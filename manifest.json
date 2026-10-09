@@ -1,0 +1,15 @@
+{
+  "initialized_utc": "2026-10-09T06:00:00+00:00",
+  "generated_utc": "2026-10-09T13:26:27.348373+00:00",
+  "maps": [
+    "gfs_h500_vorticity_f012.png",
+    "gfs_h500_vorticity_f036.png",
+    "gfs_ivt_f012.png",
+    "gfs_ivt_f036.png",
+    "gfs_jet300_f012.png",
+    "gfs_jet300_f036.png",
+    "gfs_t850_wind_f012.png",
+    "gfs_t850_wind_f036.png"
+  ],
+  "dashboard": "moraga_dashboard.png"
+}
