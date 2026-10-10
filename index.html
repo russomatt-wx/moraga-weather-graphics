@@ -23,11 +23,11 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
 <h1>Moraga Weather Observatory</h1>
-<p>Local microclimate diagnostics, Pacific storm tracking, and model forecast verification.</p></header>
+<p>Local microclimate diagnostics, Pacific storm tracking, and model forecast verification.</p><p style="font-size:13px;color:#7dd3fc">Local forecast sampling: KCAMORAG71 • 37.8201932°N, 122.1193876°W</p></header>
 <main><nav><a href="#moraga">Moraga & marine air</a><a href="#westcoast">West Coast atmosphere</a><a href="#rainfall">Rainfall & verification</a></nav>
 <section id="moraga"><div class="intro"><div class="kicker">01 / Local conditions</div><h2>Moraga & the marine push</h2><p>Forecast temperature trends, marine penetration and pressure forcing across the East Bay.</p></div>
 <div class="grid">
-<article class="card wide"><h3>Moraga forecast dashboard</h3><p>Existing local forecast graphic.</p><img loading="lazy" src="moraga_dashboard.png" alt="Moraga forecast dashboard"></article>
+<article class="card wide"><h3>Moraga forecast dashboard</h3><p>Legacy forecast overview; station-coordinate verification pending. For corrected ECMWF/GFS values, use the comparison chart below.</p><img loading="lazy" src="moraga_dashboard.png" alt="Moraga forecast dashboard"></article>
 <article class="card"><h3>East Bay marine intrusion tracker</h3><p>Oakland, Berkeley, Moraga, Concord and Livermore temperature and dew-point forecasts. Model estimates, not live station readings.</p><img loading="lazy" src="moraga_marine_transect.png" alt="East Bay temperature and dew point forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p>Awaiting first successful model chart run.</p>')"><span class="pill">Model forecast</span></article>
 <article class="card"><h3>48-hour Moraga temperature model comparison</h3><p>ECMWF and GFS hourly forecasts. KCAMORAG71 observation overlay is pending data integration.</p><img loading="lazy" src="moraga_temperature_model_comparison.png" alt="ECMWF and GFS hourly Moraga forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p>Awaiting first successful model chart run.</p>')"><span class="pill">Forecast only</span></article>
 <article class="card"><h3>SFO–Sacramento pressure gradient</h3><p>48 hours of model history plus a 48-hour model forecast. Positive values indicate relatively higher coastal pressure.</p><img loading="lazy" src="moraga_pressure_gradient_96h.png" alt="Pressure gradient model chart"></article>
@@ -48,4 +48,4 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 <div class="grid"><article class="card wide"><h3>10-day rainfall model comparison</h3><p>ECMWF, GFS and ensemble mean daily precipitation projections.</p><img loading="lazy" src="moraga_rainfall_10day.png" alt="Moraga 10-day model rainfall comparison"></article>
 <article class="card wide"><h3>Model accuracy leaderboard</h3><p class="pending"><strong>Verification awaiting data.</strong> No rankings will be shown until archived forecast values and time-matched KCAMORAG71 observations are available. Planned metrics: high/low temperature mean absolute error, bias and precipitation performance across 7, 30 and 90 days.</p><p>See <a href="moraga_mesoscale_data.json">current forecast comparison data</a> and <a href="moraga_rainfall_10day.json">rainfall forecast data</a>.</p></article></div></section>
 </main><footer>Moraga Weather Observatory • Model output is guidance, not a station observation • Forecasts can change</footer>
-</body></html>
+<script>/* Refresh image URLs on every page load to prevent stale forecast graphics from browser caches. */ document.querySelectorAll("img[src$='.png']").forEach(function(img){img.src=img.getAttribute("src")+"?updated="+Math.floor(Date.now()/3600000);});</script></body></html>
