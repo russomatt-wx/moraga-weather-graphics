@@ -1,5 +1,9 @@
 name: Moraga 10-day rainfall graphic
 on:
+  push:
+    paths:
+      - 'scripts/rainfall_10day.py'
+      - '.github/workflows/rainfall_10day.yml'
   schedule:
     - cron: "15 1,7,13,19 * * *"
   workflow_dispatch:
