@@ -11,5 +11,7 @@
     "gfs_t850_wind_f012.png",
     "gfs_t850_wind_f036.png"
   ],
-  "dashboard": "moraga_dashboard.png"
+  "dashboard": "moraga_dashboard.png",
+  "rainfall_chart": "moraga_rainfall_10day.png",
+  "rainfall_data": "moraga_rainfall_10day.json"
 }
