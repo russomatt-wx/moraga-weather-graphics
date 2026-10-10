@@ -1,0 +1,42 @@
+name: Moraga mesoscale forecast charts
+on:
+  push:
+    paths:
+      - 'scripts/mesoscale_dashboard.py'
+      - '.github/workflows/mesoscale_dashboard.yml'
+  schedule:
+    - cron: '40 1,7,13,19 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mesoscale-dashboard
+  cancel-in-progress: false
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install matplotlib
+      - run: python scripts/mesoscale_dashboard.py
+      - name: Publish model charts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p /tmp/mesoscale
+          cp moraga_marine_transect.png moraga_temperature_model_comparison.png moraga_mesoscale_data.json /tmp/mesoscale/
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/mesoscale/* .
+            git add moraga_marine_transect.png moraga_temperature_model_comparison.png moraga_mesoscale_data.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "Update East Bay marine transect and Moraga model comparison"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
