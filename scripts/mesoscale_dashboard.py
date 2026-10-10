@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from zoneinfo import ZoneInfo
 TZ=ZoneInfo("America/Los_Angeles")
-POINTS={"Oakland":(37.8044,-122.2712),"Berkeley":(37.8715,-122.2730),"Moraga":(37.8201932,-122.1193876),"Concord":(37.978,-122.031),"Livermore":(37.6819,-121.768)}
+POINTS={"San Francisco":(37.7749,-122.4194),"Oakland":(37.8044,-122.2712),"Moraga":(37.8201932,-122.1193876),"Concord":(37.978,-122.031),"Sacramento":(38.5816,-121.4944)}
 def fetch(lat,lon,model=None):
     q={"latitude":lat,"longitude":lon,"hourly":"temperature_2m,dew_point_2m,wind_speed_10m,wind_direction_10m,precipitation_probability","temperature_unit":"fahrenheit","wind_speed_unit":"mph","timezone":"America/Los_Angeles","past_hours":1,"forecast_hours":49}
     if model:q["models"]=model
@@ -33,7 +33,7 @@ def main():
         axes[0].plot(x,temp,label=name,color=c,linewidth=2.4)
         axes[1].plot(x,dew,label=name,color=c,linewidth=2.4)
         result[name]={"times":[times[i].isoformat() for i in idx],"temperature_f":temp,"dewpoint_f":dew,"wind_mph":[h["wind_speed_10m"][i] for i in idx],"wind_direction_deg":[h["wind_direction_10m"][i] for i in idx]}
-    axes[0].set_title("East Bay marine intrusion | Model temperature outlook",loc="left",weight="bold",fontsize=15)
+    axes[0].set_title("Bay-to-Valley marine intrusion | Model temperature outlook",loc="left",weight="bold",fontsize=15)
     axes[0].set_ylabel("Temperature (°F)")
     axes[1].set_ylabel("Dew point (°F)")
     axes[1].set_title("Moisture gradient | Model dew point outlook",loc="left",weight="bold")
