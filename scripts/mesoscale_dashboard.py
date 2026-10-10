@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from zoneinfo import ZoneInfo
 TZ=ZoneInfo("America/Los_Angeles")
-POINTS={"Oakland":(37.8044,-122.2712),"Berkeley":(37.8715,-122.2730),"Moraga":(37.8349,-122.1297),"Concord":(37.978,-122.031),"Livermore":(37.6819,-121.768)}
+POINTS={"Oakland":(37.8044,-122.2712),"Berkeley":(37.8715,-122.2730),"Moraga":(37.8201932,-122.1193876),"Concord":(37.978,-122.031),"Livermore":(37.6819,-121.768)}
 def fetch(lat,lon,model=None):
     q={"latitude":lat,"longitude":lon,"hourly":"temperature_2m,dew_point_2m,wind_speed_10m,wind_direction_10m,precipitation_probability","temperature_unit":"fahrenheit","wind_speed_unit":"mph","timezone":"America/Los_Angeles","past_hours":1,"forecast_hours":49}
     if model:q["models"]=model
@@ -60,5 +60,5 @@ def main():
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %I %p",tz=TZ))
     fig.text(.02,.01,"Forecasts only. KCAMORAG71 verification pending matched observation + archived model data.",fontsize=9)
     fig.savefig("moraga_temperature_model_comparison.png",dpi=155,bbox_inches="tight");plt.close(fig)
-    Path("moraga_mesoscale_data.json").write_text(json.dumps({"generated_utc":datetime.now(timezone.utc).isoformat(),"source":"Open-Meteo model data, not station observations","transect":result,"temperature_models":forecasts,"errors":errors,"verification_status":"pending_station_observations_and_archived_forecasts"},indent=2)+"\n")
+    Path("moraga_mesoscale_data.json").write_text(json.dumps({"generated_utc":datetime.now(timezone.utc).isoformat(),"source":"Open-Meteo model data, not station observations","transect":result,"temperature_models":forecasts,"errors":errors,"requested_station_coordinates":{"latitude":37.8201932,"longitude":-122.1193876},"verification_status":"pending_station_observations_and_archived_forecasts"},indent=2)+"\n")
 if __name__=="__main__":main()
