@@ -13,5 +13,8 @@
   ],
   "dashboard": "moraga_dashboard.png",
   "rainfall_chart": "moraga_rainfall_10day.png",
-  "rainfall_data": "moraga_rainfall_10day.json"
+  "rainfall_data": "moraga_rainfall_10day.json",
+  "pressure_gradient_chart": "moraga_pressure_gradient_96h.png",
+  "marine_layer_proxy_chart": "moraga_marine_layer_proxy_96h.png",
+  "marine_diagnostics_data": "moraga_marine_diagnostics_96h.json"
 }
