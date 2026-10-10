@@ -1,0 +1,43 @@
+name: Moraga marine diagnostics (96h)
+on:
+  push:
+    paths:
+      - 'scripts/marine_diagnostics_96h.py'
+      - '.github/workflows/marine_diagnostics_96h.yml'
+  schedule:
+    - cron: '25 1,7,13,19 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: marine-diagnostics-graphics
+  cancel-in-progress: false
+jobs:
+  charts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install matplotlib numpy requests
+      - name: Generate actual model diagnostics
+        run: python scripts/marine_diagnostics_96h.py
+      - name: Publish images and data safely
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p /tmp/marine-publish
+          cp moraga_pressure_gradient_96h.png moraga_marine_layer_proxy_96h.png moraga_marine_diagnostics_96h.json /tmp/marine-publish/
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/marine-publish/* .
+            git add moraga_pressure_gradient_96h.png moraga_marine_layer_proxy_96h.png moraga_marine_diagnostics_96h.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "Update Moraga marine pressure and PBL proxy charts"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
