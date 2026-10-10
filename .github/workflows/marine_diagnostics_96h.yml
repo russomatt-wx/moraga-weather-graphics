@@ -34,8 +34,7 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             cp /tmp/marine-publish/* .
-            python -c "import json; from pathlib import Path; p=Path('index.html'); h=p.read_text() if p.exists() else '<h1>Moraga weather graphics</h1>'; names=['moraga_pressure_gradient_96h.png','moraga_marine_layer_proxy_96h.png']; h+=''.join('<h2>'+n.replace('_',' ')+'</h2><p><img width=900 src='+n+'></p>' for n in names if n not in h); p.write_text(h); m=Path('manifest.json'); d=json.loads(m.read_text()) if m.exists() else {}; d.update({'pressure_gradient_chart':names[0],'marine_layer_proxy_chart':names[1],'marine_diagnostics_data':'moraga_marine_diagnostics_96h.json'}); m.write_text(json.dumps(d,indent=2)+chr(10))"
-            git add index.html manifest.json moraga_pressure_gradient_96h.png moraga_marine_layer_proxy_96h.png moraga_marine_diagnostics_96h.json
+            git add moraga_pressure_gradient_96h.png moraga_marine_layer_proxy_96h.png moraga_marine_diagnostics_96h.json
             if git diff --cached --quiet; then exit 0; fi
             git commit -m "Update Moraga marine pressure and PBL proxy charts"
             if git push origin HEAD:main; then exit 0; fi
