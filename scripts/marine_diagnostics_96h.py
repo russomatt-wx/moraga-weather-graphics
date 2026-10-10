@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+"""Moraga mesoscale diagnostics. Model past is NOT surface observations."""
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+from zoneinfo import ZoneInfo
+import requests
+import numpy as np
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+ROOT=Path(__file__).resolve().parents[1]
+ZONE=ZoneInfo("America/Los_Angeles")
+URL="https://api.open-meteo.com/v1/forecast"
+LOCATIONS={"SFO":(37.619,-122.375),"SAC":(38.513,-121.493),"Coastal proxy":(37.50,-122.50)}
+VARIABLES="pressure_msl,boundary_layer_height"
+
+def retrieve(name,coords):
+    r=requests.get(URL,params={"latitude":coords[0],"longitude":coords[1],
+       "hourly":VARIABLES,"past_hours":48,"forecast_hours":49,
+       "timezone":"America/Los_Angeles","models":"best_match"},timeout=50)
+    r.raise_for_status()
+    j=r.json()
+    if "hourly" not in j: raise RuntimeError(f"{name}: no hourly data: {j}")
+    return j
+
+def series(data,key):
+    h=data["hourly"]
+    if key not in h: raise RuntimeError(f"Missing {key}")
+    return {t:float(v) for t,v in zip(h["time"],h[key]) if v is not None}
+
+def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
+    ts=[datetime.fromisoformat(t).replace(tzinfo=ZONE) for t in times]
+    vals=np.array(values,dtype=float)
+    fig,ax=plt.subplots(figsize=(13,5.4),layout="constrained")
+    fig.patch.set_facecolor("#f8fafc");ax.set_facecolor("#f8fafc")
+    past=np.array([t<=cutoff for t in ts])
+    future=np.array([t>=cutoff for t in ts])
+    ax.plot(np.array(ts)[past],vals[past],color="#1663a8",linewidth=2.5,label="Recent model analysis")
+    ax.plot(np.array(ts)[future],vals[future],color="#e87722",linewidth=2.5,label="Model forecast")
+    ax.axvline(cutoff,color="#333",linestyle="--",linewidth=1.2,label="Now")
+    if reference is not None: ax.axhline(reference,color="#7b8794",linestyle=":",linewidth=1,label=f"{reference:g} ft reference")
+    if filename.startswith("moraga_pressure"): ax.axhline(0,color="#444",linewidth=1)
+    ax.set_title(title,fontsize=16,weight="bold",loc="left",pad=15)
+    ax.set_ylabel(ylabel)
+    ax.grid(axis="y",alpha=.22)
+    ax.legend(loc="upper left",ncol=3,fontsize=9)
+    import matplotlib.dates as mdates
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=12))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %I %p",tz=ZONE))
+    plt.setp(ax.get_xticklabels(),rotation=25,ha="right")
+    fig.text(.01,.005,footnote,fontsize=8,color="#525d69")
+    fig.savefig(ROOT/filename,dpi=155,bbox_inches="tight",facecolor=fig.get_facecolor())
+    plt.close(fig)
+
+def main():
+    d={name:retrieve(name,coord) for name,coord in LOCATIONS.items()}
+    pressure={name:series(d[name],"pressure_msl") for name in ("SFO","SAC")}
+    pbl=series(d["Coastal proxy"],"boundary_layer_height")
+    common=sorted(set(pressure["SFO"]) & set(pressure["SAC"]) & set(pbl))
+    now=datetime.now(ZONE)
+    cutoff=now.replace(minute=0,second=0,microsecond=0)
+    start=cutoff.timestamp()-48*3600; end=cutoff.timestamp()+48*3600
+    common=[t for t in common if start<=datetime.fromisoformat(t).replace(tzinfo=ZONE).timestamp()<=end]
+    if len(common)<75: raise RuntimeError(f"Insufficient model time coverage: {len(common)} hours")
+    gradient=[pressure["SFO"][t]-pressure["SAC"][t] for t in common]
+    pbl_ft=[pbl[t]*3.28084 for t in common]
+    if not all(np.isfinite(gradient)) or not all(np.isfinite(pbl_ft)): raise RuntimeError("Nonfinite model values")
+    chart(common,gradient,cutoff,"SFO − Sacramento | Onshore pressure gradient","Sea-level pressure difference (hPa)","moraga_pressure_gradient_96h.png",
+      "MODEL-BASED recent 48 h and next 48 h. Positive = coast higher pressure; not station observations.")
+    chart(common,pbl_ft,cutoff,"Coastal boundary-layer height | Marine-layer proxy","Boundary-layer height (feet AGL)","moraga_marine_layer_proxy_96h.png",
+      "MODEL PBL HEIGHT, NOT OBSERVED MARINE INVERSION OR CLOUD TOP. Coastal grid point; 650 ft reference is Moraga elevation.",650)
+    payload={"generated_utc":datetime.now(timezone.utc).isoformat(),"source":"Open-Meteo best_match model",
+       "note":"Recent 48h is model-based, not station observations. Boundary-layer height is NOT marine inversion depth.",
+       "time_local":common,"sfo_minus_sac_hpa":gradient,"coastal_pbl_height_ft_agl":pbl_ft,
+       "cutoff_local":cutoff.isoformat(),"locations":LOCATIONS}
+    (ROOT/"moraga_marine_diagnostics_96h.json").write_text(json.dumps(payload,indent=2)+"\n")
+if __name__=="__main__":main()
