@@ -11,7 +11,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-LAT, LON = 37.8349, -122.1297  # approximate Moraga town center, not station coordinates
+LAT, LON = 37.8201932, -122.1193876  # KCAMORAG71 user-provided station coordinates
 TZ = "America/Los_Angeles"
 BASE = {"latitude": LAT, "longitude": LON, "daily": "precipitation_sum",
         "timezone": TZ, "precipitation_unit": "inch", "forecast_days": 10}
@@ -62,7 +62,7 @@ ax.grid(axis="y", alpha=.2)
 ax.legend(loc="upper left", fontsize=9, ncol=2)
 fig.suptitle("MORAGA  |  10-DAY MODEL RAINFALL COMPARISON", fontsize=16, fontweight="bold")
 ax.set_title("ECMWF · GFS · EPS mean · GEFS mean  |  Local calendar days (Pacific time)", fontsize=10)
-fig.text(.09, .035, f"Generated {now:%Y-%m-%d %H:%M} UTC  •  Open-Meteo model data  •  Approx. Moraga town center  •  Missing: {', '.join(errors) or 'none'}", fontsize=8)
+fig.text(.09, .035, f"Generated {now:%Y-%m-%d %H:%M} UTC  •  Open-Meteo model data  •  KCAMORAG71 requested coordinates  •  Missing: {', '.join(errors) or 'none'}", fontsize=8)
 fig.tight_layout(rect=[0,.06,1,.92])
 out = Path("moraga_rainfall_10day.png")
 fig.savefig(out, bbox_inches="tight", facecolor="white")
