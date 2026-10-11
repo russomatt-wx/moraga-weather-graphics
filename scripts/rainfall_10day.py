@@ -55,7 +55,7 @@ for name, vals in results.items():
     ax.plot(range(10), vals, label=f"{name}  |  10d {sum(v for v in vals if v is not None):.2f} in",
             marker="o", markersize=5, linewidth=2.4 if "mean" not in name else 2,
             linestyle="--" if "mean" in name else "-", color=colors[name])
-ax.set_xticks(range(10), [datetime.fromisoformat(d).strftime("%b %-d") for d in dates])
+ax.set_xticks(range(10), [datetime.fromisoformat(d).strftime("%a %b %-d") for d in dates])
 ax.set_ylabel("Daily precipitation (inches)")
 ax.set_ylim(bottom=0)
 ax.grid(axis="y", alpha=.2)
