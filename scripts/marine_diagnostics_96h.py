@@ -48,7 +48,7 @@ def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
     ax.legend(loc="upper left",ncol=3,fontsize=9)
     import matplotlib.dates as mdates
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=12))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %I %p",tz=ZONE))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\n%I %p",tz=ZONE))
     plt.setp(ax.get_xticklabels(),rotation=25,ha="right")
     fig.text(.01,.005,footnote,fontsize=8,color="#525d69")
     fig.savefig(ROOT/filename,dpi=155,bbox_inches="tight",facecolor=fig.get_facecolor())
