@@ -39,7 +39,7 @@ def main():
     axes[1].set_title("Moisture gradient | 96-hour dew point forecast",loc="left",weight="bold")
     for ax in axes:ax.grid(alpha=.2);ax.legend(ncol=5,fontsize=8,loc="upper left")
     axes[1].xaxis.set_major_locator(mdates.HourLocator(interval=12,tz=TZ))
-    axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%a %I %p",tz=TZ))
+    axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\n%I %p",tz=TZ))
     fig.suptitle("MODEL FORECAST • Not live station observations • Open-Meteo best match",fontsize=10)
     fig.savefig("moraga_marine_transect.png",dpi=155,bbox_inches="tight");plt.close(fig)
     # Compare actual independently requested model grids, not station measurements.
