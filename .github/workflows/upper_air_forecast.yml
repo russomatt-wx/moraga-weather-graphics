@@ -1,0 +1,42 @@
+name: Moraga upper-air forecast
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/upper_air_forecast.py'
+      - '.github/workflows/upper_air_forecast.yml'
+  schedule:
+    - cron: '20 2,8,14,20 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: upper-air-forecast
+  cancel-in-progress: false
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install matplotlib
+      - run: python scripts/upper_air_forecast.py
+      - name: Publish chart
+        run: |
+          mkdir -p /tmp/upper-air
+          cp moraga_upper_air_10day.png moraga_upper_air_10day.json /tmp/upper-air/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/upper-air/* .
+            git add moraga_upper_air_10day.png moraga_upper_air_10day.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "Update ten-day upper-air model forecast"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
