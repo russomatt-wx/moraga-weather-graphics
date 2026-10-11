@@ -54,7 +54,7 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
  try{
   const response=await fetch('hourly_matches.csv?updated='+Date.now(),{cache:'no-store'});
   if(!response.ok)throw new Error('Verification feed not yet published');
-  const lines=(await response.text()).trim().split(/\\r?\\n/);
+  const lines=(await response.text()).trim().split(/\r?\n/);
   const header=lines.shift().split(',');
   const idx=Object.fromEntries(header.map((h,i)=>[h,i]));
   const required=['model','valid_utc','error_f'];
