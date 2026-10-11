@@ -23,5 +23,5 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add moraga_rainfall_10day.png moraga_rainfall_10day.json
-          git diff --cached --quiet || (git commit -m "Update 10-day Moraga rainfall model comparison" && git push)
+          git add moraga_rainfall_10day.png moraga_rainfall_10day.json moraga_forecast_10day.json
+          git diff --cached --quiet || (git commit -m "Update rolling 10-day Moraga forecast and rainfall" && git pull --rebase origin main && git push)
