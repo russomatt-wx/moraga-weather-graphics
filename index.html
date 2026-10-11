@@ -24,14 +24,14 @@ html{scroll-behavior:smooth}
 .pending{border-left:3px solid #e9aa55;padding-left:13px;margin:13px 0;color:#f4d8a9}
 footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center;font-size:12px}
 @media(max-width:760px){.grid{grid-template-columns:1fr}.card.wide{grid-column:auto}header{padding:27px 20px}}
-</style></head>
+.ten-day-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.day-forecast{background:#102033;border:1px solid #30455b;border-radius:12px;padding:16px 10px;text-align:center}.day-date{font-size:12px;color:#9eb6cc}.day-temps{margin:12px 0 2px;font-size:29px;font-weight:700;color:#ffcb88}.day-temps small{font-size:21px;color:#8ccdfa}.day-rain{font-size:13px;margin:12px 0}.day-forecast details{font-size:11px;color:#b8c8da}.day-forecast summary{cursor:pointer}@media(max-width:760px){.ten-day-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}</style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
 <h1>Moraga Weather Observatory</h1>
 <p>Local microclimate diagnostics, Pacific storm tracking, and model forecast verification.</p><p style="font-size:13px;color:#7dd3fc">Local forecast sampling: KCAMORAG71 • 37.8201932°N, 122.1193876°W</p></header>
 <main><nav aria-label="Weather dashboard sections"><a href="#observations">Observations</a><a href="#forecast">Moraga forecast</a><a href="#marine">Marine intrusion</a><a href="#rainfall">Rainfall</a><a href="#accuracy">Model accuracy</a><a href="#climate">Climate</a><a href="#westcoast">West Coast maps</a></nav>
  <section id="observations"><div class="intro"><div class="kicker">01 / What happened</div><h2>Moraga station observations</h2><p>Actual KCAMORAG71 temperature and dew point, separate from model forecasts.</p></div><div class="focus-grid"><article class="card"><h3>Station observations</h3><a href="moraga_station_observations.png"><img loading="lazy" src="moraga_station_observations.png" alt="KCAMORAG71 observed temperature and dew point" onerror="this.closest('article').style.display='none'"></a></article></div></section>
- <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Compare deterministic models and ensemble uncertainty for the station location.</p></div><div class="focus-grid"><article class="card"><h3>Temperature guidance</h3><a href="moraga_model_temperatures.png"><img loading="lazy" src="moraga_model_temperatures.png" alt="Individual temperature model comparison" onerror="this.closest('article').style.display='none'"></a></article>
+ <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Compare deterministic models and ensemble uncertainty for the station location.</p></div><div class="focus-grid"><article class="card" id="ten-day"><h3>Rolling 10-day forecast</h3><p>Your daily Moraga outlook • Pacific calendar days</p><p id="ten-day-updated" class="day-date"></p><div id="ten-day-results" aria-live="polite"><p>Loading daily forecast…</p></div><p style="font-size:12px;margin-top:16px">Highs and lows blend ECMWF and GFS equally. Rainfall averages available ECMWF, GFS, EPS mean and GEFS mean guidance. Tap “Model range” for disagreement; ranges are model spread. Raw guidance, with station calibration still to come.</p></article><article class="card"><h3>Temperature guidance</h3><a href="moraga_model_temperatures.png"><img loading="lazy" src="moraga_model_temperatures.png" alt="Individual temperature model comparison" onerror="this.closest('article').style.display='none'"></a></article>
 <article class="card"><h3>Ensemble spread</h3><a href="moraga_ensemble_spread.png"><img loading="lazy" src="moraga_ensemble_spread.png" alt="GEFS and EPS ensemble temperature spread" onerror="this.closest('article').style.display='none'"></a></article>
 <article class="card"><h3>48-hour Moraga temperature model comparison</h3><p>ECMWF and GFS hourly forecasts. KCAMORAG71 observation overlay is pending data integration.</p><img loading="lazy" src="moraga_temperature_model_comparison.png" alt="ECMWF and GFS hourly Moraga forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p>Awaiting first successful model chart run.</p>')"><span class="pill">Forecast only</span></article></div></section>
  <section id="marine"><div class="intro"><div class="kicker">03 / Regional drivers</div><h2>Marine intrusion & East Bay gradients</h2><p>Follow the Bay-to-Valley temperature contrast, pressure forcing, and boundary-layer evolution.</p></div><div class="grid"><article class="card"><h3>96-hour Bay-to-Valley marine intrusion tracker</h3><p>Four-day temperature and dew-point forecasts for San Francisco, Oakland, Moraga, Concord and Sacramento. Model estimates, not live station readings.</p><img loading="lazy" src="moraga_marine_transect.png" alt="East Bay temperature and dew point forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p>Awaiting first successful model chart run.</p>')"><span class="pill">Model forecast</span></article>
@@ -96,5 +96,37 @@ html+='<tr style="border-top:1px solid #30455b"><td style="padding:12px 8px">'+m
 html+='</tbody></table></div><p style="font-size:12px">These are averages of sampled daily extremes, not long-term climate normals. Partial days may underestimate highs or overestimate lows. Rainfall is withheld until verified; water-year totals will be added when supported.</p>';
 el.innerHTML=html;
 }catch(e){el.innerHTML='<p>Station climate data will appear after its first successful publication. Rainfall totals are not yet verified.</p>';}
+})();
+</script><script>
+(async function(){
+const el=document.getElementById('ten-day-results');
+const dateKey=d=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
+async function refresh(){
+try{
+const res=await fetch('moraga_forecast_10day.json?t='+Date.now(),{cache:'no-store'});
+if(!res.ok)throw Error('Forecast pending');
+const data=await res.json(),today=dateKey(new Date());
+const models=Object.entries(data.temperature_models||{});
+const finite=v=>typeof v==='number'&&Number.isFinite(v);
+const mean=a=>a.reduce((s,v)=>s+v,0)/a.length;
+const temp=a=>a.length?Math.round(mean(a))+'°':'—';
+const spread=a=>a.length>1?Math.round(Math.min(...a))+'–'+Math.round(Math.max(...a))+'°F':'—';
+const days=(data.dates||[]).filter(d=>d>=today).slice(0,10);
+if(!days.length||!models.length)throw Error('No current forecast');
+el.innerHTML='<div class="ten-day-grid">'+days.map((date,i)=>{
+const highs=models.map(([n,m])=>m.high_f[m.dates.indexOf(date)]).filter(finite);
+const lows=models.map(([n,m])=>m.low_f[m.dates.indexOf(date)]).filter(finite);
+const rains=Object.values(data.model_daily_inches||{}).map(a=>a[data.dates.indexOf(date)]).filter(finite);
+const d=new Date(date+'T12:00:00Z');
+const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
+const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
+return '<article class="day-forecast"><strong>'+(date===today?'Today':day)+'</strong><div class="day-date">'+label+'</div><div class="day-temps"><span>'+temp(highs)+'</span> <small>'+temp(lows)+'</small></div><div class="day-date">High / low °F</div><div class="day-rain">'+(rains.length?'💧 '+mean(rains).toFixed(2)+' in':'Rain —')+'</div><details><summary>Model range</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Rain '+(rains.length?Math.min(...rains).toFixed(2)+'–'+Math.max(...rains).toFixed(2)+' in':'—')+'</p></details></article>';
+}).join('')+'</div>';
+const stamp=new Date(data.generated_utc);
+document.getElementById('ten-day-updated').textContent='Updated '+stamp.toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT'+(Date.now()-stamp.getTime()>12*3600000?' • Update delayed':'')+(days.length<10?' • '+days.length+' current days available':'');
+}catch(e){el.innerHTML='<p>Daily forecast awaiting its next successful update.</p>';}
+}
+await refresh();setInterval(refresh,15*60*1000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
 })();
 </script></body></html>
