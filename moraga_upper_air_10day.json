@@ -1,0 +1,19 @@
+{
+  "generated_utc": "2026-10-11T03:33:17.342844+00:00",
+  "requested_latitude": 37.8201932,
+  "requested_longitude": -122.1193876,
+  "models": {
+    "ECMWF": {
+      "model": "ecmwf_ifs025",
+      "hours": 240,
+      "grid_latitude": 37.75,
+      "grid_longitude": -122.0
+    },
+    "GFS": {
+      "model": "ncep_gfs_seamless",
+      "hours": 240,
+      "grid_latitude": 37.82783,
+      "grid_longitude": -122.11667
+    }
+  }
+}
