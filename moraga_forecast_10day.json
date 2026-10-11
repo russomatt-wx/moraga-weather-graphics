@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-11T22:26:57.548196+00:00",
+  "generated_utc": "2026-10-11T22:30:28.750531+00:00",
   "timezone": "America/Los_Angeles",
   "latitude": 37.8201932,
   "longitude": -122.1193876,
@@ -144,7 +144,7 @@
     ]
   },
   "errors": {},
-  "method": "Equal-weight ECMWF/GFS daily high and low blend; displayed ranges are deterministic model spread, not probability intervals.",
+  "method": "Daily ECMWF/GFS model inputs. Website applies paired KCAMORAG71 hourly skill weights separately for highs and lows and by forecast lead; sparse or unverified leads retain equal weights. Displayed ranges are deterministic model spread, not probability intervals.",
   "source": "Open-Meteo",
-  "note": "Raw model guidance; not yet station-calibrated. Generated timestamp is retrieval time, not model initialization."
+  "note": "Model inputs are not bias-corrected; website skill weighting is provisional, based on hourly temperature errors. Generated timestamp is retrieval time, not model initialization."
 }
