@@ -59,7 +59,6 @@ def main():
     ax.set_title("Moraga | 48-hour temperature model comparison",loc="left",weight="bold",fontsize=15)
     ax.set_ylabel("2 m temperature (°F)");ax.grid(alpha=.2);ax.legend()
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %I %p",tz=TZ))
-    fig.text(.02,.01,"Forecasts only. KCAMORAG71 verification pending matched observation + archived model data.",fontsize=9)
     fig.savefig("moraga_temperature_model_comparison.png",dpi=155,bbox_inches="tight");plt.close(fig)
     Path("moraga_mesoscale_data.json").write_text(json.dumps({"generated_utc":datetime.now(timezone.utc).isoformat(),"source":"Open-Meteo model data, not station observations","transect":result,"temperature_models":forecasts,"errors":errors,"requested_station_coordinates":{"latitude":37.8201932,"longitude":-122.1193876},"verification_status":"pending_station_observations_and_archived_forecasts"},indent=2)+"\n")
 if __name__=="__main__":main()
