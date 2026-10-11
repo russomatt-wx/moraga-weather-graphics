@@ -86,6 +86,6 @@ Path("moraga_forecast_10day.json").write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
     "dates": dates, "temperature_models": {name: temperature_results[model] for name, url, model in SOURCES if model in temperature_results},
     "model_daily_inches": results, "errors": errors,
-    "method": "Equal-weight ECMWF/GFS daily high and low blend; displayed ranges are deterministic model spread, not probability intervals.",
-    "source": "Open-Meteo", "note": "Raw model guidance; not yet station-calibrated. Generated timestamp is retrieval time, not model initialization."
+    "method": "Daily ECMWF/GFS model inputs. Website applies paired KCAMORAG71 hourly skill weights separately for highs and lows and by forecast lead; sparse or unverified leads retain equal weights. Displayed ranges are deterministic model spread, not probability intervals.",
+    "source": "Open-Meteo", "note": "Model inputs are not bias-corrected; website skill weighting is provisional, based on hourly temperature errors. Generated timestamp is retrieval time, not model initialization."
 }, indent=2))
