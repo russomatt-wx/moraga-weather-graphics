@@ -10,8 +10,13 @@ header{padding:38px max(22px,calc((100% - 1180px)/2));border-bottom:1px solid #3
 h1{font-size:clamp(30px,5vw,50px);line-height:1.12;margin:12px 0}h2{font-size:25px;margin:0 0 8px}h3{font-size:17px;margin:0 0 6px}
 p{margin:7px 0;color:#b8c8da}main{max-width:1180px;margin:auto;padding:25px 20px 75px}
 nav{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 35px}nav a{padding:9px 14px;border-radius:20px;background:#21354b;color:#d8f2ff;text-decoration:none;font-size:13px}
-section{margin:38px 0 48px;scroll-margin-top:20px}.intro{margin-bottom:18px}
+section{margin:38px 0 48px;scroll-margin-top:90px}.intro{margin-bottom:18px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.focus-grid{display:grid;grid-template-columns:1fr;gap:18px}
+.focus-grid .card{width:100%}
+.focus-grid .card img{max-height:760px;object-fit:contain}
+nav{position:sticky;top:0;z-index:5;padding:12px 0;background:#0a1422f2;backdrop-filter:blur(8px)}
+html{scroll-behavior:smooth}
 .card{background:#142438;border:1px solid #30455b;border-radius:15px;padding:16px;overflow:hidden}
 .card.wide{grid-column:1/-1}.card img{display:block;width:100%;height:auto;background:#fff;border-radius:8px;margin-top:13px}
 .card a{color:#7dd3fc;text-decoration:none}.card a:hover{text-decoration:underline}
@@ -24,23 +29,17 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 <header><div class="kicker">Lamorinda • East Bay • California</div>
 <h1>Moraga Weather Observatory</h1>
 <p>Local microclimate diagnostics, Pacific storm tracking, and model forecast verification.</p><p style="font-size:13px;color:#7dd3fc">Local forecast sampling: KCAMORAG71 • 37.8201932°N, 122.1193876°W</p></header>
-<main><nav><a href="#moraga">Moraga & marine air</a><a href="#westcoast">West Coast atmosphere</a><a href="#rainfall">Rainfall & verification</a></nav>
-<section id="moraga"><div class="intro"><div class="kicker">01 / Local conditions</div><h2>Moraga & the marine push</h2><p>Forecast temperature trends, marine penetration and pressure forcing across the East Bay.</p></div>
-<div class="grid">
-
-<article class="card wide"><h3>Detailed forecast panels</h3><p>Individual charts for easier reading on mobile. Tap an image to view it full-size.</p><div class="grid">
-<article class="card"><h3>Temperature guidance</h3><a href="moraga_model_temperatures.png"><img loading="lazy" src="moraga_model_temperatures.png" alt="Individual temperature model comparison" onerror="this.closest('article').style.display='none'"></a></article>
+<main><nav aria-label="Weather dashboard sections"><a href="#observations">Observations</a><a href="#forecast">Moraga forecast</a><a href="#marine">Marine intrusion</a><a href="#rainfall">Rainfall</a><a href="#accuracy">Model accuracy</a><a href="#westcoast">West Coast maps</a></nav>
+ <section id="observations"><div class="intro"><div class="kicker">01 / What happened</div><h2>Moraga station observations</h2><p>Actual KCAMORAG71 temperature and dew point, separate from model forecasts.</p></div><div class="focus-grid"><article class="card"><h3>Station observations</h3><a href="moraga_station_observations.png"><img loading="lazy" src="moraga_station_observations.png" alt="KCAMORAG71 observed temperature and dew point" onerror="this.closest('article').style.display='none'"></a></article></div></section>
+ <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Compare deterministic models and ensemble uncertainty for the station location.</p></div><div class="focus-grid"><article class="card"><h3>Temperature guidance</h3><a href="moraga_model_temperatures.png"><img loading="lazy" src="moraga_model_temperatures.png" alt="Individual temperature model comparison" onerror="this.closest('article').style.display='none'"></a></article>
 <article class="card"><h3>Ensemble spread</h3><a href="moraga_ensemble_spread.png"><img loading="lazy" src="moraga_ensemble_spread.png" alt="GEFS and EPS ensemble temperature spread" onerror="this.closest('article').style.display='none'"></a></article>
-<article class="card"><h3>Upper-air evolution</h3><a href="moraga_upper_air.png"><img loading="lazy" src="moraga_upper_air.png" alt="Regional H500 and T850 evolution" onerror="this.closest('article').style.display='none'"></a></article>
-<article class="card"><h3>Station observations</h3><a href="moraga_station_observations.png"><img loading="lazy" src="moraga_station_observations.png" alt="KCAMORAG71 observed temperature and dew point" onerror="this.closest('article').style.display='none'"></a></article>
-</div></article>
-<article class="card"><h3>96-hour Bay-to-Valley marine intrusion tracker</h3><p>Four-day temperature and dew-point forecasts for San Francisco, Oakland, Moraga, Concord and Sacramento. Model estimates, not live station readings.</p><img loading="lazy" src="moraga_marine_transect.png" alt="East Bay temperature and dew point forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p>Awaiting first successful model chart run.</p>')"><span class="pill">Model forecast</span></article>
-<article class="card"><h3>48-hour Moraga temperature model comparison</h3><p>ECMWF and GFS hourly forecasts. KCAMORAG71 observation overlay is pending data integration.</p><img loading="lazy" src="moraga_temperature_model_comparison.png" alt="ECMWF and GFS hourly Moraga forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p>Awaiting first successful model chart run.</p>')"><span class="pill">Forecast only</span></article>
+<article class="card"><h3>48-hour Moraga temperature model comparison</h3><p>ECMWF and GFS hourly forecasts. KCAMORAG71 observation overlay is pending data integration.</p><img loading="lazy" src="moraga_temperature_model_comparison.png" alt="ECMWF and GFS hourly Moraga forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p>Awaiting first successful model chart run.</p>')"><span class="pill">Forecast only</span></article></div></section>
+ <section id="marine"><div class="intro"><div class="kicker">03 / Regional drivers</div><h2>Marine intrusion & East Bay gradients</h2><p>Follow the Bay-to-Valley temperature contrast, pressure forcing, and boundary-layer evolution.</p></div><div class="grid"><article class="card"><h3>96-hour Bay-to-Valley marine intrusion tracker</h3><p>Four-day temperature and dew-point forecasts for San Francisco, Oakland, Moraga, Concord and Sacramento. Model estimates, not live station readings.</p><img loading="lazy" src="moraga_marine_transect.png" alt="East Bay temperature and dew point forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p>Awaiting first successful model chart run.</p>')"><span class="pill">Model forecast</span></article>
 <article class="card"><h3>SFO–Sacramento pressure gradient</h3><p>48 hours of model history plus a 48-hour model forecast. Positive values indicate relatively higher coastal pressure.</p><img loading="lazy" src="moraga_pressure_gradient_96h.png" alt="Pressure gradient model chart"></article>
-<article class="card"><h3>Coastal boundary-layer height</h3><p>Model boundary-layer height proxy, not measured marine inversion depth. Moraga elevation reference: ~650 feet.</p><img loading="lazy" src="moraga_marine_layer_proxy_96h.png" alt="Coastal boundary-layer height model proxy"></article>
-</div></section>
-<section id="westcoast"><div class="intro"><div class="kicker">02 / Synoptic overview</div><h2>West Coast atmospheric setup</h2><p>Actual NOAA GFS fields, with forecast valid times displayed on each graphic.</p></div>
-<div class="grid">
+<article class="card"><h3>Coastal boundary-layer height</h3><p>Model boundary-layer height proxy, not measured marine inversion depth. Moraga elevation reference: ~650 feet.</p><img loading="lazy" src="moraga_marine_layer_proxy_96h.png" alt="Coastal boundary-layer height model proxy"></article></div></section>
+ <section id="rainfall"><div class="intro"><div class="kicker">04 / Storm outlook</div><h2>10-day rainfall outlook</h2><p>ECMWF, GFS and ensemble precipitation guidance. Forecast amounts are not observed rainfall.</p></div><div class="grid"><article class="card wide"><h3>10-day rainfall model comparison</h3><p>ECMWF, GFS and ensemble mean daily precipitation projections.</p><img loading="lazy" src="moraga_rainfall_10day.png" alt="Moraga 10-day model rainfall comparison"></article></div></section>
+ <section id="accuracy"><div class="intro"><div class="kicker">05 / Model performance</div><h2>Forecast accuracy leaderboard</h2><p>Measured model error against station observations; preliminary until more matched hours accumulate.</p></div><div class="grid"><article class="card wide"><h3>Model accuracy leaderboard</h3><div id="accuracy-results" aria-live="polite"><p class="pending">Loading verified hourly model accuracy…</p></div><p>See <a href="moraga_mesoscale_data.json">current forecast comparison data</a> and <a href="moraga_rainfall_10day.json">rainfall forecast data</a>.</p></article></div></section>
+ <section id="westcoast"><div class="intro"><div class="kicker">06 / Larger pattern</div><h2>West Coast atmospheric setup</h2><p>NOAA GFS maps for the evolving jet stream, midlevel circulation and moisture transport.</p></div><div class="grid"><article class="card"><h3>Upper-air evolution</h3><a href="moraga_upper_air.png"><img loading="lazy" src="moraga_upper_air.png" alt="Regional H500 and T850 evolution" onerror="this.closest('article').style.display='none'"></a></article>
 <article class="card"><h3>500 hPa vorticity • +12h</h3><img loading="lazy" src="gfs_h500_vorticity_f012.png" alt="500 hPa vorticity +12h"></article>
 <article class="card"><h3>500 hPa vorticity • +36h</h3><img loading="lazy" src="gfs_h500_vorticity_f036.png" alt="500 hPa vorticity +36h"></article>
 <article class="card"><h3>850 hPa temperature and wind • +12h</h3><img loading="lazy" src="gfs_t850_wind_f012.png" alt="850 hPa temperature and wind +12h"></article>
@@ -48,12 +47,8 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 <article class="card"><h3>300 hPa jet stream • +12h</h3><img loading="lazy" src="gfs_jet300_f012.png" alt="Jet stream +12h"></article>
 <article class="card"><h3>300 hPa jet stream • +36h</h3><img loading="lazy" src="gfs_jet300_f036.png" alt="Jet stream +36h"></article>
 <article class="card"><h3>Integrated vapor transport • +12h</h3><img loading="lazy" src="gfs_ivt_f012.png" alt="IVT +12h"></article>
-<article class="card"><h3>Integrated vapor transport • +36h</h3><img loading="lazy" src="gfs_ivt_f036.png" alt="IVT +36h"></article>
-</div></section>
-<section id="rainfall"><div class="intro"><div class="kicker">03 / Storms & verification</div><h2>Rainfall & forecast accuracy</h2><p>Rainfall model comparison and a foundation for location-specific forecast scoring.</p></div>
-<div class="grid"><article class="card wide"><h3>10-day rainfall model comparison</h3><p>ECMWF, GFS and ensemble mean daily precipitation projections.</p><img loading="lazy" src="moraga_rainfall_10day.png" alt="Moraga 10-day model rainfall comparison"></article>
-<article class="card wide"><h3>Model accuracy leaderboard</h3><div id="accuracy-results" aria-live="polite"><p class="pending">Loading verified hourly model accuracy…</p></div><p>See <a href="moraga_mesoscale_data.json">current forecast comparison data</a> and <a href="moraga_rainfall_10day.json">rainfall forecast data</a>.</p></article></div></section>
-</main><footer>Moraga Weather Observatory • Model output is guidance, not a station observation • Forecasts can change</footer>
+<article class="card"><h3>Integrated vapor transport • +36h</h3><img loading="lazy" src="gfs_ivt_f036.png" alt="IVT +36h"></article></div></section>
+ </main><footer>Moraga Weather Observatory • Model output is guidance, not a station observation • Forecasts can change</footer>
 <script>/* Refresh image URLs on every page load to prevent stale forecast graphics from browser caches. */ document.querySelectorAll("img[src$='.png']").forEach(function(img){img.src=img.getAttribute("src")+"?updated="+Math.floor(Date.now()/3600000);});</script><script>
 (async function(){
  const el=document.getElementById('accuracy-results');
