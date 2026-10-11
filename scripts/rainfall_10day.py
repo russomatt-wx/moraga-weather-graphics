@@ -21,8 +21,12 @@ SOURCES = [
     ("EPS mean", "https://ensemble-api.open-meteo.com/v1/ensemble", "ecmwf_ifs025_ensemble_mean"),
     ("GEFS mean", "https://ensemble-api.open-meteo.com/v1/ensemble", "ncep_gefs_ensemble_mean_seamless"),
 ]
+temperature_results = {}
 def get(url, model):
-    q = urllib.parse.urlencode({**BASE, "models": model})
+    params = {**BASE, "models": model}
+    if "ensemble" not in url:
+        params.update(daily="precipitation_sum,temperature_2m_max,temperature_2m_min", temperature_unit="fahrenheit")
+    q = urllib.parse.urlencode(params)
     req = urllib.request.Request(url + "?" + q, headers={"User-Agent": "MoragaWeatherGraphics/1.0"})
     with urllib.request.urlopen(req, timeout=40) as resp:
         payload = json.load(resp)
@@ -32,6 +36,11 @@ def get(url, model):
         raise ValueError(f"Unexpected forecast length: {model}")
     if any(v is not None and (not isinstance(v, (float,int)) or v < 0) for v in values):
         raise ValueError(f"Invalid precipitation values: {model}")
+    if "temperature_2m_max" in daily:
+        highs, lows = daily["temperature_2m_max"], daily["temperature_2m_min"]
+        if len(highs) != 10 or len(lows) != 10:
+            raise ValueError("Unexpected temperature forecast length")
+        temperature_results[model] = {"dates": daily["time"], "high_f": highs, "low_f": lows}
     return daily["time"], values
 
 results, errors = {}, {}
@@ -72,3 +81,11 @@ Path("moraga_rainfall_10day.json").write_text(json.dumps({
     "source": "Open-Meteo", "note": "API does not explicitly expose model initialization times here; generated time is not initialization time."
 }, indent=2))
 print(f"Saved {out}; available models: {', '.join(results)}; errors: {errors}")
+
+Path("moraga_forecast_10day.json").write_text(json.dumps({
+    "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
+    "dates": dates, "temperature_models": {name: temperature_results[model] for name, url, model in SOURCES if model in temperature_results},
+    "model_daily_inches": results, "errors": errors,
+    "method": "Equal-weight ECMWF/GFS daily high and low blend; displayed ranges are deterministic model spread, not probability intervals.",
+    "source": "Open-Meteo", "note": "Raw model guidance; not yet station-calibrated. Generated timestamp is retrieval time, not model initialization."
+}, indent=2))
