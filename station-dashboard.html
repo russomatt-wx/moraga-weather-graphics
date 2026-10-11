@@ -46,6 +46,33 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 </div></section>
 <section id="rainfall"><div class="intro"><div class="kicker">03 / Storms & verification</div><h2>Rainfall & forecast accuracy</h2><p>Rainfall model comparison and a foundation for location-specific forecast scoring.</p></div>
 <div class="grid"><article class="card wide"><h3>10-day rainfall model comparison</h3><p>ECMWF, GFS and ensemble mean daily precipitation projections.</p><img loading="lazy" src="moraga_rainfall_10day.png" alt="Moraga 10-day model rainfall comparison"></article>
-<article class="card wide"><h3>Model accuracy leaderboard</h3><p class="pending"><strong>Verification awaiting data.</strong> No rankings will be shown until archived forecast values and time-matched KCAMORAG71 observations are available. Planned metrics: high/low temperature mean absolute error, bias and precipitation performance across 7, 30 and 90 days.</p><p>See <a href="moraga_mesoscale_data.json">current forecast comparison data</a> and <a href="moraga_rainfall_10day.json">rainfall forecast data</a>.</p></article></div></section>
+<article class="card wide"><h3>Model accuracy leaderboard</h3><div id="accuracy-results" aria-live="polite"><p class="pending">Loading verified hourly model accuracy…</p></div><p>See <a href="moraga_mesoscale_data.json">current forecast comparison data</a> and <a href="moraga_rainfall_10day.json">rainfall forecast data</a>.</p></article></div></section>
 </main><footer>Moraga Weather Observatory • Model output is guidance, not a station observation • Forecasts can change</footer>
-<script>/* Refresh image URLs on every page load to prevent stale forecast graphics from browser caches. */ document.querySelectorAll("img[src$='.png']").forEach(function(img){img.src=img.getAttribute("src")+"?updated="+Math.floor(Date.now()/3600000);});</script></body></html>
+<script>/* Refresh image URLs on every page load to prevent stale forecast graphics from browser caches. */ document.querySelectorAll("img[src$='.png']").forEach(function(img){img.src=img.getAttribute("src")+"?updated="+Math.floor(Date.now()/3600000);});</script><script>
+(async function(){
+ const el=document.getElementById('accuracy-results');
+ try{
+  const response=await fetch('hourly_matches.csv?updated='+Date.now(),{cache:'no-store'});
+  if(!response.ok)throw new Error('Verification feed not yet published');
+  const lines=(await response.text()).trim().split(/\\r?\\n/);
+  const header=lines.shift().split(',');
+  const idx=Object.fromEntries(header.map((h,i)=>[h,i]));
+  const required=['model','valid_utc','error_f'];
+  if(required.some(k=>idx[k]===undefined))throw new Error('Verification feed format unavailable');
+  const rows=lines.map(line=>line.split(',')).map(c=>({name:c[idx.model].toUpperCase(),time:new Date(c[idx.valid_utc]),err:Math.abs(Number(c[idx.error_f]))})).filter(r=>Number.isFinite(r.err)&&!isNaN(r.time.getTime()));
+  if(!rows.length)throw new Error('Awaiting verified station matches');
+  const latest=new Date(Math.max(...rows.map(r=>r.time.getTime())));
+  const day=d=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
+  const today=day(latest);
+  function section(title,items){
+   const by={};
+   for(const r of items)(by[r.name]??=[]).push(r.err);
+   const ranking=Object.entries(by).map(([name,a])=>({name,n:a.length,mae:a.reduce((x,y)=>x+y,0)/a.length})).sort((a,b)=>a.mae-b.mae);
+   if(!ranking.length)return '<p>Awaiting matched observations.</p>';
+   return '<h4 style="margin:17px 0 8px">'+title+'</h4><div style="display:grid;gap:9px">'+ranking.map((r,i)=>'<div style="display:grid;grid-template-columns:75px 1fr 95px;align-items:center;gap:10px;font-size:14px"><strong>'+ (i===0?'🏆 ':'')+r.name+'</strong><div style="height:11px;border-radius:8px;background:#273b50;overflow:hidden"><div style="height:100%;width:'+Math.max(2,100*r.mae/Math.max(4,...ranking.map(x=>x.mae)))+'%;background:'+(i===0?'#50c9a2':'#78a8d1')+'"></div></div><span style="text-align:right">'+r.mae.toFixed(2)+'°F <small>('+r.n+'h)</small></span></div>').join('')+'</div>';
+  }
+  const recent=rows.filter(r=>r.time.getTime()>latest.getTime()-7*86400000);
+  el.innerHTML='<p>Verified KCAMORAG71 hourly temperature forecasts. Lower error is better.</p>'+section('Latest verified day • '+today,rows.filter(r=>day(r.time)===today))+section('Rolling seven days • available samples',recent)+'<p style="font-size:12px;margin-top:16px">Preliminary results; sample sizes shown. Forecast retrieval timestamps are not independently verified model initialization cycles. Updated through '+latest.toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT.</p>';
+ }catch(e){el.innerHTML='<p class="pending">Hourly verification feed is not yet available on the public site. Rankings will appear after the next successful graphics publication.</p>';}
+})();
+</script></body></html>
