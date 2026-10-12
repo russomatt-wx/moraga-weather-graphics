@@ -1,0 +1,26 @@
+{
+  "status": "awaiting_eligible_explicit_forecasts",
+  "summary": {
+    "6 AM": {
+      "count": 0,
+      "high_mae_f": null,
+      "low_mae_f": null
+    },
+    "11 AM": {
+      "count": 0,
+      "high_mae_f": null,
+      "low_mae_f": null
+    },
+    "4 PM": {
+      "count": 0,
+      "high_mae_f": null,
+      "low_mae_f": null
+    },
+    "9 PM": {
+      "count": 0,
+      "high_mae_f": null,
+      "low_mae_f": null
+    }
+  },
+  "caveat": "Only live-issued explicit forecasts; historical recovered tests and automated model guidance excluded."
+}
