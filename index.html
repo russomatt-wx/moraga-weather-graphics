@@ -31,7 +31,7 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 <p>Local microclimate diagnostics, Pacific storm tracking, and model forecast verification.</p><p style="font-size:13px;color:#7dd3fc">Local forecast sampling: KCAMORAG71 • 37.8201932°N, 122.1193876°W</p></header>
 <main><nav aria-label="Weather dashboard sections"><a href="#observations">Observations</a><a href="#forecast">Moraga forecast</a><a href="#marine">Marine intrusion</a><a href="#rainfall">Rainfall</a><a href="#accuracy">Model accuracy</a><a href="#chatgpt-accuracy">Briefing verification</a><a href="#climate">Climate</a><a href="#westcoast">West Coast maps</a></nav>
  <section id="observations"><div class="intro"><div class="kicker">01 / What happened</div><h2>Moraga station observations</h2><p>Actual KCAMORAG71 temperature and dew point, separate from model forecasts.</p></div><div class="focus-grid"><article class="card"><h3>Station observations</h3><a href="moraga_station_observations.png"><img loading="lazy" src="moraga_station_observations.png" alt="KCAMORAG71 observed temperature and dew point" onerror="this.closest('article').style.display='none'"></a></article></div></section>
- <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Compare deterministic models and ensemble uncertainty for the station location.</p></div><div class="focus-grid"><article class="card" id="ten-day"><h3>Rolling 10-day forecast</h3><p>Your daily Moraga outlook • Pacific calendar days</p><p id="ten-day-updated" class="day-date"></p><div id="ten-day-results" aria-live="polite"><p>Loading daily forecast…</p></div><p style="font-size:12px;margin-top:16px">Temperatures use provisional model-skill weighting against KCAMORAG71. Rainfall is a separate multi-model average; icons use hourly conditions and flag rain risk when models disagree. Tap “Model range” for details.</p></article><article class="card"><h3>Temperature guidance</h3><a href="moraga_model_temperatures.png"><img loading="lazy" src="moraga_model_temperatures.png" alt="Individual temperature model comparison" onerror="this.closest('article').style.display='none'"></a></article>
+ <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Compare deterministic models and ensemble uncertainty for the station location.</p></div><div class="focus-grid"><article class="card" id="ten-day"><h3>Rolling 10-day forecast</h3><p>Your daily Moraga outlook • Pacific calendar days</p><p id="ten-day-updated" class="day-date"></p><div id="ten-day-results" aria-live="polite"><p>Loading daily forecast…</p></div><p style="font-size:12px;margin-top:16px">Temperatures use provisional model-skill weighting against KCAMORAG71. Rainfall is a multi-model average; icons use ECMWF/GFS hourly rain duration and cloud cover, with ensemble rain risk flagged separately. Tap “Model range” for details.</p></article><article class="card"><h3>Temperature guidance</h3><a href="moraga_model_temperatures.png"><img loading="lazy" src="moraga_model_temperatures.png" alt="Individual temperature model comparison" onerror="this.closest('article').style.display='none'"></a></article>
 <article class="card"><h3>Ensemble spread</h3><a href="moraga_ensemble_spread.png"><img loading="lazy" src="moraga_ensemble_spread.png" alt="GEFS and EPS ensemble temperature spread" onerror="this.closest('article').style.display='none'"></a></article>
 <article class="card"><h3>48-hour Moraga temperature model comparison</h3><p>ECMWF and GFS hourly forecasts. KCAMORAG71 observation overlay is pending data integration.</p><img loading="lazy" src="moraga_temperature_model_comparison.png" alt="ECMWF and GFS hourly Moraga forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p>Awaiting first successful model chart run.</p>')"><span class="pill">Forecast only</span></article></div></section>
  <section id="marine"><div class="intro"><div class="kicker">03 / Regional drivers</div><h2>Marine intrusion & East Bay gradients</h2><p>Follow the Bay-to-Valley temperature contrast, pressure forcing, and boundary-layer evolution.</p></div><div class="grid"><article class="card"><h3>96-hour Bay-to-Valley marine intrusion tracker</h3><p>Four-day temperature and dew-point forecasts for San Francisco, Oakland, Moraga, Concord and Sacramento. Model estimates, not live station readings.</p><img loading="lazy" src="moraga_marine_transect.png" alt="East Bay temperature and dew point forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p>Awaiting first successful model chart run.</p>')"><span class="pill">Model forecast</span></article>
@@ -157,45 +157,56 @@ const res=await fetch('moraga_forecast_10day.json?t='+Date.now(),{cache:'no-stor
 if(!res.ok)throw Error('Forecast pending');
 const data=await res.json(),today=dateKey(new Date());
 const models=Object.entries(data.temperature_models||{});
-let conditions={}, hourlyByDay={};
-try {
- const url='https://api.open-meteo.com/v1/forecast?latitude='+encodeURIComponent(data.latitude)+'&longitude='+encodeURIComponent(data.longitude)+'&daily=weather_code&hourly=precipitation,cloud_cover&timezone=America%2FLos_Angeles&forecast_days=10';
- const weatherRes=await fetch(url,{cache:'no-store'});
- if(weatherRes.ok){
-  const wx=await weatherRes.json();
-  (wx.daily?.time||[]).forEach((d,i)=>{conditions[d]=wx.daily.weather_code?.[i]});
+// Pull the same deterministic model families used by the temperature forecast.
+// Use hourly precipitation timing, duration, and daytime cloud cover from each.
+let hourlyModels={};
+await Promise.all([['ECMWF','ecmwf_ifs025'],['GFS','gfs_seamless']].map(async ([name,model])=>{
+ try{
+  const url='https://api.open-meteo.com/v1/forecast?latitude='+encodeURIComponent(data.latitude)+'&longitude='+encodeURIComponent(data.longitude)+'&models='+model+'&hourly=precipitation,cloud_cover&timezone=America%2FLos_Angeles&forecast_days=10';
+  const response=await fetch(url,{cache:'no-store'});
+  if(!response.ok)return;
+  const wx=await response.json(),byDay={};
   (wx.hourly?.time||[]).forEach((t,i)=>{
-   const day=t.slice(0,10), hour=Number(t.slice(11,13));
-   (hourlyByDay[day]??=[]).push({hour,rain:wx.hourly.precipitation?.[i],cloud:wx.hourly.cloud_cover?.[i]});
+   const rain=wx.hourly.precipitation?.[i],cloud=wx.hourly.cloud_cover?.[i];
+   (byDay[t.slice(0,10)]??=[]).push({hour:Number(t.slice(11,13)),rain,cloud});
   });
- }
-}catch(e){}
-function hourlyCondition(date, fallback){
- const hours=hourlyByDay[date];
- if(!hours||hours.length<20)return null;
- // A wet hour must have at least 0.1 mm forecast, avoiding trace noise.
- const wet=hours.filter(h=>Number.isFinite(h.rain)&&h.rain>=0.1);
- const n=wet.length;
+  if(Object.keys(byDay).length)hourlyModels[name]=byDay;
+ }catch(e){}
+}));
+function skyCondition(hours){
  const daytime=hours.filter(h=>h.hour>=8&&h.hour<=18&&Number.isFinite(h.cloud));
- const clouds=daytime.map(h=>h.cloud);
- const avgCloud=clouds.length?clouds.reduce((a,b)=>a+b,0)/clouds.length:null;
- const morning=daytime.filter(h=>h.hour<=11),afternoon=daytime.filter(h=>h.hour>=13);
- const average=a=>a.length?a.reduce((sum,h)=>sum+h.cloud,0)/a.length:null;
- const amCloud=average(morning),pmCloud=average(afternoon);
- if(n){
-  const am=wet.filter(h=>h.hour<12).length,pm=n-am;
-  if(n<=2)return ['🌦️',am>pm?'Brief AM showers':pm>am?'Brief PM showers':'Brief showers'];
-  if(n<=5)return ['🌦️',am>=n*.8?'AM showers':pm>=n*.8?'PM showers':'Scattered showers'];
-  return ['🌧️',n>=9?'Rainy':am>=n*.8?'AM rain':pm>=n*.8?'PM rain':'Periods of rain'];
- }
- if(avgCloud===null)return fallback;
- if(amCloud!==null&&pmCloud!==null&&amCloud>=75&&pmCloud<=35&&amCloud-pmCloud>=45)return ['🌤️','AM clouds, PM sun'];
- if(amCloud!==null&&pmCloud!==null&&amCloud<=35&&pmCloud>=75&&pmCloud-amCloud>=45)return ['🌥️','Increasing clouds'];
- if(avgCloud<=10)return ['☀️','Sunny'];
- if(avgCloud<=25)return ['🌤️','Mostly sunny'];
- if(avgCloud<=50)return ['⛅','Partly cloudy'];
- if(avgCloud<=85)return ['🌥️','Mostly cloudy'];
+ const average=arr=>arr.length?arr.reduce((s,h)=>s+h.cloud,0)/arr.length:null;
+ const avg=average(daytime),am=average(daytime.filter(h=>h.hour<=11)),pm=average(daytime.filter(h=>h.hour>=13));
+ if(avg===null)return ['','Conditions unavailable'];
+ if(am!==null&&pm!==null&&am>=75&&pm<=35&&am-pm>=45)return ['🌤️','AM clouds, PM sun'];
+ if(am!==null&&pm!==null&&am<=35&&pm>=75&&pm-am>=45)return ['🌥️','Increasing clouds'];
+ if(avg<=10)return ['☀️','Sunny'];
+ if(avg<=25)return ['🌤️','Mostly sunny'];
+ if(avg<=50)return ['⛅','Partly cloudy'];
+ if(avg<=85)return ['🌥️','Mostly cloudy'];
  return ['☁️','Overcast'];
+}
+function modelCondition(date,rainMean){
+ const available=Object.entries(hourlyModels).map(([name,days])=>({name,hours:days[date]})).filter(m=>m.hours?.length>=20);
+ if(!available.length)return rainMean!==null&&rainMean>=0.01?['🌦️','Rain possible']:['','Conditions unavailable'];
+ const summaries=available.map(m=>{
+  const wet=m.hours.filter(h=>Number.isFinite(h.rain)&&h.rain>=0.1);
+  return {name:m.name,wet,cloud:m.hours.filter(h=>h.hour>=8&&h.hour<=18&&Number.isFinite(h.cloud)),hours:m.hours};
+ });
+ const wetModels=summaries.filter(m=>m.wet.length);
+ if(wetModels.length){
+  const totalWet=wetModels.reduce((s,m)=>s+m.wet.length,0)/wetModels.length;
+  const am=wetModels.reduce((s,m)=>s+m.wet.filter(h=>h.hour<12).length,0);
+  const pm=wetModels.reduce((s,m)=>s+m.wet.filter(h=>h.hour>=12).length,0);
+  if(wetModels.length<available.length)return ['🌦️','Showers possible'];
+  if(totalWet<=2)return ['🌦️',am>pm?'Brief AM showers':pm>am?'Brief PM showers':'Brief showers'];
+  if(totalWet<=5)return ['🌦️',am>=4*pm?'AM showers':pm>=4*am?'PM showers':'Scattered showers'];
+  return ['🌧️',totalWet>=9?'Rainy':am>=4*pm?'AM rain':pm>=4*am?'PM rain':'Periods of rain'];
+ }
+ // EPS/GEFS may still contribute measurable rain when deterministic models stay dry.
+ if(rainMean!==null&&rainMean>=0.01)return ['🌦️','Mostly dry · rain possible'];
+ const sky=available.flatMap(m=>m.cloud);
+ return skyCondition(sky);
 }
 function conditionDisplay(code){
  if(code===0)return ['☀️','Sunny'];
@@ -227,15 +238,8 @@ const weightLabel=w=>'ECMWF '+Math.round(w.ECMWF*100)+'% / GFS '+Math.round(w.GF
 const rains=Object.values(data.model_daily_inches||{}).map(a=>a[data.dates.indexOf(date)]).filter(finite);
 // Prefer hourly timing and duration; the displayed model-mean rainfall
 // remains separate because it is a different multi-model dataset.
-const originalCondition=conditionDisplay(conditions[date]);
-const hourly=hourlyCondition(date,originalCondition);
 const rainMean=rains.length?mean(rains):null;
-// If the multi-model rainfall mean is wet but the hourly source is dry,
-// do not present an unqualified sunny/cloudy icon or invent rain timing.
-const hourlyWet=(hourlyByDay[date]||[]).some(h=>Number.isFinite(h.rain)&&h.rain>=0.1);
-const condition=rainMean!==null&&rainMean>=0.01&&!hourlyWet
- ? ['🌦️','Mostly dry · rain possible']
- : (hourly || (rainMean!==null&&rainMean>=0.01?['🌦️','Showers possible']:originalCondition));
+const condition=modelCondition(date,rainMean);
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
