@@ -24,7 +24,7 @@ html{scroll-behavior:smooth}
 .pending{border-left:3px solid #e9aa55;padding-left:13px;margin:13px 0;color:#f4d8a9}
 footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center;font-size:12px}
 @media(max-width:760px){.grid{grid-template-columns:1fr}.card.wide{grid-column:auto}header{padding:27px 20px}}
-.ten-day-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.day-forecast{background:#102033;border:1px solid #30455b;border-radius:12px;padding:16px 10px;text-align:center}.day-date{font-size:12px;color:#9eb6cc}.day-temps{margin:12px 0 2px;font-size:29px;font-weight:700;color:#ffcb88}.day-temps small{font-size:21px;color:#8ccdfa}.day-rain{font-size:13px;margin:12px 0}.day-forecast details{font-size:11px;color:#b8c8da}.day-forecast summary{cursor:pointer}@media(max-width:760px){#ten-day{padding:12px 8px}.ten-day-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.day-forecast{padding:12px 3px;border-radius:9px;min-width:0}.day-forecast>strong{font-size:12px}.day-forecast .day-date{font-size:10px}.day-temps{margin:10px 0 3px;font-size:22px;line-height:1.3}.day-temps span,.day-temps small{display:block}.day-temps small{font-size:18px}.day-rain{font-size:10px;line-height:1.4;margin:9px 0;overflow-wrap:anywhere}.day-forecast details{font-size:9px;overflow-wrap:anywhere}.day-forecast summary{min-height:30px;display:flex;align-items:center;justify-content:center}.day-forecast details p{font-size:10px}}.verification-table{width:100%;border-collapse:collapse;text-align:left;table-layout:fixed}.verification-table th,.verification-table td{padding:10px 8px;border-bottom:1px solid #30455b;vertical-align:top}.verification-table th{color:#a9c4db;font-size:12px}.verification-table td{font-size:14px;overflow-wrap:anywhere}.verification-table .date-cell{white-space:nowrap}.verification-note{font-size:12px;line-height:1.5;margin-top:14px}@media(max-width:760px){.verification-table th,.verification-table td{padding:8px 4px;font-size:12px}.verification-table th{font-size:11px}.verification-table .date-cell{white-space:normal}} </style></head>
+.ten-day-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.day-forecast{background:#102033;border:1px solid #30455b;border-radius:12px;padding:16px 10px;text-align:center}.day-date{font-size:12px;color:#9eb6cc}.day-temps{margin:12px 0 2px;font-size:29px;font-weight:700;color:#ffcb88}.day-temps small{font-size:21px;color:#8ccdfa}.day-rain{font-size:13px;margin:12px 0}.day-forecast details{font-size:11px;color:#b8c8da}.day-forecast summary{cursor:pointer}@media(max-width:760px){#ten-day{padding:12px 8px}.ten-day-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.day-forecast{padding:12px 3px;border-radius:9px;min-width:0}.day-forecast>strong{font-size:12px}.day-forecast .day-date{font-size:10px}.day-temps{margin:10px 0 3px;font-size:22px;line-height:1.3}.day-temps span,.day-temps small{display:block}.day-temps small{font-size:18px}.day-rain{font-size:10px;line-height:1.4;margin:9px 0;overflow-wrap:anywhere}.day-forecast details{font-size:9px;overflow-wrap:anywhere}.day-forecast summary{min-height:30px;display:flex;align-items:center;justify-content:center}.day-forecast details p{font-size:10px}}.verification-table{width:100%;border-collapse:collapse;text-align:left;table-layout:fixed}.verification-table th,.verification-table td{padding:10px 8px;border-bottom:1px solid #30455b;vertical-align:top}.verification-table th{color:#a9c4db;font-size:12px}.verification-table td{font-size:14px;overflow-wrap:anywhere}.verification-table .date-cell{white-space:nowrap}.verification-note{font-size:12px;line-height:1.5;margin-top:14px}@media(max-width:760px){.verification-table th,.verification-table td{padding:8px 4px;font-size:12px}.verification-table th{font-size:11px}.verification-table .date-cell{white-space:normal}} .day-condition{min-height:65px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;margin-top:8px}.day-condition span{font-size:31px;line-height:1.2}.day-condition small{font-size:11px;color:#b8c8da;line-height:1.25}@media(max-width:760px){.day-condition{min-height:55px}.day-condition span{font-size:25px}.day-condition small{font-size:9px;overflow-wrap:anywhere}}</style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
 <h1>Moraga Weather Observatory</h1>
@@ -157,6 +157,24 @@ const res=await fetch('moraga_forecast_10day.json?t='+Date.now(),{cache:'no-stor
 if(!res.ok)throw Error('Forecast pending');
 const data=await res.json(),today=dateKey(new Date());
 const models=Object.entries(data.temperature_models||{});
+let conditions={};
+try {
+ const url='https://api.open-meteo.com/v1/forecast?latitude='+encodeURIComponent(data.latitude)+'&longitude='+encodeURIComponent(data.longitude)+'&daily=weather_code&timezone=America%2FLos_Angeles&forecast_days=10';
+ const weatherRes=await fetch(url,{cache:'no-store'});
+ if(weatherRes.ok){const wx=await weatherRes.json();(wx.daily?.time||[]).forEach((d,i)=>{conditions[d]=wx.daily.weather_code?.[i]});}
+}catch(e){}
+function conditionDisplay(code){
+ if(code===0)return ['☀️','Sunny'];
+ if(code===1)return ['🌤️','Mostly sunny'];
+ if(code===2)return ['⛅','Partly cloudy'];
+ if(code===3)return ['☁️','Cloudy'];
+ if([45,48].includes(code))return ['🌫️','Foggy'];
+ if([51,53,55,56,57].includes(code))return ['🌦️','Drizzle'];
+ if([61,63,65,66,67,80,81,82].includes(code))return ['🌧️','Rain'];
+ if([71,73,75,77,85,86].includes(code))return ['🌨️','Snow'];
+ if([95,96,99].includes(code))return ['⛈️','Thunderstorms'];
+ return ['','Conditions unavailable'];
+}
 let skill=[];
 try{const verification=await fetch('hourly_matches.csv?t='+Date.now(),{cache:'no-store'});if(verification.ok)skill=forecastSkill(await verification.text());}catch(e){}
 
@@ -176,7 +194,7 @@ const rains=Object.values(data.model_daily_inches||{}).map(a=>a[data.dates.index
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
-return '<article class="day-forecast"><strong>'+(date===today?'Today':day)+'</strong><div class="day-date">'+label+'</div><div class="day-temps"><span>'+skillBlend(highEntries,wh)+'</span> <small>'+skillBlend(lowEntries,wl)+'</small></div><div class="day-date">High / low °F</div><div class="day-rain">'+(rains.length?'💧 '+mean(rains).toFixed(2)+' in':'Rain —')+'</div><details><summary>Model range</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Rain '+(rains.length?Math.min(...rains).toFixed(2)+'–'+Math.max(...rains).toFixed(2)+' in':'—')+'<br>High weights: '+weightLabel(wh)+'<br>'+wh.reason+'<br>Low weights: '+weightLabel(wl)+'<br>'+wl.reason+'</p></details></article>';
+return '<article class="day-forecast"><strong>'+(date===today?'Today':day)+'</strong><div class="day-date">'+label+'</div><div class="day-condition" title="Daily weather condition from Open-Meteo"><span aria-hidden="true">'+conditionDisplay(conditions[date])[0]+'</span><small>'+conditionDisplay(conditions[date])[1]+'</small></div><div class="day-temps"><span>'+skillBlend(highEntries,wh)+'</span> <small>'+skillBlend(lowEntries,wl)+'</small></div><div class="day-date">High / low °F</div><div class="day-rain">'+(rains.length?'💧 '+mean(rains).toFixed(2)+' in':'Rain —')+'</div><details><summary>Model range</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Rain '+(rains.length?Math.min(...rains).toFixed(2)+'–'+Math.max(...rains).toFixed(2)+' in':'—')+'<br>High weights: '+weightLabel(wh)+'<br>'+wh.reason+'<br>Low weights: '+weightLabel(wl)+'<br>'+wl.reason+'</p></details></article>';
 }).join('')+'</div>';
 const stamp=new Date(data.generated_utc);
 document.getElementById('ten-day-updated').textContent='Updated '+stamp.toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT'+(Date.now()-stamp.getTime()>12*3600000?' • Update delayed':'')+(days.length<10?' • '+days.length+' current days available':'');
