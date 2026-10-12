@@ -176,8 +176,12 @@ function hourlyCondition(date, fallback){
  // A wet hour must have at least 0.1 mm forecast, avoiding trace noise.
  const wet=hours.filter(h=>Number.isFinite(h.rain)&&h.rain>=0.1);
  const n=wet.length;
- const clouds=hours.map(h=>h.cloud).filter(Number.isFinite);
+ const daytime=hours.filter(h=>h.hour>=8&&h.hour<=18&&Number.isFinite(h.cloud));
+ const clouds=daytime.map(h=>h.cloud);
  const avgCloud=clouds.length?clouds.reduce((a,b)=>a+b,0)/clouds.length:null;
+ const morning=daytime.filter(h=>h.hour<=11),afternoon=daytime.filter(h=>h.hour>=13);
+ const average=a=>a.length?a.reduce((sum,h)=>sum+h.cloud,0)/a.length:null;
+ const amCloud=average(morning),pmCloud=average(afternoon);
  if(n){
   const am=wet.filter(h=>h.hour<12).length,pm=n-am;
   if(n<=2)return ['🌦️',am>pm?'Brief AM showers':pm>am?'Brief PM showers':'Brief showers'];
@@ -185,10 +189,13 @@ function hourlyCondition(date, fallback){
   return ['🌧️',n>=9?'Rainy':am>=n*.8?'AM rain':pm>=n*.8?'PM rain':'Periods of rain'];
  }
  if(avgCloud===null)return fallback;
- if(avgCloud<20)return ['☀️','Sunny'];
- if(avgCloud<45)return ['🌤️','Mostly sunny'];
- if(avgCloud<75)return ['⛅','Partly cloudy'];
- return ['☁️','Cloudy'];
+ if(amCloud!==null&&pmCloud!==null&&amCloud>=75&&pmCloud<=35&&amCloud-pmCloud>=45)return ['🌤️','AM clouds, PM sun'];
+ if(amCloud!==null&&pmCloud!==null&&amCloud<=35&&pmCloud>=75&&pmCloud-amCloud>=45)return ['🌥️','Increasing clouds'];
+ if(avgCloud<=10)return ['☀️','Sunny'];
+ if(avgCloud<=25)return ['🌤️','Mostly sunny'];
+ if(avgCloud<=50)return ['⛅','Partly cloudy'];
+ if(avgCloud<=85)return ['🌥️','Mostly cloudy'];
+ return ['☁️','Overcast'];
 }
 function conditionDisplay(code){
  if(code===0)return ['☀️','Sunny'];
