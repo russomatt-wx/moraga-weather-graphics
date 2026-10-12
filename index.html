@@ -159,7 +159,7 @@ const data=await res.json(),today=dateKey(new Date());
 const models=Object.entries(data.temperature_models||{});
 // Pull the same deterministic model families used by the temperature forecast.
 // Use hourly precipitation timing, duration, and daytime cloud cover from each.
-let hourlyModels={};
+let hourlyModels={},fallbackCodes={};
 await Promise.all([['ECMWF','ecmwf_ifs025'],['GFS','gfs_seamless']].map(async ([name,model])=>{
  try{
   const url='https://api.open-meteo.com/v1/forecast?latitude='+encodeURIComponent(data.latitude)+'&longitude='+encodeURIComponent(data.longitude)+'&models='+model+'&hourly=precipitation,cloud_cover&timezone=America%2FLos_Angeles&forecast_days=10';
@@ -173,6 +173,20 @@ await Promise.all([['ECMWF','ecmwf_ifs025'],['GFS','gfs_seamless']].map(async ([
   if(Object.keys(byDay).length)hourlyModels[name]=byDay;
  }catch(e){}
 }));
+// Independent cloud-cover fallback if model-specific hourly cloud fields are absent.
+let fallbackCloudByDay={};
+try{
+ const url='https://api.open-meteo.com/v1/forecast?latitude='+encodeURIComponent(data.latitude)+'&longitude='+encodeURIComponent(data.longitude)+'&hourly=cloud_cover&daily=weather_code&timezone=America%2FLos_Angeles&forecast_days=10';
+ const response=await fetch(url,{cache:'no-store'});
+ if(response.ok){
+  const wx=await response.json();
+  (wx.hourly?.time||[]).forEach((t,i)=>{
+   const cloud=wx.hourly.cloud_cover?.[i];
+   (fallbackCloudByDay[t.slice(0,10)]??=[]).push({hour:Number(t.slice(11,13)),cloud});
+  });
+  (wx.daily?.time||[]).forEach((d,i)=>{fallbackCodes[d]=wx.daily.weather_code?.[i]});
+ }
+}catch(e){}
 function skyCondition(hours){
  const daytime=hours.filter(h=>h.hour>=8&&h.hour<=18&&Number.isFinite(h.cloud));
  const average=arr=>arr.length?arr.reduce((s,h)=>s+h.cloud,0)/arr.length:null;
@@ -188,7 +202,7 @@ function skyCondition(hours){
 }
 function modelCondition(date,rainMean){
  const available=Object.entries(hourlyModels).map(([name,days])=>({name,hours:days[date]})).filter(m=>m.hours?.length>=20);
- if(!available.length)return rainMean!==null&&rainMean>=0.01?['🌦️','Rain possible']:['','Conditions unavailable'];
+ if(!available.length)return rainMean!==null&&rainMean>=0.01?['🌦️','Rain possible']:(skyCondition(fallbackCloudByDay[date]||[])?.[0]?skyCondition(fallbackCloudByDay[date]):conditionDisplay(fallbackCodes[date]));
  const summaries=available.map(m=>{
   const wet=m.hours.filter(h=>Number.isFinite(h.rain)&&h.rain>=0.1);
   return {name:m.name,wet,cloud:m.hours.filter(h=>h.hour>=8&&h.hour<=18&&Number.isFinite(h.cloud)),hours:m.hours};
@@ -206,7 +220,7 @@ function modelCondition(date,rainMean){
  // EPS/GEFS may still contribute measurable rain when deterministic models stay dry.
  if(rainMean!==null&&rainMean>=0.01)return ['🌦️','Mostly dry · rain possible'];
  const sky=available.flatMap(m=>m.cloud);
- return skyCondition(sky);
+ const cloudGuidance=skyCondition(sky);if(cloudGuidance[0])return cloudGuidance;const fallback=skyCondition(fallbackCloudByDay[date]||[]);return fallback[0]?fallback:conditionDisplay(fallbackCodes[date]);
 }
 function conditionDisplay(code){
  if(code===0)return ['☀️','Sunny'];
