@@ -22,15 +22,19 @@ SOURCES = [
     ("GEFS mean", "https://ensemble-api.open-meteo.com/v1/ensemble", "ncep_gefs_ensemble_mean_seamless"),
 ]
 temperature_results = {}
+hourly_results = {}
 def get(url, model):
     params = {**BASE, "models": model}
     if "ensemble" not in url:
-        params.update(daily="precipitation_sum,temperature_2m_max,temperature_2m_min", temperature_unit="fahrenheit")
+        params.update(daily="precipitation_sum,temperature_2m_max,temperature_2m_min", hourly="precipitation,cloud_cover", temperature_unit="fahrenheit")
     q = urllib.parse.urlencode(params)
     req = urllib.request.Request(url + "?" + q, headers={"User-Agent": "MoragaWeatherGraphics/1.0"})
     with urllib.request.urlopen(req, timeout=40) as resp:
         payload = json.load(resp)
     daily = payload["daily"]
+    if "hourly" in payload and "temperature_2m_max" in daily:
+        hourly = payload["hourly"]
+        hourly_results[model] = {"time": hourly.get("time", []), "precipitation_mm": hourly.get("precipitation", []), "cloud_cover_pct": hourly.get("cloud_cover", [])}
     values = daily["precipitation_sum"]
     if len(daily["time"]) != 10 or len(values) != 10:
         raise ValueError(f"Unexpected forecast length: {model}")
@@ -85,7 +89,7 @@ print(f"Saved {out}; available models: {', '.join(results)}; errors: {errors}")
 Path("moraga_forecast_10day.json").write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
     "dates": dates, "temperature_models": {name: temperature_results[model] for name, url, model in SOURCES if model in temperature_results},
-    "model_daily_inches": results, "errors": errors,
+    "model_daily_inches": results, "hourly_conditions": {name: hourly_results[model] for name, url, model in SOURCES if model in hourly_results}, "errors": errors,
     "method": "Daily ECMWF/GFS model inputs. Website applies paired KCAMORAG71 hourly skill weights separately for highs and lows and by forecast lead; sparse or unverified leads retain equal weights. Displayed ranges are deterministic model spread, not probability intervals.",
     "source": "Open-Meteo", "note": "Model inputs are not bias-corrected; website skill weighting is provisional, based on hourly temperature errors. Generated timestamp is retrieval time, not model initialization."
 }, indent=2))
