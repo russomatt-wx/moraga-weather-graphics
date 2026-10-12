@@ -1,0 +1,19 @@
+{
+  "forecasts": [
+    {
+      "edition": "6 AM",
+      "valid_local_date": "2026-10-11",
+      "forecast_high_f": 67,
+      "forecast_low_f": 49,
+      "record_type": "historically_recovered_chatgpt_forecast"
+    },
+    {
+      "edition": "11 AM",
+      "valid_local_date": "2026-10-11",
+      "forecast_high_f": 69,
+      "forecast_low_f": null,
+      "record_type": "historically_recovered_chatgpt_forecast"
+    }
+  ],
+  "note": "Historical conversational test records, not live-issued forecasts. No forecast accuracy implied."
+}
