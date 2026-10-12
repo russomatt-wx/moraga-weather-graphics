@@ -1,4 +1,5 @@
 {
+  "generated_utc": "2026-10-12T00:15:00.591916+00:00",
   "status": "awaiting_eligible_explicit_forecasts",
   "summary": {
     "6 AM": {
@@ -20,7 +21,12 @@
       "count": 0,
       "high_mae_f": null,
       "low_mae_f": null
+    },
+    "Unclassified": {
+      "count": 0,
+      "high_mae_f": null,
+      "low_mae_f": null
     }
   },
-  "caveat": "Only live-issued explicit forecasts; historical recovered tests and automated model guidance excluded."
-}
+  "caveat": "Only explicit live-issued forecasts scored; recovered historical tests and automated model guidance excluded."
+}\n

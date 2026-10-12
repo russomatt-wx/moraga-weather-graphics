@@ -1,43 +1,50 @@
 {
-  "generated_utc": "2026-10-11T00:10:26.713567+00:00",
+  "generated_utc": "2026-10-12T00:15:00.625717+00:00",
   "station": "KCAMORAG71",
   "days": {
     "2026-10-07": {
-      "sampled_low_f": 64,
-      "sampled_high_f": 98,
+      "sampled_low_f": 64.0,
+      "sampled_high_f": 98.0,
       "samples": 18,
       "first_utc": "2026-10-07T23:35:00+00:00",
       "last_utc": "2026-10-08T06:58:00+00:00"
     },
     "2026-10-08": {
-      "sampled_low_f": 57,
-      "sampled_high_f": 100,
+      "sampled_low_f": 57.0,
+      "sampled_high_f": 100.0,
       "samples": 50,
       "first_utc": "2026-10-08T07:25:00+00:00",
       "last_utc": "2026-10-09T06:57:00+00:00"
     },
     "2026-10-09": {
-      "sampled_low_f": 55,
-      "sampled_high_f": 71,
+      "sampled_low_f": 55.0,
+      "sampled_high_f": 71.0,
       "samples": 51,
       "first_utc": "2026-10-09T07:25:00+00:00",
       "last_utc": "2026-10-10T06:42:00+00:00"
     },
     "2026-10-10": {
-      "sampled_low_f": 55,
-      "sampled_high_f": 66,
-      "samples": 49,
+      "sampled_low_f": 53.0,
+      "sampled_high_f": 66.0,
+      "samples": 63,
       "first_utc": "2026-10-10T07:01:00+00:00",
-      "last_utc": "2026-10-10T23:47:00+00:00"
+      "last_utc": "2026-10-11T06:42:00+00:00"
+    },
+    "2026-10-11": {
+      "sampled_low_f": 47.0,
+      "sampled_high_f": 66.0,
+      "samples": 45,
+      "first_utc": "2026-10-11T07:03:00+00:00",
+      "last_utc": "2026-10-12T00:08:00+00:00"
     }
   },
   "months": {
     "2026-10": {
-      "sample_count": 168,
-      "days_with_samples": 4,
-      "mean_sample_temperature_f": 67.49,
-      "mean_sampled_daily_high_f": 83.75,
-      "mean_sampled_daily_low_f": 57.75,
+      "sample_count": 227,
+      "days_with_samples": 5,
+      "mean_sample_temperature_f": 64.54,
+      "mean_sampled_daily_high_f": 80.2,
+      "mean_sampled_daily_low_f": 55.2,
       "monthly_precipitation_in": 0,
       "annual_precipitation_in": null,
       "precipitation_status": "owner_confirmed_as_of",
@@ -45,13 +52,13 @@
       "precipitation_source": "Owner confirmed no rainfall this month"
     }
   },
-  "observations": 168,
+  "observations": 227,
   "status": "partial_observed_climate_ledger",
-  "caveat": "Uneven station sampling; rainfall uses source-reported month-to-date readings or dated owner confirmation.",
+  "caveat": "Uneven station sampling; monthly averages are not official daily-mean climate normals. Rainfall is source-reported month-to-date or a dated owner confirmation; cumulative readings are never summed.",
   "station_graphic": {
     "path": "climate/station_temperature_latest.png",
-    "samples_plotted": 168,
-    "last_observed_utc": "2026-10-10T23:47:00+00:00",
+    "samples_plotted": 227,
+    "last_observed_utc": "2026-10-12T00:08:00+00:00",
     "source": "observations/KCAMORAG71_*.csv"
   }
 }
