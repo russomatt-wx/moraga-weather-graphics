@@ -1,0 +1,87 @@
+{
+  "generated_utc": "2026-10-12T01:40:17.884252+00:00",
+  "target_local_date": "2026-10-10",
+  "timezone": "America/Los_Angeles",
+  "rows": [
+    {
+      "label": "ECMWF",
+      "kind": "model",
+      "high_f": null,
+      "low_f": null,
+      "status": "full_day_forecast_not_archived"
+    },
+    {
+      "label": "GFS",
+      "kind": "model",
+      "high_f": null,
+      "low_f": null,
+      "status": "full_day_forecast_not_archived"
+    },
+    {
+      "label": "NAM",
+      "kind": "model",
+      "high_f": null,
+      "low_f": null,
+      "status": "full_day_forecast_not_archived"
+    },
+    {
+      "label": "ICON",
+      "kind": "model",
+      "high_f": null,
+      "low_f": null,
+      "status": "full_day_forecast_not_archived"
+    },
+    {
+      "label": "GEM",
+      "kind": "model",
+      "high_f": null,
+      "low_f": null,
+      "status": "full_day_forecast_not_archived"
+    },
+    {
+      "label": "Model consensus",
+      "kind": "model",
+      "high_f": 62.2,
+      "low_f": 53.2,
+      "issued_utc": "2026-10-09T23:45:10.830911+00:00",
+      "status": "archived_raw_model_consensus"
+    },
+    {
+      "label": "Assistant \u00b7 6 AM",
+      "kind": "assistant",
+      "high_f": null,
+      "low_f": null,
+      "status": "not_logged"
+    },
+    {
+      "label": "Assistant \u00b7 11 AM",
+      "kind": "assistant",
+      "high_f": null,
+      "low_f": null,
+      "status": "not_logged"
+    },
+    {
+      "label": "Assistant \u00b7 4 PM",
+      "kind": "assistant",
+      "high_f": null,
+      "low_f": null,
+      "status": "not_logged"
+    },
+    {
+      "label": "Assistant \u00b7 9 PM",
+      "kind": "assistant",
+      "high_f": null,
+      "low_f": null,
+      "status": "not_logged"
+    },
+    {
+      "label": "Observed \u00b7 KCAMORAG71",
+      "kind": "observed",
+      "high_f": 66.0,
+      "low_f": 53.0,
+      "samples": 63,
+      "status": "completed_day_sampled_extrema"
+    }
+  ],
+  "method": "Individual models: latest archived retrieval before target-day midnight with every hourly value present. Assistant: first saved forecast per edition, with recovered records flagged. Observations: sampled daily extrema."
+}
