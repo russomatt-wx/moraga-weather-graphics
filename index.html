@@ -191,10 +191,18 @@ const highs=highEntries.map(([n,v])=>v).filter(finite),lows=lowEntries.map(([n,v
 const wh=skillWeights(skill,i,'high'),wl=skillWeights(skill,i,'low');
 const weightLabel=w=>'ECMWF '+Math.round(w.ECMWF*100)+'% / GFS '+Math.round(w.GFS*100)+'%';
 const rains=Object.values(data.model_daily_inches||{}).map(a=>a[data.dates.indexOf(date)]).filter(finite);
+// The icon and rainfall number must tell the same story. Use the
+// displayed multi-model rainfall mean to override a dry icon when wet.
+const rainMean=rains.length?mean(rains):null;
+const originalCondition=conditionDisplay(conditions[date]);
+const rainCode=[51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99].includes(conditions[date]);
+const condition=rainMean!==null&&rainMean>=0.01&&!rainCode
+ ? (rainMean>=0.10?['🌧️','Rain possible']:['🌦️','Showers possible'])
+ : originalCondition;
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
-return '<article class="day-forecast"><strong>'+(date===today?'Today':day)+'</strong><div class="day-date">'+label+'</div><div class="day-condition" title="Daily weather condition from Open-Meteo"><span aria-hidden="true">'+conditionDisplay(conditions[date])[0]+'</span><small>'+conditionDisplay(conditions[date])[1]+'</small></div><div class="day-temps"><span>'+skillBlend(highEntries,wh)+'</span> <small>'+skillBlend(lowEntries,wl)+'</small></div><div class="day-date">High / low °F</div><div class="day-rain">'+(rains.length?'💧 '+mean(rains).toFixed(2)+' in':'Rain —')+'</div><details><summary>Model range</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Rain '+(rains.length?Math.min(...rains).toFixed(2)+'–'+Math.max(...rains).toFixed(2)+' in':'—')+'<br>High weights: '+weightLabel(wh)+'<br>'+wh.reason+'<br>Low weights: '+weightLabel(wl)+'<br>'+wl.reason+'</p></details></article>';
+return '<article class="day-forecast"><strong>'+(date===today?'Today':day)+'</strong><div class="day-date">'+label+'</div><div class="day-condition" title="Daily weather condition from Open-Meteo"><span aria-hidden="true">'+condition[0]+'</span><small>'+condition[1]+'</small></div><div class="day-temps"><span>'+skillBlend(highEntries,wh)+'</span> <small>'+skillBlend(lowEntries,wl)+'</small></div><div class="day-date">High / low °F</div><div class="day-rain">'+(rains.length?'💧 '+mean(rains).toFixed(2)+' in':'Rain —')+'</div><details><summary>Model range</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Rain '+(rains.length?Math.min(...rains).toFixed(2)+'–'+Math.max(...rains).toFixed(2)+' in':'—')+'<br>High weights: '+weightLabel(wh)+'<br>'+wh.reason+'<br>Low weights: '+weightLabel(wl)+'<br>'+wl.reason+'</p></details></article>';
 }).join('')+'</div>';
 const stamp=new Date(data.generated_utc);
 document.getElementById('ten-day-updated').textContent='Updated '+stamp.toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT'+(Date.now()-stamp.getTime()>12*3600000?' • Update delayed':'')+(days.length<10?' • '+days.length+' current days available':'');
