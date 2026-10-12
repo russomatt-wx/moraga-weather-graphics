@@ -204,7 +204,7 @@ function modelCondition(date,rainMean){
  }
  // EPS/GEFS may still contribute measurable rain when deterministic models stay dry.
  if(rainMean!==null&&rainMean>=0.01)return ['🌦️','Mostly dry · rain possible'];
- const sky=available.flatMap(m=>m.cloud);
+ const sky=summaries.flatMap(m=>m.cloud);
  const cloudGuidance=skyCondition(sky);return cloudGuidance[0]?cloudGuidance:['🌫️','Sky data pending'];
 }
 function conditionDisplay(code){
