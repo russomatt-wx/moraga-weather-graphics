@@ -232,7 +232,15 @@ function modelCondition(date,rainMean){
   return ['🌧️',totalWet>=9?'Rainy':am>=4*pm?'AM rain':pm>=4*am?'PM rain':'Periods of rain'];
  }
  // EPS/GEFS may still contribute measurable rain when deterministic models stay dry.
- if(rainMean!==null&&rainMean>=0.01)return ['🌦️','Mostly dry · rain possible'];
+ if(rainMean!==null&&rainMean>=0.01){
+  // Ensemble/model-mean accumulation is not a probability of precipitation.
+  // When hourly deterministic models are dry, retain the actual sky condition
+  // and flag the lower-confidence rain signal without implying expected rain.
+  const sky=summaries.flatMap(m=>m.cloud);
+  const cloudGuidance=skyCondition(sky);
+  if(cloudGuidance[0])return [cloudGuidance[0],cloudGuidance[1]+' · rain risk'];
+  return ['🌦️','Rain risk · timing uncertain'];
+ }
  const sky=summaries.flatMap(m=>m.cloud);
  const cloudGuidance=skyCondition(sky);return cloudGuidance[0]?cloudGuidance:['🌫️','Sky data pending'];
 }
