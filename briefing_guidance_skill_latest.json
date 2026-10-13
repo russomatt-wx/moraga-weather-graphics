@@ -1,0 +1,28 @@
+{
+  "generated_utc": "2026-10-13T05:03:14.521896+00:00",
+  "source": "automated_briefing_model_guidance",
+  "summary": {
+    "6 AM": {
+      "count": 0,
+      "high_mae_f": null,
+      "low_mae_f": null
+    },
+    "11 AM": {
+      "count": 0,
+      "high_mae_f": null,
+      "low_mae_f": null
+    },
+    "4 PM": {
+      "count": 0,
+      "high_mae_f": null,
+      "low_mae_f": null
+    },
+    "9 PM": {
+      "count": 0,
+      "high_mae_f": null,
+      "low_mae_f": null
+    }
+  },
+  "matches": [],
+  "caveat": "Not conversational ChatGPT skill. Only completed days with >=48 Xweather samples, first/last hour coverage and no >2h gaps."
+}
