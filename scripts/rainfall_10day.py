@@ -18,6 +18,9 @@ BASE = {"latitude": LAT, "longitude": LON, "daily": "precipitation_sum",
 SOURCES = [
     ("ECMWF", "https://api.open-meteo.com/v1/forecast", "ecmwf_ifs025"),
     ("GFS", "https://api.open-meteo.com/v1/forecast", "ncep_gfs_seamless"),
+    ("ICON", "https://api.open-meteo.com/v1/forecast", "icon_seamless"),
+    ("GEM", "https://api.open-meteo.com/v1/forecast", "gem_seamless"),
+    ("NAM", "https://api.open-meteo.com/v1/forecast", "ncep_nam_conus"),
     ("EPS mean", "https://ensemble-api.open-meteo.com/v1/ensemble", "ecmwf_ifs025_ensemble_mean"),
     ("GEFS mean", "https://ensemble-api.open-meteo.com/v1/ensemble", "ncep_gefs_ensemble_mean_seamless"),
 ]
@@ -36,13 +39,13 @@ def get(url, model):
         hourly = payload["hourly"]
         hourly_results[model] = {"time": hourly.get("time", []), "precipitation_mm": hourly.get("precipitation", []), "cloud_cover_pct": hourly.get("cloud_cover", [])}
     values = daily["precipitation_sum"]
-    if len(daily["time"]) != 10 or len(values) != 10:
+    if not daily["time"] or len(values) != len(daily["time"]):
         raise ValueError(f"Unexpected forecast length: {model}")
     if any(v is not None and (not isinstance(v, (float,int)) or v < 0) for v in values):
         raise ValueError(f"Invalid precipitation values: {model}")
     if "temperature_2m_max" in daily:
         highs, lows = daily["temperature_2m_max"], daily["temperature_2m_min"]
-        if len(highs) != 10 or len(lows) != 10:
+        if len(highs) != len(daily["time"]) or len(lows) != len(daily["time"]):
             raise ValueError("Unexpected temperature forecast length")
         temperature_results[model] = {"dates": daily["time"], "high_f": highs, "low_f": lows}
     return daily["time"], values
@@ -54,8 +57,10 @@ for name, url, model in SOURCES:
         d, vals = get(url, model)
         if dates is None:
             dates = d
-        if dates != d:
+        if dates != d and name in ("ECMWF","GFS","EPS mean","GEFS mean"):
             raise ValueError("Date mismatch")
+        if dates != d:
+            vals = [dict(zip(d,vals)).get(day) for day in dates]
         results[name] = vals
     except Exception as exc:
         errors[name] = str(exc)
