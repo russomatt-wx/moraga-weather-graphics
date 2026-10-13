@@ -91,10 +91,60 @@ Path("moraga_rainfall_10day.json").write_text(json.dumps({
 }, indent=2))
 print(f"Saved {out}; available models: {', '.join(results)}; errors: {errors}")
 
+def daily_conditions(dates, results, hourly_results):
+    """Compute deterministic display labels before publishing, never in the browser."""
+    by_name = {name: hourly_results[model] for name, _, model in SOURCES if model in hourly_results}
+    output = {}
+    for index, day in enumerate(dates):
+        available = []
+        sky = []
+        for name, series in by_name.items():
+            hours = []
+            for j, stamp in enumerate(series.get("time", [])):
+                if not stamp.startswith(day):
+                    continue
+                hour = int(stamp[11:13])
+                rain = series.get("precipitation_mm", [])[j]
+                cloud = series.get("cloud_cover_pct", [])[j]
+                if 8 <= hour <= 18 and isinstance(cloud, (float, int)):
+                    sky.append((hour, cloud))
+                hours.append((hour, rain))
+            amount = results.get(name, [None] * len(dates))[index]
+            if len(hours) >= 20 and isinstance(amount, (float, int)):
+                available.append((name, amount, hours))
+        clouds = sum(c for _, c in sky) / len(sky) if sky else None
+        if clouds is None:
+            icon, label = "⛅", "Partly cloudy"
+        elif clouds <= 10:
+            icon, label = "☀️", "Sunny"
+        elif clouds <= 25:
+            icon, label = "🌤️", "Mostly sunny"
+        elif clouds <= 50:
+            icon, label = "⛅", "Partly cloudy"
+        elif clouds <= 85:
+            icon, label = "🌥️", "Mostly cloudy"
+        else:
+            icon, label = "☁️", "Overcast"
+        support = [(n, a, h) for n, a, h in available if a >= 0.05]
+        wet = [(n, sum(1 for _, r in h if isinstance(r, (float, int)) and r >= 0.004))
+               for n, a, h in available if any(isinstance(r, (float, int)) and r >= 0.004 for _, r in h)]
+        if len(support) >= 2 and len(support) / len(available) >= 0.6 and len(wet) >= 2 and sum(n for _, n in wet) / len(wet) >= 3:
+            icon, label = "🌧️", "Rain likely"
+        elif len(support) >= 2 and len(support) / len(available) >= 0.4:
+            icon, label = "🌦️", "Chance of showers"
+        elif available and len(wet) / len(available) >= 0.4:
+            icon, label = "🌦️", "Chance of showers"
+        output[day] = {"icon": icon, "label": label}
+    return output
+
+conditions = daily_conditions(dates, results, hourly_results)
+assert len(conditions) == len(dates)
+assert all(v["icon"] and v["label"] for v in conditions.values())
+
 Path("moraga_forecast_10day.json").write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
     "dates": dates, "temperature_models": {name: temperature_results[model] for name, url, model in SOURCES if model in temperature_results},
-    "model_daily_inches": results, "hourly_conditions": {name: hourly_results[model] for name, url, model in SOURCES if model in hourly_results}, "errors": errors,
+    "model_daily_inches": results, "daily_conditions": conditions, "hourly_conditions": {name: hourly_results[model] for name, url, model in SOURCES if model in hourly_results}, "errors": errors,
     "method": "Available ECMWF, GFS, ICON, GEM and NAM temperature guidance; website applies provisional KCAMORAG71 hourly skill weights separately for daytime and overnight, using lead-specific history where sufficient. Displayed ranges are deterministic model spread, not probability intervals.",
     "source": "Open-Meteo", "note": "Model inputs are not bias-corrected; website skill weighting is provisional, based on hourly temperature errors. Generated timestamp is retrieval time, not model initialization."
 }, indent=2))
