@@ -1,71 +1,69 @@
 {
-  "generated_utc": "2026-10-13T06:38:19.526995+00:00",
-  "target_local_date": "2026-10-11",
+  "generated_utc": "2026-10-13T07:35:10.743903+00:00",
+  "target_local_date": "2026-10-12",
   "timezone": "America/Los_Angeles",
   "rows": [
     {
       "label": "ECMWF",
       "kind": "model",
-      "high_f": 68.18,
-      "low_f": 49.28,
-      "issued_utc": "2026-10-11T06:35:20.643037+00:00",
+      "high_f": 69.44,
+      "low_f": 47.48,
+      "issued_utc": "2026-10-12T06:42:07.871183+00:00",
       "status": "full_day_archived_snapshot"
     },
     {
       "label": "GFS",
       "kind": "model",
-      "high_f": 69.44,
+      "high_f": 68.9,
       "low_f": 46.58,
-      "issued_utc": "2026-10-11T06:35:19.890681+00:00",
+      "issued_utc": "2026-10-12T06:42:07.409935+00:00",
       "status": "full_day_archived_snapshot"
     },
     {
       "label": "NAM",
       "kind": "model",
-      "high_f": 66.2,
-      "low_f": 49.82,
-      "issued_utc": "2026-10-11T06:35:21.852393+00:00",
+      "high_f": 65.66,
+      "low_f": 46.94,
+      "issued_utc": "2026-10-12T06:42:08.912907+00:00",
       "status": "full_day_archived_snapshot"
     },
     {
       "label": "ICON",
       "kind": "model",
-      "high_f": 67.28,
-      "low_f": 43.7,
-      "issued_utc": "2026-10-11T06:35:22.433638+00:00",
+      "high_f": 70.16,
+      "low_f": 44.42,
+      "issued_utc": "2026-10-12T06:42:09.380267+00:00",
       "status": "full_day_archived_snapshot"
     },
     {
       "label": "GEM",
       "kind": "model",
-      "high_f": 65.48,
-      "low_f": 46.4,
-      "issued_utc": "2026-10-11T06:35:23.105457+00:00",
+      "high_f": 66.2,
+      "low_f": 44.42,
+      "issued_utc": "2026-10-12T06:42:09.858378+00:00",
       "status": "full_day_archived_snapshot"
     },
     {
       "label": "Model consensus",
       "kind": "model",
-      "high_f": 68.0,
-      "low_f": 48.4,
-      "issued_utc": "2026-10-10T23:42:00.409502+00:00",
+      "high_f": 69.4,
+      "low_f": 47.8,
+      "issued_utc": "2026-10-12T00:15:00.515064+00:00",
       "status": "archived_raw_model_consensus"
     },
     {
       "label": "Assistant \u00b7 6 AM",
       "kind": "assistant",
-      "high_f": 67.0,
-      "low_f": 49.0,
-      "issued_utc": "2026-10-11T13:02:37+00:00",
-      "status": "recovered_historical_not_scored"
+      "high_f": null,
+      "low_f": null,
+      "status": "not_logged"
     },
     {
       "label": "Assistant \u00b7 11 AM",
       "kind": "assistant",
-      "high_f": 69.0,
+      "high_f": null,
       "low_f": null,
-      "issued_utc": "2026-10-11T18:02:33+00:00",
-      "status": "recovered_historical_not_scored"
+      "status": "not_logged"
     },
     {
       "label": "Assistant \u00b7 4 PM",
@@ -84,10 +82,10 @@
     {
       "label": "Observed \u00b7 KCAMORAG71",
       "kind": "observed",
-      "high_f": 66.0,
-      "low_f": 47.0,
-      "samples": 58,
-      "status": "completed_day_sampled_extrema"
+      "high_f": 70.0,
+      "low_f": 44.0,
+      "samples": 47,
+      "status": "partial_station_coverage"
     }
   ],
   "method": "Individual models: latest archived retrieval before target-day midnight with every hourly value present. Assistant: first saved forecast per edition, with recovered records flagged. Observations: sampled daily extrema."
