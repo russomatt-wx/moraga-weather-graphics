@@ -126,7 +126,7 @@ function forecastSkill(csv,now=Date.now()){
  const rows=[];
  for(const line of lines){
   const c=line.split(','),model=(c[ix.model]||'').toUpperCase();
-  if(!['ECMWF','GFS'].includes(model)||!c[ix.forecast_f]?.trim()||!c[ix.observed_f]?.trim())continue;
+  if(!['ECMWF','GFS','ICON','GEM','NAM'].includes(model)||!c[ix.forecast_f]?.trim()||!c[ix.observed_f]?.trim())continue;
   const valid=Date.parse(c[ix.valid_utc]),issued=Date.parse(c[ix.issued_utc]);
   const forecast=Number(c[ix.forecast_f]),observed=Number(c[ix.observed_f]);
   if(![valid,issued,forecast,observed].every(Number.isFinite)||valid>now||valid<now-7*86400000||issued>=valid)continue;
@@ -136,24 +136,40 @@ function forecastSkill(csv,now=Date.now()){
  }
  return rows;
 }
-function skillWeights(rows,bucket,phase){
- const paired=new Map();
- for(const r of rows){
-  if(r.bucket!==bucket||r.phase!==phase)continue;
-  const key=r.valid,by=paired.get(key)||{};
-  if(!by[r.model]||r.issued>by[r.model].issued)by[r.model]=r;
-  paired.set(key,by);
+function skillWeights(rows,bucket,phase,names){
+ const eligible=[...new Set(names)];
+ const weights=Object.fromEntries(eligible.map(n=>[n,1/eligible.length]));
+ const phases=rows.filter(r=>r.phase===phase&&eligible.includes(r.model));
+ // Pair comparable forecast lead times. If a lead bucket is sparse, fall back
+ // to the model's broader same-phase skill rather than forcing a 50/50 blend.
+ const stats={};
+ for(const name of eligible){
+  const same=phases.filter(r=>r.model===name&&r.bucket===bucket);
+  const broad=phases.filter(r=>r.model===name);
+  const chosen=same.length>=12&&new Set(same.map(r=>dateKey(new Date(r.valid)))).size>=3?same:broad;
+  const unique=new Map();
+  for(const r of chosen){
+   const key=dateKey(new Date(r.valid))+'-'+new Date(r.valid).getUTCHours();
+   if(!unique.has(key)||r.issued>unique.get(key).issued)unique.set(key,r);
+  }
+  const samples=[...unique.values()];
+  const days=new Set(samples.map(r=>dateKey(new Date(r.valid)))).size;
+  if(samples.length>=3)stats[name]={mae:samples.reduce((v,r)=>v+r.error,0)/samples.length,days,n:samples.length};
  }
- const pairs=[...paired.values()].filter(p=>p.ECMWF&&p.GFS&&Math.abs(p.ECMWF.lead-p.GFS.lead)<=1&&Math.abs(p.ECMWF.observed-p.GFS.observed)<.01);
- const n=pairs.length,days=new Set(pairs.map(p=>new Date(p.ECMWF.valid).toISOString().slice(0,10))).size;
- if(n<3)return {ECMWF:.5,GFS:.5,n,reason:'Equal weights • awaiting matched '+phase+'-temperature samples at this lead'};
- const mae=Object.fromEntries(['ECMWF','GFS'].map(m=>[m,pairs.reduce((s,p)=>s+p[m].error,0)/n]));
- const inverse=Object.fromEntries(Object.entries(mae).map(([m,v])=>[m,1/Math.max(.5,v)]));
- // Shrink early results toward equal weights; correlated hours are not independent days.
- const strength=Math.min(n/(n+48),days/(days+7));
- const raw=inverse.ECMWF/(inverse.ECMWF+inverse.GFS);
- const e=Math.max(.3,Math.min(.7,.5+strength*(raw-.5)));
- return {ECMWF:e,GFS:1-e,n,mae,reason:'Provisional hourly '+(phase==='high'?'daytime':'overnight')+' skill • '+n+' paired hours'};
+ // Model skill is provisional and correlated; shrink toward equal weighting.
+ // Cap each model's advantage so a handful of hourly samples cannot dominate.
+ const raw=Object.fromEntries(eligible.map(name=>[name,stats[name]?1/Math.max(.75,stats[name].mae):null]));
+ const measured=Object.values(raw).filter(v=>v!==null);
+ if(measured.length>=2){
+  const neutral=measured.reduce((a,b)=>a+b,0)/measured.length;
+  const adjusted=eligible.map(name=>{
+   const st=stats[name],confidence=st?Math.min(.65,st.days/(st.days+5),st.n/(st.n+30)):0;
+   return (1-confidence)*neutral+confidence*(raw[name]??neutral);
+  });
+  const sum=adjusted.reduce((a,b)=>a+b,0);
+  eligible.forEach((name,i)=>weights[name]=adjusted[i]/sum);
+ }
+ return {...weights,reason:'Provisional '+(phase==='high'?'daytime':'overnight')+' model skill · '+eligible.filter(n=>stats[n]).length+' scored models; short leads prioritized'};
 }
 function skillBlend(entries,weights){
  const good=entries.filter(([name,value])=>typeof value==='number'&&Number.isFinite(value));
@@ -244,8 +260,9 @@ el.innerHTML='<div class="ten-day-grid">'+days.map((date,i)=>{
 const highEntries=models.map(([n,m])=>[n,m.high_f[m.dates.indexOf(date)]]);
 const lowEntries=models.map(([n,m])=>[n,m.low_f[m.dates.indexOf(date)]]);
 const highs=highEntries.map(([n,v])=>v).filter(finite),lows=lowEntries.map(([n,v])=>v).filter(finite);
-const wh=skillWeights(skill,i,'high'),wl=skillWeights(skill,i,'low');
-const weightLabel=w=>'ECMWF '+Math.round(w.ECMWF*100)+'% / GFS '+Math.round(w.GFS*100)+'%';
+const names=[...new Set([...highEntries,...lowEntries].filter(([n,v])=>finite(v)).map(([n])=>n))];
+const wh=skillWeights(skill,i,'high',names),wl=skillWeights(skill,i,'low',names);
+const weightLabel=w=>names.map(n=>n+' '+Math.round((w[n]||0)*100)+'%').join(' · ');
 const rains=Object.values(data.model_daily_inches||{}).map(a=>a[data.dates.indexOf(date)]).filter(finite);
 // Prefer hourly timing and duration; the displayed model-mean rainfall
 // remains separate because it is a different multi-model dataset.
