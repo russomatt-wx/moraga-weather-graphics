@@ -226,10 +226,21 @@ function modelCondition(date,rainMean){
   const totalWet=wetModels.reduce((s,m)=>s+m.wet.length,0)/wetModels.length;
   const am=wetModels.reduce((s,m)=>s+m.wet.filter(h=>h.hour<12).length,0);
   const pm=wetModels.reduce((s,m)=>s+m.wet.filter(h=>h.hour>=12).length,0);
-  if(wetModels.length<available.length)return ['🌦️','Showers possible'];
-  if(totalWet<=2)return ['🌦️',am>pm?'Brief AM showers':pm>am?'Brief PM showers':'Brief showers'];
-  if(totalWet<=5)return ['🌦️',am>=4*pm?'AM showers':pm>=4*am?'PM showers':'Scattered showers'];
-  return ['🌧️',totalWet>=9?'Rainy':am>=4*pm?'AM rain':pm>=4*am?'PM rain':'Periods of rain'];
+  const agreement=wetModels.length/available.length;
+  const overnight=wetModels.reduce((n,m)=>n+m.wet.filter(h=>h.hour<6).length,0);
+  const evening=wetModels.reduce((n,m)=>n+m.wet.filter(h=>h.hour>=18).length,0);
+  const morning=wetModels.reduce((n,m)=>n+m.wet.filter(h=>h.hour>=6&&h.hour<12).length,0);
+  const afternoon=wetModels.reduce((n,m)=>n+m.wet.filter(h=>h.hour>=12&&h.hour<18).length,0);
+  const peak=Math.max(overnight,evening,morning,afternoon);
+  const timing=peak>=0.55*(overnight+evening+morning+afternoon)?
+    (peak===overnight?'Overnight':peak===evening?'Evening':peak===morning?'AM':'PM'):'';
+  // Agreement among deterministic models is not a calibrated rain probability.
+  if(agreement<0.4)return ['🌦️','Slight chance of showers'];
+  if(agreement<0.6)return ['🌦️',timing?timing+' showers possible':'Chance of showers'];
+  if(totalWet<=2)return ['🌦️',timing?timing+' showers likely':'Brief showers likely'];
+  if(totalWet<=5)return ['🌦️',timing?timing+' showers likely':'Scattered showers likely'];
+  if(timing==='AM'&&afternoon===0)return ['🌦️','AM rain, then clearing'];
+  return ['🌧️',timing?timing+' rain likely':totalWet>=9?'Periods of rain':'Rain likely'];
  }
  // EPS/GEFS may still contribute measurable rain when deterministic models stay dry.
  if(rainMean!==null&&rainMean>=0.01){
