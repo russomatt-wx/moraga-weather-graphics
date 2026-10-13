@@ -214,48 +214,45 @@ function skyCondition(hours){
  if(avg<=85)return ['🌥️','Mostly cloudy'];
  return ['☁️','Overcast'];
 }
-function modelCondition(date,rainMean){
+function modelCondition(date,rainMean,dailyRain){
+ // Open-Meteo hourly precipitation uses the request's precipitation_unit=inch.
+ // 0.004 inch/hour is approximately 0.1 mm/hour.
  const available=Object.entries(hourlyModels).map(([name,days])=>({name,hours:days[date]}))
-  .filter(m=>m.hours?.length>=20&&m.hours.some(h=>Number.isFinite(h.rain)));
- const skyHours=available.flatMap(m=>m.hours.filter(h=>h.hour>=8&&h.hour<=18&&Number.isFinite(h.cloud)));
- const sky=skyCondition(skyHours);
+  .filter(m=>m.hours?.length>=20&&Number.isFinite(dailyRain[name])&&m.hours.some(h=>Number.isFinite(h.rain)));
+ const sky=skyCondition(available.flatMap(m=>m.hours.filter(h=>h.hour>=8&&h.hour<=18&&Number.isFinite(h.cloud))));
  if(!available.length)return sky[0]?sky:['🌫️','Conditions unavailable'];
- const wet=available.map(m=>{
-  const hours=m.hours.filter(h=>Number.isFinite(h.rain)&&h.rain>=0.1);
-  return {name:m.name,hours};
- }).filter(m=>m.hours.length);
+ const wet=available.map(m=>({name:m.name,hours:m.hours.filter(h=>Number.isFinite(h.rain)&&h.rain>=0.004)}))
+  .filter(m=>m.hours.length);
  const agreement=wet.length/available.length;
- // This is deterministic model agreement, NOT calibrated precipitation probability.
- // Don't use multi-model mean accumulation as a proxy for a rainy day.
- if(!wet.length)return sky;
+ const modelAmounts=available.map(m=>dailyRain[m.name]);
+ const substantial=modelAmounts.filter(v=>v>=0.05).length/available.length;
+ if(!wet.length){
+  return substantial>=0.4?['🌦️','Chance of showers']:sky;
+ }
  const wetHours=wet.reduce((n,m)=>n+m.hours.length,0)/wet.length;
- const periods={morning:0,afternoon:0,evening:0,overnight:0};
+ const periods={am:0,pm:0,evening:0,overnight:0};
  wet.forEach(m=>m.hours.forEach(h=>{
-  const k=h.hour<6?'overnight':h.hour<12?'morning':h.hour<18?'afternoon':'evening';
-  periods[k]++;
+  const key=h.hour<6?'overnight':h.hour<12?'am':h.hour<18?'pm':'evening';
+  periods[key]++;
  }));
  const total=Object.values(periods).reduce((a,b)=>a+b,0);
  const peak=Object.entries(periods).sort((a,b)=>b[1]-a[1])[0];
- const focused=peak[1]>=total*0.55;
- const timing=focused?peak[0]:null;
- // Only use a full rain icon when a majority of available models support
- // sustained wet conditions (at least three average wet hours).
+ const timing=peak[1]>=total*0.55?peak[0]:null;
+ // Sustained rain needs broad deterministic agreement and several wet hours.
  if(agreement>=0.6&&wetHours>=3){
   if(timing==='overnight')return ['🌧️','Overnight rain'];
-  if(timing==='morning'&&periods.afternoon<=total*0.15)return ['🌧️','AM rain'];
+  if(timing==='am'&&periods.pm<=total*0.15)return ['🌧️','AM rain'];
   if(timing==='evening')return ['🌧️','Evening rain'];
-  if(timing==='afternoon')return ['🌧️','PM rain'];
+  if(timing==='pm')return ['🌧️','PM rain'];
   return ['🌧️','Rain likely'];
  }
- if(agreement>=0.4){
-  if(timing==='morning')return ['🌦️','AM showers'];
-  if(timing==='afternoon')return ['🌦️','PM showers'];
+ if(agreement>=0.4||substantial>=0.4){
+  if(timing==='am')return ['🌦️','AM showers possible'];
+  if(timing==='pm')return ['🌦️','PM showers possible'];
   if(timing==='evening')return ['🌦️','Evening showers'];
   if(timing==='overnight')return ['🌦️','Overnight showers'];
   return ['🌦️','Chance of showers'];
  }
- // Weak, isolated deterministic wet signals should not overwhelm a dry
- // daily sky forecast. Show rain details in the model range instead.
  return sky[0]?sky:['🌦️','Slight chance of showers'];
 }
 function conditionDisplay(code){
@@ -290,7 +287,7 @@ const rains=Object.values(data.model_daily_inches||{}).map(a=>a[data.dates.index
 // Prefer hourly timing and duration; the displayed model-mean rainfall
 // remains separate because it is a different multi-model dataset.
 const rainMean=rains.length?mean(rains):null;
-let condition;try{condition=modelCondition(date,rainMean);}catch(error){console.warn('Condition classification failed',date,error);condition=['','Conditions unavailable'];}
+let condition;try{condition=modelCondition(date,rainMean,Object.fromEntries(Object.entries(data.model_daily_inches||{}).map(([n,a])=>[n,a[data.dates.indexOf(date)]])));}catch(error){console.warn('Condition classification failed',date,error);condition=['','Conditions unavailable'];}
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
