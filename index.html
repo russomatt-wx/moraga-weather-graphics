@@ -303,8 +303,18 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
    try{const d=await load(file);for(const e of editions){const s=d.summary?.[e]||{};rows.push({name,edition:e,count:s.count||0,hi:s.high_mae_f,lo:s.low_mae_f});}}
    catch(e){for(const edition of editions)rows.push({name,edition,count:null,hi:null,lo:null});}
   }
+  let archiveHtml='';
+  try{
+   const archive=await load('model_consensus_verification_latest.json');
+   const matches=(archive.verification||[]).filter(x=>Number.isFinite(x.high_error_f)&&Number.isFinite(x.low_error_f));
+   if(matches.length){
+    const days=new Set(matches.map(x=>x.valid_local_date)).size;
+    const mae=k=>(matches.reduce((sum,x)=>sum+Math.abs(x[k]),0)/matches.length).toFixed(1);
+    archiveHtml='<p><strong>Archived model consensus</strong> · '+matches.length+' forecast snapshots over '+days+' observed days · High MAE <strong>'+mae('high_error_f')+'°F</strong> · Low MAE <strong>'+mae('low_error_f')+'°F</strong></p><p style="font-size:12px">Earlier raw multi-model guidance, scored against sampled KCAMORAG71 extremes. Not attributable to a specific briefing edition or conversational assistant forecast.</p>';
+   }
+  }catch(error){console.warn('Archived model skill unavailable',error);}
   const v=x=>x==null?'—':Number(x).toFixed(1)+'°F';
-  root.innerHTML='<div style="overflow-x:auto"><table class="verification-table"><thead><tr><th>Forecast</th><th>Edition</th><th>Days</th><th>High MAE</th><th>Low MAE</th></tr></thead><tbody>'+rows.map(r=>'<tr><td>'+r.name+'</td><td>'+r.edition+'</td><td>'+(r.count==null?'—':r.count)+'</td><td>'+v(r.hi)+'</td><td>'+v(r.lo)+'</td></tr>').join('')+'</tbody></table></div><p style="font-size:12px">Model guidance = archived automated model blend. Assistant forecast = independently issued and logged conversational forecast. Recovered historical forecasts are excluded. A dash means no eligible score yet; station days must pass completeness checks.</p>';
+  root.innerHTML=archiveHtml+'<div style="overflow-x:auto"><table class="verification-table"><thead><tr><th>Forecast</th><th>Edition</th><th>Days</th><th>High MAE</th><th>Low MAE</th></tr></thead><tbody>'+rows.map(r=>'<tr><td>'+r.name+'</td><td>'+r.edition+'</td><td>'+(r.count==null?'—':r.count)+'</td><td>'+v(r.hi)+'</td><td>'+v(r.lo)+'</td></tr>').join('')+'</tbody></table></div><p style="font-size:12px">Model guidance = archived automated model blend. Assistant forecast = independently issued and logged conversational forecast. Recovered historical forecasts are excluded. A dash means no eligible score yet; station days must pass completeness checks.</p>';
  }
  await combinedSkill();
  try{const d=await load('edition_skill_latest.json');const editions=['6 AM','11 AM','4 PM','9 PM'];score.innerHTML='<p>'+ (d.status==='scored'?'Verified against station observations.':'Awaiting the first eligible live-issued forecast and completed observation day.')+'</p><div style="overflow-x:auto"><table class="verification-table"><thead><tr><th>Edition</th><th>Verified days</th><th>High MAE</th><th>Low MAE</th></tr></thead><tbody>'+editions.map(e=>{const s=d.summary?.[e]||{};return '<tr><td>'+e+'</td><td>'+(s.count||0)+'</td><td>'+(s.high_mae_f==null?'—':esc(s.high_mae_f)+'°F')+'</td><td>'+(s.low_mae_f==null?'—':esc(s.low_mae_f)+'°F')+'</td></tr>'}).join('')+'</tbody></table></div><p style="font-size:12px">Only explicitly archived conversational forecasts count. Automated model guidance and recovered historical tests are excluded.</p>'}catch(e){score.textContent='Verified scorecard has not been published yet.'}
