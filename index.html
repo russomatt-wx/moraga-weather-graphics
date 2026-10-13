@@ -219,8 +219,9 @@ function modelCondition(date,rainMean,dailyRain){
  // 0.004 inch/hour is approximately 0.1 mm/hour.
  const available=Object.entries(hourlyModels).map(([name,days])=>({name,hours:days[date]}))
   .filter(m=>m.hours?.length>=20&&Number.isFinite(dailyRain[name])&&m.hours.some(h=>Number.isFinite(h.rain)));
- const sky=skyCondition(available.flatMap(m=>m.hours.filter(h=>h.hour>=8&&h.hour<=18&&Number.isFinite(h.cloud))));
- if(!available.length)return sky[0]?sky:['🌫️','Conditions unavailable'];
+ const allSkyHours=Object.values(hourlyModels).flatMap(days=>(days[date]||[]).filter(h=>h.hour>=8&&h.hour<=18&&Number.isFinite(h.cloud)));
+ const sky=skyCondition(allSkyHours);
+ if(!available.length)return sky[0]?sky:['⛅','Partly cloudy'];
  const wet=available.map(m=>({name:m.name,hours:m.hours.filter(h=>Number.isFinite(h.rain)&&h.rain>=0.004)}))
   .filter(m=>m.hours.length);
  const agreement=wet.length/available.length;
@@ -253,7 +254,7 @@ function modelCondition(date,rainMean,dailyRain){
   if(timing==='overnight')return ['🌦️','Overnight showers'];
   return ['🌦️','Chance of showers'];
  }
- return sky[0]?sky:['🌦️','Slight chance of showers'];
+ return sky[0]?sky:['⛅','Partly cloudy'];
 }
 function conditionDisplay(code){
  if(code===0)return ['☀️','Sunny'];
