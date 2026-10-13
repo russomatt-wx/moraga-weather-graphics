@@ -134,6 +134,13 @@ def daily_conditions(dates, results, hourly_results):
             icon, label = "🌦️", "Chance of showers"
         elif available and len(wet) / len(available) >= 0.4:
             icon, label = "🌦️", "Chance of showers"
+        # A small, credible rain signal should not be represented as entirely dry.
+        # Reserve "Rain likely" for broad agreement; retain uncertainty otherwise.
+        daily_amounts = [values[index] for values in results.values()
+                         if index < len(values) and isinstance(values[index], (int, float))]
+        mean_rain = sum(daily_amounts) / len(daily_amounts) if daily_amounts else 0
+        if icon not in ("🌧️", "🌦️") and (mean_rain >= 0.01 or len(support) >= 1):
+            icon, label = "🌦️", "Isolated showers possible"
         output[day] = {"icon": icon, "label": label}
     return output
 
