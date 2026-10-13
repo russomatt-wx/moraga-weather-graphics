@@ -43,7 +43,7 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 <p>Local microclimate diagnostics, Pacific storm tracking, and model forecast verification.</p><p style="font-size:13px;color:#7dd3fc">Local forecast sampling: KCAMORAG71 • 37.8201932°N, 122.1193876°W</p></header>
 <main><nav aria-label="Weather dashboard sections"><a href="#observations">Observations</a><a href="#forecast">Moraga forecast</a><a href="#marine">Marine intrusion</a><a href="#rainfall">Rainfall</a><a href="#accuracy">Model accuracy</a><a href="#chatgpt-accuracy">Briefing verification</a><a href="#climate">Climate</a><a href="#westcoast">West Coast maps</a></nav>
  <section id="observations"><div class="intro"><div class="kicker">01 / What happened</div><h2>Moraga station observations</h2><p>Actual KCAMORAG71 temperature and dew point, separate from model forecasts.</p></div><div class="focus-grid"><article class="card"><h3>Station observations</h3><a href="moraga_station_observations.png"><img loading="lazy" src="moraga_station_observations.png" alt="KCAMORAG71 observed temperature and dew point" onerror="this.closest('article').style.display='none'"></a></article></div></section>
- <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Compare deterministic models and ensemble uncertainty for the station location.</p></div><div class="focus-grid"><article class="card" id="ten-day"><h3>Rolling 10-day forecast</h3><p>Your daily Moraga outlook • Pacific calendar days</p><p id="ten-day-updated" class="day-date"></p><div id="ten-day-results" aria-live="polite"><p>Loading daily forecast…</p></div><p style="font-size:12px;margin-top:16px">Temperatures use provisional model-skill weighting against KCAMORAG71. Rainfall is a multi-model average; icons use available hourly model rain duration and cloud cover, with ensemble rain risk flagged separately. Tap “Model range” for details.</p></article><article class="card"><h3>Temperature guidance</h3><a href="moraga_model_temperatures.png"><img loading="lazy" src="moraga_model_temperatures.png" alt="Individual temperature model comparison" onerror="this.closest('article').style.display='none'"></a></article>
+ <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Compare deterministic models and ensemble uncertainty for the station location.</p></div><div class="focus-grid"><article class="card" id="ten-day"><h3>Rolling 10-day forecast</h3><p>Your daily Moraga outlook • Pacific calendar days</p><p id="ten-day-updated" class="day-date"></p><div id="ten-day-results" aria-live="polite"><p>Loading daily forecast…</p></div><p style="font-size:12px;margin-top:16px">Temperatures use provisional model-skill weighting against KCAMORAG71. Rainfall is a multi-model average; daily icons use cloud cover, deterministic model agreement, and expected rain duration. A full rain icon requires broad model support for sustained precipitation. Tap “Model range” for details.</p></article><article class="card"><h3>Temperature guidance</h3><a href="moraga_model_temperatures.png"><img loading="lazy" src="moraga_model_temperatures.png" alt="Individual temperature model comparison" onerror="this.closest('article').style.display='none'"></a></article>
 <article class="card"><h3>Ensemble spread</h3><a href="moraga_ensemble_spread.png"><img loading="lazy" src="moraga_ensemble_spread.png" alt="GEFS and EPS ensemble temperature spread" onerror="this.closest('article').style.display='none'"></a></article>
 <article class="card"><h3>48-hour Moraga temperature model comparison</h3><p>ECMWF and GFS hourly forecasts. KCAMORAG71 observation overlay is pending data integration.</p><img loading="lazy" src="moraga_temperature_model_comparison.png" alt="ECMWF and GFS hourly Moraga forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p>Awaiting first successful model chart run.</p>')"><span class="pill">Forecast only</span></article></div></section>
  <section id="marine"><div class="intro"><div class="kicker">03 / Regional drivers</div><h2>Marine intrusion & East Bay gradients</h2><p>Follow the Bay-to-Valley temperature contrast, pressure forcing, and boundary-layer evolution.</p></div><div class="grid"><article class="card"><h3>96-hour Bay-to-Valley marine intrusion tracker</h3><p>Four-day temperature and dew-point forecasts for San Francisco, Oakland, Moraga, Concord and Sacramento. Model estimates, not live station readings.</p><img loading="lazy" src="moraga_marine_transect.png" alt="East Bay temperature and dew point forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p>Awaiting first successful model chart run.</p>')"><span class="pill">Model forecast</span></article>
@@ -215,45 +215,48 @@ function skyCondition(hours){
  return ['☁️','Overcast'];
 }
 function modelCondition(date,rainMean){
- const available=Object.entries(hourlyModels).map(([name,days])=>({name,hours:days[date]})).filter(m=>m.hours?.length>=20);
- if(!available.length)return rainMean!==null&&rainMean>=0.01?['🌦️','Rain possible']:['🌫️','Sky data pending'];
- const summaries=available.map(m=>{
-  const wet=m.hours.filter(h=>Number.isFinite(h.rain)&&h.rain>=0.1);
-  return {name:m.name,wet,cloud:m.hours.filter(h=>h.hour>=8&&h.hour<=18&&Number.isFinite(h.cloud)),hours:m.hours};
- });
- const wetModels=summaries.filter(m=>m.wet.length);
- if(wetModels.length){
-  const totalWet=wetModels.reduce((s,m)=>s+m.wet.length,0)/wetModels.length;
-  const am=wetModels.reduce((s,m)=>s+m.wet.filter(h=>h.hour<12).length,0);
-  const pm=wetModels.reduce((s,m)=>s+m.wet.filter(h=>h.hour>=12).length,0);
-  const agreement=wetModels.length/available.length;
-  const overnight=wetModels.reduce((n,m)=>n+m.wet.filter(h=>h.hour<6).length,0);
-  const evening=wetModels.reduce((n,m)=>n+m.wet.filter(h=>h.hour>=18).length,0);
-  const morning=wetModels.reduce((n,m)=>n+m.wet.filter(h=>h.hour>=6&&h.hour<12).length,0);
-  const afternoon=wetModels.reduce((n,m)=>n+m.wet.filter(h=>h.hour>=12&&h.hour<18).length,0);
-  const peak=Math.max(overnight,evening,morning,afternoon);
-  const timing=peak>=0.55*(overnight+evening+morning+afternoon)?
-    (peak===overnight?'Overnight':peak===evening?'Evening':peak===morning?'AM':'PM'):'';
-  // Agreement among deterministic models is not a calibrated rain probability.
-  if(agreement<0.4)return ['🌦️','Slight chance of showers'];
-  if(agreement<0.6)return ['🌦️',timing?timing+' showers possible':'Chance of showers'];
-  if(totalWet<=2)return ['🌦️',timing?timing+' showers likely':'Brief showers likely'];
-  if(totalWet<=5)return ['🌦️',timing?timing+' showers likely':'Scattered showers likely'];
-  if(timing==='AM'&&afternoon===0)return ['🌦️','AM rain, then clearing'];
-  return ['🌧️',timing?timing+' rain likely':totalWet>=9?'Periods of rain':'Rain likely'];
+ const available=Object.entries(hourlyModels).map(([name,days])=>({name,hours:days[date]}))
+  .filter(m=>m.hours?.length>=20&&m.hours.some(h=>Number.isFinite(h.rain)));
+ const skyHours=available.flatMap(m=>m.hours.filter(h=>h.hour>=8&&h.hour<=18&&Number.isFinite(h.cloud)));
+ const sky=skyCondition(skyHours);
+ if(!available.length)return sky[0]?sky:['🌫️','Conditions unavailable'];
+ const wet=available.map(m=>{
+  const hours=m.hours.filter(h=>Number.isFinite(h.rain)&&h.rain>=0.1);
+  return {name:m.name,hours};
+ }).filter(m=>m.hours.length);
+ const agreement=wet.length/available.length;
+ // This is deterministic model agreement, NOT calibrated precipitation probability.
+ // Don't use multi-model mean accumulation as a proxy for a rainy day.
+ if(!wet.length)return sky;
+ const wetHours=wet.reduce((n,m)=>n+m.hours.length,0)/wet.length;
+ const periods={morning:0,afternoon:0,evening:0,overnight:0};
+ wet.forEach(m=>m.hours.forEach(h=>{
+  const k=h.hour<6?'overnight':h.hour<12?'morning':h.hour<18?'afternoon':'evening';
+  periods[k]++;
+ }));
+ const total=Object.values(periods).reduce((a,b)=>a+b,0);
+ const peak=Object.entries(periods).sort((a,b)=>b[1]-a[1])[0];
+ const focused=peak[1]>=total*0.55;
+ const timing=focused?peak[0]:null;
+ // Only use a full rain icon when a majority of available models support
+ // sustained wet conditions (at least three average wet hours).
+ if(agreement>=0.6&&wetHours>=3){
+  if(timing==='overnight')return ['🌧️','Overnight rain'];
+  if(timing==='morning'&&periods.afternoon<=total*0.15)return ['🌧️','AM rain'];
+  if(timing==='evening')return ['🌧️','Evening rain'];
+  if(timing==='afternoon')return ['🌧️','PM rain'];
+  return ['🌧️','Rain likely'];
  }
- // EPS/GEFS may still contribute measurable rain when deterministic models stay dry.
- if(rainMean!==null&&rainMean>=0.01){
-  // Ensemble/model-mean accumulation is not a probability of precipitation.
-  // When hourly deterministic models are dry, retain the actual sky condition
-  // and flag the lower-confidence rain signal without implying expected rain.
-  const sky=summaries.flatMap(m=>m.cloud);
-  const cloudGuidance=skyCondition(sky);
-  if(cloudGuidance[0])return [cloudGuidance[0],cloudGuidance[1]+' · rain risk'];
-  return ['🌦️','Rain risk · timing uncertain'];
+ if(agreement>=0.4){
+  if(timing==='morning')return ['🌦️','AM showers'];
+  if(timing==='afternoon')return ['🌦️','PM showers'];
+  if(timing==='evening')return ['🌦️','Evening showers'];
+  if(timing==='overnight')return ['🌦️','Overnight showers'];
+  return ['🌦️','Chance of showers'];
  }
- const sky=summaries.flatMap(m=>m.cloud);
- const cloudGuidance=skyCondition(sky);return cloudGuidance[0]?cloudGuidance:['🌫️','Sky data pending'];
+ // Weak, isolated deterministic wet signals should not overwhelm a dry
+ // daily sky forecast. Show rain details in the model range instead.
+ return sky[0]?sky:['🌦️','Slight chance of showers'];
 }
 function conditionDisplay(code){
  if(code===0)return ['☀️','Sunny'];
