@@ -68,12 +68,12 @@ if not results:
     raise RuntimeError("No valid model data: " + str(errors))
 now = datetime.now(timezone.utc)
 fig, ax = plt.subplots(figsize=(13, 6.3), dpi=160)
-colors = {"ECMWF":"#0e7490", "GFS":"#e87922", "EPS mean":"#2563eb", "GEFS mean":"#9333ea"}
+colors = {"ECMWF":"#0e7490", "GFS":"#e87922", "ICON":"#059669", "GEM":"#db2777", "NAM":"#64748b", "EPS mean":"#2563eb", "GEFS mean":"#9333ea"}
 for name, vals in results.items():
-    ax.plot(range(10), vals, label=f"{name}  |  10d {sum(v for v in vals if v is not None):.2f} in",
+    ax.plot(range(len(vals)), vals, label=f"{name}  |  10d {sum(v for v in vals if v is not None):.2f} in",
             marker="o", markersize=5, linewidth=2.4 if "mean" not in name else 2,
             linestyle="--" if "mean" in name else "-", color=colors[name])
-ax.set_xticks(range(10), [datetime.fromisoformat(d).strftime("%a %b %-d") for d in dates])
+ax.set_xticks(range(len(dates)), [datetime.fromisoformat(d).strftime("%a %b %-d") for d in dates])
 ax.set_ylabel("Daily precipitation (inches)")
 ax.set_ylim(bottom=0)
 ax.grid(axis="y", alpha=.2)
@@ -95,6 +95,6 @@ Path("moraga_forecast_10day.json").write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
     "dates": dates, "temperature_models": {name: temperature_results[model] for name, url, model in SOURCES if model in temperature_results},
     "model_daily_inches": results, "hourly_conditions": {name: hourly_results[model] for name, url, model in SOURCES if model in hourly_results}, "errors": errors,
-    "method": "Daily ECMWF/GFS model inputs. Website applies paired KCAMORAG71 hourly skill weights separately for highs and lows and by forecast lead; sparse or unverified leads retain equal weights. Displayed ranges are deterministic model spread, not probability intervals.",
+    "method": "Available ECMWF, GFS, ICON, GEM and NAM temperature guidance; website applies provisional KCAMORAG71 hourly skill weights separately for daytime and overnight, using lead-specific history where sufficient. Displayed ranges are deterministic model spread, not probability intervals.",
     "source": "Open-Meteo", "note": "Model inputs are not bias-corrected; website skill weighting is provisional, based on hourly temperature errors. Generated timestamp is retrieval time, not model initialization."
 }, indent=2))
