@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-13T22:40:48.623978+00:00",
+  "generated_utc": "2026-10-13T22:50:31.660100+00:00",
   "timezone": "America/Los_Angeles",
   "latitude": 37.8201932,
   "longitude": -122.1193876,
@@ -327,12 +327,12 @@
       "label": "Rain likely"
     },
     "2026-10-21": {
-      "icon": "\u2600\ufe0f",
-      "label": "Sunny"
+      "icon": "\ud83c\udf26\ufe0f",
+      "label": "Isolated showers possible"
     },
     "2026-10-22": {
-      "icon": "\ud83c\udf24\ufe0f",
-      "label": "Mostly sunny"
+      "icon": "\ud83c\udf26\ufe0f",
+      "label": "Isolated showers possible"
     }
   },
   "hourly_conditions": {
