@@ -227,6 +227,16 @@ function modelCondition(date,rainMean,dailyRain){
  const agreement=wet.length/available.length;
  const modelAmounts=available.map(m=>dailyRain[m.name]);
  const substantial=modelAmounts.filter(v=>v>=0.05).length/available.length;
+ // Daily deterministic totals are the primary rain signal; hourly timing is secondary.
+ // Prevent a sunny/cloudy icon when two or more available models forecast measurable rain.
+ const rainSupport=modelAmounts.filter(v=>v>=0.05).length;
+ const widespreadRain=rainSupport>=2&&substantial>=0.6&&wet.length>=2;
+ if(widespreadRain&&wet.reduce((n,m)=>n+m.hours.length,0)/wet.length>=3){
+  return ['🌧️','Rain likely'];
+ }
+ if(rainSupport>=2&&substantial>=0.4){
+  return ['🌦️','Chance of showers'];
+ }
  if(!wet.length){
   return substantial>=0.4?['🌦️','Chance of showers']:sky;
  }
