@@ -298,7 +298,10 @@ const rains=Object.values(data.model_daily_inches||{}).map(a=>a[data.dates.index
 // Prefer hourly timing and duration; the displayed model-mean rainfall
 // remains separate because it is a different multi-model dataset.
 const rainMean=rains.length?mean(rains):null;
-let condition;try{condition=modelCondition(date,rainMean,Object.fromEntries(Object.entries(data.model_daily_inches||{}).map(([n,a])=>[n,a[data.dates.indexOf(date)]])));}catch(error){console.warn('Condition classification failed',date,error);condition=['','Conditions unavailable'];}
+const publishedCondition=data.daily_conditions?.[date];
+let condition;
+if(publishedCondition?.icon&&publishedCondition?.label){condition=[publishedCondition.icon,publishedCondition.label];}
+else {try{condition=modelCondition(date,rainMean,Object.fromEntries(Object.entries(data.model_daily_inches||{}).map(([n,a])=>[n,a[data.dates.indexOf(date)]])));}catch(error){console.warn('Condition classification failed',date,error);condition=['⛅','Partly cloudy'];}}
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
