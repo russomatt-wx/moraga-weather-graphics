@@ -300,7 +300,23 @@ const rains=Object.values(data.model_daily_inches||{}).map(a=>a[data.dates.index
 const rainMean=rains.length?mean(rains):null;
 const publishedCondition=data.daily_conditions?.[date];
 let condition;
-if(publishedCondition?.icon&&publishedCondition?.label){condition=[publishedCondition.icon,publishedCondition.label];}
+if(publishedCondition?.icon&&publishedCondition?.label){
+ condition=[publishedCondition.icon,publishedCondition.label];
+ // Normalize legacy wet-day descriptions to the four public-facing rain categories.
+ if(/rain|shower|drizzle/i.test(condition[1])){
+  const modeled=modelCondition(date,rainMean,Object.fromEntries(Object.entries(data.model_daily_inches||{}).map(([n,a])=>[n,a[data.dates.indexOf(date)]])));
+  const rainLabels=['Chance of rain','Scattered showers','Rain','Heavy rain'];
+  const modeledLabel=modeled[1].toLowerCase();
+  const amounts=Object.values(data.model_daily_inches||{}).map(a=>Number(a[data.dates.indexOf(date)])).filter(Number.isFinite);
+  const consensus=amounts.length?amounts.filter(v=>v>=0.05).length/amounts.length:0;
+  const average=amounts.length?amounts.reduce((a,b)=>a+b,0)/amounts.length:0;
+  const heavy=average>=0.75&&consensus>=0.7;
+  const sustained=/rain likely|overnight rain|am rain|pm rain|evening rain/i.test(modeled[1]);
+  const scattered=/shower/i.test(modeledLabel)&&consensus>=0.4&&average>=0.05;
+  const category=heavy?3:sustained?2:scattered?1:0;
+  condition=[category>=2?'🌧️':'🌦️',rainLabels[category]];
+ }
+}
 else {try{condition=modelCondition(date,rainMean,Object.fromEntries(Object.entries(data.model_daily_inches||{}).map(([n,a])=>[n,a[data.dates.indexOf(date)]])));}catch(error){console.warn('Condition classification failed',date,error);condition=['⛅','Partly cloudy'];}}
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
