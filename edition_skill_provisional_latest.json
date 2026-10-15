@@ -1,0 +1,28 @@
+{
+  "generated_utc": "2026-10-15T13:28:04.563929+00:00",
+  "status": "provisional_only",
+  "summary": {
+    "6 AM": {
+      "count": 0,
+      "high_mae_f": null,
+      "low_mae_f": null
+    },
+    "11 AM": {
+      "count": 0,
+      "high_mae_f": null,
+      "low_mae_f": null
+    },
+    "4 PM": {
+      "count": 0,
+      "high_mae_f": null,
+      "low_mae_f": null
+    },
+    "9 PM": {
+      "count": 0,
+      "high_mae_f": null,
+      "low_mae_f": null
+    }
+  },
+  "matches": [],
+  "caveat": "Preliminary sampled-extrema errors, not official skill. 20+ samples spanning 18h, first by 2AM and last after 9PM. Days passing strict verification are excluded. No retroactive assistant forecasts."
+}
