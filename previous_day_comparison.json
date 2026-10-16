@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-16T21:38:40.204300+00:00",
+  "generated_utc": "2026-10-16T22:39:03.169006+00:00",
   "target_local_date": "2026-10-15",
   "timezone": "America/Los_Angeles",
   "rows": [
@@ -88,7 +88,7 @@
       "high_f": 88.0,
       "low_f": 45.0,
       "samples": 36,
-      "status": "partial_station_coverage"
+      "status": "completed_day_sampled_extrema"
     }
   ],
   "method": "Individual models: latest archived retrieval before target-day midnight with every hourly value present. Assistant: first saved forecast per edition, with recovered records flagged. Observations: sampled daily extrema."
