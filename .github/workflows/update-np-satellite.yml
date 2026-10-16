@@ -1,0 +1,39 @@
+name: Refresh North Pacific satellite imagery
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7,27,47 * * * *'
+permissions:
+  contents: write
+concurrency:
+  group: np-satellite-images
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download and validate NOAA timestamped images
+        run: python scripts/update_np_satellite.py
+      - name: Publish images
+        run: |
+          set -euo pipefail
+          cp satellite_np_geocolor.jpg /tmp/np_geocolor.jpg
+          cp satellite_np_ir.jpg /tmp/np_ir.jpg
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/np_geocolor.jpg satellite_np_geocolor.jpg
+            cp /tmp/np_ir.jpg satellite_np_ir.jpg
+            git add satellite_np_geocolor.jpg satellite_np_ir.jpg
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m 'Update Northern Pacific satellite imagery'
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
