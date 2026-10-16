@@ -393,7 +393,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  const d=await load('forecast_diagnostics_latest.json');
  const target=document.getElementById('combined-skill-results');
  const h=d.archive_health||{}, m=d.matched_skill||{}, bias=d.assistant_bias||{};
- const safe=n=>Number.isFinite(Number(n))?Number(n).toFixed(1)+'°F':'—';
+ const safe=n=>n!==null&&n!==undefined&&Number.isFinite(Number(n))?Number(n).toFixed(1)+'°F':'—';
  const pairs=m.pairs||[];
  const avg=k=>pairs.length?pairs.reduce((sum,p)=>sum+Number(p[k]||0),0)/pairs.length:null;
  const summary=pairs.length?'<p>Matched high MAE: assistant '+safe(avg('assistant_high_abs_error_f'))+' · guidance '+safe(avg('guidance_high_abs_error_f'))+'. Matched low MAE: assistant '+safe(avg('assistant_low_abs_error_f'))+' · guidance '+safe(avg('guidance_low_abs_error_f'))+'.</p>':'<p>Not enough forecasts issued at comparable times yet.</p>';
