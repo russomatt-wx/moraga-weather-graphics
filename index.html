@@ -386,7 +386,9 @@ return '<article class="day-forecast"><strong>'+(date===today?'Today':day)+'</st
 // Use real buttons and a separate full-width diagnostics panel.
 // Native <details> cannot expand inside a five-column mobile forecast card.
 el.querySelectorAll('.day-forecast details').forEach((detail,index)=>{
- const raw=detail.innerHTML;
+ const content=detail.cloneNode(true);
+ content.querySelector('summary')?.remove();
+ const raw=content.innerHTML;
  const card=detail.closest('.day-forecast');
  const day=card.querySelector('strong')?.textContent||'Day';
  const button=document.createElement('button');
