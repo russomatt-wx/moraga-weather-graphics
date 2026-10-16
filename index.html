@@ -43,7 +43,7 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 <p>Local microclimate diagnostics, Pacific storm tracking, and model forecast verification.</p><p style="font-size:13px;color:#7dd3fc">Local forecast sampling: KCAMORAG71 • 37.8201932°N, 122.1193876°W</p></header>
 <main><nav aria-label="Weather dashboard sections"><a href="#observations">Observations</a><a href="#forecast">Moraga forecast</a><a href="#marine">Marine intrusion</a><a href="#rainfall">Rainfall</a><a href="#accuracy">Model accuracy</a><a href="#chatgpt-accuracy">Briefing verification</a><a href="#climate">Climate</a><a href="#westcoast">West Coast maps</a></nav>
  <section id="observations"><div class="intro"><div class="kicker">01 / What happened</div><h2>Moraga station observations</h2><p>Actual KCAMORAG71 temperature and dew point, separate from model forecasts.</p></div><div class="focus-grid"><article class="card"><h3>Station observations</h3><a href="moraga_station_observations.png"><img loading="lazy" src="moraga_station_observations.png" alt="KCAMORAG71 observed temperature and dew point" onerror="this.closest('article').style.display='none'"></a></article></div></section>
- <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Compare deterministic models and ensemble uncertainty for the station location.</p></div><div class="focus-grid"><article class="card" id="ten-day"><h3>Rolling 10-day forecast</h3><p>Your daily Moraga outlook • Pacific calendar days</p><p id="ten-day-updated" class="day-date"></p><div id="ten-day-results" aria-live="polite"><p>Loading daily forecast…</p></div><p style="font-size:12px;margin-top:16px">Temperatures use provisional model-skill weighting against KCAMORAG71. Rainfall is a multi-model average; daily icons use cloud cover, deterministic model agreement, and expected rain duration. A full rain icon requires broad model support for sustained precipitation. Tap “Model range” for details.</p></article><article class="card"><h3>Temperature guidance</h3><a href="moraga_model_temperatures.png"><img loading="lazy" src="moraga_model_temperatures.png" alt="Individual temperature model comparison" onerror="this.closest('article').style.display='none'"></a></article>
+ <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Compare deterministic models and ensemble uncertainty for the station location.</p></div><div class="focus-grid"><article class="card" id="ten-day"><h3>Rolling 10-day forecast</h3><p>Your daily Moraga outlook • Pacific calendar days</p><p id="ten-day-updated" class="day-date"></p><div id="ten-day-results" aria-live="polite"><p>Loading daily forecast…</p></div><p style="font-size:12px;margin-top:16px">Temperatures use provisional model-skill weighting and guarded local bias adjustments against KCAMORAG71. Bias estimates use recent hourly observations as proxies for daily highs and lows, require at least four separate days, and fade toward zero at longer lead times. Rainfall is a multi-model average; daily icons use cloud cover, deterministic model agreement, and expected rain duration. A full rain icon requires broad model support for sustained precipitation. Tap “Model range” for details.</p></article><article class="card"><h3>Temperature guidance</h3><a href="moraga_model_temperatures.png"><img loading="lazy" src="moraga_model_temperatures.png" alt="Individual temperature model comparison" onerror="this.closest('article').style.display='none'"></a></article>
 <article class="card"><h3>Ensemble spread</h3><a href="moraga_ensemble_spread.png"><img loading="lazy" src="moraga_ensemble_spread.png" alt="GEFS and EPS ensemble temperature spread" onerror="this.closest('article').style.display='none'"></a></article>
 </div></section>
  <section id="marine"><div class="intro"><div class="kicker">03 / Regional drivers</div><h2>Marine intrusion & East Bay gradients</h2><p>Follow the Bay-to-Valley temperature contrast, pressure forcing, and boundary-layer evolution.</p></div><div class="grid"><article class="card"><h3>96-hour Bay-to-Valley marine intrusion tracker</h3><p>Four-day temperature and dew-point forecasts for San Francisco, Oakland, Moraga, Concord and Sacramento. Model estimates, not live station readings.</p><img loading="lazy" src="moraga_marine_transect.png" alt="East Bay temperature and dew point forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p>Awaiting first successful model chart run.</p>')"><span class="pill">Model forecast</span></article>
@@ -132,7 +132,7 @@ function forecastSkill(csv,now=Date.now()){
   if(![valid,issued,forecast,observed].every(Number.isFinite)||valid>now||valid<now-7*86400000||issued>=valid)continue;
   const lead=(valid-issued)/3600000;
   const hour=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',hourCycle:'h23'}).format(new Date(valid)));
-  rows.push({model,valid,issued,lead,bucket:Math.floor(lead/24),phase:hour>=10&&hour<=18?'high':hour<=8?'low':'other',observed,error:Math.abs(forecast-observed)});
+  rows.push({model,valid,issued,lead,bucket:Math.floor(lead/24),phase:hour>=10&&hour<=18?'high':hour<=8?'low':'other',observed,error:Math.abs(forecast-observed),signedError:forecast-observed});
  }
  return rows;
 }
@@ -170,6 +170,53 @@ function skillWeights(rows,bucket,phase,names){
   eligible.forEach((name,i)=>weights[name]=adjusted[i]/sum);
  }
  return {...weights,reason:'Provisional '+(phase==='high'?'daytime':'overnight')+' model skill · '+eligible.filter(n=>stats[n]).length+' scored models; short leads prioritized'};
+}
+/* Guarded local calibration: hourly phase bias is only a proxy for daily
+   extremes. Require independent days, cap adjustments and fade with lead. */
+function localBias(rows,bucket,phase,names){
+ const corrections={},evidence={};
+ for(const name of names){
+  const eligible=rows.filter(r=>r.model===name&&r.phase===phase&&
+    r.lead>=3&&r.lead<=96&&Number.isFinite(r.signedError));
+  // Choose the most recent forecast for each verifying station hour.
+  const unique=new Map();
+  for(const r of eligible){
+   const key=r.valid;
+   if(!unique.has(key)||r.issued>unique.get(key).issued)unique.set(key,r);
+  }
+  const samples=[...unique.values()];
+  const dates=[...new Set(samples.map(r=>dateKey(new Date(r.valid))))];
+  // No correction with sparse observations or only one weather regime.
+  if(samples.length<18||dates.length<4){
+   corrections[name]=0;evidence[name]='insufficient';continue;
+  }
+  // Average daily bias first, so densely sampled days do not dominate.
+  const daily=dates.map(d=>{
+   const values=samples.filter(r=>dateKey(new Date(r.valid))===d);
+   return values.reduce((sum,r)=>sum+r.signedError,0)/values.length;
+  });
+  const signed=daily.reduce((a,b)=>a+b,0)/daily.length;
+  // Conservative reliability: modest correction even with several days.
+  const confidence=Math.min(0.65,dates.length/(dates.length+10));
+  const horizon=Math.max(0,Math.min(1,(8-bucket)/8));
+  const correction=Math.max(-3,Math.min(3,-signed*confidence*horizon));
+  corrections[name]=correction;
+  evidence[name]=dates.length+' days, '+samples.length+' hours; mean bias '+signed.toFixed(1)+'°F';
+ }
+ return {corrections,evidence};
+}
+function correctedEntries(entries,calibration){
+ return entries.map(([name,value])=>[name,typeof value==='number'&&Number.isFinite(value)?
+   value+(calibration.corrections[name]||0):value]);
+}
+function adjustmentLabel(raw,adjusted,weights){
+ const weighted=(entries)=>{
+  const good=entries.filter(([name,value])=>typeof value==='number'&&Number.isFinite(value));
+  const total=good.reduce((sum,[name])=>sum+(weights[name]||0),0);
+  return total?good.reduce((sum,[name,value])=>sum+value*(weights[name]||0),0)/total:null;
+ };
+ const a=weighted(raw),b=weighted(adjusted);
+ return a===null||b===null?'—':(b-a>=0?'+':'')+(b-a).toFixed(1)+'°F';
 }
 function skillBlend(entries,weights){
  const good=entries.filter(([name,value])=>typeof value==='number'&&Number.isFinite(value));
@@ -293,6 +340,9 @@ const lowEntries=models.map(([n,m])=>[n,m.low_f[m.dates.indexOf(date)]]);
 const highs=highEntries.map(([n,v])=>v).filter(finite),lows=lowEntries.map(([n,v])=>v).filter(finite);
 const names=[...new Set([...highEntries,...lowEntries].filter(([n,v])=>finite(v)).map(([n])=>n))];
 const wh=skillWeights(skill,i,'high',names),wl=skillWeights(skill,i,'low',names);
+const bh=localBias(skill,i,'high',names),bl=localBias(skill,i,'low',names);
+const correctedHighs=correctedEntries(highEntries,bh),correctedLows=correctedEntries(lowEntries,bl);
+const biasDetails=(b)=>names.map(n=>n+': '+(b.corrections[n]>=0?'+':'')+(b.corrections[n]||0).toFixed(1)+'°F ('+b.evidence[n]+')').join(' · ');
 const weightLabel=w=>names.map(n=>n+' '+Math.round((w[n]||0)*100)+'%').join(' · ');
 const rains=Object.values(data.model_daily_inches||{}).map(a=>a[data.dates.indexOf(date)]).filter(finite);
 // Prefer hourly timing and duration; the displayed model-mean rainfall
@@ -321,7 +371,7 @@ else {try{condition=modelCondition(date,rainMean,Object.fromEntries(Object.entri
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
-return '<article class="day-forecast"><strong>'+(date===today?'Today':day)+'</strong><div class="day-date">'+label+'</div><div class="day-condition" title="Daily weather condition from Open-Meteo"><span aria-hidden="true">'+condition[0]+'</span><small>'+condition[1]+'</small></div><div class="day-temps"><span>'+skillBlend(highEntries,wh)+'</span> <small>'+skillBlend(lowEntries,wl)+'</small></div><div class="day-date">High / low °F</div><div class="day-rain">'+(rains.length?'💧 '+mean(rains).toFixed(2)+' in':'Rain —')+'</div><details><summary>Model range</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Rain '+(rains.length?Math.min(...rains).toFixed(2)+'–'+Math.max(...rains).toFixed(2)+' in':'—')+'<br>High weights: '+weightLabel(wh)+'<br>'+wh.reason+'<br>Low weights: '+weightLabel(wl)+'<br>'+wl.reason+'</p></details></article>';
+return '<article class="day-forecast"><strong>'+(date===today?'Today':day)+'</strong><div class="day-date">'+label+'</div><div class="day-condition" title="Daily weather condition from Open-Meteo"><span aria-hidden="true">'+condition[0]+'</span><small>'+condition[1]+'</small></div><div class="day-temps"><span>'+skillBlend(correctedHighs,wh)+'</span> <small>'+skillBlend(correctedLows,wl)+'</small></div><div class="day-date">High / low °F</div><div class="day-rain">'+(rains.length?'💧 '+mean(rains).toFixed(2)+' in':'Rain —')+'</div><details><summary>Model range</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Rain '+(rains.length?Math.min(...rains).toFixed(2)+'–'+Math.max(...rains).toFixed(2)+' in':'—')+'<br>Raw weighted high: '+skillBlend(highEntries,wh)+' · Local adjustment: '+adjustmentLabel(highEntries,correctedHighs,wh)+'<br>Raw weighted low: '+skillBlend(lowEntries,wl)+' · Local adjustment: '+adjustmentLabel(lowEntries,correctedLows,wl)+'<br>High model corrections: '+biasDetails(bh)+'<br>Low model corrections: '+biasDetails(bl)+'<br>High weights: '+weightLabel(wh)+'<br>'+wh.reason+'<br>Low weights: '+weightLabel(wl)+'<br>'+wl.reason+'</p></details></article>';
 }).join('')+'</div>';
 const stamp=new Date(data.generated_utc);
 document.getElementById('ten-day-updated').textContent='Updated '+stamp.toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT'+(Date.now()-stamp.getTime()>12*3600000?' • Update delayed':'')+(days.length<10?' • '+days.length+' current days available':'');
