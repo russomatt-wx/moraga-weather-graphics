@@ -64,6 +64,45 @@ h3{font-size:16px;letter-spacing:-.012em}
 .method-note summary{cursor:pointer;color:#93cde6}
 .method-note p{font-size:12px;line-height:1.55}
 @media(max-width:760px){header{padding:25px 19px 21px}main{padding:12px 14px 60px}nav{gap:6px;margin-bottom:20px}nav a{padding:7px 9px;font-size:11px}section{margin:26px 0 34px}.card{padding:13px}.intro>p{font-size:12px}}
+</style><style>
+/* 10-day forecast: two balanced rows on phones, clear temperature hierarchy. */
+#ten-day{border-color:#3c6077;background:linear-gradient(180deg,#182d42,#132438 62%)}
+#ten-day>h3{font-size:19px;letter-spacing:-.025em}
+#ten-day>p:not(.day-date){font-size:12px;margin:3px 0 7px;color:#9fb8cb}
+#ten-day-updated{font-size:11px}
+.ten-day-grid{gap:10px}
+.day-forecast{background:#102135;border:1px solid #2c465c;border-radius:12px;padding:13px 6px;min-width:0}
+.day-forecast:first-child{border-color:#53839c;background:#1b3448}
+.day-forecast>strong{font-size:13px;color:#e9f4fc}
+.day-forecast .day-date{font-size:11px;color:#8faec3}
+.day-condition{min-height:68px;margin-top:7px}
+.day-condition span{font-size:29px}
+.day-condition small{font-size:11px;color:#c0d3e1;line-height:1.3}
+.day-temps{margin:8px 0 3px;font-size:29px;color:#f6c889;line-height:1.15;letter-spacing:-.035em}
+.day-temps small{font-size:20px;color:#91cde8;letter-spacing:-.02em}
+.day-rain{font-size:12px;margin:10px 0;color:#a5cbe1}
+.day-forecast summary{color:#8ecde9;font-size:11px}
+@media(max-width:760px){
+#ten-day{padding:13px 10px}
+.ten-day-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.day-forecast{padding:11px 3px;border-radius:9px}
+.day-forecast>strong{font-size:12px}
+.day-forecast .day-date{font-size:10px}
+.day-condition{min-height:66px;margin-top:6px}
+.day-condition span{font-size:25px}
+.day-condition small{font-size:10px;line-height:1.25}
+.day-temps{font-size:23px;margin:8px 0 4px}
+.day-temps small{font-size:18px}
+.day-rain{font-size:10px;margin:8px 0}
+.day-forecast summary{font-size:10px}
+}
+@media(max-width:390px){
+.ten-day-grid{gap:4px}
+.day-forecast{padding:10px 2px}
+.day-condition small{font-size:9px}
+.day-temps{font-size:21px}
+.day-temps small{font-size:17px}
+}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
