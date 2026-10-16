@@ -1,32 +1,22 @@
-"""Publish latest timestamped NOAA Northern Pacific imagery to GitHub Pages."""
-from html.parser import HTMLParser
-from urllib.parse import urljoin
-from urllib.request import Request, urlopen
+"""Download and validate latest Northern Pacific NOAA GOES-West satellite frames."""
+import re
 from pathlib import Path
+from urllib.request import Request, urlopen
 
-BASE = "https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G18&sector=np"
-class Links(HTMLParser):
-    def __init__(self):
-        super().__init__()
-        self.links=[]
-    def handle_starttag(self, tag, attrs):
-        if tag=="a":
-            href=dict(attrs).get("href","")
-            if href:
-                self.links.append(href)
-
+BASE = "https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/np/"
 def fetch(url):
-    with urlopen(Request(url, headers={"User-Agent":"Mozilla/5.0 MoragaWeatherObservatory"}), timeout=35) as r:
-        return r.read()
+    with urlopen(Request(url, headers={"User-Agent":"Mozilla/5.0"}), timeout=45) as response:
+        return response.read()
 
-parser=Links()
-parser.feed(fetch(BASE).decode("utf-8"))
-for product, output in [("GEOCOLOR","satellite_np_geocolor.jpg"),("13","satellite_np_ir.jpg")]:
-    candidates=[urljoin(BASE, link) for link in parser.links if f"/np/{product}/" in link and link.endswith("900x540.jpg")]
-    if not candidates:
-        raise RuntimeError("NOAA did not publish timestamped "+product+" link")
-    image=fetch(candidates[0])
-    if len(image)<20000 or image[:3]!=b"\\xff\\xd8\\xff":
-        raise RuntimeError("Invalid or incomplete NOAA "+product+" JPEG")
+for product, output in [("GEOCOLOR", "satellite_np_geocolor.jpg"), ("13", "satellite_np_ir.jpg")]:
+    directory = BASE + product + "/"
+    listing = fetch(directory).decode("utf-8")
+    names = sorted(set(re.findall(r'([0-9]{11}_GOES18-ABI-np-' + product + r'-900x540\\.jpg)', listing)))
+    if not names:
+        raise RuntimeError("No timestamped 900x540 frames found in " + directory)
+    name = names[-1]
+    image = fetch(directory + name)
+    if len(image) < 20000 or not image.startswith(bytes([255, 216, 255])):
+        raise RuntimeError("Invalid JPEG for " + product)
     Path(output).write_bytes(image)
-    print(product, len(image), candidates[0])
+    print(product, name, len(image), "bytes")
