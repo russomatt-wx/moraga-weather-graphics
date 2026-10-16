@@ -383,7 +383,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
   const v=x=>x==null?'—':Number(x).toFixed(1)+'°F';
   const scored=rows.filter(r=>r.count>0),pending=rows.filter(r=>r.count===0),missing=rows.filter(r=>r.count===null);
   const table=items=>'<div style="overflow-x:auto"><table class="verification-table"><thead><tr><th>Forecast</th><th>Edition</th><th>Days</th><th>High MAE</th><th>Low MAE</th></tr></thead><tbody>'+items.map(r=>'<tr><td>'+r.name+'</td><td>'+r.edition+'</td><td>'+r.count+'</td><td>'+v(r.hi)+'</td><td>'+v(r.lo)+'</td></tr>').join('')+'</tbody></table></div>';
-  root.innerHTML=(scored.length?table(scored):'<p><strong>Collecting forecast verification data</strong></p><p>No briefing edition has a qualifying verified day yet. Forecasts must be saved when issued and compared after a sufficiently complete observation day. This is not a zero-error score.</p>')+
+  root.innerHTML=(scored.length?'<p><strong>Official forecast skill</strong></p>'+table(scored):'<p><strong>Official skill pending</strong></p><p>Archived forecasts are available, but no observation day has yet met the strict quality threshold. Preliminary comparisons are shown below. A dash means insufficient eligible data, not zero error.</p>')+
     (pending.length?'<details style="margin-top:12px"><summary>Pending briefing editions ('+pending.length+')</summary>'+table(pending)+'</details>':'')+
     (missing.length?'<p style="font-size:12px">Some verification feeds are temporarily unavailable.</p>':'')+
     archiveHtml+'<p style="font-size:12px">Model guidance and independently issued assistant forecasts are scored separately. Historical estimates are never counted as live-issued assistant forecasts.</p>';
@@ -393,6 +393,8 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
   const d=await load('edition_skill_provisional_latest.json');
   const matches=d.matches||[];
   const target=document.getElementById('combined-skill-results');
+  const latest=matches[0];
+  const quality=latest?'<p style="font-size:12px"><strong>Why preliminary?</strong> '+latest.target_date+': '+latest.samples+' samples across '+Number(latest.coverage_hours).toFixed(1)+' hours; largest gap '+Number(latest.largest_gap_hours).toFixed(2)+' hours. Official scoring requires at least 48 samples, sufficient start/end coverage, and no gap over 2 hours. This day falls short of the sample-count requirement.</p>':'';
   const rows=matches.map(m=>'<tr><td>'+m.target_date+'</td><td>'+m.edition+'</td><td>'+Number(m.high_error_f).toFixed(1)+'°F</td><td>'+Number(m.low_error_f).toFixed(1)+'°F</td><td>'+m.samples+'</td></tr>').join('');
   target.insertAdjacentHTML('beforeend','<details style="margin-top:15px"><summary>Provisional assistant verification ('+matches.length+')</summary><p>Preliminary sampled errors; not counted in official skill.</p><table class="verification-table"><thead><tr><th>Date</th><th>Edition</th><th>High error</th><th>Low error</th><th>Samples</th></tr></thead><tbody>'+rows+'</tbody></table></details>');
  } catch(e) { console.warn('Provisional feed unavailable',e); }
