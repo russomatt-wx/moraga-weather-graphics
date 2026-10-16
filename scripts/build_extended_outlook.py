@@ -11,7 +11,7 @@ LAT, LON = 37.8201932, -122.1193876
 params = {
     "latitude": LAT, "longitude": LON,
     "hourly": "temperature_2m,precipitation",
-    "models": "gfs_seamless", "forecast_days": 16,
+    "models": "ncep_gefs_seamless", "forecast_days": 16,
     "temperature_unit": "fahrenheit", "precipitation_unit": "inch",
     "timezone": "America/Los_Angeles",
 }
@@ -27,7 +27,7 @@ temp_members = {k.removeprefix("temperature_2m_"): v for k, v in hourly.items() 
 rain_members = {k.removeprefix("precipitation_"): v for k, v in hourly.items() if k.startswith("precipitation_member")}
 members = sorted(set(temp_members) & set(rain_members))
 if len(members) < 10:
-    raise RuntimeError(f"Insufficient GEFS members: {len(members)}")
+    raise RuntimeError(f"Insufficient GEFS members: {len(members)}; available keys: {list(hourly)[:12]}")
 dates = list(dict.fromkeys(t[:10] for t in times))
 if len(dates) < 16:
     raise RuntimeError("Missing extended forecast days")
