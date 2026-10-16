@@ -2,6 +2,8 @@
 Forecast-valid composite (not an observed surface analysis). Fails closed on bad data.
 """
 import json
+import time
+import random
 from datetime import datetime, timezone
 from pathlib import Path
 import requests
@@ -21,15 +23,26 @@ lats=np.linspace(20,65,19)
 lon2,lat2=np.meshgrid(lons,lats)
 coords=list(zip(lat2.ravel(),lon2.ravel()))
 rows=[]
-for offset in range(0,len(coords),65):
-    batch=coords[offset:offset+65]
-    response=requests.get("https://api.open-meteo.com/v1/gfs",params={
+session=requests.Session()
+for offset in range(0,len(coords),30):
+    batch=coords[offset:offset+30]
+    params="https://api.open-meteo.com/v1/gfs",params={
       "latitude":",".join(f"{lat:.2f}" for lat,_ in batch),
       "longitude":",".join(f"{lon:.2f}" for _,lon in batch),
       "hourly":"pressure_msl,geopotential_height_500hPa,geopotential_height_1000hPa",
       "forecast_days":2,"timezone":"GMT","models":"gfs_seamless"
-    },timeout=120)
-    response.raise_for_status()
+    }
+    for attempt in range(4):
+        try:
+            response=session.get("https://api.open-meteo.com/v1/gfs",params=params,timeout=(15,45))
+            response.raise_for_status()
+            break
+        except (requests.exceptions.Timeout,requests.exceptions.ConnectionError) as exc:
+            if attempt==3:raise RuntimeError(f"GFS batch {offset//30+1} failed after four attempts") from exc
+            time.sleep(min(20,3*(2**attempt))+random.uniform(0,2))
+        except requests.exceptions.HTTPError as exc:
+            if response.status_code not in (429,500,502,503,504) or attempt==3:raise
+            time.sleep(min(30,5*(2**attempt))+random.uniform(0,2))
     data=response.json()
     if isinstance(data,dict):data=[data]
     if len(data)!=len(batch):raise RuntimeError("Incomplete model grid")
