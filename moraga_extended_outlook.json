@@ -1,0 +1,51 @@
+{
+  "generated_utc": "2026-10-16T23:56:54.299613+00:00",
+  "source": "Open-Meteo GEFS ensemble, station coordinates",
+  "latitude": 37.8201932,
+  "longitude": -122.1193876,
+  "days": [
+    {
+      "date": "2026-10-26",
+      "temperature_f_p10": 66.2,
+      "temperature_f_p90": 77.0,
+      "rain_member_fraction": 0.1,
+      "members": 30
+    },
+    {
+      "date": "2026-10-27",
+      "temperature_f_p10": 63.3,
+      "temperature_f_p90": 76.7,
+      "rain_member_fraction": 0.067,
+      "members": 30
+    },
+    {
+      "date": "2026-10-28",
+      "temperature_f_p10": 62.3,
+      "temperature_f_p90": 76.3,
+      "rain_member_fraction": 0.067,
+      "members": 30
+    },
+    {
+      "date": "2026-10-29",
+      "temperature_f_p10": 59.2,
+      "temperature_f_p90": 74.9,
+      "rain_member_fraction": 0.267,
+      "members": 30
+    },
+    {
+      "date": "2026-10-30",
+      "temperature_f_p10": 58.6,
+      "temperature_f_p90": 75.5,
+      "rain_member_fraction": 0.2,
+      "members": 30
+    },
+    {
+      "date": "2026-10-31",
+      "temperature_f_p10": 60.1,
+      "temperature_f_p90": 74.9,
+      "rain_member_fraction": 0.133,
+      "members": 30
+    }
+  ],
+  "caveat": "Uncalibrated ensemble member fractions and high-temperature spread, not deterministic forecasts"
+}
