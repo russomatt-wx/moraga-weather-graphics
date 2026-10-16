@@ -1,16 +1,16 @@
 {
-  "generated_utc": "2026-10-16T18:04:16.236930+00:00",
-  "status": "awaiting_eligible_explicit_forecasts",
+  "generated_utc": "2026-10-16T21:54:07.847326+00:00",
+  "status": "scored",
   "summary": {
     "6 AM": {
-      "count": 0,
-      "high_mae_f": null,
-      "low_mae_f": null
+      "count": 1,
+      "high_mae_f": 1.0,
+      "low_mae_f": 0.0
     },
     "11 AM": {
-      "count": 0,
-      "high_mae_f": null,
-      "low_mae_f": null
+      "count": 1,
+      "high_mae_f": 1.0,
+      "low_mae_f": 0.0
     },
     "4 PM": {
       "count": 0,
@@ -18,9 +18,9 @@
       "low_mae_f": null
     },
     "9 PM": {
-      "count": 0,
-      "high_mae_f": null,
-      "low_mae_f": null
+      "count": 1,
+      "high_mae_f": 2.0,
+      "low_mae_f": 4.0
     },
     "Unclassified": {
       "count": 0,

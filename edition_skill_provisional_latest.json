@@ -1,16 +1,16 @@
 {
-  "generated_utc": "2026-10-16T18:04:16.240374+00:00",
+  "generated_utc": "2026-10-16T21:54:07.852687+00:00",
   "status": "provisional_only",
   "summary": {
     "6 AM": {
-      "count": 1,
-      "high_mae_f": 1.0,
-      "low_mae_f": 0.0
+      "count": 0,
+      "high_mae_f": null,
+      "low_mae_f": null
     },
     "11 AM": {
-      "count": 1,
-      "high_mae_f": 1.0,
-      "low_mae_f": 0.0
+      "count": 0,
+      "high_mae_f": null,
+      "low_mae_f": null
     },
     "4 PM": {
       "count": 0,
@@ -18,57 +18,11 @@
       "low_mae_f": null
     },
     "9 PM": {
-      "count": 1,
-      "high_mae_f": 2.0,
-      "low_mae_f": 4.0
+      "count": 0,
+      "high_mae_f": null,
+      "low_mae_f": null
     }
   },
-  "matches": [
-    {
-      "target_date": "2026-10-15",
-      "edition": "9 PM",
-      "issued_utc": "2026-10-15T04:34:25.005Z",
-      "forecast_high_f": 86.0,
-      "forecast_low_f": 49.0,
-      "observed_high_f": 88.0,
-      "observed_low_f": 45.0,
-      "samples": 36,
-      "coverage_hours": 23.6,
-      "largest_gap_hours": 0.95,
-      "observation_quality": "provisional_sampled_extrema",
-      "high_error_f": -2.0,
-      "low_error_f": 4.0
-    },
-    {
-      "target_date": "2026-10-15",
-      "edition": "6 AM",
-      "issued_utc": "2026-10-15T13:06:31.404Z",
-      "forecast_high_f": 87.0,
-      "forecast_low_f": 45.0,
-      "observed_high_f": 88.0,
-      "observed_low_f": 45.0,
-      "samples": 36,
-      "coverage_hours": 23.6,
-      "largest_gap_hours": 0.95,
-      "observation_quality": "provisional_sampled_extrema",
-      "high_error_f": -1.0,
-      "low_error_f": 0.0
-    },
-    {
-      "target_date": "2026-10-15",
-      "edition": "11 AM",
-      "issued_utc": "2026-10-15T17:59:38.082Z",
-      "forecast_high_f": 89.0,
-      "forecast_low_f": 45.0,
-      "observed_high_f": 88.0,
-      "observed_low_f": 45.0,
-      "samples": 36,
-      "coverage_hours": 23.6,
-      "largest_gap_hours": 0.95,
-      "observation_quality": "provisional_sampled_extrema",
-      "high_error_f": 1.0,
-      "low_error_f": 0.0
-    }
-  ],
+  "matches": [],
   "caveat": "Preliminary sampled-extrema errors, not official skill. 20+ samples spanning 18h, first by 2AM and last after 9PM. Days passing strict verification are excluded. No retroactive assistant forecasts."
 }

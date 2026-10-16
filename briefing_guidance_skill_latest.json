@@ -1,28 +1,137 @@
 {
-  "generated_utc": "2026-10-16T18:04:12.618721+00:00",
+  "generated_utc": "2026-10-16T21:54:02.402950+00:00",
   "source": "automated_briefing_model_guidance",
   "summary": {
     "6 AM": {
-      "count": 0,
-      "high_mae_f": null,
-      "low_mae_f": null
+      "count": 2,
+      "high_mae_f": 4.35,
+      "low_mae_f": 7.75
     },
     "11 AM": {
-      "count": 0,
-      "high_mae_f": null,
-      "low_mae_f": null
+      "count": 2,
+      "high_mae_f": 4.55,
+      "low_mae_f": 6.7
     },
     "4 PM": {
-      "count": 0,
-      "high_mae_f": null,
-      "low_mae_f": null
+      "count": 2,
+      "high_mae_f": 5.1,
+      "low_mae_f": 6.7
     },
     "9 PM": {
-      "count": 0,
-      "high_mae_f": null,
-      "low_mae_f": null
+      "count": 3,
+      "high_mae_f": 3.7,
+      "low_mae_f": 6.73
     }
   },
-  "matches": [],
+  "matches": [
+    {
+      "valid_local_date": "2026-10-13",
+      "edition": "9 PM",
+      "issued_utc": "2026-10-13T05:02:15.610793+00:00",
+      "forecast_high_f": 74.3,
+      "forecast_low_f": 46.6,
+      "observed_high_f": 76.0,
+      "observed_low_f": 41.0,
+      "samples": 44,
+      "high_error_f": -1.7,
+      "low_error_f": 5.6
+    },
+    {
+      "valid_local_date": "2026-10-14",
+      "edition": "6 AM",
+      "issued_utc": "2026-10-13T14:23:47.856128+00:00",
+      "forecast_high_f": 78.8,
+      "forecast_low_f": 50.9,
+      "observed_high_f": 83.0,
+      "observed_low_f": 44.0,
+      "samples": 35,
+      "high_error_f": -4.2,
+      "low_error_f": 6.9
+    },
+    {
+      "valid_local_date": "2026-10-14",
+      "edition": "11 AM",
+      "issued_utc": "2026-10-13T17:54:20.152837+00:00",
+      "forecast_high_f": 79.0,
+      "forecast_low_f": 49.3,
+      "observed_high_f": 83.0,
+      "observed_low_f": 44.0,
+      "samples": 35,
+      "high_error_f": -4.0,
+      "low_error_f": 5.3
+    },
+    {
+      "valid_local_date": "2026-10-14",
+      "edition": "4 PM",
+      "issued_utc": "2026-10-13T23:02:00.403830+00:00",
+      "forecast_high_f": 77.9,
+      "forecast_low_f": 49.3,
+      "observed_high_f": 83.0,
+      "observed_low_f": 44.0,
+      "samples": 35,
+      "high_error_f": -5.1,
+      "low_error_f": 5.3
+    },
+    {
+      "valid_local_date": "2026-10-14",
+      "edition": "9 PM",
+      "issued_utc": "2026-10-14T04:05:33.004820+00:00",
+      "forecast_high_f": 78.1,
+      "forecast_low_f": 51.3,
+      "observed_high_f": 83.0,
+      "observed_low_f": 44.0,
+      "samples": 35,
+      "high_error_f": -4.9,
+      "low_error_f": 7.3
+    },
+    {
+      "valid_local_date": "2026-10-15",
+      "edition": "6 AM",
+      "issued_utc": "2026-10-14T13:15:18.196472+00:00",
+      "forecast_high_f": 83.5,
+      "forecast_low_f": 53.6,
+      "observed_high_f": 88.0,
+      "observed_low_f": 45.0,
+      "samples": 36,
+      "high_error_f": -4.5,
+      "low_error_f": 8.6
+    },
+    {
+      "valid_local_date": "2026-10-15",
+      "edition": "11 AM",
+      "issued_utc": "2026-10-14T18:08:21.011373+00:00",
+      "forecast_high_f": 82.9,
+      "forecast_low_f": 53.1,
+      "observed_high_f": 88.0,
+      "observed_low_f": 45.0,
+      "samples": 36,
+      "high_error_f": -5.1,
+      "low_error_f": 8.1
+    },
+    {
+      "valid_local_date": "2026-10-15",
+      "edition": "4 PM",
+      "issued_utc": "2026-10-14T23:01:34.919159+00:00",
+      "forecast_high_f": 82.9,
+      "forecast_low_f": 53.1,
+      "observed_high_f": 88.0,
+      "observed_low_f": 45.0,
+      "samples": 36,
+      "high_error_f": -5.1,
+      "low_error_f": 8.1
+    },
+    {
+      "valid_local_date": "2026-10-15",
+      "edition": "9 PM",
+      "issued_utc": "2026-10-15T03:05:41.006474+00:00",
+      "forecast_high_f": 83.5,
+      "forecast_low_f": 52.3,
+      "observed_high_f": 88.0,
+      "observed_low_f": 45.0,
+      "samples": 36,
+      "high_error_f": -4.5,
+      "low_error_f": 7.3
+    }
+  ],
   "caveat": "Not conversational ChatGPT skill. Only completed days with >=48 Xweather samples, first/last hour coverage and no >2h gaps."
 }
