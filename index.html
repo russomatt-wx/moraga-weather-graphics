@@ -43,7 +43,7 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 <p>Local microclimate diagnostics, Pacific storm tracking, and model forecast verification.</p><p style="font-size:13px;color:#7dd3fc">Local forecast sampling: KCAMORAG71 • 37.8201932°N, 122.1193876°W</p></header>
 <main><nav aria-label="Weather dashboard sections"><a href="#observations">Observations</a><a href="#forecast">Moraga forecast</a><a href="#marine">Marine intrusion</a><a href="#rainfall">Rainfall</a><a href="#accuracy">Model accuracy</a><a href="#chatgpt-accuracy">Briefing verification</a><a href="#climate">Climate</a><a href="#westcoast">West Coast maps</a></nav>
  <section id="observations"><div class="intro"><div class="kicker">01 / What happened</div><h2>Moraga station observations</h2><p>Actual KCAMORAG71 temperature and dew point, separate from model forecasts.</p></div><div class="focus-grid"><article class="card"><h3>Station observations</h3><a href="moraga_station_observations.png"><img loading="lazy" src="moraga_station_observations.png" alt="KCAMORAG71 observed temperature and dew point" onerror="this.closest('article').style.display='none'"></a></article></div></section>
- <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Compare deterministic models and ensemble uncertainty for the station location.</p></div><div class="focus-grid"><article class="card" id="ten-day"><h3>Rolling 10-day forecast</h3><p>Your daily Moraga outlook • Pacific calendar days</p><p id="ten-day-updated" class="day-date"></p><div id="ten-day-results" aria-live="polite"><p>Loading daily forecast…</p></div><p style="font-size:12px;margin-top:16px">Temperatures use provisional model-skill weighting and guarded local bias adjustments against KCAMORAG71. Bias estimates use recent hourly observations as proxies for daily highs and lows, require at least four separate days, and fade toward zero at longer lead times. Rainfall is a multi-model average; daily icons use cloud cover, deterministic model agreement, and expected rain duration. A full rain icon requires broad model support for sustained precipitation. Tap “Model range” for details.</p></article><article class="card"><h3>Temperature guidance</h3><a href="moraga_model_temperatures.png"><img loading="lazy" src="moraga_model_temperatures.png" alt="Individual temperature model comparison" onerror="this.closest('article').style.display='none'"></a></article>
+ <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Compare deterministic models and ensemble uncertainty for the station location.</p></div><div class="focus-grid"><article class="card" id="ten-day"><h3>Rolling 10-day forecast</h3><p>Your daily Moraga outlook • Pacific calendar days</p><p id="ten-day-updated" class="day-date"></p><div id="ten-day-results" aria-live="polite"><p>Loading daily forecast…</p></div><p style="font-size:12px;margin-top:16px">Temperatures use provisional model-skill weighting (7-day recent skill, with a guarded 60/40 seven-/30-day blend once 10 distinct verified days are available) and local bias adjustments against KCAMORAG71. Bias estimates use recent hourly observations as proxies for daily highs and lows, require at least four separate days, and fade toward zero at longer lead times. Rainfall is a multi-model average; daily icons use cloud cover, deterministic model agreement, and expected rain duration. A full rain icon requires broad model support for sustained precipitation. Tap “Model range” for details.</p></article><article class="card"><h3>Temperature guidance</h3><a href="moraga_model_temperatures.png"><img loading="lazy" src="moraga_model_temperatures.png" alt="Individual temperature model comparison" onerror="this.closest('article').style.display='none'"></a></article>
 <article class="card"><h3>Ensemble spread</h3><a href="moraga_ensemble_spread.png"><img loading="lazy" src="moraga_ensemble_spread.png" alt="GEFS and EPS ensemble temperature spread" onerror="this.closest('article').style.display='none'"></a></article>
 </div></section>
  <section id="marine"><div class="intro"><div class="kicker">03 / Regional drivers</div><h2>Marine intrusion & East Bay gradients</h2><p>Follow the Bay-to-Valley temperature contrast, pressure forcing, and boundary-layer evolution.</p></div><div class="grid"><article class="card"><h3>96-hour Bay-to-Valley marine intrusion tracker</h3><p>Four-day temperature and dew-point forecasts for San Francisco, Oakland, Moraga, Concord and Sacramento. Model estimates, not live station readings.</p><img loading="lazy" src="moraga_marine_transect.png" alt="East Bay temperature and dew point forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p>Awaiting first successful model chart run.</p>')"><span class="pill">Model forecast</span></article>
@@ -88,7 +88,10 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
    return '<h4 style="margin:17px 0 8px">'+title+'</h4><div style="display:grid;gap:9px">'+ranking.map((r,i)=>'<div style="display:grid;grid-template-columns:75px 1fr 95px;align-items:center;gap:10px;font-size:14px"><strong>'+ (i===0?'🏆 ':'')+r.name+'</strong><div style="height:11px;border-radius:8px;background:#273b50;overflow:hidden"><div style="height:100%;width:'+Math.max(2,100*r.mae/Math.max(4,...ranking.map(x=>x.mae)))+'%;background:'+(i===0?'#50c9a2':'#78a8d1')+'"></div></div><span style="text-align:right">'+r.mae.toFixed(2)+'°F <small>('+r.n+'h)</small></span></div>').join('')+'</div>';
   }
   const recent=rows.filter(r=>r.time.getTime()>latest.getTime()-7*86400000);
-  el.innerHTML='<p>Verified KCAMORAG71 hourly temperature forecasts. Lower error is better.</p>'+section('Latest verified day • '+today,rows.filter(r=>day(r.time)===today))+section('Rolling seven days • available samples',recent)+'<p style="font-size:12px;margin-top:16px">Preliminary results; sample sizes shown. Forecast retrieval timestamps are not independently verified model initialization cycles. Updated through '+latest.toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT.</p>';
+  const monthly=rows.filter(r=>r.time.getTime()>latest.getTime()-30*86400000);
+  const seasonal=rows.filter(r=>r.time.getTime()>latest.getTime()-90*86400000);
+  const distinctDays=items=>new Set(items.map(r=>day(r.time))).size;
+  el.innerHTML='<p>Verified KCAMORAG71 hourly temperature forecasts. Lower error is better.</p>'+section('Latest verified day • '+today,rows.filter(r=>day(r.time)===today))+section('Rolling seven days • '+distinctDays(recent)+' verified days',recent)+section('Rolling 30 days • '+distinctDays(monthly)+' verified days',monthly)+section('Rolling 90 days • '+distinctDays(seasonal)+' verified days',seasonal)+'<p style="font-size:12px;margin-top:16px">Preliminary results; sample sizes shown. Forecast retrieval timestamps are not independently verified model initialization cycles. Updated through '+latest.toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT.</p>';
  }catch(e){el.innerHTML='<p class="pending">Hourly verification feed is not yet available on the public site. Rankings will appear after the next successful graphics publication.</p>';}
 })();
 </script><script>
@@ -129,7 +132,7 @@ function forecastSkill(csv,now=Date.now()){
   if(!['ECMWF','GFS','ICON','GEM','NAM'].includes(model)||!c[ix.forecast_f]?.trim()||!c[ix.observed_f]?.trim())continue;
   const valid=Date.parse(c[ix.valid_utc]),issued=Date.parse(c[ix.issued_utc]);
   const forecast=Number(c[ix.forecast_f]),observed=Number(c[ix.observed_f]);
-  if(![valid,issued,forecast,observed].every(Number.isFinite)||valid>now||valid<now-7*86400000||issued>=valid)continue;
+  if(![valid,issued,forecast,observed].every(Number.isFinite)||valid>now||valid<now-90*86400000||issued>=valid)continue;
   const lead=(valid-issued)/3600000;
   const hour=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',hourCycle:'h23'}).format(new Date(valid)));
   rows.push({model,valid,issued,lead,bucket:Math.floor(lead/24),phase:hour>=10&&hour<=18?'high':hour<=8?'low':'other',observed,error:Math.abs(forecast-observed),signedError:forecast-observed});
@@ -140,6 +143,7 @@ function skillWeights(rows,bucket,phase,names){
  const eligible=[...new Set(names)];
  const weights=Object.fromEntries(eligible.map(n=>[n,1/eligible.length]));
  const phases=rows.filter(r=>r.phase===phase&&eligible.includes(r.model));
+ const latest=Date.now();
  // Pair comparable forecast lead times. If a lead bucket is sparse, fall back
  // to the model's broader same-phase skill rather than forcing a 50/50 blend.
  const stats={};
@@ -154,7 +158,16 @@ function skillWeights(rows,bucket,phase,names){
   }
   const samples=[...unique.values()];
   const days=new Set(samples.map(r=>dateKey(new Date(r.valid)))).size;
-  if(samples.length>=3)stats[name]={mae:samples.reduce((v,r)=>v+r.error,0)/samples.length,days,n:samples.length};
+  if(samples.length>=3){
+   const period=n=>samples.filter(r=>r.valid>=latest-n*86400000);
+   const short=period(7),long=period(30);
+   const shortDays=new Set(short.map(r=>dateKey(new Date(r.valid)))).size;
+   const longDays=new Set(long.map(r=>dateKey(new Date(r.valid)))).size;
+   const avg=a=>a.reduce((v,r)=>v+r.error,0)/a.length;
+   // Only enable the 60/40 blend after 10 distinct days of 30-day evidence.
+   const mae=longDays>=10&&shortDays>=3?0.6*avg(short)+0.4*avg(long):shortDays>=3?avg(short):avg(samples);
+   stats[name]={mae,days,n:samples.length,longDays};
+  }
  }
  // Model skill is provisional and correlated; shrink toward equal weighting.
  // Cap each model's advantage so a handful of hourly samples cannot dominate.
@@ -169,14 +182,14 @@ function skillWeights(rows,bucket,phase,names){
   const sum=adjusted.reduce((a,b)=>a+b,0);
   eligible.forEach((name,i)=>weights[name]=adjusted[i]/sum);
  }
- return {...weights,reason:'Provisional '+(phase==='high'?'daytime':'overnight')+' model skill · '+eligible.filter(n=>stats[n]).length+' scored models; short leads prioritized'};
+ return {...weights,reason:'Provisional '+(phase==='high'?'daytime':'overnight')+' model skill · '+eligible.filter(n=>stats[n]).length+' scored models; short leads prioritized; 60/40 seven-/30-day blend only after 10 verified days'};
 }
 /* Guarded local calibration: hourly phase bias is only a proxy for daily
    extremes. Require independent days, cap adjustments and fade with lead. */
 function localBias(rows,bucket,phase,names){
  const corrections={},evidence={};
  for(const name of names){
-  const eligible=rows.filter(r=>r.model===name&&r.phase===phase&&
+  const eligible=rows.filter(r=>r.valid>=Date.now()-30*86400000&&r.model===name&&r.phase===phase&&
     r.lead>=3&&r.lead<=96&&Number.isFinite(r.signedError));
   // Choose the most recent forecast for each verifying station hour.
   const unique=new Map();
