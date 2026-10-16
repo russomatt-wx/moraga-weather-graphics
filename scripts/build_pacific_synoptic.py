@@ -11,6 +11,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
+from matplotlib.markers import MarkerStyle
 
 OUT=Path("pacific_synoptic.png")
 META=Path("pacific_synoptic.json")
@@ -53,7 +54,7 @@ fr=requests.get(fronts_url,params={"where":"1=1","outFields":"*","returnGeometry
 fr.raise_for_status()
 features=fr.json().get("features",[])
 if not features:raise RuntimeError("WPC front feed empty")
-fig=plt.figure(figsize=(13,8),facecolor="#0c1929")
+fig=plt.figure(figsize=(14,9),facecolor="#0c1929")
 ax=plt.axes(projection=ccrs.PlateCarree())
 ax.set_extent([-175,-105,20,65],crs=ccrs.PlateCarree())
 ax.set_facecolor("#11283b")
@@ -61,10 +62,10 @@ ax.add_feature(cfeature.LAND,facecolor="#20394b",zorder=0)
 ax.add_feature(cfeature.COASTLINE,edgecolor="#8baec3",linewidth=.65)
 ax.add_feature(cfeature.BORDERS,edgecolor="#55758a",linewidth=.45)
 ax.add_feature(cfeature.STATES,edgecolor="#55758a",linewidth=.35)
-p=ax.contour(lon2,lat2,pressure,levels=np.arange(960,1050,4),colors="#e6f1f8",linewidths=.75,alpha=.8,transform=ccrs.PlateCarree())
-ax.clabel(p,fmt="%d",fontsize=8,inline=True)
-t=ax.contour(lon2,lat2,thickness,levels=np.arange(480,610,6),colors="#f0ae6d",linewidths=1.2,linestyles="dashed",transform=ccrs.PlateCarree())
-ax.clabel(t,fmt="%d",fontsize=8,inline=True)
+p=ax.contour(lon2,lat2,pressure,levels=np.arange(960,1050,8),colors="#c7d7e4",linewidths=.9,alpha=.72,transform=ccrs.PlateCarree())
+ax.clabel(p,fmt="%d",fontsize=10,inline=True,inline_spacing=7)
+t=ax.contour(lon2,lat2,thickness,levels=np.arange(480,610,12),colors="#f5ba70",linewidths=1.5,linestyles="dashed",transform=ccrs.PlateCarree())
+ax.clabel(t,fmt="%d",fontsize=10,inline=True,inline_spacing=7)
 palette={"cold":"#64baff","warm":"#fa7775","stationary":"#bb8dff","occluded":"#cc8fff"}
 drawn=0
 for f in features:
@@ -76,7 +77,28 @@ for f in features:
     lines=[geom["coordinates"]] if typ=="LineString" else geom.get("coordinates",[]) if typ=="MultiLineString" else []
     for line in lines:
         a=np.asarray(line)
-        if len(a)>1:ax.plot(a[:,0],a[:,1],color=color,lw=2.5,transform=ccrs.PlateCarree(),zorder=6);drawn+=1
+        if len(a)>1:
+            ax.plot(a[:,0],a[:,1],color=color,lw=3.3,transform=ccrs.PlateCarree(),zorder=6)
+            # Standard frontal symbols sampled along the plotted line. NOAA's
+            # geometry does not reliably supply the advancing side, so symbols
+            # are illustrative; the source forecast remains authoritative.
+            visible=a[(a[:,0]>=-175)&(a[:,0]<=-105)&(a[:,1]>=20)&(a[:,1]<=65)]
+            if len(visible)>1:
+                distances=np.r_[0,np.cumsum(np.hypot(np.diff(visible[:,0])*np.cos(np.deg2rad(visible[:-1,1])),np.diff(visible[:,1])))]
+                for j,d in enumerate(np.arange(3,distances[-1]-1,5)):
+                    k=np.clip(np.searchsorted(distances,d),1,len(visible)-1)
+                    x,y=visible[k]
+                    dx,dy=visible[k]-visible[k-1]
+                    angle=np.degrees(np.arctan2(dy,dx))
+                    if "cold" in name or ("stationary" in name and j%2==0):
+                        marker=MarkerStyle("^")
+                        marker._transform=marker.get_transform().rotate_deg(angle-90)
+                        c="#64baff"
+                    else:
+                        marker=MarkerStyle("o")
+                        c="#fa7775" if "warm" in name or "stationary" in name else "#cc8fff"
+                    ax.scatter([x],[y],marker=marker,s=85,color=c,edgecolors="#11283b",linewidths=.4,transform=ccrs.PlateCarree(),zorder=7)
+            drawn+=1
 if not drawn:raise RuntimeError("WPC fronts unavailable or unsupported")
 ax.plot(-122.13,37.83,"o",ms=5,color="#ffd37e",transform=ccrs.PlateCarree(),zorder=8)
 ax.text(-121.5,38.4,"MORAGA",color="#ffe4ac",fontsize=9,transform=ccrs.PlateCarree())
@@ -84,6 +106,6 @@ fig.text(.06,.95,"PACIFIC SYNOPTIC • SURFACE + THICKNESS",color="white",fontsi
 fig.text(.06,.915,"GFS pressure (white, hPa) · 1000–500 hPa thickness (amber dashed, dam) · WPC Day-1 forecast fronts",color="#b6d0e2",fontsize=10)
 fig.text(.06,.04,f"GFS valid {valid:%d %b %Y %HZ}  |  WPC fronts: Day-1 forecast (valid time may differ)  |  Sources: Open-Meteo/GFS, NOAA WPC",color="#bed1df",fontsize=9)
 fig.subplots_adjust(left=.04,right=.98,bottom=.08,top=.89)
-fig.savefig(OUT,dpi=150,facecolor=fig.get_facecolor())
+fig.savefig(OUT,dpi=175,facecolor=fig.get_facecolor())
 META.write_text(json.dumps({"gfs_valid_utc":valid.isoformat(),"front_source":"NOAA WPC Day-1 forecast; different valid time possible","front_segments":drawn}))
 print("Wrote",OUT,valid,drawn)
