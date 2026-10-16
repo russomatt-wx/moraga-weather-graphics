@@ -1,0 +1,42 @@
+name: Build Pacific synoptic composite
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '25 1,7,13,19 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: pacific-synoptic
+  cancel-in-progress: false
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install map dependencies
+        run: pip install requests numpy matplotlib cartopy
+      - name: Render validated composite
+        run: python scripts/build_pacific_synoptic.py
+      - name: Commit map only after successful render
+        run: |
+          set -euo pipefail
+          cp pacific_synoptic.png /tmp/pacific_synoptic.png
+          cp pacific_synoptic.json /tmp/pacific_synoptic.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for attempt in 1 2 3 4; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/pacific_synoptic.png pacific_synoptic.png
+            cp /tmp/pacific_synoptic.json pacific_synoptic.json
+            git add pacific_synoptic.png pacific_synoptic.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m 'Refresh Pacific surface and thickness composite'
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 4
+          done
+          exit 1
