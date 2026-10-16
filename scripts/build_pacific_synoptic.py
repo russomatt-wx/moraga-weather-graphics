@@ -26,7 +26,7 @@ rows=[]
 session=requests.Session()
 for offset in range(0,len(coords),30):
     batch=coords[offset:offset+30]
-    params="https://api.open-meteo.com/v1/gfs",params={
+    params={
       "latitude":",".join(f"{lat:.2f}" for lat,_ in batch),
       "longitude":",".join(f"{lon:.2f}" for _,lon in batch),
       "hourly":"pressure_msl,geopotential_height_500hPa,geopotential_height_1000hPa",
