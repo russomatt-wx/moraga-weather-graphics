@@ -71,7 +71,7 @@ ax.add_feature(cfeature.COASTLINE,edgecolor="#777777",linewidth=.65)
 ax.add_feature(cfeature.BORDERS,edgecolor="#aaaaaa",linewidth=.45)
 ax.add_feature(cfeature.STATES,edgecolor="#55758a",linewidth=.35)
 p=ax.contour(lon2,lat2,pressure,levels=np.arange(960,1050,4),colors="#242424",linewidths=.8,alpha=.86,transform=ccrs.PlateCarree())
-ax.clabel(p,fmt="%d",fontsize=10,inline=True,inline_spacing=7)
+ax.clabel(p,fmt="%d",fontsize=12,inline=True,inline_spacing=7)
 # Cool thickness values are purple/blue; warm values green/yellow/orange/red.
 levels=np.arange(480,611,6)
 cmap=LinearSegmentedColormap.from_list("thickness_rainbow",[
@@ -83,13 +83,13 @@ norm=Normalize(vmin=504,vmax=594)
 colors=[cmap(norm(float(v))) for v in levels]
 t=ax.contour(lon2,lat2,thickness,levels=levels,colors=colors,
              linewidths=1.2,linestyles="dashed",transform=ccrs.PlateCarree())
-ax.clabel(t,fmt="%d",fontsize=10,inline=True,inline_spacing=7)
+ax.clabel(t,fmt="%d",fontsize=12,inline=True,inline_spacing=7)
 # Keep 540 dam prominent, but avoid overwhelming nearby contours.
 line540=ax.contour(lon2,lat2,thickness,levels=[540],colors="#0069c9",
                    linewidths=2.7,linestyles="solid",
                    transform=ccrs.PlateCarree(),zorder=5)
 if len(line540.allsegs[0]):
-    ax.clabel(line540,fmt={540:"540"},fontsize=12,inline=True,
+    ax.clabel(line540,fmt={540:"540"},fontsize=14,inline=True,
               inline_spacing=8,colors="#0069c9",use_clabeltext=True)
 ax.plot(-122.13,37.83,"o",ms=5,color="#222222",transform=ccrs.PlateCarree(),zorder=8)
 ax.text(-121.5,38.4,"MORAGA",color="#222222",fontsize=9,transform=ccrs.PlateCarree())
