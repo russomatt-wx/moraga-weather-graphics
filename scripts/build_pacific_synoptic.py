@@ -66,6 +66,14 @@ p=ax.contour(lon2,lat2,pressure,levels=np.arange(960,1050,8),colors="#c7d7e4",li
 ax.clabel(p,fmt="%d",fontsize=10,inline=True,inline_spacing=7)
 t=ax.contour(lon2,lat2,thickness,levels=np.arange(480,610,12),colors="#f5ba70",linewidths=1.5,linestyles="dashed",transform=ccrs.PlateCarree())
 ax.clabel(t,fmt="%d",fontsize=10,inline=True,inline_spacing=7)
+# Emphasize the classic 540-dam 1000–500 hPa thickness reference.
+# Draw after the other contours so it remains visually dominant.
+line540=ax.contour(lon2,lat2,thickness,levels=[540],colors="#42d9ff",
+                   linewidths=3.6,linestyles="solid",transform=ccrs.PlateCarree(),zorder=5)
+if line540.allsegs[0]:
+    ax.clabel(line540,fmt={540:"540"},fontsize=13,inline=True,
+              inline_spacing=9,colors="#42d9ff",use_clabeltext=True)
+
 palette={"cold":"#64baff","warm":"#fa7775","stationary":"#bb8dff","occluded":"#cc8fff"}
 drawn=0
 for f in features:
@@ -103,7 +111,7 @@ if not drawn:raise RuntimeError("WPC fronts unavailable or unsupported")
 ax.plot(-122.13,37.83,"o",ms=5,color="#ffd37e",transform=ccrs.PlateCarree(),zorder=8)
 ax.text(-121.5,38.4,"MORAGA",color="#ffe4ac",fontsize=9,transform=ccrs.PlateCarree())
 fig.text(.06,.95,"PACIFIC SYNOPTIC • SURFACE + THICKNESS",color="white",fontsize=19,weight="bold")
-fig.text(.06,.915,"GFS pressure (white, hPa) · 1000–500 hPa thickness (amber dashed, dam) · WPC Day-1 forecast fronts",color="#b6d0e2",fontsize=10)
+fig.text(.06,.915,"GFS pressure (white, hPa) · 1000–500 hPa thickness (amber dashed, dam) · 540 line (cyan) · WPC Day-1 fronts",color="#b6d0e2",fontsize=10)
 fig.text(.06,.04,f"GFS valid {valid:%d %b %Y %HZ}  |  WPC fronts: Day-1 forecast (valid time may differ)  |  Sources: Open-Meteo/GFS, NOAA WPC",color="#bed1df",fontsize=9)
 fig.subplots_adjust(left=.04,right=.98,bottom=.08,top=.89)
 fig.savefig(OUT,dpi=175,facecolor=fig.get_facecolor())
