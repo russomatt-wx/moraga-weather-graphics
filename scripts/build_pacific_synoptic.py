@@ -75,16 +75,16 @@ ax.add_feature(cfeature.LAND,facecolor="#20394b",zorder=0)
 ax.add_feature(cfeature.COASTLINE,edgecolor="#8baec3",linewidth=.65)
 ax.add_feature(cfeature.BORDERS,edgecolor="#55758a",linewidth=.45)
 ax.add_feature(cfeature.STATES,edgecolor="#55758a",linewidth=.35)
-p=ax.contour(lon2,lat2,pressure,levels=np.arange(960,1050,8),colors="#c7d7e4",linewidths=.9,alpha=.72,transform=ccrs.PlateCarree())
+p=ax.contour(lon2,lat2,pressure,levels=np.arange(960,1050,4),colors="#c7d7e4",linewidths=.75,alpha=.76,transform=ccrs.PlateCarree())
 ax.clabel(p,fmt="%d",fontsize=10,inline=True,inline_spacing=7)
-t=ax.contour(lon2,lat2,thickness,levels=np.arange(480,610,12),colors="#f5ba70",linewidths=1.5,linestyles="dashed",transform=ccrs.PlateCarree())
+t=ax.contour(lon2,lat2,thickness,levels=np.arange(480,610,6),colors="#f5ba70",linewidths=1.0,linestyles="dashed",transform=ccrs.PlateCarree())
 ax.clabel(t,fmt="%d",fontsize=10,inline=True,inline_spacing=7)
 # Emphasize the classic 540-dam 1000–500 hPa thickness reference.
 # Draw after the other contours so it remains visually dominant.
 line540=ax.contour(lon2,lat2,thickness,levels=[540],colors="#42d9ff",
-                   linewidths=3.6,linestyles="solid",transform=ccrs.PlateCarree(),zorder=5)
+                   linewidths=2.2,linestyles="solid",transform=ccrs.PlateCarree(),zorder=5)
 if line540.allsegs[0]:
-    ax.clabel(line540,fmt={540:"540"},fontsize=13,inline=True,
+    ax.clabel(line540,fmt={540:"540"},fontsize=11,inline=True,
               inline_spacing=9,colors="#42d9ff",use_clabeltext=True)
 
 palette={"cold":"#64baff","warm":"#fa7775","stationary":"#bb8dff","occluded":"#cc8fff"}
@@ -99,7 +99,7 @@ for f in features:
     for line in lines:
         a=np.asarray(line)
         if len(a)>1:
-            ax.plot(a[:,0],a[:,1],color=color,lw=3.3,transform=ccrs.PlateCarree(),zorder=6)
+            ax.plot(a[:,0],a[:,1],color=color,lw=2.5,transform=ccrs.PlateCarree(),zorder=6)
             # Standard frontal symbols sampled along the plotted line. NOAA's
             # geometry does not reliably supply the advancing side, so symbols
             # are illustrative; the source forecast remains authoritative.
@@ -118,7 +118,7 @@ for f in features:
                     else:
                         marker=MarkerStyle("o")
                         c="#fa7775" if "warm" in name or "stationary" in name else "#cc8fff"
-                    ax.scatter([x],[y],marker=marker,s=85,color=c,edgecolors="#11283b",linewidths=.4,transform=ccrs.PlateCarree(),zorder=7)
+                    ax.scatter([x],[y],marker=marker,s=45,color=c,edgecolors="#11283b",linewidths=.4,transform=ccrs.PlateCarree(),zorder=7)
             drawn+=1
 if not drawn:raise RuntimeError("WPC fronts unavailable or unsupported")
 ax.plot(-122.13,37.83,"o",ms=5,color="#ffd37e",transform=ccrs.PlateCarree(),zorder=8)
