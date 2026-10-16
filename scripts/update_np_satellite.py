@@ -11,7 +11,7 @@ def fetch(url):
 for product, output in [("GEOCOLOR", "satellite_np_geocolor.jpg"), ("13", "satellite_np_ir.jpg")]:
     directory = BASE + product + "/"
     listing = fetch(directory).decode("utf-8")
-    names = sorted(set(re.findall(r'([0-9]{11}_GOES18-ABI-np-' + product + r'-900x540\\.jpg)', listing)))
+    names = sorted(set(re.findall(r'([0-9]{11}_GOES18-ABI-np-' + product + r'-900x540[.]jpg)', listing)))
     if not names:
         raise RuntimeError("No timestamped 900x540 frames found in " + directory)
     name = names[-1]
