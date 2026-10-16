@@ -390,6 +390,18 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  }
  await combinedSkill();
  try {
+ const d=await load('forecast_diagnostics_latest.json');
+ const target=document.getElementById('combined-skill-results');
+ const h=d.archive_health||{}, m=d.matched_skill||{}, bias=d.assistant_bias||{};
+ const safe=n=>Number.isFinite(Number(n))?Number(n).toFixed(1)+'°F':'—';
+ const pairs=m.pairs||[];
+ const avg=k=>pairs.length?pairs.reduce((sum,p)=>sum+Number(p[k]||0),0)/pairs.length:null;
+ const summary=pairs.length?'<p>Matched high MAE: assistant '+safe(avg('assistant_high_abs_error_f'))+' · guidance '+safe(avg('guidance_high_abs_error_f'))+'. Matched low MAE: assistant '+safe(avg('assistant_low_abs_error_f'))+' · guidance '+safe(avg('guidance_low_abs_error_f'))+'.</p>':'<p>Not enough forecasts issued at comparable times yet.</p>';
+ const rows=['6 AM','11 AM','4 PM','9 PM'].map(e=>{const b=bias[e]||{};return '<tr><td>'+e+'</td><td>'+(b.verified_days||0)+'</td><td>'+safe(b.high_mean_error_f)+'</td><td>'+safe(b.low_mean_error_f)+'</td><td>'+(b.calibration_ready?'Ready':'Collecting')+'</td></tr>'}).join('');
+ target.insertAdjacentHTML('beforeend','<details style="margin-top:15px"><summary>Archive health, matched accuracy & bias</summary><p>Archived assistant forecasts: '+(h.valid_records||0)+' · Invalid: '+(h.invalid_records||0)+' · Duplicate editions: '+(h.duplicate_target_editions||[]).length+' · Off-hour archives: '+(h.off_hour_archives||[]).length+'.</p><p>Fair assistant vs guidance comparisons: '+pairs.length+'.</p>'+summary+'<div style="overflow-x:auto"><table class="verification-table"><thead><tr><th>Edition</th><th>Days</th><th>High bias</th><th>Low bias</th><th>Calibration</th></tr></thead><tbody>'+rows+'</tbody></table></div><p style="font-size:12px">Bias is signed forecast minus observed temperature. Calibration remains disabled until at least 10 distinct verified days per edition. Off-hour archives are warnings, not proof of missed forecasts.</p></details>');
+} catch(e) { /* Diagnostics feed not published yet. */ }
+
+ try {
   const d=await load('edition_skill_provisional_latest.json');
   const matches=d.matches||[];
   const target=document.getElementById('combined-skill-results');
