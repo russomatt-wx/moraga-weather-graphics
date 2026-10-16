@@ -1,0 +1,39 @@
+name: Update Moraga extended ensemble outlook
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '45 12,23 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: moraga-extended-outlook
+  cancel-in-progress: false
+jobs:
+  extended:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retrieve and validate GEFS ensemble
+        run: python scripts/build_extended_outlook.py
+      - name: Commit only validated outlook
+        run: |
+          set -euo pipefail
+          cp moraga_extended_outlook.json /tmp/moraga_extended_outlook.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/moraga_extended_outlook.json moraga_extended_outlook.json
+            git add moraga_extended_outlook.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m 'Refresh Moraga days 11-16 ensemble outlook'
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
