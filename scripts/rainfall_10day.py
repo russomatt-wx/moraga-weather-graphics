@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Publish a 10-day Moraga daily model precipitation comparison.
+"""Publish a 14-day Moraga daily model precipitation comparison.
 Source: Open-Meteo deterministic forecast and ensemble-mean APIs.
 Daily totals are midnight-to-midnight America/Los_Angeles; units inches.
 """
@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 LAT, LON = 37.8201932, -122.1193876  # KCAMORAG71 user-provided station coordinates
 TZ = "America/Los_Angeles"
 BASE = {"latitude": LAT, "longitude": LON, "daily": "precipitation_sum",
-        "timezone": TZ, "precipitation_unit": "inch", "forecast_days": 10}
+        "timezone": TZ, "precipitation_unit": "inch", "forecast_days": 14}
 SOURCES = [
     ("ECMWF", "https://api.open-meteo.com/v1/forecast", "ecmwf_ifs025"),
     ("GFS", "https://api.open-meteo.com/v1/forecast", "ncep_gfs_seamless"),
@@ -70,7 +70,7 @@ now = datetime.now(timezone.utc)
 fig, ax = plt.subplots(figsize=(13, 6.3), dpi=160)
 colors = {"ECMWF":"#0e7490", "GFS":"#e87922", "ICON":"#059669", "GEM":"#db2777", "NAM":"#64748b", "EPS mean":"#2563eb", "GEFS mean":"#9333ea"}
 for name, vals in results.items():
-    ax.plot(range(len(vals)), vals, label=f"{name}  |  10d {sum(v for v in vals if v is not None):.2f} in",
+    ax.plot(range(len(vals)), vals, label=f"{name}  |  14d {sum(v for v in vals if v is not None):.2f} in",
             marker="o", markersize=5, linewidth=2.4 if "mean" not in name else 2,
             linestyle="--" if "mean" in name else "-", color=colors[name])
 ax.set_xticks(range(len(dates)), [datetime.fromisoformat(d).strftime("%a %b %-d") for d in dates])
@@ -78,7 +78,7 @@ ax.set_ylabel("Daily precipitation (inches)")
 ax.set_ylim(bottom=0)
 ax.grid(axis="y", alpha=.2)
 ax.legend(loc="upper left", fontsize=9, ncol=2)
-fig.suptitle("MORAGA  |  10-DAY MODEL RAINFALL COMPARISON", fontsize=16, fontweight="bold")
+fig.suptitle("MORAGA  |  14-DAY MODEL RAINFALL COMPARISON", fontsize=16, fontweight="bold")
 ax.set_title("ECMWF · GFS · EPS mean · GEFS mean  |  Local calendar days (Pacific time)", fontsize=10)
 fig.text(.09, .035, f"Generated {now:%Y-%m-%d %H:%M} UTC  •  Open-Meteo model data  •  KCAMORAG71 requested coordinates  •  Missing: {', '.join(errors) or 'none'}", fontsize=8)
 fig.tight_layout(rect=[0,.06,1,.92])
@@ -148,10 +148,10 @@ conditions = daily_conditions(dates, results, hourly_results)
 assert len(conditions) == len(dates)
 assert all(v["icon"] and v["label"] for v in conditions.values())
 
-Path("moraga_forecast_10day.json").write_text(json.dumps({
+forecast_dates = dates[:10]\nPath("moraga_forecast_10day.json").write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
-    "dates": dates, "temperature_models": {name: temperature_results[model] for name, url, model in SOURCES if model in temperature_results},
-    "model_daily_inches": results, "daily_conditions": conditions, "hourly_conditions": {name: hourly_results[model] for name, url, model in SOURCES if model in hourly_results}, "errors": errors,
+    "dates": forecast_dates, "temperature_models": {name: {**temperature_results[model], "dates": temperature_results[model]["dates"][:10], "high_f": temperature_results[model]["high_f"][:10], "low_f": temperature_results[model]["low_f"][:10]} for name, url, model in SOURCES if model in temperature_results},
+    "model_daily_inches": {name: values[:10] for name, values in results.items()}, "daily_conditions": {day: conditions[day] for day in forecast_dates}, "hourly_conditions": {name: hourly_results[model] for name, url, model in SOURCES if model in hourly_results}, "errors": errors,
     "method": "Available ECMWF, GFS, ICON, GEM and NAM temperature guidance; website applies provisional KCAMORAG71 hourly skill weights separately for daytime and overnight, using lead-specific history where sufficient. Displayed ranges are deterministic model spread, not probability intervals.",
     "source": "Open-Meteo", "note": "Model inputs are not bias-corrected; website skill weighting is provisional, based on hourly temperature errors. Generated timestamp is retrieval time, not model initialization."
 }, indent=2))
