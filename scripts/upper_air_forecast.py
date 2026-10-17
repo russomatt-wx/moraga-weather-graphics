@@ -14,7 +14,7 @@ LOCAL=ZoneInfo("America/Los_Angeles")
 MODELS={"ECMWF":"ecmwf_ifs025","GFS":"ncep_gfs_seamless"}
 FIELDS="geopotential_height_500hPa,temperature_850hPa"
 fig,axes=plt.subplots(2,1,figsize=(12,8),sharex=True,layout="constrained")
-colors={"ECMWF":"#e07832","GFS":"#2474a6"}
+colors={"ECMWF":"#d56b16","GFS":"#087e9a"}\nfig.patch.set_facecolor("#ffffff")\nfor axis in axes:axis.set_facecolor("#f8fafc")
 results={}
 for label,model in MODELS.items():
     query=urllib.parse.urlencode({"latitude":LAT,"longitude":LON,"hourly":FIELDS,"models":model,"timezone":"America/Los_Angeles","forecast_days":10})
@@ -36,8 +36,8 @@ axes[0].set_ylabel("Geopotential height (m)")
 axes[1].set_title("850 hPa temperature | air-mass evolution",loc="left",fontweight="bold")
 axes[1].set_ylabel("Temperature (°C)")
 for ax in axes:
-    ax.grid(alpha=.22)
-    ax.legend(loc="best",frameon=True)
+    ax.grid(axis="y",color="#cbd5e1",alpha=.75)\n    ax.tick_params(labelsize=11)\n    ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
+    ax.legend(loc="best",frameon=True,fontsize=11)
 axes[1].xaxis.set_major_locator(mdates.DayLocator(interval=1,tz=LOCAL))
 axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d",tz=LOCAL))
 axes[1].tick_params(axis="x",rotation=30)
