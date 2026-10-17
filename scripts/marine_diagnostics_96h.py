@@ -33,8 +33,8 @@ def series(data,key):
 def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
     ts=[datetime.fromisoformat(t).replace(tzinfo=ZONE) for t in times]
     vals=np.array(values,dtype=float)
-    fig,ax=plt.subplots(figsize=(13,5.4),layout="constrained")
-    fig.patch.set_facecolor("#f8fafc");ax.set_facecolor("#f8fafc")
+    fig,ax=plt.subplots(figsize=(13,5.8),layout="constrained")
+    fig.patch.set_facecolor("#ffffff");ax.set_facecolor("#f8fafc")
     past=np.array([t<=cutoff for t in ts])
     future=np.array([t>=cutoff for t in ts])
     ax.plot(np.array(ts)[past],vals[past],color="#1663a8",linewidth=2.5,label="Recent model analysis")
@@ -44,8 +44,8 @@ def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
     if filename.startswith("moraga_pressure"): ax.axhline(0,color="#444",linewidth=1)
     ax.set_title(title,fontsize=16,weight="bold",loc="left",pad=15)
     ax.set_ylabel(ylabel)
-    ax.grid(axis="y",alpha=.22)
-    ax.legend(loc="upper left",ncol=3,fontsize=9)
+    ax.grid(axis="y",color="#cbd5e1",alpha=.7)\n    ax.tick_params(labelsize=11)\n    ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
+    ax.legend(loc="upper left",ncol=2,fontsize=11)
     import matplotlib.dates as mdates
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=12))
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\n%I %p",tz=ZONE))
