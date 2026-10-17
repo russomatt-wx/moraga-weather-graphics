@@ -167,7 +167,8 @@ conditions = daily_conditions(dates, results, hourly_results)
 assert len(conditions) == len(dates)
 assert all(v["icon"] and v["label"] for v in conditions.values())
 
-forecast_dates = dates[:10]\nPath("moraga_forecast_10day.json").write_text(json.dumps({
+forecast_dates = dates[:10]
+Path("moraga_forecast_10day.json").write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
     "dates": forecast_dates, "temperature_models": {name: {**temperature_results[model], "dates": temperature_results[model]["dates"][:10], "high_f": temperature_results[model]["high_f"][:10], "low_f": temperature_results[model]["low_f"][:10]} for name, url, model in SOURCES if model in temperature_results},
     "model_daily_inches": {name: values[:10] for name, values in results.items()}, "daily_conditions": {day: conditions[day] for day in forecast_dates}, "hourly_conditions": {name: hourly_results[model] for name, url, model in SOURCES if model in hourly_results}, "errors": errors,
