@@ -969,6 +969,8 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
   const r=await fetch('moraga_rainfall_10day.json?v='+Date.now(),{cache:'no-store'});
   if(!r.ok)throw Error('data unavailable');
   const d=await r.json(), dates=d.dates||[], series=Object.entries(d.model_daily_inches||{});
+  const rainImg=document.querySelector('#rainfall img[src*="moraga_rainfall_10day.png"]');
+  if(rainImg&&d.generated_utc){rainImg.src='moraga_rainfall_10day.png?v='+encodeURIComponent(d.generated_utc);}
   const totals=series.map(([name,values])=>({name,total:values.reduce((a,v)=>a+(Number.isFinite(v)?v:0),0),count:values.filter(Number.isFinite).length})).filter(x=>x.count);
   const wet=totals.slice().sort((a,b)=>b.total-a.total)[0];
   summary.innerHTML='<div><small>Forecast coverage</small><strong>'+dates.length+' days</strong></div><div><small>Wettest model total</small><strong>'+(wet?wet.total.toFixed(2)+'″':'—')+'</strong><small>'+(wet?wet.name:'Unavailable')+'</small></div><div><small>Models available</small><strong>'+totals.length+'</strong><small>of '+series.length+' sources</small></div>';
