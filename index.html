@@ -588,6 +588,13 @@ if(publishedCondition?.icon&&publishedCondition?.label){
  }
 }
 else {try{condition=modelCondition(date,rainMean,Object.fromEntries(Object.entries(data.model_daily_inches||{}).map(([n,a])=>[n,a[data.dates.indexOf(date)]])));}catch(error){console.warn('Condition classification failed',date,error);condition=['⛅','Partly cloudy'];}}
+// Rain icons and rain wording require at least a 20% daily PoP.
+// Below threshold, display cloud-based conditions while retaining the numeric PoP and rain amount.
+if(Number.isFinite(dailyRainChance[date])&&dailyRainChance[date]<20&&/rain|shower|drizzle/i.test(condition[1])){
+ const skyHours=Object.values(hourlyModels).flatMap(days=>(days[date]||[]).filter(h=>h.hour>=8&&h.hour<=18&&Number.isFinite(h.cloud)));
+ const drySky=skyCondition(skyHours);
+ condition=drySky[0]?drySky:['⛅','Partly cloudy'];
+}
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
