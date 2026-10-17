@@ -64,16 +64,16 @@ for name, url, model in SOURCES:
 if not results:
     raise RuntimeError("No valid model data: " + str(errors))
 now = datetime.now(timezone.utc)
-# Mobile-first chart: taller plotting area, external legend, no microscopic text.
+# Shared light chart style: readable on mobile, matching the observatory's other graphics.
 plt.rcParams.update({"font.family":"DejaVu Sans","font.size":13,
-    "axes.edgecolor":"#48637b","axes.labelcolor":"#dceaf5",
-    "xtick.color":"#c4d6e4","ytick.color":"#c4d6e4",
-    "text.color":"#e8f3fc","savefig.facecolor":"#112237"})
-fig, ax = plt.subplots(figsize=(11, 9.2), dpi=160, facecolor="#112237")
-ax.set_facecolor("#142b40")
-colors = {"ECMWF":"#67d8f4","GFS":"#ffbc78","ICON":"#54d6a4",
-          "GEM":"#ff83b0","NAM":"#c1d1e0","EPS mean":"#8aaaff",
-          "GEFS mean":"#c2a0ff"}
+    "axes.edgecolor":"#a5b4c3","axes.labelcolor":"#25374a",
+    "xtick.color":"#34495e","ytick.color":"#34495e",
+    "text.color":"#1c3044","savefig.facecolor":"#ffffff"})
+fig, ax = plt.subplots(figsize=(11, 9.2), dpi=160, facecolor="#ffffff")
+ax.set_facecolor("#f8fafc")
+colors = {"ECMWF":"#087e9a","GFS":"#d56b16","ICON":"#168458",
+          "GEM":"#c33268","NAM":"#65778a","EPS mean":"#245bb3",
+          "GEFS mean":"#7a46b0"}
 for name, vals in results.items():
     available=[v for v in vals if isinstance(v,(float,int))]
     if not available: continue
@@ -87,19 +87,19 @@ ax.set_xticklabels([datetime.fromisoformat(d).strftime("%b %-d") for d in dates]
 ax.tick_params(axis="y",labelsize=12)
 ax.set_ylabel("Daily rainfall (inches)",fontsize=13,labelpad=12)
 ax.set_ylim(bottom=0)
-ax.grid(axis="y",color="#39536a",alpha=.7,linewidth=.8)
+ax.grid(axis="y",color="#cbd5e1",alpha=.75,linewidth=.8)
 ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
 fig.suptitle("MORAGA  |  14-DAY RAINFALL",fontsize=21,fontweight="bold",
              x=.085,ha="left",y=.974)
-fig.text(.085,.915,"Model comparison  ·  Daily precipitation",fontsize=13,color="#b8d0e0")
+fig.text(.085,.915,"Model comparison  ·  Daily precipitation",fontsize=13,color="#53697b")
 handles,labels=ax.get_legend_handles_labels()
 fig.legend(handles,labels,loc="upper left",bbox_to_anchor=(.085,.885),
-           ncol=2,fontsize=12,frameon=False,labelcolor="#e8f3fc",
+           ncol=2,fontsize=12,frameon=False,labelcolor="#1c3044",
            columnspacing=2.5,handlelength=2.3,labelspacing=.75)
 fig.text(.085,.026,
          f"Updated {now:%b %d %H:%M} UTC  ·  Open-Meteo  ·  Gaps indicate unavailable model days",
-         fontsize=10,color="#afc6d7")
+         fontsize=10,color="#64748b")
 fig.subplots_adjust(left=.085,right=.98,bottom=.17,top=.64)
 out=Path("moraga_rainfall_10day.png")
 fig.savefig(out,facecolor=fig.get_facecolor())
