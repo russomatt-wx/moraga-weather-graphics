@@ -65,8 +65,7 @@ def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
     ax.legend(loc="upper left",ncol=2,fontsize=12)
     import matplotlib.dates as mdates
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=12))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d
-%I %p",tz=ZONE))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\n%I %p",tz=ZONE))
     plt.setp(ax.get_xticklabels(),rotation=25,ha="right")
     fig.text(.01,.005,footnote,fontsize=10,color="#525d69")
     fig.savefig(ROOT/filename,dpi=155,bbox_inches="tight",facecolor=fig.get_facecolor())
@@ -96,6 +95,5 @@ def main():
        "note":"Recent 48h is model-based, not station observations. Boundary-layer height is NOT marine inversion depth.",
        "time_local":common,"sfo_minus_sac_hpa":gradient,"acv_minus_sfo_hpa":north_south,"coastal_pbl_height_ft_agl":pbl_ft,
        "cutoff_local":cutoff.isoformat(),"locations":LOCATIONS}
-    (ROOT/"moraga_marine_diagnostics_96h.json").write_text(json.dumps(payload,indent=2)+"
-")
+    (ROOT/"moraga_marine_diagnostics_96h.json").write_text(json.dumps(payload,indent=2)+"\n")
 if __name__=="__main__":main()
