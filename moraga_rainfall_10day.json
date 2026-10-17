@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-17T04:29:44.104218+00:00",
+  "generated_utc": "2026-10-17T04:37:58.758293+00:00",
   "timezone": "America/Los_Angeles",
   "latitude": 37.8201932,
   "longitude": -122.1193876,
@@ -60,39 +60,7 @@
       0.091,
       0.035,
       0.0,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "GEM": [
       0.0,
-      0.0,
-      0.0,
-      0.008,
-      0.076,
-      0.047,
-      0.012,
-      0.0,
-      0.0,
-      0.0,
-      null,
-      null,
-      null,
-      null
-    ],
-    "NAM": [
-      0.0,
-      0.0,
-      0.146,
-      null,
-      null,
-      null,
-      null,
-      null,
       null,
       null,
       null,
@@ -133,7 +101,10 @@
       0.008
     ]
   },
-  "errors": {},
+  "errors": {
+    "GEM": "<urlopen error _ssl.c:993: The handshake operation timed out>",
+    "NAM": "HTTP Error 503: Service Unavailable"
+  },
   "source": "Open-Meteo",
   "note": "API does not explicitly expose model initialization times here; generated time is not initialization time."
 }
