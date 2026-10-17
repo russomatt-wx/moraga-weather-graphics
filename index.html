@@ -708,7 +708,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  function paint(){clamp();image.style.width=image.naturalWidth+'px';image.style.height=image.naturalHeight+'px';image.style.transform='translate('+x+'px,'+y+'px) scale('+scale+')'}
  function fit(){if(!image.naturalWidth)return;minScale=Math.min(stage.clientWidth/image.naturalWidth,stage.clientHeight/image.naturalHeight);scale=minScale;x=0;y=0;paint()}
  function zoom(factor,cx=stage.clientWidth/2,cy=stage.clientHeight/2){const next=Math.max(minScale,Math.min(minScale*8,scale*factor));x=cx-(cx-x)*(next/scale);y=cy-(cy-y)*(next/scale);scale=next;paint()}
- function close(){modal.hidden=true;document.body.classList.remove('chart-viewer-open');pointers.clear();gesture=null;image.removeAttribute('src');previousFocus?.focus()}
+ function close(){lastTap=null;modal.hidden=true;document.body.classList.remove('chart-viewer-open');pointers.clear();gesture=null;image.removeAttribute('src');previousFocus?.focus()}
  function open(img){previousFocus=document.activeElement;const card=img.closest('.card');title.textContent=card?.querySelector('h3')?.textContent||img.alt||'Weather chart';modal.hidden=false;document.body.classList.add('chart-viewer-open');image.onload=()=>fit();image.src=img.dataset.satellite ? img.src : (img.currentSrc||img.src);if(image.complete&&image.naturalWidth)fit();document.getElementById('chart-viewer-close').focus()}
  document.querySelectorAll('.card img').forEach(img=>{
    img.classList.add('chart-zoomable');img.tabIndex=0;img.setAttribute('role','button');img.setAttribute('aria-label','Expand chart: '+(img.alt||'weather chart'));
@@ -722,11 +722,32 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  stage.addEventListener('wheel',e=>{e.preventDefault();const b=stage.getBoundingClientRect();zoom(e.deltaY<0?1.2:1/1.2,e.clientX-b.left,e.clientY-b.top)},{passive:false});
  function distance(a,b){return Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)}
  function center(a,b){const box=stage.getBoundingClientRect();return [(a.clientX+b.clientX)/2-box.left,(a.clientY+b.clientY)/2-box.top]}
- stage.addEventListener('pointerdown',e=>{e.preventDefault();stage.setPointerCapture(e.pointerId);pointers.set(e.pointerId,e);gesture=null});
- stage.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;const prev=pointers.get(e.pointerId);pointers.set(e.pointerId,e);const pts=[...pointers.values()];if(pts.length===1){x+=e.clientX-prev.clientX;y+=e.clientY-prev.clientY;paint()}else if(pts.length===2){const d=distance(pts[0],pts[1]),c=center(pts[0],pts[1]);if(gesture){zoom(d/gesture.distance,c[0],c[1]);x+=c[0]-gesture.center[0];y+=c[1]-gesture.center[1];paint()}gesture={distance:d,center:c}}});
- function end(e){pointers.delete(e.pointerId);gesture=null}
+ let lastTap=null, tapStart=null, multiTouch=false;
+ stage.addEventListener('pointerdown',e=>{
+  e.preventDefault();stage.setPointerCapture(e.pointerId);pointers.set(e.pointerId,e);gesture=null;
+  if(pointers.size===1){tapStart={id:e.pointerId,x:e.clientX,y:e.clientY,time:Date.now(),moved:false};multiTouch=false}
+  else{multiTouch=true;tapStart=null;lastTap=null}
+ });
+ stage.addEventListener('pointermove',e=>{
+  if(!pointers.has(e.pointerId))return;
+  const prev=pointers.get(e.pointerId);pointers.set(e.pointerId,e);
+  if(tapStart&&e.pointerId===tapStart.id&&Math.hypot(e.clientX-tapStart.x,e.clientY-tapStart.y)>12)tapStart.moved=true;
+  const pts=[...pointers.values()];
+  if(pts.length===1){x+=e.clientX-prev.clientX;y+=e.clientY-prev.clientY;paint()}
+  else if(pts.length===2){const d=distance(pts[0],pts[1]),c=center(pts[0],pts[1]);if(gesture){zoom(d/gesture.distance,c[0],c[1]);x+=c[0]-gesture.center[0];y+=c[1]-gesture.center[1];paint()}gesture={distance:d,center:c}}
+ });
+ function end(e){
+  if(e.type==='pointerup'&&pointers.size===1&&!multiTouch&&tapStart&&!tapStart.moved&&Date.now()-tapStart.time<350){
+   const now=Date.now(),point={x:e.clientX,y:e.clientY};
+   if(lastTap&&now-lastTap.time<350&&Math.hypot(point.x-lastTap.x,point.y-lastTap.y)<35){
+    const rect=stage.getBoundingClientRect();zoom(2,point.x-rect.left,point.y-rect.top);lastTap=null;
+   }else lastTap={...point,time:now};
+  }
+  pointers.delete(e.pointerId);gesture=null;tapStart=null;
+  if(e.type==='pointercancel')lastTap=null;
+ }
  stage.addEventListener('pointerup',end);stage.addEventListener('pointercancel',end);
- stage.addEventListener('dblclick',e=>{const b=stage.getBoundingClientRect();zoom(2,e.clientX-b.left,e.clientY-b.top)});
+ stage.addEventListener('dblclick',e=>e.preventDefault());
  window.addEventListener('resize',()=>{if(!modal.hidden)fit()});
  // File metadata: Last-Modified is a publication timestamp, NOT the model valid time.
  const imgs=[...document.querySelectorAll('.card img')].filter(img=>!img.classList.contains('goes-live'));
