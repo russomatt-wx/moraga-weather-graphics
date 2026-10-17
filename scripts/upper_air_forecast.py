@@ -7,6 +7,20 @@ from zoneinfo import ZoneInfo
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+# Shared high-legibility typography for charts embedded on narrow screens.
+plt.rcParams.update({
+    "font.family": "DejaVu Sans",
+    "font.size": 14,
+    "font.weight": "semibold",
+    "axes.titlesize": 17,
+    "axes.titleweight": "bold",
+    "axes.labelsize": 14,
+    "axes.labelweight": "bold",
+    "xtick.labelsize": 12,
+    "ytick.labelsize": 12,
+    "legend.fontsize": 12,
+})
+
 import matplotlib.dates as mdates
 
 LAT,LON=37.8201932,-122.1193876
@@ -36,12 +50,12 @@ axes[0].set_ylabel("Geopotential height (m)")
 axes[1].set_title("850 hPa temperature | air-mass evolution",loc="left",fontweight="bold")
 axes[1].set_ylabel("Temperature (°C)")
 for ax in axes:
-    ax.grid(axis="y",color="#cbd5e1",alpha=.75)\n    ax.tick_params(labelsize=11)\n    ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
-    ax.legend(loc="best",frameon=True,fontsize=11)
+    ax.grid(axis="y",color="#cbd5e1",alpha=.75)\n    ax.tick_params(labelsize=13)\n    for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")\n    ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
+    ax.legend(loc="best",frameon=True,fontsize=12)
 axes[1].xaxis.set_major_locator(mdates.DayLocator(interval=1,tz=LOCAL))
 axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d",tz=LOCAL))
 axes[1].tick_params(axis="x",rotation=30)
-fig.suptitle("MORAGA | 10-DAY UPPER-AIR MODEL FORECAST",fontweight="bold",fontsize=17)
+fig.suptitle("MORAGA | 10-DAY UPPER-AIR MODEL FORECAST",fontweight="bold",fontsize=19)
 fig.savefig("moraga_upper_air_10day.png",dpi=165,facecolor="white",bbox_inches="tight",pad_inches=.3)
 plt.close(fig)
 Path("moraga_upper_air_10day.json").write_text(json.dumps({"generated_utc":datetime.now(timezone.utc).isoformat(),"requested_latitude":LAT,"requested_longitude":LON,"models":results},indent=2)+"\n")
