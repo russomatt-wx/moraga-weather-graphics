@@ -4,7 +4,7 @@ Source: Open-Meteo deterministic forecast and ensemble-mean APIs.
 Daily totals are midnight-to-midnight America/Los_Angeles; units inches.
 """
 import json, urllib.parse, urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from pathlib import Path
 import matplotlib
@@ -51,17 +51,14 @@ def get(url, model):
     return daily["time"], values
 
 results, errors = {}, {}
-dates = None
+# Use a fixed 14-day calendar, not the horizon of whichever model responds first.
+start_day = datetime.now(ZoneInfo(TZ)).date()
+dates = [(start_day + timedelta(days=i)).isoformat() for i in range(14)]
 for name, url, model in SOURCES:
     try:
         d, vals = get(url, model)
-        if dates is None:
-            dates = d
-        if dates != d and name in ("ECMWF","GFS","EPS mean","GEFS mean"):
-            raise ValueError("Date mismatch")
-        if dates != d:
-            vals = [dict(zip(d,vals)).get(day) for day in dates]
-        results[name] = vals
+        # Shorter-range models retain nulls beyond their available horizon.
+        results[name] = [dict(zip(d, vals)).get(day) for day in dates]
     except Exception as exc:
         errors[name] = str(exc)
 if not results:
