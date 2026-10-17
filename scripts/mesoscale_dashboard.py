@@ -22,7 +22,7 @@ def main():
     station={n:fetch(*p) for n,p in POINTS.items()}
     fig,axes=plt.subplots(2,1,figsize=(12,8),sharex=True,layout="constrained")
     colors=["#1674ad","#17a398","#d8502d","#9356ab","#d3a029"]
-    result={}
+    for axis in axes:\n        axis.set_facecolor("#f8fafc")\n    fig.patch.set_facecolor("#ffffff")\n    result={}
     for (name,h),c in zip(station.items(),colors):
         times=[datetime.fromisoformat(t).replace(tzinfo=TZ) for t in h["time"]]
         idx=[i for i,t in enumerate(times) if now<=t<=now+__import__("datetime").timedelta(hours=96)]
@@ -37,7 +37,7 @@ def main():
     axes[0].set_ylabel("Temperature (°F)")
     axes[1].set_ylabel("Dew point (°F)")
     axes[1].set_title("Moisture gradient | 96-hour dew point forecast",loc="left",weight="bold")
-    for ax in axes:ax.grid(alpha=.2);ax.legend(ncol=5,fontsize=8,loc="upper left")
+    for ax in axes:\n        ax.grid(axis="y",color="#cbd5e1",alpha=.75)\n        ax.tick_params(labelsize=11)\n        ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)\n        ax.legend(ncol=3,fontsize=10,loc="upper left")
     axes[1].xaxis.set_major_locator(mdates.HourLocator(interval=12,tz=TZ))
     axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\n%I %p",tz=TZ))
     fig.suptitle("MODEL FORECAST • Not live station observations • Open-Meteo best match",fontsize=10)
@@ -45,7 +45,7 @@ def main():
     # Compare actual independently requested model grids, not station measurements.
     models={"ECMWF":"ecmwf_ifs025","GFS":"ncep_gfs_seamless"}
     forecasts={};errors={}
-    fig,ax=plt.subplots(figsize=(12,5.4),layout="constrained")
+    fig,ax=plt.subplots(figsize=(12,6),layout="constrained")\n    fig.patch.set_facecolor("#ffffff");ax.set_facecolor("#f8fafc")
     for name,model in models.items():
         try:
             h=fetch(*POINTS["Moraga"],model=model)
@@ -57,7 +57,7 @@ def main():
         except Exception as e:errors[name]=str(e)
     if not forecasts:raise RuntimeError("No model forecasts available: "+str(errors))
     ax.set_title("Moraga | 48-hour temperature model comparison",loc="left",weight="bold",fontsize=15)
-    ax.set_ylabel("2 m temperature (°F)");ax.grid(alpha=.2);ax.legend()
+    ax.set_ylabel("2 m temperature (°F)");ax.grid(axis="y",color="#cbd5e1",alpha=.75);ax.legend(fontsize=11)\n    ax.tick_params(labelsize=11)\n    ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=12,tz=TZ))
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\\n%I %p",tz=TZ))
     fig.savefig("moraga_temperature_model_comparison.png",dpi=155,bbox_inches="tight");plt.close(fig)
