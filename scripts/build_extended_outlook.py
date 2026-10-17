@@ -53,6 +53,8 @@ for date in dates[10:16]:
     out.append({
         "date": date,
         "temperature_f_p10": round(percentile(0.1), 1),
+        "temperature_f_median": round(percentile(0.5), 1),
+        "temperature_f_mean": round(mean(highs), 1),
         "temperature_f_p90": round(percentile(0.9), 1),
         "rain_member_fraction": round(mean(wet), 3),
         "members": len(highs),
