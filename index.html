@@ -207,7 +207,7 @@ nav a:hover,nav a:focus-visible{border-color:#608ca8}
 <p>Local conditions · Pacific storms · Forecast skill</p><p class="station-id">KCAMORAG71 · Moraga, CA</p></header>
 <main><nav aria-label="Weather dashboard sections"><a href="#observations">Now</a><a href="#forecast">Forecast</a><a href="#marine">Marine</a><a href="#satellite">Satellite</a><a href="#rainfall">Rain</a><a href="#extended-outlook">Days 11–16</a><a href="#cpc-outlook">CPC</a><a href="#accuracy">Model skill</a><a href="#chatgpt-accuracy">Briefing skill</a><a href="#climate">Climate</a><a href="#westcoast">Pacific maps</a></nav>
  <section id="observations"><div class="intro"><div class="kicker">01 / What happened</div><h2>Moraga station observations</h2><p>Observed temperature and dew point.</p></div><div class="focus-grid"><article class="card"><h3>Station observations</h3><a href="moraga_station_observations.png"><img loading="lazy" src="moraga_station_observations.png" alt="KCAMORAG71 observed temperature and dew point" onerror="this.closest('article').style.display='none'"></a></article></div></section>
- <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Daily temperatures and model guidance.</p></div><div class="focus-grid"><article class="card" id="ten-day"><h3>Rolling 10-day forecast</h3><p>Moraga daily outlook</p><p id="ten-day-updated" class="day-date"></p><div id="ten-day-results" aria-live="polite"><p>Loading daily forecast…</p></div><details class="method-note"><summary>How this forecast is made</summary><p>Temperatures blend models using recent verified skill and local bias adjustments. Rainfall uses multiple models; icons consider cloud cover, agreement and rain duration. Forecast weighting is provisional while the verification archive grows. Tap “Model range” for daily details.</p></details></article><article class="card"><h3>Temperature guidance</h3><a href="moraga_model_temperatures.png"><img loading="lazy" src="moraga_model_temperatures.png" alt="Individual temperature model comparison" onerror="this.closest('article').style.display='none'"></a></article>
+ <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Daily temperatures and model guidance.</p></div><div class="focus-grid"><article class="card" id="ten-day"><h3>Rolling 10-day forecast</h3><p>Moraga daily outlook</p><p id="ten-day-updated" class="day-date"></p><div id="ten-day-results" aria-live="polite"><p>Loading daily forecast…</p></div><details class="method-note"><summary>How this forecast is made</summary><p>Temperatures blend models using recent verified skill and local bias adjustments. Rainfall uses multiple models; icons consider cloud cover, agreement and rain duration. Forecast weighting is provisional while the verification archive grows. Tap “Model range” for daily details.</p></details></article><article class="card"><h3>Temperature guidance</h3><p class="temperature-chart-note" id="temperature-chart-note">Individual models · available forecast horizon</p><a href="moraga_model_temperatures.png"><img loading="lazy" id="temperature-guidance-image" src="moraga_model_temperatures.png" alt="Individual temperature model comparison" onerror="this.closest('article').style.display='none'"></a></article>
 <article class="card"><h3>Ensemble spread</h3><a href="moraga_ensemble_spread.png"><img loading="lazy" src="moraga_ensemble_spread.png" alt="GEFS and EPS ensemble temperature spread" onerror="this.closest('article').style.display='none'"></a></article>
 </div></section>
  <section id="marine"><div class="intro"><div class="kicker">03 / Regional drivers</div><h2>Marine intrusion & East Bay gradients</h2><p>Track marine air moving inland.</p></div><div class="grid"><article class="card"><h3>96-hour Bay-to-Valley marine intrusion tracker</h3><p>96-hour coastal-to-inland temperature and dew point.</p><img loading="lazy" src="moraga_marine_transect.png" alt="East Bay temperature and dew point forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p>Awaiting first successful model chart run.</p>')"><span class="pill">Model forecast</span></article>
@@ -801,4 +801,34 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  const syn=document.getElementById('pacific-synoptic-image');
  if(syn){fetch('pacific_synoptic.json?ts='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.json()}).then(data=>{if(data.gfs_valid_utc)label(syn,'GFS forecast valid: '+pacificDate(data.gfs_valid_utc)+' · Updated file time shown when available')}).catch(()=>{})}
 })();
-</script><script defer src="dashboard_enhancements.js?v=3"></script></body></html>
+</script><script defer src="dashboard_enhancements.js?v=3"></script><script>
+(async function(){
+ const img=document.getElementById('temperature-guidance-image'),note=document.getElementById('temperature-chart-note');
+ if(!img)return;
+ try{
+  const res=await fetch('moraga_forecast_10day.json?chart='+Date.now(),{cache:'no-store'});
+  if(!res.ok)throw Error('No model dataset');
+  const data=await res.json(),models=data.hourly_conditions||{};
+  const names=['GFS','ECMWF','HRRR','NAM','ICON','GEM'],colors={GFS:'#2679b5',ECMWF:'#e88936',HRRR:'#419e55',NAM:'#cf4749',ICON:'#9372bb',GEM:'#856052'};
+  const series=names.map(name=>({name,color:colors[name],v:models[name]})).filter(m=>m.v&&Array.isArray(m.v.time)&&Array.isArray(m.v.temperature_2m));
+  if(!series.length)throw Error('No hourly model temperatures');
+  const allTimes=[...new Set(series.flatMap(m=>m.v.time))].sort(),dates=[...new Set(allTimes.map(t=>t.slice(0,10)))];
+  if(dates.length<2)throw Error('Insufficient dates');
+  const start=Date.parse(allTimes[0]),end=Date.parse(allTimes[allTimes.length-1]),width=1080,height=530,left=74,right=20,top=65,bottom=78;
+  const vals=series.flatMap(m=>m.v.temperature_2m.filter(Number.isFinite));
+  const min=Math.floor((Math.min(...vals)-3)/5)*5,max=Math.ceil((Math.max(...vals)+3)/5)*5;
+  const x=t=>left+(Date.parse(t)-start)/(end-start)*(width-left-right);
+  const y=v=>top+(max-v)/(max-min)*(height-top-bottom);
+  const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+  let svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+width+' '+height+'" width="'+width+'" height="'+height+'"><rect width="100%" height="100%" fill="white"/><text x="'+left+'" y="30" font-size="20" font-weight="700" fill="#111">Moraga | Temperature model guidance</text>';
+  for(let v=min;v<=max;v+=5){const yy=y(v);svg+='<line x1="'+left+'" x2="'+(width-right)+'" y1="'+yy+'" y2="'+yy+'" stroke="#e8ebee"/><text x="'+(left-11)+'" y="'+(yy+5)+'" text-anchor="end" font-size="13" fill="#344252">'+v+'</text>'}
+  for(const date of dates){const xx=x(date+'T00:00');if(xx<left||xx>width-right)continue;svg+='<line x1="'+xx+'" x2="'+xx+'" y1="'+top+'" y2="'+(height-bottom)+'" stroke="#e9edf0"/><text x="'+Math.min(width-45,xx+7)+'" y="'+(height-bottom+27)+'" font-size="13" fill="#344252">'+esc(new Date(date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}))+'</text>'}
+  for(const m of series){let d='',started=false,points=0;for(let i=0;i<m.v.time.length;i++){const val=m.v.temperature_2m[i],time=m.v.time[i];if(!Number.isFinite(val)){started=false;continue}const xx=x(time),yy=y(val);d+=(started?'L':'M')+xx.toFixed(1)+','+yy.toFixed(1)+' ';started=true;points++}if(points>1)svg+='<path d="'+d+'" fill="none" stroke="'+m.color+'" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>'}
+  series.forEach((m,i)=>{const xx=left+(i%3)*160,yy=height-28+Math.floor(i/3)*23;svg+='<line x1="'+xx+'" x2="'+(xx+27)+'" y1="'+yy+'" y2="'+yy+'" stroke="'+m.color+'" stroke-width="3"/><text x="'+(xx+34)+'" y="'+(yy+5)+'" font-size="14" fill="#273444">'+m.name+'</text>'});
+  svg+='<text x="18" y="'+(height/2)+'" transform="rotate(-90 18 '+height/2+')" font-size="14" fill="#344252">Temperature (°F)</text></svg>';
+  const blob=new Blob([svg],{type:'image/svg+xml'}),url=URL.createObjectURL(blob);
+  img.src=url;img.closest('a').href=url;
+  if(note)note.textContent='Hourly model guidance · through '+new Date(dates[dates.length-1]+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})+' · shorter-range models end earlier';
+ }catch(e){if(note)note.textContent='Published model temperature guidance'}
+})();
+</script></body></html>
