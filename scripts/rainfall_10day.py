@@ -64,44 +64,45 @@ for name, url, model in SOURCES:
 if not results:
     raise RuntimeError("No valid model data: " + str(errors))
 now = datetime.now(timezone.utc)
-# Unified observatory chart styling: dark canvas, legible dates, honest gaps.
-plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 10,
-    "axes.edgecolor": "#456078", "axes.labelcolor": "#dceaf5",
-    "xtick.color": "#b7cbdc", "ytick.color": "#b7cbdc",
-    "text.color": "#e8f3fc", "savefig.facecolor": "#112237"})
-fig, ax = plt.subplots(figsize=(14, 7.2), dpi=150, facecolor="#112237")
+# Mobile-first chart: taller plotting area, external legend, no microscopic text.
+plt.rcParams.update({"font.family":"DejaVu Sans","font.size":13,
+    "axes.edgecolor":"#48637b","axes.labelcolor":"#dceaf5",
+    "xtick.color":"#c4d6e4","ytick.color":"#c4d6e4",
+    "text.color":"#e8f3fc","savefig.facecolor":"#112237"})
+fig, ax = plt.subplots(figsize=(11, 9.2), dpi=160, facecolor="#112237")
 ax.set_facecolor("#142b40")
-colors = {"ECMWF":"#67d8f4", "GFS":"#ffbc78", "ICON":"#54d6a4",
-          "GEM":"#ff83b0", "NAM":"#aebed2", "EPS mean":"#8aaaff",
+colors = {"ECMWF":"#67d8f4","GFS":"#ffbc78","ICON":"#54d6a4",
+          "GEM":"#ff83b0","NAM":"#c1d1e0","EPS mean":"#8aaaff",
           "GEFS mean":"#c2a0ff"}
 for name, vals in results.items():
-    available = [v for v in vals if isinstance(v, (float, int))]
-    if not available:
-        continue
-    ax.plot(range(len(vals)), vals,
-            label=f"{name}  ·  {sum(available):.2f} in",
-            marker="o", markersize=4, linewidth=2.4 if "mean" not in name else 2,
-            linestyle="--" if "mean" in name else "-", color=colors[name])
-ax.set_xlim(-0.25, 13.25)
-ax.set_xticks(range(14), [datetime.fromisoformat(d).strftime("%b %-d") for d in dates],
-              rotation=40, ha="right")
-ax.set_ylabel("Daily precipitation (inches)", labelpad=12)
+    available=[v for v in vals if isinstance(v,(float,int))]
+    if not available: continue
+    ax.plot(range(len(vals)), vals, label=f"{name}  {sum(available):.2f} in",
+            marker="o", markersize=6, linewidth=3 if "mean" not in name else 2.8,
+            linestyle="--" if "mean" in name else "-",color=colors[name])
+ax.set_xlim(-.35,13.35)
+ax.set_xticks(range(14))
+ax.set_xticklabels([datetime.fromisoformat(d).strftime("%b %-d") for d in dates],
+                   rotation=55,ha="right",fontsize=12)
+ax.tick_params(axis="y",labelsize=12)
+ax.set_ylabel("Daily rainfall (inches)",fontsize=13,labelpad=12)
 ax.set_ylim(bottom=0)
-ax.grid(axis="y", color="#39536a", alpha=.6, linewidth=.7)
+ax.grid(axis="y",color="#39536a",alpha=.7,linewidth=.8)
 ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
-ax.legend(loc="upper left", fontsize=9, ncol=2, frameon=True,
-          facecolor="#1d344a", edgecolor="#39536a", labelcolor="#e8f3fc")
-fig.suptitle("MORAGA  |  14-DAY RAINFALL MODEL COMPARISON",
-             fontsize=17, fontweight="bold", x=.08, ha="left", y=.98)
-ax.set_title("Daily rainfall  ·  7 model sources  ·  Pacific local dates",
-             fontsize=10, loc="left", pad=13, color="#abc6d8")
-fig.text(.08, .018,
-         f"Updated {now:%Y-%m-%d %H:%M} UTC  ·  Open-Meteo  ·  KCAMORAG71 coordinates  ·  Gaps = unavailable guidance",
-         fontsize=8, color="#a8bfd0")
-fig.subplots_adjust(left=.08, right=.985, bottom=.20, top=.80)
-out = Path("moraga_rainfall_10day.png")
-fig.savefig(out, facecolor=fig.get_facecolor())
+fig.suptitle("MORAGA  |  14-DAY RAINFALL",fontsize=21,fontweight="bold",
+             x=.085,ha="left",y=.974)
+fig.text(.085,.915,"Model comparison  ·  Daily precipitation",fontsize=13,color="#b8d0e0")
+handles,labels=ax.get_legend_handles_labels()
+fig.legend(handles,labels,loc="upper left",bbox_to_anchor=(.085,.885),
+           ncol=2,fontsize=12,frameon=False,labelcolor="#e8f3fc",
+           columnspacing=2.5,handlelength=2.3,labelspacing=.75)
+fig.text(.085,.026,
+         f"Updated {now:%b %d %H:%M} UTC  ·  Open-Meteo  ·  Gaps indicate unavailable model days",
+         fontsize=10,color="#afc6d7")
+fig.subplots_adjust(left=.085,right=.98,bottom=.17,top=.64)
+out=Path("moraga_rainfall_10day.png")
+fig.savefig(out,facecolor=fig.get_facecolor())
 plt.close(fig)
 Path("moraga_rainfall_10day.json").write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
