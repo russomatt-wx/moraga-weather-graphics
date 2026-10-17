@@ -10,6 +10,20 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+# Shared high-legibility typography for charts embedded on narrow screens.
+plt.rcParams.update({
+    "font.family": "DejaVu Sans",
+    "font.size": 14,
+    "font.weight": "semibold",
+    "axes.titlesize": 17,
+    "axes.titleweight": "bold",
+    "axes.labelsize": 14,
+    "axes.labelweight": "bold",
+    "xtick.labelsize": 12,
+    "ytick.labelsize": 12,
+    "legend.fontsize": 12,
+})
+
 
 LAT, LON = 37.8201932, -122.1193876  # KCAMORAG71 user-provided station coordinates
 TZ = "America/Los_Angeles"
@@ -65,7 +79,7 @@ if not results:
     raise RuntimeError("No valid model data: " + str(errors))
 now = datetime.now(timezone.utc)
 # Shared light chart style: readable on mobile, matching the observatory's other graphics.
-plt.rcParams.update({"font.family":"DejaVu Sans","font.size":13,
+plt.rcParams.update({"font.family":"DejaVu Sans","font.size":14,"font.weight":"semibold",
     "axes.edgecolor":"#a5b4c3","axes.labelcolor":"#25374a",
     "xtick.color":"#34495e","ytick.color":"#34495e",
     "text.color":"#1c3044","savefig.facecolor":"#ffffff"})
@@ -83,23 +97,23 @@ for name, vals in results.items():
 ax.set_xlim(-.35,13.35)
 ax.set_xticks(range(14))
 ax.set_xticklabels([datetime.fromisoformat(d).strftime("%b %-d") for d in dates],
-                   rotation=55,ha="right",fontsize=12)
+                   rotation=55,ha="right",fontsize=13,fontweight="semibold")
 ax.tick_params(axis="y",labelsize=12)
-ax.set_ylabel("Daily rainfall (inches)",fontsize=13,labelpad=12)
+ax.set_ylabel("Daily rainfall (inches)",fontsize=15,fontweight="bold",labelpad=12)
 ax.set_ylim(bottom=0)
 ax.grid(axis="y",color="#cbd5e1",alpha=.75,linewidth=.8)
 ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
-fig.suptitle("MORAGA  |  14-DAY RAINFALL",fontsize=21,fontweight="bold",
+fig.suptitle("MORAGA  |  14-DAY RAINFALL",fontsize=23,fontweight="bold",
              x=.085,ha="left",y=.974)
-fig.text(.085,.915,"Model comparison  ·  Daily precipitation",fontsize=13,color="#53697b")
+fig.text(.085,.915,"Model comparison  ·  Daily precipitation",fontsize=14,color="#53697b")
 handles,labels=ax.get_legend_handles_labels()
 fig.legend(handles,labels,loc="upper left",bbox_to_anchor=(.085,.885),
-           ncol=2,fontsize=12,frameon=False,labelcolor="#1c3044",
+           ncol=2,fontsize=14,frameon=False,labelcolor="#1c3044",
            columnspacing=2.5,handlelength=2.3,labelspacing=.75)
 fig.text(.085,.026,
          f"Updated {now:%b %d %H:%M} UTC  ·  Open-Meteo  ·  Gaps indicate unavailable model days",
-         fontsize=10,color="#64748b")
+         fontsize=11,color="#64748b")
 fig.subplots_adjust(left=.085,right=.98,bottom=.17,top=.64)
 out=Path("moraga_rainfall_10day.png")
 fig.savefig(out,facecolor=fig.get_facecolor())
