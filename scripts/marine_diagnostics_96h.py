@@ -58,11 +58,15 @@ def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
     if filename.startswith("moraga_pressure"): ax.axhline(0,color="#444",linewidth=1)
     ax.set_title(title,fontsize=16,weight="bold",loc="left",pad=15)
     ax.set_ylabel(ylabel)
-    ax.grid(axis="y",color="#cbd5e1",alpha=.7)\n    ax.tick_params(labelsize=13)\n    for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")\n    ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
+    ax.grid(axis="y",color="#cbd5e1",alpha=.7)
+    ax.tick_params(labelsize=13)
+    for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")
+    ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
     ax.legend(loc="upper left",ncol=2,fontsize=12)
     import matplotlib.dates as mdates
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=12))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\n%I %p",tz=ZONE))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d
+%I %p",tz=ZONE))
     plt.setp(ax.get_xticklabels(),rotation=25,ha="right")
     fig.text(.01,.005,footnote,fontsize=10,color="#525d69")
     fig.savefig(ROOT/filename,dpi=155,bbox_inches="tight",facecolor=fig.get_facecolor())
@@ -92,5 +96,6 @@ def main():
        "note":"Recent 48h is model-based, not station observations. Boundary-layer height is NOT marine inversion depth.",
        "time_local":common,"sfo_minus_sac_hpa":gradient,"acv_minus_sfo_hpa":north_south,"coastal_pbl_height_ft_agl":pbl_ft,
        "cutoff_local":cutoff.isoformat(),"locations":LOCATIONS}
-    (ROOT/"moraga_marine_diagnostics_96h.json").write_text(json.dumps(payload,indent=2)+"\n")
+    (ROOT/"moraga_marine_diagnostics_96h.json").write_text(json.dumps(payload,indent=2)+"
+")
 if __name__=="__main__":main()
