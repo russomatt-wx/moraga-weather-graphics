@@ -37,10 +37,6 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
   .card .chart-meta,.card p.chart-meta{font-size:11px!important;line-height:1.35;margin:7px 0 2px;color:#9db1c5}
   .card .pill{font-size:10px;padding:2px 7px;margin-top:4px}
 }
-.chart-inspect{margin:8px 0 3px;padding:9px 11px;border:1px solid #34526a;border-radius:10px;background:#10283e;color:#e3f1fc;font-size:12px;line-height:1.6}
-.chart-inspect strong{font-weight:800;color:#fff}
-.chart-inspect .inspect-model{display:inline-block;margin-right:13px;font-weight:700;white-space:nowrap}
-.chart-viewport img[data-inspectable="true"]{cursor:crosshair;touch-action:manipulation}
 
 /* Consistent chart cards: image and update metadata remain separate. */
 .chart-viewport{display:block;overflow:visible;border-radius:12px;margin-top:12px;background:transparent;border:0}
@@ -954,38 +950,9 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  // Surface the actual chart source, so fallback PNGs cannot silently appear current.
  const chartStatus=document.getElementById('chart-render-status');
  if(chartStatus)chartStatus.textContent='Live chart renderer v2 · bold mobile labels';
- const attachInspector=(image,models)=>{
-   image.dataset.inspectable='true';
-   let box=image.closest('.chart-viewport').nextElementSibling;
-   if(!box||!box.classList.contains('chart-inspect')){
-     box=document.createElement('div');box.className='chart-inspect';box.setAttribute('aria-live','polite');
-     box.textContent='Tap the chart to inspect model temperatures at a specific time.';
-     image.closest('.chart-viewport').insertAdjacentElement('afterend',box);
-   }
-   image.addEventListener('click',event=>{
-     event.preventDefault();event.stopPropagation();
-     const bounds=image.getBoundingClientRect();
-     const imageX=(event.clientX-bounds.left)/bounds.width*1000;
-     const fraction=Math.max(0,Math.min(1,(imageX-83)/(1000-83-76)));
-     const target=start+fraction*(axisEnd-start);
-     const nearest=series[0].time.map(t=>Date.parse(t)).filter(Number.isFinite).reduce((best,ms)=>Math.abs(ms-target)<Math.abs(best-target)?ms:best,Date.parse(series[0].time[0]));
-     const stamp=new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric',hour:'numeric',timeZone:tz}).format(new Date(nearest));
-     box.replaceChildren();
-     const header=document.createElement('strong');header.textContent=stamp;box.appendChild(header);
-     const row=document.createElement('div');
-     models.forEach(m=>{
-       let best=-1,delta=Infinity;
-       m.time.forEach((t,i)=>{const d=Math.abs(Date.parse(t)-nearest);if(d<delta&&Number.isFinite(m.temp[i])){best=i;delta=d}});
-       if(best<0||delta>7200000)return;
-       const item=document.createElement('span');item.className='inspect-model';item.style.color=m.color;
-       item.textContent=m.name+' '+Math.round(m.temp[best])+'°F';row.appendChild(item);
-     });
-     box.appendChild(row);
-   });
- };
  const guidanceUrl=renderChart(series,'Moraga | Temperature model guidance');
  if(!guidanceUrl)return;
- img.src=guidanceUrl;img.closest('a').href=guidanceUrl;attachInspector(img,series);
+ img.src=guidanceUrl;img.closest('a').href=guidanceUrl;
  if(note)note.textContent='Hourly model guidance · shared plot style with ensemble spread · shorter-range models end earlier';
  const ensembleImg=document.getElementById('ensemble-guidance-image');
  if(ensembleImg){
@@ -1006,7 +973,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
     return {name,color,time:h.time,temp:baseKey?h[baseKey]:median,low:rows.map(v=>quantile(v,.1)),high:rows.map(v=>quantile(v,.9))};
    }));
    const ensembleSeries=ensemble.filter(x=>x.status==='fulfilled').map(x=>x.value).filter(m=>m.time?.length>2&&m.temp?.some(Number.isFinite));
-   if(ensembleSeries.length===2){const ensembleUrl=renderChart(ensembleSeries,'Moraga | GEFS / EPS ensemble spread',true);if(ensembleUrl){ensembleImg.src=ensembleUrl;ensembleImg.closest('a').href=ensembleUrl;attachInspector(ensembleImg,ensembleSeries);}}
+   if(ensembleSeries.length===2){const ensembleUrl=renderChart(ensembleSeries,'Moraga | GEFS / EPS ensemble spread',true);if(ensembleUrl){ensembleImg.src=ensembleUrl;ensembleImg.closest('a').href=ensembleUrl;}}
   }catch(error){console.warn('Ensemble plot fallback to published chart',error)}
  }
  const meta=img.closest('a').nextElementSibling;
