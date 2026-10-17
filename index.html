@@ -644,9 +644,8 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  function fit(){if(!image.naturalWidth)return;minScale=Math.min(stage.clientWidth/image.naturalWidth,stage.clientHeight/image.naturalHeight);scale=minScale;x=0;y=0;paint()}
  function zoom(factor,cx=stage.clientWidth/2,cy=stage.clientHeight/2){const next=Math.max(minScale,Math.min(minScale*8,scale*factor));x=cx-(cx-x)*(next/scale);y=cy-(cy-y)*(next/scale);scale=next;paint()}
  function close(){modal.hidden=true;document.body.classList.remove('chart-viewer-open');pointers.clear();gesture=null;image.removeAttribute('src');previousFocus?.focus()}
- function open(img){previousFocus=document.activeElement;const card=img.closest('.card');title.textContent=card?.querySelector('h3')?.textContent||img.alt||'Weather chart';modal.hidden=false;document.body.classList.add('chart-viewer-open');image.onload=()=>fit();image.src=img.currentSrc||img.src;if(image.complete&&image.naturalWidth)fit();document.getElementById('chart-viewer-close').focus()}
+ function open(img){previousFocus=document.activeElement;const card=img.closest('.card');title.textContent=card?.querySelector('h3')?.textContent||img.alt||'Weather chart';modal.hidden=false;document.body.classList.add('chart-viewer-open');image.onload=()=>fit();image.src=img.dataset.satellite ? img.src : (img.currentSrc||img.src);if(image.complete&&image.naturalWidth)fit();document.getElementById('chart-viewer-close').focus()}
  document.querySelectorAll('.card img').forEach(img=>{
-   if(img.classList.contains('goes-live'))return; // Cropped satellite panels require their own full-frame viewer.
    img.classList.add('chart-zoomable');img.tabIndex=0;img.setAttribute('role','button');img.setAttribute('aria-label','Expand chart: '+(img.alt||'weather chart'));
    img.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();open(img)});
    img.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open(img)}});
@@ -671,7 +670,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  const sources=new Map();
  for(const img of imgs){const src=img.getAttribute('src');if(!src||!src.match(/\.png(?:\?|$)|\.jpg(?:\?|$)|\.gif(?:\?|$)/i))continue;const url=new URL(src,location.href);url.search='';if(!sources.has(url.href))sources.set(url.href,[]);sources.get(url.href).push(img)}
  function pacificDate(iso){return new Date(iso).toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'})}
- function label(img,msg){const host=img.closest('a')||img;let el=host.nextElementSibling;if(!el||!el.classList.contains('chart-meta')){el=document.createElement('p');el.className='chart-meta';host.after(el)}el.textContent=msg}
+ function label(img,msg){const host=img.closest('a')||img;let el=host.nextElementSibling;if(!el||!el.classList.contains('chart-meta')){el=document.createElement('p');el.className='chart-meta';host.after(el)}if(msg.startsWith('Chart file updated:')){el.dataset.updated=msg}else{el.dataset.valid=msg}el.textContent=[el.dataset.valid,el.dataset.updated].filter(Boolean).join(' · ')}
  for(const [url,group] of sources){fetch(url,{method:'HEAD',cache:'no-store'}).then(res=>{if(!res.ok)return;const modified=res.headers.get('Last-Modified');if(!modified)return;for(const img of group)label(img,'Chart file updated: '+pacificDate(modified))}).catch(()=>{})}
  const syn=document.getElementById('pacific-synoptic-image');
  if(syn){fetch('pacific_synoptic.json?ts='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.json()}).then(data=>{if(data.gfs_valid_utc)label(syn,'GFS forecast valid: '+pacificDate(data.gfs_valid_utc)+' · Updated file time shown when available')}).catch(()=>{})}
