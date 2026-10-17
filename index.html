@@ -171,7 +171,16 @@ nav a:hover,nav a:focus-visible{border-color:#608ca8}
  .pacific-group-grid{gap:12px;padding:0 10px 11px}
 }
 @media(prefers-reduced-motion:reduce){.card,nav a,.pacific-group>summary,.accuracy-collapsible>summary,.pacific-chevron{transition:none!important}.card:hover{transform:none!important}}
-</style><style>.model-skill-details{margin-top:12px;border:1px solid #38546d;border-radius:11px;background:#102033;overflow:hidden}.model-skill-details>summary{display:flex;justify-content:space-between;align-items:center;gap:10px;list-style:none;cursor:pointer;padding:13px 14px;font-size:13px;font-weight:650;color:#cce7f6}.model-skill-details>summary::-webkit-details-marker{display:none}.model-skill-details>summary:hover{background:#1b3249}.model-skill-details>summary:focus-visible{outline:2px solid #84d5ed;outline-offset:-2px}.model-skill-details>summary span{font-size:18px;color:#84d5ed}.model-skill-details[open]>summary span{transform:rotate(180deg)}.model-skill-details #accuracy-results{padding:2px 14px 15px}.model-skill-details #accuracy-results h4{font-size:15px}</style></head>
+</style><style>.model-skill-details{margin-top:12px;border:1px solid #38546d;border-radius:11px;background:#102033;overflow:hidden}.model-skill-details>summary{display:flex;justify-content:space-between;align-items:center;gap:10px;list-style:none;cursor:pointer;padding:13px 14px;font-size:13px;font-weight:650;color:#cce7f6}.model-skill-details>summary::-webkit-details-marker{display:none}.model-skill-details>summary:hover{background:#1b3249}.model-skill-details>summary:focus-visible{outline:2px solid #84d5ed;outline-offset:-2px}.model-skill-details>summary span{font-size:18px;color:#84d5ed}.model-skill-details[open]>summary span{transform:rotate(180deg)}.model-skill-details #accuracy-results{padding:2px 14px 15px}.model-skill-details #accuracy-results h4{font-size:15px}</style><style>
+.extended-intro{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:15px}.extended-intro strong{font-size:16px;color:#e8f1f9}.extended-intro span{font-size:12px;color:#a9bfd0}
+.extended-days{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.extended-day{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;align-items:start;padding:14px;border:1px solid #36516a;background:#102235;border-radius:11px}
+.extended-day-date{grid-column:1/-1;font-weight:700;color:#e8f1f9;font-size:15px;padding-bottom:8px;border-bottom:1px solid #30485e}
+.extended-field-label{display:block;font-size:11px;color:#a8bfd1;line-height:1.4;margin-bottom:6px}
+.extended-day-temp strong{display:block;font-size:20px;color:#f4be79;white-space:nowrap}.extended-day-rain strong{display:block;font-size:20px;color:#84d5ed}.extended-day-rain small{display:block;font-size:11px;color:#a8bfd1;margin-top:3px}
+.extended-method{border-top:1px solid #30485e;margin-top:16px;padding-top:11px}.extended-method>summary{cursor:pointer;list-style:none;color:#9fdcf0;font-size:13px;font-weight:650;display:flex;justify-content:space-between}.extended-method>summary::-webkit-details-marker{display:none}.extended-method[open]>summary span{transform:rotate(180deg)}.extended-method p{font-size:12px;line-height:1.6;margin:10px 0;color:#b7c8d8}.extended-source{font-size:11px!important;color:#9cb2c5!important;margin-top:13px}
+@media(max-width:760px){.extended-days{grid-template-columns:1fr}.extended-day{padding:13px}.extended-day-temp strong,.extended-day-rain strong{font-size:20px}}
+</style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
 <h1>Moraga Weather Observatory</h1>
@@ -684,11 +693,17 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
   if(!Number.isFinite(generated)||Date.now()-generated>48*3600000)throw Error('Extended ensemble data is stale');
   const rows=d.days.map(day=>{
    const date=new Date(day.date+'T12:00:00Z').toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short',month:'short',day:'numeric'});
-   const range=day.temperature_f_p10===null?'—':Math.round(day.temperature_f_p10)+'–'+Math.round(day.temperature_f_p90)+'°F';
-   const chance=day.rain_member_fraction===null?'—':Math.round(day.rain_member_fraction*100)+'%';
-   return '<tr><th>'+esc(date)+'</th><td>'+range+'</td><td>'+chance+'</td><td>'+day.members+'</td></tr>';
+   const low=Number.isFinite(day.temperature_f_p10)?Math.round(day.temperature_f_p10):null;
+   const high=Number.isFinite(day.temperature_f_p90)?Math.round(day.temperature_f_p90):null;
+   const pct=Number.isFinite(day.rain_member_fraction)?Math.round(day.rain_member_fraction*100):null;
+   const n=Number(day.members);
+   const wet=Number.isFinite(n)&&pct!==null?Math.round(n*day.rain_member_fraction):null;
+   const range=low!==null&&high!==null?low+'–'+high+'°F':'—';
+   const rain=pct===null?'—':pct+'%';
+   return '<div class="extended-day"><div class="extended-day-date">'+esc(date)+'</div><div class="extended-day-temp"><span class="extended-field-label">Possible high temperatures</span><strong>'+range+'</strong></div><div class="extended-day-rain"><span class="extended-field-label">Members with rain</span><strong>'+rain+'</strong><small>'+(wet===null?'':wet+' of '+n+' members')+'</small></div></div>';
   }).join('');
-  root.innerHTML='<p>GEFS ensemble members at the Moraga station coordinates. Temperature range is the 10th–90th percentile of member daily maximum temperatures; rain probability is the fraction of members predicting at least 0.01 in during the day. These are model-member fractions, not calibrated probabilities.</p><div style="overflow-x:auto"><table class="verification-table"><thead><tr><th>Date</th><th>High range</th><th>Rain members</th><th>Members</th></tr></thead><tbody>'+rows+'</tbody></table></div><p style="font-size:12px">Source: '+esc(d.source)+' · Generated '+new Date(generated).toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT. Beyond day 10, daily detail has low predictability. No station bias correction is applied.</p>';
+  root.innerHTML='<div class="extended-intro"><strong>Beyond the 10-day forecast</strong><span>GEFS ensemble · Moraga</span></div><div class="extended-days">'+rows+'</div><details class="extended-method"><summary>How to read this outlook <span aria-hidden="true">⌄</span></summary><p><strong>High range:</strong> The middle 80% of GEFS ensemble members’ predicted daily high temperatures (10th–90th percentile). It is not a forecast low-to-high temperature range.</p><p><strong>Rain members:</strong> The share of members predicting at least 0.01 inch of precipitation that day. This is model agreement, not a calibrated chance of rain.</p><p>Long-range detail is uncertain and no station bias correction is applied.</p></details><p class="extended-source">GEFS · '+esc(d.days[0]?.members||'')+' members · Updated '+new Date(generated).toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT</p>';
+
  }catch(e){root.innerHTML='<p>Extended ensemble outlook is awaiting a successful data update. No forecast values will be displayed until verified ensemble data is available.</p>';}
 })();
 </script>
