@@ -828,24 +828,23 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  const ensembleEnd=await fetch('moraga_ensemble_spread.png',{method:'HEAD'}).then(()=>null).catch(()=>null);
  const valid=series.flatMap(m=>m.time.filter((t,i)=>Number.isFinite(m.temp[i]))).sort();
  if(valid.length<2)return;
- const start=Date.parse(valid[0]),actualEnd=Date.parse(valid[valid.length-1]);
- // Hold a common 16-day axis; do not fabricate lines beyond each model's final forecast.
- const axisEnd=Math.max(actualEnd,start+15*86400000);
- const W=1100,H=520,L=72,R=25,T=64,B=78;
- const values=series.flatMap(m=>m.temp.filter(Number.isFinite)),min=Math.floor((Math.min(...values)-3)/5)*5,max=Math.ceil((Math.max(...values)+3)/5)*5;
+ const start=Date.parse(valid[0]),cutoff='2026-10-27T00:00:00',axisEnd=Date.parse(cutoff);
+ if(!Number.isFinite(axisEnd)||axisEnd<=start)return;
+ const W=1100,H=540,L=78,R=25,T=66,B=72;
+ const values=series.flatMap(m=>m.temp.filter((v,i)=>Number.isFinite(v)&&Date.parse(m.time[i])<=axisEnd));
+ const min=Math.floor((Math.min(...values)-3)/5)*5,max=Math.ceil((Math.max(...values)+3)/5)*5;
  const x=t=>L+(Date.parse(t)-start)/(axisEnd-start)*(W-L-R),y=v=>T+(max-v)/(max-min)*(H-T-B);
- const labels=[],dayFmt=new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:tz});
- for(let ms=start;ms<=axisEnd;ms+=86400000){const d=new Date(ms),label=dayFmt.format(d);if(!labels.some(a=>a.label===label))labels.push({ms,label})}
- let svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'"><rect width="'+W+'" height="'+H+'" fill="white"/><text x="'+L+'" y="31" fill="#111" font-size="21" font-weight="bold">Moraga | Temperature model guidance</text>';
- for(let v=min;v<=max;v+=5){const yy=y(v);svg+='<path d="M'+L+' '+yy+'H'+(W-R)+'" stroke="#e8ebee"/><text x="'+(L-10)+'" y="'+(yy+5)+'" text-anchor="end" font-size="13" fill="#344252">'+v+'</text>'}
- labels.forEach((d,i)=>{if(i%2)return;const xx=L+(d.ms-start)/(axisEnd-start)*(W-L-R);svg+='<path d="M'+xx+' '+T+'V'+(H-B)+'" stroke="#edf0f3"/><text x="'+Math.min(W-90,xx+3)+'" y="'+(H-B+26)+'" font-size="12" fill="#344252">'+d.label+'</text>'});
- for(const m of series){let path='',active=false;for(let i=0;i<m.time.length;i++){const v=m.temp[i];if(!Number.isFinite(v)){active=false;continue}const xx=x(m.time[i]),yy=y(v);path+=(active?'L':'M')+xx.toFixed(1)+','+yy.toFixed(1)+' ';active=true}svg+='<path d="'+path+'" fill="none" stroke="'+m.color+'" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>'}
- series.forEach((m,i)=>{const xx=L+(i%3)*160,yy=H-36+Math.floor(i/3)*21;svg+='<path d="M'+xx+' '+yy+'h27" stroke="'+m.color+'" stroke-width="3"/><text x="'+(xx+33)+'" y="'+(yy+5)+'" font-size="14" fill="#273444">'+m.name+'</text>'});
- svg+='<text x="18" y="'+(H/2)+'" transform="rotate(-90 18 '+H/2+')" font-size="14" fill="#344252">Temperature (°F)</text></svg>';
+ const dayFmt=new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:tz});
+ let svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'"><rect width="'+W+'" height="'+H+'" rx="16" fill="white"/><text x="'+L+'" y="33" fill="#111" font-family="Arial,sans-serif" font-size="20" font-weight="700">Moraga | Temperature model guidance</text>';
+ for(let v=min;v<=max;v+=10){const yy=y(v);svg+='<path d="M'+L+' '+yy+'H'+(W-R)+'" stroke="#e8ebee"/><text x="'+(L-12)+'" y="'+(yy+5)+'" text-anchor="end" font-family="Arial,sans-serif" font-size="13" fill="#333">'+v+'</text>'}
+ let tick=0;for(let ms=start;ms<=axisEnd;ms+=86400000){const xx=L+(ms-start)/(axisEnd-start)*(W-L-R);svg+='<path d="M'+xx+' '+T+'V'+(H-B)+'" stroke="#eeeeee"/>';if(tick%1===0){svg+='<text x="'+xx+'" y="'+(H-B+28)+'" text-anchor="end" transform="rotate(-28 '+xx+' '+(H-B+28)+')" font-family="Arial,sans-serif" font-size="12" fill="#333">'+dayFmt.format(new Date(ms))+'</text>'}tick++}
+ for(const m of series){let path='',active=false;for(let i=0;i<m.time.length;i++){const v=m.temp[i],ms=Date.parse(m.time[i]);if(ms>axisEnd)break;if(!Number.isFinite(v)){active=false;continue}const xx=x(m.time[i]),yy=y(v);path+=(active?'L':'M')+xx.toFixed(1)+','+yy.toFixed(1)+' ';active=true}svg+='<path d="'+path+'" fill="none" stroke="'+m.color+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>'}
+ const legendX=W-320,legendY=31;
+ series.forEach((m,i)=>{const xx=legendX+(i%3)*103,yy=legendY+Math.floor(i/3)*19;svg+='<path d="M'+xx+' '+yy+'h24" stroke="'+m.color+'" stroke-width="2.5"/><text x="'+(xx+29)+'" y="'+(yy+4)+'" font-family="Arial,sans-serif" font-size="12" fill="#333">'+m.name+'</text>'});
+ svg+='<text x="21" y="'+(H/2)+'" transform="rotate(-90 21 '+H/2+')" font-family="Arial,sans-serif" font-size="14" fill="#333">Temperature (°F)</text></svg>';
  const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
  img.src=url;img.closest('a').href=url;
- const latest=series.map(m=>m.time.filter((t,i)=>Number.isFinite(m.temp[i])).at(-1)).filter(Boolean).sort().at(-1);
- if(note)note.textContent='Live model hourly forecasts · through '+dayFmt.format(new Date(latest))+' · shorter-range models end earlier';
+ if(note)note.textContent='Hourly model guidance · same Oct 27 endpoint as ensemble spread · shorter-range models end earlier';
  const meta=img.closest('a').nextElementSibling;
  if(meta?.classList.contains('chart-meta'))meta.textContent='Live model data retrieved '+new Date().toLocaleString('en-US',{timeZone:tz,month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
 })();
