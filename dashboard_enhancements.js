@@ -60,7 +60,7 @@ function groups(){
  for(const def of definitions){
   const members=cards.filter(card=>def.match.test(card.querySelector('h3')?.textContent||''));
   if(!members.length)continue;
-  const details=document.createElement('details');details.className='pacific-group';details.open=def.title==='Surface & thickness';
+  const details=document.createElement('details');details.className='pacific-group';details.open=true;
   const summary=document.createElement('summary');summary.innerHTML='<span><strong>'+escape(def.title)+'</strong><small>'+escape(def.description)+'</small></span><span aria-hidden="true" class="pacific-chevron">⌄</span>';
   details.append(summary);
   const body=document.createElement('div');body.className='pacific-group-grid';
