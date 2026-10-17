@@ -13,7 +13,7 @@ function run(){
  const stationReading=null; // No verified live KCAMORAG71 feed is published by this website. Never substitute model output for observations.
  const idx=(moraga?.times||[]).findIndex(t=>Date.parse(t)>=now-3600000);
  const modelNow=idx>=0?moraga.temperature_f?.[idx]:null;
- const localDate=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+ const localDate=new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
  const di=forecast?.dates?.indexOf(localDate)??-1,cond=di>=0?forecast.daily_conditions?.[localDate]:null;
  const models=di>=0?Object.entries(forecast.temperature_models||{}).filter(([n,m])=>!/(EPS|GEFS)/i.test(n)&&Number.isFinite(m.high_f?.[di])&&Number.isFinite(m.low_f?.[di])):[];
  const mean=k=>models.length?Math.round(models.reduce((n,[,m])=>n+m[k][di],0)/models.length):null;
@@ -27,7 +27,7 @@ function run(){
  '<p class="hero-foot">Model values are guidance, not station observations. Current station temperature will appear only when a verified live feed is connected. <a href="#observations">Station chart ↗</a></p>';
  if(!moraga?.times?.length){timeline.innerHTML='<p class="pending">Hourly Moraga guidance unavailable.</p>';return}
  const fModels=Object.entries(forecast?.hourly_conditions||{}).filter(([name])=>['ECMWF','GFS','ICON','GEM'].includes(name));
- const start=Math.max(0,moraga.times.findIndex(t=>Date.parse(t)>=now-3600000));
+ const nextIndex=moraga.times.findIndex(t=>Date.parse(t)>=now-3600000);if(nextIndex<0){timeline.innerHTML='<p class="pending">Hourly model guidance is out of date. Awaiting the next published update.</p>';return}const start=nextIndex;
  const rows=moraga.times.slice(start,start+24).map((t,k)=>{
  const i=start+k,ts=Date.parse(t);
  const conditions=fModels.map(([,v])=>{const ix=v.time?.indexOf(t.slice(0,16));return ix>=0?{cloud:v.cloud_cover_pct?.[ix],rain:v.precipitation_mm?.[ix]}:null}).filter(Boolean);
