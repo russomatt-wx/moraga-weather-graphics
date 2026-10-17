@@ -211,7 +211,7 @@ nav a:hover,nav a:focus-visible{border-color:#608ca8}
 .extended-compact .extended-rain{font-size:15px;color:#84d5ed;font-weight:750}
 .extended-compact th:nth-child(1){width:31%}.extended-compact th:nth-child(2){width:19%}.extended-compact th:nth-child(3){width:31%}.extended-compact th:nth-child(4){width:19%}
 @media(max-width:390px){.extended-compact table{font-size:12px}.extended-compact th,.extended-compact td{padding:9px 3px}.extended-compact tbody th{font-size:12px}}
-</style></head>
+</style><style>.day-forecast .day-pop{font-size:11px;line-height:1.3;color:#8ed4eb;font-weight:650;text-align:center;white-space:nowrap;margin-top:4px}@media(max-width:430px){.day-forecast .day-pop{font-size:10px;letter-spacing:-.2px}}</style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
 <h1>Moraga Weather Observatory</h1>
@@ -435,6 +435,12 @@ try{
 const res=await fetch('moraga_forecast_10day.json?t='+Date.now(),{cache:'no-store'});
 if(!res.ok)throw Error('Forecast pending');
 const data=await res.json(),today=dateKey(new Date());
+let dailyRainChance={};
+try{
+ const url='https://api.open-meteo.com/v1/forecast?'+new URLSearchParams({latitude:String(data.latitude||37.8201932),longitude:String(data.longitude||-122.1193876),daily:'precipitation_probability_max',timezone:'America/Los_Angeles',forecast_days:'10'});
+ const response=await fetch(url,{cache:'no-store'});
+ if(response.ok){const daily=(await response.json()).daily||{};(daily.time||[]).forEach((date,i)=>{const value=daily.precipitation_probability_max?.[i];if(typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=100)dailyRainChance[date]=Math.round(value)})}
+}catch(error){console.warn('Rain probability unavailable',error)}
 const models=Object.entries(data.temperature_models||{});
 
 // Pull the same deterministic model families used by the temperature forecast.
@@ -585,7 +591,7 @@ else {try{condition=modelCondition(date,rainMean,Object.fromEntries(Object.entri
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
-return '<article class="day-forecast"><strong>'+(date===today?'Today':day)+'</strong><div class="day-date">'+label+'</div><div class="day-condition" title="Daily weather condition from Open-Meteo"><span aria-hidden="true">'+condition[0]+'</span><small>'+condition[1]+'</small></div><div class="day-temps"><span>'+skillBlend(correctedHighs,wh)+'</span> <small>'+skillBlend(correctedLows,wl)+'</small></div><div class="day-rain">'+(rains.length?'💧 '+mean(rains).toFixed(2)+' in':'Rain —')+'</div><details><summary>Model range</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Rain '+(rains.length?Math.min(...rains).toFixed(2)+'–'+Math.max(...rains).toFixed(2)+' in':'—')+'<br>Raw weighted high: '+skillBlend(highEntries,wh)+' · Local adjustment: '+adjustmentLabel(highEntries,correctedHighs,wh)+'<br>Raw weighted low: '+skillBlend(lowEntries,wl)+' · Local adjustment: '+adjustmentLabel(lowEntries,correctedLows,wl)+'</p><h5>High temperature models</h5>'+detailTable(highEntries,bh,wh)+'<h5>Low temperature models</h5>'+detailTable(lowEntries,bl,wl)+'<p class="diagnostic-note">Bias = model minus observed station temperature; adjustment is the guarded correction actually applied. Recent hourly samples are provisional proxies for daily extremes. High weights: '+weightLabel(wh)+'; low weights: '+weightLabel(wl)+'.</p></details></article>';
+return '<article class="day-forecast"><strong>'+(date===today?'Today':day)+'</strong><div class="day-date">'+label+'</div><div class="day-condition" title="Daily weather condition from Open-Meteo"><span aria-hidden="true">'+condition[0]+'</span><small>'+condition[1]+'</small></div><div class="day-temps"><span>'+skillBlend(correctedHighs,wh)+'</span> <small>'+skillBlend(correctedLows,wl)+'</small></div><div class="day-rain">'+(rains.length?'💧 '+mean(rains).toFixed(2)+' in':'Rain —')+'</div><div class="day-pop" title="Open-Meteo daily maximum precipitation probability; separate from multi-model rain amount">'+(dailyRainChance[date]===undefined?'Rain chance —':'Rain '+dailyRainChance[date]+'%')+'</div><details><summary>Model range</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Rain '+(rains.length?Math.min(...rains).toFixed(2)+'–'+Math.max(...rains).toFixed(2)+' in':'—')+'<br>Raw weighted high: '+skillBlend(highEntries,wh)+' · Local adjustment: '+adjustmentLabel(highEntries,correctedHighs,wh)+'<br>Raw weighted low: '+skillBlend(lowEntries,wl)+' · Local adjustment: '+adjustmentLabel(lowEntries,correctedLows,wl)+'</p><h5>High temperature models</h5>'+detailTable(highEntries,bh,wh)+'<h5>Low temperature models</h5>'+detailTable(lowEntries,bl,wl)+'<p class="diagnostic-note">Bias = model minus observed station temperature; adjustment is the guarded correction actually applied. Recent hourly samples are provisional proxies for daily extremes. High weights: '+weightLabel(wh)+'; low weights: '+weightLabel(wl)+'.</p></details></article>';
 }).join('')+'</div>';
 // Use real buttons and a separate full-width diagnostics panel.
 // Native <details> cannot expand inside a five-column mobile forecast card.
