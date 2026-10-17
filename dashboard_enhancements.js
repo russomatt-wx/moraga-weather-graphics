@@ -43,7 +43,13 @@ function accuracy(){
  if(!ranked.length)throw Error();
  const names=['ECMWF','GFS','BLEND','WEIGHTED','CHATGPT'];const matched=names.map(n=>ranked.find(r=>r.model===n)).filter(Boolean);
  const items=matched.length?matched:ranked.slice(0,4);
- el.innerHTML='<div class="skill-mini-grid">'+items.map((r,i)=>'<div><span>'+escape(r.model)+'</span><strong>'+r.mae.toFixed(2)+'°F</strong><small>'+r.n+' verified hourly matches</small></div>').join('')+'</div><p class="skill-disclaimer">Rolling 7-day hourly absolute error, ranked on available matched observations; not daily high/low error. Different models may have different sample sets, so this is indicative rather than a controlled same-case comparison. Forecast blend or briefing skill is shown only when its own verified records exist. Through '+escape(ptTime(new Date(end)))+'.</p>';
+ const namesAll=['ECMWF','GFS','GEM','ICON','NAM','BLEND','WEIGHTED','CHATGPT'];
+ const ordered=namesAll.map(n=>ranked.find(r=>r.model===n)).filter(Boolean);
+ const show=ordered.length?ordered:ranked;
+ const fmt=v=>Number.isFinite(v)?v.toFixed(2)+'°F':'—';
+ const body=show.map(r=>'<tr><th scope="row">'+escape(r.model)+'</th><td class="skill-unavailable" title="Requires issued daily high forecasts matched to complete station days">—</td><td class="skill-unavailable" title="Requires issued daily low forecasts matched to complete station days">—</td><td><strong>'+fmt(r.mae)+'</strong><small>'+r.n+' hours</small></td></tr>').join('');
+ el.innerHTML='<div class="skill-table-wrap"><table class="skill-compare"><thead><tr><th>Model</th><th>High MAE</th><th>Low MAE</th><th>Hourly MAE</th></tr></thead><tbody>'+body+'</tbody></table></div><p class="skill-disclaimer"><strong>Hourly:</strong> rolling 7-day absolute temperature error through '+escape(ptTime(new Date(end)))+'. <strong>High / Low:</strong> awaiting archived forecasts issued before each day and verified complete-day station extremes. Hourly records cannot be substituted for true daily high/low forecasts. Signed warm/cold bias will be reported when valid daily matches are available.</p>';
+
  }).catch(()=>{el.innerHTML='<p class="day-date">Awaiting verified hourly matches; no rankings inferred.</p>'});
 }
 function groups(){
