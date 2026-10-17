@@ -63,5 +63,4 @@ axes[1].tick_params(axis="x",rotation=30)
 fig.suptitle("MORAGA | 10-DAY UPPER-AIR MODEL FORECAST",fontweight="bold",fontsize=19)
 fig.savefig("moraga_upper_air_10day.png",dpi=165,facecolor="white",bbox_inches="tight",pad_inches=.3)
 plt.close(fig)
-Path("moraga_upper_air_10day.json").write_text(json.dumps({"generated_utc":datetime.now(timezone.utc).isoformat(),"requested_latitude":LAT,"requested_longitude":LON,"models":results},indent=2)+"
-")
+Path("moraga_upper_air_10day.json").write_text(json.dumps({"generated_utc":datetime.now(timezone.utc).isoformat(),"requested_latitude":LAT,"requested_longitude":LON,"models":results},indent=2)+"\n")
