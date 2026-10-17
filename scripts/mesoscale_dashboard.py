@@ -36,7 +36,10 @@ def main():
     station={n:fetch(*p) for n,p in POINTS.items()}
     fig,axes=plt.subplots(2,1,figsize=(12,8),sharex=True,layout="constrained")
     colors=["#1674ad","#17a398","#d8502d","#9356ab","#d3a029"]
-    for axis in axes:\n        axis.set_facecolor("#f8fafc")\n    fig.patch.set_facecolor("#ffffff")\n    result={}
+    for axis in axes:
+        axis.set_facecolor("#f8fafc")
+    fig.patch.set_facecolor("#ffffff")
+    result={}
     for (name,h),c in zip(station.items(),colors):
         times=[datetime.fromisoformat(t).replace(tzinfo=TZ) for t in h["time"]]
         idx=[i for i,t in enumerate(times) if now<=t<=now+__import__("datetime").timedelta(hours=96)]
@@ -51,15 +54,22 @@ def main():
     axes[0].set_ylabel("Temperature (°F)")
     axes[1].set_ylabel("Dew point (°F)")
     axes[1].set_title("Moisture gradient | 96-hour dew point forecast",loc="left",weight="bold")
-    for ax in axes:\n        ax.grid(axis="y",color="#cbd5e1",alpha=.75)\n        ax.tick_params(labelsize=13)\n        for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")\n        ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)\n        ax.legend(ncol=3,fontsize=12,loc="upper left")
+    for ax in axes:
+        ax.grid(axis="y",color="#cbd5e1",alpha=.75)
+        ax.tick_params(labelsize=13)
+        for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")
+        ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
+        ax.legend(ncol=3,fontsize=12,loc="upper left")
     axes[1].xaxis.set_major_locator(mdates.HourLocator(interval=12,tz=TZ))
-    axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\n%I %p",tz=TZ))
+    axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d
+%I %p",tz=TZ))
     fig.suptitle("MODEL FORECAST • Not live station observations • Open-Meteo best match",fontsize=10)
     fig.savefig("moraga_marine_transect.png",dpi=155,bbox_inches="tight");plt.close(fig)
     # Compare actual independently requested model grids, not station measurements.
     models={"ECMWF":"ecmwf_ifs025","GFS":"ncep_gfs_seamless"}
     forecasts={};errors={}
-    fig,ax=plt.subplots(figsize=(12,6),layout="constrained")\n    fig.patch.set_facecolor("#ffffff");ax.set_facecolor("#f8fafc")
+    fig,ax=plt.subplots(figsize=(12,6),layout="constrained")
+    fig.patch.set_facecolor("#ffffff");ax.set_facecolor("#f8fafc")
     for name,model in models.items():
         try:
             h=fetch(*POINTS["Moraga"],model=model)
@@ -71,9 +81,13 @@ def main():
         except Exception as e:errors[name]=str(e)
     if not forecasts:raise RuntimeError("No model forecasts available: "+str(errors))
     ax.set_title("Moraga | 48-hour temperature model comparison",loc="left",weight="bold",fontsize=15)
-    ax.set_ylabel("2 m temperature (°F)");ax.grid(axis="y",color="#cbd5e1",alpha=.75);ax.legend(fontsize=12)\n    ax.tick_params(labelsize=13)\n    ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
+    ax.set_ylabel("2 m temperature (°F)");ax.grid(axis="y",color="#cbd5e1",alpha=.75);ax.legend(fontsize=12)
+    ax.tick_params(labelsize=13)
+    ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=12,tz=TZ))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\\n%I %p",tz=TZ))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\
+%I %p",tz=TZ))
     fig.savefig("moraga_temperature_model_comparison.png",dpi=155,bbox_inches="tight");plt.close(fig)
-    Path("moraga_mesoscale_data.json").write_text(json.dumps({"generated_utc":datetime.now(timezone.utc).isoformat(),"source":"Open-Meteo model data, not station observations","transect":result,"temperature_models":forecasts,"errors":errors,"requested_station_coordinates":{"latitude":37.8201932,"longitude":-122.1193876},"verification_status":"pending_station_observations_and_archived_forecasts"},indent=2)+"\n")
+    Path("moraga_mesoscale_data.json").write_text(json.dumps({"generated_utc":datetime.now(timezone.utc).isoformat(),"source":"Open-Meteo model data, not station observations","transect":result,"temperature_models":forecasts,"errors":errors,"requested_station_coordinates":{"latitude":37.8201932,"longitude":-122.1193876},"verification_status":"pending_station_observations_and_archived_forecasts"},indent=2)+"
+")
 if __name__=="__main__":main()
