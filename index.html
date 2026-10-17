@@ -136,7 +136,42 @@ h3{font-size:16px;letter-spacing:-.012em}
 .card{transition:border-color .18s ease,box-shadow .18s ease}.card:hover{border-color:#476983;box-shadow:0 5px 20px #0000001a}.card h3{font-size:16px;line-height:1.35;letter-spacing:-.012em}.card .chart-meta{padding-top:8px;border-top:1px solid #2a4055;font-size:11px}.card img:focus-visible{outline:3px solid var(--wx-cyan);outline-offset:3px}
 @media(max-width:760px){.station-hero{padding:18px}.hero-primary{margin:18px 0}.hero-bottom{gap:15px}.hero-condition strong{font-size:15px}.hourly-cell{flex-basis:92px}.card h3{font-size:17px}}
 @media(prefers-reduced-motion:reduce){.card{transition:none}}
-</style><style>.accuracy-collapsible{border:1px solid #30455b;border-radius:13px;background:#142336;padding:0 13px 13px}.accuracy-collapsible>summary{cursor:pointer;list-style:none;padding:15px 4px;color:#e8f0f8;font-size:14px;font-weight:650;display:flex;justify-content:space-between;align-items:center}.accuracy-collapsible>summary::-webkit-details-marker{display:none}.accuracy-collapsible>summary span{font-size:19px;color:#9bd7ee}.accuracy-collapsible[open]>summary span{transform:rotate(180deg)}.accuracy-collapsible .grid{margin-top:5px}</style></head>
+</style><style>.accuracy-collapsible{border:1px solid #30455b;border-radius:13px;background:#142336;padding:0 13px 13px}.accuracy-collapsible>summary{cursor:pointer;list-style:none;padding:15px 4px;color:#e8f0f8;font-size:14px;font-weight:650;display:flex;justify-content:space-between;align-items:center}.accuracy-collapsible>summary::-webkit-details-marker{display:none}.accuracy-collapsible>summary span{font-size:19px;color:#9bd7ee}.accuracy-collapsible[open]>summary span{transform:rotate(180deg)}.accuracy-collapsible .grid{margin-top:5px}</style><style>
+/* Observatory finishing touches — restrained, scientific, accessible */
+:root{--obs-accent:#84d5ed;--obs-forecast:#f4be79;--obs-verified:#74c8b6;--obs-text:#e8f1f9;--obs-muted:#a8bfd1;--obs-border:#31485e;--obs-radius:14px}
+main>section{margin-block:34px 44px}
+main>section>.intro{margin-bottom:17px}
+main>section>.intro h2{line-height:1.25}
+.grid,.focus-grid{gap:16px}
+.card{border-radius:var(--obs-radius);border-color:var(--obs-border);padding:17px;transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}
+.card h3{color:var(--obs-text);line-height:1.35}
+.card .chart-meta{color:var(--obs-muted)}
+.card img{border-radius:9px}
+.card a,.glance-source a,.hero-foot a{color:var(--obs-accent)}
+.card a:hover,.card a:focus-visible{color:#b9ebfa}
+nav a,.pacific-group>summary,.accuracy-collapsible>summary{transition:background-color .18s ease,border-color .18s ease,color .18s ease}
+nav a:hover,nav a:focus-visible{border-color:#608ca8}
+.pacific-group{margin-bottom:15px;border-color:var(--obs-border)}
+.pacific-group>summary:hover,.accuracy-collapsible>summary:hover{background:#1b3249}
+.pacific-group>summary:active,.accuracy-collapsible>summary:active{background:#244059}
+.pacific-group>summary:focus-visible,.accuracy-collapsible>summary:focus-visible,.chart-zoomable:focus-visible{outline:2px solid var(--obs-accent);outline-offset:2px}
+.pacific-group-grid{gap:14px;padding:3px 14px 14px}
+.pacific-chevron{color:var(--obs-accent)}
+#accuracy .card h3,#chatgpt-accuracy .card h3{border-left:3px solid var(--obs-verified);padding-left:10px}
+#forecast .card h3,#rainfall .card h3{border-left:3px solid var(--obs-forecast);padding-left:10px}
+#westcoast .card h3,#marine .card h3,#satellite .card h3{border-left:3px solid var(--obs-accent);padding-left:10px}
+@media(hover:hover) and (pointer:fine){.card:hover{border-color:#54748c;box-shadow:0 7px 22px #00000022;transform:translateY(-1px)}.chart-zoomable:hover{filter:brightness(1.035)}}
+@media(max-width:760px){
+ main>section{margin-block:28px 37px}
+ main>section>.intro{margin-bottom:15px}
+ .grid,.focus-grid{gap:14px}
+ .card{padding:15px}
+ .card h3{font-size:18px;line-height:1.3}
+ .pacific-group>summary{padding:16px}
+ .pacific-group-grid{gap:12px;padding:0 10px 11px}
+}
+@media(prefers-reduced-motion:reduce){.card,nav a,.pacific-group>summary,.accuracy-collapsible>summary,.pacific-chevron{transition:none!important}.card:hover{transform:none!important}}
+</style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
 <h1>Moraga Weather Observatory</h1>
