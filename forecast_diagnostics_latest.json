@@ -1,0 +1,72 @@
+{
+  "generated_utc": "2026-10-17T16:49:58.131148+00:00",
+  "status": "diagnostic_only",
+  "archive_health": {
+    "valid_records": 8,
+    "invalid_records": 0,
+    "duplicate_target_editions": [],
+    "off_hour_archives": [
+      {
+        "date": "2026-10-15",
+        "edition": "11 AM"
+      },
+      {
+        "date": "2026-10-16",
+        "edition": "6 AM"
+      },
+      {
+        "date": "2026-10-16",
+        "edition": "11 AM"
+      }
+    ]
+  },
+  "matched_skill": {
+    "count": 2,
+    "pairs": [
+      {
+        "date": "2026-10-15",
+        "edition": "9 PM",
+        "assistant_high_abs_error_f": 2.0,
+        "guidance_high_abs_error_f": 4.5,
+        "assistant_low_abs_error_f": 4.0,
+        "guidance_low_abs_error_f": 7.3
+      },
+      {
+        "date": "2026-10-16",
+        "edition": "4 PM",
+        "assistant_high_abs_error_f": 4.0,
+        "guidance_high_abs_error_f": 4.7,
+        "assistant_low_abs_error_f": 2.0,
+        "guidance_low_abs_error_f": 7.4
+      }
+    ],
+    "note": "Same target date and edition, issued within three hours."
+  },
+  "assistant_bias": {
+    "6 AM": {
+      "verified_days": 2,
+      "high_mean_error_f": -2.5,
+      "low_mean_error_f": 0.0,
+      "calibration_ready": false
+    },
+    "11 AM": {
+      "verified_days": 2,
+      "high_mean_error_f": -0.5,
+      "low_mean_error_f": 0.0,
+      "calibration_ready": false
+    },
+    "4 PM": {
+      "verified_days": 1,
+      "high_mean_error_f": -4.0,
+      "low_mean_error_f": 2.0,
+      "calibration_ready": false
+    },
+    "9 PM": {
+      "verified_days": 1,
+      "high_mean_error_f": -2.0,
+      "low_mean_error_f": 4.0,
+      "calibration_ready": false
+    }
+  },
+  "automatic_calibration_enabled": false
+}
