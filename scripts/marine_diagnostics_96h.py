@@ -9,6 +9,20 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+# Shared high-legibility typography for charts embedded on narrow screens.
+plt.rcParams.update({
+    "font.family": "DejaVu Sans",
+    "font.size": 14,
+    "font.weight": "semibold",
+    "axes.titlesize": 17,
+    "axes.titleweight": "bold",
+    "axes.labelsize": 14,
+    "axes.labelweight": "bold",
+    "xtick.labelsize": 12,
+    "ytick.labelsize": 12,
+    "legend.fontsize": 12,
+})
+
 
 ROOT=Path(__file__).resolve().parents[1]
 ZONE=ZoneInfo("America/Los_Angeles")
@@ -44,13 +58,13 @@ def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
     if filename.startswith("moraga_pressure"): ax.axhline(0,color="#444",linewidth=1)
     ax.set_title(title,fontsize=16,weight="bold",loc="left",pad=15)
     ax.set_ylabel(ylabel)
-    ax.grid(axis="y",color="#cbd5e1",alpha=.7)\n    ax.tick_params(labelsize=11)\n    ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
-    ax.legend(loc="upper left",ncol=2,fontsize=11)
+    ax.grid(axis="y",color="#cbd5e1",alpha=.7)\n    ax.tick_params(labelsize=13)\n    for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")\n    ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
+    ax.legend(loc="upper left",ncol=2,fontsize=12)
     import matplotlib.dates as mdates
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=12))
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\n%I %p",tz=ZONE))
     plt.setp(ax.get_xticklabels(),rotation=25,ha="right")
-    fig.text(.01,.005,footnote,fontsize=8,color="#525d69")
+    fig.text(.01,.005,footnote,fontsize=10,color="#525d69")
     fig.savefig(ROOT/filename,dpi=155,bbox_inches="tight",facecolor=fig.get_facecolor())
     plt.close(fig)
 
