@@ -190,6 +190,16 @@ nav a:hover,nav a:focus-visible{border-color:#608ca8}
 .skill-compare td small{display:block;font-size:10px;color:#9db2c4;margin-top:3px}
 .skill-unavailable{color:#8096a8;text-align:center}
 @media(max-width:500px){.skill-compare{font-size:12px}.skill-compare th,.skill-compare td{padding:10px 5px}.skill-compare thead th{font-size:10px}}
+</style><style>
+/* Compact extended outlook: one scannable line per day on mobile */
+.extended-days{display:block!important;border:1px solid #36516a;border-radius:11px;overflow:hidden}
+.extended-day{display:grid!important;grid-template-columns:minmax(92px,1.15fr) minmax(105px,1.2fr) minmax(72px,.75fr)!important;align-items:center!important;gap:8px!important;padding:11px 12px!important;border:0!important;border-radius:0!important;border-bottom:1px solid #30485e!important;background:#102235!important}
+.extended-day:last-child{border-bottom:0!important}
+.extended-day-date{grid-column:auto!important;padding:0!important;border:0!important;font-size:13px!important;white-space:nowrap}
+.extended-day-temp strong,.extended-day-rain strong{font-size:17px!important;line-height:1.25}
+.extended-day-temp small,.extended-day-rain small{font-size:10px!important;margin-top:2px!important;line-height:1.35}
+.extended-field-label{font-size:10px!important;margin-bottom:2px!important}
+@media(max-width:390px){.extended-day{grid-template-columns:85px minmax(100px,1fr) 70px!important;padding:10px 8px!important;gap:5px!important}.extended-day-date{font-size:12px!important}.extended-day-temp strong,.extended-day-rain strong{font-size:16px!important}}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
