@@ -61,8 +61,7 @@ def main():
         ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
         ax.legend(ncol=3,fontsize=12,loc="upper left")
     axes[1].xaxis.set_major_locator(mdates.HourLocator(interval=12,tz=TZ))
-    axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d
-%I %p",tz=TZ))
+    axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\n%I %p",tz=TZ))
     fig.suptitle("MODEL FORECAST • Not live station observations • Open-Meteo best match",fontsize=10)
     fig.savefig("moraga_marine_transect.png",dpi=155,bbox_inches="tight");plt.close(fig)
     # Compare actual independently requested model grids, not station measurements.
@@ -88,6 +87,5 @@ def main():
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\
 %I %p",tz=TZ))
     fig.savefig("moraga_temperature_model_comparison.png",dpi=155,bbox_inches="tight");plt.close(fig)
-    Path("moraga_mesoscale_data.json").write_text(json.dumps({"generated_utc":datetime.now(timezone.utc).isoformat(),"source":"Open-Meteo model data, not station observations","transect":result,"temperature_models":forecasts,"errors":errors,"requested_station_coordinates":{"latitude":37.8201932,"longitude":-122.1193876},"verification_status":"pending_station_observations_and_archived_forecasts"},indent=2)+"
-")
+    Path("moraga_mesoscale_data.json").write_text(json.dumps({"generated_utc":datetime.now(timezone.utc).isoformat(),"source":"Open-Meteo model data, not station observations","transect":result,"temperature_models":forecasts,"errors":errors,"requested_station_coordinates":{"latitude":37.8201932,"longitude":-122.1193876},"verification_status":"pending_station_observations_and_archived_forecasts"},indent=2)+"\n")
 if __name__=="__main__":main()
