@@ -64,6 +64,27 @@ def get(url, model):
         temperature_results[model] = {"dates": daily["time"], "high_f": highs, "low_f": lows}
     return daily["time"], values
 
+def fetch_rain_probability():
+    """Open-Meteo daily precipitation probability, derived from ensemble guidance.
+
+    Fail closed: an unavailable probability never becomes an invented zero or
+    a rain icon based on a lone deterministic precipitation forecast.
+    """
+    params = {"latitude": LAT, "longitude": LON, "daily": "precipitation_probability_max",
+              "timezone": TZ, "forecast_days": 14}
+    url = "https://api.open-meteo.com/v1/forecast?" + urllib.parse.urlencode(params)
+    req = urllib.request.Request(url, headers={"User-Agent": "MoragaWeatherGraphics/1.0"})
+    with urllib.request.urlopen(req, timeout=40) as resp:
+        payload = json.load(resp)
+    daily = payload["daily"]
+    dates = daily["time"]
+    probabilities = daily["precipitation_probability_max"]
+    if len(dates) != len(probabilities):
+        raise ValueError("Rain probability date/value length mismatch")
+    if any(p is not None and (not isinstance(p, (int, float)) or p < 0 or p > 100) for p in probabilities):
+        raise ValueError("Invalid precipitation probability")
+    return dict(zip(dates, probabilities))
+
 results, errors = {}, {}
 # Use a fixed 14-day calendar, not the horizon of whichever model responds first.
 start_day = datetime.now(ZoneInfo(TZ)).date()
@@ -77,6 +98,11 @@ for name, url, model in SOURCES:
         errors[name] = str(exc)
 if not results:
     raise RuntimeError("No valid model data: " + str(errors))
+try:
+    ensemble_rain_probability = fetch_rain_probability()
+except Exception as exc:
+    ensemble_rain_probability = {}
+    errors["ensemble_rain_probability"] = str(exc)
 now = datetime.now(timezone.utc)
 # Shared light chart style: readable on mobile, matching the observatory's other graphics.
 plt.rcParams.update({"font.family":"DejaVu Sans","font.size":14,"font.weight":"semibold",
@@ -120,12 +146,12 @@ fig.savefig(out,facecolor=fig.get_facecolor())
 plt.close(fig)
 Path("moraga_rainfall_10day.json").write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
-    "dates": dates, "model_daily_inches": results, "errors": errors,
+    "dates": dates, "model_daily_inches": results, "ensemble_rain_probability_pct": {day: ensemble_rain_probability.get(day) for day in dates}, "errors": errors,
     "source": "Open-Meteo", "note": "API does not explicitly expose model initialization times here; generated time is not initialization time."
 }, indent=2))
 print(f"Saved {out}; available models: {', '.join(results)}; errors: {errors}")
 
-def daily_conditions(dates, results, hourly_results):
+def daily_conditions(dates, results, hourly_results, ensemble_rain_probability):
     """Compute deterministic display labels before publishing, never in the browser."""
     by_name = {name: hourly_results[model] for name, _, model in SOURCES if model in hourly_results}
     output = {}
@@ -168,17 +194,29 @@ def daily_conditions(dates, results, hourly_results):
             icon, label = "🌦️", "Chance of showers"
         elif available and len(wet) / len(available) >= 0.4:
             icon, label = "🌦️", "Chance of showers"
-        # A small, credible rain signal should not be represented as entirely dry.
-        # Reserve "Rain likely" for broad agreement; retain uncertainty otherwise.
-        daily_amounts = [values[index] for values in results.values()
-                         if index < len(values) and isinstance(values[index], (int, float))]
-        mean_rain = sum(daily_amounts) / len(daily_amounts) if daily_amounts else 0
-        if icon not in ("🌧️", "🌦️") and (mean_rain >= 0.01 or len(support) >= 1):
-            icon, label = "🌦️", "Isolated showers possible"
+        # Ensemble-derived probability is the mandatory rain-icon gate.
+        # Deterministic outliers (e.g. NAM alone) must not trigger rain icons.
+        probability = ensemble_rain_probability.get(day)
+        if probability is None or probability < 20:
+            if icon in ("🌧️", "🌦️"):
+                if clouds is None:
+                    icon, label = "⛅", "Partly cloudy"
+                elif clouds <= 10:
+                    icon, label = "☀️", "Sunny"
+                elif clouds <= 25:
+                    icon, label = "🌤️", "Mostly sunny"
+                elif clouds <= 50:
+                    icon, label = "⛅", "Partly cloudy"
+                elif clouds <= 85:
+                    icon, label = "🌥️", "Mostly cloudy"
+                else:
+                    icon, label = "☁️", "Overcast"
+        elif icon not in ("🌧️", "🌦️"):
+            icon, label = "🌦️", "Chance of showers"
         output[day] = {"icon": icon, "label": label}
     return output
 
-conditions = daily_conditions(dates, results, hourly_results)
+conditions = daily_conditions(dates, results, hourly_results, ensemble_rain_probability)
 assert len(conditions) == len(dates)
 assert all(v["icon"] and v["label"] for v in conditions.values())
 
@@ -186,7 +224,7 @@ forecast_dates = dates[:10]
 Path("moraga_forecast_10day.json").write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
     "dates": forecast_dates, "temperature_models": {name: {**temperature_results[model], "dates": temperature_results[model]["dates"][:10], "high_f": temperature_results[model]["high_f"][:10], "low_f": temperature_results[model]["low_f"][:10]} for name, url, model in SOURCES if model in temperature_results},
-    "model_daily_inches": {name: values[:10] for name, values in results.items()}, "daily_conditions": {day: conditions[day] for day in forecast_dates}, "hourly_conditions": {name: hourly_results[model] for name, url, model in SOURCES if model in hourly_results}, "errors": errors,
+    "model_daily_inches": {name: values[:10] for name, values in results.items()}, "ensemble_rain_probability_pct": {day: ensemble_rain_probability.get(day) for day in forecast_dates}, "daily_conditions": {day: conditions[day] for day in forecast_dates}, "hourly_conditions": {name: hourly_results[model] for name, url, model in SOURCES if model in hourly_results}, "errors": errors,
     "method": "Available ECMWF, GFS, ICON, GEM and NAM temperature guidance; website applies provisional KCAMORAG71 hourly skill weights separately for daytime and overnight, using lead-specific history where sufficient. Displayed ranges are deterministic model spread, not probability intervals.",
     "source": "Open-Meteo", "note": "Model inputs are not bias-corrected; website skill weighting is provisional, based on hourly temperature errors. Generated timestamp is retrieval time, not model initialization."
 }, indent=2))
