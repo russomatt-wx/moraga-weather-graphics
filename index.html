@@ -794,7 +794,7 @@ const iconSvg=(kind)=>{
  return '<svg class="forecast-wx-icon" viewBox="0 0 64 64" width="44" height="44" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+(parts[kind]||parts.partly)+'</svg>';
 };
 const labelLower=condition[1].toLowerCase();
-const iconKind=/thunder|storm/.test(labelLower)?'storm':/snow|sleet/.test(labelLower)?'snow':/drizzle/.test(labelLower)?'drizzle':/fog|mist/.test(labelLower)?'fog':/am clouds.*pm sun|am low clouds.*sun/.test(labelLower)?'clearing':/shower|chance of rain/.test(labelLower)?'showers':/rain/.test(labelLower)?'rain':/overcast|cloudy|low clouds/.test(labelLower)?'cloud':/mostly cloudy/.test(labelLower)?'partly':/partly cloudy|increasing clouds/.test(labelLower)?'partly':/mostly sunny/.test(labelLower)?'mostlySun':/sunny|clear/.test(labelLower)?'sun':'partly';
+const iconKind=/thunder|storm/.test(labelLower)?'storm':/snow|sleet/.test(labelLower)?'snow':/drizzle/.test(labelLower)?'drizzle':/fog|mist/.test(labelLower)?'fog':/am clouds.*pm sun|am low clouds.*sun/.test(labelLower)?'clearing':/shower|chance of rain/.test(labelLower)?'showers':/rain/.test(labelLower)?'rain':/mostly cloudy/.test(labelLower)?'partly':/overcast|cloudy|low clouds/.test(labelLower)?'cloud':/partly cloudy|increasing clouds/.test(labelLower)?'partly':/mostly sunny/.test(labelLower)?'mostlySun':/sunny|clear/.test(labelLower)?'sun':'partly';
 const conditionIcon=iconSvg(iconKind);
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
