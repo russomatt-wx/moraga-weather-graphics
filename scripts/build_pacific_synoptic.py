@@ -77,10 +77,10 @@ cmap=LinearSegmentedColormap.from_list("thickness_rainbow",[
     (0.46,"#008ee6"),(0.55,"#00b76d"),(0.64,"#a8d900"),
     (0.73,"#ffdd00"),(0.82,"#ff9400"),(0.92,"#f33218"),(1.0,"#c90020")
 ])
-norm=Normalize(vmin=504,vmax=594)
+norm=Normalize(vmin=480,vmax=594)
 # Continuous thickness shading; extend at either end rather than leaving white holes.
 # Use the same color scale as the legend and dashed thickness isolines.
-shade_levels=np.linspace(504,594,181)
+shade_levels=np.linspace(480,594,229)
 ax.contourf(lon2,lat2,thickness,levels=shade_levels,cmap=cmap,norm=norm,
             extend="both",alpha=.66,transform=ccrs.PlateCarree(),zorder=0.5)
 # Pressure contours remain above the filled thickness field.
@@ -109,11 +109,11 @@ fig.text(.06,.025,f"GFS valid {valid:%d %b %Y %HZ}  |  Source: Open-Meteo / GFS"
 fig.subplots_adjust(left=.04,right=.98,bottom=.13,top=.895)
 bar_ax=fig.add_axes([.095,.085,.77,.018])
 sm=ScalarMappable(norm=norm,cmap=cmap)
-cb=fig.colorbar(sm,cax=bar_ax,orientation="horizontal",ticks=np.arange(504,595,6))
+cb=fig.colorbar(sm,cax=bar_ax,orientation="horizontal",ticks=np.arange(480,595,6))
 cb.ax.tick_params(labelsize=8)
 fig.text(.875,.086,"dam",fontsize=9,color="#333333")
 fig.savefig(OUT,dpi=175,facecolor="white")
 META.write_text(json.dumps({"gfs_valid_utc":valid.isoformat(),
  "fields":["sea-level pressure","1000-500 mb thickness"],"fronts":False,
- "thickness_color_range_dam":[504,594],"highlight_dam":540}))
+ "thickness_color_range_dam":[480,594],"highlight_dam":540}))
 print("Wrote",OUT,valid)
