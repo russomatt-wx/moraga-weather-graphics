@@ -34,7 +34,8 @@ def fetch(lat,lon,model=None):
 def main():
     now=datetime.now(TZ).replace(minute=0,second=0,microsecond=0)
     station={n:fetch(*p) for n,p in POINTS.items()}
-    fig,axes=plt.subplots(2,1,figsize=(12,8),sharex=True,layout="constrained")
+    fig,axes=plt.subplots(2,1,figsize=(12.5,7.1),sharex=True)
+    fig.subplots_adjust(left=.075,right=.985,top=.87,bottom=.12,hspace=.23)
     colors=["#1674ad","#17a398","#d8502d","#9356ab","#d3a029"]
     for axis in axes:
         axis.set_facecolor("#f8fafc")
@@ -47,22 +48,26 @@ def main():
         x=[times[i] for i in idx]
         temp=[h["temperature_2m"][i] for i in idx]
         dew=[h["dew_point_2m"][i] for i in idx]
-        axes[0].plot(x,temp,label=name,color=c,linewidth=2.4)
-        axes[1].plot(x,dew,label=name,color=c,linewidth=2.4)
+        axes[0].plot(x,temp,label=name,color=c,linewidth=3.4 if name=="Moraga" else 1.8,alpha=1 if name=="Moraga" else .75,zorder=5 if name=="Moraga" else 2)
+        axes[1].plot(x,dew,label=name,color=c,linewidth=3.4 if name=="Moraga" else 1.8,alpha=1 if name=="Moraga" else .75,zorder=5 if name=="Moraga" else 2)
         result[name]={"times":[times[i].isoformat() for i in idx],"temperature_f":temp,"dewpoint_f":dew,"wind_mph":[h["wind_speed_10m"][i] for i in idx],"wind_direction_deg":[h["wind_direction_10m"][i] for i in idx]}
-    axes[0].set_title("Bay-to-Valley marine intrusion | 96-hour temperature forecast",loc="left",weight="bold",fontsize=15)
+    axes[0].set_title("Temperature",loc="left",weight="bold",fontsize=16,pad=8)
     axes[0].set_ylabel("Temperature (°F)")
     axes[1].set_ylabel("Dew point (°F)")
-    axes[1].set_title("Moisture gradient | 96-hour dew point forecast",loc="left",weight="bold")
+    axes[1].set_title("Dew point",loc="left",weight="bold",fontsize=16,pad=8)
     for ax in axes:
         ax.grid(axis="y",color="#cbd5e1",alpha=.75)
         ax.tick_params(labelsize=13)
         for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")
         ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
-        ax.legend(ncol=3,fontsize=12,loc="upper left")
-    axes[1].xaxis.set_major_locator(mdates.HourLocator(interval=12,tz=TZ))
-    axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\n%I %p",tz=TZ))
-    fig.suptitle("MODEL FORECAST • Not live station observations • Open-Meteo best match",fontsize=10)
+        ax.grid(axis="x",color="#dfe7ed",alpha=.45)
+        ax.tick_params(axis="both",labelsize=11,length=0,pad=6)
+    axes[1].xaxis.set_major_locator(mdates.HourLocator(byhour=[0,12],tz=TZ))
+    axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%a\n%-I %p",tz=TZ))
+    handles,labels=axes[0].get_legend_handles_labels()
+    fig.legend(handles,labels,loc="upper center",bbox_to_anchor=(.52,.965),ncol=5,frameon=False,fontsize=11)
+    fig.text(.075,.982,"BAY → VALLEY  |  96-HOUR MODEL FORECAST",fontsize=12,weight="bold",color="#27394a",va="top")
+    fig.text(.075,.035,"Model guidance · Open-Meteo best match · Not live observations",fontsize=10,color="#617184")
     fig.savefig("moraga_marine_transect.png",dpi=155,bbox_inches="tight");plt.close(fig)
     # Compare actual independently requested model grids, not station measurements.
     models={"ECMWF":"ecmwf_ifs025","GFS":"ncep_gfs_seamless"}
