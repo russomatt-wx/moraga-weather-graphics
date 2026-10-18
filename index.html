@@ -351,6 +351,12 @@ main>nav[aria-label="Weather dashboard sections"] a{
 .day-condition .forecast-wx-icon{display:block;width:56px;height:56px;max-width:100%;object-fit:contain}
 @media(max-width:760px){.day-condition .forecast-wx-icon{width:49px;height:49px}}
 </style>
+<style>
+/* Keep dimensional Meteocons visually integrated with dark forecast cards. */
+.day-condition .forecast-wx-icon{width:52px!important;height:52px!important;object-fit:contain!important;display:block!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;filter:none!important}
+.day-condition>span{background:transparent!important;border:0!important;box-shadow:none!important;display:flex!important;align-items:center;justify-content:center}
+@media(max-width:760px){.day-condition .forecast-wx-icon{width:48px!important;height:48px!important}}
+</style>
 </head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
@@ -777,7 +783,7 @@ const iconSvg=(kind)=>{
  cloud:'overcast',rain:'rain',showers:'partly-cloudy-day-rain',drizzle:'drizzle',
  fog:'fog',snow:'snow',storm:'thunderstorms',clearing:'partly-cloudy-day'};
  const file=files[kind]||'partly-cloudy-day';
- return '<img class="forecast-wx-icon" src="https://cdn.jsdelivr.net/npm/@bybas/weather-icons@2.0.0/production/fill/all/'+file+'.svg" width="56" height="56" loading="lazy" alt="" decoding="async">';
+ return '<img class="forecast-wx-icon" src="https://cdn.jsdelivr.net/npm/@bybas/weather-icons@2.0.0/production/fill/all/'+file+'.svg" width="52" height="52" loading="lazy" alt="" decoding="async">';
 };
 const labelLower=condition[1].toLowerCase();
 const iconKind=/thunder|storm/.test(labelLower)?'storm':/snow|sleet/.test(labelLower)?'snow':/drizzle/.test(labelLower)?'drizzle':/fog|mist/.test(labelLower)?'fog':/am clouds.*pm sun|am low clouds.*sun/.test(labelLower)?'clearing':/shower|chance of rain/.test(labelLower)?'showers':/rain/.test(labelLower)?'rain':/mostly cloudy|overcast|low clouds/.test(labelLower)?'cloud':/partly cloudy|increasing clouds/.test(labelLower)?'partly':/mostly sunny/.test(labelLower)?'mostlySun':/sunny|clear/.test(labelLower)?'sun':'partly';
