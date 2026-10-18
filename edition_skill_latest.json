@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-18T04:03:38.189285+00:00",
+  "generated_utc": "2026-10-18T16:51:02.715248+00:00",
   "status": "scored",
   "summary": {
     "6 AM": {
@@ -13,14 +13,14 @@
       "low_mae_f": 0.0
     },
     "4 PM": {
-      "count": 1,
+      "count": 2,
       "high_mae_f": 4.0,
-      "low_mae_f": 2.0
+      "low_mae_f": 4.5
     },
     "9 PM": {
-      "count": 1,
-      "high_mae_f": 2.0,
-      "low_mae_f": 4.0
+      "count": 2,
+      "high_mae_f": 3.0,
+      "low_mae_f": 5.0
     },
     "Unclassified": {
       "count": 0,
@@ -28,5 +28,5 @@
       "low_mae_f": null
     }
   },
-  "caveat": "Only explicit live-issued forecasts scored; recovered historical tests and automated model guidance excluded."
+  "caveat": "Only explicitly issued conversational forecasts; station extrema are sampled and require 24+ observations, 22h coverage, no gaps over 90 minutes, and morning/afternoon coverage. Automated model guidance excluded."
 }
