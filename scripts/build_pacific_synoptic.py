@@ -92,10 +92,12 @@ norm=Normalize(vmin=480,vmax=594)
 shade_levels=np.linspace(480,594,229)
 ax.contourf(lon2,lat2,thickness,levels=shade_levels,cmap=cmap,norm=norm,
             extend="both",alpha=.47,transform=ccrs.PlateCarree(),zorder=0.5)
-# Pressure contours remain above the filled thickness field.
-p=ax.contour(lon2,lat2,pressure,levels=np.arange(960,1050,4),colors="#242424",
-             linewidths=1.05,alpha=.95,transform=ccrs.PlateCarree(),zorder=3)
-ax.clabel(p,fmt="%d",fontsize=12,inline=True,inline_spacing=7)
+# Keep the surface pressure field subordinate to the thickness analysis.
+# Eight-hPa isobars and selective labels reduce visual clutter on mobile.
+p=ax.contour(lon2,lat2,pressure,levels=np.arange(960,1050,8),colors="#667580",
+             linewidths=.65,alpha=.62,transform=ccrs.PlateCarree(),zorder=3)
+ax.clabel(p,levels=np.arange(968,1049,16),fmt="%d",fontsize=10,
+          inline=True,inline_spacing=12,colors="#52616b")
 # Strong, contrasting dashed thickness isolines on top of the shaded field.
 # Dark underlay prevents the colored contours from disappearing into matching fills.
 colors=[cmap(norm(float(v))) for v in levels]
@@ -117,7 +119,7 @@ ax.plot(-122.13,37.83,"o",ms=5,color="#222222",transform=ccrs.PlateCarree(),zord
 ax.text(-121.5,38.4,"MORAGA",color="#222222",fontsize=9,transform=ccrs.PlateCarree())
 fig.text(.06,.96,"PACIFIC SYNOPTIC • SURFACE + 1000–500 mb THICKNESS",
          color="#111111",fontsize=18,weight="bold")
-fig.text(.06,.924,"GFS sea-level pressure (black, hPa)  •  1000–500 mb thickness (shaded + dashed, dam)  •  540 dam (blue solid)",
+fig.text(.06,.924,"GFS sea-level pressure (gray, 8 hPa)  •  1000–500 mb thickness (shaded + dashed, dam)  •  540 dam (blue solid)",
          color="#333333",fontsize=10)
 fig.text(.06,.025,f"GFS valid {valid:%d %b %Y %HZ}  |  Source: Open-Meteo / GFS",
          color="#333333",fontsize=9)
