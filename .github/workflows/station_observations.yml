@@ -1,5 +1,9 @@
 name: Render KCAMORAG71 observations
 on:
+  push:
+    paths:
+      - 'scripts/station_observations.py'
+      - '.github/workflows/station_observations.yml'
   workflow_dispatch:
   schedule:
     - cron: '15 * * * *'
