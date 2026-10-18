@@ -1,6 +1,11 @@
 name: Build Pacific synoptic composite
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/build_pacific_synoptic.py'
+      - '.github/workflows/update-pacific-synoptic.yml'
   schedule:
     - cron: '25 1,7,13,19 * * *'
 permissions:
