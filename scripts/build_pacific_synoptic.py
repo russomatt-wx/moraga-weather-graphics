@@ -81,12 +81,14 @@ ax.add_feature(cfeature.LAND,facecolor="#fafafa",zorder=0)
 ax.add_feature(cfeature.COASTLINE,edgecolor="#777777",linewidth=.65)
 ax.add_feature(cfeature.BORDERS,edgecolor="#aaaaaa",linewidth=.45)
 ax.add_feature(cfeature.STATES,edgecolor="#55758a",linewidth=.35)
-# Cool thickness values are purple/blue; warm values green/yellow/orange/red.
+# Extreme cold thickness is white/pink/lavender, transitioning through blue, green, yellow and red.
 levels=np.arange(480,611,6)
 cmap=LinearSegmentedColormap.from_list("thickness_rainbow",[
-    (0.00,"#7716ad"),(0.20,"#983dff"),(0.35,"#2368ff"),
-    (0.46,"#008ee6"),(0.55,"#00b76d"),(0.64,"#a8d900"),
-    (0.73,"#ffdd00"),(0.82,"#ff9400"),(0.92,"#f33218"),(1.0,"#c90020")
+    # Extreme cold (480–498 dam): near-white / pink / lavender.
+    (0.00,"#fff8fd"),(0.08,"#ffd5ed"),(0.16,"#f58acb"),
+    (0.24,"#bd68d9"),(0.34,"#6954d6"),(0.44,"#2368ff"),
+    (0.52,"#008ee6"),(0.61,"#00b76d"),(0.69,"#a8d900"),
+    (0.77,"#ffdd00"),(0.85,"#ff9400"),(0.93,"#f33218"),(1.0,"#c90020")
 ])
 norm=Normalize(vmin=480,vmax=594)
 # Continuous thickness shading; extend at either end rather than leaving white holes.
