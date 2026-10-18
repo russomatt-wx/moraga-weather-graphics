@@ -1,5 +1,9 @@
 name: Update Moraga extended ensemble outlook
 on:
+  push:
+    paths:
+      - 'scripts/build_extended_outlook.py'
+      - '.github/workflows/update-extended-outlook.yml'
   workflow_dispatch:
   schedule:
     - cron: '45 12,23 * * *'
