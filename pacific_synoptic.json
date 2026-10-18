@@ -1,1 +1,1 @@
-{"gfs_valid_utc": "2026-10-18T18:00:00+00:00", "fields": ["sea-level pressure", "1000-500 mb thickness"], "fronts": false, "thickness_color_range_dam": [504, 594], "highlight_dam": 540}
+{"gfs_valid_utc": "2026-10-19T00:00:00+00:00", "fields": ["sea-level pressure", "1000-500 mb thickness"], "fronts": false, "thickness_color_range_dam": [480, 594], "highlight_dam": 540}
