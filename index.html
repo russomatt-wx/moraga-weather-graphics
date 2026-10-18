@@ -846,9 +846,10 @@ const rawRainChance=dailyRainChance[date];
 const shownRainChance=Number.isFinite(rawRainChance)?Math.min(100,Math.round(rawRainChance/10)*10):null;
 if(shownRainChance!==null&&shownRainChance>=20){
   // Display probability drives icon and wording consistently.
-  // Rain likely begins at 60%; use the full rain icon at 60% and above.
+  // 60–70%: Rain likely; 80%+: Rain. Both use the full rain icon.
   if(!/heavy rain|thunder|storm|snow|sleet/i.test(condition[1])){
-    if(shownRainChance>=60) condition=['🌧️','Rain likely'];
+    if(shownRainChance>=80) condition=['🌧️','Rain'];
+    else if(shownRainChance>=60) condition=['🌧️','Rain likely'];
     else condition=['🌦️',shownRainChance<30?'Slight chance of rain':'Chance of rain'];
   }
 }
