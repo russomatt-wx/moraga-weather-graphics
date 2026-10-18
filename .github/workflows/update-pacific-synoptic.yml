@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install map dependencies
-        run: pip install requests numpy matplotlib cartopy
+        run: pip install requests numpy matplotlib cartopy scipy
       - name: Render validated composite
         run: python scripts/build_pacific_synoptic.py
       - name: Commit map only after successful render
