@@ -33,20 +33,29 @@ for offset in range(0,len(coords),30):
       "hourly":"pressure_msl,geopotential_height_500hPa,geopotential_height_1000hPa",
       "forecast_days":2,"timezone":"GMT","models":"gfs_seamless"
     }
-    for attempt in range(4):
+    # Decode and validate each response *inside* the retry loop. A 200 response
+    # can still contain truncated JSON; retry it rather than aborting the map.
+    for attempt in range(5):
         try:
-            response=session.get("https://api.open-meteo.com/v1/gfs",params=params,timeout=(15,45))
+            response=session.get("https://api.open-meteo.com/v1/gfs",params=params,timeout=(15,60))
             response.raise_for_status()
+            data=response.json()
+            if isinstance(data,dict):
+                data=[data]
+            if not isinstance(data,list) or len(data)!=len(batch):
+                raise ValueError("Incomplete model grid")
+            if any(not isinstance(item,dict) or "hourly" not in item for item in data):
+                raise ValueError("Invalid hourly data in model grid")
             break
-        except (requests.exceptions.Timeout,requests.exceptions.ConnectionError) as exc:
-            if attempt==3:raise RuntimeError(f"GFS batch {offset//30+1} failed after four attempts") from exc
-            time.sleep(min(20,3*(2**attempt))+random.uniform(0,2))
+        except (requests.exceptions.Timeout,requests.exceptions.ConnectionError,
+                requests.exceptions.JSONDecodeError,ValueError) as exc:
+            if attempt==4:
+                raise RuntimeError(f"GFS batch {offset//30+1} failed after five attempts: {type(exc).__name__}") from exc
+            time.sleep(min(24,3*(2**attempt))+random.uniform(0,2))
         except requests.exceptions.HTTPError as exc:
-            if response.status_code not in (429,500,502,503,504) or attempt==3:raise
+            if response.status_code not in (429,500,502,503,504) or attempt==4:
+                raise
             time.sleep(min(30,5*(2**attempt))+random.uniform(0,2))
-    data=response.json()
-    if isinstance(data,dict):data=[data]
-    if len(data)!=len(batch):raise RuntimeError("Incomplete model grid")
     rows.extend(data)
 # Select a common future valid time from actual API output.
 times=rows[0]["hourly"]["time"]
