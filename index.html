@@ -324,6 +324,26 @@ section .intro p{font-size:12px}
 .extended-compact th:nth-child(1){width:26%}.extended-compact th:nth-child(2){width:14%}.extended-compact th:nth-child(3){width:14%}.extended-compact th:nth-child(4){width:28%}.extended-compact th:nth-child(5){width:18%}
 .extended-compact .extended-low{font-size:16px;color:#8fc9f4;font-weight:750}
 @media(max-width:430px){.extended-compact th,.extended-compact td{padding:10px 3px;font-size:12px}.extended-compact .extended-median,.extended-compact .extended-low,.extended-compact .extended-rain{font-size:15px}.extended-compact thead th{font-size:10px}}
+</style><style>
+/* Compact sticky navigation: visible while scrolling without covering charts */
+main>nav[aria-label="Weather dashboard sections"]{
+ position:sticky;top:0;z-index:80;
+ display:flex;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;
+ scrollbar-width:none;-webkit-overflow-scrolling:touch;
+ gap:5px;margin:0 -12px 18px;padding:8px 12px;
+ background:rgba(13,23,36,.96);
+ border-bottom:1px solid #30465a;
+ backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+main>nav[aria-label="Weather dashboard sections"]::-webkit-scrollbar{display:none}
+main>nav[aria-label="Weather dashboard sections"] a{
+ flex:0 0 auto;white-space:nowrap;
+ font-size:11px;line-height:1.25;padding:7px 10px;
+ border-radius:7px;
+}
+@media(min-width:761px){
+ main>nav[aria-label="Weather dashboard sections"]{margin:0 0 20px;padding:8px 0}
+}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
