@@ -1,0 +1,8 @@
+{
+  "generated_utc": null,
+  "status": "collecting_prospective_forecasts",
+  "station": "KCAMORAG71",
+  "model_scores": {},
+  "method": "Daily highs and lows are verified only after prospective model forecasts and complete KCAMORAG71 station days are available.",
+  "note": "No daily model accuracy values are inferred from hourly records."
+}
