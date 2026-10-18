@@ -843,8 +843,14 @@ if(Number.isFinite(dailyRainChance[date])&&dailyRainChance[date]<20&&/rain|showe
 // Keep the icon and label consistent with displayed daily PoP.
 // The 20% threshold applies to presentation only; raw forecast values are unchanged.
 // More specific rain labels from hourly/model evidence remain intact.
-if(Number.isFinite(dailyRainChance[date])&&dailyRainChance[date]>=20&&!/rain|shower|drizzle|storm|thunder|snow|sleet/i.test(condition[1])){
- condition=['🌦️',dailyRainChance[date]<30?'Slight chance of rain':'Chance of rain'];
+const rawRainChance=dailyRainChance[date];
+const shownRainChance=Number.isFinite(rawRainChance)?Math.min(100,Math.round(rawRainChance/10)*10):null;
+if(shownRainChance!==null&&shownRainChance>=20){
+  // Apply the same rounded value to the label and icon as the one displayed.
+  // Keep heavier precipitation descriptions where the forecast already provides them.
+  if(!/heavy rain|thunder|storm|snow|sleet/i.test(condition[1])){
+    condition=['🌦️',shownRainChance<30?'Slight chance of rain':'Chance of rain'];
+  }
 }
 // A unified vector icon family. Only the display changes; forecast classification is unchanged.
 // Professionally illustrated Meteocons filled SVG assets (MIT, Bas Milius).
