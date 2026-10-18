@@ -13,6 +13,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap, Normalize
 from matplotlib.cm import ScalarMappable
+from scipy.ndimage import gaussian_filter, minimum_filter, maximum_filter
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 
@@ -115,6 +116,33 @@ line540=ax.contour(lon2,lat2,thickness,levels=[540],colors="#0069c9",
 if len(line540.allsegs[0]):
     ax.clabel(line540,fmt={540:"540"},fontsize=14,inline=True,
               inline_spacing=8,colors="#0069c9",use_clabeltext=True)
+# Detect prominent interior pressure extrema; avoid edge artifacts and clutter.
+smooth=gaussian_filter(pressure,sigma=1.0)
+candidates=[]
+for kind,fn in (("L",minimum_filter),("H",maximum_filter)):
+    local=fn(smooth,size=7,mode="nearest")
+    for iy in range(3,smooth.shape[0]-3):
+        for ix in range(3,smooth.shape[1]-3):
+            v=smooth[iy,ix]
+            if abs(v-local[iy,ix])>0.05: continue
+            area=smooth[iy-3:iy+4,ix-3:ix+4]
+            prominence=(np.max(area)-v) if kind=="L" else (v-np.min(area))
+            if prominence>=3: candidates.append((prominence,kind,iy,ix))
+chosen=[]
+for _,kind,iy,ix in sorted(candidates,reverse=True):
+    if any((iy-jy)**2+(ix-jx)**2<36 for _,jy,jx in chosen): continue
+    chosen.append((kind,iy,ix))
+    if len(chosen)>=7: break
+for kind,iy,ix in chosen:
+    lon,lat=float(lon2[iy,ix]),float(lat2[iy,ix])
+    ax.text(lon,lat,kind,ha="center",va="center",fontsize=22,fontweight="black",
+            color="#c02637" if kind=="L" else "#1954bc",
+            bbox=dict(facecolor="white",alpha=.83,edgecolor="none",pad=1.2),
+            transform=ccrs.PlateCarree(),zorder=10)
+    ax.text(lon,lat-1.7,f"{pressure[iy,ix]:.0f}",ha="center",va="top",
+            fontsize=10,fontweight="bold",color="#1b2b3a",
+            bbox=dict(facecolor="white",alpha=.85,edgecolor="none",pad=1),
+            transform=ccrs.PlateCarree(),zorder=10)
 ax.plot(-122.13,37.83,"o",ms=5,color="#222222",transform=ccrs.PlateCarree(),zorder=8)
 ax.text(-121.5,38.4,"MORAGA",color="#222222",fontsize=9,transform=ccrs.PlateCarree())
 fig.text(.06,.96,"PACIFIC SYNOPTIC • SURFACE + 1000–500 mb THICKNESS",
