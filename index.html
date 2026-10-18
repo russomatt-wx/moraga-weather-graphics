@@ -853,9 +853,9 @@ if(shownRainChance!==null){
   if(!/heavy rain|thunder|storm|snow|sleet/i.test(condition[1])){
     if(shownRainChance>=80) condition=['🌧️','Rain'];
     else if(shownRainChance>=60) condition=['🌧️','Rain likely'];
-    else if(shownRainChance>=40&&modelWetSignal) condition=['🌦️','Chance of rain'];
-    else if(sky[0]) condition=sky;
     else if(shownRainChance>=40) condition=['🌦️','Chance of rain'];
+    else if(shownRainChance>=20) condition=['🌦️','Slight chance of rain'];
+    else if(sky[0]) condition=sky;
     else if(modelWetSignal) condition=['⛅','Partly cloudy'];
   }
 }
