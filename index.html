@@ -402,6 +402,11 @@ main>nav[aria-label="Weather dashboard sections"] a{
 /* Dedicated atmospheric image assets replace inline cartoon SVGs. */
 #ten-day .forecast-wx-icon{display:block;object-fit:contain;width:min(100%,116px);height:88px;margin:auto;filter:drop-shadow(0 5px 10px rgba(0,0,0,.22))}
 @media(max-width:760px){#ten-day .forecast-wx-icon{width:min(100%,76px);height:64px}}
+</style><style>
+/* Photographic atmospheric conditions — dark cards, no cartoon vectors. */
+#ten-day .day-condition>span{height:94px;overflow:hidden;border-radius:9px}
+#ten-day .forecast-wx-icon.forecast-photo{width:100%;height:94px;max-width:none;object-fit:cover;object-position:center;filter:saturate(.9) brightness(.9);border-radius:9px;display:block}
+@media(max-width:760px){#ten-day .day-condition>span{height:75px}#ten-day .forecast-wx-icon.forecast-photo{height:75px}}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
@@ -823,7 +828,24 @@ if(Number.isFinite(dailyRainChance[date])&&dailyRainChance[date]<20&&/rain|showe
 // A unified vector icon family. Only the display changes; forecast classification is unchanged.
 // Professionally illustrated Meteocons filled SVG assets (MIT, Bas Milius).
 // Pinned CDN version avoids unpredictable design changes.
-const iconSvg=(kind)=>'<img class="forecast-wx-icon" src="weather-assets/'+encodeURIComponent(kind)+'.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" onerror="this.onerror=null;this.style.display=\'none\'">';
+const iconSvg=(kind)=>{
+ // Real sky photography (Unsplash), not illustrated weather symbols.
+ // Labels and precipitation percentages remain driven by forecast data.
+ const photos={
+ sun:'https://images.unsplash.com/photo-1596627546982-d62c02c55b00?auto=format&fit=crop&w=360&h=280&q=75',
+ mostlySun:'https://images.unsplash.com/photo-1594809766683-0bae7390b256?auto=format&fit=crop&w=360&h=280&q=75',
+ partly:'https://images.unsplash.com/photo-1594809766683-0bae7390b256?auto=format&fit=crop&w=360&h=280&q=75',
+ clearing:'https://images.unsplash.com/photo-1594809766683-0bae7390b256?auto=format&fit=crop&w=360&h=280&q=75',
+ cloud:'https://images.unsplash.com/photo-1649843787933-a4e0d5313391?auto=format&fit=crop&w=360&h=280&q=75',
+ showers:'https://images.unsplash.com/photo-1649843787933-a4e0d5313391?auto=format&fit=crop&w=360&h=280&q=75',
+ rain:'https://images.unsplash.com/photo-1649843787933-a4e0d5313391?auto=format&fit=crop&w=360&h=280&q=75',
+ drizzle:'https://images.unsplash.com/photo-1649843787933-a4e0d5313391?auto=format&fit=crop&w=360&h=280&q=75',
+ storm:'https://images.unsplash.com/photo-1649843787933-a4e0d5313391?auto=format&fit=crop&w=360&h=280&q=75',
+ snow:'https://images.unsplash.com/photo-1649843787933-a4e0d5313391?auto=format&fit=crop&w=360&h=280&q=75',
+ fog:'https://images.unsplash.com/photo-1649843787933-a4e0d5313391?auto=format&fit=crop&w=360&h=280&q=75'
+ };
+ return '<img class="forecast-wx-icon forecast-photo" src="'+(photos[kind]||photos.partly)+'" alt="" aria-hidden="true" loading="lazy" decoding="async">';
+};
 const labelLower=condition[1].toLowerCase();
 const iconKind=/thunder|storm/.test(labelLower)?'storm':/snow|sleet/.test(labelLower)?'snow':/drizzle/.test(labelLower)?'drizzle':/fog|mist/.test(labelLower)?'fog':/am clouds.*pm sun|am low clouds.*sun/.test(labelLower)?'clearing':/shower|chance of rain/.test(labelLower)?'showers':/rain/.test(labelLower)?'rain':/partly cloudy|increasing clouds/.test(labelLower)?'partly':/mostly cloudy|overcast|low clouds/.test(labelLower)?'cloud':/mostly sunny/.test(labelLower)?'mostlySun':/sunny|clear/.test(labelLower)?'sun':'partly';
 const conditionIcon=iconSvg(iconKind);
