@@ -29,12 +29,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           mkdir -p /tmp/marine-publish
-          cp moraga_pressure_gradient_96h.png moraga_north_south_pressure_gradient_96h.png moraga_marine_layer_proxy_96h.png moraga_marine_diagnostics_96h.json /tmp/marine-publish/
+          cp moraga_pressure_gradient_96h.png moraga_winnemucca_pressure_gradient_96h.png moraga_north_south_pressure_gradient_96h.png moraga_marine_layer_proxy_96h.png moraga_marine_diagnostics_96h.json /tmp/marine-publish/
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             git reset --hard origin/main
             cp /tmp/marine-publish/* .
-            git add moraga_pressure_gradient_96h.png moraga_north_south_pressure_gradient_96h.png moraga_marine_layer_proxy_96h.png moraga_marine_diagnostics_96h.json
+            git add moraga_pressure_gradient_96h.png moraga_winnemucca_pressure_gradient_96h.png moraga_north_south_pressure_gradient_96h.png moraga_marine_layer_proxy_96h.png moraga_marine_diagnostics_96h.json
             if git diff --cached --quiet; then exit 0; fi
             git commit -m "Update Moraga marine pressure and PBL proxy charts"
             if git push origin HEAD:main; then exit 0; fi
