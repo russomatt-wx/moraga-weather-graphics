@@ -320,6 +320,10 @@ section .intro p{font-size:12px}
 #rainfall .rain-summary strong{font-size:14px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style><style>
+.extended-compact th:nth-child(1){width:26%}.extended-compact th:nth-child(2){width:14%}.extended-compact th:nth-child(3){width:14%}.extended-compact th:nth-child(4){width:28%}.extended-compact th:nth-child(5){width:18%}
+.extended-compact .extended-low{font-size:16px;color:#8fc9f4;font-weight:750}
+@media(max-width:430px){.extended-compact th,.extended-compact td{padding:10px 3px;font-size:12px}.extended-compact .extended-median,.extended-compact .extended-low,.extended-compact .extended-rain{font-size:15px}.extended-compact thead th{font-size:10px}}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
@@ -901,11 +905,12 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
    const low=Number.isFinite(day.temperature_f_p10)?Math.round(day.temperature_f_p10):null;
    const high=Number.isFinite(day.temperature_f_p90)?Math.round(day.temperature_f_p90):null;
    const median=Number.isFinite(day.temperature_f_median)?Math.round(day.temperature_f_median)+'°':'—';
+   const medianLow=Number.isFinite(day.temperature_low_f_median)?Math.round(day.temperature_low_f_median)+'°':'—';
    const range=low!==null&&high!==null?low+'–'+high+'°':'—';
    const pct=Number.isFinite(day.rain_member_fraction)?Math.round(day.rain_member_fraction*100)+'%':'—';
    return '<tr><th scope="row">'+esc(date)+'</th><td class="extended-median">'+median+'</td><td>'+range+'</td><td class="extended-rain">'+pct+'</td></tr>';
   }).join('');
-  root.innerHTML='<div class="extended-compact"><table><thead><tr><th>Day</th><th>Median</th><th>High spread</th><th>Rain*</th></tr></thead><tbody>'+rows+'</tbody></table></div><details class="extended-method"><summary>How to read this outlook <span aria-hidden="true">⌄</span></summary><p><strong>Median:</strong> Middle GEFS member’s forecast high. <strong>High spread:</strong> 10th–90th percentile of daily highs, not a low/high temperature pair. <strong>Rain:</strong> Share of ensemble members forecasting at least 0.01 inch; not calibrated rain probability. These are long-range model estimates without station bias correction.</p></details><p class="extended-source">*GEFS rain-member agreement · '+esc(d.days[0]?.members||'')+' members · Updated '+new Date(generated).toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT</p>';
+  root.innerHTML='<div class="extended-compact"><table><thead><tr><th>Day</th><th>High</th><th>Low</th><th>High spread</th><th>Rain*</th></tr></thead><tbody>'+rows+'</tbody></table></div><details class="extended-method"><summary>How to read this outlook <span aria-hidden="true">⌄</span></summary><p><strong>High / Low:</strong> Median of individual GEFS members’ daily highs and lows. <strong>High spread:</strong> 10th–90th percentile of daily highs, not a low/high temperature pair. <strong>Rain:</strong> Share of ensemble members forecasting at least 0.01 inch; not calibrated rain probability. These are long-range model estimates without station bias correction.</p></details><p class="extended-source">*GEFS rain-member agreement · '+esc(d.days[0]?.members||'')+' members · Updated '+new Date(generated).toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT</p>';
 
  }catch(e){root.innerHTML='<p>Extended ensemble outlook is awaiting a successful data update. No forecast values will be displayed until verified ensemble data is available.</p>';}
 })();
