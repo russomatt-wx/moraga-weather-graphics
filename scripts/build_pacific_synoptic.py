@@ -91,15 +91,21 @@ norm=Normalize(vmin=480,vmax=594)
 # Use the same color scale as the legend and dashed thickness isolines.
 shade_levels=np.linspace(480,594,229)
 ax.contourf(lon2,lat2,thickness,levels=shade_levels,cmap=cmap,norm=norm,
-            extend="both",alpha=.66,transform=ccrs.PlateCarree(),zorder=0.5)
+            extend="both",alpha=.47,transform=ccrs.PlateCarree(),zorder=0.5)
 # Pressure contours remain above the filled thickness field.
 p=ax.contour(lon2,lat2,pressure,levels=np.arange(960,1050,4),colors="#242424",
-             linewidths=.9,alpha=.9,transform=ccrs.PlateCarree(),zorder=3)
+             linewidths=1.05,alpha=.95,transform=ccrs.PlateCarree(),zorder=3)
 ax.clabel(p,fmt="%d",fontsize=12,inline=True,inline_spacing=7)
+# Strong, contrasting dashed thickness isolines on top of the shaded field.
+# Dark underlay prevents the colored contours from disappearing into matching fills.
 colors=[cmap(norm(float(v))) for v in levels]
+ax.contour(lon2,lat2,thickness,levels=levels,colors="#253746",
+           linewidths=2.0,linestyles="dashed",alpha=.78,
+           transform=ccrs.PlateCarree(),zorder=4)
 t=ax.contour(lon2,lat2,thickness,levels=levels,colors=colors,
-             linewidths=1.15,linestyles="dashed",transform=ccrs.PlateCarree(),zorder=4)
-ax.clabel(t,fmt="%d",fontsize=12,inline=True,inline_spacing=7)
+             linewidths=1.35,linestyles="dashed",transform=ccrs.PlateCarree(),zorder=4.1)
+ax.clabel(t,fmt="%d",fontsize=12,inline=True,inline_spacing=7,
+          colors="#182e40")
 # Keep 540 dam prominent, but avoid overwhelming nearby contours.
 line540=ax.contour(lon2,lat2,thickness,levels=[540],colors="#0069c9",
                    linewidths=2.7,linestyles="solid",
