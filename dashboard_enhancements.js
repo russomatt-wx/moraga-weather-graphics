@@ -47,8 +47,28 @@ function accuracy(){
  const ordered=namesAll.map(n=>ranked.find(r=>r.model===n)).filter(Boolean);
  const show=ordered.length?ordered:ranked;
  const fmt=v=>Number.isFinite(v)?v.toFixed(2)+'°F':'—';
- const body=show.map(r=>'<tr><th scope="row">'+escape(r.model)+'</th><td class="skill-unavailable" title="Requires issued daily high forecasts matched to complete station days">—</td><td class="skill-unavailable" title="Requires issued daily low forecasts matched to complete station days">—</td><td><strong>'+fmt(r.mae)+'</strong><small>'+r.n+' hours</small></td></tr>').join('');
- el.innerHTML='<div class="skill-table-wrap"><table class="skill-compare"><thead><tr><th>Model</th><th>High MAE</th><th>Low MAE</th><th>Hourly MAE</th></tr></thead><tbody>'+body+'</tbody></table></div><p class="skill-disclaimer"><strong>Hourly:</strong> rolling 7-day absolute temperature error through '+escape(ptTime(new Date(end)))+'. <strong>High / Low:</strong> awaiting archived forecasts issued before each day and verified complete-day station extremes. Hourly records cannot be substituted for true daily high/low forecasts. Signed warm/cold bias will be reported when valid daily matches are available.</p>';
+ const body=show.map(r=>'<tr data-model="'+escape(r.model)+'"><th scope="row">'+escape(r.model)+'</th><td class="skill-unavailable daily-high">—</td><td class="skill-unavailable daily-low">—</td><td><strong>'+fmt(r.mae)+'</strong><small>'+r.n+' hours</small></td></tr>').join('');
+ el.innerHTML='<div class="skill-table-wrap"><table class="skill-compare"><thead><tr><th>Model</th><th>High MAE</th><th>Low MAE</th><th>Hourly MAE</th></tr></thead><tbody>'+body+'</tbody></table></div><p class="skill-disclaimer"><strong>Hourly:</strong> rolling 7-day absolute temperature error through '+escape(ptTime(new Date(end)))+'. <strong>High / Low:</strong> <span id="daily-model-status">Collecting prospective model forecasts and complete KCAMORAG71 observation days.</span> Daily verification is independent of hourly scores.</p>';
+ fetch('model_daily_verification_latest.json?skill='+Date.now(),{cache:'no-store'})
+  .then(r=>{if(!r.ok)throw Error('Daily verification not published');return r.json()})
+  .then(d=>{
+   let verified=0;
+   for(const row of el.querySelectorAll('tr[data-model]')){
+    const score=d.model_scores?.[row.dataset.model.toLowerCase()];
+    if(!score||!score.verified_days)continue;
+    verified+=score.verified_days;
+    for(const [selector,key] of [['.daily-high','high_mae_f'],['.daily-low','low_mae_f']]){
+     const cell=row.querySelector(selector);
+     if(Number.isFinite(score[key])){
+      cell.textContent=Number(score[key]).toFixed(2)+'°F';
+      cell.classList.remove('skill-unavailable');
+      cell.title=score.verified_days+' completed days · bias '+(Number(score[key==='high_mae_f'?'high_bias_f':'low_bias_f'])||0).toFixed(2)+'°F';
+     }
+    }
+   }
+   const status=document.getElementById('daily-model-status');
+   if(status)status.textContent=verified?'Daily MAE uses prospective archived model highs/lows matched to complete station days; sample counts and signed biases appear on hover.':'Collecting prospective forecasts; no eligible completed station days yet.';
+  }).catch(()=>{const status=document.getElementById('daily-model-status');if(status)status.textContent='Daily verification feed pending publication; hourly scores remain available.'});
 
  }).catch(()=>{el.innerHTML='<p class="day-date">Awaiting verified hourly matches; no rankings inferred.</p>'});
 }
