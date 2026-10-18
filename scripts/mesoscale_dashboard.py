@@ -34,8 +34,8 @@ def fetch(lat,lon,model=None):
 def main():
     now=datetime.now(TZ).replace(minute=0,second=0,microsecond=0)
     station={n:fetch(*p) for n,p in POINTS.items()}
-    fig,axes=plt.subplots(2,1,figsize=(12.5,7.1),sharex=True)
-    fig.subplots_adjust(left=.075,right=.985,top=.87,bottom=.12,hspace=.23)
+    fig,axes=plt.subplots(3,1,figsize=(12.5,8.5),sharex=True,gridspec_kw={'height_ratios':[2.4,2.4,1.0]})
+    fig.subplots_adjust(left=.075,right=.985,top=.89,bottom=.105,hspace=.31)
     colors=["#1674ad","#17a398","#d8502d","#9356ab","#d3a029"]
     for axis in axes:
         axis.set_facecolor("#f8fafc")
@@ -51,6 +51,36 @@ def main():
         axes[0].plot(x,temp,label=name,color=c,linewidth=3.4 if name=="Moraga" else 1.8,alpha=1 if name=="Moraga" else .75,zorder=5 if name=="Moraga" else 2)
         axes[1].plot(x,dew,label=name,color=c,linewidth=3.4 if name=="Moraga" else 1.8,alpha=1 if name=="Moraga" else .75,zorder=5 if name=="Moraga" else 2)
         result[name]={"times":[times[i].isoformat() for i in idx],"temperature_f":temp,"dewpoint_f":dew,"wind_mph":[h["wind_speed_10m"][i] for i in idx],"wind_direction_deg":[h["wind_direction_10m"][i] for i in idx]}
+    # Moraga minus Oakland highlights the strength and evolution of the inland temperature gap.
+    moraga=result["Moraga"]
+    oakland=result["Oakland"]
+    oak_by_time=dict(zip(oakland["times"],oakland["temperature_f"]))
+    delta_times=[];delta=[]
+    for stamp,value in zip(moraga["times"],moraga["temperature_f"]):
+        other=oak_by_time.get(stamp)
+        if value is not None and other is not None:
+            delta_times.append(datetime.fromisoformat(stamp))
+            delta.append(value-other)
+    axes[2].plot(delta_times,delta,color="#d8502d",linewidth=2.5,zorder=3)
+    axes[2].axhline(0,color="#64748b",linewidth=1.1,linestyle="--")
+    axes[2].fill_between(delta_times,delta,0,where=[v>=0 for v in delta],color="#d8502d",alpha=.12)
+    axes[2].fill_between(delta_times,delta,0,where=[v<0 for v in delta],color="#1674ad",alpha=.12)
+    axes[2].set_title("Moraga − Oakland temperature gap",loc="left",weight="bold",fontsize=14,pad=8)
+    axes[2].set_ylabel("ΔT (°F)")
+    # Consistent midnight separators across all three panels, with day labels
+    # above the temperature panel. The bottom axis retains 12-hour time ticks.
+    midnight=mdates.HourLocator(byhour=[0],tz=TZ)
+    from matplotlib.ticker import FuncFormatter
+    for ax in axes:
+        ax.xaxis.set_minor_locator(midnight)
+        ax.grid(axis="x",which="minor",color="#b2c2d1",alpha=.75,linewidth=1)
+    from datetime import timedelta
+    start=delta_times[0].replace(hour=0,minute=0,second=0,microsecond=0)+timedelta(days=1)
+    end=delta_times[-1]
+    cursor=start
+    while cursor<=end:
+        axes[0].annotate(cursor.strftime("%a %b %-d"),xy=(cursor,1),xycoords=("data","axes fraction"),xytext=(4,3),textcoords="offset points",fontsize=9,color="#64748b",weight="bold",ha="left",va="bottom")
+        cursor+=timedelta(days=1)
     axes[0].set_title("Temperature",loc="left",weight="bold",fontsize=16,pad=8)
     axes[0].set_ylabel("Temperature (°F)")
     axes[1].set_ylabel("Dew point (°F)")
