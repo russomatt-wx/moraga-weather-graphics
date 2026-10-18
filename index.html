@@ -346,7 +346,12 @@ main>nav[aria-label="Weather dashboard sections"] a{
 @media(min-width:761px){
  main>nav[aria-label="Weather dashboard sections"]{margin:0 0 20px;padding:8px 0}
 }
-</style></head>
+</style><style>
+/* Unified forecast weather icons, consistent on iOS and desktop. */
+.day-condition .forecast-wx-icon{display:block;width:44px;height:44px;max-width:100%;overflow:visible}
+@media(max-width:760px){.day-condition .forecast-wx-icon{width:34px;height:34px}}
+</style>
+</head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
 <h1>Moraga Weather Observatory</h1>
@@ -764,9 +769,33 @@ if(Number.isFinite(dailyRainChance[date])&&dailyRainChance[date]<20&&/rain|showe
  const drySky=skyCondition(skyHours);
  condition=drySky[0]?drySky:['⛅','Partly cloudy'];
 }
-// Custom morning-stratus clearing icon: dominant afternoon sunshine, small retreating cloud.
-const clearingSunIcon='<svg class="clearing-sun-icon" viewBox="0 0 64 52" width="48" height="40" role="img" aria-label="Morning clouds clearing to sunshine" xmlns="http://www.w3.org/2000/svg"><g stroke="#ffc64b" stroke-width="3" stroke-linecap="round"><path d="M43 3v5M43 41v5M18 25h5M60 25h-5M29 11l4 4M57 11l-4 4M29 39l4-4M57 39l-4-4"/></g><circle cx="43" cy="25" r="13" fill="#ffcf49" stroke="#f5a623" stroke-width="1.5"/><path d="M9 42h28a8 8 0 0 0 0-16 10 10 0 0 0-18-3 9 9 0 0 0-10 19Z" fill="#d6e2eb" stroke="#93a8b8" stroke-width="1.5"/></svg>';
-const conditionIcon=condition[1]==='AM clouds, PM sun'?clearingSunIcon:condition[0];
+// A unified vector icon family. Only the display changes; forecast classification is unchanged.
+const iconSvg=(kind)=>{
+ const sun='<g stroke="#ffc64b" stroke-width="3" stroke-linecap="round"><path d="M43 3v5M43 41v5M18 25h5M60 25h-5M29 11l4 4M57 11l-4 4M29 39l4-4M57 39l-4-4"/></g><circle cx="43" cy="25" r="13" fill="#ffcf49" stroke="#f5a623" stroke-width="1.5"/>';
+ const cloud='<path d="M9 42h28a8 8 0 0 0 0-16 10 10 0 0 0-18-3 9 9 0 0 0-10 19Z" fill="#d6e2eb" stroke="#93a8b8" stroke-width="1.5"/>';
+ const largeCloud='<path d="M9 39h41a9 9 0 0 0-2-18 14 14 0 0 0-26-3A11 11 0 0 0 9 39Z" fill="#d6e2eb" stroke="#93a8b8" stroke-width="1.5"/>';
+ const rain='<g stroke="#4e9fe6" stroke-width="3" stroke-linecap="round"><path d="M18 43l-3 6M32 43l-3 6M46 43l-3 6"/></g>';
+ const snow='<g fill="#79b9eb" font-size="15" font-weight="bold"><text x="17" y="51">*</text><text x="36" y="51">*</text></g>';
+ const fog='<g stroke="#90a7b9" stroke-width="2.5" stroke-linecap="round"><path d="M8 42h48M14 48h36"/></g>';
+ const lightning='<path d="M34 38l-8 11h9l-4 10 17-18h-11l4-3Z" fill="#ffc64b" stroke="#e5a526" stroke-width="1"/>';
+ const parts={
+  sun:sun,
+  mostlySun:sun+cloud,
+  partly:sun+largeCloud,
+  cloud:largeCloud,
+  rain:largeCloud+rain,
+  showers:sun+cloud+rain,
+  drizzle:largeCloud+'<g stroke="#4e9fe6" stroke-width="2" stroke-linecap="round"><path d="M18 44l-1 3M33 44l-1 3M47 44l-1 3"/></g>',
+  fog:largeCloud+fog,
+  snow:largeCloud+snow,
+  storm:largeCloud+lightning,
+  clearing:sun+cloud
+ };
+ return '<svg class="forecast-wx-icon" viewBox="0 0 64 64" width="44" height="44" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+(parts[kind]||parts.partly)+'</svg>';
+};
+const labelLower=condition[1].toLowerCase();
+const iconKind=/thunder|storm/.test(labelLower)?'storm':/snow|sleet/.test(labelLower)?'snow':/drizzle/.test(labelLower)?'drizzle':/fog|mist/.test(labelLower)?'fog':/am clouds.*pm sun|am low clouds.*sun/.test(labelLower)?'clearing':/shower|chance of rain/.test(labelLower)?'showers':/rain/.test(labelLower)?'rain':/overcast|cloudy|low clouds/.test(labelLower)?'cloud':/mostly cloudy/.test(labelLower)?'partly':/partly cloudy|increasing clouds/.test(labelLower)?'partly':/mostly sunny/.test(labelLower)?'mostlySun':/sunny|clear/.test(labelLower)?'sun':'partly';
+const conditionIcon=iconSvg(iconKind);
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
