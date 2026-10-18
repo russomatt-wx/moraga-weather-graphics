@@ -647,7 +647,7 @@ if(!res.ok)throw Error('Forecast pending');
 const data=await res.json(),today=dateKey(new Date());
 // Primary: official NWS gridpoint probability. NBM is a separate GRIB2 product,
 // so do not label NWS grid PoP as direct NBM guidance.
-let dailyRainChance={},rainChanceSource={},rainChanceComparison={};
+let dailyRainChance={},rainChanceSource={},rainChanceComparison={},dailyWind={},dailyFog={};
 const lat=Number(data.latitude)||37.8201932,lon=Number(data.longitude)||-122.1193876;
 const localDate=ms=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(ms));
 const validPop=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=100;
@@ -687,6 +687,39 @@ try{
 }catch(error){console.warn('NWS rain probability unavailable; Open-Meteo fallback',error)}
 const models=Object.entries(data.temperature_models||{});
 
+// Wind and persistent fog are separate from cloud cover and rain probability.
+// Open-Meteo provides sustained 10-m wind and gust maxima in mph; hourly
+// weather codes 45/48 identify fog. Never infer fog from cloud cover alone.
+try{
+ const wxUrl='https://api.open-meteo.com/v1/forecast?'+new URLSearchParams({
+  latitude:String(lat),longitude:String(lon),timezone:'America/Los_Angeles',
+  forecast_days:'10',wind_speed_unit:'mph',
+  daily:'wind_speed_10m_max,wind_gusts_10m_max',
+  hourly:'weather_code'
+ });
+ const wxResponse=await fetch(wxUrl,{cache:'no-store'});
+ if(wxResponse.ok){
+  const wx=await wxResponse.json();
+  (wx.daily?.time||[]).forEach((day,i)=>{
+   const sustained=wx.daily.wind_speed_10m_max?.[i],gust=wx.daily.wind_gusts_10m_max?.[i];
+   if(Number.isFinite(sustained)||Number.isFinite(gust))dailyWind[day]={
+    sustained:Number.isFinite(sustained)?sustained:null,
+    gust:Number.isFinite(gust)?gust:null
+   };
+  });
+  const fogCounts={};
+  (wx.hourly?.time||[]).forEach((t,i)=>{
+   const hour=Number(t.slice(11,13)),code=wx.hourly.weather_code?.[i];
+   if(hour<8||hour>18||!Number.isFinite(code))return;
+   const day=t.slice(0,10),counts=fogCounts[day]??={fog:0,total:0};
+   counts.total++;
+   if(code===45||code===48)counts.fog++;
+  });
+  for(const [day,counts] of Object.entries(fogCounts)){
+   dailyFog[day]=counts.total>=8&&counts.fog/counts.total>=.65;
+  }
+ }
+}catch(error){console.warn('Wind and fog forecast unavailable',error)}
 // Pull the same deterministic model families used by the temperature forecast.
 // Use hourly precipitation timing, duration, and daytime cloud cover from each.
 // Same-origin published model data: no browser-side cross-origin API dependency.
@@ -858,6 +891,16 @@ if(shownRainChance!==null){
     else if(sky[0]) condition=sky;
     else if(modelWetSignal) condition=['⛅','Partly cloudy'];
   }
+}
+// Persistent daytime fog uses the cloud icon. Wind gets its own icon when
+// daily maximum sustained wind reaches 20 mph or gusts reach 30 mph.
+// Significant rain takes precedence over wind; never suppress rain probabilities.
+const wind=dailyWind[date];
+const isWindy=wind&&(wind.sustained>=20||wind.gust>=30);
+const significantRain=shownRainChance!==null&&shownRainChance>=40;
+if(!significantRain&&!/thunder|storm|snow|sleet|heavy rain/i.test(condition[1])){
+ if(isWindy)condition=['💨','Windy'];
+ else if(dailyFog[date])condition=['☁️','Foggy'];
 }
 // A unified vector icon family. Only the display changes; forecast classification is unchanged.
 // Professionally illustrated Meteocons filled SVG assets (MIT, Bas Milius).
