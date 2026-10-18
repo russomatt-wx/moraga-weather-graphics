@@ -13,6 +13,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap, Normalize
 from matplotlib.cm import ScalarMappable
+import matplotlib.patheffects as pe
 from scipy.ndimage import gaussian_filter, minimum_filter, maximum_filter
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
@@ -137,11 +138,11 @@ for kind,iy,ix in chosen:
     lon,lat=float(lon2[iy,ix]),float(lat2[iy,ix])
     ax.text(lon,lat,kind,ha="center",va="center",fontsize=22,fontweight="black",
             color="#c02637" if kind=="L" else "#1954bc",
-            bbox=dict(facecolor="white",alpha=.83,edgecolor="none",pad=1.2),
+            path_effects=[pe.withStroke(linewidth=2.4,foreground="white")],
             transform=ccrs.PlateCarree(),zorder=10)
     ax.text(lon,lat-1.7,f"{pressure[iy,ix]:.0f}",ha="center",va="top",
             fontsize=10,fontweight="bold",color="#1b2b3a",
-            bbox=dict(facecolor="white",alpha=.85,edgecolor="none",pad=1),
+            path_effects=[pe.withStroke(linewidth=1.7,foreground="white")],
             transform=ccrs.PlateCarree(),zorder=10)
 ax.plot(-122.13,37.83,"o",ms=5,color="#222222",transform=ccrs.PlateCarree(),zorder=8)
 ax.text(-121.5,38.4,"MORAGA",color="#222222",fontsize=9,transform=ccrs.PlateCarree())
