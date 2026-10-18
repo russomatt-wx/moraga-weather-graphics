@@ -243,6 +243,49 @@ nav a:hover,nav a:focus-visible{border-color:#608ca8}
 .forecast-bars .axis-label{font-size:11px;fill:#a9c5d9}
 .forecast-visual .chart-meta{margin:8px 0 0}
 @media(max-width:760px){#rainfall .rain-summary{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}#rainfall .rain-summary>div{padding:9px 6px}#rainfall .rain-summary strong{font-size:15px}.forecast-bars{grid-template-columns:1fr}}
+</style><style>
+/* Observatory refinement: consistent restrained surfaces, readable mobile forecast */
+:root{--obs-bg:#0d1724;--obs-panel:#162537;--obs-line:#30445a;--obs-muted:#a9bdce;--obs-ink:#f0f6fb;--obs-accent-clean:#91d4e8}
+body{background:var(--obs-bg);color:var(--obs-ink);line-height:1.48}
+header{padding-top:27px;padding-bottom:25px;border-bottom-color:var(--obs-line)}
+header h1{font-size:clamp(29px,4vw,41px);letter-spacing:-.035em;margin:7px 0 8px}
+header .kicker{font-size:10px;letter-spacing:.13em;color:var(--obs-accent-clean)}
+header p{margin:4px 0;font-size:13px}
+main{padding-top:17px}
+nav{gap:6px;margin-bottom:24px;padding:0;background:transparent;position:static}
+nav a{padding:7px 11px;background:#192c3e;border:1px solid #294257;border-radius:8px;color:#d6e7f2;font-size:12px}
+nav a:hover,nav a:focus-visible{background:#294257}
+section{margin:25px 0 37px;scroll-margin-top:16px}
+.intro{margin-bottom:12px}
+.intro .kicker{font-size:10px;letter-spacing:.10em;color:#91bbd0}
+.intro h2{font-size:clamp(20px,3vw,24px);letter-spacing:-.025em;margin:3px 0}
+.intro p{font-size:13px;margin:3px 0}
+.grid,.focus-grid{gap:12px}
+.card,#rainfall .card,#accuracy .card,#chatgpt-accuracy .card{background:var(--obs-panel);border:1px solid var(--obs-line);border-radius:12px;padding:15px;box-shadow:none}
+.card h3{font-size:15px;letter-spacing:-.01em}
+.card p,.card .chart-meta{line-height:1.45}
+.card img,#rainfall .card img{border-radius:8px}
+.pill{border-color:#425a70;color:#c1d3df}
+.ten-day-grid{gap:8px}
+.day-forecast{background:#102132;border:1px solid #30485e;border-radius:10px;padding:13px 7px}
+.day-forecast .day-temps{font-size:25px;margin:9px 0 5px}
+.day-forecast .day-temps small{font-size:17px}
+.day-forecast .day-pop{font-size:11px;margin-top:5px}
+.day-forecast details{margin-top:9px}
+.method-note{margin-top:12px}
+@media(max-width:760px){
+header{padding:22px 17px 19px}
+main{padding:13px 12px 55px}
+nav{gap:5px;margin-bottom:16px}
+nav a{font-size:11px;padding:7px 9px}
+section{margin:20px 0 30px}
+.card,#rainfall .card,#accuracy .card,#chatgpt-accuracy .card{padding:12px}
+.ten-day-grid{gap:5px}
+.day-forecast{padding:10px 3px;border-radius:8px}
+.day-forecast .day-temps{font-size:21px;line-height:1.15;margin:8px 0 5px}
+.day-forecast .day-temps small{font-size:16px}
+.day-forecast .day-pop{font-size:10px;white-space:normal;line-height:1.15}
+}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
