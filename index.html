@@ -286,11 +286,45 @@ section{margin:20px 0 30px}
 .day-forecast .day-temps small{font-size:16px}
 .day-forecast .day-pop{font-size:10px;white-space:normal;line-height:1.15}
 }
+</style><style>
+/* Observatory refinement II — unified charts, progressive disclosure and mobile legibility */
+:root{--wx-space:12px;--wx-rule:#31485e;--wx-soft:#aabfd0}
+section .intro{max-width:750px}
+section .intro p{max-width:680px;color:var(--wx-soft)}
+.card>h3{margin-bottom:8px}
+.card>p{font-size:13px}
+.card img{background:#fff;border:1px solid #d5e0e9;max-width:100%;object-fit:contain}
+.card a:focus-visible,nav a:focus-visible,summary:focus-visible{outline:2px solid #8ed8f3;outline-offset:3px}
+.card details{border-top:1px solid var(--wx-rule);padding-top:9px}
+.card details summary{font-size:12px;font-weight:650;color:#b9d8e8}
+.chart-meta{font-size:11px!important;color:#b5c7d5!important;line-height:1.35}
+#rainfall .rain-summary{gap:8px}
+#rainfall .rain-summary>div{border-radius:8px;padding:10px}
+#rainfall .rain-summary strong{font-size:17px}
+.day-forecast .day-condition{min-height:56px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px}
+.day-forecast .day-condition span{font-size:24px;line-height:1.2}
+.day-forecast .day-condition small{font-size:11px;line-height:1.2}
+.day-forecast .day-temps{font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.day-forecast .day-date{letter-spacing:.01em}
+@media(max-width:760px){
+section .intro h2{font-size:21px}
+section .intro p{font-size:12px}
+.card>h3{font-size:14px}
+.card img{margin-top:9px}
+#ten-day{padding:10px 6px}
+.day-forecast .day-condition{min-height:52px}
+.day-forecast .day-condition span{font-size:21px}
+.day-forecast .day-condition small{font-size:10px;line-height:1.15;overflow-wrap:anywhere}
+.day-forecast .day-date{font-size:10px}
+.day-forecast details summary{font-size:10px}
+#rainfall .rain-summary strong{font-size:14px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
 <h1>Moraga Weather Observatory</h1>
-<p>Local conditions · Pacific storms · Forecast skill</p><p class="station-id">KCAMORAG71 · Moraga, CA</p></header>
+<p class="station-id">KCAMORAG71 · Moraga, California</p><p>Local observations · Forecast guidance · Pacific patterns</p></header>
 <main><nav aria-label="Weather dashboard sections"><a href="#observations">Now</a><a href="#forecast">Forecast</a><a href="#marine">Marine</a><a href="#satellite">Satellite</a><a href="#rainfall">Rain</a><a href="#extended-outlook">Days 11–16</a><a href="#cpc-outlook">CPC</a><a href="#accuracy">Model skill</a><a href="#chatgpt-accuracy">Briefing skill</a><a href="#climate">Climate</a><a href="#westcoast">Pacific maps</a></nav>
  <section id="observations"><div class="intro"><div class="kicker">01 / What happened</div><h2>Moraga station observations</h2><p>Observed temperature and dew point.</p></div><div class="focus-grid"><article class="card"><h3>Station observations</h3><a href="moraga_station_observations.png?v=20261017-050232-time-axis"><img loading="lazy" src="moraga_station_observations.png?v=20261017-050232-time-axis" alt="KCAMORAG71 observed temperature and dew point" onerror="this.closest('article').style.display='none'"></a></article></div></section>
  <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Daily temperatures and model guidance.</p></div><div class="focus-grid"><article class="card" id="ten-day"><h3>Rolling 10-day forecast</h3><p>Moraga daily outlook</p><p id="ten-day-updated" class="day-date"></p><div id="ten-day-results" aria-live="polite"><p>Loading daily forecast…</p></div><details class="method-note"><summary>How this forecast is made</summary><p>Temperatures blend models using recent verified skill and local bias adjustments. Rain icons require at least 20% ensemble-derived rain probability; model rainfall amounts appear only in the rainfall comparison section. Forecast weighting is provisional while the verification archive grows. Tap “Model range” for daily details.</p></details></article><article class="card"><h3>Temperature guidance</h3><p id="chart-render-status" class="chart-meta" style="font-size:12px;font-weight:700;color:#7dd3fc">Loading live chart renderer v2…</p><p class="temperature-chart-note" id="temperature-chart-note">Individual models · available forecast horizon</p><a href="moraga_model_temperatures.png?v=20261017-045442-typography"><div class="chart-viewport" role="region" aria-label="Weather chart"><img loading="lazy" id="temperature-guidance-image" src="moraga_model_temperatures.png?v=20261017-045442-typography" alt="Individual temperature model comparison" onerror="this.closest('article').style.display='none'"></div></a></article>
