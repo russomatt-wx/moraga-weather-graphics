@@ -398,6 +398,10 @@ main>nav[aria-label="Weather dashboard sections"] a{
 #ten-day .day-temps{color:#ff9659!important;font-weight:800}
 #ten-day .day-temps small{color:#69b9ff!important}
 @media(max-width:760px){#ten-day .day-condition{min-height:94px}#ten-day .day-condition>span{height:60px}#ten-day .forecast-wx-icon{height:60px;width:min(65px,100%)}#ten-day .day-condition small{font-size:10px}}
+</style><style>
+/* Dedicated atmospheric image assets replace inline cartoon SVGs. */
+#ten-day .forecast-wx-icon{display:block;object-fit:contain;width:min(100%,116px);height:88px;margin:auto;filter:drop-shadow(0 5px 10px rgba(0,0,0,.22))}
+@media(max-width:760px){#ten-day .forecast-wx-icon{width:min(100%,76px);height:64px}}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
@@ -819,22 +823,7 @@ if(Number.isFinite(dailyRainChance[date])&&dailyRainChance[date]<20&&/rain|showe
 // A unified vector icon family. Only the display changes; forecast classification is unchanged.
 // Professionally illustrated Meteocons filled SVG assets (MIT, Bas Milius).
 // Pinned CDN version avoids unpredictable design changes.
-const iconSvg=(kind)=>{
- // Detailed shaded weather illustrations, transparent and legible against dark cards.
- const sun='<g filter="url(#wxGlow)"><circle cx="28" cy="27" r="17" fill="#ffc34c" opacity=".24"/><circle cx="28" cy="27" r="13.8" fill="url(#wxSun)" stroke="#ffe8a4" stroke-width=".7"/><ellipse cx="23.5" cy="21.5" rx="5.5" ry="2.8" transform="rotate(-34 23.5 21.5)" fill="#fff" opacity=".62"/></g>';
- const rays='<g stroke="#ffcc60" stroke-width="2.2" stroke-linecap="round" opacity=".8"><path d="M28 2v6M28 46v7M3 27h7M46 27h7M10 9l5 5M42 42l5 5M46 9l-5 5M13 42l-5 5"/></g>';
- const cloud='<g filter="url(#wxShadow)"><path d="M10 51C3 50 1 43 5 37c3-5 8-7 14-6 2-11 11-18 22-16 9 1 15 7 17 15 9-1 16 5 16 12 0 6-5 10-13 10H10Z" fill="url(#wxCloud)" stroke="#eef5ff" stroke-width=".45"/><path d="M9 39c4-5 11-6 16-2 3-11 14-16 23-10 3 2 5 4 6 7" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" opacity=".57"/><path d="M8 46c11-3 18 0 27-1 15-1 23 3 32-1" fill="none" stroke="#7e92ab" stroke-width="3" opacity=".25"/></g>';
- const small='<g transform="translate(20 25) scale(.54)">'+cloud+'</g>';
- const medium='<g transform="translate(13 17) scale(.72)">'+cloud+'</g>';
- const thick='<g transform="translate(3 7) scale(.91)">'+cloud+'</g>';
- const rain='<g stroke="url(#wxRain)" stroke-width="2.5" stroke-linecap="round"><path d="M20 55l-4 10M34 55l-4 10M48 55l-4 10M61 55l-4 10"/></g>';
- const drizzle='<g stroke="#80d7ff" stroke-width="1.8" stroke-linecap="round"><path d="M24 56l-2 5M39 56l-2 5M54 56l-2 5"/></g>';
- const snow='<g stroke="#e7f6ff" stroke-width="1.6"><path d="M25 56v11m-5-5.5h10m-8-4 6 8m0-8-6 8M52 56v11m-5-5.5h10m-8-4 6 8m0-8-6 8"/></g>';
- const storm='<path d="M39 47l-10 15h10l-5 12 20-25H42l5-8" fill="#ffda73" stroke="#fff1b8" stroke-width=".9"/>';
- const fog='<g stroke="#c2d8e8" stroke-width="2.7" stroke-linecap="round" opacity=".85"><path d="M10 55h55M17 62h43M24 69h29"/></g>';
- const layers={sun:rays+sun,mostlySun:rays+sun+small,partly:rays+sun+medium,clearing:rays+sun+medium,cloud:rays+sun+thick,rain:cloud+rain,showers:rays+sun+medium+rain,drizzle:cloud+drizzle,fog:cloud+fog,snow:cloud+snow,storm:cloud+storm};
- return '<svg class="forecast-wx-icon" viewBox="0 0 76 76" width="76" height="76" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+kind+' weather"><defs><radialGradient id="wxSun" cx="35%" cy="30%" r="75%"><stop stop-color="#fffef0"/><stop offset=".42" stop-color="#ffe891"/><stop offset="1" stop-color="#f6a320"/></radialGradient><linearGradient id="wxCloud" x1="18%" y1="2%" x2="65%" y2="100%"><stop stop-color="#fff"/><stop offset=".36" stop-color="#eef4fc"/><stop offset=".7" stop-color="#b9cadd"/><stop offset="1" stop-color="#677b94"/></linearGradient><linearGradient id="wxRain" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c5eeff"/><stop offset="1" stop-color="#359ee8"/></linearGradient><filter id="wxGlow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur in="SourceGraphic" stdDeviation=".35"/></filter><filter id="wxShadow" x="-35%" y="-35%" width="170%" height="180%"><feDropShadow dx="0" dy="3" stdDeviation="2.4" flood-color="#000" flood-opacity=".45"/></filter></defs>'+(layers[kind]||layers.partly)+'</svg>';
-};
+const iconSvg=(kind)=>'<img class="forecast-wx-icon" src="weather-assets/'+encodeURIComponent(kind)+'.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" onerror="this.onerror=null;this.style.display=\'none\'">';
 const labelLower=condition[1].toLowerCase();
 const iconKind=/thunder|storm/.test(labelLower)?'storm':/snow|sleet/.test(labelLower)?'snow':/drizzle/.test(labelLower)?'drizzle':/fog|mist/.test(labelLower)?'fog':/am clouds.*pm sun|am low clouds.*sun/.test(labelLower)?'clearing':/shower|chance of rain/.test(labelLower)?'showers':/rain/.test(labelLower)?'rain':/partly cloudy|increasing clouds/.test(labelLower)?'partly':/mostly cloudy|overcast|low clouds/.test(labelLower)?'cloud':/mostly sunny/.test(labelLower)?'mostlySun':/sunny|clear/.test(labelLower)?'sun':'partly';
 const conditionIcon=iconSvg(iconKind);
