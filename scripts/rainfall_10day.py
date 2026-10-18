@@ -34,7 +34,6 @@ SOURCES = [
     ("GFS", "https://api.open-meteo.com/v1/forecast", "ncep_gfs_seamless"),
     ("ICON", "https://api.open-meteo.com/v1/forecast", "icon_seamless"),
     ("GEM", "https://api.open-meteo.com/v1/forecast", "gem_seamless"),
-    ("NAM", "https://api.open-meteo.com/v1/forecast", "ncep_nam_conus"),
     ("EPS mean", "https://ensemble-api.open-meteo.com/v1/ensemble", "ecmwf_ifs025_ensemble_mean"),
     ("GEFS mean", "https://ensemble-api.open-meteo.com/v1/ensemble", "ncep_gefs_ensemble_mean_seamless"),
 ]
@@ -112,7 +111,7 @@ plt.rcParams.update({"font.family":"DejaVu Sans","font.size":14,"font.weight":"s
 fig, ax = plt.subplots(figsize=(11, 9.2), dpi=160, facecolor="#ffffff")
 ax.set_facecolor("#f8fafc")
 colors = {"ECMWF":"#087e9a","GFS":"#d56b16","ICON":"#168458",
-          "GEM":"#c33268","NAM":"#65778a","EPS mean":"#245bb3",
+          "GEM":"#c33268","EPS mean":"#245bb3",
           "GEFS mean":"#7a46b0"}
 for name, vals in results.items():
     available=[v for v in vals if isinstance(v,(float,int))]
