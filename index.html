@@ -928,7 +928,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
    const medianLow=Number.isFinite(day.temperature_low_f_median)?Math.round(day.temperature_low_f_median)+'°':'—';
    const range=low!==null&&high!==null?low+'–'+high+'°':'—';
    const pct=Number.isFinite(day.rain_member_fraction)?Math.round(day.rain_member_fraction*100)+'%':'—';
-   return '<tr><th scope="row">'+esc(date)+'</th><td class="extended-median">'+median+'</td><td>'+range+'</td><td class="extended-rain">'+pct+'</td></tr>';
+   return '<tr><th scope="row">'+esc(date)+'</th><td class="extended-median">'+median+'</td><td class="extended-low">'+medianLow+'</td><td>'+range+'</td><td class="extended-rain">'+pct+'</td></tr>';
   }).join('');
   root.innerHTML='<div class="extended-compact"><table><thead><tr><th>Day</th><th>High</th><th>Low</th><th>High spread</th><th>Rain*</th></tr></thead><tbody>'+rows+'</tbody></table></div><details class="extended-method"><summary>How to read this outlook <span aria-hidden="true">⌄</span></summary><p><strong>High / Low:</strong> Median of individual GEFS members’ daily highs and lows. <strong>High spread:</strong> 10th–90th percentile of daily highs, not a low/high temperature pair. <strong>Rain:</strong> Share of ensemble members forecasting at least 0.01 inch; not calibrated rain probability. These are long-range model estimates without station bias correction.</p></details><p class="extended-source">*GEFS rain-member agreement · '+esc(d.days[0]?.members||'')+' members · Updated '+new Date(generated).toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT</p>';
 
