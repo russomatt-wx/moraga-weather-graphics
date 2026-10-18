@@ -70,8 +70,6 @@ ax.add_feature(cfeature.LAND,facecolor="#fafafa",zorder=0)
 ax.add_feature(cfeature.COASTLINE,edgecolor="#777777",linewidth=.65)
 ax.add_feature(cfeature.BORDERS,edgecolor="#aaaaaa",linewidth=.45)
 ax.add_feature(cfeature.STATES,edgecolor="#55758a",linewidth=.35)
-p=ax.contour(lon2,lat2,pressure,levels=np.arange(960,1050,4),colors="#242424",linewidths=.8,alpha=.86,transform=ccrs.PlateCarree())
-ax.clabel(p,fmt="%d",fontsize=12,inline=True,inline_spacing=7)
 # Cool thickness values are purple/blue; warm values green/yellow/orange/red.
 levels=np.arange(480,611,6)
 cmap=LinearSegmentedColormap.from_list("thickness_rainbow",[
@@ -80,9 +78,18 @@ cmap=LinearSegmentedColormap.from_list("thickness_rainbow",[
     (0.73,"#ffdd00"),(0.82,"#ff9400"),(0.92,"#f33218"),(1.0,"#c90020")
 ])
 norm=Normalize(vmin=504,vmax=594)
+# Continuous thickness shading; extend at either end rather than leaving white holes.
+# Use the same color scale as the legend and dashed thickness isolines.
+shade_levels=np.linspace(504,594,181)
+ax.contourf(lon2,lat2,thickness,levels=shade_levels,cmap=cmap,norm=norm,
+            extend="both",alpha=.66,transform=ccrs.PlateCarree(),zorder=0.5)
+# Pressure contours remain above the filled thickness field.
+p=ax.contour(lon2,lat2,pressure,levels=np.arange(960,1050,4),colors="#242424",
+             linewidths=.9,alpha=.9,transform=ccrs.PlateCarree(),zorder=3)
+ax.clabel(p,fmt="%d",fontsize=12,inline=True,inline_spacing=7)
 colors=[cmap(norm(float(v))) for v in levels]
 t=ax.contour(lon2,lat2,thickness,levels=levels,colors=colors,
-             linewidths=1.2,linestyles="dashed",transform=ccrs.PlateCarree())
+             linewidths=1.15,linestyles="dashed",transform=ccrs.PlateCarree(),zorder=4)
 ax.clabel(t,fmt="%d",fontsize=12,inline=True,inline_spacing=7)
 # Keep 540 dam prominent, but avoid overwhelming nearby contours.
 line540=ax.contour(lon2,lat2,thickness,levels=[540],colors="#0069c9",
@@ -95,7 +102,7 @@ ax.plot(-122.13,37.83,"o",ms=5,color="#222222",transform=ccrs.PlateCarree(),zord
 ax.text(-121.5,38.4,"MORAGA",color="#222222",fontsize=9,transform=ccrs.PlateCarree())
 fig.text(.06,.96,"PACIFIC SYNOPTIC • SURFACE + 1000–500 mb THICKNESS",
          color="#111111",fontsize=18,weight="bold")
-fig.text(.06,.924,"GFS sea-level pressure (black, hPa)  •  1000–500 mb thickness (colored dashed, dam)  •  540 dam (blue solid)",
+fig.text(.06,.924,"GFS sea-level pressure (black, hPa)  •  1000–500 mb thickness (shaded + dashed, dam)  •  540 dam (blue solid)",
          color="#333333",fontsize=10)
 fig.text(.06,.025,f"GFS valid {valid:%d %b %Y %HZ}  |  Source: Open-Meteo / GFS",
          color="#333333",fontsize=9)
