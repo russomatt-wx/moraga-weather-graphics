@@ -34,28 +34,30 @@ if len(dates) < 16:
 out = []
 for date in dates[10:16]:
     indices = [i for i, t in enumerate(times) if t.startswith(date)]
-    highs, wet = [], []
+    highs, lows, wet = [], [], []
     for member in members:
         t = [temp_members[member][i] for i in indices]
         p = [rain_members[member][i] for i in indices]
         if not t or any(x is None for x in t) or any(x is None for x in p):
             continue
         highs.append(max(t))
+        lows.append(min(t))
         wet.append(sum(max(0, x) for x in p) >= 0.01)
     if len(highs) < 10:
         raise RuntimeError(f"Insufficient complete members on {date}")
-    sorted_highs = sorted(highs)
-    def percentile(frac):
-        pos = frac * (len(sorted_highs) - 1)
+    def percentile(values, frac):
+        ordered = sorted(values)
+        pos = frac * (len(ordered) - 1)
         lo = math.floor(pos)
         hi = math.ceil(pos)
-        return sorted_highs[lo] * (hi - pos) + sorted_highs[hi] * (pos - lo) if lo != hi else sorted_highs[lo]
+        return ordered[lo] * (hi - pos) + ordered[hi] * (pos - lo) if lo != hi else ordered[lo]
     out.append({
         "date": date,
-        "temperature_f_p10": round(percentile(0.1), 1),
-        "temperature_f_median": round(percentile(0.5), 1),
+        "temperature_f_p10": round(percentile(highs, 0.1), 1),
+        "temperature_f_median": round(percentile(highs, 0.5), 1),
         "temperature_f_mean": round(mean(highs), 1),
-        "temperature_f_p90": round(percentile(0.9), 1),
+        "temperature_low_f_median": round(percentile(lows, 0.5), 1),
+        "temperature_f_p90": round(percentile(highs, 0.9), 1),
         "rain_member_fraction": round(mean(wet), 3),
         "members": len(highs),
     })
@@ -64,7 +66,7 @@ result = {
     "source": "Open-Meteo GEFS ensemble, station coordinates",
     "latitude": LAT, "longitude": LON,
     "days": out,
-    "caveat": "Uncalibrated ensemble member fractions and high-temperature spread, not deterministic forecasts",
+    "caveat": "Uncalibrated ensemble member fractions and high-temperature spread, and daily low medians; not deterministic forecasts",
 }
 Path("moraga_extended_outlook.json").write_text(json.dumps(result, indent=2) + "\n")
 print("Published", len(out), "days with", len(members), "ensemble members")
