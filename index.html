@@ -846,10 +846,11 @@ if(Number.isFinite(dailyRainChance[date])&&dailyRainChance[date]<20&&/rain|showe
 const rawRainChance=dailyRainChance[date];
 const shownRainChance=Number.isFinite(rawRainChance)?Math.min(100,Math.round(rawRainChance/10)*10):null;
 if(shownRainChance!==null&&shownRainChance>=20){
-  // Apply the same rounded value to the label and icon as the one displayed.
-  // Keep heavier precipitation descriptions where the forecast already provides them.
+  // Display probability drives icon and wording consistently.
+  // A full rain icon is reserved for 70%+; below that, use showers.
   if(!/heavy rain|thunder|storm|snow|sleet/i.test(condition[1])){
-    condition=['🌦️',shownRainChance<30?'Slight chance of rain':'Chance of rain'];
+    if(shownRainChance>=70) condition=['🌧️','Rain likely'];
+    else condition=['🌦️',shownRainChance<30?'Slight chance of rain':'Chance of rain'];
   }
 }
 // A unified vector icon family. Only the display changes; forecast classification is unchanged.
