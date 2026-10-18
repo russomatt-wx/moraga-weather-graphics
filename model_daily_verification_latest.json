@@ -1,8 +1,44 @@
 {
-  "generated_utc": null,
+  "generated_utc": "2026-10-18T22:02:08.942267+00:00",
   "status": "collecting_prospective_forecasts",
   "station": "KCAMORAG71",
-  "model_scores": {},
-  "method": "Daily highs and lows are verified only after prospective model forecasts and complete KCAMORAG71 station days are available.",
-  "note": "No daily model accuracy values are inferred from hourly records."
-}
+  "model_scores": {
+    "gfs": {
+      "verified_days": 0,
+      "high_mae_f": null,
+      "low_mae_f": null,
+      "high_bias_f": null,
+      "low_bias_f": null
+    },
+    "ecmwf": {
+      "verified_days": 0,
+      "high_mae_f": null,
+      "low_mae_f": null,
+      "high_bias_f": null,
+      "low_bias_f": null
+    },
+    "nam": {
+      "verified_days": 0,
+      "high_mae_f": null,
+      "low_mae_f": null,
+      "high_bias_f": null,
+      "low_bias_f": null
+    },
+    "icon": {
+      "verified_days": 0,
+      "high_mae_f": null,
+      "low_mae_f": null,
+      "high_bias_f": null,
+      "low_bias_f": null
+    },
+    "gem": {
+      "verified_days": 0,
+      "high_mae_f": null,
+      "low_mae_f": null,
+      "high_bias_f": null,
+      "low_bias_f": null
+    }
+  },
+  "method": "Earliest archived complete hourly model snapshot per target local date, retrieved before target day; observed KCAMORAG71 daily extrema require >=90% 15-minute coverage and no gap >60 minutes",
+  "note": "Provider retrieval time is not verified model initialization time; missing daily records are not scored."
+}\n
