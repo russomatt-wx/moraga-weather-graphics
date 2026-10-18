@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-18T16:51:02.715248+00:00",
+  "generated_utc": "2026-10-18T17:57:10.057157+00:00",
   "status": "scored",
   "summary": {
     "6 AM": {
@@ -28,5 +28,5 @@
       "low_mae_f": null
     }
   },
-  "caveat": "Only explicitly issued conversational forecasts; station extrema are sampled and require 24+ observations, 22h coverage, no gaps over 90 minutes, and morning/afternoon coverage. Automated model guidance excluded."
+  "caveat": "Only explicit live-issued forecasts scored; recovered historical tests and automated model guidance excluded."
 }
