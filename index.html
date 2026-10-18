@@ -748,6 +748,29 @@ function skyCondition(hours){
  if(avg<=85)return ['🌥️','Mostly cloudy'];
  return ['☁️','Overcast'];
 }
+// Detect morning-to-afternoon sky transitions from each model independently.
+// Requiring two models and a majority vote avoids a single noisy cloud run
+// turning an entire day into a clearing/increasing-clouds forecast.
+function skyTransition(date){
+ const votes=[];
+ for(const days of Object.values(hourlyModels)){
+  const hours=days[date]||[];
+  const am=hours.filter(h=>h.hour>=8&&h.hour<=11&&Number.isFinite(h.cloud));
+  const pm=hours.filter(h=>h.hour>=13&&h.hour<=18&&Number.isFinite(h.cloud));
+  if(am.length<3||pm.length<4)continue;
+  const avg=xs=>xs.reduce((sum,h)=>sum+h.cloud,0)/xs.length;
+  const morning=avg(am),afternoon=avg(pm);
+  if(morning>=65&&afternoon<=40&&morning-afternoon>=35)votes.push('clearing');
+  else if(morning<=40&&afternoon>=65&&afternoon-morning>=35)votes.push('increasing');
+  else votes.push('steady');
+ }
+ if(votes.length<2)return null;
+ const clearing=votes.filter(v=>v==='clearing').length;
+ const increasing=votes.filter(v=>v==='increasing').length;
+ if(clearing>=2&&clearing>votes.length/2)return ['🌤️','Clearing skies'];
+ if(increasing>=2&&increasing>votes.length/2)return ['🌥️','Increasing clouds'];
+ return null;
+}
 function modelCondition(date,rainMean,dailyRain){
  // Open-Meteo hourly precipitation uses the request's precipitation_unit=inch.
  // 0.004 inch/hour is approximately 0.1 mm/hour.
@@ -888,7 +911,7 @@ if(shownRainChance!==null){
     else if(shownRainChance>=60) condition=['🌧️','Rain likely'];
     else if(shownRainChance>=40) condition=['🌦️','Chance of rain'];
     else if(shownRainChance>=20) condition=['🌦️','Slight chance of rain'];
-    else if(sky[0]) condition=sky;
+    else if(sky[0]) condition=skyTransition(date)||sky;
     else if(modelWetSignal) condition=['⛅','Partly cloudy'];
   }
 }
