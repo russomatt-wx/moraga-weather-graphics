@@ -840,6 +840,12 @@ if(Number.isFinite(dailyRainChance[date])&&dailyRainChance[date]<20&&/rain|showe
  const drySky=skyCondition(skyHours);
  condition=drySky[0]?drySky:['⛅','Partly cloudy'];
 }
+// Keep the icon and label consistent with displayed daily PoP.
+// The 20% threshold applies to presentation only; raw forecast values are unchanged.
+// More specific rain labels from hourly/model evidence remain intact.
+if(Number.isFinite(dailyRainChance[date])&&dailyRainChance[date]>=20&&!/rain|shower|drizzle|storm|thunder|snow|sleet/i.test(condition[1])){
+ condition=['🌦️','Chance of rain'];
+}
 // A unified vector icon family. Only the display changes; forecast classification is unchanged.
 // Professionally illustrated Meteocons filled SVG assets (MIT, Bas Milius).
 // Pinned CDN version avoids unpredictable design changes.
