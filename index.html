@@ -844,7 +844,7 @@ if(Number.isFinite(dailyRainChance[date])&&dailyRainChance[date]<20&&/rain|showe
 // The 20% threshold applies to presentation only; raw forecast values are unchanged.
 // More specific rain labels from hourly/model evidence remain intact.
 if(Number.isFinite(dailyRainChance[date])&&dailyRainChance[date]>=20&&!/rain|shower|drizzle|storm|thunder|snow|sleet/i.test(condition[1])){
- condition=['🌦️','Chance of rain'];
+ condition=['🌦️',dailyRainChance[date]<30?'Slight chance of rain':'Chance of rain'];
 }
 // A unified vector icon family. Only the display changes; forecast classification is unchanged.
 // Professionally illustrated Meteocons filled SVG assets (MIT, Bas Milius).
