@@ -779,14 +779,20 @@ if(Number.isFinite(dailyRainChance[date])&&dailyRainChance[date]<20&&/rain|showe
 // Professionally illustrated Meteocons filled SVG assets (MIT, Bas Milius).
 // Pinned CDN version avoids unpredictable design changes.
 const iconSvg=(kind)=>{
- const files={sun:'clear-day',mostlySun:'partly-cloudy-day',partly:'partly-cloudy-day',
- cloud:'overcast',rain:'rain',showers:'partly-cloudy-day-rain',drizzle:'drizzle',
- fog:'fog',snow:'snow',storm:'thunderstorms',clearing:'partly-cloudy-day'};
- const file=files[kind]||'partly-cloudy-day';
- return '<img class="forecast-wx-icon" src="https://cdn.jsdelivr.net/npm/@bybas/weather-icons@2.0.0/production/fill/all/'+file+'.svg" width="52" height="52" loading="lazy" alt="" decoding="async">';
+ // Transparent vector artwork rendered locally: no CDN tiles, image backgrounds or external requests.
+ const sun='<g><circle cx="31" cy="29" r="12" fill="url(#sunCore)"/><circle cx="31" cy="29" r="16" fill="#ffd37a" opacity=".15"/><g stroke="#ffd27c" stroke-width="3" stroke-linecap="round" opacity=".9"><path d="M31 6v6M31 46v6M8 29h6M48 29h6M15 13l4 4M43 41l4 4M47 13l-4 4M19 41l-4 4"/></g></g>';
+ const cloud='<g filter="url(#cloudShadow)"><path d="M17 47C9 47 6 42 7 36c1-6 6-10 12-10 1-9 9-16 19-15 9 0 15 6 17 14 8 0 13 5 13 12 0 6-5 10-12 10Z" fill="url(#cloudBody)" stroke="#d9e5f2" stroke-width=".65"/><path d="M16 37c3-5 8-7 14-5 2-10 11-15 19-10" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity=".45"/></g>';
+ const smallCloud='<g transform="translate(11 14) scale(.8)">'+cloud+'</g>';
+ const rain='<g stroke="#65c6f8" stroke-width="3.4" stroke-linecap="round"><path d="M23 51l-4 9M38 51l-4 9M53 51l-4 9"/></g>';
+ const drizzle='<g stroke="#7ecded" stroke-width="2.4" stroke-linecap="round"><path d="M26 52l-2 5M42 52l-2 5"/></g>';
+ const snow='<g fill="#e2f4ff" font-size="17" font-weight="bold"><text x="17" y="63">✳</text><text x="43" y="61">✳</text></g>';
+ const storm='<path d="M38 46l-9 13h9l-5 12 18-21H40l6-9" fill="#f8cf72" stroke="#ffe4a0" stroke-width="1"/>';
+ const fog='<g stroke="#b8d1df" stroke-width="3.5" stroke-linecap="round" opacity=".9"><path d="M9 43h54M15 52h46M23 61h31"/></g>';
+ let layers={sun:sun,mostlySun:sun+smallCloud,partly:sun+smallCloud,clearing:sun+smallCloud,cloud:cloud,rain:cloud+rain,showers:sun+smallCloud+rain,drizzle:cloud+drizzle,fog:cloud+fog,snow:cloud+snow,storm:cloud+storm};
+ return '<svg class="forecast-wx-icon" viewBox="0 0 76 76" width="52" height="52" xmlns="http://www.w3.org/2000/svg" role="presentation" aria-hidden="true"><defs><radialGradient id="sunCore"><stop stop-color="#fff6b7"/><stop offset=".6" stop-color="#ffd66e"/><stop offset="1" stop-color="#f2a64c"/></radialGradient><linearGradient id="cloudBody" x1="0" y1="0" x2=".15" y2="1"><stop stop-color="#ffffff"/><stop offset=".52" stop-color="#e0eaf4"/><stop offset="1" stop-color="#91a9c1"/></linearGradient><filter id="cloudShadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="3" stdDeviation="2.5" flood-color="#000" flood-opacity=".22"/></filter></defs>'+(layers[kind]||layers.partly)+'</svg>';
 };
 const labelLower=condition[1].toLowerCase();
-const iconKind=/thunder|storm/.test(labelLower)?'storm':/snow|sleet/.test(labelLower)?'snow':/drizzle/.test(labelLower)?'drizzle':/fog|mist/.test(labelLower)?'fog':/am clouds.*pm sun|am low clouds.*sun/.test(labelLower)?'clearing':/shower|chance of rain/.test(labelLower)?'showers':/rain/.test(labelLower)?'rain':/mostly cloudy|overcast|low clouds/.test(labelLower)?'cloud':/partly cloudy|increasing clouds/.test(labelLower)?'partly':/mostly sunny/.test(labelLower)?'mostlySun':/sunny|clear/.test(labelLower)?'sun':'partly';
+const iconKind=/thunder|storm/.test(labelLower)?'storm':/snow|sleet/.test(labelLower)?'snow':/drizzle/.test(labelLower)?'drizzle':/fog|mist/.test(labelLower)?'fog':/am clouds.*pm sun|am low clouds.*sun/.test(labelLower)?'clearing':/shower|chance of rain/.test(labelLower)?'showers':/rain/.test(labelLower)?'rain':/partly cloudy|increasing clouds/.test(labelLower)?'partly':/mostly cloudy|overcast|low clouds/.test(labelLower)?'cloud':/mostly sunny/.test(labelLower)?'mostlySun':/sunny|clear/.test(labelLower)?'sun':'partly';
 const conditionIcon=iconSvg(iconKind);
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
