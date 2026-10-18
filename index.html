@@ -357,7 +357,36 @@ main>nav[aria-label="Weather dashboard sections"] a{
 .day-condition>span{background:transparent!important;border:0!important;box-shadow:none!important;display:flex!important;align-items:center;justify-content:center}
 @media(max-width:760px){.day-condition .forecast-wx-icon{width:48px!important;height:48px!important}}
 </style>
-</head>
+<style>
+/* Compact five-column mobile forecast: information remains available on demand. */
+#ten-day .day-forecast{padding:12px 6px 9px;display:flex;flex-direction:column;align-items:center;min-height:0;gap:0}
+#ten-day .day-forecast>strong{font-size:15px;line-height:1.2}
+#ten-day .day-forecast .day-date{font-size:11px;margin-top:3px}
+#ten-day .day-condition{margin-top:8px;min-height:0;gap:4px;width:100%;justify-content:flex-start}
+#ten-day .day-condition>span{height:52px;display:flex;align-items:center;justify-content:center}
+#ten-day .day-condition small{font-size:11px;line-height:1.2;min-height:29px;display:flex;align-items:center;justify-content:center;max-width:100%;text-wrap:balance}
+#ten-day .day-temps{margin:5px 0 0;line-height:1.05}
+#ten-day .day-temps span,#ten-day .day-temps small{display:block}
+#ten-day .day-temps small{margin-top:4px}
+#ten-day .day-pop{margin-top:9px;line-height:1.2}
+#ten-day .forecast-detail{margin-top:8px;width:100%;font-size:10px}
+#ten-day .forecast-detail summary{min-height:0!important;display:block!important;color:#8fb4cb;font-size:10px;line-height:1.3;cursor:pointer;list-style:none}
+#ten-day .forecast-detail summary::-webkit-details-marker{display:none}
+#ten-day .forecast-detail summary:before{content:'+';font-weight:700;margin-right:3px}
+#ten-day .forecast-detail[open] summary:before{content:'−'}
+@media(max-width:760px){
+ #ten-day .ten-day-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+ #ten-day .day-forecast{padding:10px 2px 8px}
+ #ten-day .day-forecast>strong{font-size:13px}
+ #ten-day .day-condition>span{height:43px}
+ #ten-day .forecast-wx-icon{width:43px!important;height:43px!important}
+ #ten-day .day-condition small{font-size:10px;min-height:35px}
+ #ten-day .day-temps{font-size:24px}
+ #ten-day .day-temps small{font-size:19px}
+ #ten-day .day-pop{font-size:10px;white-space:normal}
+ #ten-day .forecast-detail summary{font-size:9px}
+}
+</style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
 <h1>Moraga Weather Observatory</h1>
@@ -797,7 +826,7 @@ const conditionIcon=iconSvg(iconKind);
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
-return '<article class="day-forecast"><strong>'+(date===today?'Today':day)+'</strong><div class="day-date">'+label+'</div><div class="day-condition" title="Daily weather condition from Open-Meteo"><span aria-hidden="true">'+conditionIcon+'</span><small>'+condition[1]+'</small></div><div class="day-temps"><span>'+skillBlend(correctedHighs,wh)+'</span> <small>'+skillBlend(correctedLows,wl)+'</small></div><div class="day-pop" title="Daily maximum precipitation probability from NWS when available, otherwise Open-Meteo; separate from multi-model rain amount">'+(dailyRainChance[date]===undefined?'Rain chance —':'Rain '+dailyRainChance[date]+'%')+'</div><details><summary>Model range</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Rain chance source: '+(rainChanceSource[date]||'unavailable')+' · NWS: '+(rainChanceComparison[date]?.nws??'—')+'% · Open-Meteo: '+(rainChanceComparison[date]?.openMeteo??'—')+'%<br>Raw weighted high: '+skillBlend(highEntries,wh)+' · Local adjustment: '+adjustmentLabel(highEntries,correctedHighs,wh)+'<br>Raw weighted low: '+skillBlend(lowEntries,wl)+' · Local adjustment: '+adjustmentLabel(lowEntries,correctedLows,wl)+'</p><h5>High temperature models</h5>'+detailTable(highEntries,bh,wh)+'<h5>Low temperature models</h5>'+detailTable(lowEntries,bl,wl)+'<p class="diagnostic-note">Bias = model minus observed station temperature; adjustment is the guarded correction actually applied. Recent hourly samples are provisional proxies for daily extremes. High weights: '+weightLabel(wh)+'; low weights: '+weightLabel(wl)+'.</p></details></article>';
+return '<article class="day-forecast"><strong>'+(date===today?'Today':day)+'</strong><div class="day-date">'+label+'</div><div class="day-condition" title="Daily weather condition from Open-Meteo"><span aria-hidden="true">'+conditionIcon+'</span><small>'+condition[1]+'</small></div><div class="day-temps"><span>'+skillBlend(correctedHighs,wh)+'</span> <small>'+skillBlend(correctedLows,wl)+'</small></div><div class="day-pop" title="Daily maximum precipitation probability from NWS when available, otherwise Open-Meteo; separate from multi-model rain amount">'+(dailyRainChance[date]===undefined?'Rain chance —':'Rain '+dailyRainChance[date]+'%')+'</div><details class="forecast-detail"><summary aria-label="Show model range">Model details</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Rain chance source: '+(rainChanceSource[date]||'unavailable')+' · NWS: '+(rainChanceComparison[date]?.nws??'—')+'% · Open-Meteo: '+(rainChanceComparison[date]?.openMeteo??'—')+'%<br>Raw weighted high: '+skillBlend(highEntries,wh)+' · Local adjustment: '+adjustmentLabel(highEntries,correctedHighs,wh)+'<br>Raw weighted low: '+skillBlend(lowEntries,wl)+' · Local adjustment: '+adjustmentLabel(lowEntries,correctedLows,wl)+'</p><h5>High temperature models</h5>'+detailTable(highEntries,bh,wh)+'<h5>Low temperature models</h5>'+detailTable(lowEntries,bl,wl)+'<p class="diagnostic-note">Bias = model minus observed station temperature; adjustment is the guarded correction actually applied. Recent hourly samples are provisional proxies for daily extremes. High weights: '+weightLabel(wh)+'; low weights: '+weightLabel(wl)+'.</p></details></article>';
 }).join('')+'</div>';
 // Use real buttons and a separate full-width diagnostics panel.
 // Native <details> cannot expand inside a five-column mobile forecast card.
