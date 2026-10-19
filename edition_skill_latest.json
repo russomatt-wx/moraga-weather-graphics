@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-19T04:09:54.596761+00:00",
+  "generated_utc": "2026-10-19T13:22:58.437998+00:00",
   "status": "scored",
   "summary": {
     "6 AM": {
@@ -18,9 +18,9 @@
       "low_mae_f": 4.5
     },
     "9 PM": {
-      "count": 2,
-      "high_mae_f": 3.0,
-      "low_mae_f": 5.0
+      "count": 3,
+      "high_mae_f": 3.33,
+      "low_mae_f": 4.0
     },
     "Unclassified": {
       "count": 0,
