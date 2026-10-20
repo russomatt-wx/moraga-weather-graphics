@@ -110,7 +110,7 @@ ax.contour(lon2,lat2,thickness,levels=levels,colors="#253746",
            transform=ccrs.PlateCarree(),zorder=4)
 t=ax.contour(lon2,lat2,thickness,levels=levels,colors=colors,
              linewidths=.85,linestyles="dashed",transform=ccrs.PlateCarree(),zorder=4.1)
-ax.clabel(t,levels=np.arange(480,611,6),fmt="%d",fontsize=12,inline=True,inline_spacing=7,
+ax.clabel(t,levels=np.arange(480,611,3),fmt="%d",fontsize=11,inline=True,inline_spacing=10,
           colors="#182e40")
 # Keep 540 dam prominent, but avoid overwhelming nearby contours.
 line540=ax.contour(lon2,lat2,thickness,levels=[540],colors="#0069c9",
