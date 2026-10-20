@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-20T04:07:47.801092+00:00",
+  "generated_utc": "2026-10-20T13:20:54.378218+00:00",
   "status": "scored",
   "summary": {
     "6 AM": {
@@ -13,14 +13,14 @@
       "low_mae_f": 0.0
     },
     "4 PM": {
-      "count": 2,
-      "high_mae_f": 4.0,
-      "low_mae_f": 4.5
+      "count": 3,
+      "high_mae_f": 3.0,
+      "low_mae_f": 4.33
     },
     "9 PM": {
-      "count": 3,
-      "high_mae_f": 3.33,
-      "low_mae_f": 4.0
+      "count": 4,
+      "high_mae_f": 2.75,
+      "low_mae_f": 3.5
     },
     "Unclassified": {
       "count": 0,

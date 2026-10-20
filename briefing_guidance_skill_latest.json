@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-20T04:07:43.725329+00:00",
+  "generated_utc": "2026-10-20T13:20:46.914477+00:00",
   "source": "automated_briefing_model_guidance",
   "summary": {
     "6 AM": {
@@ -8,19 +8,19 @@
       "low_mae_f": 7.08
     },
     "11 AM": {
-      "count": 5,
-      "high_mae_f": 4.74,
-      "low_mae_f": 6.66
+      "count": 6,
+      "high_mae_f": 4.47,
+      "low_mae_f": 6.23
     },
     "4 PM": {
-      "count": 5,
-      "high_mae_f": 4.96,
-      "low_mae_f": 6.62
+      "count": 6,
+      "high_mae_f": 4.68,
+      "low_mae_f": 5.87
     },
     "9 PM": {
-      "count": 6,
-      "high_mae_f": 4.28,
-      "low_mae_f": 6.62
+      "count": 7,
+      "high_mae_f": 4.24,
+      "low_mae_f": 5.97
     }
   },
   "matches": [
@@ -275,6 +275,42 @@
       "samples": 1417,
       "high_error_f": -5.7,
       "low_error_f": -2.2
+    },
+    {
+      "valid_local_date": "2026-10-19",
+      "edition": "11 AM",
+      "issued_utc": "2026-10-18T17:57:05.682159+00:00",
+      "forecast_high_f": 61.9,
+      "forecast_low_f": 48.9,
+      "observed_high_f": 65.0,
+      "observed_low_f": 53.0,
+      "samples": 1415,
+      "high_error_f": -3.1,
+      "low_error_f": -4.1
+    },
+    {
+      "valid_local_date": "2026-10-19",
+      "edition": "4 PM",
+      "issued_utc": "2026-10-18T22:58:50.448091+00:00",
+      "forecast_high_f": 61.7,
+      "forecast_low_f": 50.9,
+      "observed_high_f": 65.0,
+      "observed_low_f": 53.0,
+      "samples": 1415,
+      "high_error_f": -3.3,
+      "low_error_f": -2.1
+    },
+    {
+      "valid_local_date": "2026-10-19",
+      "edition": "9 PM",
+      "issued_utc": "2026-10-19T04:09:49.315221+00:00",
+      "forecast_high_f": 61.0,
+      "forecast_low_f": 50.9,
+      "observed_high_f": 65.0,
+      "observed_low_f": 53.0,
+      "samples": 1415,
+      "high_error_f": -4.0,
+      "low_error_f": -2.1
     }
   ],
   "caveat": "Not conversational ChatGPT skill. Only completed days with >=48 Xweather samples, first/last hour coverage and no >2h gaps."
