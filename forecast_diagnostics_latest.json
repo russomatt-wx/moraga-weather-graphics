@@ -1,8 +1,8 @@
 {
-  "generated_utc": "2026-10-19T16:59:05.753110+00:00",
+  "generated_utc": "2026-10-20T16:57:20.016230+00:00",
   "status": "diagnostic_only",
   "archive_health": {
-    "valid_records": 11,
+    "valid_records": 12,
     "invalid_records": 0,
     "duplicate_target_editions": [],
     "off_hour_archives": [
@@ -25,7 +25,7 @@
     ]
   },
   "matched_skill": {
-    "count": 5,
+    "count": 7,
     "pairs": [
       {
         "date": "2026-10-15",
@@ -66,6 +66,22 @@
         "guidance_high_abs_error_f": 5.7,
         "assistant_low_abs_error_f": 2.0,
         "guidance_low_abs_error_f": 2.2
+      },
+      {
+        "date": "2026-10-19",
+        "edition": "4 PM",
+        "assistant_high_abs_error_f": 1.0,
+        "guidance_high_abs_error_f": 3.3,
+        "assistant_low_abs_error_f": 4.0,
+        "guidance_low_abs_error_f": 2.1
+      },
+      {
+        "date": "2026-10-19",
+        "edition": "9 PM",
+        "assistant_high_abs_error_f": 1.0,
+        "guidance_high_abs_error_f": 4.0,
+        "assistant_low_abs_error_f": 2.0,
+        "guidance_low_abs_error_f": 2.1
       }
     ],
     "note": "Same target date and edition, issued within three hours."
@@ -84,15 +100,15 @@
       "calibration_ready": false
     },
     "4 PM": {
-      "verified_days": 2,
-      "high_mean_error_f": -4.0,
-      "low_mean_error_f": 4.5,
+      "verified_days": 3,
+      "high_mean_error_f": -3.0,
+      "low_mean_error_f": 1.67,
       "calibration_ready": false
     },
     "9 PM": {
-      "verified_days": 3,
-      "high_mean_error_f": -3.33,
-      "low_mean_error_f": 2.67,
+      "verified_days": 4,
+      "high_mean_error_f": -2.75,
+      "low_mean_error_f": 1.5,
       "calibration_ready": false
     }
   },
