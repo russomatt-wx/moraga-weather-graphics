@@ -82,7 +82,7 @@ ax.add_feature(cfeature.COASTLINE,edgecolor="#777777",linewidth=.65)
 ax.add_feature(cfeature.BORDERS,edgecolor="#aaaaaa",linewidth=.45)
 ax.add_feature(cfeature.STATES,edgecolor="#55758a",linewidth=.35)
 # Extreme cold thickness is white/pink/lavender, transitioning through blue, green, yellow and red.
-levels=np.arange(480,611,6)
+levels=np.arange(480,611,3)
 cmap=LinearSegmentedColormap.from_list("thickness_rainbow",[
     # Extreme cold (480–498 dam): near-white / pink / lavender.
     (0.00,"#fff8fd"),(0.08,"#ffd5ed"),(0.16,"#f58acb"),
@@ -106,11 +106,11 @@ ax.clabel(p,levels=np.arange(968,1049,16),fmt="%d",fontsize=10,
 # Dark underlay prevents the colored contours from disappearing into matching fills.
 colors=[cmap(norm(float(v))) for v in levels]
 ax.contour(lon2,lat2,thickness,levels=levels,colors="#253746",
-           linewidths=2.0,linestyles="dashed",alpha=.78,
+           linewidths=1.15,linestyles="dashed",alpha=.7,
            transform=ccrs.PlateCarree(),zorder=4)
 t=ax.contour(lon2,lat2,thickness,levels=levels,colors=colors,
-             linewidths=1.35,linestyles="dashed",transform=ccrs.PlateCarree(),zorder=4.1)
-ax.clabel(t,fmt="%d",fontsize=12,inline=True,inline_spacing=7,
+             linewidths=.85,linestyles="dashed",transform=ccrs.PlateCarree(),zorder=4.1)
+ax.clabel(t,levels=np.arange(480,611,6),fmt="%d",fontsize=12,inline=True,inline_spacing=7,
           colors="#182e40")
 # Keep 540 dam prominent, but avoid overwhelming nearby contours.
 line540=ax.contour(lon2,lat2,thickness,levels=[540],colors="#0069c9",
