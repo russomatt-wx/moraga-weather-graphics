@@ -1,8 +1,8 @@
 {
-  "generated_utc": "2026-10-20T16:57:20.016230+00:00",
+  "generated_utc": "2026-10-21T16:57:59.956764+00:00",
   "status": "diagnostic_only",
   "archive_health": {
-    "valid_records": 12,
+    "valid_records": 14,
     "invalid_records": 0,
     "duplicate_target_editions": [],
     "off_hour_archives": [
@@ -21,11 +21,15 @@
       {
         "date": "2026-10-18",
         "edition": "9 PM"
+      },
+      {
+        "date": "2026-10-22",
+        "edition": "9 PM"
       }
     ]
   },
   "matched_skill": {
-    "count": 7,
+    "count": 8,
     "pairs": [
       {
         "date": "2026-10-15",
@@ -82,6 +86,14 @@
         "guidance_high_abs_error_f": 4.0,
         "assistant_low_abs_error_f": 2.0,
         "guidance_low_abs_error_f": 2.1
+      },
+      {
+        "date": "2026-10-20",
+        "edition": "4 PM",
+        "assistant_high_abs_error_f": 1.0,
+        "guidance_high_abs_error_f": 1.6,
+        "assistant_low_abs_error_f": 1.0,
+        "guidance_low_abs_error_f": 1.9
       }
     ],
     "note": "Same target date and edition, issued within three hours."
@@ -100,9 +112,9 @@
       "calibration_ready": false
     },
     "4 PM": {
-      "verified_days": 3,
-      "high_mean_error_f": -3.0,
-      "low_mean_error_f": 1.67,
+      "verified_days": 4,
+      "high_mean_error_f": -2.5,
+      "low_mean_error_f": 1.5,
       "calibration_ready": false
     },
     "9 PM": {
