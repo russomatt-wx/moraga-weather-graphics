@@ -41,4 +41,4 @@
   },
   "method": "Earliest archived complete hourly model snapshot per target local date, retrieved before target day; observed KCAMORAG71 daily extrema require >=90% 15-minute coverage and no gap >60 minutes",
   "note": "Provider retrieval time is not verified model initialization time; missing daily records are not scored."
-}\n
+}
