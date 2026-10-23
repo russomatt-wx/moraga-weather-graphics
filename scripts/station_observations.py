@@ -53,9 +53,9 @@ def observations():
                     continue
                 temp = float(record["temperature_f"])
                 dew = float(record["dew_point_f"]) if record.get("dew_point_f") else float("nan")
-                rate = float(record["precip_rate_in_per_hr"]) if record.get("precip_rate_in_per_hr") else 0.0
+                rate = float(record["precip_observation_in"]) if record.get("precip_observation_in") else float("nan")
                 if -40 < temp < 130 and -50 < dew < 130:
-                    points[timestamp] = (temp, dew, max(0, rate))
+                    points[timestamp] = (temp, dew, max(0, rate) if np.isfinite(rate) else float("nan"))
             except (ValueError, KeyError, TypeError):
                 continue
     if len(points) < 12:
@@ -93,26 +93,27 @@ def draw(points):
         day += dt.timedelta(days=1)
     ax.set_xlim(x[0], x[-1])
     # Day + hour on each label; avoid overlapping text at phone width.
-    ax.xaxis.set_major_locator(mdates.HourLocator(byhour=(0, 12), tz=ZONE))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\\n%I %p", tz=ZONE))
-    ax.tick_params(axis="x", labelrotation=0, labelsize=10, colors="#203449", length=0, pad=12)
+    ax.xaxis.set_major_locator(mdates.HourLocator(byhour=(6, 18), tz=ZONE))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %d %b\\n%I %p", tz=ZONE))
+    ax.tick_params(axis="x", labelrotation=0, labelsize=11, colors="#203449", length=0, pad=12)
     for tick in ax.get_xticklabels(): tick.set_fontweight("bold")
     ax.margins(y=.12)
-    if np.nanmax(rain) > 0:
+    if np.any(np.isfinite(rain) & (rain > 0)):
         ax2 = ax.twinx()
         # Rain values are Xweather precip_rate_in_per_hr, not accumulated rainfall.
-        ax2.bar(x, rain, width=0.012, color="#28a6bc", alpha=.55, label="Rain rate", zorder=2)
-        ax2.set_ylabel("Rain rate (in/hr)", color="#205b6b", weight="bold", fontsize=11)
+        ax2.bar(x, np.nan_to_num(rain, nan=0.0), width=0.0025, color="#28a6bc", alpha=.55, label="Reported precipitation", zorder=2)
+        ax2.set_ylabel("Reported precip. (in)", color="#205b6b", weight="bold", fontsize=11)
         ax2.tick_params(axis="y", colors="#205b6b", labelsize=10, length=0)
         for spine in ax2.spines.values(): spine.set_visible(False)
         ax2.set_ylim(bottom=0)
         from matplotlib.patches import Patch
         handles=[plt.Line2D([], [], color="#dd6033", lw=3.4, label="Temperature"),
                  plt.Line2D([], [], color="#1675aa", lw=3, label="Dew point"),
-                 Patch(facecolor="#28a6bc", alpha=.55, label="Rain rate")]
+                 Patch(facecolor="#28a6bc", alpha=.55, label="Reported precipitation")]
     else:
         handles=[plt.Line2D([], [], color="#dd6033", lw=3.4, label="Temperature"),
                  plt.Line2D([], [], color="#1675aa", lw=3, label="Dew point")]
+    fig.text(.075, .815, "Rainfall values are individual reported observations, not a storm total.", fontsize=9, color="#476276")
     fig.text(.075, .945, "MORAGA  |  KCAMORAG71", fontsize=18, color="#172b41", weight="bold")
     fig.text(.075, .887, "Verified observations  ·  Pacific time (PDT/PST)", fontsize=11, color="#476276", weight="bold")
     fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(.075, .854),
