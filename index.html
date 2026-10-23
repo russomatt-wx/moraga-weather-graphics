@@ -551,6 +551,17 @@ function forecastSkill(csv,now=Date.now()){
  }
  return rows;
 }
+// Daily high/low skill is a separate, smaller sample from hourly skill.
+// Fade it in only after 10 complete verified days; reach 35% at 14 days.
+let dailyModelSkill={};
+async function loadDailyModelSkill(){
+ try{
+  const response=await fetch('model_daily_verification_latest.json?forecast='+Date.now(),{cache:'no-store'});
+  if(!response.ok)throw Error('daily skill unavailable');
+  const data=await response.json();
+  dailyModelSkill=data.model_scores||{};
+ }catch(error){dailyModelSkill={};console.warn('Using hourly-only weights',error);}
+}
 function skillWeights(rows,bucket,phase,names){
  const eligible=[...new Set(names)];
  const weights=Object.fromEntries(eligible.map(n=>[n,1/eligible.length]));
@@ -593,6 +604,20 @@ function skillWeights(rows,bucket,phase,names){
   });
   const sum=adjusted.reduce((a,b)=>a+b,0);
   eligible.forEach((name,i)=>weights[name]=adjusted[i]/sum);
+ }
+ // Preserve hourly-based weights until the independent daily sample matures.
+ const dailyKey=phase==='high'?'high_mae_f':'low_mae_f';
+ const eligibleDaily=eligible.map(name=>({name,score:dailyModelSkill[name.toLowerCase()]}))
+  .filter(x=>Number.isFinite(x.score?.[dailyKey])&&x.score.verified_days>=10);
+ if(eligibleDaily.length>=2){
+  const minDays=Math.min(...eligibleDaily.map(x=>x.score.verified_days));
+  const dailyShare=Math.min(.35,.35*Math.max(0,(minDays-9)/5));
+  const dailyRaw=Object.fromEntries(eligibleDaily.map(x=>[x.name,1/Math.max(.75,x.score[dailyKey])]));
+  const totalDaily=Object.values(dailyRaw).reduce((a,b)=>a+b,0);
+  const dailyNeutral=1/eligible.length;
+  const dailyWeights=Object.fromEntries(eligible.map(name=>[name,dailyRaw[name]===undefined?dailyNeutral:dailyRaw[name]/totalDaily]));
+  const normalization=Object.values(dailyWeights).reduce((a,b)=>a+b,0);
+  for(const name of eligible)weights[name]=(1-dailyShare)*weights[name]+dailyShare*dailyWeights[name]/normalization;
  }
  return {...weights,reason:'Provisional '+(phase==='high'?'daytime':'overnight')+' model skill · '+eligible.filter(n=>stats[n]).length+' scored models; short leads prioritized; 60/40 seven-/30-day blend only after 10 verified days'};
 }
@@ -846,6 +871,7 @@ function conditionDisplay(code){
  if([95,96,99].includes(code))return ['⛈️','Thunderstorms'];
  return ['','Conditions unavailable'];
 }
+await loadDailyModelSkill();
 let skill=[];
 try{const verification=await fetch('hourly_matches.csv?t='+Date.now(),{cache:'no-store'});if(verification.ok)skill=forecastSkill(await verification.text());}catch(e){}
 
