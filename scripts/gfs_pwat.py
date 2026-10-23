@@ -22,7 +22,7 @@ def main():
         for back in (0, 6, 12):
             run = cycle - dt.timedelta(hours=back)
             try:
-                h = Herbie(run, model="gfs", product="pgrb2.0p25", fxx=hour, priority=["aws", "nomads"])
+                h = Herbie(run.replace(tzinfo=None), model="gfs", product="pgrb2.0p25", fxx=hour, priority=["aws", "nomads"])
                 dataset = h.xarray(":PWAT:")
                 if dataset is not None:
                     break
