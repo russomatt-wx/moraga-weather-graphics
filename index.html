@@ -505,7 +505,7 @@ const data=await res.json();
 const months=Object.entries(data.months||{}).sort(([a],[b])=>a.localeCompare(b));
 if(!months.length)throw Error('No monthly station records');
 const fmt=v=>Number.isFinite(v)?v.toFixed(1)+'°F':'—';
-const rainfmt=v=>Number.isFinite(v)?v.toFixed(2)+' in':'—';
+const rainfmt=v=>Number.isFinite(v)?v.toFixed(2)+' in':'0.00 in';
 const allDays=data.days||{};
 let html='<div class="climate-archive">';
 for(const [month,m] of months){
@@ -519,9 +519,9 @@ for(const [month,m] of months){
   const dayRain=Number.isFinite(d.daily_precipitation_in)?d.daily_precipitation_in:(Number.isFinite(d.precipitation_in)?d.precipitation_in:null);
   html+='<tr style="border-bottom:1px solid #30455b"><td style="padding:10px 4px">'+label+'</td><td>'+fmt(d.sampled_high_f)+'</td><td>'+fmt(d.sampled_low_f)+'</td><td>'+rainfmt(dayRain)+'</td></tr>';
  }
- html+='</tbody></table></div><p style="font-size:12px;color:#a9bdd0;margin-top:12px">Daily highs and lows are sampled station extremes; incomplete days may not capture the true extremes. — means rainfall is not available, not zero.</p></details>';
+ html+='</tbody></table></div><p style="font-size:12px;color:#a9bdd0;margin-top:12px">Daily highs and lows are sampled station extremes; incomplete days may not capture the true extremes. Missing daily rainfall is displayed as 0.00 in by convention; it is not a verified zero measurement.</p></details>';
 }
-html+='</div><p style="font-size:12px">Monthly averages use sampled daily extremes, not long-term climate normals. Rainfall totals are shown only when verified station or dated owner records are available.</p>';
+html+='</div><p style="font-size:12px">Monthly averages use sampled daily extremes, not long-term climate normals. Missing rainfall displays as 0.00 in by convention; these values are not verified dry-day observations.</p>';
 const confirmations=months.filter(([month,m])=>m.precipitation_status==='owner_confirmed_as_of'&&m.precipitation_as_of_utc).map(([month,m])=>month+' through '+new Date(m.precipitation_as_of_utc).toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'}));
 if(confirmations.length)html+='<p style="font-size:12px">Owner-confirmed rainfall: '+confirmations.join('; ')+'.</p>';
 el.innerHTML=html;
