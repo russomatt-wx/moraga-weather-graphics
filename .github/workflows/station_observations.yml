@@ -21,9 +21,9 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install matplotlib numpy
-      - name: Render verified PWS observations
+      - name: Render verified Xweather archive observations
         env:
-          WU_API_KEY: ${{ secrets.WU_API_KEY }}
+          WEATHER_REPO_TOKEN: ${{ secrets.WEATHER_REPO_TOKEN }}
         run: python scripts/station_observations.py
       - name: Commit updated chart
         run: |
