@@ -43,7 +43,15 @@ def main():
         ax = fig.add_subplot(111, projection=ccrs.PlateCarree())
         ax.set_extent([-165, -112, 20, 60], crs=ccrs.PlateCarree())
         levels = np.arange(0, 2.76, .25)
-        m = ax.contourf(lon, lat, pwat, levels=levels, cmap="YlGnBu", extend="max", transform=ccrs.PlateCarree())
+        from matplotlib.colors import LinearSegmentedColormap
+        # Low PWAT: brown/tan; moderate: yellow/green; high: turquoise/deep blue.
+        moisture_colors = LinearSegmentedColormap.from_list(
+            "moraga_pwat",
+            [(0.00, "#805738"), (0.12, "#bc9262"), (0.23, "#ffe17c"),
+             (0.36, "#b9dd56"), (0.48, "#31b665"), (0.62, "#008f9c"),
+             (0.76, "#159bd6"), (0.88, "#176bc5"), (1.00, "#132d87")],
+            N=256)
+        m = ax.contourf(lon, lat, pwat, levels=levels, cmap=moisture_colors, extend="max", transform=ccrs.PlateCarree())
         ax.coastlines(resolution="110m", linewidth=.8)
         ax.add_feature(cfeature.BORDERS, linewidth=.4)
         ax.add_feature(cfeature.STATES, linewidth=.3)
