@@ -5,7 +5,7 @@ import io
 import os
 import pathlib
 import sys
-import urllib.parse
+import urllib.error
 import urllib.request
 from zoneinfo import ZoneInfo
 
@@ -21,33 +21,48 @@ OUTPUT = pathlib.Path("moraga_station_observations.png")
 
 
 def observations():
-    key = os.getenv("WU_API_KEY", "").strip()
-    if not key:
-        raise RuntimeError("WU_API_KEY is not configured; leaving existing station image untouched.")
-    today = dt.datetime.now(ZONE).date()
+    """Read actual Xweather station CSVs from the private source repository."""
+    import csv
+    import json
+    import base64
+    token = os.getenv("WEATHER_REPO_TOKEN", "").strip()
+    if not token:
+        raise RuntimeError("WEATHER_REPO_TOKEN missing; cannot read private station archive.")
     points = {}
+    today = dt.datetime.now(ZONE).date()
     for days_back in (2, 1, 0):
         day = today - dt.timedelta(days=days_back)
-        query = urllib.parse.urlencode(dict(stationId=STATION, format="json", units="e", date=day.strftime("%Y%m%d"), apiKey=key))
-        url = "https://api.weather.com/v2/pws/history/all?" + query
-        req = urllib.request.Request(url, headers={"User-Agent": "MoragaWeatherObservatory/1.0"})
-        with urllib.request.urlopen(req, timeout=30) as response:
-            import json
-            records = json.load(response).get("observations", [])
-        for record in records:
+        path = f"observations/KCAMORAG71_{day.isoformat()}.csv"
+        url = "https://api.github.com/repos/russomatt-wx/moraga-weather/contents/" + path
+        req = urllib.request.Request(url, headers={
+            "Authorization": "Bearer " + token,
+            "Accept": "application/vnd.github+json",
+            "User-Agent": "MoragaWeatherObservatory/1.0"})
+        try:
+            with urllib.request.urlopen(req, timeout=20) as response:
+                payload = json.load(response)
+        except urllib.error.HTTPError as exc:
+            if exc.code == 404:
+                continue
+            raise
+        raw = base64.b64decode(payload["content"]).decode("utf-8-sig")
+        for record in csv.DictReader(io.StringIO(raw)):
             try:
-                timestamp = dt.datetime.fromisoformat(record["obsTimeUtc"].replace("Z", "+00:00")).astimezone(ZONE)
-                imp = record.get("imperial") or {}
-                temp = float(imp["temp"])
-                dew = float(imp["dewpt"]) if imp.get("dewpt") is not None else float("nan")
-                rain = float(imp.get("precipRate", 0) or 0)
-                if not (-40 < temp < 130):
+                timestamp = dt.datetime.fromisoformat(record["timestamp_utc"].replace("Z", "+00:00")).astimezone(ZONE)
+                if timestamp.date() != day or record.get("source", "").lower().find("xweather") < 0:
                     continue
-                points[timestamp] = (temp, dew, max(0, rain))
+                temp = float(record["temperature_f"])
+                dew = float(record["dew_point_f"]) if record.get("dew_point_f") else float("nan")
+                rate = float(record["precip_rate_in_per_hr"]) if record.get("precip_rate_in_per_hr") else 0.0
+                if -40 < temp < 130 and -50 < dew < 130:
+                    points[timestamp] = (temp, dew, max(0, rate))
             except (ValueError, KeyError, TypeError):
                 continue
     if len(points) < 12:
-        raise RuntimeError("Too few verified station observations; preserving existing chart.")
+        raise RuntimeError("Too few verified Xweather station observations; preserving existing chart.")
+    newest = max(points)
+    if (dt.datetime.now(ZONE) - newest).total_seconds() > 3 * 3600:
+        raise RuntimeError("Station archive is stale (>3 hours); preserving existing chart.")
     return sorted(points.items())
 
 
@@ -85,7 +100,7 @@ def draw(points):
     ax.margins(y=.12)
     if np.nanmax(rain) > 0:
         ax2 = ax.twinx()
-        # Rain values from WU are precipRate, not accumulated rainfall.
+        # Rain values are Xweather precip_rate_in_per_hr, not accumulated rainfall.
         ax2.bar(x, rain, width=0.012, color="#28a6bc", alpha=.55, label="Rain rate", zorder=2)
         ax2.set_ylabel("Rain rate (in/hr)", color="#205b6b", weight="bold", fontsize=11)
         ax2.tick_params(axis="y", colors="#205b6b", labelsize=10, length=0)
