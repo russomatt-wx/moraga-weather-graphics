@@ -946,7 +946,7 @@ if(shownRainChance!==null){
   if(!/heavy rain|thunder|storm|snow|sleet/i.test(condition[1])){
     if(shownRainChance>=80) condition=['🌧️','Rain'];
     else if(shownRainChance>=60) condition=['🌧️','Rain likely'];
-    else if(shownRainChance>=40) condition=['🌦️','Chance of rain'];
+    else if(shownRainChance>=30) condition=['🌦️','Chance of rain'];
     else if(shownRainChance>=20) condition=['🌦️','Slight chance of rain'];
     else if(sky[0]) condition=skyTransition(date)||sky;
     else if(modelWetSignal) condition=['⛅','Partly cloudy'];
@@ -957,7 +957,7 @@ if(shownRainChance!==null){
 // Significant rain takes precedence over wind; never suppress rain probabilities.
 const wind=dailyWind[date];
 const isWindy=wind&&(wind.sustained>=20||wind.gust>=30);
-const significantRain=shownRainChance!==null&&shownRainChance>=40;
+const significantRain=shownRainChance!==null&&shownRainChance>=30;
 if(!significantRain&&!/thunder|storm|snow|sleet|heavy rain/i.test(condition[1])){
  if(isWindy)condition=['💨','Windy'];
  else if(dailyFog[date])condition=['☁️','Foggy'];
