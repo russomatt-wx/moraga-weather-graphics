@@ -98,15 +98,27 @@ def draw(points):
     ax.tick_params(axis="x", labelrotation=0, labelsize=10, colors="#203449", length=0, pad=12)
     for tick in ax.get_xticklabels(): tick.set_fontweight("bold")
     ax.margins(y=.18)
-    # Label the observed temperature extrema, with enough space for mobile display.
-    high_idx = int(np.nanargmax(y))
-    low_idx = int(np.nanargmin(y))
-    for idx, label, offset in ((high_idx, "High", (0, 15)), (low_idx, "Low", (0, -22))):
-        ax.annotate(f"{label} {y[idx]:.1f}°F", xy=(x[idx], y[idx]),
-                    xytext=offset, textcoords="offset points",
-                    ha="center", va="center", fontsize=10, fontweight="bold",
-                    color="#a64021", zorder=8,
-                    bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="none", alpha=.9))
+    # Show high/low for EACH local calendar day, not just the entire 72-hour window.
+    # Keep labels attached to the corresponding observation and inside the chart.
+    from collections import defaultdict
+    by_day = defaultdict(list)
+    for i, timestamp in enumerate(x):
+        if np.isfinite(y[i]):
+            by_day[timestamp.date()].append(i)
+    for day, indices in sorted(by_day.items()):
+        high_idx = max(indices, key=lambda i: y[i])
+        low_idx = min(indices, key=lambda i: y[i])
+        for idx, label, dy in ((high_idx, "H", 17), (low_idx, "L", -19)):
+            # At the right edge, place text to the left so it stays visible.
+            near_right = (x[-1] - x[idx]).total_seconds() < 4 * 3600
+            near_left = (x[idx] - x[0]).total_seconds() < 4 * 3600
+            ha = "right" if near_right else ("left" if near_left else "center")
+            dx = -8 if near_right else (8 if near_left else 0)
+            ax.annotate(f"{label} {y[idx]:.1f}°F", xy=(x[idx], y[idx]),
+                        xytext=(dx, dy), textcoords="offset points",
+                        ha=ha, va="center", fontsize=9, fontweight="bold",
+                        color="#a64021", zorder=8, clip_on=True,
+                        bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="none", alpha=.92))
     if np.any(np.isfinite(rain) & (rain > 0)):
         ax2 = ax.twinx()
         # Matplotlib paints the second axes above the first unless their axes layers are reordered.
