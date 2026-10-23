@@ -100,7 +100,11 @@ def draw(points):
     ax.margins(y=.12)
     if np.any(np.isfinite(rain) & (rain > 0)):
         ax2 = ax.twinx()
-        # Rain values are Xweather precip_rate_in_per_hr, not accumulated rainfall.
+        # Matplotlib paints the second axes above the first unless their axes layers are reordered.
+        # Put precipitation behind the temperature/dew-point axes, keeping the foreground transparent.
+        ax2.set_zorder(ax.get_zorder() - 1)
+        ax.patch.set_visible(False)
+        # Rain values are individual Xweather reported precipitation observations, not a storm total.
         ax2.bar(x, np.nan_to_num(rain, nan=0.0), width=0.0025, color="#28a6bc", alpha=.55, label="Reported precipitation", zorder=2)
         ax2.set_ylabel("Reported precip. (in)", color="#205b6b", weight="bold", fontsize=11)
         ax2.tick_params(axis="y", colors="#205b6b", labelsize=10, length=0)
