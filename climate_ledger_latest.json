@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-22T13:24:08.368794+00:00",
+  "generated_utc": "2026-10-23T04:45:32.628448+00:00",
   "station": "KCAMORAG71",
   "days": {
     "2026-10-07": {
@@ -109,26 +109,28 @@
     },
     "2026-10-22": {
       "sampled_low_f": 51,
-      "sampled_high_f": 55,
-      "samples": 330,
+      "sampled_high_f": 61,
+      "samples": 1266,
       "first_utc": "2026-10-22T07:00:00+00:00",
-      "last_utc": "2026-10-22T12:35:00+00:00",
+      "last_utc": "2026-10-23T04:27:00+00:00",
       "daily_precipitation_in": 0.48,
       "precipitation_source": "owner_confirmed",
-      "precipitation_note": "Owner-reported total as of Oct 22, 2026; may increase before end of day"
+      "precipitation_note": "Owner-reported total as of Oct 22, 2026; may increase before end of day",
+      "precipitation_as_of_utc": "2026-10-23T04:39:00+00:00"
     }
   },
   "months": {
     "2026-10": {
-      "sample_count": 7848,
+      "sample_count": 8784,
       "days_with_samples": 16,
-      "mean_sample_temperature_f": 60.82,
-      "mean_sampled_daily_high_f": 77.62,
+      "mean_sample_temperature_f": 60.43,
+      "mean_sampled_daily_high_f": 78,
       "mean_sampled_daily_low_f": 50.5,
       "monthly_precipitation_in": 0.48,
       "annual_precipitation_in": null,
       "precipitation_status": "owner_confirmed_as_of",
-      "precipitation_as_of_utc": "2026-10-23T04:39:00Z"
+      "precipitation_as_of_utc": "2026-10-23T04:39:00+00:00",
+      "precipitation_source": "Owner-confirmed October 22 rainfall, month-to-date minimum"
     }
   },
   "observations": 7848,
