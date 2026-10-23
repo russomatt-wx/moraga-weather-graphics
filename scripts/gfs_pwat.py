@@ -2,6 +2,7 @@
 """Render real GFS total-column precipitable water at +12/+36 hours."""
 import datetime as dt
 from pathlib import Path
+from zoneinfo import ZoneInfo
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -17,10 +18,14 @@ def main():
     # Use the most recent established GFS cycle, allowing time for NOAA publication.
     reference = now - dt.timedelta(hours=8)
     cycle = reference.replace(hour=(reference.hour // 6) * 6, minute=0, second=0, microsecond=0)
-    for hour in HOURS:
+    for horizon in HOURS:
+        target = now + dt.timedelta(hours=horizon)
+        target = target.replace(minute=0, second=0, microsecond=0)
+        target += dt.timedelta(hours=(-target.hour) % 3)
         dataset = None
         for back in (0, 6, 12):
             run = cycle - dt.timedelta(hours=back)
+            hour = int((target - run).total_seconds() // 3600)
             try:
                 h = Herbie(run.replace(tzinfo=None), model="gfs", product="pgrb2.0p25", fxx=hour, priority=["aws", "nomads"])
                 dataset = h.xarray(":PWAT:")
@@ -29,7 +34,7 @@ def main():
             except Exception as exc:
                 print(f"GFS {run} +{hour}: {exc}")
         if dataset is None:
-            raise RuntimeError(f"No real GFS PWAT field available for +{hour}")
+            raise RuntimeError(f"No real GFS PWAT field available near +{horizon}h")
         key = next((k for k in dataset.data_vars if "pwat" in k.lower() or "precipitable" in k.lower()), None)
         if key is None:
             raise RuntimeError(f"PWAT variable missing: {list(dataset.data_vars)}")
@@ -57,10 +62,12 @@ def main():
         ax.add_feature(cfeature.STATES, linewidth=.3)
         ax.gridlines(draw_labels={"bottom":"x","left":"y"}, linewidth=.4, alpha=.35)
         valid = run + dt.timedelta(hours=hour)
-        ax.set_title(f"GFS precipitable water • +{hour}h\nValid {valid:%a %b %d %H:%M UTC}", weight="bold", fontsize=16, pad=15)
+        local_valid = valid.astimezone(ZoneInfo("America/Los_Angeles"))
+        lead = (valid - now).total_seconds() / 3600
+        ax.set_title(f"GFS precipitable water • ~+{lead:.0f}h from update\nValid {local_valid:%a %b %d %I:%M %p %Z} | GFS f{hour:03d}", weight="bold", fontsize=15, pad=15)
         bar = fig.colorbar(m, ax=ax, orientation="horizontal", pad=.07, fraction=.05)
         bar.set_label("Precipitable water (inches)")
-        fig.savefig(OUT / f"gfs_pwat_f{hour:03d}.png", bbox_inches="tight", facecolor="white")
+        fig.savefig(OUT / f"gfs_pwat_f{horizon:03d}.png", bbox_inches="tight", facecolor="white")
         plt.close(fig)
 if __name__ == "__main__":
     main()
