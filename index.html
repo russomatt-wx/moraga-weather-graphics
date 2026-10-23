@@ -504,13 +504,24 @@ if(!res.ok)throw Error('Climate ledger not published');
 const data=await res.json();
 const months=Object.entries(data.months||{}).sort(([a],[b])=>a.localeCompare(b));
 if(!months.length)throw Error('No monthly station records');
-let html='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;min-width:440px;text-align:left"><thead><tr><th>Month</th><th>Avg high</th><th>Avg low</th><th>Rainfall</th><th>Days sampled</th></tr></thead><tbody>';
-for(const [month,m] of months){
 const fmt=v=>Number.isFinite(v)?v.toFixed(1)+'°F':'—';
-const rain=Number.isFinite(m.monthly_precipitation_in)?m.monthly_precipitation_in.toFixed(2)+' in':'—';
-html+='<tr style="border-top:1px solid #30455b"><td style="padding:12px 8px">'+month+'</td><td>'+fmt(m.mean_sampled_daily_high_f)+'</td><td>'+fmt(m.mean_sampled_daily_low_f)+'</td><td>'+rain+'</td><td>'+(m.days_with_samples||0)+'</td></tr>';
+const rainfmt=v=>Number.isFinite(v)?v.toFixed(2)+' in':'—';
+const allDays=data.days||{};
+let html='<div class="climate-archive">';
+for(const [month,m] of months){
+ const days=Object.entries(allDays).filter(([date])=>date.startsWith(month+'-')).sort(([a],[b])=>b.localeCompare(a));
+ const monthLabel=new Date(month+'-01T12:00:00Z').toLocaleDateString('en-US',{timeZone:'UTC',month:'long',year:'numeric'});
+ html+='<details class="climate-month" style="border:1px solid #30455b;border-radius:12px;margin:10px 0;padding:14px"'+(month===months[months.length-1][0]?' open':'')+'><summary style="cursor:pointer;font-weight:700;font-size:18px">'+monthLabel+' <span style="font-size:13px;font-weight:400;color:#aac1d4">('+days.length+' days recorded)</span></summary>';
+ html+='<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:15px 0"><div>Avg high<br><strong>'+fmt(m.mean_sampled_daily_high_f)+'</strong></div><div>Avg low<br><strong>'+fmt(m.mean_sampled_daily_low_f)+'</strong></div><div>Rainfall<br><strong>'+rainfmt(m.monthly_precipitation_in)+'</strong></div></div>';
+ html+='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:14px;text-align:left"><thead><tr style="border-bottom:1px solid #40566c"><th style="padding:9px 4px">Date</th><th>High</th><th>Low</th><th>Rain</th></tr></thead><tbody>';
+ for(const [date,d] of days){
+  const label=new Date(date+'T12:00:00Z').toLocaleDateString('en-US',{timeZone:'UTC',month:'short',day:'numeric'});
+  const dayRain=Number.isFinite(d.daily_precipitation_in)?d.daily_precipitation_in:(Number.isFinite(d.precipitation_in)?d.precipitation_in:null);
+  html+='<tr style="border-bottom:1px solid #30455b"><td style="padding:10px 4px">'+label+'</td><td>'+fmt(d.sampled_high_f)+'</td><td>'+fmt(d.sampled_low_f)+'</td><td>'+rainfmt(dayRain)+'</td></tr>';
+ }
+ html+='</tbody></table></div><p style="font-size:12px;color:#a9bdd0;margin-top:12px">Daily highs and lows are sampled station extremes; incomplete days may not capture the true extremes. — means rainfall is not available, not zero.</p></details>';
 }
-html+='</tbody></table></div><p style="font-size:12px">These are averages of sampled daily extremes, not long-term climate normals. Partial days may underestimate highs or overestimate lows. Rainfall uses station month-to-date readings or dated owner confirmations. Dated owner totals remain snapshots until superseded by newer station readings.</p>';
+html+='</div><p style="font-size:12px">Monthly averages use sampled daily extremes, not long-term climate normals. Rainfall totals are shown only when verified station or dated owner records are available.</p>';
 const confirmations=months.filter(([month,m])=>m.precipitation_status==='owner_confirmed_as_of'&&m.precipitation_as_of_utc).map(([month,m])=>month+' through '+new Date(m.precipitation_as_of_utc).toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'}));
 if(confirmations.length)html+='<p style="font-size:12px">Owner-confirmed rainfall: '+confirmations.join('; ')+'.</p>';
 el.innerHTML=html;
