@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+"""Render real GFS total-column precipitable water at +12/+36 hours."""
+import datetime as dt
+from pathlib import Path
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import numpy as np
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+from herbie import Herbie
+
+HOURS = (12, 36)
+OUT = Path(".")
+def main():
+    now = dt.datetime.now(dt.timezone.utc)
+    # Use the most recent established GFS cycle, allowing time for NOAA publication.
+    cycle = (now - dt.timedelta(hours=6)).replace(hour=((now.hour-6)%24//6)*6, minute=0, second=0, microsecond=0)
+    for hour in HOURS:
+        dataset = None
+        for back in (0, 6, 12):
+            run = cycle - dt.timedelta(hours=back)
+            try:
+                h = Herbie(run, model="gfs", product="pgrb2.0p25", fxx=hour, priority=["aws", "nomads"])
+                dataset = h.xarray(":PWAT:entire atmosphere:")
+                if dataset is not None:
+                    break
+            except Exception as exc:
+                print(f"GFS {run} +{hour}: {exc}")
+        if dataset is None:
+            raise RuntimeError(f"No real GFS PWAT field available for +{hour}")
+        key = next((k for k in dataset.data_vars if "pwat" in k.lower()), None)
+        if key is None:
+            raise RuntimeError(f"PWAT variable missing: {list(dataset.data_vars)}")
+        field = dataset[key].squeeze()
+        lon = np.asarray(field.longitude)
+        lat = np.asarray(field.latitude)
+        pwat = np.asarray(field, dtype=float) / 25.4  # GRIB PWAT kg/m² = mm liquid water.
+        if not np.isfinite(pwat).any():
+            raise RuntimeError("Invalid PWAT field")
+        fig = plt.figure(figsize=(12, 7), dpi=150, facecolor="white")
+        ax = fig.add_subplot(111, projection=ccrs.PlateCarree())
+        ax.set_extent([-165, -112, 20, 60], crs=ccrs.PlateCarree())
+        levels = np.arange(0, 2.76, .25)
+        m = ax.contourf(lon, lat, pwat, levels=levels, cmap="YlGnBu", extend="max", transform=ccrs.PlateCarree())
+        ax.coastlines(resolution="110m", linewidth=.8)
+        ax.add_feature(cfeature.BORDERS, linewidth=.4)
+        ax.add_feature(cfeature.STATES, linewidth=.3)
+        ax.gridlines(draw_labels={"bottom":"x","left":"y"}, linewidth=.4, alpha=.35)
+        valid = run + dt.timedelta(hours=hour)
+        ax.set_title(f"GFS precipitable water • +{hour}h\nValid {valid:%a %b %d %H:%M UTC}", weight="bold", fontsize=16, pad=15)
+        bar = fig.colorbar(m, ax=ax, orientation="horizontal", pad=.07, fraction=.05)
+        bar.set_label("Precipitable water (inches)")
+        fig.savefig(OUT / f"gfs_pwat_f{hour:03d}.png", bbox_inches="tight", facecolor="white")
+        plt.close(fig)
+if __name__ == "__main__":
+    main()
