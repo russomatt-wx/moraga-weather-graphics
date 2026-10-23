@@ -75,7 +75,7 @@ def draw(points):
     rain = np.array([v[2] for _, v in points])
     fig, ax = plt.subplots(figsize=(12, 6.1), dpi=170, facecolor="#ffffff")
     ax.set_facecolor("#f8fafc")
-    fig.subplots_adjust(left=.075, right=.92, top=.79, bottom=.23)
+    fig.subplots_adjust(left=.09, right=.90, top=.70, bottom=.19)
     ax.plot(x, y, color="#dd6033", lw=3.4, label="Temperature", zorder=5)
     ax.plot(x, dew, color="#1675aa", lw=3.0, label="Dew point", zorder=4)
     ax.grid(axis="y", color="#c7d3dc", alpha=.65, linewidth=.9)
@@ -94,10 +94,19 @@ def draw(points):
     ax.set_xlim(x[0], x[-1])
     # Day + hour on each label; avoid overlapping text at phone width.
     ax.xaxis.set_major_locator(mdates.HourLocator(byhour=(6, 18), tz=ZONE))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %d %b\\n%I %p", tz=ZONE))
-    ax.tick_params(axis="x", labelrotation=0, labelsize=11, colors="#203449", length=0, pad=12)
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %d %b\n%I %p", tz=ZONE))
+    ax.tick_params(axis="x", labelrotation=0, labelsize=10, colors="#203449", length=0, pad=12)
     for tick in ax.get_xticklabels(): tick.set_fontweight("bold")
-    ax.margins(y=.12)
+    ax.margins(y=.18)
+    # Label the observed temperature extrema, with enough space for mobile display.
+    high_idx = int(np.nanargmax(y))
+    low_idx = int(np.nanargmin(y))
+    for idx, label, offset in ((high_idx, "High", (0, 15)), (low_idx, "Low", (0, -22))):
+        ax.annotate(f"{label} {y[idx]:.1f}°F", xy=(x[idx], y[idx]),
+                    xytext=offset, textcoords="offset points",
+                    ha="center", va="center", fontsize=10, fontweight="bold",
+                    color="#a64021", zorder=8,
+                    bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="none", alpha=.9))
     if np.any(np.isfinite(rain) & (rain > 0)):
         ax2 = ax.twinx()
         # Matplotlib paints the second axes above the first unless their axes layers are reordered.
@@ -117,11 +126,11 @@ def draw(points):
     else:
         handles=[plt.Line2D([], [], color="#dd6033", lw=3.4, label="Temperature"),
                  plt.Line2D([], [], color="#1675aa", lw=3, label="Dew point")]
-    fig.text(.075, .815, "Rainfall values are individual reported observations, not a storm total.", fontsize=9, color="#476276")
-    fig.text(.075, .945, "MORAGA  |  KCAMORAG71", fontsize=18, color="#172b41", weight="bold")
-    fig.text(.075, .887, "Verified observations  ·  Pacific time (PDT/PST)", fontsize=11, color="#476276", weight="bold")
-    fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(.075, .854),
-               ncol=3, frameon=False, labelcolor="#203449", fontsize=12)
+    fig.text(.09, .745, "Rainfall bars show individual reported observations, not a storm total.", fontsize=10, color="#476276")
+    fig.text(.09, .945, "MORAGA  |  KCAMORAG71", fontsize=18, color="#172b41", weight="bold")
+    fig.text(.09, .895, "Verified observations  ·  Pacific time (PDT/PST)", fontsize=11, color="#476276", weight="bold")
+    fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(.09, .855),
+               ncol=3, frameon=False, labelcolor="#203449", fontsize=11, columnspacing=1.5)
     fig.savefig(OUTPUT, dpi=170, facecolor=fig.get_facecolor())
     plt.close(fig)
 
