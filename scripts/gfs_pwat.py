@@ -15,21 +15,22 @@ OUT = Path(".")
 def main():
     now = dt.datetime.now(dt.timezone.utc)
     # Use the most recent established GFS cycle, allowing time for NOAA publication.
-    cycle = (now - dt.timedelta(hours=6)).replace(hour=((now.hour-6)%24//6)*6, minute=0, second=0, microsecond=0)
+    reference = now - dt.timedelta(hours=8)
+    cycle = reference.replace(hour=(reference.hour // 6) * 6, minute=0, second=0, microsecond=0)
     for hour in HOURS:
         dataset = None
         for back in (0, 6, 12):
             run = cycle - dt.timedelta(hours=back)
             try:
                 h = Herbie(run, model="gfs", product="pgrb2.0p25", fxx=hour, priority=["aws", "nomads"])
-                dataset = h.xarray(":PWAT:entire atmosphere:")
+                dataset = h.xarray(":PWAT:")
                 if dataset is not None:
                     break
             except Exception as exc:
                 print(f"GFS {run} +{hour}: {exc}")
         if dataset is None:
             raise RuntimeError(f"No real GFS PWAT field available for +{hour}")
-        key = next((k for k in dataset.data_vars if "pwat" in k.lower()), None)
+        key = next((k for k in dataset.data_vars if "pwat" in k.lower() or "precipitable" in k.lower()), None)
         if key is None:
             raise RuntimeError(f"PWAT variable missing: {list(dataset.data_vars)}")
         field = dataset[key].squeeze()
