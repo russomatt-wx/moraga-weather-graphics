@@ -73,7 +73,7 @@ for key in ("pressure_msl","geopotential_height_500hPa","geopotential_height_100
 pressure=fields["pressure_msl"]
 thickness=(fields["geopotential_height_500hPa"]-fields["geopotential_height_1000hPa"])/10
 if not (940<np.nanmin(pressure)<1080 and 460<np.nanmean(thickness)<610):raise RuntimeError("Unexpected field units")
-fig=plt.figure(figsize=(14,9),facecolor="white")
+fig=plt.figure(figsize=(11,10),facecolor="white")
 ax=plt.axes(projection=ccrs.PlateCarree())
 ax.set_extent([-175,-105,20,65],crs=ccrs.PlateCarree())
 ax.set_facecolor("white")
@@ -153,7 +153,7 @@ fig.text(.06,.96,"PACIFIC SYNOPTIC • SURFACE + 1000–500 mb THICKNESS",
 fig.text(.06,.924,"GFS sea-level pressure (gray, 8 hPa)  •  1000–500 mb thickness (shaded + dashed, dam)  •  540 dam (blue solid)",
          color="#333333",fontsize=10)
 fig.text(.06,.025,f"GFS valid {valid:%d %b %Y %HZ}  |  Source: Open-Meteo / GFS",
-         color="#333333",fontsize=9)
+         color="#333333",fontsize=12)
 fig.subplots_adjust(left=.04,right=.98,bottom=.13,top=.895)
 bar_ax=fig.add_axes([.095,.085,.77,.018])
 sm=ScalarMappable(norm=norm,cmap=cmap)
