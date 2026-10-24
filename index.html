@@ -1234,7 +1234,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  if(valid.length<2)return;
  const start=Date.parse(valid[0]);
  const axisEnd=start+11*86400000;
- const W=1000,H=700,L=83,R=76,T=130,B=102;
+ const W=800,H=900,L=75,R=65,T=155,B=105;
  const dayFmt=new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:tz});
  const renderChart=(plotSeries,title,showBands=false)=>{
   const vals=plotSeries.flatMap(m=>m.temp.filter((v,i)=>Number.isFinite(v)&&Date.parse(m.time[i])<=axisEnd));
@@ -1242,9 +1242,9 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
   const min=Math.floor((Math.min(...vals)-4)/10)*10,max=Math.ceil((Math.max(...vals)+4)/10)*10;
   const px=ms=>L+(ms-start)/(axisEnd-start)*(W-L-R);
   const py=v=>T+(max-v)/(max-min)*(H-T-B);
-  let svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'"><rect width="'+W+'" height="'+H+'" rx="15" fill="white"/><text x="'+L+'" y="43" font-family="Arial,sans-serif" font-size="26" font-weight="800" fill="#111">'+title+'</text>';
-  for(let v=min;v<=max;v+=10){const yy=py(v);svg+='<path d="M'+L+' '+yy+'H'+(W-R)+'" stroke="#e4e4e4"/>';for(const side of [L-13,W-R+13])svg+='<text x="'+side+'" y="'+(yy+4)+'" text-anchor="'+(side<L?'end':'start')+'" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#26394d">'+v+'</text>'}
-  for(let ms=start;ms<=axisEnd;ms+=2*86400000){const xx=px(ms);svg+='<path d="M'+xx+' '+T+'V'+(H-B)+'" stroke="#eee"/><text x="'+xx+'" y="'+(H-B+35)+'" text-anchor="end" transform="rotate(-28 '+xx+' '+(H-B+27)+')" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#26394d">'+dayFmt.format(new Date(ms))+'</text>'}
+  let svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'"><rect width="'+W+'" height="'+H+'" rx="15" fill="white"/><text x="'+L+'" y="43" font-family="Arial,sans-serif" font-size="25" font-weight="800" fill="#111">'+title+'</text>';
+  for(let v=min;v<=max;v+=10){const yy=py(v);svg+='<path d="M'+L+' '+yy+'H'+(W-R)+'" stroke="#e4e4e4"/>';for(const side of [L-13,W-R+13])svg+='<text x="'+side+'" y="'+(yy+4)+'" text-anchor="'+(side<L?'end':'start')+'" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#26394d"">'+v+'</text>'}
+  for(let ms=start;ms<=axisEnd;ms+=3*86400000){const xx=px(ms);svg+='<path d="M'+xx+' '+T+'V'+(H-B)+'" stroke="#eee"/><text x="'+xx+'" y="'+(H-B+35)+'" text-anchor="middle"" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#26394d"">'+dayFmt.format(new Date(ms))+'</text>'}
   for(const m of plotSeries){
    const points=m.time.map((t,i)=>({ms:Date.parse(t),v:m.temp[i],low:m.low?.[i],high:m.high?.[i]})).filter(p=>Number.isFinite(p.v)&&p.ms>=start&&p.ms<=axisEnd);
    if(!points.length)continue;
@@ -1255,13 +1255,13 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
    svg+='<polyline points="'+points.map(p=>px(p.ms).toFixed(1)+','+py(p.v).toFixed(1)).join(' ')+'" fill="none" stroke="'+m.color+'" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>';
   }
   const legendX=L+16;
-  plotSeries.forEach((m,i)=>{const xx=legendX+(i%3)*270,yy=75+Math.floor(i/3)*32;svg+='<path d="M'+xx+' '+yy+'h22" stroke="'+m.color+'" stroke-width="4"/><text x="'+(xx+27)+'" y="'+(yy+4)+'" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#26394d">'+m.name+'</text>'});
+  plotSeries.forEach((m,i)=>{const xx=legendX+(i%3)*220,yy=75+Math.floor(i/3)*38;svg+='<path d="M'+xx+' '+yy+'h22" stroke="'+m.color+'" stroke-width="4"/><text x="'+(xx+27)+'" y="'+(yy+4)+'" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#26394d">'+m.name+'</text>'});
   svg+='<rect x="'+L+'" y="'+T+'" width="'+(W-L-R)+'" height="'+(H-T-B)+'" fill="none" stroke="#777"/><text x="29" y="'+H/2+'" transform="rotate(-90 29 '+H/2+')" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#26394d">Temperature (°F)</text><text x="'+(W-29)+'" y="'+H/2+'" transform="rotate(90 '+(W-29)+' '+H/2+')" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#26394d">Temperature (°F)</text></svg>';
   return URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
  };
  // Surface the actual chart source, so fallback PNGs cannot silently appear current.
  const chartStatus=document.getElementById('chart-render-status');
- if(chartStatus)chartStatus.textContent='Live chart renderer v2 · bold mobile labels';
+ if(chartStatus)chartStatus.textContent='Live chart renderer v3 · mobile-readable layout';
  const guidanceUrl=renderChart(series,'Moraga | Temperature model guidance');
  if(!guidanceUrl)return;
  img.src=guidanceUrl;img.closest('a').href=guidanceUrl;
