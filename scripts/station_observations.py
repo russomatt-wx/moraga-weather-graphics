@@ -108,16 +108,16 @@ def draw(points):
     for day, indices in sorted(by_day.items()):
         high_idx = max(indices, key=lambda i: y[i])
         low_idx = min(indices, key=lambda i: y[i])
-        for idx, label, dy in ((high_idx, "H", 17), (low_idx, "L", -19)):
+        for idx, color, dy in ((high_idx, "#d94f2b", 17), (low_idx, "#1675aa", -19)):
             # At the right edge, place text to the left so it stays visible.
             near_right = (x[-1] - x[idx]).total_seconds() < 4 * 3600
             near_left = (x[idx] - x[0]).total_seconds() < 4 * 3600
             ha = "right" if near_right else ("left" if near_left else "center")
             dx = -8 if near_right else (8 if near_left else 0)
-            ax.annotate(f"{label} {y[idx]:.1f}°F", xy=(x[idx], y[idx]),
+            ax.annotate(f"{y[idx]:.0f}°F", xy=(x[idx], y[idx]),
                         xytext=(dx, dy), textcoords="offset points",
                         ha=ha, va="center", fontsize=9, fontweight="bold",
-                        color="#a64021", zorder=8, clip_on=True,
+                        color=color, zorder=8, clip_on=True,
                         bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="none", alpha=.92))
     if np.any(np.isfinite(rain) & (rain > 0)):
         ax2 = ax.twinx()
