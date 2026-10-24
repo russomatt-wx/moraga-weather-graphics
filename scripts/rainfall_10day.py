@@ -137,6 +137,7 @@ ax.tick_params(axis="y",labelsize=15)
 ax.set_ylabel("Daily rainfall (inches)",fontsize=15,fontweight="bold",labelpad=12)
 ax.set_ylim(bottom=0)
 ax.grid(axis="y",color="#cbd5e1",alpha=.75,linewidth=.8)
+ax.grid(axis="x",which="major",color="#94a3b8",linestyle=":",linewidth=1.1,alpha=.65)
 ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
 fig.suptitle("MORAGA  |  14-DAY RAINFALL",fontsize=23,fontweight="bold",
