@@ -94,6 +94,7 @@ def draw(points):
     ax.set_xlim(x[0], x[-1])
     # Day + hour on each label; avoid overlapping text at phone width.
     ax.xaxis.set_major_locator(mdates.HourLocator(byhour=(6,), tz=ZONE))
+    ax.grid(axis="x", which="major", color="#94a3b8", linestyle=":", linewidth=1.1, alpha=.65)
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %d %b\n%I %p", tz=ZONE))
     ax.tick_params(axis="x", labelrotation=0, labelsize=15, colors="#203449", length=0, pad=12)
     for tick in ax.get_xticklabels(): tick.set_fontweight("bold")
