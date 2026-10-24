@@ -54,8 +54,18 @@ def get(url, model):
     values = daily["precipitation_sum"]
     if not daily["time"] or len(values) != len(daily["time"]):
         raise ValueError(f"Unexpected forecast length: {model}")
-    if any(v is not None and (not isinstance(v, (float,int)) or v < 0) for v in values):
-        raise ValueError(f"Invalid precipitation values: {model}")
+    # Preserve valid days even when a model returns an invalid daily value.
+    cleaned = []
+    for v in values:
+        if v is None:
+            cleaned.append(None)
+        elif not isinstance(v, (float, int)) or not float("-inf") < v < float("inf"):
+            cleaned.append(None)
+        elif v < -0.005:
+            cleaned.append(None)
+        else:
+            cleaned.append(max(0.0, v))
+    values = cleaned
     if "temperature_2m_max" in daily:
         highs, lows = daily["temperature_2m_max"], daily["temperature_2m_min"]
         if len(highs) != len(daily["time"]) or len(lows) != len(daily["time"]):
