@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-24T02:34:12.990190+00:00",
+  "generated_utc": "2026-10-24T02:41:14.849550+00:00",
   "requested_latitude": 37.8201932,
   "requested_longitude": -122.1193876,
   "models": {
@@ -16,10 +16,14 @@
       "grid_longitude": -122.11667
     },
     "EPS": {
-      "error": "HTTP Error 404: Not Found"
+      "model": "ecmwf_ifs025_ensemble_mean",
+      "source": "Open-Meteo ensemble-mean",
+      "hours": 240,
+      "grid_latitude": 37.75,
+      "grid_longitude": -122.0
     },
     "GEFS": {
-      "error": "HTTP Error 404: Not Found"
+      "error": "Insufficient ensemble mean data for geopotential_height_500hPa"
     }
   }
 }
