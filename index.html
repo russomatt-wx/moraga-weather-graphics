@@ -474,6 +474,9 @@ main>nav[aria-label="Weather dashboard sections"] a{
 /* Subtle temperature-tinted card interiors; retain the high-to-low gradient outlines. */
 #ten-day .day-forecast{background:linear-gradient(180deg,color-mix(in srgb,var(--forecast-high,#dfbb60) 20%,#142330) 0%,color-mix(in srgb,var(--forecast-high,#dfbb60) 10%,#10202d) 48%,color-mix(in srgb,var(--forecast-low,#5aa6e0) 14%,#0b1722) 100%) padding-box,linear-gradient(180deg,var(--forecast-high,#dfbb60) 0%,color-mix(in srgb,var(--forecast-high,#dfbb60) 48%,var(--forecast-low,#5aa6e0)) 52%,var(--forecast-low,#5aa6e0) 100%) border-box!important}
 /* Today retains its distinctive blue emphasis. */
+
+/* Today: use the same temperature-gradient outline as other days, without interior color tint. */
+#ten-day .day-forecast:first-child{border-color:transparent!important;background:linear-gradient(180deg,#142330,#0b1722) padding-box,linear-gradient(180deg,var(--forecast-high,#dfbb60) 0%,color-mix(in srgb,var(--forecast-high,#dfbb60) 48%,var(--forecast-low,#5aa6e0)) 52%,var(--forecast-low,#5aa6e0) 100%) border-box!important}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
