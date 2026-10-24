@@ -1,16 +1,16 @@
 {
-  "generated_utc": "2026-10-23T23:04:16.184906+00:00",
+  "generated_utc": "2026-10-24T17:59:38.987878+00:00",
   "status": "scored",
   "summary": {
     "6 AM": {
-      "count": 2,
-      "high_mae_f": 2.5,
-      "low_mae_f": 0.0
+      "count": 3,
+      "high_mae_f": 2.67,
+      "low_mae_f": 1.33
     },
     "11 AM": {
-      "count": 2,
-      "high_mae_f": 1.5,
-      "low_mae_f": 0.0
+      "count": 3,
+      "high_mae_f": 2.33,
+      "low_mae_f": 1.33
     },
     "4 PM": {
       "count": 6,

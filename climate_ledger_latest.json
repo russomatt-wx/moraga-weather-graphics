@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-23T23:04:08.144984+00:00",
+  "generated_utc": "2026-10-24T17:59:28.525127+00:00",
   "station": "KCAMORAG71",
   "days": {
     "2026-10-07": {
@@ -118,34 +118,39 @@
       "precipitation_as_of_utc": "2026-10-23T04:39:00+00:00"
     },
     "2026-10-23": {
-      "sampled_low_f": 54.0,
-      "sampled_high_f": 70.0,
-      "samples": 910,
+      "sampled_low_f": 48.0,
+      "sampled_high_f": 71.0,
+      "samples": 1417,
       "first_utc": "2026-10-23T07:00:00+00:00",
-      "last_utc": "2026-10-23T22:24:00+00:00"
+      "last_utc": "2026-10-24T06:59:00+00:00"
+    },
+    "2026-10-24": {
+      "sampled_low_f": 40.0,
+      "sampled_high_f": 60.0,
+      "samples": 611,
+      "first_utc": "2026-10-24T07:00:00+00:00",
+      "last_utc": "2026-10-24T17:21:00+00:00"
     }
   },
   "months": {
     "2026-10": {
-      "sample_count": 9842,
-      "days_with_samples": 17,
-      "mean_sample_temperature_f": 60.11,
-      "mean_sampled_daily_high_f": 77.53,
-      "mean_sampled_daily_low_f": 50.71,
+      "sample_count": 10960,
+      "days_with_samples": 18,
+      "mean_sample_temperature_f": 59.17,
+      "mean_sampled_daily_high_f": 76.61,
+      "mean_sampled_daily_low_f": 49.78,
       "monthly_precipitation_in": 0.48,
       "annual_precipitation_in": null,
-      "precipitation_status": "owner_confirmed_as_of",
-      "precipitation_as_of_utc": "2026-10-23T04:39:00+00:00",
-      "precipitation_source": "Owner-confirmed October 22 rainfall, month-to-date minimum"
+      "precipitation_status": "daily_observed_or_confirmed_minimum"
     }
   },
-  "observations": 9842,
+  "observations": 10960,
   "status": "partial_observed_climate_ledger",
   "caveat": "Uneven station sampling; monthly averages are not official daily-mean climate normals. Rainfall is source-reported month-to-date or a dated owner confirmation; cumulative readings are never summed.",
   "station_graphic": {
     "path": "climate/station_temperature_latest.png",
     "samples_plotted": 500,
-    "last_observed_utc": "2026-10-23T22:24:00+00:00",
+    "last_observed_utc": "2026-10-24T17:21:00+00:00",
     "source": "observations/KCAMORAG71_*.csv"
   }
 }
