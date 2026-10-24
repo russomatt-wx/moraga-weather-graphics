@@ -118,7 +118,7 @@ plt.rcParams.update({"font.family":"DejaVu Sans","font.size":14,"font.weight":"s
     "axes.edgecolor":"#a5b4c3","axes.labelcolor":"#25374a",
     "xtick.color":"#34495e","ytick.color":"#34495e",
     "text.color":"#1c3044","savefig.facecolor":"#ffffff"})
-fig, ax = plt.subplots(figsize=(11, 9.2), dpi=160, facecolor="#ffffff")
+fig, ax = plt.subplots(figsize=(9, 10.5), dpi=160, facecolor="#ffffff")
 ax.set_facecolor("#f8fafc")
 colors = {"ECMWF":"#087e9a","GFS":"#d56b16","ICON":"#168458",
           "GEM":"#c33268","EPS mean":"#245bb3",
@@ -132,8 +132,8 @@ for name, vals in results.items():
 ax.set_xlim(-.35,13.35)
 ax.set_xticks(range(14))
 ax.set_xticklabels([datetime.fromisoformat(d).strftime("%b %-d") for d in dates],
-                   rotation=55,ha="right",fontsize=13,fontweight="semibold")
-ax.tick_params(axis="y",labelsize=12)
+                   rotation=55,ha="right",fontsize=15,fontweight="semibold")
+ax.tick_params(axis="y",labelsize=15)
 ax.set_ylabel("Daily rainfall (inches)",fontsize=15,fontweight="bold",labelpad=12)
 ax.set_ylim(bottom=0)
 ax.grid(axis="y",color="#cbd5e1",alpha=.75,linewidth=.8)
@@ -144,12 +144,12 @@ fig.suptitle("MORAGA  |  14-DAY RAINFALL",fontsize=23,fontweight="bold",
 fig.text(.085,.915,"Model comparison  ·  Daily precipitation",fontsize=14,color="#53697b")
 handles,labels=ax.get_legend_handles_labels()
 fig.legend(handles,labels,loc="upper left",bbox_to_anchor=(.085,.885),
-           ncol=2,fontsize=14,frameon=False,labelcolor="#1c3044",
+           ncol=2,fontsize=16,frameon=False,labelcolor="#1c3044",
            columnspacing=2.5,handlelength=2.3,labelspacing=.75)
 fig.text(.085,.026,
          f"Updated {now:%b %d %H:%M} UTC  ·  Open-Meteo  ·  Gaps indicate unavailable model days",
          fontsize=11,color="#64748b")
-fig.subplots_adjust(left=.085,right=.98,bottom=.17,top=.64)
+fig.subplots_adjust(left=.085,right=.98,bottom=.18,top=.72)
 out=Path("moraga_rainfall_10day.png")
 fig.savefig(out,facecolor=fig.get_facecolor())
 plt.close(fig)
