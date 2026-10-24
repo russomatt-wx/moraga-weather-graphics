@@ -73,15 +73,15 @@ def draw(points):
     y = np.array([v[0] for _, v in points])
     dew = np.array([v[1] for _, v in points])
     rain = np.array([v[2] for _, v in points])
-    fig, ax = plt.subplots(figsize=(9, 8.2), dpi=170, facecolor="#ffffff")
+    fig, ax = plt.subplots(figsize=(7.2, 8.6), dpi=170, facecolor="#ffffff")
     ax.set_facecolor("#f8fafc")
-    fig.subplots_adjust(left=.10, right=.87, top=.79, bottom=.15)
+    fig.subplots_adjust(left=.10, right=.90, top=.84, bottom=.12)
     ax.plot(x, y, color="#dd6033", lw=3.4, label="Temperature", zorder=5)
     ax.plot(x, dew, color="#1675aa", lw=3.0, label="Dew point", zorder=4)
     ax.grid(axis="y", color="#c7d3dc", alpha=.65, linewidth=.9)
     ax.set_axisbelow(True)
-    ax.set_ylabel("Temperature / dew point (°F)", color="#203449", weight="bold", fontsize=12)
-    ax.tick_params(axis="y", labelsize=13, colors="#203449", length=0, pad=7)
+    ax.set_ylabel("°F", color="#203449", weight="bold", fontsize=16)
+    ax.tick_params(axis="y", labelsize=16, colors="#203449", length=0, pad=7)
     for tick in ax.get_yticklabels(): tick.set_fontweight("bold")
     for spine in ax.spines.values(): spine.set_visible(False)
     start = x[0].date()
@@ -95,7 +95,7 @@ def draw(points):
     # Day + hour on each label; avoid overlapping text at phone width.
     ax.xaxis.set_major_locator(mdates.HourLocator(byhour=(6,), tz=ZONE))
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %d %b\n%I %p", tz=ZONE))
-    ax.tick_params(axis="x", labelrotation=0, labelsize=13, colors="#203449", length=0, pad=12)
+    ax.tick_params(axis="x", labelrotation=0, labelsize=15, colors="#203449", length=0, pad=12)
     for tick in ax.get_xticklabels(): tick.set_fontweight("bold")
     ax.margins(y=.18)
     # Show high/low for EACH local calendar day, not just the entire 72-hour window.
@@ -116,7 +116,7 @@ def draw(points):
             dx = -8 if near_right else (8 if near_left else 0)
             ax.annotate(f"{y[idx]:.0f}°F", xy=(x[idx], y[idx]),
                         xytext=(dx, dy), textcoords="offset points",
-                        ha=ha, va="center", fontsize=13, fontweight="bold",
+                        ha=ha, va="center", fontsize=16, fontweight="bold",
                         color=color, zorder=8, clip_on=True,
                         bbox=dict(boxstyle="round,pad=0.35", fc="white", ec="none", alpha=1.0))
     if np.any(np.isfinite(rain) & (rain > 0)):
@@ -127,8 +127,8 @@ def draw(points):
         ax.patch.set_visible(False)
         # Rain values are individual Xweather reported precipitation observations, not a storm total.
         ax2.bar(x, np.nan_to_num(rain, nan=0.0), width=0.0025, color="#28a6bc", alpha=.55, label="Reported precipitation", zorder=2)
-        ax2.set_ylabel("Reported precip. (in)", color="#205b6b", weight="bold", fontsize=11)
-        ax2.tick_params(axis="y", colors="#205b6b", labelsize=10, length=0)
+        ax2.set_ylabel("Rain (in)", color="#205b6b", weight="bold", fontsize=14)
+        ax2.tick_params(axis="y", colors="#205b6b", labelsize=13, length=0)
         for spine in ax2.spines.values(): spine.set_visible(False)
         ax2.set_ylim(bottom=0)
         from matplotlib.patches import Patch
@@ -138,11 +138,11 @@ def draw(points):
     else:
         handles=[plt.Line2D([], [], color="#dd6033", lw=3.4, label="Temperature"),
                  plt.Line2D([], [], color="#1675aa", lw=3, label="Dew point")]
-    fig.text(.10, .825, "Rainfall bars show individual reported observations, not a storm total.", fontsize=10, color="#476276")
-    fig.text(.10, .955, "MORAGA  |  KCAMORAG71", fontsize=18, color="#172b41", weight="bold")
-    fig.text(.10, .920, "Verified observations  ·  Pacific time (PDT/PST)", fontsize=11, color="#476276", weight="bold")
-    fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(.10, .895),
-               ncol=3, frameon=False, labelcolor="#203449", fontsize=13, columnspacing=1.1)
+    fig.text(.10, .865, "Rain bars = individual reports, not storm totals", fontsize=12, color="#476276")
+    fig.text(.10, .965, "MORAGA  |  KCAMORAG71", fontsize=18, color="#172b41", weight="bold")
+    fig.text(.10, .930, "Verified observations  ·  Pacific time (PDT/PST)", fontsize=11, color="#476276", weight="bold")
+    fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(.10, .912),
+               ncol=2, frameon=False, labelcolor="#203449", fontsize=15, columnspacing=1.0)
     fig.savefig(OUTPUT, dpi=170, facecolor=fig.get_facecolor())
     plt.close(fig)
 
