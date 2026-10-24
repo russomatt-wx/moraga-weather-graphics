@@ -47,7 +47,7 @@ def series(data,key):
 def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
     ts=[datetime.fromisoformat(t).replace(tzinfo=ZONE) for t in times]
     vals=np.array(values,dtype=float)
-    fig,ax=plt.subplots(figsize=(13,5.8),layout="constrained")
+    fig,ax=plt.subplots(figsize=(9,7.8),layout="constrained")
     fig.patch.set_facecolor("#ffffff");ax.set_facecolor("#f8fafc")
     past=np.array([t<=cutoff for t in ts])
     future=np.array([t>=cutoff for t in ts])
@@ -59,14 +59,14 @@ def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
         ax.axhline(0,color="#475569",linewidth=1.3)
         ax.axhspan(0,max(1,float(np.nanmax(vals))*1.15),color="#dbeafe",alpha=.24,zorder=0)
         ax.axhspan(min(-1,float(np.nanmin(vals))*1.15),0,color="#ffedd5",alpha=.25,zorder=0)
-    ax.set_title(title,fontsize=16,weight="bold",loc="left",pad=15)
+    ax.set_title(title,fontsize=18,weight="bold",loc="left",pad=15)
     ax.set_xlabel("Pacific time · model analysis / forecast",fontweight="bold")
     ax.set_ylabel(ylabel)
     ax.grid(axis="y",color="#cbd5e1",alpha=.7)
-    ax.tick_params(labelsize=13)
+    ax.tick_params(labelsize=16)
     for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")
     ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
-    ax.legend(loc="upper left",ncol=2,fontsize=12)
+    ax.legend(loc="upper left",ncol=2,fontsize=14)
     import matplotlib.dates as mdates
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=12))
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\n%I %p",tz=ZONE))
