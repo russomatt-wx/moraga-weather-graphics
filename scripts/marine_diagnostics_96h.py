@@ -68,10 +68,10 @@ def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
     ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
     ax.legend(loc="upper left",ncol=2,fontsize=14)
     import matplotlib.dates as mdates
-    ax.xaxis.set_major_locator(mdates.HourLocator(byhour=(6,),tz=ZONE))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\n%I %p",tz=ZONE))
+    ax.xaxis.set_major_locator(mdates.DayLocator(interval=1,tz=ZONE))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d",tz=ZONE))
     plt.setp(ax.get_xticklabels(),rotation=0,ha="center")
-    fig.text(.01,.005,footnote,fontsize=10,color="#525d69")
+    fig.text(.07,.012,footnote,fontsize=9,color="#525d69",wrap=True)
     fig.savefig(ROOT/filename,dpi=155,bbox_inches="tight",facecolor=fig.get_facecolor())
     plt.close(fig)
 
