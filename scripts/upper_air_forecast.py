@@ -49,7 +49,7 @@ for label,model in MODELS.items():
         results[label]={"error":str(exc)}
 # Actual ensemble means from Open-Meteo's ensemble-mean API.
 # Do not substitute deterministic forecasts if ensemble data is unavailable.
-ENSEMBLES={"EPS":"ecmwf_ifs025_ensemble_mean","GEFS":"ncep_gefs025_ensemble_mean"}
+ENSEMBLES={"EPS":"ecmwf_ifs025_ensemble_mean","GEFS":"ncep_gefs_ensemble_mean_seamless"}
 for label, model in ENSEMBLES.items():
     query=urllib.parse.urlencode({"latitude":LAT,"longitude":LON,
         "hourly":FIELDS,"models":model,"timezone":"America/Los_Angeles","forecast_days":10})
@@ -66,7 +66,7 @@ for label, model in ENSEMBLES.items():
             if key is None: raise ValueError(f"Missing ensemble mean {field}; fields={list(h)}")
             values=np.array([float(v) if v is not None else np.nan for v in h[key]])
             if len(values)!=len(x) or np.isfinite(values).sum()<24:
-                raise ValueError(f"Insufficient ensemble mean data for {field}")
+                raise ValueError(f"Insufficient ensemble mean data for {field}: {np.isfinite(values).sum()}/{len(values)} valid")
             return values
         z=mean_field("geopotential_height_500hPa")
         t=mean_field("temperature_850hPa")
