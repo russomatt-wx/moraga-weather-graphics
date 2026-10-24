@@ -1,3 +1,4 @@
+import math
 #!/usr/bin/env python3
 """Publish a 14-day Moraga daily model precipitation comparison.
 Source: Open-Meteo deterministic forecast and ensemble-mean APIs.
@@ -135,7 +136,11 @@ ax.set_xticklabels([datetime.fromisoformat(d).strftime("%b %-d") for d in dates]
                    rotation=55,ha="right",fontsize=15,fontweight="semibold")
 ax.tick_params(axis="y",labelsize=15)
 ax.set_ylabel("Daily rainfall (inches)",fontsize=15,fontweight="bold",labelpad=12)
-ax.set_ylim(bottom=0)
+max_daily = max((float(v) for vals in results.values() for v in vals if isinstance(v, (float, int))), default=0.0)
+# Keep a consistent scale between routine updates; expand only for exceptional rainfall.
+axis_ceiling = max(1.0, math.ceil(max_daily / 0.2) * 0.2)
+ax.set_ylim(0, axis_ceiling)
+ax.set_yticks([round(i * 0.2, 2) for i in range(int(round(axis_ceiling / 0.2)) + 1)])
 ax.grid(axis="y",color="#cbd5e1",alpha=.75,linewidth=.8)
 ax.grid(axis="x",which="major",color="#94a3b8",linestyle=":",linewidth=1.1,alpha=.65)
 ax.spines["top"].set_visible(False)
