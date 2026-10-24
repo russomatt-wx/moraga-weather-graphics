@@ -432,6 +432,10 @@ main>nav[aria-label="Weather dashboard sections"] a{
 #ten-day .day-pop{font-weight:700;color:#8fddfa!important;font-size:11px!important;margin:7px 0 4px!important;white-space:nowrap}
 #ten-day .forecast-details-button{margin-top:auto!important}
 @media(max-width:760px){#ten-day .day-forecast{min-height:0!important}#ten-day .day-condition{min-height:48px!important}#ten-day .day-range{width:82%}}
+
+/* Transparent illustrated forecast symbols blend directly with navy cards. */
+#ten-day .day-condition>span{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:47px!important;line-height:1!important;background:none!important}
+#ten-day .forecast-weather-svg{display:block;width:49px;height:49px;max-width:100%;object-fit:contain;background:transparent!important;border:0!important;box-shadow:none!important;filter:none!important}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
@@ -980,7 +984,8 @@ if(!significantRain&&!/thunder|storm|snow|sleet|heavy rain/i.test(condition[1]))
 // Restore the original compact emoji weather symbols used before the illustration redesign.
 const labelLower=condition[1].toLowerCase();
 const iconKind=/thunder|storm/.test(labelLower)?'storm':/snow|sleet/.test(labelLower)?'snow':/drizzle/.test(labelLower)?'drizzle':/fog|mist/.test(labelLower)?'fog':/am clouds.*pm sun|am low clouds.*sun/.test(labelLower)?'clearing':/shower|chance of rain/.test(labelLower)?'showers':/rain/.test(labelLower)?'rain':/partly cloudy|increasing clouds/.test(labelLower)?'partly':/mostly cloudy|overcast|low clouds/.test(labelLower)?'cloud':/mostly sunny/.test(labelLower)?'mostlySun':/sunny|clear/.test(labelLower)?'sun':'partly';
-const conditionIcon=condition[0];
+const iconNames={storm:'thunderstorms-day',snow:'snow',drizzle:'drizzle',fog:'mist',clearing:'partly-cloudy-day',showers:'partly-cloudy-day-rain',rain:'rain',partly:'partly-cloudy-day',cloud:'cloudy',mostlySun:'partly-cloudy-day',sun:'clear-day'};
+const conditionIcon='<img class="forecast-weather-svg" src="https://basmilius.github.io/weather-icons/production/fill/all/'+(iconNames[iconKind]||'partly-cloudy-day')+'.svg" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode('+JSON.stringify('☁️')+'))">';
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
