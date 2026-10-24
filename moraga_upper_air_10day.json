@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-24T02:41:14.849550+00:00",
+  "generated_utc": "2026-10-24T02:43:22.225428+00:00",
   "requested_latitude": 37.8201932,
   "requested_longitude": -122.1193876,
   "models": {
@@ -23,7 +23,11 @@
       "grid_longitude": -122.0
     },
     "GEFS": {
-      "error": "Insufficient ensemble mean data for geopotential_height_500hPa"
+      "model": "ncep_gefs_ensemble_mean_seamless",
+      "source": "Open-Meteo ensemble-mean",
+      "hours": 240,
+      "grid_latitude": 37.75,
+      "grid_longitude": -122.0
     }
   }
 }
