@@ -44,7 +44,7 @@ def main():
         pwat = np.asarray(field, dtype=float) / 25.4  # GRIB PWAT kg/m² = mm liquid water.
         if not np.isfinite(pwat).any():
             raise RuntimeError("Invalid PWAT field")
-        fig = plt.figure(figsize=(12, 7), dpi=150, facecolor="white")
+        fig = plt.figure(figsize=(10, 8.5), dpi=150, facecolor="white")
         ax = fig.add_subplot(111, projection=ccrs.PlateCarree())
         ax.set_extent([-165, -112, 20, 60], crs=ccrs.PlateCarree())
         levels = np.arange(0, 2.76, .25)
@@ -64,7 +64,7 @@ def main():
         valid = run + dt.timedelta(hours=hour)
         local_valid = valid.astimezone(ZoneInfo("America/Los_Angeles"))
         lead = (valid - now).total_seconds() / 3600
-        ax.set_title(f"GFS precipitable water • ~+{lead:.0f}h from update\nValid {local_valid:%a %b %d %I:%M %p %Z} | GFS f{hour:03d}", weight="bold", fontsize=15, pad=15)
+        ax.set_title(f"GFS precipitable water • ~+{lead:.0f}h from update\nValid {local_valid:%a %b %d %I:%M %p %Z} | GFS f{hour:03d}", weight="bold", fontsize=17, pad=15)
         bar = fig.colorbar(m, ax=ax, orientation="horizontal", pad=.07, fraction=.05)
         bar.set_label("Precipitable water (inches)")
         fig.savefig(OUT / f"gfs_pwat_f{horizon:03d}.png", bbox_inches="tight", facecolor="white")
