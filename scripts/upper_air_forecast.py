@@ -86,6 +86,7 @@ axes[1].set_title("850 hPa temperature | air-mass evolution",loc="left",fontweig
 axes[1].set_ylabel("Temperature (°C)")
 for ax in axes:
     ax.grid(axis="y",color="#cbd5e1",alpha=.75)
+    ax.grid(axis="x",which="major",color="#94a3b8",linestyle=":",linewidth=1.1,alpha=.65)
     ax.tick_params(labelsize=15)
     for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")
     ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
