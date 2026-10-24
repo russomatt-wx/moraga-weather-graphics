@@ -69,6 +69,7 @@ def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
     ax.legend(loc="upper left",ncol=2,fontsize=14)
     import matplotlib.dates as mdates
     ax.xaxis.set_major_locator(mdates.DayLocator(interval=1,tz=ZONE))
+    ax.grid(axis="x", which="major", color="#94a3b8", linestyle=":", linewidth=1.1, alpha=.65)
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d",tz=ZONE))
     plt.setp(ax.get_xticklabels(),rotation=0,ha="center")
     fig.text(.07,.012,footnote,fontsize=9,color="#525d69",wrap=True)
