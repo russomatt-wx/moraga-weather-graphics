@@ -436,6 +436,11 @@ main>nav[aria-label="Weather dashboard sections"] a{
 /* Transparent illustrated forecast symbols blend directly with navy cards. */
 #ten-day .day-condition>span{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:47px!important;line-height:1!important;background:none!important}
 #ten-day .forecast-weather-svg{display:block;width:49px;height:49px;max-width:100%;object-fit:contain;background:transparent!important;border:0!important;box-shadow:none!important;filter:none!important}
+
+/* Quiet, transparent information glyph, not an emoji tile. */
+#ten-day .forecast-details-button{background:transparent!important;border:0!important;box-shadow:none!important;color:#83a9bf!important}
+#ten-day .forecast-info-symbol{display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;border:1.2px solid currentColor;border-radius:50%;font-family:system-ui,sans-serif;font-style:normal;font-weight:600;font-size:13px;line-height:1;background:transparent!important}
+#ten-day .forecast-details-button:hover,#ten-day .forecast-details-button:focus-visible{color:#c8e9fa!important}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
@@ -1010,7 +1015,7 @@ el.querySelectorAll('.day-forecast details').forEach((detail,index)=>{
  const button=document.createElement('button');
  button.type='button';
  button.className='forecast-details-button';
- button.innerHTML='<span aria-hidden="true">ⓘ</span><span class="sr-only">Forecast details for '+day+'</span>';
+ button.innerHTML='<span class="forecast-info-symbol" aria-hidden="true">i</span><span class="sr-only">Forecast details for '+day+'</span>';
  button.setAttribute('aria-expanded','false');
  button.setAttribute('aria-label','Forecast details for '+day);
  button.title='Forecast details for '+day;
