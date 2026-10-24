@@ -75,7 +75,7 @@ def draw(points):
     rain = np.array([v[2] for _, v in points])
     fig, ax = plt.subplots(figsize=(7.2, 8.6), dpi=170, facecolor="#ffffff")
     ax.set_facecolor("#f8fafc")
-    fig.subplots_adjust(left=.10, right=.90, top=.84, bottom=.12)
+    fig.subplots_adjust(left=.10, right=.90, top=.80, bottom=.12)
     ax.plot(x, y, color="#dd6033", lw=3.4, label="Temperature", zorder=5)
     ax.plot(x, dew, color="#1675aa", lw=3.0, label="Dew point", zorder=4)
     ax.grid(axis="y", color="#c7d3dc", alpha=.65, linewidth=.9)
@@ -138,10 +138,10 @@ def draw(points):
     else:
         handles=[plt.Line2D([], [], color="#dd6033", lw=3.4, label="Temperature"),
                  plt.Line2D([], [], color="#1675aa", lw=3, label="Dew point")]
-    fig.text(.10, .865, "Rain bars = individual reports, not storm totals", fontsize=12, color="#476276")
+    fig.text(.10, .835, "Rain bars = individual reports, not storm totals", fontsize=12, color="#476276")
     fig.text(.10, .965, "MORAGA  |  KCAMORAG71", fontsize=18, color="#172b41", weight="bold")
     fig.text(.10, .930, "Verified observations  ·  Pacific time (PDT/PST)", fontsize=11, color="#476276", weight="bold")
-    fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(.10, .912),
+    fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(.10, .905),
                ncol=2, frameon=False, labelcolor="#203449", fontsize=15, columnspacing=1.0)
     fig.savefig(OUTPUT, dpi=170, facecolor=fig.get_facecolor())
     plt.close(fig)
