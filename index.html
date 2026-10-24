@@ -1244,7 +1244,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
   const py=v=>T+(max-v)/(max-min)*(H-T-B);
   let svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'"><rect width="'+W+'" height="'+H+'" rx="15" fill="white"/><text x="'+L+'" y="43" font-family="Arial,sans-serif" font-size="25" font-weight="800" fill="#111">'+title+'</text>';
   for(let v=min;v<=max;v+=10){const yy=py(v);svg+='<path d="M'+L+' '+yy+'H'+(W-R)+'" stroke="#e4e4e4"/>';for(const side of [L-13,W-R+13])svg+='<text x="'+side+'" y="'+(yy+4)+'" text-anchor="'+(side<L?'end':'start')+'" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#26394d"">'+v+'</text>'}
-  for(let ms=start;ms<=axisEnd;ms+=3*86400000){const xx=px(ms);svg+='<path d="M'+xx+' '+T+'V'+(H-B)+'" stroke="#eee"/><text x="'+xx+'" y="'+(H-B+35)+'" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#26394d"">'+dayFmt.format(new Date(ms))+'</text>'}
+  for(let ms=start;ms<=axisEnd;ms+=3*86400000){const xx=px(ms);svg+='<path d="M'+xx+' '+T+'V'+(H-B)+'" stroke="#94a3b8" stroke-dasharray="3 6" stroke-opacity=".65"/><text x="'+xx+'" y="'+(H-B+35)+'" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#26394d"">'+dayFmt.format(new Date(ms))+'</text>'}
   for(const m of plotSeries){
    const points=m.time.map((t,i)=>({ms:Date.parse(t),v:m.temp[i],low:m.low?.[i],high:m.high?.[i]})).filter(p=>Number.isFinite(p.v)&&p.ms>=start&&p.ms<=axisEnd);
    if(!points.length)continue;
