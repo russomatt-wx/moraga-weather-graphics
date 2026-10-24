@@ -49,11 +49,11 @@ for label,model in MODELS.items():
         results[label]={"error":str(exc)}
 # Actual ensemble means from Open-Meteo's ensemble-mean API.
 # Do not substitute deterministic forecasts if ensemble data is unavailable.
-ENSEMBLES={"EPS":"ecmwf_ifs025_ensemble","GEFS":"ncep_gefs025"}
+ENSEMBLES={"EPS":"ecmwf_ifs025_ensemble_mean","GEFS":"ncep_gefs025_ensemble_mean"}
 for label, model in ENSEMBLES.items():
     query=urllib.parse.urlencode({"latitude":LAT,"longitude":LON,
         "hourly":FIELDS,"models":model,"timezone":"America/Los_Angeles","forecast_days":10})
-    req=urllib.request.Request("https://ensemble-api.open-meteo.com/v1/ensemble-mean?"+query,
+    req=urllib.request.Request("https://ensemble-api.open-meteo.com/v1/ensemble?"+query,
         headers={"User-Agent":"MoragaWeatherObservatory/1.0"})
     try:
         with urllib.request.urlopen(req,timeout=50) as response: payload=json.load(response)
