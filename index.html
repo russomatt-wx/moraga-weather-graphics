@@ -456,6 +456,13 @@ main>nav[aria-label="Weather dashboard sections"] a{
 /* Daily high-to-low gradient: top warm, bottom cool, continuous around sides. */
 #ten-day .day-forecast{border:2px solid transparent!important;border-top-width:2.5px!important;background:linear-gradient(180deg,#142330,#0b1722) padding-box,linear-gradient(180deg,var(--forecast-high,#dfbb60) 0%,color-mix(in srgb,var(--forecast-high,#dfbb60) 48%,var(--forecast-low,#5aa6e0)) 52%,var(--forecast-low,#5aa6e0) 100%) border-box!important}
 #ten-day .day-forecast:first-child{border-color:transparent!important;background:linear-gradient(180deg,#163149,#0c2236) padding-box,linear-gradient(180deg,#499cdb 0%,color-mix(in srgb,var(--forecast-high,#dfbb60) 50%,var(--forecast-low,#5aa6e0)) 50%,var(--forecast-low,#5aa6e0) 100%) border-box!important}
+
+/* Mobile: stronger high/low outlines and visibly shorter forecast cards. */
+#ten-day .day-forecast{border-width:3px!important;border-top-width:3px!important;padding-top:7px!important;padding-bottom:5px!important}
+#ten-day .day-condition{min-height:36px!important}
+#ten-day .day-condition>span{height:39px!important}
+#ten-day .day-temps{margin-top:3px!important;padding-top:3px!important;padding-bottom:0!important}
+#ten-day .forecast-details-button{min-height:32px!important;margin-top:4px!important;margin-bottom:0!important}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
