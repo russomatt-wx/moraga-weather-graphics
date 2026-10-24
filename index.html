@@ -446,6 +446,12 @@ main>nav[aria-label="Weather dashboard sections"] a{
 #ten-day .day-condition>span{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:47px!important;font-size:30px!important;line-height:1!important;background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important}
 
 #ten-day .day-temps{background:transparent!important;box-shadow:none!important}
+
+/* Slightly shorter 10-day cards: reduce excess space beneath temperatures. */
+#ten-day .day-forecast{padding-bottom:6px!important}
+#ten-day .day-condition{min-height:42px!important}
+#ten-day .forecast-details-button{margin-top:8px!important;margin-bottom:2px!important}
+@media(max-width:760px){#ten-day .day-forecast{padding-top:8px!important;padding-bottom:5px!important}#ten-day .day-condition{min-height:40px!important}}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
