@@ -28,7 +28,7 @@ LAT,LON=37.8201932,-122.1193876
 LOCAL=ZoneInfo("America/Los_Angeles")
 MODELS={"ECMWF":"ecmwf_ifs025","GFS":"ncep_gfs_seamless"}
 FIELDS="geopotential_height_500hPa,temperature_850hPa"
-fig,axes=plt.subplots(2,1,figsize=(12,8),sharex=True,layout="constrained")
+fig,axes=plt.subplots(2,1,figsize=(9,10),sharex=True,layout="constrained")
 colors={"ECMWF":"#d56b16","GFS":"#087e9a"}
 fig.patch.set_facecolor("#ffffff")
 for axis in axes:axis.set_facecolor("#f8fafc")
@@ -86,14 +86,14 @@ axes[1].set_title("850 hPa temperature | air-mass evolution",loc="left",fontweig
 axes[1].set_ylabel("Temperature (°C)")
 for ax in axes:
     ax.grid(axis="y",color="#cbd5e1",alpha=.75)
-    ax.tick_params(labelsize=13)
+    ax.tick_params(labelsize=15)
     for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")
     ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
-    ax.legend(loc="best",frameon=True,fontsize=12)
+    ax.legend(loc="best",frameon=True,fontsize=14)
 axes[1].xaxis.set_major_locator(mdates.DayLocator(interval=1,tz=LOCAL))
 axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d",tz=LOCAL))
 axes[1].tick_params(axis="x",rotation=30)
-fig.suptitle("MORAGA | 10-DAY UPPER-AIR MODEL FORECAST",fontweight="bold",fontsize=19)
+fig.suptitle("MORAGA | 10-DAY UPPER-AIR MODEL FORECAST",fontweight="bold",fontsize=18)
 fig.savefig("moraga_upper_air_10day.png",dpi=165,facecolor="white",bbox_inches="tight",pad_inches=.3)
 plt.close(fig)
 Path("moraga_upper_air_10day.json").write_text(json.dumps({"generated_utc":datetime.now(timezone.utc).isoformat(),"requested_latitude":LAT,"requested_longitude":LON,"models":results},indent=2)+"\n")
