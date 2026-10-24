@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-23T20:47:39.075030+00:00",
+  "generated_utc": "2026-10-24T02:34:12.990190+00:00",
   "requested_latitude": 37.8201932,
   "requested_longitude": -122.1193876,
   "models": {
@@ -14,6 +14,12 @@
       "hours": 240,
       "grid_latitude": 37.82783,
       "grid_longitude": -122.11667
+    },
+    "EPS": {
+      "error": "HTTP Error 404: Not Found"
+    },
+    "GEFS": {
+      "error": "HTTP Error 404: Not Found"
     }
   }
 }
