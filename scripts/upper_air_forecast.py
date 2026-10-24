@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Moraga regional upper-air guidance from explicit ECMWF and GFS Open-Meteo model requests."""
 import json, urllib.parse, urllib.request
+import numpy as np
 from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -46,6 +47,38 @@ for label,model in MODELS.items():
         results[label]={"model":model,"hours":len(x),"grid_latitude":payload.get("latitude"),"grid_longitude":payload.get("longitude")}
     except Exception as exc:
         results[label]={"error":str(exc)}
+# Actual ensemble means from Open-Meteo's ensemble-mean API.
+# Do not substitute deterministic forecasts if ensemble data is unavailable.
+ENSEMBLES={"EPS":"ecmwf_ifs025_ensemble","GEFS":"ncep_gefs025"}
+for label, model in ENSEMBLES.items():
+    query=urllib.parse.urlencode({"latitude":LAT,"longitude":LON,
+        "hourly":FIELDS,"models":model,"timezone":"America/Los_Angeles","forecast_days":10})
+    req=urllib.request.Request("https://ensemble-api.open-meteo.com/v1/ensemble-mean?"+query,
+        headers={"User-Agent":"MoragaWeatherObservatory/1.0"})
+    try:
+        with urllib.request.urlopen(req,timeout=50) as response: payload=json.load(response)
+        h=payload["hourly"]
+        x=[datetime.fromisoformat(v).replace(tzinfo=LOCAL) for v in h["time"]]
+        def mean_field(field):
+            # Support the ensemble-mean endpoint's field naming.
+            keys=[field+"_mean",field]
+            key=next((k for k in keys if k in h),None)
+            if key is None: raise ValueError(f"Missing ensemble mean {field}; fields={list(h)}")
+            values=np.array([float(v) if v is not None else np.nan for v in h[key]])
+            if len(values)!=len(x) or np.isfinite(values).sum()<24:
+                raise ValueError(f"Insufficient ensemble mean data for {field}")
+            return values
+        z=mean_field("geopotential_height_500hPa")
+        t=mean_field("temperature_850hPa")
+        for axis,values in ((axes[0],z),(axes[1],t)):
+            axis.plot(x,values,label=label+" mean",color=colors["ECMWF" if label=="EPS" else "GFS"],
+                      linewidth=2.3,linestyle=(0,(6,3)))
+        results[label]={"model":model,"source":"Open-Meteo ensemble-mean",
+                        "hours":len(x),"grid_latitude":payload.get("latitude"),
+                        "grid_longitude":payload.get("longitude")}
+    except Exception as exc:
+        results[label]={"error":str(exc)}
+        print(f"{label} ensemble mean unavailable: {exc}")
 if not any("hours" in v for v in results.values()): raise RuntimeError("No verified upper-air model response: "+str(results))
 axes[0].set_title("500 hPa geopotential height | ridge and trough evolution",loc="left",fontweight="bold")
 axes[0].set_ylabel("Geopotential height (m)")
