@@ -466,6 +466,10 @@ main>nav[aria-label="Weather dashboard sections"] a{
 
 /* Improve mobile date readability without increasing card height. */
 #ten-day .day-forecast .day-date{font-size:13px!important;font-weight:600!important;color:#b9d0df!important;letter-spacing:.01em!important;line-height:1.2!important;margin-top:3px!important}
+
+/* Slightly enlarge 10-day forecast condition icons while retaining compact cards. */
+#ten-day .day-condition>span{font-size:35px!important;height:43px!important}
+@media(max-width:760px){#ten-day .day-condition>span{font-size:33px!important;height:43px!important}}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
