@@ -3,6 +3,7 @@ import json
 import math
 import urllib.parse
 import urllib.request
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from statistics import mean
@@ -18,8 +19,15 @@ def fetch(model, horizon):
               "timezone": "America/Los_Angeles"}
     url = "https://ensemble-api.open-meteo.com/v1/ensemble?" + urllib.parse.urlencode(params)
     req = urllib.request.Request(url, headers={"User-Agent": "MoragaWeatherObservatory/1.0"})
-    with urllib.request.urlopen(req, timeout=55) as response:
-        data = json.load(response)
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=55) as response:
+                data = json.load(response)
+            break
+        except (OSError, ValueError) as exc:
+            if attempt == 2:
+                raise
+            time.sleep(2 * (attempt + 1))
     hourly = data["hourly"]
     times = hourly["time"]
     temps = {k.removeprefix("temperature_2m_"): v for k, v in hourly.items() if k.startswith("temperature_2m_member")}
@@ -70,10 +78,10 @@ for date in dates[10:16]:
     g, e = daily(gefs, date), daily(eps, date)
     if not g:
         raise RuntimeError(f"Missing complete GEFS guidance for {date}")
-    if not e and date != dates[15]:
-        raise RuntimeError(f"Missing complete EPS guidance for {date}")
+    # The EPS horizon is shorter and its final local day can be partial.
+    # Use verified GEFS-only guidance when EPS is unavailable; never invent EPS values.
     # Both ensemble systems have equal weight, irrespective of member count.
-    # EPS is only available through day 15; label the final GEFS-only day.
+    # Clearly label any GEFS-only days when EPS data is incomplete.
     models = {"gefs": g}
     if e:
         models["eps"] = e
@@ -89,6 +97,6 @@ for date in dates[10:16]:
 result = {"generated_utc": datetime.now(timezone.utc).isoformat(),
           "source": "Open-Meteo GEFS and ECMWF IFS EPS ensembles",
           "latitude": LAT, "longitude": LON, "days": out,
-          "caveat": "Equal-weight model-level ensemble summary, not calibrated precipitation probability. EPS has a 15-day horizon; the final day may be GEFS-only."}
+          "caveat": "Equal-weight model-level ensemble summary where both systems have complete days; GEFS-only days are labeled. Not calibrated precipitation probability."}
 Path("moraga_extended_outlook.json").write_text(json.dumps(result, indent=2)+"\n")
 print("Validated", len(out), "extended outlook days; EPS/GEFS days:", sum(bool(d["models"].get("eps")) for d in out))
