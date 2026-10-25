@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Moraga Weather Observatory | Forecast Graphics</title>
+<title>Moraga Weather Observatory | Forecast Graphics</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#0a1422"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Moraga Weather"><link rel="icon" type="image/svg+xml" href="./app-icon.svg"><link rel="apple-touch-icon" href="./app-icon.svg">
 <meta name="description" content="Moraga microclimate, Bay Area marine intrusion, West Coast synoptic maps and rainfall forecast graphics.">
 <style>
 :root{color-scheme:dark;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0a1422;color:#eaf3ff}
@@ -77,4 +77,4 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
   el.innerHTML='<p>Verified KCAMORAG71 hourly temperature forecasts. Lower error is better.</p>'+section('Latest verified day • '+today,rows.filter(r=>day(r.time)===today))+section('Rolling seven days • available samples',recent)+'<p style="font-size:12px;margin-top:16px">Preliminary results; sample sizes shown. Forecast retrieval timestamps are not independently verified model initialization cycles. Updated through '+latest.toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT.</p>';
  }catch(e){el.innerHTML='<p class="pending">Hourly verification feed is not yet available on the public site. Rankings will appear after the next successful graphics publication.</p>';}
 })();
-</script></body></html>
+</script><script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(e=>console.warn('App offline support unavailable',e)));}</script></body></html>
