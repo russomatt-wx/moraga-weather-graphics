@@ -7,10 +7,8 @@ on:
       - '.github/workflows/coordinated-pages.yml'
       - 'moraga_extended_outlook.json'
   schedule:
-    # Publish before the four Pacific briefing times (6 AM, 11 AM, 4 PM, 9 PM).
-    # Seasonal UTC schedules target 5:30, 10:30, 15:30, and 20:30 Pacific.
-    - cron: '30 3,12,17,22 * 3-10 *' # PDT season
-    - cron: '30 4,13,18,23 * 11,12,1,2 *' # PST season
+    # Both UTC offsets run year-round; the Pacific timezone gate handles DST.
+    - cron: '30 3,4,12,13,17,18,22,23 * * *'
 permissions:
   contents: read
   pages: write
@@ -29,12 +27,54 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
+      - name: Verify Pacific schedule and forecast freshness
+        id: readiness
+        if: ${{ github.event_name == 'schedule' }}
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os
+          from datetime import datetime, timezone, timedelta
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+          now=datetime.now(timezone.utc)
+          local=now.astimezone(ZoneInfo("America/Los_Angeles"))
+          # Ignore the extra UTC offset on either side of daylight saving time.
+          allowed_hours={5,10,15,20}
+          ready=local.hour in allowed_hours and 30<=local.minute<=55
+          if ready:
+              for name in ("moraga_forecast_10day.json","moraga_rainfall_10day.json"):
+                  path=Path(name)
+                  if not path.exists():
+                      print(f"Missing required forecast: {name}")
+                      ready=False
+                      continue
+                  try:
+                      data=json.loads(path.read_text())
+                      stamp=data["generated_utc"]
+                      generated=datetime.fromisoformat(stamp.replace("Z","+00:00"))
+                      if generated.tzinfo is None:
+                          generated=generated.replace(tzinfo=timezone.utc)
+                      age=now-generated
+                      print(f"{name}: generated {generated.isoformat()}, age {age}")
+                      if not timedelta(0)<=age<=timedelta(hours=8):
+                          ready=False
+                  except (KeyError,ValueError,TypeError) as error:
+                      print(f"Invalid forecast timestamp in {name}: {error}")
+                      ready=False
+          print(f"Publication readiness: {ready}")
+          with open(os.environ["GITHUB_OUTPUT"],"a") as output:
+              output.write(f"ready={str(ready).lower()}\\n")
+          PY
       - name: Configure Pages
+        if: ${{ github.event_name != 'schedule' || steps.readiness.outputs.ready == 'true' }}
         uses: actions/configure-pages@v5
       - name: Upload site
+        if: ${{ github.event_name != 'schedule' || steps.readiness.outputs.ready == 'true' }}
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
       - name: Deploy site
+        if: ${{ github.event_name != 'schedule' || steps.readiness.outputs.ready == 'true' }}
         id: deployment
         uses: actions/deploy-pages@v4
