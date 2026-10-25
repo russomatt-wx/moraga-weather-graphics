@@ -1,26 +1,26 @@
 {
-  "generated_utc": "2026-10-24T22:59:58.653180+00:00",
+  "generated_utc": "2026-10-25T13:13:46.953415+00:00",
   "status": "scored",
   "summary": {
     "6 AM": {
-      "count": 3,
-      "high_mae_f": 2.67,
-      "low_mae_f": 1.33
+      "count": 4,
+      "high_mae_f": 2.5,
+      "low_mae_f": 1.25
     },
     "11 AM": {
-      "count": 3,
-      "high_mae_f": 2.33,
-      "low_mae_f": 1.33
+      "count": 4,
+      "high_mae_f": 2.0,
+      "low_mae_f": 1.0
     },
     "4 PM": {
-      "count": 6,
-      "high_mae_f": 2.17,
-      "low_mae_f": 2.83
+      "count": 7,
+      "high_mae_f": 2.29,
+      "low_mae_f": 3.57
     },
     "9 PM": {
-      "count": 5,
-      "high_mae_f": 3.6,
-      "low_mae_f": 3.0
+      "count": 6,
+      "high_mae_f": 3.5,
+      "low_mae_f": 3.67
     },
     "Unclassified": {
       "count": 0,
