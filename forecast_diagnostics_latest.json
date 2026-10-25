@@ -1,8 +1,8 @@
 {
-  "generated_utc": "2026-10-24T16:52:57.930825+00:00",
+  "generated_utc": "2026-10-25T16:53:18.441434+00:00",
   "status": "diagnostic_only",
   "archive_health": {
-    "valid_records": 20,
+    "valid_records": 24,
     "invalid_records": 0,
     "duplicate_target_editions": [],
     "off_hour_archives": [
@@ -25,11 +25,15 @@
       {
         "date": "2026-10-22",
         "edition": "9 PM"
+      },
+      {
+        "date": "2026-10-25",
+        "edition": "6 AM"
       }
     ]
   },
   "matched_skill": {
-    "count": 10,
+    "count": 11,
     "pairs": [
       {
         "date": "2026-10-15",
@@ -110,33 +114,41 @@
         "guidance_high_abs_error_f": 1.8,
         "assistant_low_abs_error_f": 2.0,
         "guidance_low_abs_error_f": 1.9
+      },
+      {
+        "date": "2026-10-24",
+        "edition": "4 PM",
+        "assistant_high_abs_error_f": 3.0,
+        "guidance_high_abs_error_f": 6.1,
+        "assistant_low_abs_error_f": 8.0,
+        "guidance_low_abs_error_f": 8.7
       }
     ],
     "note": "Same target date and edition, issued within three hours."
   },
   "assistant_bias": {
     "6 AM": {
-      "verified_days": 3,
-      "high_mean_error_f": -2.67,
-      "low_mean_error_f": 1.33,
+      "verified_days": 4,
+      "high_mean_error_f": -2.5,
+      "low_mean_error_f": 1.25,
       "calibration_ready": false
     },
     "11 AM": {
-      "verified_days": 3,
-      "high_mean_error_f": -1.67,
-      "low_mean_error_f": 1.33,
+      "verified_days": 4,
+      "high_mean_error_f": -1.5,
+      "low_mean_error_f": 1.0,
       "calibration_ready": false
     },
     "4 PM": {
-      "verified_days": 6,
-      "high_mean_error_f": -1.17,
-      "low_mean_error_f": 1.5,
+      "verified_days": 7,
+      "high_mean_error_f": -1.43,
+      "low_mean_error_f": 2.43,
       "calibration_ready": false
     },
     "9 PM": {
-      "verified_days": 5,
-      "high_mean_error_f": -0.8,
-      "low_mean_error_f": 1.4,
+      "verified_days": 6,
+      "high_mean_error_f": -1.17,
+      "low_mean_error_f": 2.33,
       "calibration_ready": false
     }
   },
