@@ -4,7 +4,7 @@ import math
 Source: Open-Meteo deterministic forecast and ensemble-mean APIs.
 Daily totals are midnight-to-midnight America/Los_Angeles; units inches.
 """
-import json, urllib.parse, urllib.request
+import json, urllib.parse, urllib.request, time
 from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from pathlib import Path
@@ -46,8 +46,15 @@ def get(url, model):
         params.update(daily="precipitation_sum,temperature_2m_max,temperature_2m_min", hourly="precipitation,cloud_cover", temperature_unit="fahrenheit")
     q = urllib.parse.urlencode(params)
     req = urllib.request.Request(url + "?" + q, headers={"User-Agent": "MoragaWeatherGraphics/1.0"})
-    with urllib.request.urlopen(req, timeout=40) as resp:
-        payload = json.load(resp)
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=40) as resp:
+                payload = json.load(resp)
+            break
+        except (OSError, ValueError):
+            if attempt == 2:
+                raise
+            time.sleep(2 * (attempt + 1))
     daily = payload["daily"]
     if "hourly" in payload and "temperature_2m_max" in daily:
         hourly = payload["hourly"]
