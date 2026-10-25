@@ -6,7 +6,8 @@ on:
       - 'scripts/upper_air_forecast.py'
       - '.github/workflows/upper_air_forecast.yml'
   schedule:
-    - cron: '20 2,8,14,20 * * *'
+    - cron: '10 2,11,16,21 * 3-10 *'
+    - cron: '10 3,12,17,22 * 11,12,1,2 *'
 permissions:
   contents: write
 concurrency:
