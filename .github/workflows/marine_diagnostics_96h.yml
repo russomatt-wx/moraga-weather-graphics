@@ -5,7 +5,8 @@ on:
       - 'scripts/marine_diagnostics_96h.py'
       - '.github/workflows/marine_diagnostics_96h.yml'
   schedule:
-    - cron: '25 1,7,13,19 * * *'
+    - cron: '10 2,11,16,21 * 3-10 *'
+    - cron: '10 3,12,17,22 * 11,12,1,2 *'
   workflow_dispatch:
 permissions:
   contents: write
