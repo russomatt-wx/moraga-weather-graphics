@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/generate-app-icons.yml'
+      - 'app-icon.svg'
 permissions:
   contents: write
 jobs:
