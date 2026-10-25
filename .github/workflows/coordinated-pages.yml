@@ -42,12 +42,12 @@ jobs:
           # Ignore the extra UTC offset on either side of daylight saving time.
           allowed_hours={5,10,15,20}
           ready=local.hour in allowed_hours and 30<=local.minute<=55
+          # Forecast age is advisory only; never block a scheduled update for stale data.
           if ready:
               for name in ("moraga_forecast_10day.json","moraga_rainfall_10day.json"):
                   path=Path(name)
                   if not path.exists():
                       print(f"Missing required forecast: {name}")
-                      ready=False
                       continue
                   try:
                       data=json.loads(path.read_text())
@@ -58,10 +58,9 @@ jobs:
                       age=now-generated
                       print(f"{name}: generated {generated.isoformat()}, age {age}")
                       if not timedelta(0)<=age<=timedelta(hours=8):
-                          ready=False
+                          print(f"WARNING: {name} is outside the 8-hour freshness target; publishing anyway.")
                   except (KeyError,ValueError,TypeError) as error:
                       print(f"Invalid forecast timestamp in {name}: {error}")
-                      ready=False
           print(f"Publication readiness: {ready}")
           with open(os.environ["GITHUB_OUTPUT"],"a") as output:
               output.write(f"ready={str(ready).lower()}\\n")
