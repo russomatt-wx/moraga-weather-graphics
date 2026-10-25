@@ -7,8 +7,10 @@ on:
       - '.github/workflows/coordinated-pages.yml'
       - 'moraga_extended_outlook.json'
   schedule:
-    # Publish a fresh site after the four daily forecast cycles (UTC).
-    - cron: '25 4,13,18,23 * * *'
+    # Publish before the four Pacific briefing times (6 AM, 11 AM, 4 PM, 9 PM).
+    # Seasonal UTC schedules target 5:30, 10:30, 15:30, and 20:30 Pacific.
+    - cron: '30 3,12,17,22 * 3-10 *' # PDT season
+    - cron: '30 4,13,18,23 * 11-2 *' # PST season
 permissions:
   contents: read
   pages: write
