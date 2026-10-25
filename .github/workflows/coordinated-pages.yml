@@ -6,6 +6,11 @@ on:
     paths:
       - '.github/workflows/coordinated-pages.yml'
       - 'moraga_extended_outlook.json'
+      - 'index.html'
+      - 'station-dashboard.html'
+      - 'app.webmanifest'
+      - 'app-icon.svg'
+      - 'service-worker.js'
   schedule:
     # Both UTC offsets run year-round; the Pacific timezone gate handles DST.
     - cron: '30 3,4,12,13,17,18,22,23 * * *'
