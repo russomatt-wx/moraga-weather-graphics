@@ -5,7 +5,8 @@ on:
       - 'scripts/rainfall_10day.py'
       - '.github/workflows/rainfall_10day.yml'
   schedule:
-    - cron: "15 1,7,13,19 * * *"
+    - cron: '10 2,11,16,21 * 3-10 *'
+    - cron: '10 3,12,17,22 * 11,12,1,2 *'
   workflow_dispatch:
 permissions:
   contents: write
