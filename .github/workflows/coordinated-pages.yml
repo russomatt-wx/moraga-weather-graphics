@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/coordinated-pages.yml'
+      - 'moraga_extended_outlook.json'
   schedule:
     # Publish a fresh site after the four daily forecast cycles (UTC).
     - cron: '25 4,13,18,23 * * *'
