@@ -10,6 +10,9 @@ on:
       - 'station-dashboard.html'
       - 'app.webmanifest'
       - 'app-icon.svg'
+      - 'app-icon-180.png'
+      - 'app-icon-192.png'
+      - 'app-icon-512.png'
       - 'service-worker.js'
   schedule:
     # Both UTC offsets run year-round; the Pacific timezone gate handles DST.
