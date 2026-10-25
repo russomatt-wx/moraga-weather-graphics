@@ -20,6 +20,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Cache chart dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: station-chart-pip-${{ runner.os }}-py311-matplotlib-numpy-v1
       - run: pip install matplotlib numpy
       - name: Render verified Xweather archive observations
         env:
