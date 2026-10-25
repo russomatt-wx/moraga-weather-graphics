@@ -1381,7 +1381,17 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
    return values.slice(0,14).reduce((a,b)=>a+b,0);
   });
   const ensemble14Mean=ensemble14.every(Number.isFinite)&&dates.length>=14?(ensemble14[0]+ensemble14[1])/2:null;
-  summary.innerHTML='<div><small>7-day ensemble mean</small><strong>'+(ensemble7Mean===null?'—':ensemble7Mean.toFixed(2)+'″')+'</strong><small>EPS + GEFS · next 7 days</small></div><div><small>14-day ensemble mean</small><strong>'+(ensemble14Mean===null?'—':ensemble14Mean.toFixed(2)+'″')+'</strong><small>'+(ensemble14Mean===null?'Awaiting full EPS + GEFS coverage':'EPS + GEFS · next 14 days')+'</small></div><div><small>Wettest model total</small><strong>'+(wet?wet.total.toFixed(2)+'″':'—')+'</strong><small>'+(wet?wet.name:'Unavailable')+'</small></div><div><small>Models available</small><strong>'+totals.length+'</strong><small>of '+series.length+' sources</small></div>';
+  // A shorter common horizon is explicitly labeled, never passed off as a 14-day total.
+  let commonDays=0;
+  for(let i=0;i<14&&i<dates.length;i++){
+   if(ensembleNames.every(name=>Number.isFinite(d.model_daily_inches?.[name]?.[i])))commonDays++;
+   else break;
+  }
+  const sharedTotal=commonDays>=7?ensembleNames.map(name=>d.model_daily_inches[name].slice(0,commonDays).reduce((a,b)=>a+b,0)).reduce((a,b)=>a+b,0)/2:null;
+  const displayTotal=ensemble14Mean??sharedTotal;
+  const displayLabel=ensemble14Mean!==null?'14-day ensemble mean':(sharedTotal!==null?commonDays+'-day ensemble mean':'14-day ensemble mean');
+  const displayNote=ensemble14Mean!==null?'EPS + GEFS · next 14 days':(sharedTotal!==null?'EPS + GEFS · '+commonDays+' verified days; 14-day coverage incomplete':'Awaiting verified EPS + GEFS coverage');
+  summary.innerHTML='<div><small>7-day ensemble mean</small><strong>'+(ensemble7Mean===null?'—':ensemble7Mean.toFixed(2)+'″')+'</strong><small>EPS + GEFS · next 7 days</small></div><div><small>'+displayLabel+'</small><strong>'+(displayTotal===null?'—':displayTotal.toFixed(2)+'″')+'</strong><small>'+displayNote+'</small></div><div><small>Wettest model total</small><strong>'+(wet?wet.total.toFixed(2)+'″':'—')+'</strong><small>'+(wet?wet.name:'Unavailable')+'</small></div><div><small>Models available</small><strong>'+totals.length+'</strong><small>of '+series.length+' sources</small></div>';
   note.textContent=dates.length===14?'14 local dates · '+dates[0]+' through '+dates[13]+' · missing model days shown as gaps':'Only '+dates.length+' dates currently published; awaiting the 14-day chart refresh.';
  }catch(e){note.textContent='Rainfall data temporarily unavailable; showing the latest published chart.'}
 })();
