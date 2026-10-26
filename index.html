@@ -1295,7 +1295,8 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  // One shared SVG plotting template for deterministic and ensemble charts.
  const valid=series.flatMap(m=>m.time.filter((t,i)=>Number.isFinite(m.temp[i]))).sort();
  if(valid.length<2)return;
- const start=Date.parse(valid[0]);
+ const nowMs=Date.now();
+ const start=Math.max(Date.parse(valid[0]),Math.floor(nowMs/3600000)*3600000);
  const axisEnd=start+11*86400000;
  const W=800,H=900,L=75,R=65,T=155,B=105;
  const dayFmt=new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:tz});
@@ -1326,9 +1327,11 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  const chartStatus=document.getElementById('chart-render-status');
  if(chartStatus)chartStatus.textContent='Live chart renderer v3 · mobile-readable layout';
  const guidanceUrl=renderChart(series,'Moraga | Temperature model guidance');
+ const localStamp=()=>new Date().toLocaleString('en-US',{timeZone:tz,month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
+ const modelStatus=series.map(m=>m.name+' (latest '+(m.time.filter((t,i)=>Number.isFinite(m.temp[i])).at(-1)||'unknown')+')').join(' · ');
  if(!guidanceUrl)return;
  img.onerror=()=>{img.onerror=null;img.src='moraga_model_temperatures.png';};img.src=guidanceUrl;img.closest('a').href=guidanceUrl;
- if(note)note.textContent='Hourly model guidance · shared plot style with ensemble spread · shorter-range models end earlier';
+ if(note)note.textContent='Live Open-Meteo guidance fetched '+localStamp()+' · forecast starts at current hour · model initialization times not provided · '+modelStatus;
  const ensembleImg=document.getElementById('ensemble-guidance-image');
  if(ensembleImg){
   try{
@@ -1348,11 +1351,13 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
     return {name,color,time:h.time,temp:baseKey?h[baseKey]:median,low:rows.map(v=>quantile(v,.1)),high:rows.map(v=>quantile(v,.9))};
    }));
    const ensembleSeries=ensemble.filter(x=>x.status==='fulfilled').map(x=>x.value).filter(m=>m.time?.length>2&&m.temp?.some(Number.isFinite));
-   if(ensembleSeries.length===2){const ensembleUrl=renderChart(ensembleSeries,'Moraga | GEFS / EPS ensemble spread',true);if(ensembleUrl){ensembleImg.onerror=()=>{ensembleImg.onerror=null;ensembleImg.src='moraga_ensemble_spread.png';};ensembleImg.src=ensembleUrl;ensembleImg.closest('a').href=ensembleUrl;}}
-  }catch(error){console.warn('Ensemble plot fallback to published chart',error)}
+   const ensembleMeta=ensembleImg.closest('a')?.nextElementSibling;
+   if(ensembleSeries.length===2){const ensembleUrl=renderChart(ensembleSeries,'Moraga | GEFS / EPS ensemble spread',true);if(ensembleUrl){ensembleImg.onerror=()=>{ensembleImg.onerror=null;ensembleImg.src='moraga_ensemble_spread.png';if(ensembleMeta)ensembleMeta.textContent='WARNING: live ensemble chart failed; showing previously published PNG (not verified current)';};ensembleImg.src=ensembleUrl;ensembleImg.closest('a').href=ensembleUrl;if(ensembleMeta)ensembleMeta.textContent='Live GEFS + EPS fetched '+localStamp()+' · model initialization times not provided';}}
+   else if(ensembleMeta)ensembleMeta.textContent='WARNING: live GEFS/EPS incomplete; showing previously published PNG (not verified current)';
+  }catch(error){console.warn('Ensemble plot fallback to published chart',error);const m=ensembleImg.closest('a')?.nextElementSibling;if(m)m.textContent='WARNING: live ensemble fetch failed; showing previously published PNG (not verified current)'}
  }
  const meta=img.closest('a').nextElementSibling;
- if(meta?.classList.contains('chart-meta'))meta.textContent='Live model data retrieved '+new Date().toLocaleString('en-US',{timeZone:tz,month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
+ if(meta?.classList.contains('chart-meta'))meta.textContent='Live Open-Meteo data fetched '+localStamp()+' · model initialization times unavailable';
 })();
 </script><script>
 /* Independent visual summaries; the existing forecast tables remain authoritative. */
