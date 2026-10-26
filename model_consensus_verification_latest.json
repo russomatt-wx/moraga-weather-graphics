@@ -1,7 +1,7 @@
 {
-  "generated_utc": "2026-10-24T22:59:44.920194+00:00",
-  "new_guidance_issued": 0,
-  "verified_days": 31,
+  "generated_utc": "2026-10-26T02:41:15.392889+00:00",
+  "new_guidance_issued": 1,
+  "verified_days": 35,
   "verification": [
     {
       "valid_local_date": "2026-10-10",
@@ -284,6 +284,16 @@
       "caveat": "Sampled extremes; missing observations can miss actual highs/lows."
     },
     {
+      "valid_local_date": "2026-10-24",
+      "issued_utc": "2026-10-21T04:08:00.087849+00:00",
+      "samples": 1416,
+      "observed_sampled_low_f": 40.0,
+      "observed_sampled_high_f": 75.0,
+      "low_error_f": 6.6,
+      "high_error_f": -2.8,
+      "caveat": "Sampled extremes; missing observations can miss actual highs/lows."
+    },
+    {
       "valid_local_date": "2026-10-22",
       "issued_utc": "2026-10-21T13:21:25.124781+00:00",
       "samples": 1414,
@@ -304,6 +314,16 @@
       "caveat": "Sampled extremes; missing observations can miss actual highs/lows."
     },
     {
+      "valid_local_date": "2026-10-24",
+      "issued_utc": "2026-10-21T13:21:25.124781+00:00",
+      "samples": 1416,
+      "observed_sampled_low_f": 40.0,
+      "observed_sampled_high_f": 75.0,
+      "low_error_f": 6.3,
+      "high_error_f": -3.4,
+      "caveat": "Sampled extremes; missing observations can miss actual highs/lows."
+    },
+    {
       "valid_local_date": "2026-10-23",
       "issued_utc": "2026-10-22T13:24:07.737049+00:00",
       "samples": 1417,
@@ -311,6 +331,26 @@
       "observed_sampled_high_f": 71.0,
       "low_error_f": 4.3,
       "high_error_f": -3.9,
+      "caveat": "Sampled extremes; missing observations can miss actual highs/lows."
+    },
+    {
+      "valid_local_date": "2026-10-24",
+      "issued_utc": "2026-10-22T13:24:07.737049+00:00",
+      "samples": 1416,
+      "observed_sampled_low_f": 40.0,
+      "observed_sampled_high_f": 75.0,
+      "low_error_f": 7.2,
+      "high_error_f": -4.0,
+      "caveat": "Sampled extremes; missing observations can miss actual highs/lows."
+    },
+    {
+      "valid_local_date": "2026-10-24",
+      "issued_utc": "2026-10-23T13:18:55.940799+00:00",
+      "samples": 1416,
+      "observed_sampled_low_f": 40.0,
+      "observed_sampled_high_f": 75.0,
+      "low_error_f": 9.8,
+      "high_error_f": -5.7,
       "caveat": "Sampled extremes; missing observations can miss actual highs/lows."
     }
   ],

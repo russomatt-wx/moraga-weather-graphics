@@ -1,54 +1,54 @@
 {
-  "generated_utc": "2026-10-25T09:54:20.964880+00:00",
-  "target_local_date": "2026-10-24",
+  "generated_utc": "2026-10-26T10:08:49.843092+00:00",
+  "target_local_date": "2026-10-25",
   "timezone": "America/Los_Angeles",
   "rows": [
     {
       "label": "ECMWF",
       "kind": "model",
-      "high_f": 70.52,
-      "low_f": 44.42,
-      "issued_utc": "2026-10-24T06:50:49.336345+00:00",
+      "high_f": 73.4,
+      "low_f": 48.02,
+      "issued_utc": "2026-10-25T06:51:18.663282+00:00",
       "status": "full_day_archived_snapshot"
     },
     {
       "label": "GFS",
       "kind": "model",
-      "high_f": 72.68,
-      "low_f": 48.38,
-      "issued_utc": "2026-10-24T06:50:49.205304+00:00",
+      "high_f": 72.32,
+      "low_f": 50.9,
+      "issued_utc": "2026-10-25T06:51:18.094895+00:00",
       "status": "full_day_archived_snapshot"
     },
     {
       "label": "NAM",
       "kind": "model",
-      "high_f": 70.16,
-      "low_f": 51.98,
-      "issued_utc": "2026-10-24T06:50:49.807739+00:00",
+      "high_f": 73.04,
+      "low_f": 52.52,
+      "issued_utc": "2026-10-25T06:51:19.582498+00:00",
       "status": "full_day_archived_snapshot"
     },
     {
       "label": "ICON",
       "kind": "model",
-      "high_f": 69.26,
-      "low_f": 48.74,
-      "issued_utc": "2026-10-24T06:50:49.883177+00:00",
+      "high_f": 70.16,
+      "low_f": 50.72,
+      "issued_utc": "2026-10-25T06:51:20.137437+00:00",
       "status": "full_day_archived_snapshot"
     },
     {
       "label": "GEM",
       "kind": "model",
-      "high_f": 69.26,
-      "low_f": 46.4,
-      "issued_utc": "2026-10-24T06:50:50.005365+00:00",
+      "high_f": 70.52,
+      "low_f": 44.96,
+      "issued_utc": "2026-10-25T06:51:20.753291+00:00",
       "status": "full_day_archived_snapshot"
     },
     {
       "label": "Model consensus",
       "kind": "model",
-      "high_f": 69.3,
-      "low_f": 49.8,
-      "issued_utc": "2026-10-23T13:18:55.940799+00:00",
+      "high_f": 69.4,
+      "low_f": 48.7,
+      "issued_utc": "2026-10-24T17:59:27.504884+00:00",
       "status": "archived_raw_model_consensus"
     },
     {
@@ -56,38 +56,38 @@
       "kind": "assistant",
       "high_f": 73.0,
       "low_f": 41.0,
-      "issued_utc": "2026-10-24T13:05:41.361000+00:00",
+      "issued_utc": "2026-10-25T12:55:50.131000+00:00",
       "status": "live_issued"
     },
     {
       "label": "Assistant \u00b7 11 AM",
       "kind": "assistant",
-      "high_f": 74.0,
-      "low_f": 40.0,
-      "issued_utc": "2026-10-24T18:02:53.131000+00:00",
+      "high_f": 75.0,
+      "low_f": 41.0,
+      "issued_utc": "2026-10-25T18:03:25.207000+00:00",
       "status": "live_issued"
     },
     {
       "label": "Assistant \u00b7 4 PM",
       "kind": "assistant",
-      "high_f": 72.0,
-      "low_f": 48.0,
-      "issued_utc": "2026-10-23T23:03:45.173000+00:00",
+      "high_f": 73.0,
+      "low_f": 46.0,
+      "issued_utc": "2026-10-24T23:04:46.865000+00:00",
       "status": "live_issued"
     },
     {
       "label": "Assistant \u00b7 9 PM",
       "kind": "assistant",
-      "high_f": 72.0,
-      "low_f": 47.0,
-      "issued_utc": "2026-10-24T04:03:57.050000+00:00",
+      "high_f": 73.0,
+      "low_f": 46.0,
+      "issued_utc": "2026-10-25T04:00:25.557000+00:00",
       "status": "live_issued"
     },
     {
       "label": "Observed \u00b7 KCAMORAG71",
       "kind": "observed",
-      "high_f": 75.0,
-      "low_f": 40.0,
+      "high_f": 78.0,
+      "low_f": 41.0,
       "samples": 1416,
       "status": "completed_day_sampled_extrema"
     }
