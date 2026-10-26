@@ -1331,29 +1331,16 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  if(!guidanceUrl)return;
  img.onerror=()=>{img.onerror=null;img.src='moraga_model_temperatures.png';};img.src=guidanceUrl;img.closest('a').href=guidanceUrl;
  
+ // The ensemble chart is published by the server-side graphics workflow.
+ // Do not fetch or render GEFS/EPS independently in the visitor's browser:
+ // that path can fail on mobile and replace a valid PNG with a false warning.
  const ensembleImg=document.getElementById('ensemble-guidance-image');
  if(ensembleImg){
-  try{
-   const specs=[['GEFS','ncep_gefs_seamless','#2679b5'],['EPS','ecmwf_ifs025','#e88936']];
-   const ensemble=await Promise.allSettled(specs.map(async ([name,model,color])=>{
-    const url='https://ensemble-api.open-meteo.com/v1/ensemble?'+new URLSearchParams({latitude:String(lat),longitude:String(lon),hourly:'temperature_2m',models:model,temperature_unit:'fahrenheit',timezone:tz,forecast_days:'16'});
-    const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw Error(name+' '+response.status);
-    const json=await response.json(),h=json.hourly||{};
-    const keys=Object.keys(h).filter(k=>k.startsWith('temperature_2m')&&Array.isArray(h[k]));
-    if(!keys.length)throw Error('Missing ensemble temperature data');
-    const members=keys.filter(k=>/member/i.test(k));
-    const rows=h.time.map((_,i)=>members.map(k=>h[k][i]).filter(Number.isFinite));
-    const median=rows.map(v=>v.length?v.slice().sort((a,b)=>a-b)[Math.floor(v.length/2)]:null);
-    const quantile=(v,q)=>{if(!v.length)return null;const sorted=v.slice().sort((a,b)=>a-b);return sorted[Math.floor((sorted.length-1)*q)]};
-    const meanKey=keys.find(k=>/mean/i.test(k));
-    const baseKey=meanKey||keys.find(k=>!(/member/i.test(k)));
-    return {name,color,time:h.time,temp:baseKey?h[baseKey]:median,low:rows.map(v=>quantile(v,.1)),high:rows.map(v=>quantile(v,.9))};
-   }));
-   const ensembleSeries=ensemble.filter(x=>x.status==='fulfilled').map(x=>x.value).filter(m=>m.time?.length>2&&m.temp?.some(Number.isFinite));
-   const ensembleMeta=ensembleImg.closest('a')?.nextElementSibling;
-   if(ensembleSeries.length===2){const ensembleUrl=renderChart(ensembleSeries,'Moraga | GEFS / EPS ensemble spread',true);if(ensembleUrl){ensembleImg.onerror=()=>{ensembleImg.onerror=null;ensembleImg.src='moraga_ensemble_spread.png';if(ensembleMeta)ensembleMeta.textContent='WARNING: live ensemble chart failed; showing previously published PNG (not verified current)';};ensembleImg.src=ensembleUrl;ensembleImg.closest('a').href=ensembleUrl;}}
-   else if(ensembleMeta)ensembleMeta.textContent='WARNING: live GEFS/EPS incomplete; showing previously published PNG (not verified current)';
-  }catch(error){console.warn('Ensemble plot fallback to published chart',error);const m=ensembleImg.closest('a')?.nextElementSibling;if(m)m.textContent='WARNING: live ensemble fetch failed; showing previously published PNG (not verified current)'}
+   const chart='moraga_ensemble_spread.png';
+   const url=chart+'?v='+Math.floor(Date.now()/1800000);
+   ensembleImg.src=url;
+   const anchor=ensembleImg.closest('a');
+   if(anchor)anchor.href=url;
  }
  const meta=img.closest('a').nextElementSibling;
  
