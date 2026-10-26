@@ -61,8 +61,8 @@ def observations():
     if len(points) < 12:
         raise RuntimeError("Too few verified Xweather station observations; preserving existing chart.")
     newest = max(points)
-    if (dt.datetime.now(ZONE) - newest).total_seconds() > 3 * 3600:
-        raise RuntimeError("Station archive is stale (>3 hours); preserving existing chart.")
+    if (dt.datetime.now(ZONE) - newest).total_seconds() > 45 * 60:
+        raise RuntimeError("Station archive is stale (>45 minutes); preserving existing chart.")
     return sorted(points.items())
 
 
