@@ -1321,17 +1321,17 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
   const legendX=L+16;
   plotSeries.forEach((m,i)=>{const xx=legendX+(i%3)*220,yy=75+Math.floor(i/3)*38;svg+='<path d="M'+xx+' '+yy+'h22" stroke="'+m.color+'" stroke-width="4"/><text x="'+(xx+27)+'" y="'+(yy+4)+'" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#26394d">'+m.name+'</text>'});
   svg+='<rect x="'+L+'" y="'+T+'" width="'+(W-L-R)+'" height="'+(H-T-B)+'" fill="none" stroke="#777"/><text x="29" y="'+H/2+'" transform="rotate(-90 29 '+H/2+')" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#26394d">Temperature (°F)</text><text x="'+(W-29)+'" y="'+H/2+'" transform="rotate(90 '+(W-29)+' '+H/2+')" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#26394d">Temperature (°F)</text></svg>';
-  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+  return URL.createObjectURL(new Blob([svg],{type:'image/svg+xml;charset=utf-8'}));
  };
  // Surface the actual chart source, so fallback PNGs cannot silently appear current.
  const chartStatus=document.getElementById('chart-render-status');
  if(chartStatus)chartStatus.textContent='Live chart renderer v3 · mobile-readable layout';
  const guidanceUrl=renderChart(series,'Moraga | Temperature model guidance');
  const localStamp=()=>new Date().toLocaleString('en-US',{timeZone:tz,month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
- const modelStatus=series.map(m=>m.name+' (latest '+(m.time.filter((t,i)=>Number.isFinite(m.temp[i])).at(-1)||'unknown')+')').join(' · ');
+ const modelStatus=series.map(m=>m.name).join(', ');
  if(!guidanceUrl)return;
  img.onerror=()=>{img.onerror=null;img.src='moraga_model_temperatures.png';};img.src=guidanceUrl;img.closest('a').href=guidanceUrl;
- if(note)note.textContent='Live Open-Meteo guidance fetched '+localStamp()+' · forecast starts at current hour · model initialization times not provided · '+modelStatus;
+ if(note)note.textContent='Live guidance · '+modelStatus+' · shorter-range models end earlier';
  const ensembleImg=document.getElementById('ensemble-guidance-image');
  if(ensembleImg){
   try{
@@ -1352,7 +1352,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
    }));
    const ensembleSeries=ensemble.filter(x=>x.status==='fulfilled').map(x=>x.value).filter(m=>m.time?.length>2&&m.temp?.some(Number.isFinite));
    const ensembleMeta=ensembleImg.closest('a')?.nextElementSibling;
-   if(ensembleSeries.length===2){const ensembleUrl=renderChart(ensembleSeries,'Moraga | GEFS / EPS ensemble spread',true);if(ensembleUrl){ensembleImg.onerror=()=>{ensembleImg.onerror=null;ensembleImg.src='moraga_ensemble_spread.png';if(ensembleMeta)ensembleMeta.textContent='WARNING: live ensemble chart failed; showing previously published PNG (not verified current)';};ensembleImg.src=ensembleUrl;ensembleImg.closest('a').href=ensembleUrl;if(ensembleMeta)ensembleMeta.textContent='Live GEFS + EPS fetched '+localStamp()+' · model initialization times not provided';}}
+   if(ensembleSeries.length===2){const ensembleUrl=renderChart(ensembleSeries,'Moraga | GEFS / EPS ensemble spread',true);if(ensembleUrl){ensembleImg.onerror=()=>{ensembleImg.onerror=null;ensembleImg.src='moraga_ensemble_spread.png';if(ensembleMeta)ensembleMeta.textContent='WARNING: live ensemble chart failed; showing previously published PNG (not verified current)';};ensembleImg.src=ensembleUrl;ensembleImg.closest('a').href=ensembleUrl;if(ensembleMeta)ensembleMeta.textContent='Live GEFS + EPS fetched '+localStamp()+' · 10–90% member spread when available';}}
    else if(ensembleMeta)ensembleMeta.textContent='WARNING: live GEFS/EPS incomplete; showing previously published PNG (not verified current)';
   }catch(error){console.warn('Ensemble plot fallback to published chart',error);const m=ensembleImg.closest('a')?.nextElementSibling;if(m)m.textContent='WARNING: live ensemble fetch failed; showing previously published PNG (not verified current)'}
  }
