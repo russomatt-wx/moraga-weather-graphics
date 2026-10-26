@@ -5,7 +5,14 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/coordinated-pages.yml'
-      - 'moraga_extended_outlook.json'
+      - '*.json'
+      - '*.png'
+      - '*.jpg'
+      - '*.jpeg'
+      - '*.webp'
+      - '*.svg'
+      - '*.js'
+      - '*.css'
       - 'index.html'
       - 'station-dashboard.html'
       - 'app.webmanifest'
