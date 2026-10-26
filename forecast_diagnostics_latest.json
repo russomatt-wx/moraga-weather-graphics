@@ -1,8 +1,8 @@
 {
-  "generated_utc": "2026-10-25T16:53:18.441434+00:00",
+  "generated_utc": "2026-10-26T17:06:42.704009+00:00",
   "status": "diagnostic_only",
   "archive_health": {
-    "valid_records": 24,
+    "valid_records": 28,
     "invalid_records": 0,
     "duplicate_target_editions": [],
     "off_hour_archives": [
@@ -33,7 +33,7 @@
     ]
   },
   "matched_skill": {
-    "count": 11,
+    "count": 12,
     "pairs": [
       {
         "date": "2026-10-15",
@@ -122,33 +122,41 @@
         "guidance_high_abs_error_f": 6.1,
         "assistant_low_abs_error_f": 8.0,
         "guidance_low_abs_error_f": 8.7
+      },
+      {
+        "date": "2026-10-25",
+        "edition": "4 PM",
+        "assistant_high_abs_error_f": 5.0,
+        "guidance_high_abs_error_f": 7.7,
+        "assistant_low_abs_error_f": 5.0,
+        "guidance_low_abs_error_f": 9.0
       }
     ],
     "note": "Same target date and edition, issued within three hours."
   },
   "assistant_bias": {
     "6 AM": {
-      "verified_days": 4,
-      "high_mean_error_f": -2.5,
-      "low_mean_error_f": 1.25,
-      "calibration_ready": false
-    },
-    "11 AM": {
-      "verified_days": 4,
-      "high_mean_error_f": -1.5,
+      "verified_days": 5,
+      "high_mean_error_f": -3.0,
       "low_mean_error_f": 1.0,
       "calibration_ready": false
     },
+    "11 AM": {
+      "verified_days": 5,
+      "high_mean_error_f": -1.8,
+      "low_mean_error_f": 0.8,
+      "calibration_ready": false
+    },
     "4 PM": {
-      "verified_days": 7,
-      "high_mean_error_f": -1.43,
-      "low_mean_error_f": 2.43,
+      "verified_days": 8,
+      "high_mean_error_f": -1.88,
+      "low_mean_error_f": 2.75,
       "calibration_ready": false
     },
     "9 PM": {
-      "verified_days": 6,
-      "high_mean_error_f": -1.17,
-      "low_mean_error_f": 2.33,
+      "verified_days": 7,
+      "high_mean_error_f": -1.71,
+      "low_mean_error_f": 2.71,
       "calibration_ready": false
     }
   },
