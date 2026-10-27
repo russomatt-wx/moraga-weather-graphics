@@ -1,8 +1,8 @@
 {
-  "generated_utc": "2026-10-26T17:06:42.704009+00:00",
+  "generated_utc": "2026-10-27T17:07:24.801858+00:00",
   "status": "diagnostic_only",
   "archive_health": {
-    "valid_records": 28,
+    "valid_records": 32,
     "invalid_records": 0,
     "duplicate_target_editions": [],
     "off_hour_archives": [
@@ -33,7 +33,7 @@
     ]
   },
   "matched_skill": {
-    "count": 12,
+    "count": 14,
     "pairs": [
       {
         "date": "2026-10-15",
@@ -130,33 +130,49 @@
         "guidance_high_abs_error_f": 7.7,
         "assistant_low_abs_error_f": 5.0,
         "guidance_low_abs_error_f": 9.0
+      },
+      {
+        "date": "2026-10-26",
+        "edition": "4 PM",
+        "assistant_high_abs_error_f": 4.0,
+        "guidance_high_abs_error_f": 4.3,
+        "assistant_low_abs_error_f": 2.0,
+        "guidance_low_abs_error_f": 0.5
+      },
+      {
+        "date": "2026-10-26",
+        "edition": "9 PM",
+        "assistant_high_abs_error_f": 3.0,
+        "guidance_high_abs_error_f": 4.3,
+        "assistant_low_abs_error_f": 1.0,
+        "guidance_low_abs_error_f": 0.5
       }
     ],
     "note": "Same target date and edition, issued within three hours."
   },
   "assistant_bias": {
     "6 AM": {
-      "verified_days": 5,
+      "verified_days": 6,
       "high_mean_error_f": -3.0,
-      "low_mean_error_f": 1.0,
+      "low_mean_error_f": 1.17,
       "calibration_ready": false
     },
     "11 AM": {
-      "verified_days": 5,
-      "high_mean_error_f": -1.8,
-      "low_mean_error_f": 0.8,
+      "verified_days": 6,
+      "high_mean_error_f": -2.17,
+      "low_mean_error_f": 1.0,
       "calibration_ready": false
     },
     "4 PM": {
-      "verified_days": 8,
-      "high_mean_error_f": -1.88,
-      "low_mean_error_f": 2.75,
+      "verified_days": 9,
+      "high_mean_error_f": -2.11,
+      "low_mean_error_f": 2.22,
       "calibration_ready": false
     },
     "9 PM": {
-      "verified_days": 7,
-      "high_mean_error_f": -1.71,
-      "low_mean_error_f": 2.71,
+      "verified_days": 8,
+      "high_mean_error_f": -1.88,
+      "low_mean_error_f": 2.25,
       "calibration_ready": false
     }
   },
