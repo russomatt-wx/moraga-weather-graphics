@@ -21,7 +21,10 @@ on:
       - 'app-icon-192.png'
       - 'app-icon-512.png'
       - 'service-worker.js'
+      - '.github/workflows/station_observations.yml'
   schedule:
+    # Hourly publication to include the latest station summary, plus pre-briefing runs.
+    - cron: '35 * * * *'
     # Publish ahead of the four Pacific briefings; UTC schedule follows PDT/PST seasons.
     - cron: '30 3,12,17,22 * 3-10 *'
     - cron: '30 4,13,18,23 * 11,12,1,2 *'
