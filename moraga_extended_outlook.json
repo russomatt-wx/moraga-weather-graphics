@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-28T12:52:38.574267+00:00",
+  "generated_utc": "2026-10-28T17:45:45.746826+00:00",
   "source": "Open-Meteo GEFS and ECMWF IFS EPS ensembles",
   "latitude": 37.8201932,
   "longitude": -122.1193876,
@@ -7,17 +7,17 @@
     {
       "temperature_f_p10": 61.21,
       "temperature_f_median": 65.15,
-      "temperature_low_f_median": 50.3,
+      "temperature_low_f_median": 50.425,
       "temperature_f_p90": 70.485,
-      "rain_member_fraction": 0.303,
+      "rain_member_fraction": 0.32,
       "date": "2026-11-07",
       "models": {
         "gefs": {
           "temperature_f_p10": 59.06,
           "temperature_f_median": 64.25,
-          "temperature_low_f_median": 51.05,
+          "temperature_low_f_median": 51.3,
           "temperature_f_p90": 69.26,
-          "rain_member_fraction": 0.36666666666666664,
+          "rain_member_fraction": 0.4,
           "members": 30
         },
         "eps": {
