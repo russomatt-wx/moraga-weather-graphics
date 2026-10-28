@@ -582,6 +582,12 @@ html+='</div><p style="font-size:12px">Monthly averages use sampled daily extrem
 const confirmations=months.filter(([month,m])=>m.precipitation_status==='owner_confirmed_as_of'&&m.precipitation_as_of_utc).map(([month,m])=>month+' through '+new Date(m.precipitation_as_of_utc).toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'}));
 if(confirmations.length)html+='<p style="font-size:12px">Owner-confirmed rainfall: '+confirmations.join('; ')+'.</p>';
 el.innerHTML=html;
+fetch('ambient_climate_monthly_2025_2026.json?ts='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Historical file missing');return r.json()}).then(hist=>{
+ const label=v=>Number.isFinite(v)?v.toFixed(1)+'°F':'—';
+ const body=hist.months.map(m=>'<tr style="border-bottom:1px solid #30455b"><td style="padding:8px">'+m.month+'</td><td>'+m.days+'</td><td>'+label(m.high_f)+'</td><td>'+label(m.low_f)+'</td><td>'+m.rain_in.toFixed(2)+' in</td></tr>').join('');
+ const panel=document.createElement('div');panel.innerHTML='<h3 style="margin-top:12px">Ambient Weather historical baseline (2025–26)</h3><p>Monthly station observations from the uploaded archive. These are <strong>not</strong> long-term expected climate normals. October 2026 is partial; rainfall totals require reconciliation.</p><div style="overflow-x:auto"><table style="width:100%;min-width:420px;text-align:left;border-collapse:collapse"><thead><tr><th>Month</th><th>Days</th><th>Avg high</th><th>Avg low</th><th>Rain</th></tr></thead><tbody>'+body+'</tbody></table></div><p style="font-size:12px">Expected monthly averages will be added separately using a verified long-term reference.</p>';
+ el.prepend(panel);
+}).catch(()=>{});
 }catch(e){el.innerHTML='<p>Station climate data will appear after its first successful publication. </p>';}
 })();
 </script><script>
