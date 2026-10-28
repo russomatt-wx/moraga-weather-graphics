@@ -1423,7 +1423,8 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
   if(!Number.isFinite(last.getTime()))throw Error('Invalid station observation timestamp');
   const vals=[Number.isFinite(d.high_f)?Math.round(d.high_f)+'°':'—',Number.isFinite(d.low_f)?Math.round(d.low_f)+'°':'—',Number.isFinite(d.rainfall_in)?d.rainfall_in.toFixed(2)+' in':'0.00 in'];
   root.querySelectorAll('strong').forEach((el,i)=>el.textContent=vals[i]);
-  status.textContent='Last updated: '+last.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'})+' PT';
+  const ageMinutes=(Date.now()-last.getTime())/60000;
+  status.textContent='Last updated: '+last.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'})+' PT'+(ageMinutes>90?' · Observations delayed':'');
  }catch(e){status.textContent='Last updated: unavailable';root.querySelectorAll('strong')[2].textContent='0.00 in'}
 })();
 </script>
