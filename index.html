@@ -578,11 +578,11 @@ const monthly=monthKeys.map(month=>{
  const vals=dates.map(d=>days[d]);const avg=k=>{const a=vals.map(v=>v[k]).filter(Number.isFinite);return a.length?a.reduce((x,y)=>x+y,0)/a.length:null};
  return {month,dates,high:avg('high'),low:avg('low'),rain:vals.reduce((sum,v)=>sum+(Number.isFinite(v.rain)?v.rain:0),0),complete:completeMonth(month)};
 });
-const fmt=v=>Number.isFinite(v)?v.toFixed(1)+'°F':'—',rainfmt=v=>Number.isFinite(v)?v.toFixed(2)+' in':'—';
+const fmt=v=>Number.isFinite(v)?Math.round(v)+'°F':'—',rainfmt=v=>Number.isFinite(v)?v.toFixed(2)+' in':'—';
 const names=['January','February','March','April','May','June','July','August','September','October','November','December'];
-let html='<h3>Monthly Climate Averages</h3><p style="font-size:13px">Running local station baseline calculated from completed months in the historical and current archive. Not official 30-year climate normals.</p>';
+let html='<h3>Monthly Climate Averages</h3><p style="font-size:13px">Running local station baseline from available observations, including the current partial month. Partial-month rainfall is month-to-date, not a full-month expectation. Not official 30-year climate normals.</p>';
 html+='<table style="width:100%;border-collapse:collapse;font-size:clamp(11px,3.2vw,14px);text-align:left"><thead><tr><th>Month</th><th>Avg high</th><th>Avg low</th><th>Rainfall</th></tr></thead><tbody>';
-for(let i=0;i<12;i++){const a=monthly.filter(m=>m.complete&&Number(m.month.slice(5))===i+1),avg=k=>a.length?a.reduce((x,m)=>x+m[k],0)/a.length:null;html+='<tr style="border-bottom:1px solid #30455b"><td style="padding:10px 3px">'+names[i]+'</td><td>'+fmt(avg('high'))+'</td><td>'+fmt(avg('low'))+'</td><td>'+rainfmt(avg('rain'))+'</td></tr>';}
+for(let i=0;i<12;i++){const a=monthly.filter(m=>Number(m.month.slice(5))===i+1),avg=k=>a.length?a.reduce((x,m)=>x+m[k],0)/a.length:null;html+='<tr style="border-bottom:1px solid #30455b"><td style="padding:10px 3px">'+names[i]+'</td><td>'+fmt(avg('high'))+'</td><td>'+fmt(avg('low'))+'</td><td>'+rainfmt(avg('rain'))+'</td></tr>';}
 html+='</tbody></table><h3 style="margin:24px 0 12px">Historical Climate Ledger</h3>';
 for(const m of [...monthly].reverse()){
  const [year,month]=m.month.split('-').map(Number),name=names[month-1]+' '+year;
@@ -592,7 +592,7 @@ for(const m of [...monthly].reverse()){
  for(const date of [...m.dates].sort().reverse()){const d=days[date];html+='<tr style="border-bottom:1px solid #30455b"><td style="padding:9px 3px">'+date.slice(5)+'</td><td>'+fmt(d.high)+'</td><td>'+fmt(d.low)+'</td><td>'+rainfmt(d.rain)+'</td></tr>';}
  html+='</tbody></table></div></details>';
 }
-html+='<p style="font-size:12px;color:#a9bdd0">Historical rain is sourced from the Ambient Weather export and may require reconciliation with station gauge records. October 18, 2026 uses the owner-confirmed 0.48 in. The current month is provisional; completed months contribute to running averages.</p>';
+html+='<p style="font-size:12px;color:#a9bdd0">Historical rain is sourced from the Ambient Weather export and may require reconciliation with station gauge records. October 18, 2026 uses the owner-confirmed 0.48 in. The current month is provisional and contributes to running averages.</p>';
 el.innerHTML=html;
 }catch(e){el.innerHTML='<p>Station climate data will appear after its first successful publication. </p>';}
 })();
