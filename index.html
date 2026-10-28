@@ -556,9 +556,12 @@ main>nav[aria-label="Weather dashboard sections"] a{
 (async()=>{
 const el=document.getElementById('climate-results');
 try {
-const res=await fetch('climate_ledger_latest.json?ts='+Date.now(),{cache:'no-store'});
-if(!res.ok)throw Error('Climate ledger not published');
-const data=await res.json();
+// Historical climate archive must remain available even when the live ledger fails.
+let data={days:{}};
+try {
+ const res=await fetch('climate_ledger_latest.json?ts='+Date.now(),{cache:'no-store'});
+ if(res.ok)data=await res.json();
+} catch(_err) { /* Show historical archive without live updates. */ }
 
 const hist=await fetch('ambient_climate_daily_2025_2026.json?ts='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Historical archive unavailable');return r.json()});
 const days={};
@@ -572,7 +575,9 @@ for(const [date,d] of Object.entries(data.days||{})){
 }
 // Preserve the Ambient Weather daily rainfall for October 18; do not apply an unverified manual override.
 // Only finalized local calendar days contribute to climate averages and the historical ledger.
-const todayPT=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+const partsPT=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+const partPT=k=>partsPT.find(p=>p.type===k).value;
+const todayPT=partPT('year')+'-'+partPT('month')+'-'+partPT('day');
 for(const date of Object.keys(days))if(date>=todayPT)delete days[date];
 const monthKeys=[...new Set(Object.keys(days).map(d=>d.slice(0,7)))].sort();
 const completeMonth=month=>{const dates=Object.keys(days).filter(d=>d.startsWith(month+'-'));const [y,m]=month.split('-').map(Number);return dates.length===new Date(y,m,0).getDate()&&dates.every(d=>Number.isFinite(days[d].high)&&Number.isFinite(days[d].low))};
@@ -597,7 +602,7 @@ for(const m of [...monthly].reverse()){
 }
 html+='<p style="font-size:12px;color:#a9bdd0">Historical rain is sourced from the Ambient Weather export and may require reconciliation with station gauge records. The current month is provisional; only completed days contribute to running averages.</p>';
 el.innerHTML=html;
-}catch(e){el.innerHTML='<p>Station climate data will appear after its first successful publication. </p>';}
+}catch(e){console.error('Climate archive:',e);el.innerHTML='<p>Climate archive could not load. Please refresh to retry.</p>';}
 })();
 </script><script>
 (async function(){
