@@ -1,42 +1,42 @@
 {
-  "generated_utc": "2026-10-28T01:37:07.181612+00:00",
+  "generated_utc": "2026-10-28T10:25:10.740556+00:00",
   "status": "verified_daily_extremes",
   "station": "KCAMORAG71",
   "model_scores": {
     "gfs": {
-      "verified_days": 8,
-      "high_mae_f": 3.57,
-      "low_mae_f": 6.4,
-      "high_bias_f": 2.11,
-      "low_bias_f": 5.51
+      "verified_days": 9,
+      "high_mae_f": 4.16,
+      "low_mae_f": 6.94,
+      "high_bias_f": 2.86,
+      "low_bias_f": 6.16
     },
     "ecmwf": {
-      "verified_days": 8,
-      "high_mae_f": 4.5,
-      "low_mae_f": 2.83,
-      "high_bias_f": -2.07,
-      "low_bias_f": 2.68
+      "verified_days": 9,
+      "high_mae_f": 4.48,
+      "low_mae_f": 3.14,
+      "high_bias_f": -2.32,
+      "low_bias_f": 3.0
     },
     "nam": {
-      "verified_days": 8,
-      "high_mae_f": 4.33,
-      "low_mae_f": 5.41,
-      "high_bias_f": -4.19,
+      "verified_days": 9,
+      "high_mae_f": 4.79,
+      "low_mae_f": 5.34,
+      "high_bias_f": -4.66,
       "low_bias_f": 4.88
     },
     "icon": {
-      "verified_days": 8,
-      "high_mae_f": 4.14,
-      "low_mae_f": 2.77,
-      "high_bias_f": -0.84,
-      "low_bias_f": 0.9
+      "verified_days": 9,
+      "high_mae_f": 4.48,
+      "low_mae_f": 3.22,
+      "high_bias_f": 0.06,
+      "low_bias_f": 1.56
     },
     "gem": {
-      "verified_days": 8,
-      "high_mae_f": 4.86,
+      "verified_days": 9,
+      "high_mae_f": 4.5,
       "low_mae_f": 2.54,
-      "high_bias_f": -4.5,
-      "low_bias_f": 1.71
+      "high_bias_f": -4.18,
+      "low_bias_f": 1.24
     }
   },
   "method": "Earliest archived complete hourly model snapshot per target local date, retrieved before target day; observed KCAMORAG71 daily extrema require >=90% 15-minute coverage and no gap >60 minutes",
