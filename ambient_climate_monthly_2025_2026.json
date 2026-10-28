@@ -1,0 +1,91 @@
+{
+  "source": "Ambient Weather daily high/low export uploaded 2026-10-28",
+  "coverage": "2025-11-01 to 2026-10-28",
+  "note": "Single-year station observations, NOT 30-year climate normals. October 2026 incomplete. Rainfall derived from daily maximum Daily Rain counter; validate against station gauge.",
+  "months": [
+    {
+      "month": "2025-11",
+      "days": 30,
+      "high_f": 65.4,
+      "low_f": 46.6,
+      "rain_in": 3.97
+    },
+    {
+      "month": "2025-12",
+      "days": 31,
+      "high_f": 56.8,
+      "low_f": 42.3,
+      "rain_in": 6.19
+    },
+    {
+      "month": "2026-01",
+      "days": 31,
+      "high_f": 61.3,
+      "low_f": 40.2,
+      "rain_in": 3.51
+    },
+    {
+      "month": "2026-02",
+      "days": 28,
+      "high_f": 65,
+      "low_f": 42,
+      "rain_in": 5.59
+    },
+    {
+      "month": "2026-03",
+      "days": 31,
+      "high_f": 78.8,
+      "low_f": 47.1,
+      "rain_in": 0.3
+    },
+    {
+      "month": "2026-04",
+      "days": 30,
+      "high_f": 68.2,
+      "low_f": 46.8,
+      "rain_in": 5.95
+    },
+    {
+      "month": "2026-05",
+      "days": 31,
+      "high_f": 73.5,
+      "low_f": 50.4,
+      "rain_in": 0.69
+    },
+    {
+      "month": "2026-06",
+      "days": 30,
+      "high_f": 78,
+      "low_f": 53.3,
+      "rain_in": 0
+    },
+    {
+      "month": "2026-07",
+      "days": 31,
+      "high_f": 81.1,
+      "low_f": 55.8,
+      "rain_in": 0
+    },
+    {
+      "month": "2026-08",
+      "days": 31,
+      "high_f": 84,
+      "low_f": 55.9,
+      "rain_in": 0
+    },
+    {
+      "month": "2026-09",
+      "days": 30,
+      "high_f": 80.6,
+      "low_f": 54.2,
+      "rain_in": 0.08
+    },
+    {
+      "month": "2026-10",
+      "days": 28,
+      "high_f": 80.6,
+      "low_f": 50.5,
+      "rain_in": 0.5
+    }
+  ]
+}
