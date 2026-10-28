@@ -2,11 +2,8 @@ name: Coordinated weather site publication
 on:
   workflow_dispatch:
   schedule:
-    # Hourly publication to include the latest station summary, plus pre-briefing runs.
+    # One coordinated publication per hour; also available via manual dispatch.
     - cron: '35 * * * *'
-    # Publish ahead of the four Pacific briefings; UTC schedule follows PDT/PST seasons.
-    - cron: '30 3,12,17,22 * 3-10 *'
-    - cron: '30 4,13,18,23 * 11,12,1,2 *'
 permissions:
   contents: read
   pages: write
