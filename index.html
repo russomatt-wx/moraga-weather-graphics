@@ -1400,10 +1400,10 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
   const expected=dayParts[2]+'-'+dayParts[0]+'-'+dayParts[1];
   if(d.date!==expected)throw Error('Waiting for today’s observations');
   const last=new Date(d.last_observation_utc);
-  if(!Number.isFinite(last.getTime())||Date.now()-last.getTime()>60*60000)throw Error('Observations delayed; not displaying stale values');
+  if(!Number.isFinite(last.getTime()))throw Error('Invalid station observation timestamp');
   const vals=[Number.isFinite(d.high_f)?Math.round(d.high_f)+'°':'—',Number.isFinite(d.low_f)?Math.round(d.low_f)+'°':'—',Number.isFinite(d.rainfall_in)?d.rainfall_in.toFixed(2)+'"':'—'];
   root.querySelectorAll('strong').forEach((el,i)=>el.textContent=vals[i]);
-  status.textContent='Observed through '+last.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'})+' PT · '+(d.rainfall_note||'');
+  const delay=Date.now()-last.getTime()>75*60000?' · Updates delayed; showing last verified readings':'';status.textContent='Observed through '+last.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'})+' PT'+delay+' · '+(d.rainfall_note||'');
  }catch(e){status.textContent=e.message+'; high, low and rainfall will appear when verified data is available.'}
 })();
 </script>
