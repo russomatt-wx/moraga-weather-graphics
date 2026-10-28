@@ -588,7 +588,7 @@ const monthly=monthKeys.map(month=>{
 });
 const fmt=v=>Number.isFinite(v)?Math.round(v)+'°F':'—',rainfmt=v=>Number.isFinite(v)?v.toFixed(2)+' in':'—';
 const names=['January','February','March','April','May','June','July','August','September','October','November','December'];
-let html='<h3>Monthly Climate Averages</h3><p style="font-size:13px">Running local station baseline from completed calendar days only; today's observations are added tomorrow (Pacific time). Current-month rainfall is month-to-date through yesterday. Not official 30-year climate normals.</p>';
+let html='<h3>Monthly Climate Averages</h3><p style="font-size:13px">Running local station baseline from completed calendar days only; current-day observations are added tomorrow (Pacific time). Current-month rainfall is month-to-date through yesterday. Not official 30-year climate normals.</p>';
 html+='<table style="width:100%;border-collapse:collapse;font-size:clamp(11px,3.2vw,14px);text-align:left"><thead><tr><th>Month</th><th>Avg high</th><th>Avg low</th><th>Rainfall</th></tr></thead><tbody>';
 for(let i=0;i<12;i++){const a=monthly.filter(m=>Number(m.month.slice(5))===i+1),avg=k=>a.length?a.reduce((x,m)=>x+m[k],0)/a.length:null;html+='<tr style="border-bottom:1px solid #30455b"><td style="padding:10px 3px">'+names[i]+'</td><td>'+fmt(avg('high'))+'</td><td>'+fmt(avg('low'))+'</td><td>'+rainfmt(avg('rain'))+'</td></tr>';}
 html+='</tbody></table><h3 style="margin:24px 0 12px">Historical Climate Ledger</h3>';
