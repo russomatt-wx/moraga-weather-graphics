@@ -570,7 +570,7 @@ for(const [date,d] of Object.entries(data.days||{})){
  const rain=Number.isFinite(d.daily_precipitation_in)?d.daily_precipitation_in:Number.isFinite(d.precipitation_in)?d.precipitation_in:old.rain;
  days[date]={high:Number.isFinite(old.high)?Math.max(old.high,high??old.high):high,low:Number.isFinite(old.low)?Math.min(old.low,low??old.low):low,rain,source:old.source||'Live station'};
 }
-if(days['2026-10-18'])days['2026-10-18'].rain=0.48;
+// Preserve the Ambient Weather daily rainfall for October 18; do not apply an unverified manual override.
 const monthKeys=[...new Set(Object.keys(days).map(d=>d.slice(0,7)))].sort();
 const completeMonth=month=>{const dates=Object.keys(days).filter(d=>d.startsWith(month+'-'));const [y,m]=month.split('-').map(Number);return dates.length===new Date(y,m,0).getDate()&&dates.every(d=>Number.isFinite(days[d].high)&&Number.isFinite(days[d].low))};
 const monthly=monthKeys.map(month=>{
@@ -592,7 +592,7 @@ for(const m of [...monthly].reverse()){
  for(const date of [...m.dates].sort().reverse()){const d=days[date];html+='<tr style="border-bottom:1px solid #30455b"><td style="padding:9px 3px">'+date.slice(5)+'</td><td>'+fmt(d.high)+'</td><td>'+fmt(d.low)+'</td><td>'+rainfmt(d.rain)+'</td></tr>';}
  html+='</tbody></table></div></details>';
 }
-html+='<p style="font-size:12px;color:#a9bdd0">Historical rain is sourced from the Ambient Weather export and may require reconciliation with station gauge records. October 18, 2026 uses the owner-confirmed 0.48 in. The current month is provisional and contributes to running averages.</p>';
+html+='<p style="font-size:12px;color:#a9bdd0">Historical rain is sourced from the Ambient Weather export and may require reconciliation with station gauge records. The current month is provisional and contributes to running averages.</p>';
 el.innerHTML=html;
 }catch(e){el.innerHTML='<p>Station climate data will appear after its first successful publication. </p>';}
 })();
