@@ -571,6 +571,9 @@ for(const [date,d] of Object.entries(data.days||{})){
  days[date]={high:Number.isFinite(old.high)?Math.max(old.high,high??old.high):high,low:Number.isFinite(old.low)?Math.min(old.low,low??old.low):low,rain,source:old.source||'Live station'};
 }
 // Preserve the Ambient Weather daily rainfall for October 18; do not apply an unverified manual override.
+// Only finalized local calendar days contribute to climate averages and the historical ledger.
+const todayPT=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+for(const date of Object.keys(days))if(date>=todayPT)delete days[date];
 const monthKeys=[...new Set(Object.keys(days).map(d=>d.slice(0,7)))].sort();
 const completeMonth=month=>{const dates=Object.keys(days).filter(d=>d.startsWith(month+'-'));const [y,m]=month.split('-').map(Number);return dates.length===new Date(y,m,0).getDate()&&dates.every(d=>Number.isFinite(days[d].high)&&Number.isFinite(days[d].low))};
 const monthly=monthKeys.map(month=>{
@@ -580,7 +583,7 @@ const monthly=monthKeys.map(month=>{
 });
 const fmt=v=>Number.isFinite(v)?Math.round(v)+'°F':'—',rainfmt=v=>Number.isFinite(v)?v.toFixed(2)+' in':'—';
 const names=['January','February','March','April','May','June','July','August','September','October','November','December'];
-let html='<h3>Monthly Climate Averages</h3><p style="font-size:13px">Running local station baseline from available observations, including the current partial month. Partial-month rainfall is month-to-date, not a full-month expectation. Not official 30-year climate normals.</p>';
+let html='<h3>Monthly Climate Averages</h3><p style="font-size:13px">Running local station baseline from completed calendar days only; today's observations are added tomorrow (Pacific time). Current-month rainfall is month-to-date through yesterday. Not official 30-year climate normals.</p>';
 html+='<table style="width:100%;border-collapse:collapse;font-size:clamp(11px,3.2vw,14px);text-align:left"><thead><tr><th>Month</th><th>Avg high</th><th>Avg low</th><th>Rainfall</th></tr></thead><tbody>';
 for(let i=0;i<12;i++){const a=monthly.filter(m=>Number(m.month.slice(5))===i+1),avg=k=>a.length?a.reduce((x,m)=>x+m[k],0)/a.length:null;html+='<tr style="border-bottom:1px solid #30455b"><td style="padding:10px 3px">'+names[i]+'</td><td>'+fmt(avg('high'))+'</td><td>'+fmt(avg('low'))+'</td><td>'+rainfmt(avg('rain'))+'</td></tr>';}
 html+='</tbody></table><h3 style="margin:24px 0 12px">Historical Climate Ledger</h3>';
@@ -592,7 +595,7 @@ for(const m of [...monthly].reverse()){
  for(const date of [...m.dates].sort().reverse()){const d=days[date];html+='<tr style="border-bottom:1px solid #30455b"><td style="padding:9px 3px">'+date.slice(5)+'</td><td>'+fmt(d.high)+'</td><td>'+fmt(d.low)+'</td><td>'+rainfmt(d.rain)+'</td></tr>';}
  html+='</tbody></table></div></details>';
 }
-html+='<p style="font-size:12px;color:#a9bdd0">Historical rain is sourced from the Ambient Weather export and may require reconciliation with station gauge records. The current month is provisional and contributes to running averages.</p>';
+html+='<p style="font-size:12px;color:#a9bdd0">Historical rain is sourced from the Ambient Weather export and may require reconciliation with station gauge records. The current month is provisional; only completed days contribute to running averages.</p>';
 el.innerHTML=html;
 }catch(e){el.innerHTML='<p>Station climate data will appear after its first successful publication. </p>';}
 })();
