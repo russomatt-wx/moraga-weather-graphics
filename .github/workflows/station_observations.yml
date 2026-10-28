@@ -5,8 +5,8 @@ on:
       - 'scripts/station_today.py'
       - '.github/workflows/station_observations.yml'
   workflow_dispatch:
-  schedule:
-    - cron: '15 * * * *'
+  repository_dispatch:
+    types: [xweather-observations-updated]
 permissions:
   contents: write
 concurrency:
