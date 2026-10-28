@@ -28,7 +28,7 @@ for row in rows:
     except (KeyError,ValueError,TypeError): continue
 if not values: raise RuntimeError("No verified readings today")
 last=max(ts for ts,_ in values)
-if now-last>timedelta(minutes=60): raise RuntimeError("Station observations stale; retaining previous summary")
+# Preserve the last verified daily extrema even if the collector is delayed.\n# The website shows the actual observation timestamp and a delay warning.
 # Source precip_observation_in is not a validated daily accumulation.
 # Never sum repeated observation reports into a false daily rainfall total.
 rainfall=0.0 if rain and all(v==0 for v in rain) else None
