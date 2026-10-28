@@ -559,38 +559,41 @@ try {
 const res=await fetch('climate_ledger_latest.json?ts='+Date.now(),{cache:'no-store'});
 if(!res.ok)throw Error('Climate ledger not published');
 const data=await res.json();
-const months=Object.entries(data.months||{}).sort(([a],[b])=>a.localeCompare(b));
-if(!months.length)throw Error('No monthly station records');
-const fmt=v=>Number.isFinite(v)?v.toFixed(1)+'°F':'—';
-const rainfmt=v=>Number.isFinite(v)?v.toFixed(2)+' in':'0.00 in';
-const allDays=data.days||{};
-let html='<div class="climate-archive">';
-for(const [month,m] of months){
- const days=Object.entries(allDays).filter(([date])=>date.startsWith(month+'-')).sort(([a],[b])=>b.localeCompare(a));
- const monthLabel=new Date(month+'-01T12:00:00Z').toLocaleDateString('en-US',{timeZone:'UTC',month:'long',year:'numeric'});
- html+='<details class="climate-month" style="border:1px solid #30455b;border-radius:12px;margin:10px 0;padding:14px"'+(month===months[months.length-1][0]?' open':'')+'><summary style="cursor:pointer;font-weight:700;font-size:18px">'+monthLabel+' <span style="font-size:13px;font-weight:400;color:#aac1d4">('+days.length+' days recorded)</span></summary>';
- html+='<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:15px 0"><div>Avg high<br><strong>'+fmt(m.mean_sampled_daily_high_f)+'</strong></div><div>Avg low<br><strong>'+fmt(m.mean_sampled_daily_low_f)+'</strong></div><div>Rainfall<br><strong>'+rainfmt(m.monthly_precipitation_in)+'</strong></div></div>';
- html+='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:14px;text-align:left"><thead><tr style="border-bottom:1px solid #40566c"><th style="padding:9px 4px">Date</th><th>High</th><th>Low</th><th>Rain</th></tr></thead><tbody>';
- for(const [date,d] of days){
-  const label=new Date(date+'T12:00:00Z').toLocaleDateString('en-US',{timeZone:'UTC',month:'short',day:'numeric'});
-  const dayRain=Number.isFinite(d.daily_precipitation_in)?d.daily_precipitation_in:(Number.isFinite(d.precipitation_in)?d.precipitation_in:null);
-  html+='<tr style="border-bottom:1px solid #30455b"><td style="padding:10px 4px">'+label+'</td><td>'+(Number.isFinite(d.sampled_high_f)?Math.round(d.sampled_high_f)+'°F':'—')+'</td><td>'+(Number.isFinite(d.sampled_low_f)?Math.round(d.sampled_low_f)+'°F':'—')+'</td><td>'+rainfmt(dayRain)+'</td></tr>';
- }
- html+='</tbody></table></div><p style="font-size:12px;color:#a9bdd0;margin-top:12px">Daily highs and lows are sampled station extremes; incomplete days may not capture the true extremes. Missing daily rainfall is displayed as 0.00 in by convention; it is not a verified zero measurement.</p></details>';
-}
-html+='</div><p style="font-size:12px">Monthly averages use sampled daily extremes, not long-term climate normals. Missing rainfall displays as 0.00 in by convention; these values are not verified dry-day observations.</p>';
-const confirmations=months.filter(([month,m])=>m.precipitation_status==='owner_confirmed_as_of'&&m.precipitation_as_of_utc).map(([month,m])=>month+' through '+new Date(m.precipitation_as_of_utc).toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'}));
-if(confirmations.length)html+='<p style="font-size:12px">Owner-confirmed rainfall: '+confirmations.join('; ')+'.</p>';
-el.innerHTML=html;
-fetch('ambient_climate_monthly_2025_2026.json?ts='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Historical file missing');return r.json()}).then(hist=>{
- const label=v=>Number.isFinite(v)?v.toFixed(1)+'°F':'—';
- const names=['January','February','March','April','May','June','July','August','September','October','November','December'];
- const grouped=names.map((name,i)=>{const rows=hist.months.filter(m=>Number(m.month.slice(5))===i+1&&m.days>=28&&(m.days>=new Date(Number(m.month.slice(0,4)),i+1,0).getDate()));if(!rows.length)return {name};return {name,high:rows.reduce((a,m)=>a+m.high_f,0)/rows.length,low:rows.reduce((a,m)=>a+m.low_f,0)/rows.length,rain:rows.reduce((a,m)=>a+m.rain_in,0)/rows.length};});
- const body=grouped.map(m=>'<tr style="border-bottom:1px solid #30455b"><td style="padding:9px 4px">'+m.name+'</td><td>'+label(m.high)+'</td><td>'+label(m.low)+'</td><td>'+(Number.isFinite(m.rain)?m.rain.toFixed(2)+'″':'—')+'</td></tr>').join('');
- const panel=document.createElement('div');panel.innerHTML='<h3 style="margin-top:12px">Monthly Climate Averages</h3><p style="font-size:13px">Running averages from complete months in the Ambient Weather station archive. These are local station baselines, not official 30-year climate normals. Recalculate as additional historical years are imported.</p><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:clamp(11px,3.2vw,14px);text-align:left"><thead><tr><th>Month</th><th>Avg high</th><th>Avg low</th><th>Rainfall</th></tr></thead><tbody>'+body+'</tbody></table></div><h3 style="margin:22px 0 8px">Historical Climate Ledger</h3>';
 
- el.prepend(panel);
-}).catch(()=>{});
+const hist=await fetch('ambient_climate_daily_2025_2026.json?ts='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Historical archive unavailable');return r.json()});
+const days={};
+for(const [date,d] of Object.entries(hist.days||{}))days[date]={high:d.high_f,low:d.low_f,rain:d.rain_in_export,source:'Ambient Weather export'};
+for(const [date,d] of Object.entries(data.days||{})){
+ const old=days[date]||{};
+ const high=Number.isFinite(d.sampled_high_f)?d.sampled_high_f:old.high;
+ const low=Number.isFinite(d.sampled_low_f)?d.sampled_low_f:old.low;
+ const rain=Number.isFinite(d.daily_precipitation_in)?d.daily_precipitation_in:Number.isFinite(d.precipitation_in)?d.precipitation_in:old.rain;
+ days[date]={high:Number.isFinite(old.high)?Math.max(old.high,high??old.high):high,low:Number.isFinite(old.low)?Math.min(old.low,low??old.low):low,rain,source:old.source||'Live station'};
+}
+if(days['2026-10-18'])days['2026-10-18'].rain=0.48;
+const monthKeys=[...new Set(Object.keys(days).map(d=>d.slice(0,7)))].sort();
+const completeMonth=month=>{const dates=Object.keys(days).filter(d=>d.startsWith(month+'-'));const [y,m]=month.split('-').map(Number);return dates.length===new Date(y,m,0).getDate()&&dates.every(d=>Number.isFinite(days[d].high)&&Number.isFinite(days[d].low))};
+const monthly=monthKeys.map(month=>{
+ const dates=Object.keys(days).filter(d=>d.startsWith(month+'-'));
+ const vals=dates.map(d=>days[d]);const avg=k=>{const a=vals.map(v=>v[k]).filter(Number.isFinite);return a.length?a.reduce((x,y)=>x+y,0)/a.length:null};
+ return {month,dates,high:avg('high'),low:avg('low'),rain:vals.reduce((sum,v)=>sum+(Number.isFinite(v.rain)?v.rain:0),0),complete:completeMonth(month)};
+});
+const fmt=v=>Number.isFinite(v)?v.toFixed(1)+'°F':'—',rainfmt=v=>Number.isFinite(v)?v.toFixed(2)+' in':'—';
+const names=['January','February','March','April','May','June','July','August','September','October','November','December'];
+let html='<h3>Monthly Climate Averages</h3><p style="font-size:13px">Running local station baseline calculated from completed months in the historical and current archive. Not official 30-year climate normals.</p>';
+html+='<table style="width:100%;border-collapse:collapse;font-size:clamp(11px,3.2vw,14px);text-align:left"><thead><tr><th>Month</th><th>Avg high</th><th>Avg low</th><th>Rainfall</th></tr></thead><tbody>';
+for(let i=0;i<12;i++){const a=monthly.filter(m=>m.complete&&Number(m.month.slice(5))===i+1),avg=k=>a.length?a.reduce((x,m)=>x+m[k],0)/a.length:null;html+='<tr style="border-bottom:1px solid #30455b"><td style="padding:10px 3px">'+names[i]+'</td><td>'+fmt(avg('high'))+'</td><td>'+fmt(avg('low'))+'</td><td>'+rainfmt(avg('rain'))+'</td></tr>';}
+html+='</tbody></table><h3 style="margin:24px 0 12px">Historical Climate Ledger</h3>';
+for(const m of [...monthly].reverse()){
+ const [year,month]=m.month.split('-').map(Number),name=names[month-1]+' '+year;
+ html+='<details class="climate-month" style="border:1px solid #30455b;border-radius:12px;margin:10px 0;padding:14px"'+(m.month===monthly[monthly.length-1].month?' open':'')+'><summary style="cursor:pointer;font-weight:700;font-size:18px">'+name+'</summary>';
+ html+='<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:15px 0"><div>Avg high<strong style="display:block">'+fmt(m.high)+'</strong></div><div>Avg low<strong style="display:block">'+fmt(m.low)+'</strong></div><div>Rainfall<strong style="display:block">'+rainfmt(m.rain)+'</strong></div></div>';
+ html+='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:14px;text-align:left"><thead><tr><th>Date</th><th>High</th><th>Low</th><th>Rain</th></tr></thead><tbody>';
+ for(const date of [...m.dates].sort().reverse()){const d=days[date];html+='<tr style="border-bottom:1px solid #30455b"><td style="padding:9px 3px">'+date.slice(5)+'</td><td>'+fmt(d.high)+'</td><td>'+fmt(d.low)+'</td><td>'+rainfmt(d.rain)+'</td></tr>';}
+ html+='</tbody></table></div></details>';
+}
+html+='<p style="font-size:12px;color:#a9bdd0">Historical rain is sourced from the Ambient Weather export and may require reconciliation with station gauge records. October 18, 2026 uses the owner-confirmed 0.48 in. The current month is provisional; completed months contribute to running averages.</p>';
+el.innerHTML=html;
 }catch(e){el.innerHTML='<p>Station climate data will appear after its first successful publication. </p>';}
 })();
 </script><script>
