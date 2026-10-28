@@ -1,27 +1,6 @@
 name: Coordinated weather site publication
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/coordinated-pages.yml'
-      - '*.json'
-      - '*.png'
-      - '*.jpg'
-      - '*.jpeg'
-      - '*.webp'
-      - '*.svg'
-      - '*.js'
-      - '*.css'
-      - 'index.html'
-      - 'station-dashboard.html'
-      - 'app.webmanifest'
-      - 'app-icon.svg'
-      - 'app-icon-180.png'
-      - 'app-icon-192.png'
-      - 'app-icon-512.png'
-      - 'service-worker.js'
-      - '.github/workflows/station_observations.yml'
   schedule:
     # Hourly publication to include the latest station summary, plus pre-briefing runs.
     - cron: '35 * * * *'
@@ -60,7 +39,7 @@ jobs:
           age=(datetime.now(timezone.utc)-last).total_seconds()/60
           print(f"Station summary observation age: {age:.1f} minutes")
           if age>90:
-              raise SystemExit(f"Refusing stale station summary: {age:.0f} minutes old")
+              print(f"::warning::Station observation is {age:.0f} minutes old; publishing forecast with delayed-observation indicator")
           f=Path('moraga_forecast_10day.json')
           if f.exists():
               forecast=json.loads(f.read_text())
