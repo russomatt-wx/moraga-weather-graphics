@@ -61,7 +61,7 @@ jobs:
           stamp = datetime.fromisoformat(ledger["generated_utc"].replace("Z", "+00:00"))
           if datetime.now(timezone.utc) - stamp > timedelta(hours=36):
               raise RuntimeError("Private climate ledger is stale; refusing to publish old observations")
-          Path("climate_ledger_latest.json").write_text(json.dumps(ledger, indent=2) + "\\n")
+          Path("climate_ledger_latest.json").write_text(json.dumps(ledger, indent=2) + chr(10))
           print("Refreshed climate ledger", ledger["generated_utc"])
           PY
       - name: Commit refreshed public station data
