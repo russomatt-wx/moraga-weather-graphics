@@ -42,7 +42,7 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 .chart-viewport{display:block;overflow:visible;border-radius:12px;margin-top:12px;background:transparent;border:0}
 .chart-viewport img{display:block;width:100%!important;max-width:100%!important;height:auto!important;max-height:none!important;object-fit:contain;border-radius:12px;background:white;margin:0}
 .chart-viewport .chart-meta,.chart-viewport .pill,.chart-viewport .chart-file-updated{background:transparent;color:#b8c8da}
-.day-temps{border-radius:10px;padding:5px 0 8px}.temp-spectrum-key{grid-column:1/-1;margin:10px 6px 3px}.temp-spectrum-bar{height:9px;border-radius:10px;background:linear-gradient(90deg,#6944ba 0%,#5872d9 11.11%,#369ee0 22.22%,#30b79d 33.33%,#77c75b 44.44%,#f7d54b 55.56%,#fa9336 66.67%,#e23539 77.78%,#d5286c 88.89%,#ef4fa1 100%)}.temp-spectrum-labels{display:flex;justify-content:space-between;color:#b8c8da;font-size:11px;margin-top:5px}.temp-spectrum-caption{text-align:center;color:#9eb6cc;font-size:11px;margin-top:3px}
+.day-temps{border-radius:10px;padding:5px 0 8px}.temp-spectrum-key{grid-column:1/-1;margin:10px 6px 3px}.temp-spectrum-bar{height:9px;border-radius:10px;background:linear-gradient(90deg,#6944ba 0%,#5872d9 11.11%,#369ee0 22.22%,#1cb5b8 33.33%,#37b95a 44.44%,#ffdc37 55.56%,#ff9024 66.67%,#e42c33 77.78%,#da2a73 88.89%,#ef4fa1 100%)}.temp-spectrum-labels{display:flex;justify-content:space-between;color:#b8c8da;font-size:11px;margin-top:5px}.temp-spectrum-caption{text-align:center;color:#9eb6cc;font-size:11px;margin-top:3px}
 
 
 /* Compact 10-day forecast: consistent rainfall row, softer temperature borders. */
@@ -1094,7 +1094,7 @@ const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
 const highText=skillBlend(correctedHighs,wh), lowText=skillBlend(correctedLows,wl);
 const highValue=parseFloat(highText),lowValue=parseFloat(lowText);
-const spectrum=t=>{const stops=[[20,[105,68,186]],[30,[88,114,217]],[40,[54,158,224]],[50,[48,183,157]],[60,[119,199,91]],[70,[247,213,75]],[80,[250,147,54]],[90,[226,53,57]],[100,[213,40,108]],[110,[239,79,161]]];if(!Number.isFinite(t))return '#e2e8f0';for(let k=1;k<stops.length;k++){if(t<=stops[k][0]){const a=stops[k-1],b=stops[k],w=Math.max(0,(t-a[0])/(b[0]-a[0]));return 'rgb('+a[1].map((v,i)=>Math.round(v+(b[1][i]-v)*w)).join(',')+')';}}return 'rgb(125,25,57)';};
+const spectrum=t=>{const stops=[[20,[105,68,186]],[30,[88,114,217]],[40,[54,158,224]],[50,[28,181,184]],[60,[55,185,90]],[70,[255,220,55]],[80,[255,144,36]],[90,[228,44,51]],[100,[218,42,115]],[110,[239,79,161]]];if(!Number.isFinite(t))return '#e2e8f0';for(let k=1;k<stops.length;k++){if(t<=stops[k][0]){const a=stops[k-1],b=stops[k],w=Math.max(0,(t-a[0])/(b[0]-a[0]));return 'rgb('+a[1].map((v,i)=>Math.round(v+(b[1][i]-v)*w)).join(',')+')';}}return 'rgb(125,25,57)';};
 const highColor=spectrum(highValue),lowColor=spectrum(lowValue);
 const rangeStart=Math.max(0,Math.min(100,((Number.isFinite(lowValue)?lowValue:20)-20)/90*100));
 const rangeEnd=Math.max(rangeStart,Math.min(100,((Number.isFinite(highValue)?highValue:110)-20)/90*100));
