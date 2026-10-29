@@ -43,6 +43,7 @@ jobs:
               print('Forecast generated:',forecast.get('generated_utc'))
           PY
       - name: Refresh public climate ledger from private source
+        continue-on-error: true
         env:
           WEATHER_REPO_TOKEN: ${{ secrets.WEATHER_REPO_TOKEN }}
         run: |
@@ -71,7 +72,14 @@ jobs:
           git add moraga_station_today.json climate_ledger_latest.json
           if ! git diff --cached --quiet; then
             git commit -m "Refresh verified public station observations [skip ci]"
-            git push
+            for attempt in 1 2 3; do
+              if git push; then exit 0; fi
+              echo "Station data push conflict; retry $attempt"
+              git fetch origin main
+              git rebase origin/main || { git rebase --abort; exit 1; }
+              sleep $((attempt * 2))
+            done
+            exit 1
           fi
       - name: Validate forecast files without blocking publication
         run: |
