@@ -43,6 +43,10 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 .chart-viewport img{display:block;width:100%!important;max-width:100%!important;height:auto!important;max-height:none!important;object-fit:contain;border-radius:12px;background:white;margin:0}
 .chart-viewport .chart-meta,.chart-viewport .pill,.chart-viewport .chart-file-updated{background:transparent;color:#b8c8da}
 .day-temps{border-radius:10px;padding:5px 0 8px}.temp-spectrum-key{grid-column:1/-1;margin:10px 6px 3px}.temp-spectrum-bar{height:9px;border-radius:10px;background:linear-gradient(90deg,#6944ba 0%,#5872d9 11.11%,#369ee0 22.22%,#39bdb2 33.33%,#82c96b 44.44%,#f3cd5c 55.56%,#f5a34e 66.67%,#f47b49 77.78%,#e84f55 88.89%,#ef4fa1 100%)}.temp-spectrum-labels{display:flex;justify-content:space-between;color:#b8c8da;font-size:11px;margin-top:5px}.temp-spectrum-caption{text-align:center;color:#9eb6cc;font-size:11px;margin-top:3px}
+
+/* More pronounced high-to-low temperature tint, still dark and legible. */
+#ten-day .day-forecast{background:linear-gradient(180deg,color-mix(in srgb,var(--forecast-high) 24%,#102135) 0%,color-mix(in srgb,var(--forecast-high) 13%,#102135) 46%,color-mix(in srgb,var(--forecast-low) 26%,#102135) 100%)!important}
+#ten-day .day-forecast:first-child{background:linear-gradient(180deg,color-mix(in srgb,var(--forecast-high) 13%,#102135) 0%,#102135 48%,color-mix(in srgb,var(--forecast-low) 14%,#102135) 100%)!important}
 /* Compact 10-day forecast: consistent rainfall row, softer temperature borders. */
 #ten-day .day-forecast{padding:10px 5px 8px!important;border-color:color-mix(in srgb,var(--forecast-border) 72%,#25384a)!important;display:flex;flex-direction:column;align-items:center;min-height:0!important}
 #ten-day .day-condition{min-height:58px!important;margin-top:5px!important;gap:1px}
