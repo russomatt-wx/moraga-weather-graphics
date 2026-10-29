@@ -1,9 +1,20 @@
 name: Coordinated weather site publication
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'moraga_forecast_10day.json'
+      - 'moraga_rainfall_10day.json'
+      - 'moraga_rainfall_10day.png'
+      - 'index.html'
+      - 'service-worker.js'
+      - '.github/workflows/coordinated-pages.yml'
   schedule:
-    # One coordinated publication per hour; also available via manual dispatch.
+    # Staggered publication opportunities after the private :07/:37 collector.
+    # Push events also publish new forecasts without waiting for the clock.
     - cron: '17 * * * *'
+    - cron: '47 * * * *'
 permissions:
   contents: write
   pages: write
