@@ -1,26 +1,26 @@
 {
-  "generated_utc": "2026-10-28T16:55:51.737906+00:00",
+  "generated_utc": "2026-10-29T17:25:03.838424+00:00",
   "source": "automated_briefing_model_guidance",
   "summary": {
     "6 AM": {
-      "count": 12,
-      "high_mae_f": 4.2,
-      "low_mae_f": 4.93
+      "count": 13,
+      "high_mae_f": 4.25,
+      "low_mae_f": 4.98
     },
     "11 AM": {
-      "count": 14,
+      "count": 15,
       "high_mae_f": 4.45,
-      "low_mae_f": 4.94
+      "low_mae_f": 5.0
     },
     "4 PM": {
-      "count": 14,
-      "high_mae_f": 4.56,
-      "low_mae_f": 4.74
+      "count": 15,
+      "high_mae_f": 4.59,
+      "low_mae_f": 4.8
     },
     "9 PM": {
-      "count": 13,
-      "high_mae_f": 3.94,
-      "low_mae_f": 4.02
+      "count": 14,
+      "high_mae_f": 3.93,
+      "low_mae_f": 4.14
     }
   },
   "matches": [
@@ -659,6 +659,54 @@
       "samples": 1413,
       "high_error_f": -5.4,
       "low_error_f": 2.3
+    },
+    {
+      "valid_local_date": "2026-10-28",
+      "edition": "6 AM",
+      "issued_utc": "2026-10-27T11:42:41.017270+00:00",
+      "forecast_high_f": 67.1,
+      "forecast_low_f": 46.6,
+      "observed_high_f": 72.0,
+      "observed_low_f": 41.0,
+      "samples": 1415,
+      "high_error_f": -4.9,
+      "low_error_f": 5.6
+    },
+    {
+      "valid_local_date": "2026-10-28",
+      "edition": "11 AM",
+      "issued_utc": "2026-10-27T16:52:49.920894+00:00",
+      "forecast_high_f": 67.6,
+      "forecast_low_f": 46.8,
+      "observed_high_f": 72.0,
+      "observed_low_f": 41.0,
+      "samples": 1415,
+      "high_error_f": -4.4,
+      "low_error_f": 5.8
+    },
+    {
+      "valid_local_date": "2026-10-28",
+      "edition": "4 PM",
+      "issued_utc": "2026-10-27T21:41:50.755793+00:00",
+      "forecast_high_f": 66.9,
+      "forecast_low_f": 46.6,
+      "observed_high_f": 72.0,
+      "observed_low_f": 41.0,
+      "samples": 1415,
+      "high_error_f": -5.1,
+      "low_error_f": 5.6
+    },
+    {
+      "valid_local_date": "2026-10-28",
+      "edition": "9 PM",
+      "issued_utc": "2026-10-28T02:51:22.420765+00:00",
+      "forecast_high_f": 68.2,
+      "forecast_low_f": 46.8,
+      "observed_high_f": 72.0,
+      "observed_low_f": 41.0,
+      "samples": 1415,
+      "high_error_f": -3.8,
+      "low_error_f": 5.8
     }
   ],
   "caveat": "Not conversational ChatGPT skill. Only completed days with >=48 Xweather samples, first/last hour coverage and no >2h gaps."
