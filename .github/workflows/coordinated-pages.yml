@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   schedule:
     # One coordinated publication per hour; also available via manual dispatch.
-    - cron: '35 * * * *'
+    - cron: '17 * * * *'
 permissions:
   contents: read
   pages: write
