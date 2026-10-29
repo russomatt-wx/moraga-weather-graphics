@@ -10,6 +10,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+concurrency:
+  group: moraga-rainfall-forecast-publish
+  cancel-in-progress: false
 jobs:
   rainfall:
     runs-on: ubuntu-latest
@@ -20,9 +23,23 @@ jobs:
           python-version: "3.12"
       - run: pip install matplotlib
       - run: python scripts/rainfall_10day.py
-      - name: Commit published graphic and data
+      - name: Commit published graphic and data with safe retries
+        shell: bash
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add moraga_rainfall_10day.png moraga_rainfall_10day.json moraga_forecast_10day.json
-          git diff --cached --quiet || (git commit -m "Update rolling 10-day forecast and 14-day rainfall" && git pull --rebase origin main && git push)
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          mkdir -p /tmp/moraga-rainfall-publish
+          cp moraga_rainfall_10day.png moraga_rainfall_10day.json moraga_forecast_10day.json /tmp/moraga-rainfall-publish/
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/moraga-rainfall-publish/* ./
+            git add moraga_rainfall_10day.png moraga_rainfall_10day.json moraga_forecast_10day.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m 'Update rolling 10-day forecast and 14-day rainfall [skip ci]'
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          echo 'Failed to publish rainfall and forecast after five attempts' >&2
+          exit 1
