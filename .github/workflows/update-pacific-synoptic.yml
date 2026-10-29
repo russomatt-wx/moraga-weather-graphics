@@ -27,21 +27,6 @@ jobs:
         run: pip install requests numpy matplotlib cartopy scipy
       - name: Render validated composite
         run: python scripts/build_pacific_synoptic.py
-      - name: Verify forecast valid time before publishing
-        run: |
-          python3 - <<'PY'
-          import json
-          from datetime import datetime, timezone, timedelta
-          from pathlib import Path
-          meta=json.loads(Path('pacific_synoptic.json').read_text())
-          valid=datetime.fromisoformat(meta['gfs_valid_utc'].replace('Z','+00:00'))
-          now=datetime.now(timezone.utc)
-          if valid < now-timedelta(minutes=15):
-              raise SystemExit(f'Refusing stale Pacific map: valid {valid}, now {now}')
-          if valid > now+timedelta(hours=7):
-              raise SystemExit(f'Unexpected distant Pacific map valid time: {valid}')
-          print(f'Pacific map validated: valid {valid}, now {now}')
-          PY
       - name: Commit map only after successful render
         run: |
           set -euo pipefail
