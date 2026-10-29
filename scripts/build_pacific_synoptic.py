@@ -119,23 +119,26 @@ line540=ax.contour(lon2,lat2,thickness,levels=[540],colors="#0069c9",
 if len(line540.allsegs[0]):
     ax.clabel(line540,fmt={540:"540"},fontsize=14,inline=True,
               inline_spacing=8,colors="#0069c9",use_clabeltext=True)
-# Detect prominent interior pressure extrema; avoid edge artifacts and clutter.
-smooth=gaussian_filter(pressure,sigma=1.0)
+# Identify pressure centers across the domain, including near the map edges.
+# The coarse GFS sampling can suppress weaker lows when smoothed heavily.
+smooth=gaussian_filter(pressure,sigma=0.65)
 candidates=[]
 for kind,fn in (("L",minimum_filter),("H",maximum_filter)):
-    local=fn(smooth,size=7,mode="nearest")
-    for iy in range(3,smooth.shape[0]-3):
-        for ix in range(3,smooth.shape[1]-3):
+    local=fn(smooth,size=5,mode="nearest")
+    for iy in range(1,smooth.shape[0]-1):
+        for ix in range(1,smooth.shape[1]-1):
             v=smooth[iy,ix]
-            if abs(v-local[iy,ix])>0.05: continue
-            area=smooth[iy-3:iy+4,ix-3:ix+4]
-            prominence=(np.max(area)-v) if kind=="L" else (v-np.min(area))
-            if prominence>=3: candidates.append((prominence,kind,iy,ix))
+            if not np.isfinite(v) or abs(v-local[iy,ix])>0.05: continue
+            y0,y1=max(0,iy-3),min(smooth.shape[0],iy+4)
+            x0,x1=max(0,ix-3),min(smooth.shape[1],ix+4)
+            area=smooth[y0:y1,x0:x1]
+            prominence=(np.nanmax(area)-v) if kind=="L" else (v-np.nanmin(area))
+            if prominence>=2.0: candidates.append((prominence,kind,iy,ix))
 chosen=[]
 for _,kind,iy,ix in sorted(candidates,reverse=True):
-    if any((iy-jy)**2+(ix-jx)**2<36 for _,jy,jx in chosen): continue
+    if any((iy-jy)**2+(ix-jx)**2<25 for _,jy,jx in chosen): continue
     chosen.append((kind,iy,ix))
-    if len(chosen)>=7: break
+    if len(chosen)>=9: break
 for kind,iy,ix in chosen:
     lon,lat=float(lon2[iy,ix]),float(lat2[iy,ix])
     ax.text(lon,lat,kind,ha="center",va="center",fontsize=22,fontweight="black",
