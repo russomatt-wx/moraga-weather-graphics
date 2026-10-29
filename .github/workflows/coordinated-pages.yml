@@ -1,6 +1,9 @@
 name: Coordinated weather site publication
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ['Moraga 14-day rainfall graphic']
+    types: [completed]
   push:
     branches: [main]
     paths:
@@ -24,6 +27,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   publish:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
