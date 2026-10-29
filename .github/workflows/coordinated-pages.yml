@@ -23,6 +23,7 @@ jobs:
         with:
           ref: main
       - name: Build station summary from latest Xweather archive
+        continue-on-error: true
         env:
           WEATHER_REPO_TOKEN: ${{ secrets.WEATHER_REPO_TOKEN }}
         run: |
@@ -41,6 +42,24 @@ jobs:
           if f.exists():
               forecast=json.loads(f.read_text())
               print('Forecast generated:',forecast.get('generated_utc'))
+          PY
+      - name: Validate forecast files without blocking publication
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from datetime import datetime, timezone
+          for name in ('moraga_forecast_10day.json', 'moraga_rainfall_10day.json'):
+              path = Path(name)
+              if not path.exists():
+                  print(f'::warning::{name} is missing from this deployment')
+                  continue
+              data = json.loads(path.read_text())
+              stamp = datetime.fromisoformat(data['generated_utc'].replace('Z', '+00:00'))
+              age = (datetime.now(timezone.utc) - stamp).total_seconds() / 3600
+              print(f'{name}: generated {stamp.isoformat()}, age {age:.1f} hours')
+              if age > 3:
+                  print(f'::warning::{name} is {age:.1f} hours old')
           PY
       - name: Configure Pages
         uses: actions/configure-pages@v5
