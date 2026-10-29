@@ -1,31 +1,31 @@
 {
-  "generated_utc": "2026-10-28T22:41:00.835752+00:00",
+  "generated_utc": "2026-10-29T03:48:16.767211+00:00",
   "source": "Open-Meteo GEFS and ECMWF IFS EPS ensembles",
   "latitude": 37.8201932,
   "longitude": -122.1193876,
   "days": [
     {
-      "temperature_f_p10": 61.575,
-      "temperature_f_median": 65.8,
-      "temperature_low_f_median": 50.6,
-      "temperature_f_p90": 71.715,
-      "rain_member_fraction": 0.203,
+      "temperature_f_p10": 62.425,
+      "temperature_f_median": 67.975,
+      "temperature_low_f_median": 51.2,
+      "temperature_f_p90": 73.96,
+      "rain_member_fraction": 0.083,
       "date": "2026-11-07",
       "models": {
         "gefs": {
-          "temperature_f_p10": 59.79,
-          "temperature_f_median": 65.55000000000001,
-          "temperature_low_f_median": 51.65,
-          "temperature_f_p90": 71.72,
-          "rain_member_fraction": 0.16666666666666666,
+          "temperature_f_p10": 63.09,
+          "temperature_f_median": 69.0,
+          "temperature_low_f_median": 52.55,
+          "temperature_f_p90": 73.71000000000001,
+          "rain_member_fraction": 0.06666666666666667,
           "members": 30
         },
         "eps": {
-          "temperature_f_p10": 63.36,
-          "temperature_f_median": 66.05000000000001,
-          "temperature_low_f_median": 49.55,
-          "temperature_f_p90": 71.71000000000001,
-          "rain_member_fraction": 0.24,
+          "temperature_f_p10": 61.76,
+          "temperature_f_median": 66.95,
+          "temperature_low_f_median": 49.85,
+          "temperature_f_p90": 74.21000000000001,
+          "rain_member_fraction": 0.1,
           "members": 50
         }
       },
@@ -33,27 +33,27 @@
       "members": 80
     },
     {
-      "temperature_f_p10": 62.08,
-      "temperature_f_median": 66.825,
-      "temperature_low_f_median": 51.125,
-      "temperature_f_p90": 73.415,
-      "rain_member_fraction": 0.22,
+      "temperature_f_p10": 62.19,
+      "temperature_f_median": 68.3,
+      "temperature_low_f_median": 51.325,
+      "temperature_f_p90": 74.925,
+      "rain_member_fraction": 0.1,
       "date": "2026-11-08",
       "models": {
         "gefs": {
-          "temperature_f_p10": 61.17,
-          "temperature_f_median": 67.1,
-          "temperature_low_f_median": 51.45,
-          "temperature_f_p90": 72.27000000000001,
-          "rain_member_fraction": 0.2,
+          "temperature_f_p10": 62.309999999999995,
+          "temperature_f_median": 70.0,
+          "temperature_low_f_median": 52.3,
+          "temperature_f_p90": 74.43,
+          "rain_member_fraction": 0,
           "members": 30
         },
         "eps": {
-          "temperature_f_p10": 62.99,
-          "temperature_f_median": 66.55,
-          "temperature_low_f_median": 50.8,
-          "temperature_f_p90": 74.56,
-          "rain_member_fraction": 0.24,
+          "temperature_f_p10": 62.07,
+          "temperature_f_median": 66.6,
+          "temperature_low_f_median": 50.349999999999994,
+          "temperature_f_p90": 75.42,
+          "rain_member_fraction": 0.2,
           "members": 50
         }
       },
@@ -61,27 +61,55 @@
       "members": 80
     },
     {
-      "temperature_f_p10": 62.695,
-      "temperature_f_median": 66.725,
-      "temperature_low_f_median": 51.7,
-      "temperature_f_p90": 72.815,
-      "rain_member_fraction": 0.183,
+      "temperature_f_p10": 61.74,
+      "temperature_f_median": 67.225,
+      "temperature_low_f_median": 52.075,
+      "temperature_f_p90": 74.505,
+      "rain_member_fraction": 0.18,
       "date": "2026-11-09",
       "models": {
         "gefs": {
-          "temperature_f_p10": 63.45,
-          "temperature_f_median": 66.2,
-          "temperature_low_f_median": 52.3,
-          "temperature_f_p90": 72.19,
+          "temperature_f_p10": 61.59,
+          "temperature_f_median": 67.95,
+          "temperature_low_f_median": 53.45,
+          "temperature_f_p90": 72.63999999999999,
+          "rain_member_fraction": 0.2,
+          "members": 30
+        },
+        "eps": {
+          "temperature_f_p10": 61.89,
+          "temperature_f_median": 66.5,
+          "temperature_low_f_median": 50.7,
+          "temperature_f_p90": 76.37,
+          "rain_member_fraction": 0.16,
+          "members": 50
+        }
+      },
+      "blend_method": "equal_model_weight",
+      "members": 80
+    },
+    {
+      "temperature_f_p10": 60.04,
+      "temperature_f_median": 66.4,
+      "temperature_low_f_median": 51.525,
+      "temperature_f_p90": 72.92,
+      "rain_member_fraction": 0.233,
+      "date": "2026-11-10",
+      "models": {
+        "gefs": {
+          "temperature_f_p10": 59.86,
+          "temperature_f_median": 66.5,
+          "temperature_low_f_median": 51.4,
+          "temperature_f_p90": 72.07000000000001,
           "rain_member_fraction": 0.16666666666666666,
           "members": 30
         },
         "eps": {
-          "temperature_f_p10": 61.940000000000005,
-          "temperature_f_median": 67.25,
-          "temperature_low_f_median": 51.1,
-          "temperature_f_p90": 73.44000000000001,
-          "rain_member_fraction": 0.2,
+          "temperature_f_p10": 60.22,
+          "temperature_f_median": 66.3,
+          "temperature_low_f_median": 51.65,
+          "temperature_f_p90": 73.77,
+          "rain_member_fraction": 0.3,
           "members": 50
         }
       },
@@ -89,67 +117,47 @@
       "members": 80
     },
     {
-      "temperature_f_p10": 60.64,
-      "temperature_f_median": 66.45,
-      "temperature_low_f_median": 51.15,
-      "temperature_f_p90": 73.435,
-      "rain_member_fraction": 0.223,
-      "date": "2026-11-10",
-      "models": {
-        "gefs": {
-          "temperature_f_p10": 59.74,
-          "temperature_f_median": 66.44999999999999,
-          "temperature_low_f_median": 52.25,
-          "temperature_f_p90": 72.84,
-          "rain_member_fraction": 0.26666666666666666,
-          "members": 30
-        },
-        "eps": {
-          "temperature_f_p10": 61.540000000000006,
-          "temperature_f_median": 66.44999999999999,
-          "temperature_low_f_median": 50.05,
-          "temperature_f_p90": 74.03,
-          "rain_member_fraction": 0.18,
-          "members": 50
-        }
-      },
-      "blend_method": "equal_model_weight",
-      "members": 80
-    },
-    {
-      "temperature_f_p10": 60.01,
-      "temperature_f_median": 64.9,
-      "temperature_low_f_median": 52.65,
-      "temperature_f_p90": 70.93,
-      "rain_member_fraction": 0.367,
+      "temperature_f_p10": 58.255,
+      "temperature_f_median": 65.3,
+      "temperature_low_f_median": 51.95,
+      "temperature_f_p90": 73.955,
+      "rain_member_fraction": 0.433,
       "date": "2026-11-11",
       "models": {
         "gefs": {
-          "temperature_f_p10": 60.010000000000005,
-          "temperature_f_median": 64.9,
-          "temperature_low_f_median": 52.650000000000006,
-          "temperature_f_p90": 70.93,
-          "rain_member_fraction": 0.36666666666666664,
+          "temperature_f_p10": 58.540000000000006,
+          "temperature_f_median": 64.0,
+          "temperature_low_f_median": 52.4,
+          "temperature_f_p90": 72.57000000000001,
+          "rain_member_fraction": 0.4666666666666667,
           "members": 30
+        },
+        "eps": {
+          "temperature_f_p10": 57.97,
+          "temperature_f_median": 66.6,
+          "temperature_low_f_median": 51.5,
+          "temperature_f_p90": 75.34,
+          "rain_member_fraction": 0.4,
+          "members": 50
         }
       },
-      "blend_method": "gefs_only",
-      "members": 30
+      "blend_method": "equal_model_weight",
+      "members": 80
     },
     {
-      "temperature_f_p10": 57.23,
-      "temperature_f_median": 62.2,
+      "temperature_f_p10": 58.98,
+      "temperature_f_median": 63.6,
       "temperature_low_f_median": 50.8,
-      "temperature_f_p90": 68.96,
-      "rain_member_fraction": 0.433,
+      "temperature_f_p90": 71.11,
+      "rain_member_fraction": 0.4,
       "date": "2026-11-12",
       "models": {
         "gefs": {
-          "temperature_f_p10": 57.23,
-          "temperature_f_median": 62.2,
+          "temperature_f_p10": 58.980000000000004,
+          "temperature_f_median": 63.6,
           "temperature_low_f_median": 50.8,
-          "temperature_f_p90": 68.96000000000001,
-          "rain_member_fraction": 0.43333333333333335,
+          "temperature_f_p90": 71.11,
+          "rain_member_fraction": 0.4,
           "members": 30
         }
       },
