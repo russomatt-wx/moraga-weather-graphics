@@ -59,7 +59,7 @@ jobs:
           ledger = json.loads(base64.b64decode(data["content"]))
           from datetime import datetime, timezone, timedelta
           stamp = datetime.fromisoformat(ledger["generated_utc"].replace("Z", "+00:00"))
-          if datetime.now(timezone.utc) - stamp > timedelta(hours=4):
+          if datetime.now(timezone.utc) - stamp > timedelta(hours=36):
               raise RuntimeError("Private climate ledger is stale; refusing to publish old observations")
           Path("climate_ledger_latest.json").write_text(json.dumps(ledger, indent=2) + "\\n")
           print("Refreshed climate ledger", ledger["generated_utc"])
