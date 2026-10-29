@@ -501,6 +501,14 @@ main>nav[aria-label="Weather dashboard sections"] a{
 #ten-day .ten-day-grid .rain-amount{display:block!important;font-size:10px!important;color:#b5d5e6!important;white-space:nowrap!important}
 #ten-day .ten-day-grid .forecast-details-button{margin-top:3px!important;min-height:25px!important;padding:2px!important}
 @media(max-width:760px){#ten-day .ten-day-grid .day-forecast{padding:7px 2px 5px!important}#ten-day .ten-day-grid .day-condition{min-height:57px!important;margin:5px 0 1px!important}#ten-day .ten-day-grid .day-temps{gap:3px!important;font-size:clamp(14px,3.4vw,22px)!important;padding-bottom:7px!important}#ten-day .ten-day-grid .day-temps small{font-size:.8em!important}#ten-day .ten-day-grid .rain-amount{font-size:9px!important}}
+
+/* Final compact mobile forecast: the entire card opens details, no information icons. */
+#ten-day .ten-day-grid .day-forecast{cursor:pointer!important;justify-content:flex-start!important}
+#ten-day .ten-day-grid .day-forecast:focus-visible{outline:2px solid #7dd3fc!important;outline-offset:3px!important}
+#ten-day .ten-day-grid .day-condition{min-height:51px!important}
+#ten-day .ten-day-grid .day-temps{gap:5px!important;font-size:clamp(15px,2.9vw,25px)!important}
+#ten-day .ten-day-grid .day-pop{min-height:28px!important;margin:5px 0 2px!important}
+@media(max-width:760px){#ten-day .ten-day-grid .day-condition{min-height:47px!important}#ten-day .ten-day-grid .day-temps{font-size:clamp(14px,3.15vw,19px)!important;gap:4px!important}}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
@@ -1085,26 +1093,23 @@ const rangeGradient='linear-gradient(90deg,'+lowColor+','+spectrum((lowValue+hig
 
 return '<article class="day-forecast'+(date===today?' is-today':'')+'" style="--forecast-high:'+highColor+';--forecast-low:'+lowColor+';--forecast-border:'+highColor+'">'+(date===today?'<span class="today-pill">TODAY</span>':'<strong>'+day+'</strong>')+'<div class="day-date">'+label+'</div><div class="day-condition" title="Daily weather condition from Open-Meteo"><span aria-hidden="true">'+conditionIcon+'</span><small>'+condition[1]+'</small></div><div class="day-temps" style="background:transparent"><span style="color:'+highColor+'">'+highText+'</span> <small style="color:'+lowColor+'">'+lowText+'</small></div><div class="day-pop" title="Daily maximum rain probability; rainfall amount is the mean of available model daily totals">'+(dailyRainChance[date]===undefined?'—':dailyRainChance[date]<10?'': '💧 '+Math.min(100,Math.round(dailyRainChance[date]/10)*10)+'%')+(Number.isFinite(dailyRainChance[date])&&dailyRainChance[date]>=20&&rainMean!==null?'<span class="rain-amount">'+rainAmountText+'</span>':'')+'</div><details class="forecast-detail"><summary aria-label="Show model range">Model details</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Rain chance source: '+(rainChanceSource[date]||'unavailable')+' · NWS: '+(rainChanceComparison[date]?.nws??'—')+'% · Open-Meteo: '+(rainChanceComparison[date]?.openMeteo??'—')+'%<br>Raw weighted high: '+skillBlend(highEntries,wh)+' · Local adjustment: '+adjustmentLabel(highEntries,correctedHighs,wh)+'<br>Raw weighted low: '+skillBlend(lowEntries,wl)+' · Local adjustment: '+adjustmentLabel(lowEntries,correctedLows,wl)+'</p><h5>High temperature models</h5>'+detailTable(highEntries,bh,wh)+'<h5>Low temperature models</h5>'+detailTable(lowEntries,bl,wl)+'<p class="diagnostic-note">Bias = model minus observed station temperature; adjustment is the guarded correction actually applied. Recent hourly samples are provisional proxies for daily extremes. High weights: '+weightLabel(wh)+'; low weights: '+weightLabel(wl)+'.</p></details></article>';
 }).join('')+'<div class="temp-spectrum-key" aria-label="Fixed temperature color scale from 20 to 110 degrees Fahrenheit"><div class="temp-spectrum-bar"></div><div class="temp-spectrum-labels"><span>20°</span><span>30°</span><span>40°</span><span>50°</span><span>60°</span><span>70°</span><span>80°</span><span>90°</span><span>100°</span><span>110°</span></div><div class="temp-spectrum-caption">Temperature color scale (°F) · highs and lows</div></div></div>';
-// Use real buttons and a separate full-width diagnostics panel.
-// Native <details> cannot expand inside a five-column mobile forecast card.
+// Keep forecast diagnostics available by tapping a day card, without visible info icons.
 el.querySelectorAll('.day-forecast details').forEach((detail,index)=>{
+ const card=detail.closest('.day-forecast');
  const content=detail.cloneNode(true);
  content.querySelector('summary')?.remove();
  const raw=content.innerHTML;
- const card=detail.closest('.day-forecast');
- const day=card.querySelector('strong')?.textContent||'Day';
- const button=document.createElement('button');
- button.type='button';
- button.className='forecast-details-button';
- button.innerHTML='<span class="forecast-info-symbol" aria-hidden="true">i</span><span class="sr-only">Forecast details for '+day+'</span>';
- button.setAttribute('aria-expanded','false');
- button.setAttribute('aria-label','Forecast details for '+day);
- button.title='Forecast details for '+day;
- button.addEventListener('click',()=>{
+ const day=card.querySelector('strong')?.textContent||card.querySelector('.day-date')?.textContent||'Day';
+ detail.remove();
+ card.setAttribute('role','button');
+ card.setAttribute('tabindex','0');
+ card.setAttribute('aria-label',day+' forecast details');
+ card.setAttribute('aria-expanded','false');
+ const toggle=()=>{
   const existing=el.querySelector('.forecast-detail-panel');
   const same=existing?.dataset.dayIndex===String(index);
   existing?.remove();
-  el.querySelectorAll('.forecast-details-button').forEach(b=>b.setAttribute('aria-expanded','false'));
+  el.querySelectorAll('.day-forecast').forEach(c=>c.setAttribute('aria-expanded','false'));
   if(same)return;
   const panel=document.createElement('section');
   panel.className='forecast-detail-panel';
@@ -1113,16 +1118,14 @@ el.querySelectorAll('.day-forecast details').forEach((detail,index)=>{
   heading.textContent=day+' · Forecast diagnostics';
   const close=document.createElement('button');
   close.className='detail-close';close.type='button';close.textContent='Close';
-  close.addEventListener('click',()=>{panel.remove();button.setAttribute('aria-expanded','false')});
-  const body=document.createElement('div');
-  body.className='diagnostic-body';
-  body.innerHTML=raw;
+  close.addEventListener('click',event=>{event.stopPropagation();panel.remove();card.setAttribute('aria-expanded','false');card.focus()});
+  const body=document.createElement('div');body.className='diagnostic-body';body.innerHTML=raw;
   panel.append(close,heading,body);
-  el.append(panel);
-  button.setAttribute('aria-expanded','true');
+  el.append(panel);card.setAttribute('aria-expanded','true');
   panel.scrollIntoView({block:'nearest',behavior:'smooth'});
- });
- detail.replaceWith(button);
+ };
+ card.addEventListener('click',toggle);
+ card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle()}});
 });
 const stamp=new Date(data.generated_utc);
 document.getElementById('ten-day-updated').textContent='Updated '+stamp.toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT'+(Date.now()-stamp.getTime()>12*3600000?' • Update delayed':'')+(days.length<10?' • '+days.length+' current days available':'');
