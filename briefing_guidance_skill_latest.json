@@ -1,16 +1,16 @@
 {
-  "generated_utc": "2026-10-30T00:57:26.402256+00:00",
+  "generated_utc": "2026-10-30T08:34:57.895972+00:00",
   "source": "automated_briefing_model_guidance",
   "summary": {
     "6 AM": {
-      "count": 13,
-      "high_mae_f": 4.25,
-      "low_mae_f": 4.98
+      "count": 14,
+      "high_mae_f": 4.26,
+      "low_mae_f": 5.11
     },
     "11 AM": {
-      "count": 15,
-      "high_mae_f": 4.45,
-      "low_mae_f": 5.0
+      "count": 16,
+      "high_mae_f": 4.44,
+      "low_mae_f": 5.11
     },
     "4 PM": {
       "count": 15,
@@ -707,6 +707,30 @@
       "samples": 1415,
       "high_error_f": -3.8,
       "low_error_f": 5.8
+    },
+    {
+      "valid_local_date": "2026-10-29",
+      "edition": "6 AM",
+      "issued_utc": "2026-10-28T11:48:57.074742+00:00",
+      "forecast_high_f": 66.7,
+      "forecast_low_f": 48.7,
+      "observed_high_f": 71.0,
+      "observed_low_f": 42.0,
+      "samples": 1415,
+      "high_error_f": -4.3,
+      "low_error_f": 6.7
+    },
+    {
+      "valid_local_date": "2026-10-29",
+      "edition": "11 AM",
+      "issued_utc": "2026-10-28T16:55:51.693908+00:00",
+      "forecast_high_f": 66.7,
+      "forecast_low_f": 48.7,
+      "observed_high_f": 71.0,
+      "observed_low_f": 42.0,
+      "samples": 1415,
+      "high_error_f": -4.3,
+      "low_error_f": 6.7
     }
   ],
   "caveat": "Not conversational ChatGPT skill. Only completed days with >=48 Xweather samples, first/last hour coverage and no >2h gaps."
