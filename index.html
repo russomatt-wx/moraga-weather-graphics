@@ -627,7 +627,7 @@ const monthly=monthKeys.map(month=>{
  const vals=dates.map(d=>days[d]);const avg=k=>{const a=vals.map(v=>v[k]).filter(Number.isFinite);return a.length?a.reduce((x,y)=>x+y,0)/a.length:null};
  return {month,dates,high:avg('high'),low:avg('low'),rain:vals.reduce((sum,v)=>sum+(Number.isFinite(v.rain)?v.rain:0),0),complete:completeMonth(month)};
 });
-const fmt=v=>Number.isFinite(v)?Math.round(v)+'°F':'—',rainfmt=v=>Number.isFinite(v)?v.toFixed(2)+' in':'—';
+const fmt=v=>Number.isFinite(v)?Math.round(v)+'°F':'—',rainfmt=v=>Number.isFinite(v)?v.toFixed(2)+' in':'0.00 in';
 const names=['January','February','March','April','May','June','July','August','September','October','November','December'];
 let html='<h3>Monthly Climate Averages</h3><p style="font-size:13px">Running local station baseline from completed calendar days only; current-day observations are added tomorrow (Pacific time). Current-month rainfall is month-to-date through yesterday. Not official 30-year climate normals.</p>';
 html+='<table style="width:100%;border-collapse:collapse;font-size:clamp(11px,3.2vw,14px);text-align:left"><thead><tr><th>Month</th><th>Avg high</th><th>Avg low</th><th>Rainfall</th></tr></thead><tbody>';
