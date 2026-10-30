@@ -46,6 +46,7 @@ jobs:
           python3 - <<'PY'
           import base64, json, os, time, urllib.request, urllib.error
           from datetime import datetime, timezone, timedelta
+          from zoneinfo import ZoneInfo
           token=os.environ.get('WEATHER_REPO_TOKEN','')
           if not token:
               print('::warning::Missing WEATHER_REPO_TOKEN; collector recovery unavailable')
@@ -53,7 +54,7 @@ jobs:
           base='https://api.github.com/repos/russomatt-wx/moraga-weather'
           headers={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','User-Agent':'MoragaWeatherObservatory'}
           def get_latest():
-              req=urllib.request.Request(base+'/contents/observations/KCAMORAG71_'+datetime.now(timezone(timedelta(hours=-7))).strftime('%Y-%m-%d')+'.csv',headers=headers)
+              req=urllib.request.Request(base+'/contents/observations/KCAMORAG71_'+datetime.now(ZoneInfo('America/Los_Angeles')).strftime('%Y-%m-%d')+'.csv',headers=headers)
               with urllib.request.urlopen(req,timeout=20) as response:
                   obj=json.load(response)
               lines=base64.b64decode(obj['content']).decode().splitlines()
