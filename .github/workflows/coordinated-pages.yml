@@ -37,6 +37,58 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
+      - name: Recover missed private Xweather collector schedule
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        continue-on-error: true
+        env:
+          WEATHER_REPO_TOKEN: ${{ secrets.WEATHER_REPO_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import base64, json, os, time, urllib.request, urllib.error
+          from datetime import datetime, timezone, timedelta
+          token=os.environ.get('WEATHER_REPO_TOKEN','')
+          if not token:
+              print('::warning::Missing WEATHER_REPO_TOKEN; collector recovery unavailable')
+              raise SystemExit(0)
+          base='https://api.github.com/repos/russomatt-wx/moraga-weather'
+          headers={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','User-Agent':'MoragaWeatherObservatory'}
+          def get_latest():
+              req=urllib.request.Request(base+'/contents/observations/KCAMORAG71_'+datetime.now(timezone(timedelta(hours=-7))).strftime('%Y-%m-%d')+'.csv',headers=headers)
+              with urllib.request.urlopen(req,timeout=20) as response:
+                  obj=json.load(response)
+              lines=base64.b64decode(obj['content']).decode().splitlines()
+              return datetime.fromisoformat(lines[-1].split(',')[1].replace('Z','+00:00')) if len(lines)>1 else None
+          now=datetime.now(timezone.utc)
+          try:
+              latest=get_latest()
+          except Exception as e:
+              print('Unable to read private archive freshness:',type(e).__name__)
+              latest=None
+          if latest and now-latest<timedelta(minutes=65):
+              print('Collector is fresh; no recovery dispatch needed:',latest)
+              raise SystemExit(0)
+          print('Collector stale; dispatching private recovery workflow. Latest:',latest)
+          payload=json.dumps({'ref':'main'}).encode()
+          req=urllib.request.Request(base+'/actions/workflows/collect-xweather.yml/dispatches',data=payload,headers={**headers,'Content-Type':'application/json'},method='POST')
+          try:
+              with urllib.request.urlopen(req,timeout=20) as response:
+                  print('Recovery dispatched:',response.status)
+          except urllib.error.HTTPError as e:
+              print('::warning::Recovery dispatch rejected (HTTP '+str(e.code)+'); WEATHER_REPO_TOKEN needs Actions:write on private repo')
+              raise
+          # Give the private collector time to finish before generating the public summary.
+          for attempt in range(12):
+              time.sleep(10)
+              try:
+                  new=get_latest()
+                  if new and (not latest or new>latest):
+                      print('Recovered observation:',new)
+                      break
+              except Exception as e:
+                  print('Recovery polling:',type(e).__name__)
+          else:
+              print('::warning::Collector dispatched but no newer archived observation yet; retaining last valid data')
+          PY
       - name: Build station summary from latest Xweather archive
         env:
           WEATHER_REPO_TOKEN: ${{ secrets.WEATHER_REPO_TOKEN }}
