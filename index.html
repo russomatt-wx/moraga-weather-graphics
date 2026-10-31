@@ -54,7 +54,7 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 #ten-day .forecast-detail{margin-top:2px!important}
 @media(max-width:760px){#ten-day .day-forecast{padding:9px 2px 7px!important}#ten-day .day-condition{min-height:52px!important}#ten-day .day-pop{font-size:10px;min-height:29px}#ten-day .day-pop .rain-amount{font-size:9px}}
 
-#live-pressure-trend{display:block;margin-top:3px;font-size:10px;font-weight:600;color:#a8bdcc;white-space:nowrap}
+.pressure-inline{display:flex;align-items:baseline;justify-content:center;gap:5px;flex-wrap:wrap}#live-pressure-trend{display:inline;font-size:10px;font-weight:600;color:#a8bdcc;white-space:nowrap}
 /* Full-width current conditions, separate from the archived daily extremes */
 #station-live-observation{width:100%;box-sizing:border-box;padding:15px 18px 16px;margin-bottom:8px;border-radius:16px;background:linear-gradient(115deg,#193448,#112739);border:1px solid #35546c}
 #station-live-observation[hidden]{display:none!important}
@@ -1512,7 +1512,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  const live=document.createElement('div');
  live.id='station-live-observation';
  live.hidden=true;
- live.innerHTML='<div class="live-topline"><span class="live-dot"></span> CURRENT CONDITIONS <span id="live-observed-at"></span></div><div class="live-main"><strong id="live-temp">—</strong><div class="live-details"><span id="live-humidity"></span><span id="live-wind"></span></div></div><div class="live-metrics"><div><span>Dew point</span><strong id="live-dew">—</strong></div><div><span>Pressure</span><strong id="live-pressure">—</strong><small id="live-pressure-trend" aria-live="polite">Trend pending</small></div><div><span>Wind gust</span><strong id="live-gust">—</strong></div></div>';
+ live.innerHTML='<div class="live-topline"><span class="live-dot"></span> CURRENT CONDITIONS <span id="live-observed-at"></span></div><div class="live-main"><strong id="live-temp">—</strong><div class="live-details"><span id="live-humidity"></span><span id="live-wind"></span></div></div><div class="live-metrics"><div><span>Dew point</span><strong id="live-dew">—</strong></div><div><span>Pressure</span><span class="pressure-inline"><strong id="live-pressure">—</strong><small id="live-pressure-trend" aria-live="polite">· Trend pending</small></span></div><div><span>Wind gust</span><strong id="live-gust">—</strong></div></div>';
  root.parentElement.insertBefore(live,root);
  const refresh=async()=>{
    try{
