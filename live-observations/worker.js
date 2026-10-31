@@ -28,6 +28,8 @@ export default {
         humidity_pct:pick('humidity'),
         dew_point_f:pick('dewpointF'),
         wind_mph:pick('windSpeedMPH'),
+        wind_direction_deg:pick('windDirDEG'),
+        wind_direction:typeof ob.windDir==='string'?ob.windDir:null,
         wind_gust_mph:pick('windGustMPH'),
         pressure_inhg:pick('pressureIN'),
         source:'Xweather'
