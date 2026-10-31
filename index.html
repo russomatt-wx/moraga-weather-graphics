@@ -53,6 +53,17 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 #ten-day .day-pop .rain-amount{font-size:10px;color:#aebfd0}
 #ten-day .forecast-detail{margin-top:2px!important}
 @media(max-width:760px){#ten-day .day-forecast{padding:9px 2px 7px!important}#ten-day .day-condition{min-height:52px!important}#ten-day .day-pop{font-size:10px;min-height:29px}#ten-day .day-pop .rain-amount{font-size:9px}}
+
+/* Full-width current conditions, separate from the archived daily extremes */
+#station-live-observation{width:100%;box-sizing:border-box;padding:18px 20px 20px;margin-bottom:20px;border-radius:16px;background:linear-gradient(115deg,#193448,#112739);border:1px solid #35546c}
+#station-live-observation[hidden]{display:none!important}
+.live-topline{display:flex;align-items:center;gap:9px;color:#a8d9e6;font-size:11px;font-weight:800;letter-spacing:.12em}
+.live-topline #live-observed-at{margin-left:auto;color:#a6bdcf;letter-spacing:0;font-size:12px;font-weight:500}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#65d5ad;box-shadow:0 0 0 3px #65d5ad22;flex-shrink:0}
+.live-main{display:flex;align-items:center;gap:24px;margin-top:12px}
+#live-temp{font-size:clamp(48px,10vw,76px);font-weight:750;letter-spacing:-.06em;line-height:1;color:#edf7ff}
+.live-details{display:flex;flex-direction:column;gap:7px;font-size:clamp(13px,3.5vw,16px);color:#c2d4e3;line-height:1.35}
+@media(max-width:390px){#station-live-observation{padding:16px}.live-main{gap:18px}.live-topline{font-size:10px}}
 </style><style>.diagnostic-body h5{font-size:14px;color:#f4d4a6;margin:15px 0 7px}.diagnostic-table-wrap{width:100%;overflow-x:auto}.diagnostic-table{width:100%;border-collapse:collapse;font-size:12px;text-align:right;white-space:nowrap}.diagnostic-table th,.diagnostic-table td{padding:8px 5px;border-bottom:1px solid #30455b}.diagnostic-table th:first-child,.diagnostic-table td:first-child{text-align:left}.diagnostic-table thead th{color:#9eb6cc}.diagnostic-note{font-size:11px;line-height:1.5;margin-top:12px}.forecast-details-button{background:transparent;border:0;color:#b8c8da;font:inherit;font-size:11px;cursor:pointer;padding:9px 2px;min-height:36px;width:100%}.forecast-details-button:focus-visible{outline:2px solid #7dd3fc;border-radius:5px}.day-forecast{min-width:0}.day-forecast details p{display:none}.forecast-detail-panel{margin-top:12px;padding:14px;border:1px solid #405a75;border-radius:12px;background:#0c1a2b;font-size:13px;color:#c8daeb;line-height:1.6}.forecast-detail-panel h4{margin:0 0 8px;color:#f4d4a6;font-size:15px}.forecast-detail-panel p{margin:5px 0}.forecast-detail-panel .detail-close{float:right;background:transparent;border:1px solid #607c97;border-radius:8px;color:#eaf3ff;padding:3px 10px;cursor:pointer}.day-forecast details summary{list-style:none}.day-forecast details summary::-webkit-details-marker{display:none}</style><style>
 /* Compact forecast comparison: preserve provenance without multi-line timestamps. */
 .compact-comparison{width:100%;table-layout:fixed}
@@ -1496,8 +1507,9 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  const status=document.getElementById('station-today-status');
  const live=document.createElement('div');
  live.id='station-live-observation';
- live.style.cssText='padding:12px 14px;margin-top:12px;border:1px solid #35546c;border-radius:12px;background:#102538;font-size:13px;line-height:1.55';
- root.appendChild(live);
+ live.hidden=true;
+ live.innerHTML='<div class="live-topline"><span class="live-dot"></span> CURRENT CONDITIONS <span id="live-observed-at"></span></div><div class="live-main"><strong id="live-temp">—</strong><div class="live-details"><span id="live-humidity"></span><span id="live-wind"></span></div></div>';
+ root.parentElement.insertBefore(live,root);
  const refresh=async()=>{
    try{
      const response=await fetch(endpoint,{cache:'no-store'});
@@ -1506,7 +1518,10 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      if(!Number.isFinite(t.getTime())||Date.now()-t.getTime()>30*60000||t.getTime()>Date.now()+60000)throw Error('Observation is not recent');
      const num=(n,unit='',digits=0)=>Number.isFinite(n)?n.toFixed(digits)+unit:'—';
      const when=t.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'});
-     live.textContent='Live · '+num(d.temperature_f,'°F')+'  ·  Humidity '+num(d.humidity_pct,'%')+'  ·  Wind '+num(d.wind_mph,' mph')+'  ·  '+when+' PT';
+     live.querySelector('#live-temp').textContent=num(d.temperature_f,'°');
+     live.querySelector('#live-humidity').textContent='Humidity '+num(d.humidity_pct,'%');
+     live.querySelector('#live-wind').textContent='Wind '+num(d.wind_mph,' mph');
+     live.querySelector('#live-observed-at').textContent=when+' PT';
      live.hidden=false;
    }catch(e){live.hidden=true;console.warn('Live station unavailable; historical summary retained',e.message)}
  };
