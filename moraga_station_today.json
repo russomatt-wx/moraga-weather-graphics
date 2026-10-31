@@ -1,10 +1,10 @@
 {
   "date": "2026-10-31",
   "station": "KCAMORAG71",
-  "generated_utc": "2026-10-31T17:36:07.070137+00:00",
-  "last_observation_utc": "2026-10-31T13:46:00+00:00",
-  "high_f": 53.0,
-  "low_f": 49.0,
+  "generated_utc": "2026-10-31T18:46:47.328180+00:00",
+  "last_observation_utc": "2026-10-31T18:39:00+00:00",
+  "high_f": 58.0,
+  "low_f": 48.0,
   "rainfall_in": 0.0,
   "rainfall_note": "No rainfall reported in available observations"
 }
