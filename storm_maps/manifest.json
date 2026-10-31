@@ -1,0 +1,87 @@
+{
+  "generated_utc": "2026-10-31T04:01:52.649813+00:00",
+  "models": {
+    "aifs-single": {
+      "label": "ECMWF AIFS",
+      "maps": [
+        {
+          "hour": 24,
+          "file": "storm_maps/aifs_single_f024.png",
+          "valid_date": 20261031,
+          "valid_time": 1800
+        },
+        {
+          "hour": 48,
+          "file": "storm_maps/aifs_single_f048.png",
+          "valid_date": 20261101,
+          "valid_time": 1800
+        },
+        {
+          "hour": 72,
+          "file": "storm_maps/aifs_single_f072.png",
+          "valid_date": 20261102,
+          "valid_time": 1800
+        },
+        {
+          "hour": 120,
+          "file": "storm_maps/aifs_single_f120.png",
+          "valid_date": 20261104,
+          "valid_time": 1800
+        },
+        {
+          "hour": 168,
+          "file": "storm_maps/aifs_single_f168.png",
+          "valid_date": 20261106,
+          "valid_time": 1800
+        },
+        {
+          "hour": 240,
+          "file": "storm_maps/aifs_single_f240.png",
+          "valid_date": 20261109,
+          "valid_time": 1800
+        }
+      ]
+    },
+    "ifs": {
+      "label": "ECMWF IFS",
+      "maps": [
+        {
+          "hour": 24,
+          "file": "storm_maps/ifs_f024.png",
+          "valid_date": 20261031,
+          "valid_time": 1800
+        },
+        {
+          "hour": 48,
+          "file": "storm_maps/ifs_f048.png",
+          "valid_date": 20261101,
+          "valid_time": 1800
+        },
+        {
+          "hour": 72,
+          "file": "storm_maps/ifs_f072.png",
+          "valid_date": 20261102,
+          "valid_time": 1800
+        },
+        {
+          "hour": 120,
+          "file": "storm_maps/ifs_f120.png",
+          "valid_date": 20261104,
+          "valid_time": 1800
+        },
+        {
+          "hour": 168,
+          "file": "storm_maps/ifs_f168.png",
+          "valid_date": 20261106,
+          "valid_time": 1200
+        },
+        {
+          "hour": 240,
+          "file": "storm_maps/ifs_f240.png",
+          "valid_date": 20261109,
+          "valid_time": 1200
+        }
+      ]
+    }
+  }
+}
