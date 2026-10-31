@@ -11,6 +11,7 @@ on:
       - 'moraga_rainfall_10day.json'
       - 'moraga_rainfall_10day.png'
       - 'index.html'
+      - 'pacific-storm-tracker.html'
       - 'service-worker.js'
       - '.github/workflows/coordinated-pages.yml'
   schedule:
