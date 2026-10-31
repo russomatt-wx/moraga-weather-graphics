@@ -63,6 +63,7 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 .live-topline{display:flex;align-items:center;gap:9px;color:#a8d9e6;font-size:11px;font-weight:800;letter-spacing:.12em}
 .live-topline #live-observed-at{margin-left:auto;color:#a6bdcf;letter-spacing:0;font-size:12px;font-weight:500}
 .live-dot{width:8px;height:8px;border-radius:50%;background:#65d5ad;box-shadow:0 0 0 3px #65d5ad22;flex-shrink:0}
+.live-temp-group{display:flex;align-items:center;gap:10px;min-width:0}#live-yesterday{display:flex;flex-direction:column;gap:2px;white-space:nowrap}#live-yesterday[hidden]{display:none}#live-yesterday-delta{font-size:clamp(13px,3.6vw,19px);font-weight:750;color:#e8f4fc}#live-yesterday small{font-size:10px;color:#b8cbd9}
 .live-main{display:flex;align-items:center;gap:22px;margin-top:9px}
 #live-temp{font-size:clamp(42px,8.5vw,64px);font-weight:750;letter-spacing:-.06em;line-height:1;color:#edf7ff}
 .live-details{display:flex;flex-direction:column;gap:7px;font-size:clamp(13px,3.5vw,16px);color:#c2d4e3;line-height:1.35}
@@ -1512,7 +1513,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  const live=document.createElement('div');
  live.id='station-live-observation';
  live.hidden=true;
- live.innerHTML='<div class="live-topline"><span class="live-dot"></span> CURRENT CONDITIONS <span id="live-observed-at"></span></div><div class="live-main"><strong id="live-temp">—</strong><div class="live-details"><span id="live-humidity"></span><span id="live-wind"></span></div></div><div class="live-metrics"><div><span>Dew point</span><strong id="live-dew">—</strong></div><div><span>Pressure</span><span class="pressure-inline"><strong id="live-pressure">—</strong><small id="live-pressure-trend" aria-live="polite"></small></span></div><div><span>Wind gust</span><strong id="live-gust">—</strong></div></div>';
+ live.innerHTML='<div class="live-topline"><span class="live-dot"></span> CURRENT CONDITIONS <span id="live-observed-at"></span></div><div class="live-main"><span class="live-temp-group"><strong id="live-temp">—</strong><span id="live-yesterday" hidden><strong id="live-yesterday-delta"></strong><small>vs yesterday</small></span></span><div class="live-details"><span id="live-humidity"></span><span id="live-wind"></span></div></div><div class="live-metrics"><div><span>Dew point</span><strong id="live-dew">—</strong></div><div><span>Pressure</span><span class="pressure-inline"><strong id="live-pressure">—</strong><small id="live-pressure-trend" aria-live="polite"></small></span></div><div><span>Wind gust</span><strong id="live-gust">—</strong></div></div>';
  root.parentElement.insertBefore(live,root);
  const refresh=async()=>{
    try{
@@ -1523,6 +1524,18 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      const num=(n,unit='',digits=0)=>Number.isFinite(n)?n.toFixed(digits)+unit:'—';
      const when=t.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'});
      live.querySelector('#live-temp').textContent=num(d.temperature_f,'°',1);
+     // Only show a same-time comparison when the live service supplies a
+     // verified prior-day reading and its timestamp.
+     const compare=live.querySelector('#live-yesterday');
+     const yesterdayTime=new Date(d.yesterday_observed_utc);
+     const minutesApart=Math.abs((t.getTime()-yesterdayTime.getTime()-86400000)/60000);
+     const validComparison=Number.isFinite(d.temperature_f)&&Number.isFinite(d.yesterday_temperature_f)&&Number.isFinite(yesterdayTime.getTime())&&minutesApart<=15;
+     compare.hidden=!validComparison;
+     if(validComparison){
+       const diff=d.temperature_f-d.yesterday_temperature_f;
+       live.querySelector('#live-yesterday-delta').textContent=(Math.abs(diff)<0.05?'→':diff>0?'↑':'↓')+' '+Math.abs(diff).toFixed(1)+'°';
+     }
+
      // Match the exact temperature color stops used by the rolling 10-day forecast.
      if(Number.isFinite(d.temperature_f)){
        const stops=[[20,[105,68,186]],[30,[88,114,217]],[40,[54,158,224]],[50,[28,181,184]],[60,[55,185,90]],[70,[255,220,55]],[80,[255,144,36]],[90,[228,44,51]],[100,[218,42,115]],[110,[239,79,161]]];
