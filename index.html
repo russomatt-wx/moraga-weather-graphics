@@ -1522,7 +1522,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      if(!Number.isFinite(t.getTime())||Date.now()-t.getTime()>30*60000||t.getTime()>Date.now()+60000)throw Error('Observation is not recent');
      const num=(n,unit='',digits=0)=>Number.isFinite(n)?n.toFixed(digits)+unit:'—';
      const when=t.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'});
-     live.querySelector('#live-temp').textContent=num(d.temperature_f,'°');
+     live.querySelector('#live-temp').textContent=num(d.temperature_f,'°',1);
      // The daily summary is published less frequently than the live feed.
      // Keep today's extrema consistent with every fresh observation seen by this page.
      if(Number.isFinite(d.temperature_f)){
