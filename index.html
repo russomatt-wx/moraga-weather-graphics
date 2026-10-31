@@ -1485,6 +1485,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  }catch(e){note.textContent='Rainfall data temporarily unavailable; showing the latest published chart.'}
 })();
 </script><script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(e=>console.warn('App offline support unavailable',e)));}</script><script>
+window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt.workers.dev/observations';
 /* Live station readings are independent of the historical archive and forecast workflows.
    Set window.MORAGA_LIVE_OBSERVATIONS_URL to the deployed Worker URL to activate. */
 (function(){
