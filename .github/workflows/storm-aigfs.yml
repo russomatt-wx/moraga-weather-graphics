@@ -1,0 +1,56 @@
+name: Pacific Storm Tracker NOAA AIGFS maps
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/build_storm_aigfs.py'
+      - '.github/workflows/storm-aigfs.yml'
+permissions:
+  contents: write
+concurrency:
+  group: storm-aigfs
+  cancel-in-progress: false
+jobs:
+  maps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install map dependencies
+        run: pip install requests eccodes numpy matplotlib cartopy scipy
+      - name: Render genuine NOAA AIGFS grids
+        run: python scripts/build_storm_aigfs.py
+      - name: Commit verified maps
+        run: |
+          set -euo pipefail
+          cp -r storm_maps /tmp/storm_maps_aigfs
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for attempt in 1 2 3 4; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p storm_maps
+            cp /tmp/storm_maps_aigfs/aigfs_*.png storm_maps/
+            python - <<'PY'
+          import json
+          from pathlib import Path
+          latest=Path('/tmp/storm_maps_aigfs/manifest.json')
+          target=Path('storm_maps/manifest.json')
+          fresh=json.loads(latest.read_text())
+          try: base=json.loads(target.read_text())
+          except (ValueError,FileNotFoundError): base={'models':{}}
+          base.setdefault('models',{})['aigfs']=fresh['models']['aigfs']
+          base['generated_utc']=fresh['generated_utc']
+          target.write_text(json.dumps(base,indent=2))
+          PY
+            git add storm_maps/
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m 'Publish NOAA AIGFS Pacific storm maps'
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 5
+          done
+          exit 1
