@@ -81,7 +81,7 @@ def render(model,label,hour):
     ax.plot(-122.12,37.82,marker="o",markersize=4,color="black")
     ax.text(-121.6,38.4,"Moraga",fontsize=9)
     fig.text(.05,.95,f"{label}  |  Pacific storm tracker  |  +{hour}h",fontsize=18,weight="bold")
-    fig.text(.05,.915,"6-hour step total precipitation (mm, shaded) • MSLP (hPa) • 1000–500 hPa thickness (dam, background)",fontsize=10)
+    fig.text(.05,.915,"Accumulated precipitation (mm, shaded) • MSLP (hPa) • 1000–500 hPa thickness (dam, background)",fontsize=10)
     fig.text(.05,.035,f"Valid {date:08d} {valid_time:04d} UTC  |  ECMWF Open Data / CC BY 4.0",fontsize=10)
     target=OUT/f"{model.replace('-','_')}_f{hour:03d}.png"
     fig.savefig(target,dpi=120,bbox_inches="tight")
