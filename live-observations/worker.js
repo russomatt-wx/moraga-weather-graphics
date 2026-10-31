@@ -31,6 +31,8 @@ export default {
         wind_direction_deg:pick('windDirDEG'),
         wind_direction:typeof ob.windDir==='string'?ob.windDir:null,
         wind_gust_mph:pick('windGustMPH'),
+        wind_gust_direction_deg:pick('windGustDirDEG'),
+        wind_gust_direction:typeof ob.windGustDir==='string'?ob.windGustDir:null,
         pressure_inhg:pick('pressureIN'),
         source:'Xweather'
       },{headers:cors});
