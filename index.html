@@ -1485,6 +1485,35 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  }catch(e){note.textContent='Rainfall data temporarily unavailable; showing the latest published chart.'}
 })();
 </script><script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(e=>console.warn('App offline support unavailable',e)));}</script><script>
+/* Live station readings are independent of the historical archive and forecast workflows.
+   Set window.MORAGA_LIVE_OBSERVATIONS_URL to the deployed Worker URL to activate. */
+(function(){
+ const endpoint=window.MORAGA_LIVE_OBSERVATIONS_URL;
+ if(typeof endpoint!=='string'||!/^https:\/\//.test(endpoint))return;
+ const root=document.getElementById('station-today');
+ if(!root)return;
+ const status=document.getElementById('station-today-status');
+ const live=document.createElement('div');
+ live.id='station-live-observation';
+ live.style.cssText='padding:12px 14px;margin-top:12px;border:1px solid #35546c;border-radius:12px;background:#102538;font-size:13px;line-height:1.55';
+ root.appendChild(live);
+ const refresh=async()=>{
+   try{
+     const response=await fetch(endpoint,{cache:'no-store'});
+     if(!response.ok)throw Error('Live API unavailable');
+     const d=await response.json(),t=new Date(d.observed_utc);
+     if(!Number.isFinite(t.getTime())||Date.now()-t.getTime()>30*60000||t.getTime()>Date.now()+60000)throw Error('Observation is not recent');
+     const num=(n,unit='',digits=0)=>Number.isFinite(n)?n.toFixed(digits)+unit:'—';
+     const when=t.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'});
+     live.textContent='Live · '+num(d.temperature_f,'°F')+'  ·  Humidity '+num(d.humidity_pct,'%')+'  ·  Wind '+num(d.wind_mph,' mph')+'  ·  '+when+' PT';
+     live.hidden=false;
+   }catch(e){live.hidden=true;console.warn('Live station unavailable; historical summary retained',e.message)}
+ };
+ refresh();
+ setInterval(refresh,5*60*1000);
+})();
+</script>
+<script>
 (async function(){
  const root=document.getElementById('station-today'),status=document.getElementById('station-today-status');
  if(!root||!status)return;
