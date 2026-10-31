@@ -1512,7 +1512,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  const live=document.createElement('div');
  live.id='station-live-observation';
  live.hidden=true;
- live.innerHTML='<div class="live-topline"><span class="live-dot"></span> CURRENT CONDITIONS <span id="live-observed-at"></span></div><div class="live-main"><strong id="live-temp">—</strong><div class="live-details"><span id="live-humidity"></span><span id="live-wind"></span></div></div><div class="live-metrics"><div><span>Dew point</span><strong id="live-dew">—</strong></div><div><span>Pressure</span><span class="pressure-inline"><strong id="live-pressure">—</strong><small id="live-pressure-trend" aria-live="polite">· Trend pending</small></span></div><div><span>Wind gust</span><strong id="live-gust">—</strong></div></div>';
+ live.innerHTML='<div class="live-topline"><span class="live-dot"></span> CURRENT CONDITIONS <span id="live-observed-at"></span></div><div class="live-main"><strong id="live-temp">—</strong><div class="live-details"><span id="live-humidity"></span><span id="live-wind"></span></div></div><div class="live-metrics"><div><span>Dew point</span><strong id="live-dew">—</strong></div><div><span>Pressure</span><span class="pressure-inline"><strong id="live-pressure">—</strong><small id="live-pressure-trend" aria-live="polite">—</small></span></div><div><span>Wind gust</span><strong id="live-gust">—</strong></div></div>';
  root.parentElement.insertBefore(live,root);
  const refresh=async()=>{
    try{
@@ -1556,7 +1556,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
        if(previous){
          const change=d.pressure_inhg-previous.v;
          const hours=Math.round((t.getTime()-previous.t)/3600000*10)/10;
-         const label=Math.abs(change)<0.01?'→ Steady':change>0?'↑ Rising':'↓ Falling';
+         const label=Math.abs(change)<0.01?'→':change>0?'↑':'↓';
          trendEl.textContent=label;
        }else trendEl.textContent='Trend pending';
      }else trendEl.textContent='Trend unavailable';
