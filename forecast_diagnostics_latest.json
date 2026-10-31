@@ -1,8 +1,8 @@
 {
-  "generated_utc": "2026-10-29T21:15:47.768730+00:00",
+  "generated_utc": "2026-10-30T20:55:34.802163+00:00",
   "status": "diagnostic_only",
   "archive_health": {
-    "valid_records": 41,
+    "valid_records": 45,
     "invalid_records": 0,
     "duplicate_target_editions": [],
     "off_hour_archives": [
@@ -32,6 +32,10 @@
       },
       {
         "date": "2026-10-28",
+        "edition": "6 AM"
+      },
+      {
+        "date": "2026-10-30",
         "edition": "6 AM"
       }
     ]
@@ -188,27 +192,27 @@
   },
   "assistant_bias": {
     "6 AM": {
-      "verified_days": 8,
-      "high_mean_error_f": -3.0,
-      "low_mean_error_f": 1.0,
+      "verified_days": 9,
+      "high_mean_error_f": -2.89,
+      "low_mean_error_f": 1.22,
       "calibration_ready": false
     },
     "11 AM": {
-      "verified_days": 8,
-      "high_mean_error_f": -2.0,
-      "low_mean_error_f": 0.75,
+      "verified_days": 9,
+      "high_mean_error_f": -2.11,
+      "low_mean_error_f": 0.67,
       "calibration_ready": false
     },
     "4 PM": {
-      "verified_days": 11,
-      "high_mean_error_f": -2.45,
-      "low_mean_error_f": 2.27,
+      "verified_days": 12,
+      "high_mean_error_f": -2.42,
+      "low_mean_error_f": 2.5,
       "calibration_ready": true
     },
     "9 PM": {
-      "verified_days": 10,
-      "high_mean_error_f": -2.2,
-      "low_mean_error_f": 2.4,
+      "verified_days": 11,
+      "high_mean_error_f": -2.18,
+      "low_mean_error_f": 2.55,
       "calibration_ready": true
     }
   },
