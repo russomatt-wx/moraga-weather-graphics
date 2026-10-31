@@ -1522,6 +1522,19 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      const num=(n,unit='',digits=0)=>Number.isFinite(n)?n.toFixed(digits)+unit:'—';
      const when=t.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'});
      live.querySelector('#live-temp').textContent=num(d.temperature_f,'°');
+     // The daily summary is published less frequently than the live feed.
+     // Keep today's extrema consistent with every fresh observation seen by this page.
+     if(Number.isFinite(d.temperature_f)){
+       const day=t.toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'});
+       const today=new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'});
+       if(day===today){
+         const state=window.moragaDailyExtrema||(window.moragaDailyExtrema={day,high:null,low:null});
+         if(state.day!==day){state.day=day;state.high=null;state.low=null}
+         state.high=Math.max(state.high??-Infinity,d.temperature_f);
+         state.low=Math.min(state.low??Infinity,d.temperature_f);
+         window.moragaApplyDailyExtrema?.();
+       }
+     }
      live.querySelector('#live-humidity').textContent='Humidity '+num(d.humidity_pct,'%');
      const direction=Number.isFinite(d.wind_direction_deg)?['N','NE','E','SE','S','SW','W','NW'][Math.round(((d.wind_direction_deg%360)+360)%360/45)%8]:(typeof d.wind_direction==='string'&&/^(N|NNE|NE|ENE|E|ESE|SE|SSE|S|SSW|SW|WSW|W|WNW|NW|NNW)$/i.test(d.wind_direction)?d.wind_direction.toUpperCase():'');
      live.querySelector('#live-wind').textContent='Wind '+(direction?direction+' · ':'')+num(d.wind_mph,' mph');
@@ -1534,6 +1547,22 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  };
  refresh();
  setInterval(refresh,5*60*1000);
+})();
+</script>
+<script>
+(function(){
+ window.moragaApplyDailyExtrema=function(){
+   const root=document.getElementById('station-today'),summary=window.moragaDailySummary,live=window.moragaDailyExtrema;
+   if(!root)return;
+   const cells=root.querySelectorAll('strong');
+   if(cells.length<2)return;
+   const day=new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'});
+   const highs=[],lows=[];
+   if(summary?.day===day){if(Number.isFinite(summary.high))highs.push(summary.high);if(Number.isFinite(summary.low))lows.push(summary.low)}
+   if(live?.day===day){if(Number.isFinite(live.high))highs.push(live.high);if(Number.isFinite(live.low))lows.push(live.low)}
+   if(highs.length)cells[0].textContent=Math.round(Math.max(...highs))+'°';
+   if(lows.length)cells[1].textContent=Math.round(Math.min(...lows))+'°';
+ };
 })();
 </script>
 <script>
@@ -1553,6 +1582,8 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
   if(!Number.isFinite(last.getTime()))throw Error('Invalid station observation timestamp');
   const vals=[Number.isFinite(d.high_f)?Math.round(d.high_f)+'°':'—',Number.isFinite(d.low_f)?Math.round(d.low_f)+'°':'—',Number.isFinite(d.rainfall_in)?d.rainfall_in.toFixed(2)+' in':'0.00 in'];
   root.querySelectorAll('strong').forEach((el,i)=>el.textContent=vals[i]);
+  window.moragaDailySummary={day:expected,high:Number.isFinite(d.high_f)?d.high_f:null,low:Number.isFinite(d.low_f)?d.low_f:null};
+  window.moragaApplyDailyExtrema?.();
   const ageMinutes=(Date.now()-last.getTime())/60000;
   status.textContent='Last updated: '+last.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'})+' PT';
  }catch(e){status.textContent='Last updated: unavailable';root.querySelectorAll('strong')[2].textContent='0.00 in'}
