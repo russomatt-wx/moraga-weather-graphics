@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'scripts/rainfall_10day.py'
+      - 'scripts/validate_forecast_publish.py'
       - '.github/workflows/rainfall_10day.yml'
   schedule:
     - cron: '10 2,11,16,21 * 3-10 *'
@@ -23,6 +24,8 @@ jobs:
           python-version: "3.12"
       - run: pip install matplotlib
       - run: python scripts/rainfall_10day.py
+      - name: Validate forecast before publishing
+        run: python scripts/validate_forecast_publish.py
       - name: Commit published graphic and data with safe retries
         shell: bash
         run: |
