@@ -1583,7 +1583,8 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
          trendEl.textContent=label;
        }else trendEl.textContent='';
      }else trendEl.textContent='';
-     live.querySelector('#live-gust').textContent=num(d.wind_gust_mph,' mph');
+     const gustDirection=Number.isFinite(d.wind_gust_direction_deg)?['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'][Math.round((((d.wind_gust_direction_deg%360)+360)%360)/22.5)%16]:(typeof d.wind_gust_direction==='string'&&/^(N|NNE|NE|ENE|E|ESE|SE|SSE|S|SSW|SW|WSW|W|WNW|NW|NNW)$/i.test(d.wind_gust_direction)?d.wind_gust_direction.toUpperCase():'');
+     live.querySelector('#live-gust').textContent=(gustDirection?gustDirection+' · ':'')+num(d.wind_gust_mph,' mph');
      live.querySelector('#live-observed-at').textContent=when+' PT';
      live.hidden=false;
    }catch(e){live.hidden=true;console.warn('Live station unavailable; historical summary retained',e.message)}
