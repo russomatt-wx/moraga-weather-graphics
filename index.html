@@ -55,6 +55,7 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 @media(max-width:760px){#ten-day .day-forecast{padding:9px 2px 7px!important}#ten-day .day-condition{min-height:52px!important}#ten-day .day-pop{font-size:10px;min-height:29px}#ten-day .day-pop .rain-amount{font-size:9px}}
 
 .pressure-inline{display:flex;align-items:baseline;justify-content:center;gap:5px;flex-wrap:wrap}#live-pressure-trend{display:inline;font-size:10px;font-weight:600;color:#a8bdcc;white-space:nowrap}
+#station-live-observation{border:3px solid transparent;background:linear-gradient(180deg,color-mix(in srgb,var(--live-temp-color,#1cb5b8) 24%,#142330),color-mix(in srgb,var(--live-temp-color,#1cb5b8) 11%,#10202d) 48%,color-mix(in srgb,var(--live-temp-color,#1cb5b8) 26%,#0b1722)) padding-box,linear-gradient(180deg,var(--live-temp-color,#1cb5b8),color-mix(in srgb,var(--live-temp-color,#1cb5b8) 65%,#10202d),var(--live-temp-color,#1cb5b8)) border-box;transition:background .6s ease}
 /* Full-width current conditions, separate from the archived daily extremes */
 #station-live-observation{width:100%;box-sizing:border-box;padding:15px 18px 16px;margin-bottom:8px;border-radius:16px;background:linear-gradient(115deg,#193448,#112739);border:1px solid #35546c}
 #station-live-observation[hidden]{display:none!important}
@@ -1523,6 +1524,16 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      const num=(n,unit='',digits=0)=>Number.isFinite(n)?n.toFixed(digits)+unit:'—';
      const when=t.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'});
      live.querySelector('#live-temp').textContent=num(d.temperature_f,'°',1);
+     // Match the exact temperature color stops used by the rolling 10-day forecast.
+     if(Number.isFinite(d.temperature_f)){
+       const stops=[[20,[105,68,186]],[30,[88,114,217]],[40,[54,158,224]],[50,[28,181,184]],[60,[55,185,90]],[70,[255,220,55]],[80,[255,144,36]],[90,[228,44,51]],[100,[218,42,115]],[110,[239,79,161]]];
+       const v=d.temperature_f;
+       let rgb=stops[stops.length-1][1];
+       if(v<=20)rgb=stops[0][1];
+       else for(let k=1;k<stops.length;k++)if(v<=stops[k][0]){const a=stops[k-1],b=stops[k],w=(v-a[0])/(b[0]-a[0]);rgb=a[1].map((x,i)=>Math.round(x+(b[1][i]-x)*w));break;}
+       live.style.setProperty('--live-temp-color','rgb('+rgb.join(',')+')');
+     }
+
      // The daily summary is published less frequently than the live feed.
      // Keep today's extrema consistent with every fresh observation seen by this page.
      if(Number.isFinite(d.temperature_f)){
