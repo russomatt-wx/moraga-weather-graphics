@@ -744,7 +744,7 @@ function skillWeights(rows,bucket,phase,names){
 function localBias(rows,bucket,phase,names){
  const corrections={},evidence={};
  for(const name of names){
-  const eligible=rows.filter(r=>r.valid>=Date.now()-30*86400000&&r.model===name&&r.phase===phase&&
+  const eligible=rows.filter(r=>r.valid<=Date.now()&&r.valid>=Date.now()-30*86400000&&r.model===name&&r.phase===phase&&
     r.lead>=3&&r.lead<=96&&Number.isFinite(r.signedError));
   // Choose the most recent forecast for each verifying station hour.
   const unique=new Map();
@@ -755,7 +755,7 @@ function localBias(rows,bucket,phase,names){
   const samples=[...unique.values()];
   const dates=[...new Set(samples.map(r=>dateKey(new Date(r.valid))))];
   // No correction with sparse observations or only one weather regime.
-  if(samples.length<18||dates.length<4){
+  if(samples.length<18||dates.length<4||Math.max(...samples.map(r=>r.valid))<Date.now()-7*86400000){
    corrections[name]=0;evidence[name]='insufficient';continue;
   }
   // Average daily bias first, so densely sampled days do not dominate.
