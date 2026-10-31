@@ -14,6 +14,7 @@ on:
       - 'pacific-storm-tracker.html'
       - 'pacific_synoptic.png'
       - 'pacific_synoptic.json'
+      - 'storm_maps/**'
       - 'service-worker.js'
       - '.github/workflows/coordinated-pages.yml'
   schedule:
