@@ -31,7 +31,16 @@ def grib_subset(url,patterns):
         parts=line.split(":")
         if len(parts)>5 and any(p in line for p in patterns):
             rows.append((int(parts[1]),line))
-    rows.sort()
+    # Some accumulation fields occur more than once (different intervals).
+    # Select exactly one matching message per requested field.
+    selected=[]
+    for pattern in patterns:
+        matches=[row for row in rows if pattern in row[1]]
+        if not matches: raise ValueError(f"Missing required GRIB field {pattern}")
+        # Prefer the shortest available accumulation interval, if present.
+        matches.sort(key=lambda r: (0 if "6 hour acc" in r[1] else 1, r[0]))
+        selected.append(matches[0])
+    rows=selected
     allrows=sorted((int(line.split(":")[1]),line) for line in idx if len(line.split(":"))>5)
     chunks=[]
     for start,line in rows:
@@ -41,7 +50,7 @@ def grib_subset(url,patterns):
         r=get(url,headers={"Range":rg})
         if r.status_code!=206: raise RuntimeError(f"NOMADS did not honor GRIB byte range: {r.status_code}")
         chunks.append(r.content)
-    if len(chunks)!=len(patterns): raise ValueError(f"Missing required GRIB fields: {patterns}; found {len(chunks)}")
+    if len(chunks)!=len(patterns): raise ValueError("Incomplete requested GRIB fields")
     result={}
     for raw in chunks:
         import tempfile,os
