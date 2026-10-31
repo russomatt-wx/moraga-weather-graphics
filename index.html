@@ -55,9 +55,8 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 @media(max-width:760px){#ten-day .day-forecast{padding:9px 2px 7px!important}#ten-day .day-condition{min-height:52px!important}#ten-day .day-pop{font-size:10px;min-height:29px}#ten-day .day-pop .rain-amount{font-size:9px}}
 
 .pressure-inline{display:flex;align-items:baseline;justify-content:center;gap:5px;flex-wrap:wrap}#live-pressure-trend{display:inline;font-size:10px;font-weight:600;color:#a8bdcc;white-space:nowrap}
-#station-live-observation{border:3px solid transparent;background:linear-gradient(180deg,color-mix(in srgb,var(--live-temp-color,#1cb5b8) 24%,#142330),color-mix(in srgb,var(--live-temp-color,#1cb5b8) 11%,#10202d) 48%,color-mix(in srgb,var(--live-temp-color,#1cb5b8) 26%,#0b1722)) padding-box,linear-gradient(180deg,var(--live-temp-color,#1cb5b8),color-mix(in srgb,var(--live-temp-color,#1cb5b8) 65%,#10202d),var(--live-temp-color,#1cb5b8)) border-box;transition:background .6s ease}
 /* Full-width current conditions, separate from the archived daily extremes */
-#station-live-observation{width:100%;box-sizing:border-box;padding:15px 18px 16px;margin-bottom:8px;border-radius:16px;background:linear-gradient(115deg,#193448,#112739);border:1px solid #35546c}
+#station-live-observation{width:100%;box-sizing:border-box;padding:15px 18px 16px;margin-bottom:8px;border-radius:16px;border:3px solid var(--live-temp-color,#1cb5b8)!important;background:linear-gradient(180deg,color-mix(in srgb,var(--live-temp-color,#1cb5b8) 28%,#142330),color-mix(in srgb,var(--live-temp-color,#1cb5b8) 13%,#10202d) 48%,color-mix(in srgb,var(--live-temp-color,#1cb5b8) 25%,#0b1722))!important;transition:background .6s ease,border-color .6s ease}
 #station-live-observation[hidden]{display:none!important}
 #station-today-status{display:none!important}
 #station-today{margin-bottom:0!important}
@@ -1513,7 +1512,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  const live=document.createElement('div');
  live.id='station-live-observation';
  live.hidden=true;
- live.innerHTML='<div class="live-topline"><span class="live-dot"></span> CURRENT CONDITIONS <span id="live-observed-at"></span></div><div class="live-main"><strong id="live-temp">—</strong><div class="live-details"><span id="live-humidity"></span><span id="live-wind"></span></div></div><div class="live-metrics"><div><span>Dew point</span><strong id="live-dew">—</strong></div><div><span>Pressure</span><span class="pressure-inline"><strong id="live-pressure">—</strong><small id="live-pressure-trend" aria-live="polite">—</small></span></div><div><span>Wind gust</span><strong id="live-gust">—</strong></div></div>';
+ live.innerHTML='<div class="live-topline"><span class="live-dot"></span> CURRENT CONDITIONS <span id="live-observed-at"></span></div><div class="live-main"><strong id="live-temp">—</strong><div class="live-details"><span id="live-humidity"></span><span id="live-wind"></span></div></div><div class="live-metrics"><div><span>Dew point</span><strong id="live-dew">—</strong></div><div><span>Pressure</span><span class="pressure-inline"><strong id="live-pressure">—</strong><small id="live-pressure-trend" aria-live="polite"></small></span></div><div><span>Wind gust</span><strong id="live-gust">—</strong></div></div>';
  root.parentElement.insertBefore(live,root);
  const refresh=async()=>{
    try{
@@ -1569,8 +1568,8 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
          const hours=Math.round((t.getTime()-previous.t)/3600000*10)/10;
          const label=Math.abs(change)<0.01?'→':change>0?'↑':'↓';
          trendEl.textContent=label;
-       }else trendEl.textContent='Trend pending';
-     }else trendEl.textContent='Trend unavailable';
+       }else trendEl.textContent='';
+     }else trendEl.textContent='';
      live.querySelector('#live-gust').textContent=num(d.wind_gust_mph,' mph');
      live.querySelector('#live-observed-at').textContent=when+' PT';
      live.hidden=false;
