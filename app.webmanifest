@@ -9,13 +9,13 @@
   "theme_color": "#0a1422",
   "icons": [
     {
-      "src": "/moraga-weather-graphics/app-icon-192.png",
+      "src": "/moraga-weather-graphics/app-icon-192.png.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/moraga-weather-graphics/app-icon-512.png",
+      "src": "/moraga-weather-graphics/app-icon-512.png.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
