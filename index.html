@@ -1824,7 +1824,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    if(!r.ok)throw Error('Forecast unavailable');
    const d=await r.json(),issued=Date.parse(d.generated_utc);
    if(!Number.isFinite(issued)||issued>Date.now()+3600000||Date.now()-issued>36*3600000)throw Error('Forecast guidance is out of date');
-   const dates=(d.dates||[]).filter(x=>x>=dateKey()).slice(0,5);
+   const dates=(d.dates||[]).filter(x=>x>=dateKey()).slice(0,2);
    if(dates.length<2)throw Error('Insufficient forecast dates');
    const models=d.temperature_models||{},rain=d.ensemble_rain_probability_pct||{},amounts=d.model_daily_inches||{};
    const records=dates.map(date=>{
@@ -1845,7 +1845,10 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    const localPart=k=>localNow.find(p=>p.type===k)?.value;
    const currentHour=localPart('year')+'-'+localPart('month')+'-'+localPart('day')+'T'+localPart('hour')+':00';
    const hourKeys=hourly.ECMWF?.time||hourly.GFS?.time||[];
-   const upcoming=hourKeys.filter(x=>x>=currentHour).slice(0,15);
+   const endParts=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',hourCycle:'h23'}).formatToParts(new Date(Date.now()+24*3600000));
+   const ep=k=>endParts.find(x=>x.type===k)?.value;
+   const endHour=ep('year')+'-'+ep('month')+'-'+ep('day')+'T'+ep('hour')+':00';
+   const upcoming=hourKeys.filter(x=>x>=currentHour&&x<=endHour).slice(0,25);
    const overnight=upcoming.map(time=>{
      const vals=Object.values(hourly).map(m=>{const idx=m.time?.indexOf(time);return idx>=0?m.precipitation_mm?.[idx]:null}).filter(Number.isFinite);
      return {time,wetModels:vals.filter(v=>v>=.02).length,total:vals.reduce((a,b)=>a+b,0)/Math.max(vals.length,1)};
@@ -1854,36 +1857,31 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    const nextRain=nearRain.length?nearRain[0]:null;
    
    let headline='',story='';
-   if(!sharedRain){headline='Forecast update in progress';story='Checking rain chances against the 10-day forecast.';}
-   else if(nextRain){
-    const h=Number(nextRain.time.slice(11,13)),day=nextRain.time.slice(0,10);
-    const period=h<6?'overnight':h<12?'early morning':h<17?'afternoon':'evening';
-    const when=day===dateKey()?'Tonight':fmtDate(day);
-    headline=h<12?'A little rain may arrive before sunrise':'A fresh chance for Moraga showers';
-    story=when+' '+period+': '+chance(day)+'% chance of light rain. Spotty showers are more likely than a widespread soaking.';
-    const later=records.find(x=>x.date>day&&chance(x.date)>=20);
-    if(later){
-      const amounts=[later.eps,later.gefs].filter(Number.isFinite);
-      const mean=amounts.length===2?(amounts[0]+amounts[1])/2:null;
-      story+=' '+fmtDate(later.date)+' offers another '+chance(later.date)+'% chance'+(mean!==null&&mean>=.025?', with around '+(mean<.15?'a tenth':'a few tenths')+' of an inch possible':'')+'.';
-    }
-   }else if(wet){
-    const eps=wet.eps,gefs=wet.gefs,mean=Number.isFinite(eps)&&Number.isFinite(gefs)?(eps+gefs)/2:null;
-    headline=chance(wet.date)>=60?'Rain is gathering momentum':'A new opening for rain';
-    story=fmtDate(wet.date)+' brings a '+chance(wet.date)+'% chance of showers'+(mean!==null?', with '+(mean<.025?'just a few hundredths':mean<.15?'around a tenth':'a few tenths')+' of an inch possible':'')+'. Timing and coverage remain uncertain.';
-   }else if(warming!==null&&warming>=6){
-    headline='A warmer chapter is on the horizon';
-    story='The guidance points toward a noticeable warm-up over the next several days, with multi-model average highs rising roughly '+Math.round(warming)+'°F from '+fmtDate(first.date)+' to '+fmtDate(last.date)+'. A subtle shift that could change how the afternoons feel.';
-   }else if(warming!==null&&warming<=-6){
-    headline='A cooler pattern is gathering';
-    story='The next several days carry a clear cooling signal: multi-model average highs fall roughly '+Math.round(Math.abs(warming))+'°F from '+fmtDate(first.date)+' to '+fmtDate(last.date)+'. Watch how quickly Moraga loses its afternoon warmth.';
+   const rainWithin24=records.filter(x=>upcoming.some(t=>t.slice(0,10)===x.date)&&chance(x.date)>=20);
+   if(!sharedRain){
+     headline='Checking the latest weather';story='Synchronizing the next 24 hours with the 10-day forecast.';
+   }else if(nextRain){
+     const h=Number(nextRain.time.slice(11,13)),day=nextRain.time.slice(0,10),pop=chance(day);
+     const period=h<6?'overnight':h<12?'in the morning':h<17?'in the afternoon':'in the evening';
+     headline=h<12?'A little rain may arrive before sunrise':pop>=60?'Showers may make their move':'A window for showers opens';
+     story=(day===dateKey()?'Today':fmtDate(day))+' '+period+': '+pop+'% chance of rain. '+(nextRain.total<.5?'Light, spotty showers are favored.':'Rain could interrupt outdoor plans.');
+   }else if(rainWithin24.length){
+     const wetDay=rainWithin24[0],pop=chance(wetDay.date);
+     headline='A chance of showers in the next 24 hours';
+     story=fmtDate(wetDay.date)+': '+pop+'% chance of rain, but hourly models disagree on timing. Check back for a clearer window.';
    }else{
-    headline='The atmosphere has a quieter story';
-    story='No major rain signal stands out in the next five days of ensemble guidance. The interesting detail is the day-to-day temperature rhythm'+(chill?'—with the coolest modeled morning near '+Math.round(chill.low)+'°F on '+fmtDate(chill.date):'')+'. Even a quiet pattern can bring sharp morning-to-afternoon contrasts in Moraga.';
+     const temps=upcoming.flatMap(time=>Object.values(hourly).map(m=>{const i=m.time?.indexOf(time);return i>=0?m.temperature_c?.[i]:null}).filter(Number.isFinite));
+     if(temps.length>=4){
+       const lo=Math.round(Math.min(...temps)*9/5+32),hi=Math.round(Math.max(...temps)*9/5+32);
+       headline=hi-lo>=12?'A big temperature swing is ahead':'Moraga’s next 24 hours';
+       story='Temperatures could range from around '+lo+'° to '+hi+'°F through tomorrow, with no significant rain signal in the hourly guidance.';
+     }else{
+       headline='Moraga’s next 24 hours';
+       story='No significant rain signal appears in the available hourly guidance. More detailed timing will follow with fresh model data.';
+     }
    }
-   
    title.textContent=headline;detail.textContent=story;
-   tag.textContent='Next 5 days';root.dataset.level='high';
+   tag.textContent='Next 24 hours';root.dataset.level='high';
   }catch(e){title.textContent='The Moraga weather story';tag.textContent='Awaiting guidance';detail.textContent='Fresh verified forecast guidance is needed before publishing a weather narrative.';root.dataset.level='unknown'}
  }
  updateStory();setInterval(updateStory,3*3600000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateStory()});
