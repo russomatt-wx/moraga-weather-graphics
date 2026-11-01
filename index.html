@@ -87,6 +87,24 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 .live-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border-top:1px solid #35546c;margin-top:12px;padding-top:11px;text-align:center}.live-metrics>div{min-width:0;display:flex;flex-direction:column;gap:5px}.live-metrics span{font-size:11px;color:#a6bdcf}.live-metrics strong{font-size:clamp(13px,3.4vw,17px);color:#edf7ff;font-weight:650;white-space:nowrap}
 @media(max-width:390px){#station-live-observation{padding:16px}.live-main{gap:18px}.live-topline{font-size:10px}}
 #atmospheric-intelligence,#forecast-evolution{display:none!important}
+#moraga-alerts{display:flex;flex-direction:column;align-items:stretch;gap:8px}
+#moraga-alerts .nws-alert-card{--alert-accent:#9bcfff;width:100%;border:1px solid color-mix(in srgb,var(--alert-accent) 65%,transparent);border-left:4px solid var(--alert-accent);border-radius:13px;background:color-mix(in srgb,var(--alert-accent) 9%,#10202d);overflow:hidden}
+#moraga-alerts .nws-alert-card.alert-warning{--alert-accent:#ff797d}
+#moraga-alerts .nws-alert-card.alert-watch,#moraga-alerts .nws-alert-card.alert-advisory{--alert-accent:#ffb76c}
+#moraga-alerts .nws-alert-card.alert-statement{--alert-accent:#9bcfff}
+#moraga-alerts .nws-alert-card summary{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:12px 14px;list-style:none}
+#moraga-alerts .nws-alert-card summary::-webkit-details-marker{display:none}
+#moraga-alerts .nws-alert-symbol{color:var(--alert-accent);font-size:21px;line-height:1.3}
+#moraga-alerts .nws-alert-main{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+#moraga-alerts .nws-alert-eyebrow{color:var(--alert-accent);font-size:10px;letter-spacing:.12em;font-weight:800}
+#moraga-alerts .nws-alert-main strong{font-size:17px;color:#eef6fc}
+#moraga-alerts .nws-alert-headline{font-size:12px;color:#c9d9e6;line-height:1.45}
+#moraga-alerts .nws-alert-arrow{color:var(--alert-accent);font-size:20px}
+#moraga-alerts .nws-alert-card[open] .nws-alert-arrow{transform:rotate(180deg)}
+#moraga-alerts .nws-alert-body{padding:0 14px 14px 44px;color:#d1e0ea;font-size:12px;white-space:pre-line}
+#moraga-alerts .nws-alert-body strong{display:block;margin-top:10px;color:#f1f6fa}
+#moraga-alerts .nws-alert-body p{margin:4px 0 8px}
+#moraga-alerts .nws-alert-body a{display:inline-block;margin-top:8px;font-size:12px;color:var(--alert-accent)}
 </style><style>.diagnostic-body h5{font-size:14px;color:#f4d4a6;margin:15px 0 7px}.diagnostic-table-wrap{width:100%;overflow-x:auto}.diagnostic-table{width:100%;border-collapse:collapse;font-size:12px;text-align:right;white-space:nowrap}.diagnostic-table th,.diagnostic-table td{padding:8px 5px;border-bottom:1px solid #30455b}.diagnostic-table th:first-child,.diagnostic-table td:first-child{text-align:left}.diagnostic-table thead th{color:#9eb6cc}.diagnostic-note{font-size:11px;line-height:1.5;margin-top:12px}.forecast-details-button{background:transparent;border:0;color:#b8c8da;font:inherit;font-size:11px;cursor:pointer;padding:9px 2px;min-height:36px;width:100%}.forecast-details-button:focus-visible{outline:2px solid #7dd3fc;border-radius:5px}.day-forecast{min-width:0}.day-forecast details p{display:none}.forecast-detail-panel{margin-top:12px;padding:14px;border:1px solid #405a75;border-radius:12px;background:#0c1a2b;font-size:13px;color:#c8daeb;line-height:1.6}.forecast-detail-panel h4{margin:0 0 8px;color:#f4d4a6;font-size:15px}.forecast-detail-panel p{margin:5px 0}.forecast-detail-panel .detail-close{float:right;background:transparent;border:1px solid #607c97;border-radius:8px;color:#eaf3ff;padding:3px 10px;cursor:pointer}.day-forecast details summary{list-style:none}.day-forecast details summary::-webkit-details-marker{display:none}</style><style>
 /* Compact forecast comparison: preserve provenance without multi-line timestamps. */
 .compact-comparison{width:100%;table-layout:fixed}
@@ -1796,19 +1814,32 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      features.sort((a,b)=>order[severityClass(a)]-order[severityClass(b)]);
      for(const feature of features.slice(0,5)){
        const p=feature.properties||{};
-       const link=document.createElement('a');
-       link.className=severityClass(feature);
-       const symbol=document.createElement('span');symbol.className='alert-icon';symbol.textContent='⚠';
-       const name=document.createElement('span');name.className='alert-name';name.textContent=p.event||'NWS Weather Alert';
-       const chevron=document.createElement('span');chevron.className='alert-chevron';chevron.textContent='›';
-       link.append(symbol,name,chevron);
+       const card=document.createElement('details');
+       card.className='nws-alert-card '+severityClass(feature);
+       const summary=document.createElement('summary');
+       const icon=document.createElement('span');icon.className='nws-alert-symbol';icon.textContent='⚠';
+       const main=document.createElement('span');main.className='nws-alert-main';
+       const eyebrow=document.createElement('span');eyebrow.className='nws-alert-eyebrow';eyebrow.textContent='NWS WEATHER ALERT';
+       const title=document.createElement('strong');title.textContent=p.event||'Weather Alert';
+       const headline=document.createElement('span');headline.className='nws-alert-headline';headline.textContent=p.headline||'Official National Weather Service alert for the Moraga area.';
+       main.append(eyebrow,title,headline);
+       const arrow=document.createElement('span');arrow.className='nws-alert-arrow';arrow.textContent='⌄';
+       summary.append(icon,main,arrow);card.appendChild(summary);
+       const body=document.createElement('div');body.className='nws-alert-body';
+       const expires=document.createElement('p');expires.className='nws-alert-expiry';
+       if(p.expires&&Number.isFinite(Date.parse(p.expires)))expires.textContent='Expires '+new Date(p.expires).toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
+       if(expires.textContent)body.appendChild(expires);
+       for(const [label,value] of [['Affected area',p.areaDesc],['Details',p.description],['Safety guidance',p.instruction]]){
+         if(typeof value!=='string'||!value.trim())continue;
+         const heading=document.createElement('strong');heading.textContent=label;
+         const paragraph=document.createElement('p');paragraph.textContent=value;
+         body.append(heading,paragraph);
+       }
        const target=p['@id']||feature.id;
-       if(typeof target==='string'&&/^https:\/\/alerts\.weather\.gov\//.test(target))link.href=target;
-       else if(typeof target==='string'&&/^https:\/\/api\.weather\.gov\/alerts\//.test(target))link.href=target;
-       else link.href='https://www.weather.gov/';
-       link.target='_blank';link.rel='noopener noreferrer';
-       link.title=p.headline||p.event||'Read NWS alert';
-       root.appendChild(link);
+       const link=document.createElement('a');
+       link.href=typeof target==='string'&&/^https:\/\/(alerts|api)\.weather\.gov\//.test(target)?target:'https://www.weather.gov/';
+       link.target='_blank';link.rel='noopener noreferrer';link.textContent='View official NWS alert';
+       body.appendChild(link);card.appendChild(body);root.appendChild(card);
      }
    }catch(e){console.warn('NWS alert check failed',e.message)}
  }
