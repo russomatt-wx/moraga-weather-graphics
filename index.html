@@ -1932,6 +1932,11 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    const forecastModels=Object.values(hourly).filter(m=>Array.isArray(m.time)&&Array.isArray(m.precipitation_mm));
    const totals=forecastModels.map(m=>upcoming.reduce((sum,time)=>{const i=m.time.indexOf(time);return sum+(i>=0&&Number.isFinite(m.precipitation_mm[i])?Math.max(0,m.precipitation_mm[i]):0)},0)/25.4);
    const maxModel=totals.length?Math.max(...totals):null;
+   const hrrrTotal=hrrrAvailable?upcoming.reduce((sum,time)=>{const i=hourly.HRRR.time.indexOf(time);return sum+(i>=0&&Number.isFinite(hourly.HRRR.precipitation_mm[i])?Math.max(0,hourly.HRRR.precipitation_mm[i]):0)},0)/25.4:null;
+   const otherTotals=Object.entries(hourly).filter(([name,m])=>name!=='HRRR'&&Array.isArray(m.time)&&Array.isArray(m.precipitation_mm)).map(([name,m])=>upcoming.reduce((sum,time)=>{const i=m.time.indexOf(time);return sum+(i>=0&&Number.isFinite(m.precipitation_mm[i])?Math.max(0,m.precipitation_mm[i]):0)},0)/25.4);
+   const otherMean=otherTotals.length?otherTotals.reduce((a,b)=>a+b,0)/otherTotals.length:null;
+   const hrrrWetter=hrrrTotal!==null&&hrrrTotal>=.15&&(otherMean===null||hrrrTotal>=otherMean*1.7);
+
    const rainAmount=maxModel!==null?(maxModel<.015?'little accumulation expected':maxModel<=.10?'a tenth of an inch or less suggested by the models':maxModel<=.25?'light amounts, potentially a few tenths of an inch':'locally meaningful rainfall possible'):'uncertain rainfall amounts';
    if(!sharedRain){
      headline='The next 24 hours in Moraga';
@@ -1939,7 +1944,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    }else if(nextRain){
      headline=overnightRain?'Showers possible overnight':morningRain?'Morning showers possible':'A chance of passing showers';
      const rainWindow=overnightRain&&morningRain?'overnight into the morning':overnightRain?'overnight':morningRain?'during the morning':afternoonRain?'this afternoon':'later today';
-     const amountText=maxModel===null?'Rainfall amounts remain uncertain.':maxModel<.015?'Little accumulation is expected.':maxModel<=.10?'Rainfall should generally stay under a tenth of an inch.':maxModel<=.25?'Some locations could receive a few tenths of an inch.':'Rainfall totals remain uncertain.';
+     const amountText=hrrrWetter?'HRRR suggests around '+hrrrTotal.toFixed(2)+'″, wetter than other guidance.':maxModel===null?'Rainfall amounts remain uncertain.':maxModel<.015?'Little accumulation is expected.':maxModel<=.10?'Most guidance suggests under 0.10″.':maxModel<=.25?'Some locations could receive a few tenths of an inch.':'Rainfall amounts vary across models.';
      const lowText=tempPhrase?' Temperatures should dip into the '+tempPhrase+'.':'';
      story=(pop!==null?'A '+pop+'% chance of rain ':'A chance of rain ')+rainWindow+', with '+(tempPhrase?'lows in the '+tempPhrase:'cool conditions')+'. '+amountText;
    }else if(upcoming.length<4){
