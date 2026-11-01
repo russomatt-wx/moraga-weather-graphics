@@ -15,7 +15,6 @@ with urllib.request.urlopen(req,timeout=25) as response:
     payload=json.load(response)
 rows=list(csv.DictReader(io.StringIO(base64.b64decode(payload["content"]).decode("utf-8-sig"))))
 values=[]
-rain=[]
 for row in rows:
     try:
         ts=datetime.fromisoformat(row["timestamp_utc"].replace("Z","+00:00"))
@@ -23,15 +22,35 @@ for row in rows:
         temp=float(row["temperature_f"])
         if not -40<temp<130: continue
         values.append((ts,temp))
-        if row.get("precip_observation_in") not in ("",None):
-            rain.append(float(row["precip_observation_in"]))
     except (KeyError,ValueError,TypeError): continue
 if not values: raise RuntimeError("No verified readings today")
 last=max(ts for ts,_ in values)
-# Preserve the last verified daily extrema even if the collector is delayed.\n# The website shows the actual observation timestamp and a delay warning.
-# Source precip_observation_in is not a validated daily accumulation.
-# Never sum repeated observation reports into a false daily rainfall total.
-rainfall=0.0 if rain and all(v==0 for v in rain) else None
-data={"date":date,"station":"KCAMORAG71","generated_utc":now.isoformat(),"last_observation_utc":last.isoformat(),"high_f":max(v for _,v in values),"low_f":min(v for _,v in values),"rainfall_in":rainfall,"rainfall_note":"No rainfall reported in available observations" if rainfall==0 else "Daily rainfall total unavailable; source observations are not validated daily increments"}
+
+# Shared precipitation authority: the private climate ledger's validated daily
+# accumulation. Do not sum rolling Xweather precipIN snapshots or infer zero.
+ledger_url="https://api.github.com/repos/russomatt-wx/moraga-weather/contents/climate/ledger_latest.json"
+ledger_req=urllib.request.Request(ledger_url,headers={"Authorization":f"Bearer {token}","Accept":"application/vnd.github+json","User-Agent":"MoragaWeatherObservatory"})
+rainfall=None
+rain_source=None
+rain_as_of=None
+try:
+    with urllib.request.urlopen(ledger_req,timeout=25) as response:
+        ledger_payload=json.load(response)
+    ledger=json.loads(base64.b64decode(ledger_payload["content"]).decode("utf-8-sig"))
+    day_record=ledger.get("days",{}).get(date,{})
+    candidate=day_record.get("daily_precipitation_in")
+    if isinstance(candidate,(int,float)) and not isinstance(candidate,bool) and 0<=candidate<=30:
+        rainfall=round(float(candidate),2)
+        rain_source=day_record.get("precipitation_source","climate_ledger")
+        rain_as_of=day_record.get("precipitation_as_of_utc")
+except Exception as exc:
+    print("Validated rainfall unavailable from climate ledger:",type(exc).__name__)
+data={"date":date,"station":"KCAMORAG71","generated_utc":now.isoformat(),
+      "last_observation_utc":last.isoformat(),
+      "high_f":max(v for _,v in values),"low_f":min(v for _,v in values),
+      "rainfall_in":rainfall,
+      "rainfall_source":rain_source,"rainfall_as_of_utc":rain_as_of,
+      "rainfall_note":"Validated daily rainfall from climate ledger" if rainfall is not None else
+                      "Daily rainfall awaiting validated station accumulation; rolling precipitation readings cannot be summed"}
 Path("moraga_station_today.json").write_text(json.dumps(data,indent=2)+"\n")
 print("Published daily station summary",date,last.isoformat())
