@@ -1854,7 +1854,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
        const hj=await hr.json(),h=hj.hourly;
        const times=h?.time,precip=h?.precipitation,temps=h?.temperature_2m;
        const count=Array.isArray(times)?times.length:0;
-       if(count>=24&&Array.isArray(precip)&&precip.length===count&&Array.isArray(temps)&&temps.length===count&&times.some((t,i)=>t>=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).reduce((o,x)=>{if(['year','month','day','hour'].includes(x.type))o[x.type]=x.value;return o},{}).year+'-')){
+       if(count>=24&&Array.isArray(precip)&&precip.length===count&&Array.isArray(temps)&&temps.length===count&&times.some(t=>typeof t==='string'&&Date.parse(t)>=Date.now()-3*3600000&&Date.parse(t)<=Date.now()+24*3600000)){
          hourly.HRRR={time:times,precipitation_mm:precip,temperature_c:temps};
          hrrrAvailable=true;
        }
