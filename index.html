@@ -1938,8 +1938,10 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      story='Checking the latest rain chances against the daily forecast.';
    }else if(nextRain){
      headline=overnightRain?'Showers possible overnight':morningRain?'Morning showers possible':'A chance of passing showers';
-     const amountText=maxModel===null?'light amounts possible':maxModel<.015?'little accumulation expected':maxModel<=.10?'up to 0.10″ possible':maxModel<=.25?'up to 0.25″ possible':'higher rainfall totals possible';
-     story=(pop!==null?pop+'% rain chance':'Showers possible')+' '+timing+'. '+amountText+'.'+(tempPhrase?' Lows in the '+tempPhrase+'.':'');
+     const rainWindow=overnightRain&&morningRain?'overnight into the morning':overnightRain?'overnight':morningRain?'during the morning':afternoonRain?'this afternoon':'later today';
+     const amountText=maxModel===null?'Rainfall amounts remain uncertain.':maxModel<.015?'Little accumulation is expected.':maxModel<=.10?'Rainfall should generally stay under a tenth of an inch.':maxModel<=.25?'Some locations could receive a few tenths of an inch.':'Rainfall totals remain uncertain.';
+     const lowText=tempPhrase?' Temperatures should dip into the '+tempPhrase+'.':'';
+     story=(pop!==null?'A '+pop+'% chance of rain ':'A chance of rain ')+rainWindow+', with '+(tempPhrase?'lows in the '+tempPhrase:'cool conditions')+'. '+amountText;
    }else if(upcoming.length<4){
      headline='The next 24 hours in Moraga';
      story='Hourly guidance is limited right now; check back for a more detailed forecast.';
