@@ -1803,6 +1803,12 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 </script>
 
 <script>
+<style>
+/* Keep the short-range nowcast readable without growing into a long text block. */
+@media(max-width:700px){
+ #ai-model-detail{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden;font-size:clamp(13px,3.3vw,15px);line-height:1.45}
+}
+</style>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
 (function(){
  const today=document.getElementById('station-today');if(!today)return;
@@ -1938,9 +1944,9 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      headline='The next 24 hours in Moraga';
      story='Checking the latest rain chances against the daily forecast.';
    }else if(nextRain){
-     headline=overnightRain?'Spotty showers may slip into Moraga overnight':morningRain?'A few showers may greet the morning':'A passing chance of showers ahead';
-     story='Look for scattered light showers '+timing+(tempPhrase?', with temperatures in the '+tempPhrase:'')+'. '+(pop!==null?'Rain chances are around '+pop+'%, with ':'Expect ')+rainAmount+'.';
-     if(hrrrWet.length){const firstHour=Number(hrrrWet[0].slice(11,13));const window=firstHour<6?'before sunrise':firstHour<12?'during the morning':firstHour<18?'during the afternoon':'this evening';story+=' High-resolution guidance also signals showers '+window+'.';}
+     headline=overnightRain?'Showers possible overnight':morningRain?'Morning showers possible':'A chance of passing showers';
+     const amountText=maxModel===null?'light amounts possible':maxModel<.015?'little accumulation expected':maxModel<=.10?'up to 0.10″ possible':maxModel<=.25?'up to 0.25″ possible':'higher rainfall totals possible';
+     story=(pop!==null?pop+'% rain chance':'Showers possible')+' '+timing+'. '+amountText+'.'+(tempPhrase?' Lows in the '+tempPhrase+'.':'');
    }else if(upcoming.length<4){
      headline='The next 24 hours in Moraga';
      story='Hourly guidance is limited right now; check back for a more detailed forecast.';
