@@ -651,6 +651,12 @@ body[data-atmosphere="hot"]{--atmo-tint:rgba(227,84,76,.13)}
 </style><style>
 #moraga-local-date{display:inline-flex;align-items:center;gap:8px;margin:8px 0 4px;padding:6px 11px;border:1px solid rgba(132,202,223,.24);border-radius:9px;background:rgba(12,36,53,.45);color:#d1e9f3;font-size:clamp(12px,2.6vw,14px);font-weight:700;letter-spacing:.035em;font-variant-numeric:tabular-nums}
 #moraga-local-date::before{content:"";width:6px;height:6px;border-radius:50%;background:#75d7b9;box-shadow:0 0 0 3px rgba(117,215,185,.10)}
+</style><style>
+/* Editorial weather story: spacious but concise, never another dashboard metric. */
+#atmospheric-intelligence .ai-model{padding:15px 16px;border-left:3px solid #71c8db;background:linear-gradient(125deg,rgba(19,53,70,.6),rgba(7,22,35,.38))}
+#atmospheric-intelligence .ai-model-top{align-items:flex-start;flex-wrap:wrap;gap:5px 12px}
+#atmospheric-intelligence #ai-story-title{font-size:clamp(15px,3.6vw,19px);line-height:1.25;letter-spacing:-.02em}
+#atmospheric-intelligence #ai-model-detail{font-size:clamp(12px,2.8vw,14px);line-height:1.6;margin-top:8px;color:#c0d4e1}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
@@ -1761,44 +1767,63 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 </script>
 
 <script>
-/* Compact intelligence: show only new information, never duplicate current conditions. */
+/* Weather story: factual, readable, varied, and driven by published guidance. */
 (function(){
  const today=document.getElementById('station-today');if(!today)return;
  const panel=document.createElement('div');panel.id='atmospheric-intelligence';
- panel.innerHTML='<div class="ai-model" id="ai-model" data-level="unknown"><div class="ai-model-top"><strong>Forecast model signal</strong><span class="ai-level" id="ai-model-level">Checking</span></div><p id="ai-model-detail">Comparing ECMWF and GFS guidance.</p></div>';
+ panel.innerHTML='<div class="ai-model" id="ai-model" data-level="unknown"><div class="ai-model-top"><strong id="ai-story-title">The Moraga weather story</strong><span class="ai-level" id="ai-model-level">Forecast outlook</span></div><p id="ai-model-detail">Reading the latest forecast guidance…</p></div>';
  today.insertAdjacentElement('afterend',panel);
- window.addEventListener('moraga:live-observation',event=>{
-  const temp=event.detail?.temperature_f;
-  if(Number.isFinite(temp))document.body.dataset.atmosphere=temp<55?'cool':temp<72?'mild':temp<88?'warm':'hot';
+ window.addEventListener('moraga:live-observation',e=>{
+  const t=e.detail?.temperature_f;
+  if(Number.isFinite(t))document.body.dataset.atmosphere=t<55?'cool':t<72?'mild':t<88?'warm':'hot';
  });
- async function modelAgreement(){
-  const root=document.getElementById('ai-model'),level=document.getElementById('ai-model-level'),detail=document.getElementById('ai-model-detail');
+ const fmtDate=d=>new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'long'});
+ const dateKey=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+ async function updateStory(){
+  const root=document.getElementById('ai-model'),title=document.getElementById('ai-story-title'),detail=document.getElementById('ai-model-detail'),tag=document.getElementById('ai-model-level');
   try{
-   const r=await fetch('moraga_forecast_10day.json?signal='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('Guidance unavailable');
-   const data=await r.json(),issued=Date.parse(data.generated_utc);
-   if(!Number.isFinite(issued)||Math.abs(Date.now()-issued)>36*3600000)throw Error('Guidance stale');
-   const a=data.temperature_models?.ECMWF,b=data.temperature_models?.GFS;
-   if(!a||!b)throw Error('Both models required');
-   const todayKey=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
-   const days=(data.dates||a.dates||[]).map((date,i)=>({date,i})).filter(x=>x.date>todayKey).slice(0,3);
-   const comparisons=days.map(({date,i})=>{
-    const highs=[a.high_f?.[i],b.high_f?.[i]],lows=[a.low_f?.[i],b.low_f?.[i]];
-    if(![...highs,...lows].every(Number.isFinite))return null;
-    const highDiff=highs[0]-highs[1],lowDiff=lows[0]-lows[1];
-    return {date,highDiff,lowDiff,largest:Math.max(Math.abs(highDiff),Math.abs(lowDiff)),type:Math.abs(highDiff)>=Math.abs(lowDiff)?'high':'low'};
-   }).filter(Boolean);
-   if(comparisons.length<2)throw Error('Not enough future model data');
-   const peak=comparisons.reduce((x,y)=>x.largest>=y.largest?x:y);
-   const avg=comparisons.reduce((sum,x)=>sum+x.largest,0)/comparisons.length;
-   const tier=avg<=3?'high':avg<=6?'moderate':'low';
-   root.dataset.level=tier;
-   level.textContent=tier==='high'?'Models aligned':tier==='moderate'?'Some divergence':'Models diverging';
-   const model=(peak.type==='high'?peak.highDiff:peak.lowDiff)>0?'ECMWF':'GFS';
-   const label=new Date(peak.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',timeZone:'America/Los_Angeles'});
-   detail.textContent='Biggest difference: '+label+' '+peak.type+' · '+model+' '+peak.largest.toFixed(1)+'°F warmer. Based on published ECMWF/GFS guidance; not a forecast accuracy score.';
-  }catch(e){root.dataset.level='unknown';level.textContent='Unavailable';detail.textContent=e.message+'. No model signal displayed.'}
+   const r=await fetch('moraga_forecast_10day.json?story='+Date.now(),{cache:'no-store'});
+   if(!r.ok)throw Error('Forecast unavailable');
+   const d=await r.json(),issued=Date.parse(d.generated_utc);
+   if(!Number.isFinite(issued)||issued>Date.now()+3600000||Date.now()-issued>36*3600000)throw Error('Forecast guidance is out of date');
+   const dates=(d.dates||[]).filter(x=>x>=dateKey()).slice(0,5);
+   if(dates.length<2)throw Error('Insufficient forecast dates');
+   const models=d.temperature_models||{},rain=d.ensemble_rain_probability_pct||{},amounts=d.model_daily_inches||{};
+   const records=dates.map(date=>{
+    const idx=(d.dates||[]).indexOf(date);
+    const highs=Object.values(models).map(m=>m.high_f?.[idx]).filter(Number.isFinite);
+    const lows=Object.values(models).map(m=>m.low_f?.[idx]).filter(Number.isFinite);
+    const pop=Number(rain[date]);
+    const eps=amounts['EPS mean']?.[idx],gefs=amounts['GEFS mean']?.[idx];
+    return {date,high:highs.length>=2?highs.reduce((a,b)=>a+b,0)/highs.length:null,low:lows.length>=2?lows.reduce((a,b)=>a+b,0)/lows.length:null,pop:Number.isFinite(pop)?pop:null,eps,gefs};
+   });
+   const wet=records.filter(x=>x.pop>=20).sort((a,b)=>b.pop-a.pop)[0];
+   const first=records[0],last=records[records.length-1];
+   const warming=first.high!==null&&last.high!==null?last.high-first.high:null;
+   const chill=records.filter(x=>x.low!==null).sort((a,b)=>a.low-b.low)[0];
+   let headline='',story='';
+   if(wet&&wet.pop>=60){
+    headline='A rainy turn is taking shape';
+    story=fmtDate(wet.date)+' stands out in the latest ensemble guidance, with a '+Math.round(wet.pop)+'% chance of precipitation. '+(Number.isFinite(wet.eps)&&Number.isFinite(wet.gefs)?'EPS and GEFS ensemble means suggest about '+wet.eps.toFixed(2)+' and '+wet.gefs.toFixed(2)+' inches respectively. ':'')+'The key question is how much of that moisture reaches Moraga.';
+   }else if(wet){
+    headline='A window for showers emerges';
+    story='Keep an eye on '+fmtDate(wet.date)+': ensemble guidance gives Moraga a '+Math.round(wet.pop)+'% chance of precipitation. That is a possibility, not a promise—and the timing and amounts will matter.';
+   }else if(warming!==null&&warming>=6){
+    headline='A warmer chapter is on the horizon';
+    story='The guidance points toward a noticeable warm-up over the next several days, with multi-model average highs rising roughly '+Math.round(warming)+'°F from '+fmtDate(first.date)+' to '+fmtDate(last.date)+'. A subtle shift that could change how the afternoons feel.';
+   }else if(warming!==null&&warming<=-6){
+    headline='A cooler pattern is gathering';
+    story='The next several days carry a clear cooling signal: multi-model average highs fall roughly '+Math.round(Math.abs(warming))+'°F from '+fmtDate(first.date)+' to '+fmtDate(last.date)+'. Watch how quickly Moraga loses its afternoon warmth.';
+   }else{
+    headline='The atmosphere has a quieter story';
+    story='No major rain signal stands out in the next five days of ensemble guidance. The interesting detail is the day-to-day temperature rhythm'+(chill?'—with the coolest modeled morning near '+Math.round(chill.low)+'°F on '+fmtDate(chill.date):'')+'. Even a quiet pattern can bring sharp morning-to-afternoon contrasts in Moraga.';
+   }
+   if(wet&&warming!==null&&Math.abs(warming)>=5)story+=' Beyond that, multi-model average afternoon highs '+(warming>0?'rise':'fall')+' by about '+Math.round(Math.abs(warming))+'°F through '+fmtDate(last.date)+'.';
+   title.textContent=headline;detail.textContent=story;
+   tag.textContent='Next 5 days';root.dataset.level='high';
+  }catch(e){title.textContent='The Moraga weather story';tag.textContent='Awaiting guidance';detail.textContent='Fresh verified forecast guidance is needed before publishing a weather narrative.';root.dataset.level='unknown'}
  }
- modelAgreement();setInterval(modelAgreement,3*3600000);
+ updateStory();setInterval(updateStory,3*3600000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateStory()});
 })();
 </script>
 <script>(function(){const el=document.getElementById('moraga-local-date');if(!el)return;function update(){el.textContent=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(new Date())}update();setInterval(update,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)update()})})();</script></body></html>
