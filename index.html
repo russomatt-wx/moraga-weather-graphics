@@ -77,7 +77,7 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 #station-today-status{display:none!important}
 #station-today{margin-bottom:0!important}
 .live-topline{display:flex;align-items:center;gap:9px;color:#a8d9e6;font-size:11px;font-weight:800;letter-spacing:.12em}
-.live-topline #live-observed-at{margin-left:auto;color:#a6bdcf;letter-spacing:0;font-size:12px;font-weight:500}
+.live-topline #live-observed-at{margin-left:auto;color:#a8d9e6;letter-spacing:.10em;font-size:10px;font-weight:800;text-align:right;white-space:pre-line;line-height:1.5}
 .live-dot{width:8px;height:8px;border-radius:50%;background:#65d5ad;box-shadow:0 0 0 3px #65d5ad22;flex-shrink:0}
 .live-temp-group{display:flex;align-items:center;gap:10px;min-width:0}#live-yesterday{display:flex;flex-direction:column;gap:2px;white-space:nowrap}#live-yesterday[hidden]{display:none}#live-yesterday-delta{font-size:clamp(13px,3.6vw,19px);font-weight:750;color:#e8f4fc}#live-yesterday small{font-size:10px;color:#b8cbd9}
 .live-main{display:flex;align-items:center;gap:22px;margin-top:9px}
@@ -1705,7 +1705,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      }else trendEl.textContent='';
      const gustDirection=Number.isFinite(d.wind_gust_direction_deg)?['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'][Math.round((((d.wind_gust_direction_deg%360)+360)%360)/22.5)%16]:(typeof d.wind_gust_direction==='string'&&/^(N|NNE|NE|ENE|E|ESE|SE|SSE|S|SSW|SW|WSW|W|WNW|NW|NNW)$/i.test(d.wind_gust_direction)?d.wind_gust_direction.toUpperCase():'');
      live.querySelector('#live-gust').textContent=Number.isFinite(d.wind_gust_mph)&&d.wind_gust_mph<1?'Calm':(gustDirection||direction?(gustDirection||direction)+' ':'')+num(d.wind_gust_mph,' mph');
-     live.querySelector('#live-observed-at').textContent=when+' PT';
+     live.querySelector('#live-observed-at').textContent=t.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'}).toUpperCase()+'\n'+when.toUpperCase()+' PT';
      live.hidden=false;
    }catch(e){live.hidden=true;console.warn('Live station unavailable; historical summary retained',e.message)}
  };
