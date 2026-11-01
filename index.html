@@ -1802,12 +1802,21 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    const warming=first.high!==null&&last.high!==null?last.high-first.high:null;
    const chill=records.filter(x=>x.low!==null).sort((a,b)=>a.low-b.low)[0];
    let headline='',story='';
-   if(wet&&wet.pop>=60){
-    headline='A rainy turn is taking shape';
-    story=fmtDate(wet.date)+' stands out in the latest ensemble guidance, with a '+Math.round(wet.pop)+'% chance of precipitation. '+(Number.isFinite(wet.eps)&&Number.isFinite(wet.gefs)?'EPS and GEFS ensemble means suggest about '+wet.eps.toFixed(2)+' and '+wet.gefs.toFixed(2)+' inches respectively. ':'')+'The key question is how much of that moisture reaches Moraga.';
-   }else if(wet){
-    headline='A window for showers emerges';
-    story='Keep an eye on '+fmtDate(wet.date)+': ensemble guidance gives Moraga a '+Math.round(wet.pop)+'% chance of precipitation. That is a possibility, not a promise—and the timing and amounts will matter.';
+   if(wet){
+    headline=wet.pop>=60?'A rainy turn is taking shape':'A window for showers emerges';
+    story=fmtDate(wet.date)+' is the day to watch: ensemble guidance gives Moraga a '+Math.round(wet.pop)+'% chance of measurable precipitation. ';
+    const eps=wet.eps,gefs=wet.gefs;
+    if(Number.isFinite(eps)&&Number.isFinite(gefs)){
+      const mean=(eps+gefs)/2,lo=Math.min(eps,gefs),hi=Math.max(eps,gefs);
+      const fmt=n=>n<.005?'less than 0.01':n.toFixed(2);
+      story+='EPS averages '+fmt(eps)+' inches and GEFS '+fmt(gefs)+' inches for that day. ';
+      if(mean<.025)story+='My read: this is a light, marginal precipitation signal—many locations could remain dry, with only a few hundredths where showers develop. ';
+      else if(mean<.12)story+='My read: spotty light rain is the leading scenario, with a few hundredths to around a tenth of an inch where showers materialize. ';
+      else if(mean<.3)story+='My read: a modest rain event is plausible, with roughly a tenth to a quarter inch in favored spots if the wetter solution verifies. ';
+      else story+='My read: a more substantial rain event is possible, although individual ensemble members and storm placement could produce very different totals. ';
+      if(hi>=lo*2&&hi-lo>=.05)story+='The two ensemble means differ notably, so confidence in the amount is limited. ';
+      story+='These are unconditional ensemble averages, not a guaranteed accumulation or a statistically derived rainfall range.';
+    }else story+='Reliable EPS/GEFS amount guidance is unavailable, so no rainfall total is estimated.';
    }else if(warming!==null&&warming>=6){
     headline='A warmer chapter is on the horizon';
     story='The guidance points toward a noticeable warm-up over the next several days, with multi-model average highs rising roughly '+Math.round(warming)+'°F from '+fmtDate(first.date)+' to '+fmtDate(last.date)+'. A subtle shift that could change how the afternoons feel.';
