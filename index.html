@@ -1815,7 +1815,25 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  let sharedRain=window.moragaDailyRainChances||null;
  window.addEventListener('moraga:daily-rain-chances',e=>{sharedRain=e.detail;updateStory()});
  const snapshotKey='moraga-forecast-evolution-v1';
- const renderEvolution=(d,records,hourly)=>{
+ const fetchSharedForecastHistory=async(currentIssued)=>{
+   try{
+     const commits=await fetch('https://api.github.com/repos/russomatt-wx/moraga-weather-graphics/commits?path=moraga_forecast_10day.json&per_page=12',{headers:{Accept:'application/vnd.github+json'}});
+     if(!commits.ok)return [];
+     const list=await commits.json();
+     const candidates=Array.isArray(list)?list.slice(0,10):[];
+     const found=[];
+     for(const commit of candidates){
+       const r=await fetch('https://raw.githubusercontent.com/russomatt-wx/moraga-weather-graphics/'+commit.sha+'/moraga_forecast_10day.json');
+       if(!r.ok)continue;
+       const old=await r.json();
+       if(!old.generated_utc||Date.parse(old.generated_utc)>=Date.parse(currentIssued))continue;
+       found.push(old);
+       break;
+     }
+     return found;
+   }catch(_){return []}
+ };
+ const renderEvolution=async(d,records,hourly)=>{
    const note=document.getElementById('forecast-evolution-detail'),stamp=document.getElementById('forecast-evolution-time');
    if(!note||!stamp)return;
    const issued=Date.parse(d.generated_utc);
@@ -1832,7 +1850,23 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    let history=[];
    try{history=JSON.parse(localStorage.getItem(snapshotKey)||'[]');if(!Array.isArray(history))history=[]}catch(_){}
    history=history.filter(x=>x&&Number.isFinite(Date.parse(x.issued))&&x.days&&Date.parse(x.issued)<=issued).sort((a,b)=>Date.parse(a.issued)-Date.parse(b.issued));
-   const prior=history.filter(x=>Date.parse(x.issued)<issued).slice(-1)[0];
+   let prior=history.filter(x=>Date.parse(x.issued)<issued).slice(-1)[0];
+   if(!prior){
+     const shared=await fetchSharedForecastHistory(d.generated_utc);
+     if(shared.length){
+       const old=shared[0],snap={issued:old.generated_utc,days:{}};
+       for(const day of days){
+         const i=(old.dates||[]).indexOf(day);if(i<0)continue;
+         const m=Object.values(old.temperature_models||{});
+         const mean=arr=>arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:null;
+         const highs=m.map(x=>x.high_f?.[i]).filter(Number.isFinite),lows=m.map(x=>x.low_f?.[i]).filter(Number.isFinite);
+         const rain=['ECMWF','GFS','EPS mean','GEFS mean'].map(k=>old.model_daily_inches?.[k]?.[i]).filter(Number.isFinite);
+         const pop=Number(old.ensemble_rain_probability_pct?.[day]);
+         snap.days[day]={high:mean(highs),low:mean(lows),rain:mean(rain),pop:Number.isFinite(pop)?pop:null};
+       }
+       prior=snap;
+     }
+   }
    if(prior){
      const changes=[];
      for(const day of days){
@@ -1846,7 +1880,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      note.textContent=changes.length?changes.slice(0,2).join('. ')+'. '+(changes.some(x=>x.includes('rain'))?'This may change the timing or likelihood of wet conditions; check the latest hourly outlook.':'Plan for the revised temperatures.'):'Forecast remains broadly on track. No meaningful changes in rain or temperature guidance since the previous published update.';
      stamp.textContent='Compared with '+new Date(prior.issued).toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
    }else{
-     note.textContent='Tracking forecast changes from this visit onward. A comparison will appear when a newer forecast is published.';
+     note.textContent='No earlier published forecast snapshot is available yet. Trend comparison will appear once another run is archived.';
      stamp.textContent='Baseline established';
    }
    if(!history.some(x=>x.issued===current.issued)){history.push(current);try{localStorage.setItem(snapshotKey,JSON.stringify(history.slice(-20)))}catch(_){}}
@@ -1956,7 +1990,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      headline=avgCloud!==null&&avgCloud>=65?'Clouds take center stage':'A quieter stretch of Moraga weather';
      story=(avgCloud!==null&&avgCloud>=65?'Expect plenty of clouds over the next day.':'No organized showers stand out in the hourly guidance.')+(tempPhrase?' Overnight lows should settle into the '+tempPhrase+'.':'');
    }
-   renderEvolution(d,records,hourly);
+   await renderEvolution(d,records,hourly);
    title.textContent=headline;detail.textContent=story;
    tag.textContent='Next 24 hours';root.dataset.level='high';
   }catch(e){title.textContent='The Moraga weather story';tag.textContent='Awaiting guidance';detail.textContent='Fresh verified forecast guidance is needed before publishing a weather narrative.';root.dataset.level='unknown'}
