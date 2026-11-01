@@ -1893,8 +1893,8 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      note.textContent=changes.length?changes.slice(0,2).join('. ')+'. '+(changes.some(x=>x.includes('rain'))?'This may change the timing or likelihood of wet conditions; check the latest hourly outlook.':'Plan for the revised temperatures.'):'Forecast remains broadly on track. No meaningful changes in rain or temperature guidance since the previous published update.';
      stamp.textContent='Compared with '+new Date(prior.issued).toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
    }else{
-     note.textContent='No earlier published forecast snapshot is available yet. Trend comparison will appear once another run is archived.';
-     stamp.textContent='Baseline established';
+     note.textContent='No newer model forecast has been published since '+new Date(d.generated_utc).toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT. Trend comparison resumes with the next distinct published run.';
+     stamp.textContent='Awaiting new run';
    }
    if(!history.some(x=>x.issued===current.issued)){history.push(current);try{localStorage.setItem(snapshotKey,JSON.stringify(history.slice(-20)))}catch(_){}}
  };
@@ -2008,7 +2008,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    tag.textContent='Next 24 hours';root.dataset.level='high';
   }catch(e){title.textContent='The Moraga weather story';tag.textContent='Awaiting guidance';detail.textContent='Fresh verified forecast guidance is needed before publishing a weather narrative.';root.dataset.level='unknown'}
  }
- updateStory();setInterval(updateStory,3*3600000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateStory()});
+ updateStory();setInterval(updateStory,30*60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateStory()});
 })();
 </script>
 <script>(function(){const el=document.getElementById('moraga-local-date');if(!el)return;function update(){el.textContent=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(new Date())}update();setInterval(update,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)update()})})();</script></body></html>
