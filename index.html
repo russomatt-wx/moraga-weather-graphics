@@ -1753,8 +1753,9 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
   const expected=dayParts[2]+'-'+dayParts[0]+'-'+dayParts[1];
   if(d.date!==expected)throw Error('Waiting for today’s observations');
   const last=new Date(d.last_observation_utc);
-  if(!Number.isFinite(last.getTime())||Date.now()-last.getTime()>90*60000)throw Error('Daily summary is stale');
-  const vals=[Number.isFinite(d.high_f)?Math.round(d.high_f)+'°':'—',Number.isFinite(d.low_f)?Math.round(d.low_f)+'°':'—',Number.isFinite(d.rainfall_in)?d.rainfall_in.toFixed(2)+' in':'—'];
+  if(!Number.isFinite(last.getTime()))throw Error('Invalid station observation timestamp');
+  const summaryStale=Date.now()-last.getTime()>90*60000;
+  const vals=[Number.isFinite(d.high_f)?Math.round(d.high_f)+'°':'—',Number.isFinite(d.low_f)?Math.round(d.low_f)+'°':'—',!summaryStale&&Number.isFinite(d.rainfall_in)?d.rainfall_in.toFixed(2)+' in':'—'];
   if(window.moragaLiveRain?.day===expected&&Number.isFinite(window.moragaLiveRain.amount)){
     vals[2]=window.moragaLiveRain.amount.toFixed(2)+' in';
   }
