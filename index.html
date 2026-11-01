@@ -97,7 +97,7 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 #moraga-alerts .nws-alert-symbol{color:var(--alert-accent);font-size:21px;line-height:1.3}
 #moraga-alerts .nws-alert-main{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
 #moraga-alerts .nws-alert-eyebrow{color:var(--alert-accent);font-size:10px;letter-spacing:.12em;font-weight:800}
-#moraga-alerts .nws-alert-main strong{font-size:17px;color:#eef6fc}
+#moraga-alerts .nws-alert-main strong{font-size:15px;color:#eef6fc}
 #moraga-alerts .nws-alert-headline{font-size:12px;color:#c9d9e6;line-height:1.45}
 #moraga-alerts .nws-alert-arrow{color:var(--alert-accent);font-size:20px}
 #moraga-alerts .nws-alert-card[open] .nws-alert-arrow{transform:rotate(180deg)}
@@ -1822,7 +1822,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
        const eyebrow=document.createElement('span');eyebrow.className='nws-alert-eyebrow';eyebrow.textContent='NWS WEATHER ALERT';
        const title=document.createElement('strong');title.textContent=p.event||'Weather Alert';
        const headline=document.createElement('span');headline.className='nws-alert-headline';headline.textContent=p.headline||'Official National Weather Service alert for the Moraga area.';
-       main.append(eyebrow,title,headline);
+       main.append(eyebrow,title);
        const arrow=document.createElement('span');arrow.className='nws-alert-arrow';arrow.textContent='⌄';
        summary.append(icon,main,arrow);card.appendChild(summary);
        const body=document.createElement('div');body.className='nws-alert-body';
