@@ -657,6 +657,9 @@ body[data-atmosphere="hot"]{--atmo-tint:rgba(227,84,76,.13)}
 #atmospheric-intelligence .ai-model-top{align-items:flex-start;flex-wrap:wrap;gap:5px 12px}
 #atmospheric-intelligence #ai-story-title{font-size:clamp(15px,3.6vw,19px);line-height:1.25;letter-spacing:-.02em}
 #atmospheric-intelligence #ai-model-detail{font-size:clamp(12px,2.8vw,14px);line-height:1.6;margin-top:8px;color:#c0d4e1}
+</style><style>
+#atmospheric-intelligence .ai-model{padding:11px 13px}
+#atmospheric-intelligence #ai-model-detail{font-size:clamp(12px,2.8vw,13px);line-height:1.5;margin-top:5px}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
@@ -1803,20 +1806,14 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    const chill=records.filter(x=>x.low!==null).sort((a,b)=>a.low-b.low)[0];
    let headline='',story='';
    if(wet){
-    headline=wet.pop>=60?'A rainy turn is taking shape':'A window for showers emerges';
-    story=fmtDate(wet.date)+' is the day to watch: ensemble guidance gives Moraga a '+Math.round(wet.pop)+'% chance of measurable precipitation. ';
+    headline=wet.pop>=60?'Rain is making a move':'Showers on the radar';
     const eps=wet.eps,gefs=wet.gefs;
+    story=fmtDate(wet.date)+': '+Math.round(wet.pop)+'% rain chance. ';
     if(Number.isFinite(eps)&&Number.isFinite(gefs)){
-      const mean=(eps+gefs)/2,lo=Math.min(eps,gefs),hi=Math.max(eps,gefs);
-      const fmt=n=>n<.005?'less than 0.01':n.toFixed(2);
-      story+='EPS averages '+fmt(eps)+' inches and GEFS '+fmt(gefs)+' inches for that day. ';
-      if(mean<.025)story+='My read: this is a light, marginal precipitation signal—many locations could remain dry, with only a few hundredths where showers develop. ';
-      else if(mean<.12)story+='My read: spotty light rain is the leading scenario, with a few hundredths to around a tenth of an inch where showers materialize. ';
-      else if(mean<.3)story+='My read: a modest rain event is plausible, with roughly a tenth to a quarter inch in favored spots if the wetter solution verifies. ';
-      else story+='My read: a more substantial rain event is possible, although individual ensemble members and storm placement could produce very different totals. ';
-      if(hi>=lo*2&&hi-lo>=.05)story+='The two ensemble means differ notably, so confidence in the amount is limited. ';
-      story+='These are unconditional ensemble averages, not a guaranteed accumulation or a statistically derived rainfall range.';
-    }else story+='Reliable EPS/GEFS amount guidance is unavailable, so no rainfall total is estimated.';
+      story+='EPS '+eps.toFixed(2)+'″ · GEFS '+gefs.toFixed(2)+'″. ';
+      const mean=(eps+gefs)/2;
+      story+=mean<.025?'A few sprinkles are possible, but dry weather may prevail.':mean<.12?'Light showers are possible; a few hundredths to around a tenth where rain develops.':mean<.3?'Some locations could pick up around a tenth to a quarter inch.':'A more meaningful rain event is possible, but totals are uncertain.';
+    }else story+='Rainfall amounts remain uncertain.';
    }else if(warming!==null&&warming>=6){
     headline='A warmer chapter is on the horizon';
     story='The guidance points toward a noticeable warm-up over the next several days, with multi-model average highs rising roughly '+Math.round(warming)+'°F from '+fmtDate(first.date)+' to '+fmtDate(last.date)+'. A subtle shift that could change how the afternoons feel.';
@@ -1827,7 +1824,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
     headline='The atmosphere has a quieter story';
     story='No major rain signal stands out in the next five days of ensemble guidance. The interesting detail is the day-to-day temperature rhythm'+(chill?'—with the coolest modeled morning near '+Math.round(chill.low)+'°F on '+fmtDate(chill.date):'')+'. Even a quiet pattern can bring sharp morning-to-afternoon contrasts in Moraga.';
    }
-   if(wet&&warming!==null&&Math.abs(warming)>=5)story+=' Beyond that, multi-model average afternoon highs '+(warming>0?'rise':'fall')+' by about '+Math.round(Math.abs(warming))+'°F through '+fmtDate(last.date)+'.';
+   
    title.textContent=headline;detail.textContent=story;
    tag.textContent='Next 5 days';root.dataset.level='high';
   }catch(e){title.textContent='The Moraga weather story';tag.textContent='Awaiting guidance';detail.textContent='Fresh verified forecast guidance is needed before publishing a weather narrative.';root.dataset.level='unknown'}
