@@ -1891,7 +1891,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
        if(Number.isFinite(a.high)&&Number.isFinite(b.high)&&Math.abs(b.high-a.high)>=3)changes.push(when+' high shifted '+Math.round(b.high-a.high)+'°F');
        if(Number.isFinite(a.low)&&Number.isFinite(b.low)&&Math.abs(b.low-a.low)>=3)changes.push(when+' low shifted '+Math.round(b.low-a.low)+'°F');
      }
-     note.textContent=changes.length?changes.slice(0,2).join('. ')+'. '+(changes.some(x=>x.includes('rain'))?'This may change the timing or likelihood of wet conditions; check the latest hourly outlook.':'Plan for the revised temperatures.'):'Forecast remains broadly on track. No meaningful changes in rain or temperature guidance since the previous published update.';
+     note.textContent=changes.length?changes.slice(0,2).map(x=>x.charAt(0).toUpperCase()+x.slice(1)).join('. ')+'.':'Rain chances and temperatures are holding fairly steady compared with the previous model run.';
      stamp.textContent='Compared with '+new Date(prior.issued).toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
    }else{
      note.textContent='No newer model forecast has been published since '+new Date(d.generated_utc).toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT. Trend comparison resumes with the next distinct published run.';
@@ -1986,6 +1986,11 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    const hrrrWetter=hrrrTotal!==null&&hrrrTotal>=.15&&(otherMean===null||hrrrTotal>=otherMean*1.7);
 
    const rainAmount=maxModel!==null?(maxModel<.015?'little accumulation expected':maxModel<=.10?'a tenth of an inch or less suggested by the models':maxModel<=.25?'light amounts, potentially a few tenths of an inch':'locally meaningful rainfall possible'):'uncertain rainfall amounts';
+   const todayChance=chance(dateKey());
+   const tomorrowDate=records.find(x=>x.date>dateKey())?.date;
+   const tomorrowChance=tomorrowDate?chance(tomorrowDate):null;
+   const todayWet=Number.isFinite(todayChance)&&todayChance>=20;
+   const tomorrowWet=Number.isFinite(tomorrowChance)&&tomorrowChance>=20;
    if(!sharedRain){
      headline='The next 24 hours in Moraga';
      story='Checking the latest rain chances against the daily forecast.';
@@ -1995,14 +2000,20 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      const amountText=hrrrWetter?'HRRR: '+hrrrTotal.toFixed(2)+'″, wetter than other models.':maxModel===null?'Rainfall amounts remain uncertain.':maxModel<.015?'Little accumulation is expected.':maxModel<=.10?'Most guidance suggests under 0.10″.':maxModel<=.25?'Some locations could receive a few tenths of an inch.':'Rainfall amounts vary across models.';
      
      story=(pop!==null?pop+'% rain chance ':'Rain possible ')+rainWindow+'. '+amountText;
+   }else if(todayWet||tomorrowWet){
+     const wetToday=todayWet&&(!tomorrowWet||todayChance>=tomorrowChance);
+     const wetChance=wetToday?todayChance:tomorrowChance;
+     headline=wetChance>=60?'Showers remain in the forecast':'Watching for passing showers';
+     const dayLabel=wetToday?'today':'tomorrow';
+     story=wetChance+'% chance of rain '+dayLabel+' in the daily guidance, although the hourly models disagree on when showers may develop. '+(hrrrWetter?'HRRR is wetter than the broader model blend. ':'')+(tempPhrase?'Temperatures overnight trend toward the '+tempPhrase+'.':'Timing and amounts remain uncertain.');
    }else if(upcoming.length<4){
      headline='The next 24 hours in Moraga';
-     story='Hourly guidance is limited right now; check back for a more detailed forecast.';
+     story='Hourly guidance is limited. The daily forecast currently shows no substantial rain signal.';
    }else{
      const cloud=upcoming.flatMap(time=>forecastModels.map(m=>{const i=m.time.indexOf(time);return i>=0?m.cloud_cover_pct?.[i]:null}).filter(Number.isFinite));
      const avgCloud=cloud.length?cloud.reduce((a,b)=>a+b,0)/cloud.length:null;
-     headline=avgCloud!==null&&avgCloud>=65?'Clouds take center stage':'A quieter stretch of Moraga weather';
-     story=(avgCloud!==null&&avgCloud>=65?'Expect plenty of clouds over the next day.':'No organized showers stand out in the hourly guidance.')+(tempPhrase?' Overnight lows should settle into the '+tempPhrase+'.':'');
+     headline=avgCloud!==null&&avgCloud>=65?'Clouds linger over Moraga':'A break between weather systems';
+     story=(avgCloud!==null&&avgCloud>=65?'Cloud cover should dominate much of the next day.':'A generally dry period is favored over the next day.')+(tempPhrase?' The next overnight low is forecast in the '+tempPhrase+'.':'');
    }
    await renderEvolution(d,records,hourly);
    title.textContent=headline;detail.textContent=story;
