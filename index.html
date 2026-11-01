@@ -1266,12 +1266,33 @@ if(shownRainChance!==null){
     else if(modelWetSignal) condition=['⛅','Partly cloudy'];
   }
 }
+// Today's icon describes the hours still ahead, not overnight rain already observed.
+// Require at least two model feeds with usable remaining-hour coverage; otherwise
+// retain the published full-day forecast rather than implying unwarranted certainty.
+if(date===today){
+ const nowHour=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',hourCycle:'h23'}).format(new Date()));
+ const startHour=Math.max(0,nowHour);
+ const remaining=Object.values(hourlyModels).map(days=>(days[date]||[]).filter(h=>h.hour>=startHour&&h.hour<=23&&Number.isFinite(Number(h.rain))&&Number.isFinite(h.cloud))).filter(hours=>hours.length>=Math.min(4,24-startHour));
+ if(remaining.length>=2){
+   const wetVotes=remaining.filter(hours=>hours.some(h=>Number(h.rain)>=0.15)).length;
+   const wetFraction=wetVotes/remaining.length;
+   const clouds=remaining.flat().filter(h=>h.hour>=Math.max(startHour,8)&&h.hour<=18);
+   const sky=skyCondition(clouds);
+   if(wetFraction<0.34){
+     condition=sky[0]?sky:['⛅','Partly cloudy'];
+   }else if(wetFraction<0.67){
+     condition=['🌦️','Chance of showers'];
+   }else{
+     condition=['🌧️','Showers likely'];
+   }
+ }
+}
 // Persistent daytime fog uses the cloud icon. Wind gets its own icon when
 // daily maximum sustained wind reaches 20 mph or gusts reach 30 mph.
 // Significant rain takes precedence over wind; never suppress rain probabilities.
 const wind=dailyWind[date];
 const isWindy=wind&&(wind.sustained>=20||wind.gust>=30);
-const significantRain=shownRainChance!==null&&shownRainChance>=30;
+const significantRain=/rain|shower|drizzle/i.test(condition[1]);
 if(!significantRain&&!/thunder|storm|snow|sleet|heavy rain/i.test(condition[1])){
  if(isWindy)condition=['💨','Windy'];
  else if(dailyFog[date])condition=['☁️','Foggy'];
