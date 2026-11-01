@@ -243,6 +243,9 @@ assert len(conditions) == len(dates)
 assert all(v["icon"] and v["label"] for v in conditions.values())
 
 forecast_dates = dates[:10]
+# Keep the forecast anchored to the Pacific local day; publication validation
+# rejects any missing or shifted day before updating the live site.
+assert len(forecast_dates) == 10 and forecast_dates[0] == datetime.now(ZoneInfo(TZ)).date().isoformat()
 Path("moraga_forecast_10day.json").write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
     "dates": forecast_dates, "temperature_models": {name: {**temperature_results[model], "dates": temperature_results[model]["dates"][:10], "high_f": temperature_results[model]["high_f"][:10], "low_f": temperature_results[model]["low_f"][:10]} for name, url, model in SOURCES if model in temperature_results},
