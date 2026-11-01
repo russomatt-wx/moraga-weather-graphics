@@ -54,7 +54,7 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 #ten-day .forecast-detail{margin-top:2px!important}
 @media(max-width:760px){#ten-day .day-forecast{padding:9px 2px 7px!important}#ten-day .day-condition{min-height:52px!important}#ten-day .day-pop{font-size:10px;min-height:29px}#ten-day .day-pop .rain-amount{font-size:9px}}
 
-.pressure-inline{display:flex;align-items:baseline;justify-content:center;gap:5px;flex-wrap:wrap}#live-pressure-trend{display:inline;font-size:10px;font-weight:600;color:#a8bdcc;white-space:nowrap}
+.pressure-inline{display:flex;align-items:baseline;justify-content:center;gap:5px;flex-wrap:wrap}#live-pressure-trend{display:inline;font-size:14px;font-weight:750;color:#a8d9e6;white-space:nowrap}
 /* Full-width current conditions, separate from the archived daily extremes */
 #station-live-observation{width:100%;box-sizing:border-box;padding:15px 18px 16px;margin-bottom:8px;border-radius:16px;border:3px solid var(--live-temp-color,#1cb5b8)!important;background:linear-gradient(180deg,color-mix(in srgb,var(--live-temp-color,#1cb5b8) 28%,#142330),color-mix(in srgb,var(--live-temp-color,#1cb5b8) 13%,#10202d) 48%,color-mix(in srgb,var(--live-temp-color,#1cb5b8) 25%,#0b1722))!important;transition:background .6s ease,border-color .6s ease}
 #station-live-observation[hidden]{display:none!important}
@@ -66,7 +66,7 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 .live-temp-group{display:flex;align-items:center;gap:10px;min-width:0}#live-yesterday{display:flex;flex-direction:column;gap:2px;white-space:nowrap}#live-yesterday[hidden]{display:none}#live-yesterday-delta{font-size:clamp(13px,3.6vw,19px);font-weight:750;color:#e8f4fc}#live-yesterday small{font-size:10px;color:#b8cbd9}
 .live-main{display:flex;align-items:center;gap:22px;margin-top:9px}
 #live-temp{font-size:clamp(42px,8.5vw,64px);font-weight:750;letter-spacing:-.06em;line-height:1;color:#edf7ff}
-#live-temp .temp-decimal{font-size:.48em;letter-spacing:-.035em;vertical-align:baseline}
+#live-temp .temp-decimal{font-size:.48em;letter-spacing:-.035em;vertical-align:baseline}#live-temp .temp-degree{display:inline-block;font-size:.56em;vertical-align:top;transform:translateY(.09em);letter-spacing:0}
 .live-details{display:flex;flex-direction:column;gap:7px;font-size:clamp(13px,3.5vw,16px);color:#c2d4e3;line-height:1.35}
 .live-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border-top:1px solid #35546c;margin-top:12px;padding-top:11px;text-align:center}.live-metrics>div{min-width:0;display:flex;flex-direction:column;gap:5px}.live-metrics span{font-size:11px;color:#a6bdcf}.live-metrics strong{font-size:clamp(13px,3.4vw,17px);color:#edf7ff;font-weight:650;white-space:nowrap}
 @media(max-width:390px){#station-live-observation{padding:16px}.live-main{gap:18px}.live-topline{font-size:10px}}
@@ -581,7 +581,7 @@ main>section>.intro .kicker{margin-bottom:6px}
 <h1>Moraga Weather Observatory</h1>
 <p class="station-id">KCAMORAG71 · Moraga, California</p><p>Local observations · Forecast guidance · Pacific patterns</p></header>
 <main><nav aria-label="Weather dashboard sections"><a href="#observations">Now</a><a href="#forecast">Forecast</a><a href="#marine">Marine</a><a href="#rainfall">Rain</a><a href="#satellite">Satellite</a><a href="#cpc-outlook">Extended &amp; CPC</a><a href="#westcoast">Pacific</a><a href="#accuracy">Model skill</a><a href="#chatgpt-accuracy">Briefing skill</a><a href="#climate">Climate</a></nav>
- <section id="observations"><div class="intro"><div class="kicker">01 / Today in Moraga</div><h2>Moraga right now</h2><p>KCAMORAG71 · Observed daily high, low and rainfall.</p></div><div class="card" style="padding:22px"><div id="station-today" aria-live="polite" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;text-align:center"><div><div style="color:#9fb8cc">High</div><strong style="font-size:clamp(24px,6vw,42px);color:#f0a65e">—</strong></div><div><div style="color:#9fb8cc">Low</div><strong style="font-size:clamp(24px,6vw,42px);color:#75bde8">—</strong></div><div><div style="color:#9fb8cc">Rain</div><strong style="font-size:clamp(24px,6vw,42px);color:#7ed1db">0.00 in</strong></div></div><p id="station-today-status" hidden>Last updated: awaiting observations</p></div></section>
+ <section id="observations"><div class="intro"><div class="kicker">01 / Today in Moraga</div><h2>Moraga right now</h2><p>KCAMORAG71 · Observed daily high, low and rainfall.</p></div><div class="card" style="padding:14px"><div id="station-today" aria-live="polite" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;text-align:center"><div><div style="color:#9fb8cc">High</div><strong style="font-size:clamp(24px,6vw,42px);color:#f0a65e">—</strong></div><div><div style="color:#9fb8cc">Low</div><strong style="font-size:clamp(24px,6vw,42px);color:#75bde8">—</strong></div><div><div style="color:#9fb8cc">Rain</div><strong style="font-size:clamp(24px,6vw,42px);color:#7ed1db">0.00 in</strong></div></div><p id="station-today-status" hidden>Last updated: awaiting observations</p></div></section>
  <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Daily temperatures and model guidance.</p></div><div class="focus-grid"><article class="card" id="ten-day"><h3>Rolling 10-day forecast</h3><p>Moraga daily outlook</p><p id="ten-day-updated" class="day-date"></p><div id="ten-day-results" aria-live="polite"><p>Loading daily forecast…</p></div><details class="method-note"><summary>How this forecast is made</summary><p>Temperatures blend models using recent verified skill and local bias adjustments. Rain icons require at least 20% ensemble-derived rain probability; model-mean rainfall amounts are shown on cards when rain chance reaches 20%, and the full model comparison remains in the rainfall section. Forecast weighting is provisional while the verification archive grows. Tap “Model range” for daily details.</p></details></article><article class="card"><h3>Temperature guidance</h3><a href="moraga_model_temperatures.png?v=20261017-045442-typography"><div class="chart-viewport" role="region" aria-label="Weather chart"><img loading="lazy" id="temperature-guidance-image" src="moraga_model_temperatures.png?v=20261017-045442-typography" alt="Individual temperature model comparison" onerror="this.style.visibility='hidden';this.closest('.chart-viewport').style.minHeight='280px'"></div></a></article>
 <article class="card"><h3>Ensemble spread</h3><a href="moraga_ensemble_spread.png?v=20261017-045442-typography"><div class="chart-viewport" role="region" aria-label="Weather chart"><img loading="lazy" id="ensemble-guidance-image" src="moraga_ensemble_spread.png?v=20261017-045442-typography" alt="GEFS and EPS ensemble temperature spread" onerror="this.style.visibility='hidden';this.closest('.chart-viewport').style.minHeight='280px'"></div></a></article>
 </div></section>
@@ -1524,7 +1524,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      if(!Number.isFinite(t.getTime())||Date.now()-t.getTime()>30*60000||t.getTime()>Date.now()+60000)throw Error('Observation is not recent');
      const num=(n,unit='',digits=0)=>Number.isFinite(n)?n.toFixed(digits)+unit:'—';
      const when=t.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'});
-     if(Number.isFinite(d.temperature_f)){const parts=d.temperature_f.toFixed(1).split('.');live.querySelector('#live-temp').innerHTML=parts[0]+'<span class="temp-decimal">.'+parts[1]+'</span>°';}else live.querySelector('#live-temp').textContent='—';
+     if(Number.isFinite(d.temperature_f)){const parts=d.temperature_f.toFixed(1).split('.');live.querySelector('#live-temp').innerHTML=parts[0]+'<span class="temp-decimal">.'+parts[1]+'</span><span class="temp-degree">°</span>';}else live.querySelector('#live-temp').textContent='—';
      // Only show a same-time comparison when the live service supplies a
      // verified prior-day reading and its timestamp.
      const compare=live.querySelector('#live-yesterday');
@@ -1562,7 +1562,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      }
      live.querySelector('#live-humidity').textContent='Humidity '+num(d.humidity_pct,'%');
      const direction=Number.isFinite(d.wind_direction_deg)?['N','NE','E','SE','S','SW','W','NW'][Math.round(((d.wind_direction_deg%360)+360)%360/45)%8]:(typeof d.wind_direction==='string'&&/^(N|NNE|NE|ENE|E|ESE|SE|SSE|S|SSW|SW|WSW|W|WNW|NW|NNW)$/i.test(d.wind_direction)?d.wind_direction.toUpperCase():'');
-     live.querySelector('#live-wind').textContent='Wind '+(direction?direction+' · ':'')+num(d.wind_mph,' mph');
+     live.querySelector('#live-wind').textContent=Number.isFinite(d.wind_mph)&&d.wind_mph<1?'Wind Calm':'Wind '+(direction?direction+' ':'')+num(d.wind_mph,' mph');
      live.querySelector('#live-dew').textContent=num(d.dew_point_f,'°');
      live.querySelector('#live-pressure').textContent=num(d.pressure_inhg,' inHg',2);
      // A single live pressure value has no trend. Compare with a verified
@@ -1579,13 +1579,12 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
        const previous=[...history].reverse().find(p=>p.t<=t.getTime()-30*60000);
        if(previous){
          const change=d.pressure_inhg-previous.v;
-         const hours=Math.round((t.getTime()-previous.t)/3600000*10)/10;
          const label=Math.abs(change)<0.01?'→':change>0?'↑':'↓';
          trendEl.textContent=label;
        }else trendEl.textContent='';
      }else trendEl.textContent='';
      const gustDirection=Number.isFinite(d.wind_gust_direction_deg)?['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'][Math.round((((d.wind_gust_direction_deg%360)+360)%360)/22.5)%16]:(typeof d.wind_gust_direction==='string'&&/^(N|NNE|NE|ENE|E|ESE|SE|SSE|S|SSW|SW|WSW|W|WNW|NW|NNW)$/i.test(d.wind_gust_direction)?d.wind_gust_direction.toUpperCase():'');
-     live.querySelector('#live-gust').textContent=(gustDirection||direction?(gustDirection||direction)+' · ':'')+num(d.wind_gust_mph,' mph');
+     live.querySelector('#live-gust').textContent=Number.isFinite(d.wind_gust_mph)&&d.wind_gust_mph<1?'Calm':(gustDirection||direction?(gustDirection||direction)+' ':'')+num(d.wind_gust_mph,' mph');
      live.querySelector('#live-observed-at').textContent=when+' PT';
      live.hidden=false;
    }catch(e){live.hidden=true;console.warn('Live station unavailable; historical summary retained',e.message)}
