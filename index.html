@@ -1743,14 +1743,14 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
   const expected=dayParts[2]+'-'+dayParts[0]+'-'+dayParts[1];
   if(d.date!==expected)throw Error('Waiting for today’s observations');
   const last=new Date(d.last_observation_utc);
-  if(!Number.isFinite(last.getTime()))throw Error('Invalid station observation timestamp');
-  const vals=[Number.isFinite(d.high_f)?Math.round(d.high_f)+'°':'—',Number.isFinite(d.low_f)?Math.round(d.low_f)+'°':'—',Number.isFinite(d.rainfall_in)?d.rainfall_in.toFixed(2)+' in':'0.00 in'];
+  if(!Number.isFinite(last.getTime())||Date.now()-last.getTime()>90*60000)throw Error('Daily summary is stale');
+  const vals=[Number.isFinite(d.high_f)?Math.round(d.high_f)+'°':'—',Number.isFinite(d.low_f)?Math.round(d.low_f)+'°':'—',Number.isFinite(d.rainfall_in)?d.rainfall_in.toFixed(2)+' in':'—'];
   root.querySelectorAll('strong').forEach((el,i)=>el.textContent=vals[i]);
   window.moragaDailySummary={day:expected,high:Number.isFinite(d.high_f)?d.high_f:null,low:Number.isFinite(d.low_f)?d.low_f:null};
   window.moragaApplyDailyExtrema?.();
   const ageMinutes=(Date.now()-last.getTime())/60000;
   status.textContent='Last updated: '+last.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'})+' PT';
- }catch(e){status.textContent='Last updated: unavailable';root.querySelectorAll('strong')[2].textContent='0.00 in'}
+ }catch(e){status.textContent='Last updated: unavailable';root.querySelectorAll('strong')[2].textContent='—'}
 })();
 </script>
 
@@ -1942,11 +1942,11 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      headline='The next 24 hours in Moraga';
      story='Checking the latest rain chances against the daily forecast.';
    }else if(nextRain){
-     headline=overnightRain?'Showers possible overnight':morningRain?'Morning showers possible':'A chance of passing showers';
-     const rainWindow=overnightRain&&morningRain?'overnight into the morning':overnightRain?'overnight':morningRain?'during the morning':afternoonRain?'this afternoon':'later today';
+     headline=overnightRain&&Number(localPart('hour'))<6?'Showers possible before sunrise':morningRain?'Showers possible this morning':overnightRain?'Showers possible early today':'A chance of passing showers';
+     const rainWindow=overnightRain&&morningRain?'through the morning':overnightRain?'before sunrise':morningRain?'this morning':afternoonRain?'this afternoon':'later today';
      const amountText=hrrrWetter?'HRRR: '+hrrrTotal.toFixed(2)+'″, wetter than other models.':maxModel===null?'Rainfall amounts remain uncertain.':maxModel<.015?'Little accumulation is expected.':maxModel<=.10?'Most guidance suggests under 0.10″.':maxModel<=.25?'Some locations could receive a few tenths of an inch.':'Rainfall amounts vary across models.';
-     const lowText=tempPhrase?' Temperatures should dip into the '+tempPhrase+'.':'';
-     story=(pop!==null?pop+'% rain chance ':'Rain possible ')+rainWindow+'. '+amountText+(tempPhrase?' Low near '+Math.round(Number(low))+'°F.':'');
+     
+     story=(pop!==null?pop+'% rain chance ':'Rain possible ')+rainWindow+'. '+amountText;
    }else if(upcoming.length<4){
      headline='The next 24 hours in Moraga';
      story='Hourly guidance is limited right now; check back for a more detailed forecast.';
