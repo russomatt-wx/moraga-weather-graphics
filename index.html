@@ -1824,7 +1824,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
     story='Several forecast models hint at light showers '+period+', with only a few hundredths of an inch indicated. ';
     if(wet){
       const mean=Number.isFinite(wet.eps)&&Number.isFinite(wet.gefs)?(wet.eps+wet.gefs)/2:null;
-      story+=fmtDate(wet.date)+' offers another '+Math.round(wet.pop)+'% rain chance'+(mean!==null?' and roughly '+(mean<.025?'a trace':mean<.15?'a tenth of an inch':'a few tenths')+' in ensemble-mean guidance':'')+'. Amounts remain uncertain.';
+      story+=fmtDate(wet.date)+' offers another '+(Math.round(wet.pop/10)*10)+'% rain chance'+(mean!==null?' and roughly '+(mean<.025?'a trace':mean<.15?'a tenth of an inch':'a few tenths')+' in ensemble-mean guidance':'')+'. Amounts remain uncertain.';
     }
    }else if(wet){
     headline=wet.pop>=60?'Rain could be on the way':'A chance of light rain ahead';
