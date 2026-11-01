@@ -643,7 +643,12 @@ body[data-atmosphere="hot"]{--atmo-tint:rgba(227,84,76,.13)}
 @media(max-width:420px){.ai-grid{gap:6px}.ai-metric{padding:8px 7px}.ai-metric small{font-size:9px}.ai-metric em{font-size:9px}.ai-spark{height:23px}}
 
 </style>
-</head>
+<style>
+/* Compact forecast intelligence replaces redundant sensor readouts. */
+#atmospheric-intelligence{margin-top:10px}
+#atmospheric-intelligence .ai-model{padding:10px 12px;background:rgba(7,22,35,.32)}
+#atmospheric-intelligence .ai-model p{font-size:11px;line-height:1.4;margin-top:3px}
+</style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
 <h1>Moraga Weather Observatory</h1>
@@ -1753,73 +1758,42 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 </script>
 
 <script>
-/* All displayed trends are timestamped readings from the existing live station feed.
-   This intentionally does not infer marine-layer status or manufacture model skill. */
+/* Compact intelligence: show only new information, never duplicate current conditions. */
 (function(){
- const today=document.getElementById('station-today');
- if(!today)return;
+ const today=document.getElementById('station-today');if(!today)return;
  const panel=document.createElement('div');panel.id='atmospheric-intelligence';
- panel.innerHTML='<div class="ai-eyebrow">Atmospheric intelligence · KCAMORAG71</div><div class="ai-grid">'+
- ['Temperature','Pressure','Humidity'].map((name,i)=>'<div class="ai-metric"><small>'+name+'</small><strong id="ai-value-'+i+'">Awaiting data</strong><em id="ai-change-'+i+'">Verified observations only</em><svg class="ai-spark" id="ai-chart-'+i+'" viewBox="0 0 120 27" preserveAspectRatio="none" role="img" aria-label="'+name+' recent trend"><path class="ai-spark-base" d="M0 26H120"/><path class="ai-spark-line" d=""/></svg></div>').join('')+
- '</div><div class="ai-model" id="ai-model" data-level="unknown"><div class="ai-model-top"><strong>Model agreement · next 3 days</strong><span class="ai-level" id="ai-model-level">Checking guidance</span></div><p id="ai-model-detail">Comparing published ECMWF and GFS temperature forecasts.</p></div>';
+ panel.innerHTML='<div class="ai-model" id="ai-model" data-level="unknown"><div class="ai-model-top"><strong>Forecast model signal</strong><span class="ai-level" id="ai-model-level">Checking</span></div><p id="ai-model-detail">Comparing ECMWF and GFS guidance.</p></div>';
  today.insertAdjacentElement('afterend',panel);
- const key='moraga-verified-sensor-history-v1';
- let history=[];try{const a=JSON.parse(localStorage.getItem(key)||'[]');if(Array.isArray(a))history=a}catch(e){}
- const fields=['temperature_f','pressure_inhg','humidity_pct'];
- function draw(){
-  for(let i=0;i<3;i++){
-   const pts=history.filter(x=>Number.isFinite(x[fields[i]])).slice(-80);
-   const el=document.getElementById('ai-chart-'+i).querySelector('.ai-spark-line');
-   if(pts.length<2){el.setAttribute('d','');continue}
-   const min=Math.min(...pts.map(p=>p[fields[i]])),max=Math.max(...pts.map(p=>p[fields[i]])),range=Math.max(max-min,.1);
-   const first=pts[0].t,last=pts[pts.length-1].t,dt=Math.max(1,last-first);
-   el.setAttribute('d',pts.map((p,j)=>(j?'L':'M')+(2+116*(p.t-first)/dt).toFixed(1)+' '+(23-19*(p[fields[i]]-min)/range).toFixed(1)).join(' '));
-  }
- }
  window.addEventListener('moraga:live-observation',event=>{
-  const d=event.detail,t=Date.parse(d.observed_utc);
-  if(!Number.isFinite(t)||Math.abs(Date.now()-t)>30*60000)return;
-  const obs={t};for(const f of fields)if(Number.isFinite(d[f]))obs[f]=d[f];
-  history=history.filter(p=>p&&Number.isFinite(p.t)&&p.t>=t-3*3600000&&p.t<=t);
-  if(!history.some(p=>p.t===t))history.push(obs);
-  history.sort((a,b)=>a.t-b.t);history=history.slice(-180);
-  try{localStorage.setItem(key,JSON.stringify(history))}catch(e){}
-  const units=['°F',' inHg','%'],digits=[1,2,0];
-  fields.forEach((f,i)=>{
-   const v=d[f],el=document.getElementById('ai-value-'+i),trend=document.getElementById('ai-change-'+i);
-   el.textContent=Number.isFinite(v)?v.toFixed(digits[i])+units[i]:'Unavailable';
-   const previous=history.filter(p=>Number.isFinite(p[f])&&p.t<=t-30*60000).pop();
-   if(previous&&Number.isFinite(v)){
-    const delta=v-previous[f],threshold=[.5,.015,1][i];
-    trend.textContent=(Math.abs(delta)<threshold?'→ Steady':delta>0?'↗ Rising':'↘ Falling')+' · ≥30 min';
-   }else trend.textContent='Collecting 3h history';
-  });
-  if(Number.isFinite(d.temperature_f))document.body.dataset.atmosphere=d.temperature_f<55?'cool':d.temperature_f<72?'mild':d.temperature_f<88?'warm':'hot';
-  draw();
+  const temp=event.detail?.temperature_f;
+  if(Number.isFinite(temp))document.body.dataset.atmosphere=temp<55?'cool':temp<72?'mild':temp<88?'warm':'hot';
  });
  async function modelAgreement(){
   const root=document.getElementById('ai-model'),level=document.getElementById('ai-model-level'),detail=document.getElementById('ai-model-detail');
   try{
-   const response=await fetch('moraga_forecast_10day.json?intelligence='+Date.now(),{cache:'no-store'});
-   if(!response.ok)throw Error('Forecast file unavailable');
-   const data=await response.json(),issued=Date.parse(data.generated_utc);
-   if(!Number.isFinite(issued)||Date.now()-issued>36*3600000||issued>Date.now()+3600000)throw Error('Model guidance is stale');
+   const r=await fetch('moraga_forecast_10day.json?signal='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('Guidance unavailable');
+   const data=await r.json(),issued=Date.parse(data.generated_utc);
+   if(!Number.isFinite(issued)||Math.abs(Date.now()-issued)>36*3600000)throw Error('Guidance stale');
    const a=data.temperature_models?.ECMWF,b=data.temperature_models?.GFS;
-   if(!a||!b||!Array.isArray(a.high_f)||!Array.isArray(b.high_f))throw Error('Both model series required');
-   const dateNow=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
-   const dates=data.dates||a.dates||[];
-   const indices=dates.map((date,i)=>date>dateNow?i:-1).filter(i=>i>=0).slice(0,3);
-   const differences=indices.map(i=>{
-    const ah=a.high_f[i],bh=b.high_f[i],al=a.low_f?.[i],bl=b.low_f?.[i];
-    return [ah,bh,al,bl].every(Number.isFinite)?Math.max(Math.abs(ah-bh),Math.abs(al-bl)):null;
-   }).filter(Number.isFinite);
-   if(differences.length<2)throw Error('Insufficient comparable future days');
-   const mean=differences.reduce((x,y)=>x+y,0)/differences.length;
-   const tier=mean<=3?'high':mean<=6?'moderate':'low';
+   if(!a||!b)throw Error('Both models required');
+   const todayKey=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+   const days=(data.dates||a.dates||[]).map((date,i)=>({date,i})).filter(x=>x.date>todayKey).slice(0,3);
+   const comparisons=days.map(({date,i})=>{
+    const highs=[a.high_f?.[i],b.high_f?.[i]],lows=[a.low_f?.[i],b.low_f?.[i]];
+    if(![...highs,...lows].every(Number.isFinite))return null;
+    const highDiff=highs[0]-highs[1],lowDiff=lows[0]-lows[1];
+    return {date,highDiff,lowDiff,largest:Math.max(Math.abs(highDiff),Math.abs(lowDiff)),type:Math.abs(highDiff)>=Math.abs(lowDiff)?'high':'low'};
+   }).filter(Boolean);
+   if(comparisons.length<2)throw Error('Not enough future model data');
+   const peak=comparisons.reduce((x,y)=>x.largest>=y.largest?x:y);
+   const avg=comparisons.reduce((sum,x)=>sum+x.largest,0)/comparisons.length;
+   const tier=avg<=3?'high':avg<=6?'moderate':'low';
    root.dataset.level=tier;
-   level.textContent=tier==='high'?'Close agreement':tier==='moderate'?'Some divergence':'Significant divergence';
-   detail.textContent='ECMWF vs GFS daily high/low differences: '+mean.toFixed(1)+'°F average maximum across '+differences.length+' upcoming days. Model agreement, not a calibrated forecast confidence or accuracy score.';
-  }catch(e){root.dataset.level='unknown';level.textContent='Not assessed';detail.textContent=e.message+'. No confidence estimate shown.'}
+   level.textContent=tier==='high'?'Models aligned':tier==='moderate'?'Some divergence':'Models diverging';
+   const model=(peak.type==='high'?peak.highDiff:peak.lowDiff)>0?'ECMWF':'GFS';
+   const label=new Date(peak.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',timeZone:'America/Los_Angeles'});
+   detail.textContent='Biggest difference: '+label+' '+peak.type+' · '+model+' '+peak.largest.toFixed(1)+'°F warmer. Based on published ECMWF/GFS guidance; not a forecast accuracy score.';
+  }catch(e){root.dataset.level='unknown';level.textContent='Unavailable';detail.textContent=e.message+'. No model signal displayed.'}
  }
  modelAgreement();setInterval(modelAgreement,3*3600000);
 })();
