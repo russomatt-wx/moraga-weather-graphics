@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-01T14:14:33.740Z",
+  "generated_utc": "2026-11-01T14:19:03.633Z",
   "station": "KCAMORAG71",
   "days": {
     "2026-10-07": {
@@ -179,6 +179,11 @@
       "samples": 1415,
       "first_utc": "2026-10-31T07:00:00+00:00",
       "last_utc": "2026-11-01T06:59:00+00:00"
+    },
+    "2026-11-01": {
+      "daily_precipitation_in": 0.28,
+      "precipitation_source": "xweather_observations_summary",
+      "precipitation_as_of_utc": "2026-11-01T14:17:39.792032+00:00"
     }
   },
   "months": {
