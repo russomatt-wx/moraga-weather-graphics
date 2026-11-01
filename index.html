@@ -1811,6 +1811,47 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  const panel=document.createElement('div');panel.id='atmospheric-intelligence';
  panel.innerHTML='<div class="ai-model" id="ai-model" data-level="unknown"><div class="ai-model-top"><strong id="ai-story-title">The Moraga weather story</strong><span class="ai-level" id="ai-model-level">Forecast outlook</span></div><p id="ai-model-detail">Reading the latest forecast guidance…</p></div>';
  today.insertAdjacentElement('afterend',panel);
+ const evolution=document.createElement('div');evolution.id='forecast-evolution';
+ evolution.style.cssText='margin-top:10px;padding:14px 16px;border:1px solid rgba(125,190,207,.30);border-radius:13px;background:rgba(13,34,49,.52);color:inherit';
+ evolution.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><strong style="font-size:14px;letter-spacing:.02em">What\'s changed?</strong><span id="forecast-evolution-time" style="font-size:11px;opacity:.7"></span></div><p id="forecast-evolution-detail" style="margin:8px 0 0;font-size:14px;line-height:1.55">Establishing a forecast baseline…</p>';
+ panel.insertAdjacentElement('afterend',evolution);
+ const snapshotKey='moraga-forecast-evolution-v1';
+ const renderEvolution=(d,records,hourly)=>{
+   const note=document.getElementById('forecast-evolution-detail'),stamp=document.getElementById('forecast-evolution-time');
+   if(!note||!stamp)return;
+   const issued=Date.parse(d.generated_utc);
+   const days=(d.dates||[]).filter(x=>x>=dateKey()).slice(0,3);
+   const models=d.temperature_models||{},amounts=d.model_daily_inches||{};
+   const current={issued:d.generated_utc,days:{}};
+   for(const day of days){
+     const i=d.dates.indexOf(day),highs=Object.values(models).map(m=>m.high_f?.[i]).filter(Number.isFinite),lows=Object.values(models).map(m=>m.low_f?.[i]).filter(Number.isFinite);
+     const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+     const dailyAmounts=['ECMWF','GFS','EPS mean','GEFS mean'].map(k=>amounts[k]?.[i]).filter(Number.isFinite);
+     const probability=Number(d.ensemble_rain_probability_pct?.[day]);
+     current.days[day]={high:mean(highs),low:mean(lows),rain:mean(dailyAmounts),pop:Number.isFinite(probability)?probability:null};
+   }
+   let history=[];
+   try{history=JSON.parse(localStorage.getItem(snapshotKey)||'[]');if(!Array.isArray(history))history=[]}catch(_){}
+   history=history.filter(x=>x&&Number.isFinite(Date.parse(x.issued))&&x.days&&Date.parse(x.issued)<=issued).sort((a,b)=>Date.parse(a.issued)-Date.parse(b.issued));
+   const prior=history.filter(x=>Date.parse(x.issued)<issued).slice(-1)[0];
+   if(prior){
+     const changes=[];
+     for(const day of days){
+       const a=prior.days[day],b=current.days[day];if(!a||!b)continue;
+       const when=day===dateKey()?'today':new Date(day+'T12:00:00').toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'long'});
+       if(Number.isFinite(a.pop)&&Number.isFinite(b.pop)&&Math.abs(b.pop-a.pop)>=15)changes.push(when+' rain probability '+(b.pop>a.pop?'rose':'fell')+' from '+Math.round(a.pop)+'% to '+Math.round(b.pop)+'%');
+       if(Number.isFinite(a.rain)&&Number.isFinite(b.rain)&&Math.abs(b.rain-a.rain)>=.10)changes.push(when+' model-average rainfall '+(b.rain>a.rain?'increased':'decreased')+' from '+a.rain.toFixed(2)+'″ to '+b.rain.toFixed(2)+'″');
+       if(Number.isFinite(a.high)&&Number.isFinite(b.high)&&Math.abs(b.high-a.high)>=3)changes.push(when+' high shifted '+Math.round(b.high-a.high)+'°F');
+       if(Number.isFinite(a.low)&&Number.isFinite(b.low)&&Math.abs(b.low-a.low)>=3)changes.push(when+' low shifted '+Math.round(b.low-a.low)+'°F');
+     }
+     note.textContent=changes.length?changes.slice(0,2).join('. ')+'. '+(changes.some(x=>x.includes('rain'))?'This may change the timing or likelihood of wet conditions; check the latest hourly outlook.':'Plan for the revised temperatures.'):'Forecast remains broadly on track. No meaningful changes in rain or temperature guidance since the previous published update.';
+     stamp.textContent='Compared with '+new Date(prior.issued).toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+   }else{
+     note.textContent='Tracking forecast changes from this visit onward. A comparison will appear when a newer forecast is published.';
+     stamp.textContent='Baseline established';
+   }
+   if(!history.some(x=>x.issued===current.issued)){history.push(current);try{localStorage.setItem(snapshotKey,JSON.stringify(history.slice(-20)))}catch(_){}}
+ };
  window.addEventListener('moraga:live-observation',e=>{
   const t=e.detail?.temperature_f;
   if(Number.isFinite(t))document.body.dataset.atmosphere=t<55?'cool':t<72?'mild':t<88?'warm':'hot';
@@ -1909,6 +1950,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      headline=avgCloud!==null&&avgCloud>=65?'Clouds take center stage':'A quieter stretch of Moraga weather';
      story=(avgCloud!==null&&avgCloud>=65?'Expect plenty of clouds over the next day.':'No organized showers stand out in the hourly guidance.')+(tempPhrase?' Overnight lows should settle into the '+tempPhrase+'.':'');
    }
+   renderEvolution(d,records,hourly);
    title.textContent=headline;detail.textContent=story;
    tag.textContent='Next 24 hours';root.dataset.level='high';
   }catch(e){title.textContent='The Moraga weather story';tag.textContent='Awaiting guidance';detail.textContent='Fresh verified forecast guidance is needed before publishing a weather narrative.';root.dataset.level='unknown'}
