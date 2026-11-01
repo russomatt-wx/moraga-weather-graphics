@@ -1857,19 +1857,20 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    if(!sharedRain){headline='Forecast update in progress';story='Checking rain chances against the 10-day forecast.';}
    else if(nextRain){
     const h=Number(nextRain.time.slice(11,13)),day=nextRain.time.slice(0,10);
-    const period=h<6?'overnight':h<12?'morning':h<17?'afternoon':'evening';
-    headline='Light showers could affect your plans';
-    story=fmtDate(day)+' '+period+': '+chance(day)+'% chance of rain. Hourly models suggest only light amounts.';
+    const period=h<6?'overnight':h<12?'early morning':h<17?'afternoon':'evening';
+    const when=day===dateKey()?'Tonight':fmtDate(day);
+    headline=h<12?'A little rain may arrive before sunrise':'A fresh chance for Moraga showers';
+    story=when+' '+period+': '+chance(day)+'% chance of light rain. Spotty showers are more likely than a widespread soaking.';
     const later=records.find(x=>x.date>day&&chance(x.date)>=20);
-    if(later)story+=' '+fmtDate(later.date)+': '+chance(later.date)+'% rain chance.';
+    if(later){
+      const amounts=[later.eps,later.gefs].filter(Number.isFinite);
+      const mean=amounts.length===2?(amounts[0]+amounts[1])/2:null;
+      story+=' '+fmtDate(later.date)+' offers another '+chance(later.date)+'% chance'+(mean!==null&&mean>=.025?', with around '+(mean<.15?'a tenth':'a few tenths')+' of an inch possible':'')+'.';
+    }
    }else if(wet){
-    headline='A chance of rain ahead';
-    const eps=wet.eps,gefs=wet.gefs;
-    story=fmtDate(wet.date)+': '+chance(wet.date)+'% chance of rain. ';
-    if(Number.isFinite(eps)&&Number.isFinite(gefs)){
-      const mean=(eps+gefs)/2;
-      story+='Models differ on totals, but '+(mean<.025?'a few hundredths':mean<.15?'around a tenth of an inch':'a few tenths of an inch')+' is the current ensemble-mean signal.';
-    }else story+='Rainfall amounts remain uncertain.';
+    const eps=wet.eps,gefs=wet.gefs,mean=Number.isFinite(eps)&&Number.isFinite(gefs)?(eps+gefs)/2:null;
+    headline=chance(wet.date)>=60?'Rain is gathering momentum':'A new opening for rain';
+    story=fmtDate(wet.date)+' brings a '+chance(wet.date)+'% chance of showers'+(mean!==null?', with '+(mean<.025?'just a few hundredths':mean<.15?'around a tenth':'a few tenths')+' of an inch possible':'')+'. Timing and coverage remain uncertain.';
    }else if(warming!==null&&warming>=6){
     headline='A warmer chapter is on the horizon';
     story='The guidance points toward a noticeable warm-up over the next several days, with multi-model average highs rising roughly '+Math.round(warming)+'°F from '+fmtDate(first.date)+' to '+fmtDate(last.date)+'. A subtle shift that could change how the afternoons feel.';
