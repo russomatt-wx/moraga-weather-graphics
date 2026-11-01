@@ -58,6 +58,18 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 /* Full-width current conditions, separate from the archived daily extremes */
 #station-live-observation{width:100%;box-sizing:border-box;padding:15px 18px 16px;margin-bottom:8px;border-radius:16px;border:3px solid var(--live-temp-color,#1cb5b8)!important;background:linear-gradient(180deg,color-mix(in srgb,var(--live-temp-color,#1cb5b8) 28%,#142330),color-mix(in srgb,var(--live-temp-color,#1cb5b8) 13%,#10202d) 48%,color-mix(in srgb,var(--live-temp-color,#1cb5b8) 25%,#0b1722))!important;transition:background .6s ease,border-color .6s ease}
 #now .card:has(#station-live-observation){border:2px solid var(--live-temp-color,#1cb5b8)!important;transition:border-color .6s ease}
+
+/* Official NWS alerts occupy the narrow gap above the live conditions panel. */
+#moraga-alerts{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 9px;min-height:0}
+#moraga-alerts:empty{display:none}
+#moraga-alerts a{display:inline-flex;align-items:center;gap:5px;border-radius:7px;padding:5px 9px;font-size:11px;font-weight:800;line-height:1.25;text-decoration:none;border:1px solid currentColor;max-width:100%}
+#moraga-alerts a span{overflow-wrap:anywhere}
+#moraga-alerts .alert-warning{color:#ff8585;background:#6a1926}
+#moraga-alerts .alert-watch{color:#ffc17a;background:#593314}
+#moraga-alerts .alert-advisory{color:#ffe487;background:#574a15}
+#moraga-alerts .alert-statement{color:#a7d9ff;background:#18364e}
+#moraga-alerts .alert-error{color:#b5c5d4;background:#243343}
+
 #station-live-observation[hidden]{display:none!important}
 #station-today-status{display:none!important}
 #station-today{margin-bottom:0!important}
@@ -582,7 +594,7 @@ main>section>.intro .kicker{margin-bottom:6px}
 <h1>Moraga Weather Observatory</h1>
 <p class="station-id">KCAMORAG71 · Moraga, California</p><p>Local observations · Forecast guidance · Pacific patterns</p></header>
 <main><nav aria-label="Weather dashboard sections"><a href="#observations">Now</a><a href="#forecast">Forecast</a><a href="#marine">Marine</a><a href="#rainfall">Rain</a><a href="#satellite">Satellite</a><a href="#cpc-outlook">Extended &amp; CPC</a><a href="#westcoast">Pacific</a><a href="#accuracy">Model skill</a><a href="#chatgpt-accuracy">Briefing skill</a><a href="#climate">Climate</a></nav>
- <section id="observations"><div class="intro"><div class="kicker">01 / Today in Moraga</div><h2>Moraga right now</h2><p>KCAMORAG71 · Observed daily high, low and rainfall.</p></div><div class="card" style="padding:14px"><div id="station-today" aria-live="polite" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;text-align:center"><div><div style="color:#9fb8cc">High</div><strong style="font-size:clamp(24px,6vw,42px);color:#f0a65e">—</strong></div><div><div style="color:#9fb8cc">Low</div><strong style="font-size:clamp(24px,6vw,42px);color:#75bde8">—</strong></div><div><div style="color:#9fb8cc">Rain</div><strong style="font-size:clamp(24px,6vw,42px);color:#7ed1db">0.00 in</strong></div></div><p id="station-today-status" hidden>Last updated: awaiting observations</p></div></section>
+ <section id="observations"><div class="intro"><div class="kicker">01 / Today in Moraga</div><h2>Moraga right now</h2><p>KCAMORAG71 · Observed daily high, low and rainfall.</p></div><div class="card" style="padding:14px"><div id="moraga-alerts" aria-live="polite"></div><div id="station-today" aria-live="polite" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;text-align:center"><div><div style="color:#9fb8cc">High</div><strong style="font-size:clamp(24px,6vw,42px);color:#f0a65e">—</strong></div><div><div style="color:#9fb8cc">Low</div><strong style="font-size:clamp(24px,6vw,42px);color:#75bde8">—</strong></div><div><div style="color:#9fb8cc">Rain</div><strong style="font-size:clamp(24px,6vw,42px);color:#7ed1db">0.00 in</strong></div></div><p id="station-today-status" hidden>Last updated: awaiting observations</p></div></section>
  <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Daily temperatures and model guidance.</p></div><div class="focus-grid"><article class="card" id="ten-day"><h3>Rolling 10-day forecast</h3><p>Moraga daily outlook</p><p id="ten-day-updated" class="day-date"></p><div id="ten-day-results" aria-live="polite"><p>Loading daily forecast…</p></div><details class="method-note"><summary>How this forecast is made</summary><p>Temperatures blend models using recent verified skill and local bias adjustments. Rain icons require at least 20% ensemble-derived rain probability; model-mean rainfall amounts are shown on cards when rain chance reaches 20%, and the full model comparison remains in the rainfall section. Forecast weighting is provisional while the verification archive grows. Tap “Model range” for daily details.</p></details></article><article class="card"><h3>Temperature guidance</h3><a href="moraga_model_temperatures.png?v=20261017-045442-typography"><div class="chart-viewport" role="region" aria-label="Weather chart"><img loading="lazy" id="temperature-guidance-image" src="moraga_model_temperatures.png?v=20261017-045442-typography" alt="Individual temperature model comparison" onerror="this.style.visibility='hidden';this.closest('.chart-viewport').style.minHeight='280px'"></div></a></article>
 <article class="card"><h3>Ensemble spread</h3><a href="moraga_ensemble_spread.png?v=20261017-045442-typography"><div class="chart-viewport" role="region" aria-label="Weather chart"><img loading="lazy" id="ensemble-guidance-image" src="moraga_ensemble_spread.png?v=20261017-045442-typography" alt="GEFS and EPS ensemble temperature spread" onerror="this.style.visibility='hidden';this.closest('.chart-viewport').style.minHeight='280px'"></div></a></article>
 </div></section>
@@ -1633,6 +1645,51 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
   const ageMinutes=(Date.now()-last.getTime())/60000;
   status.textContent='Last updated: '+last.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'})+' PT';
  }catch(e){status.textContent='Last updated: unavailable';root.querySelectorAll('strong')[2].textContent='0.00 in'}
+})();
+</script>
+
+<script>
+(function(){
+ const root=document.getElementById('moraga-alerts');
+ if(!root)return;
+ const endpoint='https://api.weather.gov/alerts/active?point=37.8349,-122.1297';
+ const severityClass=f=>{
+   const event=String(f.properties?.event||'');
+   if(/warning/i.test(event)||f.properties?.severity==='Extreme'||f.properties?.severity==='Severe')return 'alert-warning';
+   if(/watch/i.test(event))return 'alert-watch';
+   if(/advisory/i.test(event))return 'alert-advisory';
+   return 'alert-statement';
+ };
+ async function refreshAlerts(){
+   try{
+     const response=await fetch(endpoint,{headers:{Accept:'application/geo+json'},cache:'no-store'});
+     if(!response.ok)throw Error('NWS alerts unavailable');
+     const data=await response.json();
+     const now=Date.now();
+     const features=(Array.isArray(data.features)?data.features:[]).filter(f=>{
+       const p=f.properties||{};
+       return p.status==='Actual' && p.messageType!=='Cancel' && (!p.expires||Date.parse(p.expires)>now) && (!p.onset||Date.parse(p.onset)<=now);
+     });
+     root.replaceChildren();
+     const order={'alert-warning':0,'alert-watch':1,'alert-advisory':2,'alert-statement':3};
+     features.sort((a,b)=>order[severityClass(a)]-order[severityClass(b)]);
+     for(const feature of features.slice(0,5)){
+       const p=feature.properties||{};
+       const link=document.createElement('a');
+       link.className=severityClass(feature);
+       link.textContent=p.event||'NWS Weather Alert';
+       const target=p['@id']||feature.id;
+       if(typeof target==='string'&&/^https:\/\/alerts\.weather\.gov\//.test(target))link.href=target;
+       else if(typeof target==='string'&&/^https:\/\/api\.weather\.gov\/alerts\//.test(target))link.href=target;
+       else link.href='https://www.weather.gov/';
+       link.target='_blank';link.rel='noopener noreferrer';
+       link.title=p.headline||p.event||'Read NWS alert';
+       root.appendChild(link);
+     }
+   }catch(e){console.warn('NWS alert check failed',e.message)}
+ }
+ refreshAlerts();
+ setInterval(refreshAlerts,5*60*1000);
 })();
 </script>
 </body></html>
