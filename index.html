@@ -59,16 +59,19 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 #station-live-observation{width:100%;box-sizing:border-box;padding:15px 18px 16px;margin-bottom:8px;border-radius:16px;border:3px solid var(--live-temp-color,#1cb5b8)!important;background:linear-gradient(180deg,color-mix(in srgb,var(--live-temp-color,#1cb5b8) 28%,#142330),color-mix(in srgb,var(--live-temp-color,#1cb5b8) 13%,#10202d) 48%,color-mix(in srgb,var(--live-temp-color,#1cb5b8) 25%,#0b1722))!important;transition:background .6s ease,border-color .6s ease}
 #now .card:has(#station-live-observation){border:2px solid var(--live-temp-color,#1cb5b8)!important;transition:border-color .6s ease}
 
-/* Official NWS alerts occupy the narrow gap above the live conditions panel. */
-#moraga-alerts{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 9px;min-height:0}
+/* Minimal, severity-coded official weather alerts between temperature borders. */
+#moraga-alerts{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:0 0 11px;min-height:0}
 #moraga-alerts:empty{display:none}
-#moraga-alerts a{display:inline-flex;align-items:center;gap:5px;border-radius:7px;padding:5px 9px;font-size:11px;font-weight:800;line-height:1.25;text-decoration:none;border:1px solid currentColor;max-width:100%}
-#moraga-alerts a span{overflow-wrap:anywhere}
-#moraga-alerts .alert-warning{color:#ff8585;background:#6a1926}
-#moraga-alerts .alert-watch{color:#ffc17a;background:#593314}
-#moraga-alerts .alert-advisory{color:#ffe487;background:#574a15}
-#moraga-alerts .alert-statement{color:#a7d9ff;background:#18364e}
-#moraga-alerts .alert-error{color:#b5c5d4;background:#243343}
+#moraga-alerts a{--alert-accent:#a7d9ff;display:inline-flex;align-items:center;gap:7px;min-height:29px;max-width:100%;box-sizing:border-box;padding:6px 10px;border:1px solid color-mix(in srgb,var(--alert-accent) 52%,transparent);border-left:3px solid var(--alert-accent);border-radius:9px;background:color-mix(in srgb,var(--alert-accent) 11%,#10202d);color:var(--alert-accent);text-decoration:none;font-size:11px;font-weight:750;letter-spacing:.012em;line-height:1.25;box-shadow:0 2px 8px #00000012;transition:background .18s ease,border-color .18s ease}
+#moraga-alerts a:hover,#moraga-alerts a:focus-visible{background:color-mix(in srgb,var(--alert-accent) 19%,#10202d);outline-offset:2px}
+#moraga-alerts .alert-icon{font-size:12px;line-height:1;flex:none}
+#moraga-alerts .alert-name{min-width:0;overflow-wrap:anywhere}
+#moraga-alerts .alert-chevron{font-size:15px;line-height:1;opacity:.7;margin-left:1px;flex:none}
+#moraga-alerts .alert-warning{--alert-accent:#ff797d}
+#moraga-alerts .alert-watch{--alert-accent:#ffb76c}
+#moraga-alerts .alert-advisory{--alert-accent:#f7dc76}
+#moraga-alerts .alert-statement{--alert-accent:#9bcfff}
+@media(max-width:420px){#moraga-alerts{gap:5px;margin-bottom:9px}#moraga-alerts a{font-size:10.5px;padding:6px 8px}}
 
 #station-live-observation[hidden]{display:none!important}
 #station-today-status{display:none!important}
@@ -1677,7 +1680,10 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
        const p=feature.properties||{};
        const link=document.createElement('a');
        link.className=severityClass(feature);
-       link.textContent=p.event||'NWS Weather Alert';
+       const symbol=document.createElement('span');symbol.className='alert-icon';symbol.textContent='⚠';
+       const name=document.createElement('span');name.className='alert-name';name.textContent=p.event||'NWS Weather Alert';
+       const chevron=document.createElement('span');chevron.className='alert-chevron';chevron.textContent='›';
+       link.append(symbol,name,chevron);
        const target=p['@id']||feature.id;
        if(typeof target==='string'&&/^https:\/\/alerts\.weather\.gov\//.test(target))link.href=target;
        else if(typeof target==='string'&&/^https:\/\/api\.weather\.gov\/alerts\//.test(target))link.href=target;
