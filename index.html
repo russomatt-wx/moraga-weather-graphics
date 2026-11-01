@@ -57,6 +57,7 @@ footer{border-top:1px solid #30455b;padding:22px;color:#93a9be;text-align:center
 .pressure-inline{display:flex;align-items:baseline;justify-content:center;gap:5px;flex-wrap:wrap}#live-pressure-trend{display:inline;font-size:14px;font-weight:750;color:#a8d9e6;white-space:nowrap}
 /* Full-width current conditions, separate from the archived daily extremes */
 #station-live-observation{width:100%;box-sizing:border-box;padding:15px 18px 16px;margin-bottom:8px;border-radius:16px;border:3px solid var(--live-temp-color,#1cb5b8)!important;background:linear-gradient(180deg,color-mix(in srgb,var(--live-temp-color,#1cb5b8) 28%,#142330),color-mix(in srgb,var(--live-temp-color,#1cb5b8) 13%,#10202d) 48%,color-mix(in srgb,var(--live-temp-color,#1cb5b8) 25%,#0b1722))!important;transition:background .6s ease,border-color .6s ease}
+#now .card:has(#station-live-observation){border:2px solid var(--live-temp-color,#1cb5b8)!important;transition:border-color .6s ease}
 #station-live-observation[hidden]{display:none!important}
 #station-today-status{display:none!important}
 #station-today{margin-bottom:0!important}
@@ -1545,6 +1546,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
        if(v<=20)rgb=stops[0][1];
        else for(let k=1;k<stops.length;k++)if(v<=stops[k][0]){const a=stops[k-1],b=stops[k],w=(v-a[0])/(b[0]-a[0]);rgb=a[1].map((x,i)=>Math.round(x+(b[1][i]-x)*w));break;}
        live.style.setProperty('--live-temp-color','rgb('+rgb.join(',')+')');
+       live.parentElement.style.setProperty('--live-temp-color','rgb('+rgb.join(',')+')');
      }
 
      // The daily summary is published less frequently than the live feed.
