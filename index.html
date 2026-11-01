@@ -591,6 +591,27 @@ main>section>.intro .kicker{margin-bottom:6px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
+<style>
+
+/* Observatory visual system: atmospheric depth without covering chart pixels. */
+:root{--obs-line:rgba(151,194,224,.21);--obs-glass:rgba(22,42,61,.88)}
+body{background:radial-gradient(ellipse 80% 35% at 82% 0%,rgba(37,104,135,.16),transparent 75%),linear-gradient(160deg,#11243a 0%,#0a1422 42%,#09131f 100%);background-attachment:fixed}
+header{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(120deg,rgba(18,48,70,.44),rgba(9,22,36,.12));border-bottom-color:var(--obs-line)}
+header::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.20;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 350'%3E%3Cg fill='none' stroke='%238ac3d4' stroke-width='1'%3E%3Cpath d='M-80 90C100 5 180 210 365 110S660 10 980 105'/%3E%3Cpath d='M-80 113C100 28 180 233 365 133S660 33 980 128'/%3E%3Cpath d='M-80 136C100 51 180 256 365 156S660 56 980 151'/%3E%3Cpath d='M-80 159C100 74 180 279 365 179S660 79 980 174'/%3E%3Cpath d='M-80 182C100 97 180 302 365 202S660 102 980 197'/%3E%3Cpath d='M-80 205C100 120 180 325 365 225S660 125 980 220'/%3E%3Cpath d='M-80 228C100 143 180 348 365 248S660 148 980 243'/%3E%3Cpath d='M-80 251C100 166 180 371 365 271S660 171 980 266'/%3E%3C/g%3E%3C/svg%3E");background-position:center;background-size:cover}
+main section>.intro{position:relative;padding-bottom:12px;border-bottom:1px solid rgba(151,194,224,.12)}
+main section>.intro::after{content:"";position:absolute;left:0;bottom:-1px;width:72px;height:1px;background:linear-gradient(90deg,rgba(105,211,223,.55),transparent)}
+main .card{background:linear-gradient(155deg,rgba(32,57,79,.83),rgba(18,34,51,.94) 52%,rgba(16,32,48,.94));border-color:var(--obs-line);box-shadow:inset 0 1px 0 rgba(198,230,250,.065),0 9px 25px rgba(0,7,17,.15);border-radius:18px}
+main .card:not(:has(#station-live-observation)):hover{border-color:rgba(151,194,224,.32)}
+/* Chart images retain their original backgrounds, dimensions and zoom behavior. */
+main .card:has(.chart-viewport){border-color:rgba(139,190,221,.26)}
+main .card .chart-viewport{border-radius:13px;overflow:hidden;background:rgba(8,21,34,.42);box-shadow:0 0 0 1px rgba(156,201,230,.13)}
+main .card .chart-viewport img{border-radius:12px}
+main .card .chart-meta,main .card p.chart-meta{color:#afc6d7;letter-spacing:.012em;font-variant-numeric:tabular-nums}
+main .card h3{letter-spacing:-.015em}
+@media(max-width:600px){header::before{opacity:.13}main .card{box-shadow:inset 0 1px 0 rgba(198,230,250,.06),0 5px 16px rgba(0,7,17,.12)}}
+@media(prefers-reduced-motion:reduce){main .card{transition:none}}
+
+</style>
 </head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
