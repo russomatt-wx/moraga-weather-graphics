@@ -1857,28 +1857,35 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    const nextRain=nearRain.length?nearRain[0]:null;
    
    let headline='',story='';
-   const rainWithin24=records.filter(x=>upcoming.some(t=>t.slice(0,10)===x.date)&&chance(x.date)>=20);
+   const nextDay=records.find(x=>x.date>dateKey())||records[0];
+   const low=nextDay?.low;
+   const tempPhrase=Number.isFinite(low)?(low>=45&&low<50?'upper 40s':low>=40&&low<45?'lower 40s':low>=50&&low<55?'lower 50s':'near '+Math.round(low)+'°F'):null;
+   const rainDays=[...new Set(nearRain.map(x=>x.time.slice(0,10)))];
+   const pops=rainDays.map(chance).filter(Number.isFinite);
+   const pop=pops.length?Math.max(...pops):null;
+   const hours=nearRain.map(x=>Number(x.time.slice(11,13)));
+   const overnightRain=hours.some(h=>h>=20||h<6);
+   const morningRain=hours.some(h=>h>=6&&h<12);
+   const afternoonRain=hours.some(h=>h>=12&&h<18);
+   const timing=overnightRain&&morningRain?'overnight into the morning':overnightRain?'overnight':morningRain?'during the morning':afternoonRain?'during the afternoon':'later in the day';
+   const forecastModels=Object.values(hourly).filter(m=>Array.isArray(m.time)&&Array.isArray(m.precipitation_mm));
+   const totals=forecastModels.map(m=>upcoming.reduce((sum,time)=>{const i=m.time.indexOf(time);return sum+(i>=0&&Number.isFinite(m.precipitation_mm[i])?Math.max(0,m.precipitation_mm[i]):0)},0)/25.4);
+   const maxModel=totals.length?Math.max(...totals):null;
+   const rainAmount=maxModel!==null?(maxModel<.015?'little accumulation expected':maxModel<=.10?'a tenth of an inch or less suggested by the models':maxModel<=.25?'light amounts, potentially a few tenths of an inch':'locally meaningful rainfall possible'):'uncertain rainfall amounts';
    if(!sharedRain){
-     headline='Checking the latest weather';story='Synchronizing the next 24 hours with the 10-day forecast.';
+     headline='The next 24 hours in Moraga';
+     story='Checking the latest rain chances against the daily forecast.';
    }else if(nextRain){
-     const h=Number(nextRain.time.slice(11,13)),day=nextRain.time.slice(0,10),pop=chance(day);
-     const period=h<6?'overnight':h<12?'in the morning':h<17?'in the afternoon':'in the evening';
-     headline=h<12?'A little rain may arrive before sunrise':pop>=60?'Showers may make their move':'A window for showers opens';
-     story=(day===dateKey()?'Today':fmtDate(day))+' '+period+': '+pop+'% chance of rain. '+(nextRain.total<.5?'Light, spotty showers are favored.':'Rain could interrupt outdoor plans.');
-   }else if(rainWithin24.length){
-     const wetDay=rainWithin24[0],pop=chance(wetDay.date);
-     headline='A chance of showers in the next 24 hours';
-     story=fmtDate(wetDay.date)+': '+pop+'% chance of rain, but hourly models disagree on timing. Check back for a clearer window.';
+     headline=overnightRain?'Spotty showers may slip into Moraga overnight':morningRain?'A few showers may greet the morning':'A passing chance of showers ahead';
+     story='Look for scattered light showers '+timing+(tempPhrase?', with temperatures in the '+tempPhrase:'')+'. '+(pop!==null?'Rain chances are around '+pop+'%, with ':'Expect ')+rainAmount+'.';
+   }else if(upcoming.length<4){
+     headline='The next 24 hours in Moraga';
+     story='Hourly guidance is limited right now; check back for a more detailed forecast.';
    }else{
-     const temps=upcoming.flatMap(time=>Object.values(hourly).map(m=>{const i=m.time?.indexOf(time);return i>=0?m.temperature_c?.[i]:null}).filter(Number.isFinite));
-     if(temps.length>=4){
-       const lo=Math.round(Math.min(...temps)*9/5+32),hi=Math.round(Math.max(...temps)*9/5+32);
-       headline=hi-lo>=12?'A big temperature swing is ahead':'Moraga’s next 24 hours';
-       story='Temperatures could range from around '+lo+'° to '+hi+'°F through tomorrow, with no significant rain signal in the hourly guidance.';
-     }else{
-       headline='Moraga’s next 24 hours';
-       story='No significant rain signal appears in the available hourly guidance. More detailed timing will follow with fresh model data.';
-     }
+     const cloud=upcoming.flatMap(time=>forecastModels.map(m=>{const i=m.time.indexOf(time);return i>=0?m.cloud_cover_pct?.[i]:null}).filter(Number.isFinite));
+     const avgCloud=cloud.length?cloud.reduce((a,b)=>a+b,0)/cloud.length:null;
+     headline=avgCloud!==null&&avgCloud>=65?'Clouds take center stage':'A quieter stretch of Moraga weather';
+     story=(avgCloud!==null&&avgCloud>=65?'Expect plenty of clouds over the next day.':'No organized showers stand out in the hourly guidance.')+(tempPhrase?' Overnight lows should settle into the '+tempPhrase+'.':'');
    }
    title.textContent=headline;detail.textContent=story;
    tag.textContent='Next 24 hours';root.dataset.level='high';
