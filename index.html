@@ -1642,6 +1642,16 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      if(!Number.isFinite(t.getTime())||Date.now()-t.getTime()>30*60000||t.getTime()>Date.now()+60000)throw Error('Observation is not recent');
      const num=(n,unit='',digits=0)=>Number.isFinite(n)?n.toFixed(digits)+unit:'—';
      window.dispatchEvent(new CustomEvent('moraga:live-observation',{detail:d}));
+     // Prefer the fresh station's same-day precipitation over an older published daily summary.
+     const observedDay=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(t);
+     const currentDay=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+     const stationRain=Number.isFinite(d.daily_precipitation_in)?d.daily_precipitation_in:Number.isFinite(d.precipitation_in)?d.precipitation_in:null;
+     if(observedDay===currentDay&&Number.isFinite(stationRain)&&stationRain>=0){
+       window.moragaLiveRain={day:observedDay,amount:stationRain,observed:t.getTime()};
+       const rainCell=document.querySelector('#station-today > div:nth-child(3) strong');
+       if(rainCell)rainCell.textContent=stationRain.toFixed(2)+' in';
+     }
+
      const when=t.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'});
      if(Number.isFinite(d.temperature_f)){const parts=d.temperature_f.toFixed(1).split('.');live.querySelector('#live-temp').innerHTML=parts[0]+'<span class="temp-decimal">.'+parts[1]+'</span><span class="temp-degree">°</span>';}else live.querySelector('#live-temp').textContent='—';
      // Only show a same-time comparison when the live service supplies a
@@ -1745,6 +1755,9 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
   const last=new Date(d.last_observation_utc);
   if(!Number.isFinite(last.getTime())||Date.now()-last.getTime()>90*60000)throw Error('Daily summary is stale');
   const vals=[Number.isFinite(d.high_f)?Math.round(d.high_f)+'°':'—',Number.isFinite(d.low_f)?Math.round(d.low_f)+'°':'—',Number.isFinite(d.rainfall_in)?d.rainfall_in.toFixed(2)+' in':'—'];
+  if(window.moragaLiveRain?.day===expected&&Number.isFinite(window.moragaLiveRain.amount)){
+    vals[2]=window.moragaLiveRain.amount.toFixed(2)+' in';
+  }
   root.querySelectorAll('strong').forEach((el,i)=>el.textContent=vals[i]);
   window.moragaDailySummary={day:expected,high:Number.isFinite(d.high_f)?d.high_f:null,low:Number.isFinite(d.low_f)?d.low_f:null};
   window.moragaApplyDailyExtrema?.();
