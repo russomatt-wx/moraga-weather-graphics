@@ -1034,6 +1034,33 @@ try{
 }catch(error){console.warn('NWS rain probability unavailable; Open-Meteo fallback',error)}
 window.moragaDailyRainChances={chances:dailyRainChance,source:rainChanceSource};window.dispatchEvent(new CustomEvent('moraga:daily-rain-chances',{detail:window.moragaDailyRainChances}));
 const models=Object.entries(data.temperature_models||{});
+let ensembleDays={};
+try{
+ const response=await fetch('moraga_extended_outlook.json?ts='+Date.now(),{cache:'no-store'});
+ if(response.ok){
+  const ensemble=await response.json();
+  const age=Date.now()-Date.parse(ensemble.generated_utc);
+  if(age>=0&&age<18*3600000){
+   ensembleDays=Object.fromEntries((ensemble.days||[]).map(d=>[d.date,d]));
+   for(const [key,label] of [['eps','EPS'],['gefs','GEFS']]){
+    models.push([label,{dates:Object.keys(ensembleDays),high_f:Object.values(ensembleDays).map(d=>d.models?.[key]?.temperature_f_median??null),low_f:Object.values(ensembleDays).map(d=>d.models?.[key]?.temperature_low_f_median??null)}]);
+   }
+  }
+ }
+}catch(error){console.warn('Ensemble temperature guidance unavailable',error)}
+// Blend deterministic skill weights with increasing ensemble influence by lead.
+const hybridWeights=(base,entries,lead)=>{
+ const available=entries.filter(([name,value])=>Number.isFinite(value)).map(([name])=>name);
+ const ens=available.filter(n=>n==='EPS'||n==='GEFS');
+ const det=available.filter(n=>n!=='EPS'&&n!=='GEFS');
+ if(!ens.length||!det.length)return base;
+ const share=lead<3?.15:lead<7?.40:.65;
+ const weights={};
+ const detTotal=det.reduce((sum,n)=>sum+(base[n]||0),0);
+ for(const n of det)weights[n]=(1-share)*(detTotal>0?(base[n]||0)/detTotal:1/det.length);
+ for(const n of ens)weights[n]=share/ens.length;
+ return weights;
+};
 
 // Wind and persistent fog are separate from cloud cover and rain probability.
 // Open-Meteo provides sustained 10-m wind and gust maxima in mph; hourly
@@ -1198,7 +1225,7 @@ const highEntries=models.map(([n,m])=>[n,m.high_f[m.dates.indexOf(date)]]);
 const lowEntries=models.map(([n,m])=>[n,m.low_f[m.dates.indexOf(date)]]);
 const highs=highEntries.map(([n,v])=>v).filter(finite),lows=lowEntries.map(([n,v])=>v).filter(finite);
 const names=[...new Set([...highEntries,...lowEntries].filter(([n,v])=>finite(v)).map(([n])=>n))];
-const wh=skillWeights(skill,i,'high',names),wl=skillWeights(skill,i,'low',names);
+const wh=hybridWeights(skillWeights(skill,i,'high',names),highEntries,i),wl=hybridWeights(skillWeights(skill,i,'low',names),lowEntries,i);
 const bh=localBias(skill,i,'high',names),bl=localBias(skill,i,'low',names);
 const correctedHighs=correctedEntries(highEntries,bh),correctedLows=correctedEntries(lowEntries,bl);
 const detailTable=(entries,bias,weights)=>{
