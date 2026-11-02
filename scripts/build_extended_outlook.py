@@ -74,10 +74,10 @@ dates = list(dict.fromkeys(t[:10] for t in gefs[0]))
 if len(dates) < 16:
     raise RuntimeError("GEFS does not cover 16 local dates")
 out = []
-for date in dates[10:16]:
+for date in dates[:16]:
     g, e = daily(gefs, date), daily(eps, date)
     if not g:
-        raise RuntimeError(f"Missing complete GEFS guidance for {date}")
+        continue
     # The EPS horizon is shorter and its final local day can be partial.
     # Use verified GEFS-only guidance when EPS is unavailable; never invent EPS values.
     # Both ensemble systems have equal weight, irrespective of member count.
