@@ -298,7 +298,10 @@ def daily_conditions(dates, results, hourly_results, ensemble_rain_probability):
                     icon, label = "☁️", "Overcast"
         elif icon not in ("🌧️", "🌦️"):
             icon, label = "🌦️", "Chance of showers"
-        output[day] = {"icon": icon, "label": label}
+        output[day] = {"icon": icon, "label": label,
+                       "morning_cloud_pct": round(morning_cloud) if morning_cloud is not None else None,
+                       "afternoon_cloud_pct": round(afternoon_cloud) if afternoon_cloud is not None else None,
+                       "cloud_model_count": len(by_name)}
     return output
 
 conditions = daily_conditions(dates, results, hourly_results, ensemble_rain_probability)
