@@ -74,7 +74,7 @@ dates = list(dict.fromkeys(t[:10] for t in gefs[0]))
 if len(dates) < 16:
     raise RuntimeError("GEFS does not cover 16 local dates")
 out = []
-for date in dates[:16]:
+for date in dates[10:16]:
     g, e = daily(gefs, date), daily(eps, date)
     if not g:
         continue
