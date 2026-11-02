@@ -1246,7 +1246,7 @@ const rains=Object.values(data.model_daily_inches||{}).map(a=>a[data.dates.index
 const guidance=data.rain_guidance?.[date];
 const rainMean=Number.isFinite(guidance?.expected_inches)?guidance.expected_inches:(rains.length?mean(rains):null);
 // Mean across available published models, not a probability-derived rainfall estimate.
-const rainAmountText=rainMean===null?'':(rainMean<0.005?'<0.01':rainMean.toFixed(2))+' in';
+const rainAmountText=rainMean===null||rainMean<0.01?'':rainMean.toFixed(2)+' in';
 // Hourly consensus timing is local Pacific time, not a daily all-day-rain label.
 const hourlyVotes=Object.values(hourlyModels).map(days=>(days[date]||[]).filter(h=>Number.isFinite(h.rain))).filter(hours=>hours.length>=18);
 const periods=[['overnight',0,5],['morning',6,11],['afternoon',12,17],['evening',18,23]];
