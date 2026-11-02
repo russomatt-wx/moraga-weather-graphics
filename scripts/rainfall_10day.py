@@ -120,6 +120,54 @@ try:
 except Exception as exc:
     ensemble_rain_probability = {}
     errors["ensemble_rain_probability"] = str(exc)
+# Ensemble member distributions: actual daily accumulation probabilities, not
+# probability of any single wet hour. Keep model families equally weighted.
+def ensemble_daily(model):
+    params={"latitude":LAT,"longitude":LON,"hourly":"precipitation",
+            "models":model,"timezone":TZ,"precipitation_unit":"inch",
+            "forecast_days":14}
+    url="https://ensemble-api.open-meteo.com/v1/ensemble?"+urllib.parse.urlencode(params)
+    req=urllib.request.Request(url,headers={"User-Agent":"MoragaWeatherGraphics/1.0"})
+    with urllib.request.urlopen(req,timeout=70) as response:
+        payload=json.load(response)
+    hourly=payload["hourly"]
+    keys=[k for k in hourly if k.startswith("precipitation_member")]
+    out={}
+    for day in dates:
+        ix=[i for i,t in enumerate(hourly["time"]) if t.startswith(day)]
+        if len(ix)<20:continue
+        totals=[]
+        for key in keys:
+            vals=hourly[key]
+            sample=[vals[i] for i in ix]
+            if len(sample)==len(ix) and all(isinstance(v,(float,int)) and math.isfinite(v) and v>=0 for v in sample):
+                totals.append(sum(sample))
+        if len(totals)>=10:
+            out[day]={"mean":sum(totals)/len(totals),
+                      "thresholds":{str(t):sum(v>=t for v in totals)/len(totals) for t in (.01,.10,.25,.50)},
+                      "members":len(totals)}
+    return out
+
+ensemble_members={}
+for label,model in (("EPS","ecmwf_ifs025_ensemble"),("GEFS","ncep_gefs_seamless")):
+    try:ensemble_members[label]=ensemble_daily(model)
+    except Exception as exc:errors[label+"_members"]=str(exc)
+rain_guidance={}
+for i,day in enumerate(dates):
+    available={name:series[day] for name,series in ensemble_members.items() if day in series}
+    deterministic=[results[name][i] for name in ("ECMWF","GFS","ICON","GEM") if name in results and isinstance(results[name][i],(int,float))]
+    ens_mean=sum(v["mean"] for v in available.values())/len(available) if available else None
+    det_mean=sum(deterministic)/len(deterministic) if deterministic else None
+    share=.25 if i<3 else .60 if i<7 else .80
+    if ens_mean is None:share=0
+    if det_mean is None:share=1
+    expected=(ens_mean*share if ens_mean is not None else 0)+(det_mean*(1-share) if det_mean is not None else 0)
+    thresholds={str(t):round(100*sum(v["thresholds"][str(t)] for v in available.values())/len(available)) for t in (.01,.10,.25,.50)} if available else {}
+    rain_guidance[day]={"expected_inches":round(expected,3) if available or deterministic else None,
+        "ensemble_share":share if available and deterministic else (1 if available else 0),
+        "ensemble_threshold_pct":thresholds,"ensemble_models":list(available),
+        "ensemble_members":sum(v["members"] for v in available.values())}
+
 now = datetime.now(timezone.utc)
 # Shared light chart style: readable on mobile, matching the observatory's other graphics.
 plt.rcParams.update({"font.family":"DejaVu Sans","font.size":14,"font.weight":"semibold",
@@ -248,7 +296,7 @@ forecast_dates = dates[:10]
 assert len(forecast_dates) == 10 and forecast_dates[0] == datetime.now(ZoneInfo(TZ)).date().isoformat()
 Path("moraga_forecast_10day.json").write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
-    "dates": forecast_dates, "temperature_models": {name: {**temperature_results[model], "dates": temperature_results[model]["dates"][:10], "high_f": temperature_results[model]["high_f"][:10], "low_f": temperature_results[model]["low_f"][:10]} for name, url, model in SOURCES if model in temperature_results},
+    "dates": forecast_dates, "rain_guidance": {day:rain_guidance[day] for day in forecast_dates}, "temperature_models": {name: {**temperature_results[model], "dates": temperature_results[model]["dates"][:10], "high_f": temperature_results[model]["high_f"][:10], "low_f": temperature_results[model]["low_f"][:10]} for name, url, model in SOURCES if model in temperature_results},
     "model_daily_inches": {name: values[:10] for name, values in results.items()}, "ensemble_rain_probability_pct": {day: ensemble_rain_probability.get(day) for day in forecast_dates}, "daily_conditions": {day: conditions[day] for day in forecast_dates}, "hourly_conditions": {name: hourly_results[model] for name, url, model in SOURCES if model in hourly_results}, "errors": errors,
     "method": "Available ECMWF, GFS, ICON, GEM and NAM temperature guidance; website applies provisional KCAMORAG71 hourly skill weights separately for daytime and overnight, using lead-specific history where sufficient. Displayed ranges are deterministic model spread, not probability intervals.",
     "source": "Open-Meteo", "note": "Model inputs are not bias-corrected; website skill weighting is provisional, based on hourly temperature errors. Generated timestamp is retrieval time, not model initialization."
