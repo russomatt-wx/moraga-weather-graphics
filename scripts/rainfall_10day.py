@@ -242,6 +242,12 @@ def daily_conditions(dates, results, hourly_results, ensemble_rain_probability):
             amount = results.get(name, [None] * len(dates))[index]
             if len(hours) >= 20 and isinstance(amount, (float, int)):
                 available.append((name, amount, hours))
+        # Distinguish morning clearing from afternoon sky; avoid calling a sunny
+        # morning "overcast" solely because models favor later cloud development.
+        morning = [c for h, c in sky if 8 <= h <= 11]
+        afternoon = [c for h, c in sky if 12 <= h <= 17]
+        morning_cloud = sum(morning) / len(morning) if morning else None
+        afternoon_cloud = sum(afternoon) / len(afternoon) if afternoon else None
         clouds = sum(c for _, c in sky) / len(sky) if sky else None
         if clouds is None:
             icon, label = "⛅", "Partly cloudy"
@@ -255,6 +261,15 @@ def daily_conditions(dates, results, hourly_results, ensemble_rain_probability):
             icon, label = "🌥️", "Mostly cloudy"
         else:
             icon, label = "☁️", "Overcast"
+        # Apply time-of-day descriptions only where the signal is material.
+        # This does not override the ensemble precipitation icon gate below.
+        if morning_cloud is not None and afternoon_cloud is not None:
+            if morning_cloud <= 45 and afternoon_cloud >= 75:
+                icon, label = "🌤️", "AM sun, PM clouds"
+            elif morning_cloud >= 75 and afternoon_cloud <= 45:
+                icon, label = "🌤️", "AM clouds, PM sun"
+            elif morning_cloud <= 35 and afternoon_cloud <= 55:
+                icon, label = "🌤️", "Mostly sunny"
         support = [(n, a, h) for n, a, h in available if a >= 0.05]
         wet = [(n, sum(1 for _, r in h if isinstance(r, (float, int)) and r >= 0.004))
                for n, a, h in available if any(isinstance(r, (float, int)) and r >= 0.004 for _, r in h)]
