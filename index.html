@@ -1218,7 +1218,32 @@ const finite=v=>typeof v==='number'&&Number.isFinite(v);
 const mean=a=>a.reduce((s,v)=>s+v,0)/a.length;
 const temp=a=>a.length?Math.round(mean(a))+'°':'—';
 const spread=a=>a.length>1?Math.round(Math.min(...a))+'–'+Math.round(Math.max(...a))+'°F':'—';
-const days=(data.dates||[]).filter(d=>d>=today).slice(0,10);
+// Always request ten Pacific calendar dates. Published model data can lag the
+// midnight rollover; use separately labelled live guidance only for missing dates.
+const days=Array.from({length:10},(_,i)=>{
+ const [y,m,d]=today.split('-').map(Number);
+ const utc=new Date(Date.UTC(y,m-1,d+i));
+ return utc.toISOString().slice(0,10);
+});
+const missingDays=days.filter(day=>!(data.dates||[]).includes(day));
+if(missingDays.length){
+ try{
+  const fallbackUrl='https://api.open-meteo.com/v1/forecast?'+new URLSearchParams({
+   latitude:String(lat),longitude:String(lon),timezone:'America/Los_Angeles',
+   forecast_days:'10',temperature_unit:'fahrenheit',
+   daily:'temperature_2m_max,temperature_2m_min'
+  });
+  const response=await fetch(fallbackUrl,{cache:'no-store'});
+  if(!response.ok)throw Error('Fallback '+response.status);
+  const daily=(await response.json()).daily||{};
+  const lookup=Object.fromEntries((daily.time||[]).map((day,i)=>[day,i]));
+  models.push(['Open-Meteo fallback',{
+   dates:missingDays,
+   high_f:missingDays.map(day=>daily.temperature_2m_max?.[lookup[day]]??null),
+   low_f:missingDays.map(day=>daily.temperature_2m_min?.[lookup[day]]??null)
+  }]);
+ }catch(error){console.warn('Missing-day fallback unavailable',error)}
+}
 if(!days.length||!models.length)throw Error('No current forecast');
 el.innerHTML='<div class="ten-day-grid">'+days.map((date,i)=>{
 const highEntries=models.map(([n,m])=>[n,m.high_f[m.dates.indexOf(date)]]);
@@ -1305,29 +1330,9 @@ if(shownRainChance!==null){
     else if(modelWetSignal) condition=['⛅','Partly cloudy'];
   }
 }
-let remainingDayDry=false;
-// Today's icon describes the hours still ahead, not overnight rain already observed.
-// Require at least two model feeds with usable remaining-hour coverage; otherwise
-// retain the published full-day forecast rather than implying unwarranted certainty.
-if(date===today){
- const nowHour=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',hourCycle:'h23'}).format(new Date()));
- const startHour=Math.max(0,nowHour);
- const remaining=Object.values(hourlyModels).map(days=>(days[date]||[]).filter(h=>h.hour>=startHour&&h.hour<=23&&Number.isFinite(Number(h.rain))&&Number.isFinite(h.cloud))).filter(hours=>hours.length>=Math.min(4,24-startHour));
- if(remaining.length>=2){
-   const wetVotes=remaining.filter(hours=>hours.some(h=>Number(h.rain)>=0.15)).length;
-   const wetFraction=wetVotes/remaining.length;
-   const clouds=remaining.flat().filter(h=>h.hour>=Math.max(startHour,8)&&h.hour<=18);
-   const sky=skyCondition(clouds);
-   if(wetFraction<0.34){
-     remainingDayDry=true;
-     condition=sky[0]?sky:['⛅','Partly cloudy'];
-   }else if(wetFraction<0.67){
-     condition=['🌦️','Chance of showers'];
-   }else{
-     condition=['🌧️','Showers likely'];
-   }
- }
-}
+// Do not erase the daily rain icon based on a short remaining-hours model sample.
+// Daily PoP and published hourly timing remain visible independently.
+const remainingDayDry=false;
 // Persistent daytime fog uses the cloud icon. Wind gets its own icon when
 // daily maximum sustained wind reaches 20 mph or gusts reach 30 mph.
 // Significant rain takes precedence over wind; never suppress rain probabilities.
