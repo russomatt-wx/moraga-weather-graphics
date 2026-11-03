@@ -47,6 +47,23 @@ for source_path in ("observations/KCAMORAG71_daily_summary.json", "climate/ledge
             break
     except Exception as exc:
         print("Rainfall source unavailable:",source_path,type(exc).__name__)
+# Owner-confirmed rainfall is a dated minimum, never a permanent override.
+# Use it only when the upstream daily summary is missing or lower.
+try:
+    confirmation_url="https://api.github.com/repos/russomatt-wx/moraga-weather/contents/climate/rainfall_confirmations.json"
+    confirmation_req=urllib.request.Request(confirmation_url,headers={"Authorization":f"Bearer {token}","Accept":"application/vnd.github+json","User-Agent":"MoragaWeatherObservatory"})
+    with urllib.request.urlopen(confirmation_req,timeout=25) as response:
+        confirmation_payload=json.load(response)
+    confirmation_data=json.loads(base64.b64decode(confirmation_payload["content"]).decode("utf-8-sig"))
+    confirmed=confirmation_data.get("days",{}).get(date,{})
+    minimum=confirmed.get("total_in")
+    if isinstance(minimum,(int,float)) and not isinstance(minimum,bool) and 0<=minimum<=30 and (rainfall is None or rainfall<float(minimum)):
+        rainfall=round(float(minimum),2)
+        rain_source="owner_confirmed_minimum"
+        rain_as_of=confirmed.get("as_of_utc")
+except Exception as exc:
+    print("Rainfall confirmation unavailable:",type(exc).__name__)
+
 data={"date":date,"station":"KCAMORAG71","generated_utc":now.isoformat(),
       "last_observation_utc":last.isoformat(),
       "high_f":max(v for _,v in values),"low_f":min(v for _,v in values),
