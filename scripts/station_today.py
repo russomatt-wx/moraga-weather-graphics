@@ -25,6 +25,17 @@ for row in rows:
     except (KeyError,ValueError,TypeError): continue
 if not values: raise RuntimeError("No verified readings today")
 last=max(ts for ts,_ in values)
+# Do not silently publish a newly generated summary based on stale archived data.
+# The collector's live observation can be newer than its archive; until the
+# upstream CSV includes that reading, preserve the previous published summary.
+age_minutes=(now-last).total_seconds()/60
+if age_minutes < -5 or age_minutes > 45:
+    raise RuntimeError(
+        f"STALE_STATION_OBSERVATIONS: latest KCAMORAG71 sample "
+        f"{last.isoformat()} is {age_minutes:.0f} minutes old "
+        f"(maximum 45); refusing to overwrite daily summary"
+    )
+
 
 # Use the private Xweather daily summary first. It contains validated calendar-day
 # totals including genuine zero; the climate ledger can lag until finalization.
