@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-03T06:38:43.714497+00:00",
+  "generated_utc": "2026-11-03T09:56:46.780444+00:00",
   "station": "KCAMORAG71",
   "days": {
     "2026-10-07": {
@@ -196,12 +196,22 @@
     "2026-11-02": {
       "sampled_low_f": 43.0,
       "sampled_high_f": 68.0,
-      "samples": 1332,
+      "samples": 1414,
       "first_utc": "2026-11-02T08:00:00+00:00",
-      "last_utc": "2026-11-03T06:36:00+00:00",
+      "last_utc": "2026-11-03T07:59:00+00:00",
       "daily_precipitation_in": 0.0,
       "precipitation_source": "xweather_observations_summary",
-      "precipitation_as_of_utc": "2026-11-03T06:38:39.194573+00:00"
+      "precipitation_as_of_utc": "2026-11-03T09:56:43.062470+00:00"
+    },
+    "2026-11-03": {
+      "sampled_low_f": 46.0,
+      "sampled_high_f": 48.0,
+      "samples": 113,
+      "first_utc": "2026-11-03T08:00:00+00:00",
+      "last_utc": "2026-11-03T09:54:00+00:00",
+      "daily_precipitation_in": 0.0,
+      "precipitation_source": "xweather_observations_summary",
+      "precipitation_as_of_utc": "2026-11-03T09:56:43.062470+00:00"
     }
   },
   "months": {
@@ -216,17 +226,17 @@
       "precipitation_status": "daily_observed_or_confirmed_minimum"
     },
     "2026-11": {
-      "sample_count": 2803,
-      "days_with_samples": 1,
-      "mean_sample_temperature_f": 53.23,
+      "sample_count": 2998,
+      "days_with_samples": 2,
+      "mean_sample_temperature_f": 52.89,
       "mean_sampled_daily_high_f": 68.0,
-      "mean_sampled_daily_low_f": 44.0,
+      "mean_sampled_daily_low_f": 43.5,
       "monthly_precipitation_in": 0.28,
       "annual_precipitation_in": null,
       "precipitation_status": "daily_observed_or_confirmed_minimum"
     }
   },
-  "observations": 24466,
+  "observations": 24661,
   "status": "partial_observed_climate_ledger",
   "caveat": "Uneven station sampling; monthly averages are not official daily-mean climate normals. Rainfall is source-reported month-to-date or a dated owner confirmation; cumulative readings are never summed.",
   "chart_status": "matplotlib_unavailable"
