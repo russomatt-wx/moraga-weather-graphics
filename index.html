@@ -1226,17 +1226,19 @@ const days=Array.from({length:10},(_,i)=>{
  return utc.toISOString().slice(0,10);
 });
 const missingDays=days.filter(day=>!(data.dates||[]).includes(day));
+const fallbackRainAmounts={};
 if(missingDays.length){
  try{
   const fallbackUrl='https://api.open-meteo.com/v1/forecast?'+new URLSearchParams({
    latitude:String(lat),longitude:String(lon),timezone:'America/Los_Angeles',
    forecast_days:'10',temperature_unit:'fahrenheit',
-   daily:'temperature_2m_max,temperature_2m_min'
+   daily:'temperature_2m_max,temperature_2m_min,precipitation_sum',precipitation_unit:'inch'
   });
   const response=await fetch(fallbackUrl,{cache:'no-store'});
   if(!response.ok)throw Error('Fallback '+response.status);
   const daily=(await response.json()).daily||{};
   const lookup=Object.fromEntries((daily.time||[]).map((day,i)=>[day,i]));
+  for(const day of missingDays){const value=daily.precipitation_sum?.[lookup[day]];if(Number.isFinite(value))fallbackRainAmounts[day]=value;}
   models.push(['Open-Meteo fallback',{
    dates:missingDays,
    high_f:missingDays.map(day=>daily.temperature_2m_max?.[lookup[day]]??null),
@@ -1269,9 +1271,10 @@ const rains=Object.values(data.model_daily_inches||{}).map(a=>a[data.dates.index
 // Prefer hourly timing and duration; the displayed model-mean rainfall
 // remains separate because it is a different multi-model dataset.
 const guidance=data.rain_guidance?.[date];
-const rainMean=Number.isFinite(guidance?.expected_inches)?guidance.expected_inches:(rains.length?mean(rains):null);
+const rainMean=Number.isFinite(guidance?.expected_inches)?guidance.expected_inches:(rains.length?mean(rains):(Number.isFinite(fallbackRainAmounts[date])?fallbackRainAmounts[date]:null));
 // Mean across available published models, not a probability-derived rainfall estimate.
 const rainAmountText=rainMean===null||rainMean<0.01?'':rainMean.toFixed(2)+' in';
+const rainfallSourceLabel=Number.isFinite(guidance?.expected_inches)?'ensemble blend':rains.length?'published models':Number.isFinite(fallbackRainAmounts[date])?'Open-Meteo fallback':'unavailable';
 // Hourly consensus timing is local Pacific time, not a daily all-day-rain label.
 const hourlyVotes=Object.values(hourlyModels).map(days=>(days[date]||[]).filter(h=>Number.isFinite(h.rain))).filter(hours=>hours.length>=18);
 const periods=[['overnight',0,5],['morning',6,11],['afternoon',12,17],['evening',18,23]];
@@ -1361,7 +1364,7 @@ const rangeStart=Math.max(0,Math.min(100,((Number.isFinite(lowValue)?lowValue:20
 const rangeEnd=Math.max(rangeStart,Math.min(100,((Number.isFinite(highValue)?highValue:110)-20)/90*100));
 const rangeGradient='linear-gradient(90deg,'+lowColor+','+spectrum((lowValue+highValue)/2)+','+highColor+')';
 
-return '<article class="day-forecast'+(date===today?' is-today':'')+'" style="--forecast-high:'+highColor+';--forecast-low:'+lowColor+';--forecast-border:'+highColor+'">'+(date===today?'<span class="today-pill">TODAY</span>':'<strong>'+day+'</strong>')+'<div class="day-date">'+label+'</div><div class="day-condition" title="Daily weather condition from Open-Meteo"><span aria-hidden="true">'+conditionIcon+'</span><small>'+condition[1]+'</small></div><div class="day-temps" style="background:transparent"><span style="color:'+highColor+'">'+highText+'</span> <small style="color:'+lowColor+'">'+lowText+'</small></div><div class="day-pop" title="Daily rain probability and ensemble-weighted expected rainfall">'+(remainingDayDry?'':dailyRainChance[date]===undefined?'—':dailyRainChance[date]<10?'': '💧 '+Math.min(100,Math.round(dailyRainChance[date]/10)*10)+'%')+(rainAmountText?'<span class="rain-amount">'+rainAmountText+'</span>':'')+'</div><details class="forecast-detail"><summary aria-label="Show model range">Model details</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Expected rainfall: '+(rainAmountText||'unavailable')+' · '+rainTiming+'<br>Ensemble thresholds: '+thresholdText+'<br>Rain chance source: '+(rainChanceSource[date]||'unavailable')+' · NWS: '+(rainChanceComparison[date]?.nws??'—')+'% · Open-Meteo: '+(rainChanceComparison[date]?.openMeteo??'—')+'%<br>Raw weighted high: '+skillBlend(highEntries,wh)+' · Local adjustment: '+adjustmentLabel(highEntries,correctedHighs,wh)+'<br>Raw weighted low: '+skillBlend(lowEntries,wl)+' · Local adjustment: '+adjustmentLabel(lowEntries,correctedLows,wl)+'</p><h5>High temperature models</h5>'+detailTable(highEntries,bh,wh)+'<h5>Low temperature models</h5>'+detailTable(lowEntries,bl,wl)+'<p class="diagnostic-note">Bias = model minus observed station temperature; adjustment is the guarded correction actually applied. Recent hourly samples are provisional proxies for daily extremes. High weights: '+weightLabel(wh)+'; low weights: '+weightLabel(wl)+'.</p></details></article>';
+return '<article class="day-forecast'+(date===today?' is-today':'')+'" style="--forecast-high:'+highColor+';--forecast-low:'+lowColor+';--forecast-border:'+highColor+'">'+(date===today?'<span class="today-pill">TODAY</span>':'<strong>'+day+'</strong>')+'<div class="day-date">'+label+'</div><div class="day-condition" title="Daily weather condition from Open-Meteo"><span aria-hidden="true">'+conditionIcon+'</span><small>'+condition[1]+'</small></div><div class="day-temps" style="background:transparent"><span style="color:'+highColor+'">'+highText+'</span> <small style="color:'+lowColor+'">'+lowText+'</small></div><div class="day-pop" title="Daily rain probability and ensemble-weighted expected rainfall">'+(remainingDayDry?'':dailyRainChance[date]===undefined?'—':dailyRainChance[date]<10?'': '💧 '+Math.min(100,Math.round(dailyRainChance[date]/10)*10)+'%')+(rainAmountText?'<span class="rain-amount">'+rainAmountText+'</span>':'')+'</div><details class="forecast-detail"><summary aria-label="Show model range">Model details</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Expected rainfall: '+(rainAmountText||'unavailable')+' ('+rainfallSourceLabel+') · '+rainTiming+'<br>Ensemble thresholds: '+thresholdText+'<br>Rain chance source: '+(rainChanceSource[date]||'unavailable')+' · NWS: '+(rainChanceComparison[date]?.nws??'—')+'% · Open-Meteo: '+(rainChanceComparison[date]?.openMeteo??'—')+'%<br>Raw weighted high: '+skillBlend(highEntries,wh)+' · Local adjustment: '+adjustmentLabel(highEntries,correctedHighs,wh)+'<br>Raw weighted low: '+skillBlend(lowEntries,wl)+' · Local adjustment: '+adjustmentLabel(lowEntries,correctedLows,wl)+'</p><h5>High temperature models</h5>'+detailTable(highEntries,bh,wh)+'<h5>Low temperature models</h5>'+detailTable(lowEntries,bl,wl)+'<p class="diagnostic-note">Bias = model minus observed station temperature; adjustment is the guarded correction actually applied. Recent hourly samples are provisional proxies for daily extremes. High weights: '+weightLabel(wh)+'; low weights: '+weightLabel(wl)+'.</p></details></article>';
 }).join('')+'<div class="temp-spectrum-key" aria-label="Fixed temperature color scale from 20 to 110 degrees Fahrenheit"><div class="temp-spectrum-bar"></div><div class="temp-spectrum-labels"><span>20°</span><span>30°</span><span>40°</span><span>50°</span><span>60°</span><span>70°</span><span>80°</span><span>90°</span><span>100°</span><span>110°</span></div><div class="temp-spectrum-caption">Temperature color scale (°F) · highs and lows</div></div></div>';
 // Keep forecast diagnostics available by tapping a day card, without visible info icons.
 el.querySelectorAll('.day-forecast details').forEach((detail,index)=>{
