@@ -1850,7 +1850,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
   const last=new Date(d.last_observation_utc);
   if(!Number.isFinite(last.getTime()))throw Error('Invalid station observation timestamp');
   const summaryStale=Date.now()-last.getTime()>90*60000;
-  const vals=[Number.isFinite(d.high_f)?Math.round(d.high_f)+'°':'—',Number.isFinite(d.low_f)?Math.round(d.low_f)+'°':'—',Number.isFinite(d.rainfall_in)&&d.rainfall_in>=0?d.rainfall_in.toFixed(2)+' in':'—'];
+  const vals=[Number.isFinite(d.high_f)?Math.round(d.high_f)+'°':'—',Number.isFinite(d.low_f)?Math.round(d.low_f)+'°':'—',Number.isFinite(d.rainfall_in)&&d.rainfall_in>=0?d.rainfall_in.toFixed(2)+' in':'0.00'];
   if(window.moragaLiveRain?.day===expected&&Number.isFinite(window.moragaLiveRain.amount)){
     vals[2]=Math.max(window.moragaLiveRain.amount,Number.isFinite(d.rainfall_in)?d.rainfall_in:0).toFixed(2)+' in';
   }
@@ -1859,7 +1859,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
   window.moragaApplyDailyExtrema?.();
   const ageMinutes=(Date.now()-last.getTime())/60000;
   status.textContent='Last updated: '+last.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'})+' PT';
- }catch(e){status.textContent='Last updated: unavailable';root.querySelectorAll('strong')[2].textContent='—'}
+ }catch(e){status.textContent='Last updated: unavailable';const rainCell=root.querySelectorAll('strong')[2];if(rainCell){const live=window.moragaLiveRain;const localDay=new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles'});if(live&&live.day===localDay&&Number.isFinite(live.amount)&&Date.now()-live.observed<30*60000){rainCell.textContent=live.amount.toFixed(2)+' in';}else if(!rainCell.textContent.trim()||rainCell.textContent.trim()==='—'){rainCell.textContent='0.00';}}}
 })();
 </script>
 
