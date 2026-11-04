@@ -97,17 +97,24 @@ jobs:
         env:
           WEATHER_REPO_TOKEN: ${{ secrets.WEATHER_REPO_TOKEN }}
         run: |
-          python3 scripts/station_today.py
+          if python3 scripts/station_today.py; then
+            echo "Station summary refreshed."
+          else
+            echo "::warning::Station archive stale or unavailable; retaining existing station summary and continuing Pages deployment."
+          fi
           python3 - <<'PY'
           import json
           from datetime import datetime,timezone
           from pathlib import Path
-          d=json.loads(Path('moraga_station_today.json').read_text())
-          last=datetime.fromisoformat(d['last_observation_utc'].replace('Z','+00:00'))
-          age=(datetime.now(timezone.utc)-last).total_seconds()/60
-          print(f"Station summary observation age: {age:.1f} minutes")
-          if age>90:
-              print(f"::warning::Station observation is {age:.0f} minutes old; publishing forecast with delayed-observation indicator")
+          try:
+              d=json.loads(Path('moraga_station_today.json').read_text())
+              last=datetime.fromisoformat(d['last_observation_utc'].replace('Z','+00:00'))
+              age=(datetime.now(timezone.utc)-last).total_seconds()/60
+              print(f"Station summary observation age: {age:.1f} minutes")
+              if age>45:
+                  print(f"::warning::Station observation is {age:.0f} minutes old; forecast charts will publish without changing stale station data")
+          except (OSError, ValueError, KeyError) as exc:
+              print(f"::warning::Station summary metadata unavailable: {exc}")
           f=Path('moraga_forecast_10day.json')
           if f.exists():
               forecast=json.loads(f.read_text())
