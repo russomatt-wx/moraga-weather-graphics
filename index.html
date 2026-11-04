@@ -1820,6 +1820,11 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 </script>
 <script>
 (function(){
+ function moragaPacificDay(date=new Date()){
+   const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date);
+   const get=type=>parts.find(p=>p.type===type)?.value;
+   return get('year')+'-'+get('month')+'-'+get('day');
+ }
  // The public climate ledger retains the entire day's sampled temperatures.
  // Seed daily extrema from it; never treat the first live reading as the daily low.
  async function refreshArchivedExtrema(){
@@ -1827,11 +1832,11 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      const response=await fetch('climate_ledger_latest.json?t='+Date.now(),{cache:'no-store'});
      if(!response.ok)throw Error('Climate ledger unavailable');
      const ledger=await response.json();
-     const day=new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'});
+     const day=moragaPacificDay();
      const entry=ledger.days?.[day];
      if(!entry||!Number.isFinite(entry.sampled_high_f)||!Number.isFinite(entry.sampled_low_f)||entry.samples<2)return;
      const last=new Date(entry.last_utc);
-     if(!Number.isFinite(last.getTime())||Date.now()-last.getTime()>120*60000)return;
+     if(!Number.isFinite(last.getTime())||last.getTime()>Date.now()+5*60000)return;
      window.moragaArchivedExtrema={day,high:entry.sampled_high_f,low:entry.sampled_low_f};
      window.moragaApplyDailyExtrema?.();
    }catch(error){console.warn('Archived daily extrema unavailable',error.message)}
@@ -1843,7 +1848,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    if(!root)return;
    const cells=root.querySelectorAll('strong');
    if(cells.length<2)return;
-   const day=new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'});
+   const day=moragaPacificDay();
    const highs=[],lows=[];
    if(summary?.day===day){if(Number.isFinite(summary.high))highs.push(summary.high);if(Number.isFinite(summary.low))lows.push(summary.low)}
    if(archive?.day===day){if(Number.isFinite(archive.high))highs.push(archive.high);if(Number.isFinite(archive.low))lows.push(archive.low)}
