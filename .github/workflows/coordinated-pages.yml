@@ -93,6 +93,7 @@ jobs:
               print('::warning::Collector dispatched but no newer archived observation yet; retaining last valid data')
           PY
       - name: Build station summary from latest Xweather archive
+        continue-on-error: true
         env:
           WEATHER_REPO_TOKEN: ${{ secrets.WEATHER_REPO_TOKEN }}
         run: |
@@ -136,6 +137,7 @@ jobs:
           print("Refreshed climate ledger", ledger["generated_utc"])
           PY
       - name: Commit refreshed public station data
+        continue-on-error: true
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
