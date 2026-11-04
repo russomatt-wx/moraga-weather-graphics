@@ -1820,14 +1820,33 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 </script>
 <script>
 (function(){
+ // The public climate ledger retains the entire day's sampled temperatures.
+ // Seed daily extrema from it; never treat the first live reading as the daily low.
+ async function refreshArchivedExtrema(){
+   try{
+     const response=await fetch('climate_ledger_latest.json?t='+Date.now(),{cache:'no-store'});
+     if(!response.ok)throw Error('Climate ledger unavailable');
+     const ledger=await response.json();
+     const day=new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'});
+     const entry=ledger.days?.[day];
+     if(!entry||!Number.isFinite(entry.sampled_high_f)||!Number.isFinite(entry.sampled_low_f)||entry.samples<2)return;
+     const last=new Date(entry.last_utc);
+     if(!Number.isFinite(last.getTime())||Date.now()-last.getTime()>120*60000)return;
+     window.moragaArchivedExtrema={day,high:entry.sampled_high_f,low:entry.sampled_low_f};
+     window.moragaApplyDailyExtrema?.();
+   }catch(error){console.warn('Archived daily extrema unavailable',error.message)}
+ }
+ refreshArchivedExtrema();
+ setInterval(refreshArchivedExtrema,15*60000);
  window.moragaApplyDailyExtrema=function(){
-   const root=document.getElementById('station-today'),summary=window.moragaDailySummary,live=window.moragaDailyExtrema;
+   const root=document.getElementById('station-today'),summary=window.moragaDailySummary,live=window.moragaDailyExtrema,archive=window.moragaArchivedExtrema;
    if(!root)return;
    const cells=root.querySelectorAll('strong');
    if(cells.length<2)return;
    const day=new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'});
    const highs=[],lows=[];
    if(summary?.day===day){if(Number.isFinite(summary.high))highs.push(summary.high);if(Number.isFinite(summary.low))lows.push(summary.low)}
+   if(archive?.day===day){if(Number.isFinite(archive.high))highs.push(archive.high);if(Number.isFinite(archive.low))lows.push(archive.low)}
    if(live?.day===day){if(Number.isFinite(live.high))highs.push(live.high);if(Number.isFinite(live.low))lows.push(live.low)}
    if(highs.length)cells[0].textContent=Math.round(Math.max(...highs))+'°';
    if(lows.length)cells[1].textContent=Math.round(Math.min(...lows))+'°';
