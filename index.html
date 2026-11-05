@@ -1772,23 +1772,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
        live.parentElement.style.setProperty('--live-temp-color','rgb('+rgb.join(',')+')');
      }
 
-     // The daily summary is published less frequently than the live feed.
-     // Keep today's extrema consistent with every fresh observation seen by this page.
-     if(Number.isFinite(d.temperature_f)){
-       const day=t.toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'});
-       const today=new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'});
-       if(day===today){
-         const state=window.moragaDailyExtrema||(window.moragaDailyExtrema={day,high:null,low:null});
-         if(state.day!==day){state.day=day;state.high=null;state.low=null}
-         // A single live sample is not a day's high/low. Only use explicit
-         // station-reported daily extrema; otherwise await the canonical archive.
-         const reportedHigh=[d.daily_high_f,d.today_high_f,d.high_f].find(Number.isFinite);
-         const reportedLow=[d.daily_low_f,d.today_low_f,d.low_f].find(Number.isFinite);
-         if(Number.isFinite(reportedHigh))state.high=Math.max(state.high??-Infinity,reportedHigh);
-         if(Number.isFinite(reportedLow))state.low=Math.min(state.low??Infinity,reportedLow);
-         window.moragaApplyDailyExtrema?.();
-       }
-     }
+     // Current temperature never substitutes for authoritative daily extrema.
      live.querySelector('#live-humidity').textContent='Humidity '+num(d.humidity_pct,'%');
      const direction=Number.isFinite(d.wind_direction_deg)?['N','NE','E','SE','S','SW','W','NW'][Math.round(((d.wind_direction_deg%360)+360)%360/45)%8]:(typeof d.wind_direction==='string'&&/^(N|NNE|NE|ENE|E|ESE|SE|SSE|S|SSW|SW|WSW|W|WNW|NW|NNW)$/i.test(d.wind_direction)?d.wind_direction.toUpperCase():'');
      live.querySelector('#live-wind').textContent=Number.isFinite(d.wind_mph)&&d.wind_mph<1?'Wind Calm':'Wind '+(direction?direction+' ':'')+num(d.wind_mph,' mph');
@@ -1845,20 +1829,15 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      window.moragaApplyDailyExtrema?.();
    }catch(error){console.warn('Archived daily extrema unavailable',error.message)}
  }
- refreshArchivedExtrema();
- setInterval(refreshArchivedExtrema,15*60000);
+ // Daily extrema come only from the canonical station summary.
  window.moragaApplyDailyExtrema=function(){
-   const root=document.getElementById('station-today'),summary=window.moragaDailySummary,live=window.moragaDailyExtrema,archive=window.moragaArchivedExtrema;
+   const root=document.getElementById('station-today'),summary=window.moragaDailySummary;
    if(!root)return;
    const cells=root.querySelectorAll('strong');
    if(cells.length<2)return;
-   const day=moragaPacificDay();
-   const highs=[],lows=[];
-   if(summary?.day===day){if(Number.isFinite(summary.high))highs.push(summary.high);if(Number.isFinite(summary.low))lows.push(summary.low)}
-   if(archive?.day===day){if(Number.isFinite(archive.high))highs.push(archive.high);if(Number.isFinite(archive.low))lows.push(archive.low)}
-   if(live?.day===day){if(Number.isFinite(live.high))highs.push(live.high);if(Number.isFinite(live.low))lows.push(live.low)}
-   cells[0].textContent=highs.length?Math.round(Math.max(...highs))+'°':'—';
-   cells[1].textContent=lows.length?Math.round(Math.min(...lows))+'°':'—';
+   const valid=summary?.day===moragaPacificDay();
+   cells[0].textContent=valid&&Number.isFinite(summary.high)?Math.round(summary.high)+'°':'—';
+   cells[1].textContent=valid&&Number.isFinite(summary.low)?Math.round(summary.low)+'°':'—';
  };
 })();
 </script>
