@@ -1,21 +1,21 @@
 {
-  "generated_utc": "2026-11-05T11:30:08.423893+00:00",
+  "generated_utc": "2026-11-05T20:16:42.257790+00:00",
   "status": "verified_daily_extremes",
   "station": "KCAMORAG71",
   "model_scores": {
     "gfs": {
       "verified_days": 17,
       "high_mae_f": 4.84,
-      "low_mae_f": 5.91,
+      "low_mae_f": 6.03,
       "high_bias_f": 0.76,
-      "low_bias_f": 5.42
+      "low_bias_f": 5.54
     },
     "ecmwf": {
       "verified_days": 17,
       "high_mae_f": 4.74,
-      "low_mae_f": 3.62,
+      "low_mae_f": 3.73,
       "high_bias_f": -2.77,
-      "low_bias_f": 1.63
+      "low_bias_f": 1.74
     },
     "nam": {
       "verified_days": 16,
@@ -27,16 +27,16 @@
     "icon": {
       "verified_days": 17,
       "high_mae_f": 5.74,
-      "low_mae_f": 3.44,
+      "low_mae_f": 3.56,
       "high_bias_f": -2.09,
-      "low_bias_f": 1.93
+      "low_bias_f": 2.05
     },
     "gem": {
       "verified_days": 17,
       "high_mae_f": 5.6,
-      "low_mae_f": 3.4,
+      "low_mae_f": 3.28,
       "high_bias_f": -5.43,
-      "low_bias_f": -0.46
+      "low_bias_f": -0.34
     }
   },
   "method": "Earliest archived complete hourly model snapshot per target local date, retrieved before target day; observed KCAMORAG71 daily extrema require >=90% 15-minute coverage and no gap >60 minutes",
