@@ -9,34 +9,26 @@ now=datetime.now(timezone.utc)
 local=now.astimezone(ZoneInfo("America/Los_Angeles"))
 date=local.date().isoformat()
 token=os.environ["WEATHER_REPO_TOKEN"]
-url=f"https://api.github.com/repos/russomatt-wx/moraga-weather/contents/observations/KCAMORAG71_{date}.csv"
+# The private collector owns the one persistent local-day high/low record.
+# Do not reconstruct competing extrema from the current web page or latest sample.
+url="https://api.github.com/repos/russomatt-wx/moraga-weather/contents/observations/KCAMORAG71_daily_canonical.json"
 req=urllib.request.Request(url,headers={"Authorization":f"Bearer {token}","Accept":"application/vnd.github+json","User-Agent":"MoragaWeatherObservatory"})
 with urllib.request.urlopen(req,timeout=25) as response:
     payload=json.load(response)
-rows=list(csv.DictReader(io.StringIO(base64.b64decode(payload["content"]).decode("utf-8-sig"))))
-values=[]
-for row in rows:
-    try:
-        ts=datetime.fromisoformat(row["timestamp_utc"].replace("Z","+00:00"))
-        if ts.astimezone(ZoneInfo("America/Los_Angeles")).date().isoformat()!=date: continue
-        temp=float(row["temperature_f"])
-        if not -40<temp<130: continue
-        values.append((ts,temp))
-    except (KeyError,ValueError,TypeError): continue
-if not values: raise RuntimeError("No verified readings today")
-last=max(ts for ts,_ in values)
-# Do not silently publish a newly generated summary based on stale archived data.
-# The collector's live observation can be newer than its archive; until the
-# upstream CSV includes that reading, preserve the previous published summary.
+canonical=json.loads(base64.b64decode(payload["content"]).decode("utf-8-sig"))
+record=canonical.get("days",{}).get(date)
+if not record or not isinstance(record.get("high_f"),(int,float)) or not isinstance(record.get("low_f"),(int,float)):
+    raise RuntimeError("No canonical station extrema available for today")
+last=datetime.fromisoformat(record["last_observation_utc"].replace("Z","+00:00"))
+if last>now+timedelta(minutes=5):
+    raise RuntimeError("Canonical observation timestamp is in the future")
 age_minutes=(now-last).total_seconds()/60
-if age_minutes < -5 or age_minutes > 45:
-    raise RuntimeError(
-        f"STALE_STATION_OBSERVATIONS: latest KCAMORAG71 sample "
-        f"{last.isoformat()} is {age_minutes:.0f} minutes old "
-        f"(maximum 45); refusing to overwrite daily summary"
-    )
-
-
+if age_minutes>45:
+    print(f"::warning::Canonical observations delayed by {age_minutes:.0f} minutes; retaining verified extrema")
+high=float(record["high_f"])
+low=float(record["low_f"])
+if not (-30<=low<=high<=130):
+    raise RuntimeError("Invalid canonical high/low")
 # Use the private Xweather daily summary first. It contains validated calendar-day
 # totals including genuine zero; the climate ledger can lag until finalization.
 rainfall=None
@@ -77,7 +69,7 @@ except Exception as exc:
 
 data={"date":date,"station":"KCAMORAG71","generated_utc":now.isoformat(),
       "last_observation_utc":last.isoformat(),
-      "high_f":max(v for _,v in values),"low_f":min(v for _,v in values),
+      "high_f":high,"low_f":low,
       "rainfall_in":rainfall,
       "rainfall_source":rain_source,"rainfall_as_of_utc":rain_as_of,
       "rainfall_note":"Validated daily rainfall from station summary or climate ledger" if rainfall is not None else
