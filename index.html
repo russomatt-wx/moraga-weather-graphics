@@ -1780,8 +1780,12 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
        if(day===today){
          const state=window.moragaDailyExtrema||(window.moragaDailyExtrema={day,high:null,low:null});
          if(state.day!==day){state.day=day;state.high=null;state.low=null}
-         state.high=Math.max(state.high??-Infinity,d.temperature_f);
-         state.low=Math.min(state.low??Infinity,d.temperature_f);
+         // A single live sample is not a day's high/low. Only use explicit
+         // station-reported daily extrema; otherwise await the canonical archive.
+         const reportedHigh=[d.daily_high_f,d.today_high_f,d.high_f].find(Number.isFinite);
+         const reportedLow=[d.daily_low_f,d.today_low_f,d.low_f].find(Number.isFinite);
+         if(Number.isFinite(reportedHigh))state.high=Math.max(state.high??-Infinity,reportedHigh);
+         if(Number.isFinite(reportedLow))state.low=Math.min(state.low??Infinity,reportedLow);
          window.moragaApplyDailyExtrema?.();
        }
      }
@@ -1853,8 +1857,8 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    if(summary?.day===day){if(Number.isFinite(summary.high))highs.push(summary.high);if(Number.isFinite(summary.low))lows.push(summary.low)}
    if(archive?.day===day){if(Number.isFinite(archive.high))highs.push(archive.high);if(Number.isFinite(archive.low))lows.push(archive.low)}
    if(live?.day===day){if(Number.isFinite(live.high))highs.push(live.high);if(Number.isFinite(live.low))lows.push(live.low)}
-   if(highs.length)cells[0].textContent=Math.round(Math.max(...highs))+'°';
-   if(lows.length)cells[1].textContent=Math.round(Math.min(...lows))+'°';
+   cells[0].textContent=highs.length?Math.round(Math.max(...highs))+'°':'—';
+   cells[1].textContent=lows.length?Math.round(Math.min(...lows))+'°':'—';
  };
 })();
 </script>
