@@ -1842,17 +1842,15 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 })();
 </script>
 <script>
-(async function(){
+(function(){
  const root=document.getElementById('station-today'),status=document.getElementById('station-today-status');
  if(!root||!status)return;
+ async function refreshDailySummary(){
  try{
   const r=await fetch('moraga_station_today.json?t='+Date.now(),{cache:'no-store'});
   if(!r.ok)throw Error('Daily station summary not published');
   const d=await r.json();
-  const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
-  const localDay=new Date().toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'});
-  const dayParts=localDay.split('/');
-  const expected=dayParts[2]+'-'+dayParts[0]+'-'+dayParts[1];
+  const expected=moragaPacificDay();
   if(d.date!==expected)throw Error('Waiting for today’s observations');
   const last=new Date(d.last_observation_utc);
   if(!Number.isFinite(last.getTime()))throw Error('Invalid station observation timestamp');
@@ -1866,7 +1864,10 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
   window.moragaApplyDailyExtrema?.();
   const ageMinutes=(Date.now()-last.getTime())/60000;
   status.textContent='Last updated: '+last.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'})+' PT';
- }catch(e){status.textContent='Last updated: unavailable';const rainCell=root.querySelectorAll('strong')[2];if(rainCell){const live=window.moragaLiveRain;const localDay=new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles'});if(live&&live.day===localDay&&Number.isFinite(live.amount)&&Date.now()-live.observed<30*60000){rainCell.textContent=live.amount.toFixed(2)+' in';}else if(!rainCell.textContent.trim()||rainCell.textContent.trim()==='—'){rainCell.textContent='0.00';}}}
+ }catch(e){console.warn('Daily station summary unavailable',e);status.textContent='Daily observations delayed';const rainCell=root.querySelectorAll('strong')[2];if(rainCell){const live=window.moragaLiveRain;const localDay=new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles'});if(live&&live.day===localDay&&Number.isFinite(live.amount)&&Date.now()-live.observed<30*60000){rainCell.textContent=live.amount.toFixed(2)+' in';}else if(!rainCell.textContent.trim()||rainCell.textContent.trim()==='—'){rainCell.textContent='0.00';}}}
+ }
+ refreshDailySummary();
+ setInterval(refreshDailySummary,5*60000);
 })();
 </script>
 
