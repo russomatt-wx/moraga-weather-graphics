@@ -1736,6 +1736,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      const d=await response.json(),t=new Date(d.observed_utc);
      if(!Number.isFinite(t.getTime())||Date.now()-t.getTime()>30*60000||t.getTime()>Date.now()+60000)throw Error('Observation is not recent');
      const num=(n,unit='',digits=0)=>Number.isFinite(n)?n.toFixed(digits)+unit:'—';
+     window.moragaLastLiveObservation=d;
      window.dispatchEvent(new CustomEvent('moraga:live-observation',{detail:d}));
      // Prefer the fresh station's same-day precipitation over an older published daily summary.
      const observedDay=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(t);
@@ -1853,6 +1854,12 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      merge(d.temperature_f,d.temperature_f,time.getTime(),'live');
    }
  });
+ // The first live fetch can complete before this listener is registered.
+ // Replay that verified observation so startup timing cannot lose it.
+ if(window.moragaLastLiveObservation){
+   const d=window.moragaLastLiveObservation,t=new Date(d.observed_utc);
+   if(Number.isFinite(t.getTime())&&pacificDay(t)===today()&&Date.now()-t.getTime()<=30*60000&&validTemp(d.temperature_f))merge(d.temperature_f,d.temperature_f,t.getTime(),'live');
+ }
  window.moragaApplyDailyExtrema();
 })();
 </script>
@@ -1876,12 +1883,13 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
   const rain=Number.isFinite(d.rainfall_in)&&d.rainfall_in>=0?d.rainfall_in:0;
   const liveRain=window.moragaLiveRain;
   if(cells[2])cells[2].textContent=Math.max(rain,liveRain?.day===expected&&Number.isFinite(liveRain.amount)?liveRain.amount:0).toFixed(2)+' in';
-  // Reject delayed or internally inconsistent extrema. Live readings continue
-  // accumulating while the server-side canonical summary catches up.
-  if(summaryFresh&&Number.isFinite(d.high_f)&&Number.isFinite(d.low_f)&&d.low_f<=d.high_f){
+  // A delayed canonical summary still contains valid earlier-day extremes.
+  // Keep those verified historical bounds even when newer live readings arrive.
+  // Reject future, wrong-day, or internally inconsistent records instead.
+  if(ageMinutes>=-1&&Number.isFinite(d.high_f)&&Number.isFinite(d.low_f)&&d.low_f<=d.high_f){
     window.moragaMergeDailyExtrema?.(d.high_f,d.low_f,last.getTime(),'canonical');
   }else{
-    console.warn('Daily extrema summary delayed or invalid; keeping verified live readings');
+    console.warn('Daily extrema summary invalid; keeping verified live readings');
   }
   status.textContent=summaryFresh?'Last updated: '+last.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'})+' PT':'Daily summary delayed; using available live readings';
  }catch(e){console.warn('Daily station summary unavailable',e);status.textContent='Daily observations delayed';const rainCell=root.querySelectorAll('strong')[2];if(rainCell){const live=window.moragaLiveRain;const localDay=new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles'});if(live&&live.day===localDay&&Number.isFinite(live.amount)&&Date.now()-live.observed<30*60000){rainCell.textContent=live.amount.toFixed(2)+' in';}else if(!rainCell.textContent.trim()||rainCell.textContent.trim()==='—'){rainCell.textContent='0.00';}}}
