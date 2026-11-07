@@ -1666,7 +1666,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  const syn=document.getElementById('pacific-synoptic-image');
  if(syn){fetch('pacific_synoptic.json?ts='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.json()}).then(data=>{if(data.gfs_valid_utc)label(syn,'GFS forecast valid: '+pacificDate(data.gfs_valid_utc)+' · Updated file time shown when available')}).catch(()=>{})}
 })();
-</script><script defer src="dashboard_enhancements.js?v=5"></script><script>
+</script><script defer src="dashboard_enhancements.js?v=6"></script><script>
 (async function(){
  const img=document.getElementById('temperature-guidance-image'),note=document.getElementById('temperature-chart-note');
  if(!img)return;
