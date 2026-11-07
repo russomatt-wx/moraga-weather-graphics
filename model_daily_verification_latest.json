@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-07T10:41:40.518085+00:00",
+  "generated_utc": "2026-11-07T17:52:00.572412+00:00",
   "status": "verified_daily_extremes",
   "station": "KCAMORAG71",
   "model_scores": {
@@ -39,7 +39,108 @@
       "low_bias_f": 0.1
     }
   },
-  "calibration": null,
+  "calibration": {
+    "gfs": {
+      "high": {
+        "factor": 0.0,
+        "verified_days": 19,
+        "holdout_days": 12,
+        "raw_holdout_mae_f": 6.185,
+        "selected_holdout_mae_f": 6.185,
+        "method": "walk_forward_prior_days_only",
+        "lead_specific": false
+      },
+      "low": {
+        "factor": 1.25,
+        "verified_days": 19,
+        "holdout_days": 12,
+        "raw_holdout_mae_f": 6.652,
+        "selected_holdout_mae_f": 3.203,
+        "method": "walk_forward_prior_days_only",
+        "lead_specific": false
+      }
+    },
+    "ecmwf": {
+      "high": {
+        "factor": 0.75,
+        "verified_days": 19,
+        "holdout_days": 12,
+        "raw_holdout_mae_f": 5.435,
+        "selected_holdout_mae_f": 4.958,
+        "method": "walk_forward_prior_days_only",
+        "lead_specific": false
+      },
+      "low": {
+        "factor": 1.25,
+        "verified_days": 19,
+        "holdout_days": 12,
+        "raw_holdout_mae_f": 4.65,
+        "selected_holdout_mae_f": 3.915,
+        "method": "walk_forward_prior_days_only",
+        "lead_specific": false
+      }
+    },
+    "nam": {
+      "high": {
+        "factor": 1.0,
+        "verified_days": 16,
+        "holdout_days": 9,
+        "raw_holdout_mae_f": 5.607,
+        "selected_holdout_mae_f": 2.213,
+        "method": "walk_forward_prior_days_only",
+        "lead_specific": false
+      },
+      "low": {
+        "factor": 1.0,
+        "verified_days": 16,
+        "holdout_days": 9,
+        "raw_holdout_mae_f": 6.482,
+        "selected_holdout_mae_f": 2.393,
+        "method": "walk_forward_prior_days_only",
+        "lead_specific": false
+      }
+    },
+    "icon": {
+      "high": {
+        "factor": 1.25,
+        "verified_days": 19,
+        "holdout_days": 12,
+        "raw_holdout_mae_f": 7.343,
+        "selected_holdout_mae_f": 6.679,
+        "method": "walk_forward_prior_days_only",
+        "lead_specific": false
+      },
+      "low": {
+        "factor": 1.25,
+        "verified_days": 19,
+        "holdout_days": 12,
+        "raw_holdout_mae_f": 4.353,
+        "selected_holdout_mae_f": 3.507,
+        "method": "walk_forward_prior_days_only",
+        "lead_specific": false
+      }
+    },
+    "gem": {
+      "high": {
+        "factor": 1.25,
+        "verified_days": 19,
+        "holdout_days": 12,
+        "raw_holdout_mae_f": 6.77,
+        "selected_holdout_mae_f": 3.254,
+        "method": "walk_forward_prior_days_only",
+        "lead_specific": false
+      },
+      "low": {
+        "factor": 0.0,
+        "verified_days": 19,
+        "holdout_days": 12,
+        "raw_holdout_mae_f": 3.878,
+        "selected_holdout_mae_f": 3.878,
+        "method": "walk_forward_prior_days_only",
+        "lead_specific": false
+      }
+    }
+  },
   "method": "Earliest archived complete hourly model snapshot per target local date, retrieved before target day; observed KCAMORAG71 daily extrema require >=90% 15-minute coverage and no gap >60 minutes",
   "note": "Provider retrieval time is not verified model initialization time; missing daily records are not scored.",
   "matches": [
