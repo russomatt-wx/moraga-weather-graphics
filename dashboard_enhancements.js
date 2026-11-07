@@ -32,54 +32,59 @@ function summary(){
 function accuracy(){
  const el=$('skill-snapshot');if(!el)return;
  const article=el.closest('article');
- const title=article?.querySelector('h3');
- if(title)title.textContent='Daily high & low model bias';
- // Retire the redundant hourly leaderboard and its nested 7/30/90-day
- // rankings from this card. The independent daily verification is the source.
- for(const detail of article?.querySelectorAll(':scope > details.model-skill-details')||[])detail.hidden=true;
- const intro=document.createElement('p');
- intro.className='skill-disclaimer';
- intro.textContent='Average difference from KCAMORAG71 actual daily highs and lows. Blue = too cool · Coral = too warm.';
+ const title=article?.querySelector('h3');if(title)title.textContent='Daily high & low model bias';
+ // Hide only the redundant hourly rankings; keep rainfall verification.
+ for(const detail of article?.querySelectorAll(':scope > details.model-skill-details')||[]){
+  if(detail.querySelector('#accuracy-results'))detail.hidden=true;
+ }
+ const intro=document.createElement('p');intro.className='skill-disclaimer';
+ intro.textContent='How far each model predicts Moraga’s daily highs and lows too warm or too cool.';
  el.replaceChildren(intro);
- const format=v=>{
-  if(!Number.isFinite(v))return {label:'—',color:'#a9bdce',description:'Unavailable'};
-  if(Math.abs(v)<.5)return {label:'Near target',color:'#50c6a5',description:'Within 0.5°F on average'};
-  return {label:Math.abs(v).toFixed(1)+'°F '+(v>0?'too warm':'too cool'),color:v>0?'#ef9a91':'#8abef0',description:''};
- };
+ const fmt=v=>!Number.isFinite(v)?['—','#a9bdce']:Math.abs(v)<.5?['Near target','#50c6a5']:[Math.abs(v).toFixed(1)+'°F too '+(v>0?'warm':'cool'),v>0?'#ef9a91':'#8abef0'];
  fetch('model_daily_verification_latest.json?skill='+Date.now(),{cache:'no-store'})
- .then(r=>{if(!r.ok)throw Error('Daily verification unavailable');return r.json()})
- .then(data=>{
-  const scores=Object.entries(data.model_scores||{}).filter(([name,score])=>score&&score.verified_days>0)
-   .sort((a,b)=>a[0].localeCompare(b[0]));
-  if(!scores.length)throw Error('No verified daily highs and lows');
-  const grid=document.createElement('div');
-  grid.style.cssText='display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px;margin-top:14px';
-  for(const heading of ['Daily high','Daily low']){
-   const h=document.createElement('div');h.textContent=heading;h.style.cssText='color:#b7cfdf;font-size:13px;font-weight:750;padding:0 4px 3px';
-   grid.append(h);
-  }
-  const table=document.createElement('div');table.style.cssText='display:grid;gap:9px';
-  for(const [name,score] of scores){
-   const row=document.createElement('div');row.style.cssText='border:1px solid #35516a;border-radius:12px;padding:12px 10px;background:#112438';
-   const heading=document.createElement('div');heading.style.cssText='display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:9px';
-   const model=document.createElement('strong');model.textContent=name.toUpperCase();model.style.fontSize='15px';
-   const days=document.createElement('small');days.textContent=score.verified_days+' days';days.style.cssText='font-size:11px;color:#9db8c9';
-   heading.append(model,days);row.append(heading);
-   const cols=document.createElement('div');cols.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:10px';
-   for(const [label,key] of [['High','high_bias_f'],['Low','low_bias_f']]){
-    const v=Number(score[key]),info=format(score[key]==null?NaN:v);
-    const cell=document.createElement('div');cell.style.cssText='min-width:0';
-    const small=document.createElement('div');small.textContent=label;small.style.cssText='font-size:12px;color:#a9bdce;margin-bottom:3px';
-    const val=document.createElement('div');val.textContent=info.label;val.style.cssText='font-size:clamp(13px,3.5vw,18px);font-weight:750;color:'+info.color+';line-height:1.3';
-    cell.append(small,val);cols.append(cell);
+ .then(r=>{if(!r.ok)throw Error();return r.json()}).then(data=>{
+  const tabs=document.createElement('div');tabs.style.cssText='display:flex;gap:7px;flex-wrap:wrap;margin:13px 0';
+  const area=document.createElement('div');
+  const periods=[['7','7 days'],['30','30 days'],['90','90 days']];
+  const buttons=[];
+  function render(period){
+   for(const [key,btn] of buttons){const active=key===period;btn.style.background=active?'#236f85':'#152b40';btn.style.borderColor=active?'#60d3e7':'#3b566d';btn.setAttribute('aria-pressed',String(active));}
+   const latest=Date.parse(data.generated_utc);
+   const anchor=Number.isFinite(latest)?latest:Date.now();
+   const cutoff=anchor-Number(period)*86400000;
+   const rows=Array.isArray(data.matches)?data.matches.filter(r=>{const t=Date.parse(r.valid_local_date+'T12:00:00Z');return Number.isFinite(t)&&t>=cutoff&&t<=anchor;}):null;
+   const names=['ecmwf','gfs','icon','gem','nam'];
+   area.replaceChildren();
+   if(!rows){const p=document.createElement('p');p.className='skill-disclaimer';p.textContent='Historical daily records are awaiting publication. The current all-time averages are shown below.';area.append(p);}
+   for(const name of names){
+    const matches=rows?.filter(r=>r.model===name)||[];
+    const score=data.model_scores?.[name];
+    if(rows&&!matches.length)continue;
+    if(!rows&&(!score||!score.verified_days))continue;
+    const mean=key=>matches.length?matches.reduce((sum,r)=>sum+Number(r[key]),0)/matches.length:Number(score[key]);
+    const high=fmt(mean(rows?'high_error_f':'high_bias_f')),low=fmt(mean(rows?'low_error_f':'low_bias_f'));
+    const card=document.createElement('div');card.style.cssText='border:1px solid #38546d;border-radius:12px;padding:13px 12px;margin:9px 0;background:#112438';
+    const header=document.createElement('div');header.style.cssText='display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px';
+    const label=document.createElement('strong');label.textContent=name.toUpperCase();label.style.fontSize='16px';
+    const count=document.createElement('small');count.textContent=(rows?matches.length:score.verified_days)+' verified days';count.style.color='#9db8c9';header.append(label,count);
+    const values=document.createElement('div');values.style.cssText='display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px';
+    for(const [caption,entry] of [['High',high],['Low',low]]){
+     const cell=document.createElement('div');const cap=document.createElement('div');cap.textContent=caption;cap.style.cssText='color:#a9bdce;font-size:12px;margin-bottom:4px';
+     const val=document.createElement('div');val.textContent=entry[0];val.style.cssText='color:'+entry[1]+';font-weight:750;font-size:clamp(13px,3.5vw,18px);line-height:1.35';cell.append(cap,val);values.append(cell);
+    }
+    card.append(header,values);area.append(card);
    }
-   row.append(cols);table.append(row);
+   if(!area.children.length){area.textContent='Not enough completed verification days in this period.';}
   }
-  el.replaceChildren(intro,table);
-  const note=document.createElement('p');note.className='skill-disclaimer';
-  note.textContent='Signed bias is model forecast minus observed temperature, averaged across completed days. This shows direction, not the size of every individual error.';
-  el.append(note);
- }).catch(()=>{const p=document.createElement('p');p.textContent='Waiting for verified daily high and low data.';el.append(p)});
+  for(const [key,label] of periods){
+   const btn=document.createElement('button');btn.type='button';btn.textContent=label;
+   btn.style.cssText='border:1px solid #3b566d;border-radius:9px;padding:8px 12px;color:#e4f3fb;font-weight:700;cursor:pointer';
+   btn.addEventListener('click',()=>render(key));buttons.push([key,btn]);tabs.append(btn);
+  }
+  el.replaceChildren(intro,tabs,area);
+  const note=document.createElement('p');note.className='skill-disclaimer';note.textContent='Blue = too cool · Coral = too warm. Signed average bias; a near-target average does not mean every forecast was accurate.';el.append(note);
+  render('30');
+ }).catch(()=>{el.textContent='Waiting for verified daily high and low data.'});
 }
 function groups(){
  const section=$('westcoast');if(!section)return;
