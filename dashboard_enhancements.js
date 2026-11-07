@@ -36,11 +36,11 @@ function accuracy(){
  fetch('hourly_matches.csv?skill='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.text()}).then(csv=>{
   const lines=csv.trim().split(/\r?\n/),headers=lines.shift().split(','),idx=Object.fromEntries(headers.map((v,i)=>[v,i]));
   if(['model','valid_utc','error_f'].some(k=>idx[k]===undefined))throw Error('Missing columns');
-  const rows=lines.map(l=>l.split(',')).map(c=>({model:(c[idx.model]||'').toUpperCase(),date:new Date(c[idx.valid_utc]),error:Math.abs(Number(c[idx.error_f]))})).filter(r=>r.model&&Number.isFinite(r.error)&&!isNaN(r.date));
+  const rows=lines.map(l=>l.split(',')).map(c=>({model:(c[idx.model]||'').toUpperCase(),date:new Date(c[idx.valid_utc]),error:Math.abs(Number(c[idx.error_f])),signed:Number(c[idx.error_f])})).filter(r=>r.model&&Number.isFinite(r.error)&&Number.isFinite(r.signed)&&!isNaN(r.date));
   if(!rows.length)throw Error('No matches');
   const end=Math.max(...rows.map(r=>r.date.getTime())),start=end-7*86400000,groups={};
-  for(const r of rows.filter(r=>r.date.getTime()>start))(groups[r.model]??=[]).push(r.error);
-  const ranked=Object.entries(groups).map(([model,values])=>({model,n:values.length,mae:values.reduce((a,b)=>a+b,0)/values.length})).filter(r=>r.n>=5).sort((a,b)=>a.mae-b.mae);
+  for(const r of rows.filter(r=>r.date.getTime()>start))(groups[r.model]??=[]).push(r);
+  const ranked=Object.entries(groups).map(([model,values])=>({model,n:values.length,mae:values.reduce((a,b)=>a+b.error,0)/values.length,bias:values.reduce((a,b)=>a+b.signed,0)/values.length})).filter(r=>r.n>=5).sort((a,b)=>a.mae-b.mae);
   if(!ranked.length)throw Error('No eligible models');
   const max=Math.max(...ranked.map(r=>r.mae),0.1);
   const subtitle=document.createElement('p');subtitle.className='skill-disclaimer';subtitle.textContent='Average hourly forecast error · past 7 days. Shorter bars are better. Results are preliminary when models have different numbers of verified hours.';
@@ -55,7 +55,7 @@ function accuracy(){
    track.append(fill);
    const value=document.createElement('strong');value.style.cssText='font-size:15px;text-align:right;font-variant-numeric:tabular-nums';value.textContent=r.mae.toFixed(2)+'°F';
    const count=document.createElement('small');count.style.cssText='grid-column:2 / 4;color:#a9bdce;margin-top:4px;font-size:12px';count.textContent=r.n+' verified hours';
-   item.append(name,track,value,count);list.append(item);
+   const bias=document.createElement('small');bias.style.cssText='grid-column:2 / 4;font-size:12px;margin-top:3px;font-weight:600';bias.style.color=Math.abs(r.bias)<0.5?'#50c6a5':r.bias>0?'#ef9a91':'#8abef0';bias.textContent='Bias '+(r.bias>0?'+':'')+r.bias.toFixed(2)+'°F · '+(Math.abs(r.bias)<0.5?'Near neutral':r.bias>0?'Too warm':'Too cool');item.append(name,track,value,count,bias);list.append(item);
   }
   el.append(list);
   const note=document.createElement('p');note.className='skill-disclaimer';note.textContent='Daily high and low errors use a separate set of completed days and are shown below; they are not combined with hourly scores.';el.append(note);
@@ -63,7 +63,7 @@ function accuracy(){
   const summary=document.createElement('summary');summary.textContent='Daily high and low forecast errors';
   const body=document.createElement('div');body.style.cssText='overflow-x:auto;padding-top:12px';
   const table=document.createElement('table');table.className='skill-compare';
-  const thead=document.createElement('thead');thead.innerHTML='<tr><th>Model</th><th>Daily High Error</th><th>Daily Low Error</th><th>Days</th></tr>';
+  const thead=document.createElement('thead');thead.innerHTML='<tr><th>Model</th><th>High Error</th><th>High Bias</th><th>Low Error</th><th>Low Bias</th><th>Days</th></tr>';
   const tbody=document.createElement('tbody');table.append(thead,tbody);body.append(table);details.append(summary,body);el.append(details);
   fetch('model_daily_verification_latest.json?skill='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.json()}).then(d=>{
    const names=ranked.map(r=>r.model);
@@ -71,8 +71,8 @@ function accuracy(){
     const score=d.model_scores?.[name.toLowerCase()];
     if(!score||!score.verified_days)continue;
     const tr=document.createElement('tr');
-    for(const v of [name,score.high_mae_f==null?'—':Number(score.high_mae_f).toFixed(2)+'°F',score.low_mae_f==null?'—':Number(score.low_mae_f).toFixed(2)+'°F',String(score.verified_days)]){
-     const td=document.createElement('td');td.textContent=v;tr.append(td);
+    for(const v of [name,score.high_mae_f==null?'—':Number(score.high_mae_f).toFixed(2)+'°F',score.high_bias_f==null?'—':(Number(score.high_bias_f)>0?'+':'')+Number(score.high_bias_f).toFixed(2)+'°F',score.low_mae_f==null?'—':Number(score.low_mae_f).toFixed(2)+'°F',score.low_bias_f==null?'—':(Number(score.low_bias_f)>0?'+':'')+Number(score.low_bias_f).toFixed(2)+'°F',String(score.verified_days)]){
+     const td=document.createElement('td');td.textContent=v;if(v.startsWith('+'))td.style.color='#ef9a91';else if(v.startsWith('−')||v.startsWith('-'))td.style.color='#8abef0';tr.append(td);
     }
     tbody.append(tr);
    }
