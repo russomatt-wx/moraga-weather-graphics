@@ -2,8 +2,8 @@
 (function(){
  const target=document.getElementById('rain-accuracy-results');
  if(!target)return;
- const labels={latest:'Latest verified day','7d':'Rolling seven days','30d':'Rolling 30 days','90d':'Rolling 90 days'};
- const order=['latest','7d','30d','90d'];
+ const labels={latest:'Latest verified day','7d':'Rolling seven days','30d':'Rolling 30 days'};
+ const order=['latest','7d','30d'];
  function render(data){
   target.replaceChildren();
   if(!data||!data.windows){target.textContent='Rainfall verification is not available yet.';return;}
