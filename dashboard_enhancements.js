@@ -31,46 +31,54 @@ function summary(){
 }
 function accuracy(){
  const el=$('skill-snapshot');if(!el)return;
+ const title=el.closest('article')?.querySelector('h3');
+ if(title)title.textContent='Temperature forecast accuracy';
  fetch('hourly_matches.csv?skill='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.text()}).then(csv=>{
- const lines=csv.trim().split(/\r?\n/),headers=lines.shift().split(','),idx=Object.fromEntries(headers.map((v,i)=>[v,i]));
- if(['model','valid_utc','error_f'].some(k=>idx[k]===undefined))throw Error();
- const rows=lines.map(l=>l.split(',')).map(c=>({model:(c[idx.model]||'').toUpperCase(),date:new Date(c[idx.valid_utc]),error:Math.abs(Number(c[idx.error_f]))})).filter(r=>r.model&&Number.isFinite(r.error)&&!isNaN(r.date));
- if(!rows.length)throw Error();
- const end=Math.max(...rows.map(r=>r.date.getTime())),start=end-7*86400000;
- const recent=rows.filter(r=>r.date.getTime()>start),groups={};
- for(const r of recent)(groups[r.model]??=[]).push(r.error);
- const ranked=Object.entries(groups).map(([model,a])=>({model,n:a.length,mae:a.reduce((x,y)=>x+y,0)/a.length})).filter(r=>r.n>=5).sort((a,b)=>a.mae-b.mae);
- if(!ranked.length)throw Error();
- const names=['ECMWF','GFS','BLEND','WEIGHTED','CHATGPT'];const matched=names.map(n=>ranked.find(r=>r.model===n)).filter(Boolean);
- const items=matched.length?matched:ranked.slice(0,4);
- const namesAll=['ECMWF','GFS','GEM','ICON','NAM','BLEND','WEIGHTED','CHATGPT'];
- const ordered=namesAll.map(n=>ranked.find(r=>r.model===n)).filter(Boolean);
- const show=ordered.length?ordered:ranked;
- const fmt=v=>Number.isFinite(v)?v.toFixed(2)+'°F':'—';
- const body=show.map(r=>'<tr data-model="'+escape(r.model)+'"><th scope="row">'+escape(r.model)+'</th><td class="skill-unavailable daily-high">—</td><td class="skill-unavailable daily-low">—</td><td><strong>'+fmt(r.mae)+'</strong><small>'+r.n+' hours</small></td></tr>').join('');
- el.innerHTML='<div class="skill-table-wrap"><table class="skill-compare"><thead><tr><th>Model</th><th>High MAE</th><th>Low MAE</th><th>Hourly MAE</th></tr></thead><tbody>'+body+'</tbody></table></div><p class="skill-disclaimer"><strong>Hourly:</strong> rolling 7-day absolute temperature error through '+escape(ptTime(new Date(end)))+'. <strong>High / Low:</strong> <span id="daily-model-status">Collecting prospective model forecasts and complete KCAMORAG71 observation days.</span> Daily verification is independent of hourly scores.</p>';
- fetch('model_daily_verification_latest.json?skill='+Date.now(),{cache:'no-store'})
-  .then(r=>{if(!r.ok)throw Error('Daily verification not published');return r.json()})
-  .then(d=>{
-   let verified=0;
-   for(const row of el.querySelectorAll('tr[data-model]')){
-    const score=d.model_scores?.[row.dataset.model.toLowerCase()];
+  const lines=csv.trim().split(/\r?\n/),headers=lines.shift().split(','),idx=Object.fromEntries(headers.map((v,i)=>[v,i]));
+  if(['model','valid_utc','error_f'].some(k=>idx[k]===undefined))throw Error('Missing columns');
+  const rows=lines.map(l=>l.split(',')).map(c=>({model:(c[idx.model]||'').toUpperCase(),date:new Date(c[idx.valid_utc]),error:Math.abs(Number(c[idx.error_f]))})).filter(r=>r.model&&Number.isFinite(r.error)&&!isNaN(r.date));
+  if(!rows.length)throw Error('No matches');
+  const end=Math.max(...rows.map(r=>r.date.getTime())),start=end-7*86400000,groups={};
+  for(const r of rows.filter(r=>r.date.getTime()>start))(groups[r.model]??=[]).push(r.error);
+  const ranked=Object.entries(groups).map(([model,values])=>({model,n:values.length,mae:values.reduce((a,b)=>a+b,0)/values.length})).filter(r=>r.n>=5).sort((a,b)=>a.mae-b.mae);
+  if(!ranked.length)throw Error('No eligible models');
+  const max=Math.max(...ranked.map(r=>r.mae),0.1);
+  const subtitle=document.createElement('p');subtitle.className='skill-disclaimer';subtitle.textContent='Average hourly forecast error · past 7 days. Shorter bars are better. Results are preliminary when models have different numbers of verified hours.';
+  el.replaceChildren(subtitle);
+  const list=document.createElement('div');list.className='simple-skill-list';
+  for(const [i,r] of ranked.entries()){
+   const item=document.createElement('div');item.className='simple-skill-item';
+   item.style.cssText='display:grid;grid-template-columns:70px minmax(0,1fr) 78px;column-gap:12px;align-items:center;margin:15px 0';
+   const name=document.createElement('strong');name.textContent=(i===0?'🏆 ':'')+r.model;name.style.fontSize='14px';
+   const track=document.createElement('div');track.style.cssText='height:13px;background:#2a4157;border-radius:20px;overflow:hidden';
+   const fill=document.createElement('div');fill.style.cssText='height:100%;width:'+Math.max(2,100*r.mae/max)+'%;background:'+(i===0?'#50c6a5':'#7eacd0')+';border-radius:20px';
+   track.append(fill);
+   const value=document.createElement('strong');value.style.cssText='font-size:15px;text-align:right;font-variant-numeric:tabular-nums';value.textContent=r.mae.toFixed(2)+'°F';
+   const count=document.createElement('small');count.style.cssText='grid-column:2 / 4;color:#a9bdce;margin-top:4px;font-size:12px';count.textContent=r.n+' verified hours';
+   item.append(name,track,value,count);list.append(item);
+  }
+  el.append(list);
+  const note=document.createElement('p');note.className='skill-disclaimer';note.textContent='Daily high and low errors use a separate set of completed days and are shown below; they are not combined with hourly scores.';el.append(note);
+  const details=document.createElement('details');details.className='model-skill-details';
+  const summary=document.createElement('summary');summary.textContent='Daily high and low forecast errors';
+  const body=document.createElement('div');body.style.cssText='overflow-x:auto;padding-top:12px';
+  const table=document.createElement('table');table.className='skill-compare';
+  const thead=document.createElement('thead');thead.innerHTML='<tr><th>Model</th><th>Daily High Error</th><th>Daily Low Error</th><th>Days</th></tr>';
+  const tbody=document.createElement('tbody');table.append(thead,tbody);body.append(table);details.append(summary,body);el.append(details);
+  fetch('model_daily_verification_latest.json?skill='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.json()}).then(d=>{
+   const names=ranked.map(r=>r.model);
+   for(const name of names){
+    const score=d.model_scores?.[name.toLowerCase()];
     if(!score||!score.verified_days)continue;
-    verified+=score.verified_days;
-    for(const [selector,key] of [['.daily-high','high_mae_f'],['.daily-low','low_mae_f']]){
-     const cell=row.querySelector(selector);
-     if(Number.isFinite(score[key])){
-      cell.textContent=Number(score[key]).toFixed(2)+'°F';
-      cell.classList.remove('skill-unavailable');
-      cell.title=score.verified_days+' completed days · bias '+(Number(score[key==='high_mae_f'?'high_bias_f':'low_bias_f'])||0).toFixed(2)+'°F';
-     }
+    const tr=document.createElement('tr');
+    for(const v of [name,score.high_mae_f==null?'—':Number(score.high_mae_f).toFixed(2)+'°F',score.low_mae_f==null?'—':Number(score.low_mae_f).toFixed(2)+'°F',String(score.verified_days)]){
+     const td=document.createElement('td');td.textContent=v;tr.append(td);
     }
+    tbody.append(tr);
    }
-   const status=document.getElementById('daily-model-status');
-   if(status)status.textContent=verified?'Daily MAE uses prospective archived model highs/lows matched to complete station days; sample counts and signed biases appear on hover.':'Collecting prospective forecasts; no eligible completed station days yet.';
-  }).catch(()=>{const status=document.getElementById('daily-model-status');if(status)status.textContent='Daily verification feed pending publication; hourly scores remain available.'});
-
- }).catch(()=>{el.innerHTML='<p class="day-date">Awaiting verified hourly matches; no rankings inferred.</p>'});
+   if(!tbody.children.length){const p=document.createElement('p');p.textContent='Awaiting completed station days.';body.replaceChildren(p);}
+  }).catch(()=>{body.textContent='Daily verification is awaiting publication.';});
+ }).catch(()=>{el.textContent='Awaiting verified hourly matches; no rankings inferred.';});
 }
 function groups(){
  const section=$('westcoast');if(!section)return;
