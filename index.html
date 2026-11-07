@@ -935,34 +935,41 @@ function skillWeights(rows,bucket,phase,names){
 /* Guarded local calibration: hourly phase bias is only a proxy for daily
    extremes. Require independent days, cap adjustments and fade with lead. */
 function localBias(rows,bucket,phase,names){
- const corrections={},evidence={};
+ const corrections={},evidence={},now=Date.now();
  for(const name of names){
-  const eligible=rows.filter(r=>r.valid<=Date.now()&&r.valid>=Date.now()-30*86400000&&r.model===name&&r.phase===phase&&
-    r.lead>=3&&r.lead<=96&&Number.isFinite(r.signedError));
-  // Choose the most recent forecast for each verifying station hour.
-  const unique=new Map();
-  for(const r of eligible){
-   const key=r.valid;
-   if(!unique.has(key)||r.issued>unique.get(key).issued)unique.set(key,r);
+  // Never use raw hourly station bias to calibrate EPS/GEFS or an unknown model.
+  if(!['ECMWF','GFS','ICON','GEM','NAM'].includes(name)){
+   corrections[name]=0;evidence[name]='not locally calibrated';continue;
   }
-  const samples=[...unique.values()];
+  const eligible=rows.filter(r=>r.valid<=now&&r.valid>=now-30*86400000&&r.model===name&&r.phase===phase&&r.lead>=3&&r.lead<=240&&Number.isFinite(r.signedError));
+  const dedup=items=>{
+   const unique=new Map();
+   for(const r of items)if(!unique.has(r.valid)||r.issued<unique.get(r.valid).issued)unique.set(r.valid,r);
+   return [...unique.values()];
+  };
+  // Prefer evidence at comparable lead times; never transfer a 1-day bias
+  // directly to days 7-10.
+  const near=dedup(eligible.filter(r=>Math.abs(r.lead-(bucket+0.5)*24)<=24));
+  const nearDays=new Set(near.map(r=>dateKey(new Date(r.valid)))).size;
+  const broad=dedup(eligible.filter(r=>r.lead<=96));
+  const broadDays=new Set(broad.map(r=>dateKey(new Date(r.valid)))).size;
+  const leadMatched=near.length>=24&&nearDays>=5;
+  const samples=leadMatched?near:(bucket<4?broad:[]);
   const dates=[...new Set(samples.map(r=>dateKey(new Date(r.valid))))];
-  // No correction with sparse observations or only one weather regime.
-  if(samples.length<18||dates.length<4||Math.max(...samples.map(r=>r.valid))<Date.now()-7*86400000){
-   corrections[name]=0;evidence[name]='insufficient';continue;
+  if(samples.length<24||dates.length<5||Math.max(...samples.map(r=>r.valid))<now-7*86400000){
+   corrections[name]=0;evidence[name]='insufficient lead-matched evidence';continue;
   }
-  // Average daily bias first, so densely sampled days do not dominate.
-  const daily=dates.map(d=>{
-   const values=samples.filter(r=>dateKey(new Date(r.valid))===d);
+  const daily=dates.map(day=>{
+   const values=samples.filter(r=>dateKey(new Date(r.valid))===day);
    return values.reduce((sum,r)=>sum+r.signedError,0)/values.length;
   });
   const signed=daily.reduce((a,b)=>a+b,0)/daily.length;
-  // Conservative reliability: modest correction even with several days.
-  const confidence=Math.min(0.65,dates.length/(dates.length+10));
-  const horizon=Math.max(0,Math.min(1,(8-bucket)/8));
+  // Shrink aggressively until enough independent verifying days accumulate.
+  const confidence=Math.min(.65,dates.length/(dates.length+12));
+  const horizon=leadMatched?1:Math.max(0,1-bucket/4);
   const correction=Math.max(-3,Math.min(3,-signed*confidence*horizon));
   corrections[name]=correction;
-  evidence[name]=dates.length+' days, '+samples.length+' hours; mean bias '+signed.toFixed(1)+'°F';
+  evidence[name]=dates.length+' days, '+samples.length+' hours; mean bias '+signed.toFixed(1)+'°F'+(leadMatched?'; lead matched':'; short-range fallback');
  }
  return {corrections,evidence};
 }
