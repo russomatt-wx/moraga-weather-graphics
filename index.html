@@ -936,40 +936,62 @@ function skillWeights(rows,bucket,phase,names){
    extremes. Require independent days, cap adjustments and fade with lead. */
 function localBias(rows,bucket,phase,names){
  const corrections={},evidence={},now=Date.now();
+ const average=a=>a.reduce((x,y)=>x+y,0)/a.length;
  for(const name of names){
-  // Never use raw hourly station bias to calibrate EPS/GEFS or an unknown model.
   if(!['ECMWF','GFS','ICON','GEM','NAM'].includes(name)){
-   corrections[name]=0;evidence[name]='not locally calibrated';continue;
+   corrections[name]=0;evidence[name]='ensemble or fallback: uncalibrated';continue;
   }
-  const eligible=rows.filter(r=>r.valid<=now&&r.valid>=now-30*86400000&&r.model===name&&r.phase===phase&&r.lead>=3&&r.lead<=240&&Number.isFinite(r.signedError));
+  const eligible=rows.filter(r=>r.valid<=now&&r.valid>=now-60*86400000&&r.model===name&&r.phase===phase&&r.lead>=3&&r.lead<=240&&Number.isFinite(r.signedError));
+  // Use one prospectively issued forecast per verifying hour. Prefer the
+  // earliest available forecast, avoiding an artificial short-lead advantage.
   const dedup=items=>{
    const unique=new Map();
    for(const r of items)if(!unique.has(r.valid)||r.issued<unique.get(r.valid).issued)unique.set(r.valid,r);
    return [...unique.values()];
   };
-  // Prefer evidence at comparable lead times; never transfer a 1-day bias
-  // directly to days 7-10.
-  const near=dedup(eligible.filter(r=>Math.abs(r.lead-(bucket+0.5)*24)<=24));
+  const target=(bucket+.5)*24;
+  const near=dedup(eligible.filter(r=>Math.abs(r.lead-target)<=24));
   const nearDays=new Set(near.map(r=>dateKey(new Date(r.valid)))).size;
+  const leadMatched=near.length>=30&&nearDays>=7;
   const broad=dedup(eligible.filter(r=>r.lead<=96));
-  const broadDays=new Set(broad.map(r=>dateKey(new Date(r.valid)))).size;
-  const leadMatched=near.length>=24&&nearDays>=5;
-  const samples=leadMatched?near:(bucket<4?broad:[]);
-  const dates=[...new Set(samples.map(r=>dateKey(new Date(r.valid))))];
-  if(samples.length<24||dates.length<5||Math.max(...samples.map(r=>r.valid))<now-7*86400000){
-   corrections[name]=0;evidence[name]='insufficient lead-matched evidence';continue;
+  const samples=(leadMatched?near:bucket<4?broad:[]).sort((a,b)=>a.valid-b.valid);
+  const byDay=new Map();
+  for(const r of samples){
+   const day=dateKey(new Date(r.valid));
+   if(!byDay.has(day))byDay.set(day,[]);
+   byDay.get(day).push(r.signedError);
   }
-  const daily=dates.map(day=>{
-   const values=samples.filter(r=>dateKey(new Date(r.valid))===day);
-   return values.reduce((sum,r)=>sum+r.signedError,0)/values.length;
-  });
-  const signed=daily.reduce((a,b)=>a+b,0)/daily.length;
-  // Shrink aggressively until enough independent verifying days accumulate.
-  const confidence=Math.min(.65,dates.length/(dates.length+12));
+  const daily=[...byDay].map(([day,errors])=>({day,error:average(errors)}));
+  if(samples.length<30||daily.length<7||Math.max(...samples.map(r=>r.valid))<now-7*86400000){
+   corrections[name]=0;evidence[name]='insufficient comparable observations';continue;
+  }
+  // Walk-forward: every test day is calibrated ONLY from earlier days.
+  // A correction is enabled only if it beats the uncorrected forecast.
+  const tests=[];
+  for(let i=5;i<daily.length;i++){
+   const training=daily.slice(0,i).map(d=>d.error);
+   const bias=average(training);
+   const confidence=training.length/(training.length+8);
+   const predicted=-bias*confidence;
+   const actual=daily[i].error;
+   tests.push({raw:Math.abs(actual),corrected:Math.abs(actual+predicted)});
+  }
+  const rawMae=average(tests.map(t=>t.raw));
+  const correctedMae=average(tests.map(t=>t.corrected));
+  const gain=rawMae-correctedMae;
+  if(tests.length<3||gain<=0.15||gain/rawMae<0.05){
+   corrections[name]=0;
+   evidence[name]=daily.length+' days; correction withheld (no proven walk-forward benefit)';
+   continue;
+  }
+  const signed=average(daily.map(d=>d.error));
+  const confidence=daily.length/(daily.length+8);
+  // No arbitrary ±3°F ceiling: confidence, out-of-sample benefit and
+  // comparable forecast lead control the adjustment.
   const horizon=leadMatched?1:Math.max(0,1-bucket/4);
-  const correction=Math.max(-3,Math.min(3,-signed*confidence*horizon));
+  const correction=-signed*confidence*horizon;
   corrections[name]=correction;
-  evidence[name]=dates.length+' days, '+samples.length+' hours; mean bias '+signed.toFixed(1)+'°F'+(leadMatched?'; lead matched':'; short-range fallback');
+  evidence[name]=daily.length+' days, '+samples.length+' hours; mean bias '+signed.toFixed(1)+'°F; walk-forward MAE '+rawMae.toFixed(2)+'→'+correctedMae.toFixed(2)+'°F'+(leadMatched?'; lead matched':'; short-range evidence');
  }
  return {corrections,evidence};
 }
