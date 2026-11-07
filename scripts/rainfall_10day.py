@@ -148,10 +148,35 @@ def ensemble_daily(model):
                       "members":len(totals)}
     return out
 
+ensemble_temperature={}
+def ensemble_temperature_daily(model):
+    params={"latitude":LAT,"longitude":LON,"hourly":"temperature_2m","models":model,
+            "timezone":TZ,"temperature_unit":"fahrenheit","forecast_days":10}
+    url="https://ensemble-api.open-meteo.com/v1/ensemble?"+urllib.parse.urlencode(params)
+    req=urllib.request.Request(url,headers={"User-Agent":"MoragaWeatherGraphics/1.0"})
+    with urllib.request.urlopen(req,timeout=70) as response:
+        hourly=json.load(response)["hourly"]
+    keys=[k for k in hourly if k.startswith("temperature_2m_member")]
+    highs,lows=[],[]
+    for day in dates[:10]:
+        ix=[i for i,t in enumerate(hourly["time"]) if t.startswith(day)]
+        h,l=[],[]
+        if len(ix)>=20:
+            for key in keys:
+                values=[hourly[key][i] for i in ix]
+                if all(isinstance(v,(int,float)) and math.isfinite(v) for v in values):
+                    h.append(max(values));l.append(min(values))
+        highs.append(sorted(h)[len(h)//2] if len(h)>=10 else None)
+        lows.append(sorted(l)[len(l)//2] if len(l)>=10 else None)
+    return {"dates":dates[:10],"high_f":highs,"low_f":lows}
+
 ensemble_members={}
 for label,model in (("EPS","ecmwf_ifs025_ensemble"),("GEFS","ncep_gefs_seamless")):
     try:ensemble_members[label]=ensemble_daily(model)
     except Exception as exc:errors[label+"_members"]=str(exc)
+for label,model in (("EPS","ecmwf_ifs025_ensemble"),("GEFS","ncep_gefs_seamless")):
+    try: ensemble_temperature[label]=ensemble_temperature_daily(model)
+    except Exception as exc: errors[label+"_temperature"]=str(exc)
 rain_guidance={}
 for i,day in enumerate(dates):
     available={name:series[day] for name,series in ensemble_members.items() if day in series}
@@ -314,7 +339,7 @@ forecast_dates = dates[:10]
 assert len(forecast_dates) == 10 and forecast_dates[0] == datetime.now(ZoneInfo(TZ)).date().isoformat()
 Path("moraga_forecast_10day.json").write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
-    "dates": forecast_dates, "rain_guidance": {day:rain_guidance[day] for day in forecast_dates}, "temperature_models": {name: {**temperature_results[model], "dates": temperature_results[model]["dates"][:10], "high_f": temperature_results[model]["high_f"][:10], "low_f": temperature_results[model]["low_f"][:10]} for name, url, model in SOURCES if model in temperature_results},
+    "dates": forecast_dates, "rain_guidance": {day:rain_guidance[day] for day in forecast_dates}, "temperature_models": {**ensemble_temperature, **{name: {**temperature_results[model], "dates": temperature_results[model]["dates"][:10], "high_f": temperature_results[model]["high_f"][:10], "low_f": temperature_results[model]["low_f"][:10]} for name, url, model in SOURCES if model in temperature_results},
     "model_daily_inches": {name: values[:10] for name, values in results.items()}, "ensemble_rain_probability_pct": {day: ensemble_rain_probability.get(day) for day in forecast_dates}, "daily_conditions": {day: conditions[day] for day in forecast_dates}, "hourly_conditions": {name: hourly_results[model] for name, url, model in SOURCES if model in hourly_results}, "errors": errors,
     "method": "Available ECMWF, GFS, ICON, GEM and NAM temperature guidance; website applies provisional KCAMORAG71 hourly skill weights separately for daytime and overnight, using lead-specific history where sufficient. Displayed ranges are deterministic model spread, not probability intervals.",
     "source": "Open-Meteo", "note": "Model inputs are not bias-corrected; website skill weighting is provisional, based on hourly temperature errors. Generated timestamp is retrieval time, not model initialization."
