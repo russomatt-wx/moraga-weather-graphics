@@ -864,14 +864,14 @@ function forecastSkill(csv,now=Date.now()){
 }
 // Daily high/low skill is a separate, smaller sample from hourly skill.
 // Fade it in only after 10 complete verified days; reach 35% at 14 days.
-let dailyModelSkill={};
+let dailyModelSkill={},dailyCalibration={};
 async function loadDailyModelSkill(){
  try{
   const response=await fetch('model_daily_verification_latest.json?forecast='+Date.now(),{cache:'no-store'});
   if(!response.ok)throw Error('daily skill unavailable');
   const data=await response.json();
-  dailyModelSkill=data.model_scores||{};
- }catch(error){dailyModelSkill={};console.warn('Using hourly-only weights',error);}
+  dailyModelSkill=data.model_scores||{};dailyCalibration=data.calibration||{};
+ }catch(error){dailyModelSkill={};dailyCalibration={};console.warn('Using hourly-only weights',error);}
 }
 function skillWeights(rows,bucket,phase,names){
  const eligible=[...new Set(names)];
@@ -993,20 +993,24 @@ function localBias(rows,bucket,phase,names){
   corrections[name]=correction;
   evidence[name]=daily.length+' days, '+samples.length+' hours; mean bias '+signed.toFixed(1)+'°F; walk-forward MAE '+rawMae.toFixed(2)+'→'+correctedMae.toFixed(2)+'°F'+(leadMatched?'; lead matched':'; short-range evidence');
  }
- // Verified daily extremes are a guarded fallback when hourly walk-forward
- // validation cannot establish a correction. These scores are not lead-specific.
+ // Use prospectively evaluated daily high/low correction strengths. An
+ // absent or unvalidated factor must not be silently treated as proof.
  for(const name of names){
   if(corrections[name]!==0)continue;
   const score=dailyModelSkill[name.toLowerCase()];
+  const selected=dailyCalibration[name.toLowerCase()]?.[phase];
   const key=phase==='high'?'high_bias_f':'low_bias_f';
-  const maeKey=phase==='high'?'high_mae_f':'low_mae_f';
-  if(!score||score.verified_days<14||!Number.isFinite(score[key])||!Number.isFinite(score[maeKey]))continue;
-  const bias=score[key];
-  if(Math.abs(bias)<0.75||Math.abs(bias)<score[maeKey]*.2)continue;
-  const confidence=Math.min(.7,score.verified_days/(score.verified_days+12));
+  if(!score||!selected||!Number.isFinite(score[key])||selected.holdout_days<8)continue;
+  const factor=Number(selected.factor);
+  if(!Number.isFinite(factor)||factor<=0){
+   evidence[name]='daily correction withheld: walk-forward test did not improve accuracy';
+   continue;
+  }
+  // Daily verification has no lead-specific separation. Fade the verified
+  // short-range correction with horizon rather than extrapolating untested.
   const horizon=Math.max(0,1-bucket/10);
-  corrections[name]=-bias*confidence*horizon;
-  evidence[name]=score.verified_days+' verified daily extrema; mean bias '+bias.toFixed(1)+'°F; daily fallback (lead-time uncertainty)';
+  corrections[name]=-score[key]*factor*horizon;
+  evidence[name]=score.verified_days+' verified daily extrema; mean bias '+score[key].toFixed(1)+'°F; validated factor '+factor.toFixed(2)+'; '+selected.holdout_days+' walk-forward days';
  }
  return {corrections,evidence};
 }
