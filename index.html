@@ -1268,6 +1268,17 @@ const temp=a=>a.length?Math.round(mean(a))+'°':'—';
 const spread=a=>a.length>1?Math.round(Math.min(...a))+'–'+Math.round(Math.max(...a))+'°F':'—';
 // Always request ten Pacific calendar dates. Published model data can lag the
 // midnight rollover; use separately labelled live guidance only for missing dates.
+let observedTodayLow=null;
+try{
+ const response=await fetch('moraga_station_today.json?low='+Date.now(),{cache:'no-store'});
+ if(response.ok){
+  const obs=await response.json();
+  const last=Date.parse(obs.last_observation_utc);
+  const valid=obs.date===today&&Number.isFinite(last)&&last<=Date.now()+60000&&Date.now()-last<90*60000;
+  const low=Number(obs.low_f??obs.min_temperature_f??obs.temperature_min_f);
+  if(valid&&Number.isFinite(low)&&low>=-30&&low<=130)observedTodayLow=low;
+ }
+}catch(error){console.warn('Today observed low unavailable for forecast bound',error)}
 const days=Array.from({length:10},(_,i)=>{
  const [y,m,d]=today.split('-').map(Number);
  const utc=new Date(Date.UTC(y,m-1,d+i));
@@ -1404,7 +1415,11 @@ const conditionIcon=condition[0];
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
-const highText=skillBlend(correctedHighs,wh), lowText=skillBlend(correctedLows,wl);
+const highText=skillBlend(correctedHighs,wh);
+let lowText=skillBlend(correctedLows,wl);
+if(i===0&&Number.isFinite(observedTodayLow)&&Number.isFinite(parseFloat(lowText))){
+ lowText=Math.min(parseFloat(lowText),Math.round(observedTodayLow))+'°';
+}
 const highValue=parseFloat(highText),lowValue=parseFloat(lowText);
 const spectrum=t=>{const stops=[[20,[105,68,186]],[30,[88,114,217]],[40,[54,158,224]],[50,[28,181,184]],[60,[55,185,90]],[70,[255,220,55]],[80,[255,144,36]],[90,[228,44,51]],[100,[218,42,115]],[110,[239,79,161]]];if(!Number.isFinite(t))return '#e2e8f0';for(let k=1;k<stops.length;k++){if(t<=stops[k][0]){const a=stops[k-1],b=stops[k],w=Math.max(0,(t-a[0])/(b[0]-a[0]));return 'rgb('+a[1].map((v,i)=>Math.round(v+(b[1][i]-v)*w)).join(',')+')';}}return 'rgb(125,25,57)';};
 const highColor=spectrum(highValue),lowColor=spectrum(lowValue);
