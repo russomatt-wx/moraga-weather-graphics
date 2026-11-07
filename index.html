@@ -1082,20 +1082,35 @@ try{
 }catch(error){console.warn('NWS rain probability unavailable; Open-Meteo fallback',error)}
 window.moragaDailyRainChances={chances:dailyRainChance,source:rainChanceSource};window.dispatchEvent(new CustomEvent('moraga:daily-rain-chances',{detail:window.moragaDailyRainChances}));
 const models=Object.entries(data.temperature_models||{});
-let ensembleDays={};
+let ensembleStatus='Awaiting verified EPS/GEFS temperature data';
 try{
- const response=await fetch('moraga_extended_outlook.json?ts='+Date.now(),{cache:'no-store'});
- if(response.ok){
-  const ensemble=await response.json();
-  const age=Date.now()-Date.parse(ensemble.generated_utc);
-  if(age>=0&&age<18*3600000){
-   ensembleDays=Object.fromEntries((ensemble.days||[]).map(d=>[d.date,d]));
-   for(const [key,label] of [['eps','EPS'],['gefs','GEFS']]){
-    models.push([label,{dates:Object.keys(ensembleDays),high_f:Object.values(ensembleDays).map(d=>d.models?.[key]?.temperature_f_median??null),low_f:Object.values(ensembleDays).map(d=>d.models?.[key]?.temperature_low_f_median??null)}]);
-   }
-  }
+ // The 10-day collector publishes EPS/GEFS member-median daily extrema here.
+ // The extended outlook begins on day 11 and must not be used for this window.
+ const response=await fetch('moraga_forecast_10day.json?ensemble='+Date.now(),{cache:'no-store'});
+ if(!response.ok)throw Error('10-day model feed unavailable');
+ const forecast=await response.json();
+ const age=Date.now()-Date.parse(forecast.generated_utc);
+ if(!Number.isFinite(age)||age< -300000||age>18*3600000)throw Error('10-day model feed stale');
+ const dates=forecast.dates||[];
+ const expected=Array.from({length:10},(_,i)=>{const d=new Date(Date.now()+i*86400000);return new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(d)});
+ // Align by local calendar dates, not by array index or ensemble day 11.
+ let added=0;
+ for(const name of ['EPS','GEFS']){
+  const m=forecast.temperature_models?.[name];
+  if(!m||!Array.isArray(m.dates)||!Array.isArray(m.high_f)||!Array.isArray(m.low_f))continue;
+  const aligned=m.dates.length>=10&&m.dates.slice(0,10).every((date,i)=>date===dates[i])&&
+   expected.every(date=>m.dates.includes(date));
+  const valid=aligned&&expected.every(date=>{
+   const idx=m.dates.indexOf(date);
+   return Number.isFinite(m.high_f[idx])&&Number.isFinite(m.low_f[idx])&&m.high_f[idx]>=m.low_f[idx];
+  });
+  if(!valid){console.warn(name+' ensemble temperature series incomplete or misaligned');continue;}
+  const existing=models.findIndex(([label])=>label===name);
+  if(existing>=0)models.splice(existing,1);
+  models.push([name,m]);added++;
  }
-}catch(error){console.warn('Ensemble temperature guidance unavailable',error)}
+ ensembleStatus=added===2?'EPS and GEFS available':added===1?'One ensemble available; other missing':'EPS/GEFS temperature guidance missing or incomplete';
+}catch(error){console.warn('10-day ensemble temperature guidance unavailable',error)}
 // Blend deterministic skill weights with increasing ensemble influence by lead.
 const hybridWeights=(base,entries,lead)=>{
  const available=entries.filter(([name,value])=>Number.isFinite(value)).map(([name])=>name);
