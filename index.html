@@ -1402,7 +1402,14 @@ if(shownRainChance!==null){
   if(!/heavy rain|thunder|storm|snow|sleet/i.test(condition[1])){
     if(shownRainChance>=80) condition=['🌧️','Rain'];
     else if(shownRainChance>=60) condition=['🌧️','Rain likely'];
-    else if(shownRainChance>=30) condition=['🌦️','Chance of rain'];
+    else if(shownRainChance>=30){
+      // Full rain icon only when at least half of ensemble members
+      // support >=0.10" AND unrounded daily PoP is at least 30%.
+      // Missing ensemble guidance is not treated as zero probability.
+      const p10=Number(guidance?.ensemble_threshold_pct?.['0.1']);
+      const substantial=Number.isFinite(p10)&&p10>=50;
+      condition=[rawRainChance>=30&&substantial?'🌧️':'🌦️','Chance of rain'];
+    }
     else if(shownRainChance>=20) condition=['🌦️','Slight chance of rain'];
     else if(sky[0]) condition=skyTransition(date)||sky;
     else if(modelWetSignal) condition=['⛅','Partly cloudy'];
