@@ -1092,7 +1092,8 @@ try{
  const age=Date.now()-Date.parse(forecast.generated_utc);
  if(!Number.isFinite(age)||age< -300000||age>18*3600000)throw Error('10-day model feed stale');
  const dates=forecast.dates||[];
- const expected=Array.from({length:10},(_,i)=>{const d=new Date(Date.now()+i*86400000);return new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(d)});
+ const localToday=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+ const expected=Array.from({length:10},(_,i)=>{const d=new Date(localToday+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+i);return d.toISOString().slice(0,10)});
  // Align by local calendar dates, not by array index or ensemble day 11.
  let added=0;
  for(const name of ['EPS','GEFS']){
