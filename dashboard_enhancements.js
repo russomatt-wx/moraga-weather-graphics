@@ -55,6 +55,21 @@ function accuracy(){
    const rows=Array.isArray(data.matches)?data.matches.filter(r=>{const t=Date.parse(r.valid_local_date+'T12:00:00Z');return Number.isFinite(t)&&t>=cutoff&&t<=anchor;}):null;
    const names=['ecmwf','gfs','icon','gem','nam'];
    area.replaceChildren();
+   const scored=names.map(name=>{
+    const matches=rows?.filter(r=>r.model===name)||[];
+    const score=data.model_scores?.[name];
+    if(rows&&!matches.length)return null;
+    if(!rows&&(!score||!score.verified_days))return null;
+    const highMae=rows?matches.reduce((sum,r)=>sum+Math.abs(Number(r.high_error_f)),0)/matches.length:Number(score.high_mae_f);
+    const lowMae=rows?matches.reduce((sum,r)=>sum+Math.abs(Number(r.low_error_f)),0)/matches.length:Number(score.low_mae_f);
+    return {name,days:rows?matches.length:score.verified_days,mae:(highMae+lowMae)/2};
+   }).filter(r=>r&&r.days>=3&&Number.isFinite(r.mae));
+   const maxDays=Math.max(0,...scored.map(r=>r.days));
+   const best=scored.filter(r=>r.days>=maxDays-2).sort((a,b)=>a.mae-b.mae)[0];
+   const winner=document.createElement('div');
+   winner.style.cssText='padding:11px 12px;margin:8px 0 12px;border:1px solid #38566b;border-radius:10px;background:#112a39;font-size:13px;color:#c6e2ed';
+   winner.textContent=best?'🏆 Best overall: '+best.name.toUpperCase()+' · '+best.mae.toFixed(1)+'°F average high/low error · '+best.days+' days':'Not enough comparable daily verification to rank models';
+   area.append(winner);
    if(!rows){const p=document.createElement('p');p.className='skill-disclaimer';p.textContent='Historical daily records are awaiting publication. The current all-time averages are shown below.';area.append(p);}
    for(const name of names){
     const matches=rows?.filter(r=>r.model===name)||[];
@@ -66,7 +81,7 @@ function accuracy(){
     const card=document.createElement('div');card.style.cssText='border:1px solid #38546d;border-radius:12px;padding:13px 12px;margin:9px 0;background:#112438';
     const header=document.createElement('div');header.style.cssText='display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px';
     const label=document.createElement('strong');label.textContent=name.toUpperCase();label.style.fontSize='16px';
-    const count=document.createElement('small');count.textContent=(rows?matches.length:score.verified_days)+' verified days';count.style.color='#9db8c9';header.append(label,count);
+    const count=document.createElement('small');count.textContent=(rows?matches.length:score.verified_days)+' verified days';count.style.color='#9db8c9';if(best&&name===best.name)label.textContent+=' 🏆';header.append(label,count);
     const values=document.createElement('div');values.style.cssText='display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px';
     for(const [caption,entry] of [['High',high],['Low',low]]){
      const cell=document.createElement('div');const cap=document.createElement('div');cap.textContent=caption;cap.style.cssText='color:#a9bdce;font-size:12px;margin-bottom:4px';
@@ -82,7 +97,7 @@ function accuracy(){
    btn.addEventListener('click',()=>render(key));buttons.push([key,btn]);tabs.append(btn);
   }
   el.replaceChildren(intro,tabs,area);
-  const note=document.createElement('p');note.className='skill-disclaimer';note.textContent='Blue = too cool · Coral = too warm. Signed average bias; a near-target average does not mean every forecast was accurate.';el.append(note);
+  const note=document.createElement('p');note.className='skill-disclaimer';note.textContent='7, 30 and 90 days are lookback windows, not guaranteed sample counts. Daily high/low matches currently begin October 19; earlier hourly observations are separate. Best model is ranked by average absolute high/low error, not bias, using models with comparable verified days. Blue = too cool · Coral = too warm.';el.append(note);
   render('30');
  }).catch(()=>{el.textContent='Waiting for verified daily high and low data.'});
 }
