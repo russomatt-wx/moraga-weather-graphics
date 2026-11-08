@@ -1437,7 +1437,10 @@ const labelLower=condition[1].toLowerCase();
 const iconKind=/thunder|storm/.test(labelLower)?'storm':/snow|sleet/.test(labelLower)?'snow':/drizzle/.test(labelLower)?'drizzle':/fog|mist/.test(labelLower)?'fog':/am clouds.*pm sun|am low clouds.*sun/.test(labelLower)?'clearing':/shower|chance of rain/.test(labelLower)?'showers':/rain/.test(labelLower)?'rain':/partly cloudy|increasing clouds/.test(labelLower)?'partly':/mostly cloudy|overcast|low clouds/.test(labelLower)?'cloud':/mostly sunny/.test(labelLower)?'mostlySun':/sunny|clear/.test(labelLower)?'sun':'partly';
 const conditionIcon=condition[0];
 // Display-only simplification; preserve published condition and rainfall classification.
-if(condition[1]==='Chance of rain'||condition[1]==='Showers possible') condition[1]='Showers';
+if(condition[1]==='Chance of rain'||condition[1]==='Showers possible'){
+ const p10=Number(guidance?.ensemble_threshold_pct?.['0.1']);
+ condition[1]=rawRainChance>=30&&Number.isFinite(p10)&&p10>=50?'Rain':shownRainChance>=50?'Showers likely':shownRainChance>=30?'Chance of rain':'Slight chance';
+}
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
@@ -2066,6 +2069,10 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 #ten-day .ten-day-grid .day-pop .rain-chance{font-size:clamp(10px,2.5vw,13px)!important;color:#9bdcff!important;font-weight:700!important;white-space:nowrap!important}
 #ten-day .ten-day-grid .day-pop .rain-amount{font-size:clamp(9px,2.25vw,11px)!important;color:#d2e4ed!important;white-space:nowrap!important}
 @media(max-width:760px){#ten-day .ten-day-grid .day-condition{min-height:77px!important}#ten-day .ten-day-grid .day-forecast{padding:7px 2px 8px!important}}
+
+/* Readable low temperatures without increasing card height. */
+#ten-day .ten-day-grid .day-temps>small{font-size:.90em!important;line-height:1.05!important;font-weight:750!important}
+#ten-day .ten-day-grid .day-temps{gap:2px!important}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
