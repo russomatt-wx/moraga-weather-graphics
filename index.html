@@ -2487,6 +2487,22 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  bottom:5px!important;
 }
 #ten-day #ten-day-results .ten-day-grid .day-pop:empty{display:none!important}
+
+/* Rainfall details beneath low temperature; no other layout changes. */
+#ten-day #ten-day-results .ten-day-grid .day-pop{
+ left:auto!important;
+ right:9px!important;
+ width:91px!important;
+ bottom:5px!important;
+ justify-content:center!important;
+}
+@media(max-width:420px){
+ #ten-day #ten-day-results .ten-day-grid .day-pop{
+  left:auto!important;
+  right:6px!important;
+  width:80px!important;
+ }
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
