@@ -2642,6 +2642,20 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 #ten-day #ten-day-results .ten-day-grid .day-forecast .day-temps>small{
  grid-row:1!important;align-self:center!important;
 }
+
+/* Final forecast balance: equal rain text and slightly tighter temperature spacing. */
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop .rain-chance,
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop .rain-amount{
+ font-size:12px!important;
+ font-weight:600!important;
+ line-height:1!important;
+}
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-temps>span{
+ transform:translateX(5px)!important;
+}
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-temps>small{
+ transform:translateX(-6px)!important;
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
