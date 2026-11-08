@@ -2728,9 +2728,12 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  margin-right:0!important;
  padding-top:3px!important;
 }
-/* Give sunny captions extra breathing room beneath the sun artwork only. */
+/* Slightly larger forecast condition labels, with extra room below sunny icons. */
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>small{
+ font-size:clamp(11px,2.8vw,14px)!important;
+}
 #ten-day #ten-day-results .day-condition:has(img[src$="/sun.png"])>small{
- padding-top:8px!important;
+ padding-top:11px!important;
 }
 /* Rain amount matches the probability's cool blue; preserve droplet styling. */
 #ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop .rain-amount{
