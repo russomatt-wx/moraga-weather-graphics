@@ -1861,6 +1861,12 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      const num=(n,unit='',digits=0)=>Number.isFinite(n)?n.toFixed(digits)+unit:'—';
      window.moragaLastLiveObservation=d;
      window.dispatchEvent(new CustomEvent('moraga:live-observation',{detail:d}));
+     // Merge the complete Pacific-day range from the live station archive when available.
+     const archive=d.daily_extrema;
+     if(archive&&archive.date===new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(t)
+       &&Number.isFinite(archive.high_f)&&Number.isFinite(archive.low_f)&&archive.samples>0){
+       window.moragaMergeDailyExtrema?.(archive.high_f,archive.low_f,t.getTime(),'live-archive');
+     }
      // Prefer the fresh station's same-day precipitation over an older published daily summary.
      const observedDay=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(t);
      const currentDay=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
