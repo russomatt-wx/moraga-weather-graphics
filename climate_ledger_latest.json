@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-07T21:03:24.114555+00:00",
+  "generated_utc": "2026-11-08T00:53:01.620148+00:00",
   "station": "KCAMORAG71",
   "days": {
     "2026-10-07": {
@@ -241,17 +241,17 @@
       "last_utc": "2026-11-07T07:59:00+00:00",
       "daily_precipitation_in": 0.0,
       "precipitation_source": "xweather_observations_summary",
-      "precipitation_as_of_utc": "2026-11-07T21:03:20.303453+00:00"
+      "precipitation_as_of_utc": "2026-11-08T00:52:57.633270+00:00"
     },
     "2026-11-07": {
       "sampled_low_f": 41.0,
       "sampled_high_f": 75.0,
-      "samples": 770,
+      "samples": 994,
       "first_utc": "2026-11-07T08:00:00+00:00",
-      "last_utc": "2026-11-07T21:02:00+00:00",
+      "last_utc": "2026-11-08T00:50:00+00:00",
       "daily_precipitation_in": 0.0,
       "precipitation_source": "xweather_observations_summary",
-      "precipitation_as_of_utc": "2026-11-07T21:03:20.303453+00:00"
+      "precipitation_as_of_utc": "2026-11-08T00:52:57.633270+00:00"
     }
   },
   "months": {
@@ -266,9 +266,9 @@
       "precipitation_status": "daily_observed_or_confirmed_minimum"
     },
     "2026-11": {
-      "sample_count": 9316,
+      "sample_count": 9540,
       "days_with_samples": 6,
-      "mean_sample_temperature_f": 54.56,
+      "mean_sample_temperature_f": 54.99,
       "mean_sampled_daily_high_f": 70.67,
       "mean_sampled_daily_low_f": 44.0,
       "monthly_precipitation_in": 0.39,
@@ -276,7 +276,7 @@
       "precipitation_status": "daily_observed_or_confirmed_minimum"
     }
   },
-  "observations": 30979,
+  "observations": 31203,
   "status": "partial_observed_climate_ledger",
   "caveat": "Uneven station sampling; monthly averages are not official daily-mean climate normals. Rainfall is source-reported month-to-date or a dated owner confirmation; cumulative readings are never summed.",
   "chart_status": "matplotlib_unavailable"
