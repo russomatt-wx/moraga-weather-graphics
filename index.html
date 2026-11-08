@@ -1866,6 +1866,13 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
      if(archive&&archive.date===new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(t)
        &&Number.isFinite(archive.high_f)&&Number.isFinite(archive.low_f)&&archive.samples>0){
        window.moragaMergeDailyExtrema?.(archive.high_f,archive.low_f,t.getTime(),'live-archive');
+       const completeness=document.getElementById('station-extrema-coverage')||document.createElement('small');
+       completeness.id='station-extrema-coverage';
+       completeness.style.cssText='display:block;text-align:center;margin-top:8px;font-size:12px;color:#a7bdcc';
+       const summary=document.getElementById('station-today');
+       if(summary&&completeness.parentElement!==summary.parentElement)summary.parentElement.appendChild(completeness);
+       completeness.textContent=archive.complete===true?'': 'Today’s high/low provisional · observation history incomplete';
+       completeness.hidden=archive.complete===true;
      }
      // Prefer the fresh station's same-day precipitation over an older published daily summary.
      const observedDay=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(t);
