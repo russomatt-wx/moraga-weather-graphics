@@ -2313,6 +2313,19 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  #ten-day #ten-day-results .day-temps>span{font-size:27px!important}
  #ten-day #ten-day-results .day-temps>small{font-size:24px!important}
 }
+
+/* Equal visual weight for separated daily high and low temperatures. */
+#ten-day #ten-day-results .day-temps>span,
+#ten-day #ten-day-results .day-temps>small{
+ font-size:clamp(26px,6.5vw,34px)!important;
+ font-weight:750!important;
+ line-height:1!important;
+ font-variant-numeric:tabular-nums!important;
+}
+@media(max-width:420px){
+ #ten-day #ten-day-results .day-temps>span,
+ #ten-day #ten-day-results .day-temps>small{font-size:27px!important}
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
