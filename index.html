@@ -2723,7 +2723,11 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 }
 /* Align condition captions with the photographic icon center without moving icons or rain figures. */
 #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>small{
- transform:translateX(13px)!important;
+ transform:translateX(33px)!important;
+}
+/* Keep the precipitation line under the same visual center as the icon and caption. */
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop{
+ transform:translateX(15px)!important;
 }
 </style>
 <script>
