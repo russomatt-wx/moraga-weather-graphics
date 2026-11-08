@@ -177,6 +177,19 @@ for label,model in (("EPS","ecmwf_ifs025_ensemble"),("GEFS","ncep_gefs_seamless"
 for label,model in (("EPS","ecmwf_ifs025_ensemble"),("GEFS","ncep_gefs_seamless")):
     try: ensemble_temperature[label]=ensemble_temperature_daily(model)
     except Exception as exc: errors[label+"_temperature"]=str(exc)
+# Moraga PoP v1: fraction of complete EPS/GEFS member daily totals >= 0.01 in.
+# Equal model-family weighting avoids over-weighting GEFS by member count.
+# Published PoP is retained only as an independent benchmark.
+model_derived_pop={}
+for day in dates:
+    families={name:days[day] for name,days in ensemble_members.items()
+              if day in days and days[day]["members"]>=10}
+    if len(families)==2:
+        model_derived_pop[day]=round(100*sum(v["thresholds"]["0.01"] for v in families.values())/2)
+    else:
+        model_derived_pop[day]=None
+benchmark_pop=ensemble_rain_probability
+ensemble_rain_probability={day:value for day,value in model_derived_pop.items() if value is not None}
 rain_guidance={}
 for i,day in enumerate(dates):
     available={name:series[day] for name,series in ensemble_members.items() if day in series}
@@ -191,7 +204,9 @@ for i,day in enumerate(dates):
     rain_guidance[day]={"expected_inches":round(expected,3) if available or deterministic else None,
         "ensemble_share":share if available and deterministic else (1 if available else 0),
         "ensemble_threshold_pct":thresholds,"ensemble_models":list(available),
-        "ensemble_members":sum(v["members"] for v in available.values())}
+        "ensemble_members":sum(v["members"] for v in available.values()),
+        "derived_pop_pct":model_derived_pop[day], "pop_method":"EPS/GEFS equal-family member fraction >=0.01 in",
+        "pop_status":"available" if model_derived_pop[day] is not None else "missing_ensemble_family"}
 
 now = datetime.now(timezone.utc)
 # Shared light chart style: readable on mobile, matching the observatory's other graphics.
@@ -241,7 +256,7 @@ fig.savefig(out,facecolor=fig.get_facecolor())
 plt.close(fig)
 Path("moraga_rainfall_10day.json").write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
-    "dates": dates, "model_daily_inches": results, "ensemble_rain_probability_pct": {day: ensemble_rain_probability.get(day) for day in dates}, "errors": errors,
+    "dates": dates, "model_daily_inches": results, "ensemble_rain_probability_pct": {day: model_derived_pop[day] for day in dates}, "benchmark_open_meteo_pop_pct": benchmark_pop, "errors": errors,
     "source": "Open-Meteo", "note": "API does not explicitly expose model initialization times here; generated time is not initialization time."
 }, indent=2))
 print(f"Saved {out}; available models: {', '.join(results)}; errors: {errors}")
@@ -340,7 +355,7 @@ assert len(forecast_dates) == 10 and forecast_dates[0] == datetime.now(ZoneInfo(
 Path("moraga_forecast_10day.json").write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
     "dates": forecast_dates, "rain_guidance": {day:rain_guidance[day] for day in forecast_dates}, "temperature_models": {**ensemble_temperature, **{name: {**temperature_results[model], "dates": temperature_results[model]["dates"][:10], "high_f": temperature_results[model]["high_f"][:10], "low_f": temperature_results[model]["low_f"][:10]} for name, url, model in SOURCES if model in temperature_results}},
-    "model_daily_inches": {name: values[:10] for name, values in results.items()}, "ensemble_rain_probability_pct": {day: ensemble_rain_probability.get(day) for day in forecast_dates}, "daily_conditions": {day: conditions[day] for day in forecast_dates}, "hourly_conditions": {name: hourly_results[model] for name, url, model in SOURCES if model in hourly_results}, "errors": errors,
+    "model_daily_inches": {name: values[:10] for name, values in results.items()}, "ensemble_rain_probability_pct": {day: model_derived_pop[day] for day in forecast_dates}, "benchmark_open_meteo_pop_pct": {day:benchmark_pop.get(day) for day in forecast_dates}, "rain_probability_method":"EPS/GEFS equal-family daily member fraction >=0.01 in", "daily_conditions": {day: conditions[day] for day in forecast_dates}, "hourly_conditions": {name: hourly_results[model] for name, url, model in SOURCES if model in hourly_results}, "errors": errors,
     "method": "Available ECMWF, GFS, ICON, GEM and NAM temperature guidance; website applies provisional KCAMORAG71 hourly skill weights separately for daytime and overnight, using lead-specific history where sufficient. Displayed ranges are deterministic model spread, not probability intervals.",
     "source": "Open-Meteo", "note": "Model inputs are not bias-corrected; website skill weighting is provisional, based on hourly temperature errors. Generated timestamp is retrieval time, not model initialization."
 }, indent=2))
