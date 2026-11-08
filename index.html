@@ -1453,7 +1453,12 @@ const iconLabel=condition[1].toLowerCase();
 const ensembleP10=Number(guidance?.ensemble_threshold_pct?.['0.1']);
 const significantEnsembleRain=Number.isFinite(rawRainChance)&&rawRainChance>=30&&Number.isFinite(ensembleP10)&&ensembleP10>=50;
 const iconKind=/thunder|storm/.test(iconLabel)?'storm':/snow|sleet/.test(iconLabel)?'snow':/drizzle/.test(iconLabel)?'drizzle':/fog|mist/.test(iconLabel)?'fog':/am clouds.*pm sun|am low clouds.*sun/.test(iconLabel)?'clearing':/partly cloudy/.test(iconLabel)?'partly':/mostly cloudy|low clouds|increasing clouds/.test(iconLabel)?'mostlyCloudy':/overcast|cloudy/.test(iconLabel)?'overcast':/slight chance/.test(iconLabel)?'slightRain':/chance of rain/.test(iconLabel)?(significantEnsembleRain?'rain':'chance'):/shower/.test(iconLabel)?'showers':/rain/.test(iconLabel)?'rain':/mostly sunny/.test(iconLabel)?'mostlySun':/sunny|clear/.test(iconLabel)?'sun':'partly';
-const conditionIcon=moragaWeatherPictogram(iconKind);
+// Approved photographic v12 weather icons, with the original SVG as a loading fallback.
+const weatherIconAssets={sun:'sun',mostlySun:'mostlySun',partly:'partly',mostlyCloudy:'partly',overcast:'overcast',clearing:'clearing',chance:'chance',slightRain:'slightRain',showers:'showers',drizzle:'drizzle',rain:'rain',storm:'storm',fog:'fog'};
+const iconAsset=weatherIconAssets[iconKind];
+const conditionIcon=iconAsset
+ ? '<span class="moraga-icon-stack"><img class="moraga-condition-photo" src="weather-icons/'+iconAsset+'.png" alt="" loading="lazy" decoding="async" onload="this.parentElement.classList.add(\'photo-ready\')" onerror="this.remove()">'+moragaWeatherPictogram(iconKind)+'</span>'
+ : moragaWeatherPictogram(iconKind);
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
@@ -2679,6 +2684,12 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  margin-right:3px;
  vertical-align:1px;
 }
+
+/* Approved v12 photographic icons. Soft-edge the navy image tile into forecast gradients. */
+#ten-day #ten-day-results .moraga-icon-stack{position:relative;display:block;width:58px;height:52px;flex:none;overflow:visible}
+#ten-day #ten-day-results .moraga-icon-stack .moraga-condition-svg{position:absolute;inset:1px 4px;width:50px!important;height:50px!important}
+#ten-day #ten-day-results .moraga-icon-stack.photo-ready .moraga-condition-svg{visibility:hidden}
+#ten-day #ten-day-results .moraga-condition-photo{position:absolute;inset:-3px -3px;width:64px;height:58px;object-fit:contain;display:block;max-width:none;mix-blend-mode:normal;-webkit-mask-image:radial-gradient(ellipse 49% 48% at 50% 49%,#000 54%,transparent 100%);mask-image:radial-gradient(ellipse 49% 48% at 50% 49%,#000 54%,transparent 100%)}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
