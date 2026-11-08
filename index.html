@@ -2503,6 +2503,18 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
   width:80px!important;
  }
 }
+
+/* Today uses the same temperature-spectrum border and shading as other days. */
+#ten-day #ten-day-results .day-forecast.is-today{
+ background:linear-gradient(90deg,
+ color-mix(in srgb,var(--forecast-high) 16%,#142330),
+ #10202d 52%,
+ color-mix(in srgb,var(--forecast-low) 16%,#0b1722)) padding-box,
+ linear-gradient(90deg,var(--forecast-high),
+ color-mix(in srgb,var(--forecast-high) 50%,var(--forecast-low)),
+ var(--forecast-low)) border-box!important;
+ box-shadow:none!important;
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
