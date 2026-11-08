@@ -1,21 +1,21 @@
 {
-  "generated_utc": "2026-11-08T06:43:05.193514+00:00",
+  "generated_utc": "2026-11-08T13:54:13.626353+00:00",
   "status": "verified_daily_extremes",
   "station": "KCAMORAG71",
   "model_scores": {
     "gfs": {
-      "verified_days": 19,
-      "high_mae_f": 4.75,
-      "low_mae_f": 6.52,
-      "high_bias_f": 0.26,
-      "low_bias_f": 6.08
+      "verified_days": 20,
+      "high_mae_f": 4.7,
+      "low_mae_f": 6.97,
+      "high_bias_f": 0.44,
+      "low_bias_f": 6.55
     },
     "ecmwf": {
-      "verified_days": 19,
-      "high_mae_f": 4.85,
-      "low_mae_f": 3.91,
-      "high_bias_f": -3.09,
-      "low_bias_f": 2.13
+      "verified_days": 20,
+      "high_mae_f": 4.64,
+      "low_mae_f": 4.05,
+      "high_bias_f": -2.97,
+      "low_bias_f": 2.36
     },
     "nam": {
       "verified_days": 16,
@@ -25,57 +25,57 @@
       "low_bias_f": 5.98
     },
     "icon": {
-      "verified_days": 19,
-      "high_mae_f": 6.09,
-      "low_mae_f": 3.91,
-      "high_bias_f": -2.82,
-      "low_bias_f": 2.56
+      "verified_days": 20,
+      "high_mae_f": 5.87,
+      "low_mae_f": 4.2,
+      "high_bias_f": -2.77,
+      "low_bias_f": 2.92
     },
     "gem": {
-      "verified_days": 19,
+      "verified_days": 20,
       "high_mae_f": 5.99,
-      "low_mae_f": 3.35,
+      "low_mae_f": 3.3,
       "high_bias_f": -5.84,
-      "low_bias_f": 0.1
+      "low_bias_f": 0.22
     }
   },
   "calibration": {
     "gfs": {
       "high": {
         "factor": 0.0,
-        "verified_days": 19,
-        "holdout_days": 12,
-        "raw_holdout_mae_f": 6.185,
-        "selected_holdout_mae_f": 6.185,
+        "verified_days": 20,
+        "holdout_days": 13,
+        "raw_holdout_mae_f": 6.002,
+        "selected_holdout_mae_f": 6.002,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       },
       "low": {
         "factor": 1.25,
-        "verified_days": 19,
-        "holdout_days": 12,
-        "raw_holdout_mae_f": 6.652,
-        "selected_holdout_mae_f": 3.203,
+        "verified_days": 20,
+        "holdout_days": 13,
+        "raw_holdout_mae_f": 7.331,
+        "selected_holdout_mae_f": 3.563,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       }
     },
     "ecmwf": {
       "high": {
-        "factor": 0.75,
-        "verified_days": 19,
-        "holdout_days": 12,
-        "raw_holdout_mae_f": 5.435,
-        "selected_holdout_mae_f": 4.958,
+        "factor": 0.5,
+        "verified_days": 20,
+        "holdout_days": 13,
+        "raw_holdout_mae_f": 5.071,
+        "selected_holdout_mae_f": 4.647,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       },
       "low": {
         "factor": 1.25,
-        "verified_days": 19,
-        "holdout_days": 12,
-        "raw_holdout_mae_f": 4.65,
-        "selected_holdout_mae_f": 3.915,
+        "verified_days": 20,
+        "holdout_days": 13,
+        "raw_holdout_mae_f": 4.818,
+        "selected_holdout_mae_f": 3.935,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       }
@@ -103,19 +103,19 @@
     "icon": {
       "high": {
         "factor": 1.25,
-        "verified_days": 19,
-        "holdout_days": 12,
-        "raw_holdout_mae_f": 7.343,
-        "selected_holdout_mae_f": 6.679,
+        "verified_days": 20,
+        "holdout_days": 13,
+        "raw_holdout_mae_f": 6.915,
+        "selected_holdout_mae_f": 6.3,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       },
       "low": {
         "factor": 1.25,
-        "verified_days": 19,
-        "holdout_days": 12,
-        "raw_holdout_mae_f": 4.353,
-        "selected_holdout_mae_f": 3.507,
+        "verified_days": 20,
+        "holdout_days": 13,
+        "raw_holdout_mae_f": 4.766,
+        "selected_holdout_mae_f": 3.738,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       }
@@ -123,19 +123,19 @@
     "gem": {
       "high": {
         "factor": 1.25,
-        "verified_days": 19,
-        "holdout_days": 12,
-        "raw_holdout_mae_f": 6.77,
-        "selected_holdout_mae_f": 3.254,
+        "verified_days": 20,
+        "holdout_days": 13,
+        "raw_holdout_mae_f": 6.705,
+        "selected_holdout_mae_f": 3.11,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       },
       "low": {
         "factor": 0.0,
-        "verified_days": 19,
-        "holdout_days": 12,
-        "raw_holdout_mae_f": 3.878,
-        "selected_holdout_mae_f": 3.878,
+        "verified_days": 20,
+        "holdout_days": 13,
+        "raw_holdout_mae_f": 3.774,
+        "selected_holdout_mae_f": 3.774,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       }
@@ -1053,6 +1053,46 @@
       "high_error_f": -2.16,
       "low_error_f": 8.08,
       "observation_count": 1414
+    },
+    {
+      "model": "gfs",
+      "valid_local_date": "2026-11-07",
+      "issued_utc": "2026-11-02T01:29:21.640289+00:00",
+      "observed_high_f": 75.0,
+      "observed_low_f": 41.0,
+      "high_error_f": 3.8,
+      "low_error_f": 15.48,
+      "observation_count": 1407
+    },
+    {
+      "model": "ecmwf",
+      "valid_local_date": "2026-11-07",
+      "issued_utc": "2026-11-02T01:29:22.274582+00:00",
+      "observed_high_f": 75.0,
+      "observed_low_f": 41.0,
+      "high_error_f": -0.7,
+      "low_error_f": 6.84,
+      "observation_count": 1407
+    },
+    {
+      "model": "icon",
+      "valid_local_date": "2026-11-07",
+      "issued_utc": "2026-11-02T01:29:23.626079+00:00",
+      "observed_high_f": 75.0,
+      "observed_low_f": 41.0,
+      "high_error_f": -1.78,
+      "low_error_f": 9.72,
+      "observation_count": 1407
+    },
+    {
+      "model": "gem",
+      "valid_local_date": "2026-11-07",
+      "issued_utc": "2026-11-02T01:29:24.250494+00:00",
+      "observed_high_f": 75.0,
+      "observed_low_f": 41.0,
+      "high_error_f": -5.92,
+      "low_error_f": 2.52,
+      "observation_count": 1407
     },
     {
       "model": "nam",
