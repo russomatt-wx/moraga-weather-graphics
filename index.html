@@ -1436,6 +1436,8 @@ if(!significantRain&&!/thunder|storm|snow|sleet|heavy rain/i.test(condition[1]))
 const labelLower=condition[1].toLowerCase();
 const iconKind=/thunder|storm/.test(labelLower)?'storm':/snow|sleet/.test(labelLower)?'snow':/drizzle/.test(labelLower)?'drizzle':/fog|mist/.test(labelLower)?'fog':/am clouds.*pm sun|am low clouds.*sun/.test(labelLower)?'clearing':/shower|chance of rain/.test(labelLower)?'showers':/rain/.test(labelLower)?'rain':/partly cloudy|increasing clouds/.test(labelLower)?'partly':/mostly cloudy|overcast|low clouds/.test(labelLower)?'cloud':/mostly sunny/.test(labelLower)?'mostlySun':/sunny|clear/.test(labelLower)?'sun':'partly';
 const conditionIcon=condition[0];
+// Display-only simplification; preserve published condition and rainfall classification.
+if(condition[1]==='Chance of rain'||condition[1]==='Showers possible') condition[1]='Showers';
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
@@ -2052,16 +2054,18 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 @media(max-width:700px){
  #ai-model-detail{display:block;overflow:visible;font-size:clamp(13px,3.3vw,15px);line-height:1.45}
 }
-/* 10-day readability refinement: compact precipitation footer and consistent type. */
-#ten-day .ten-day-grid .day-forecast{position:relative!important;display:flex!important;flex-direction:column!important;align-items:center!important;padding-bottom:10px!important}
-#ten-day .ten-day-grid .day-condition{width:100%!important;min-height:92px!important;justify-content:flex-start!important;gap:5px!important;margin-top:12px!important}
-#ten-day .ten-day-grid .day-condition small{font-size:clamp(11px,1.7vw,14px)!important;line-height:1.2!important;min-height:34px!important;display:flex!important;align-items:center!important;justify-content:center!important;text-wrap:balance!important}
-#ten-day .ten-day-grid .day-temps{margin:5px 0 0!important;gap:5px!important}
-#ten-day .ten-day-grid .day-temps>small{font-size:.82em!important;opacity:.95!important}
-#ten-day .ten-day-grid .day-pop{width:100%!important;min-height:52px!important;margin:auto 0 0!important;padding:7px 2px 0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;gap:3px!important;border-top:1px solid rgba(139,190,212,.20)!important;line-height:1.15!important}
-#ten-day .ten-day-grid .day-pop .rain-chance{font-size:clamp(11px,1.75vw,14px)!important;font-weight:700!important;color:#9dd9ff!important;white-space:nowrap!important}
-#ten-day .ten-day-grid .day-pop .rain-amount{font-size:clamp(10px,1.5vw,12px)!important;color:#c8deeb!important;white-space:nowrap!important;display:block!important}
-@media(max-width:760px){#ten-day .ten-day-grid .day-forecast{padding-left:2px!important;padding-right:2px!important}#ten-day .ten-day-grid .day-condition{min-height:88px!important}#ten-day .ten-day-grid .day-condition small{font-size:clamp(10px,2.35vw,12px)!important}#ten-day .ten-day-grid .day-pop{min-height:48px!important}#ten-day .ten-day-grid .day-pop .rain-chance{font-size:clamp(10px,2.45vw,12px)!important}#ten-day .ten-day-grid .day-pop .rain-amount{font-size:clamp(9px,2.2vw,11px)!important}}
+
+/* Compact forecast correction: preserve five columns and natural row height. */
+#ten-day .ten-day-grid{grid-auto-rows:auto!important;align-items:start!important;row-gap:10px!important}
+#ten-day .ten-day-grid .day-forecast{height:100%!important;min-height:0!important;padding:8px 3px 10px!important;justify-content:flex-start!important}
+#ten-day .ten-day-grid .day-condition{min-height:82px!important;margin-top:9px!important;gap:2px!important;justify-content:center!important}
+#ten-day .ten-day-grid .day-condition small{min-height:32px!important;font-size:clamp(10px,2.4vw,13px)!important;line-height:1.2!important;text-wrap:balance!important}
+#ten-day .ten-day-grid .day-temps{margin:6px 0 0!important;gap:3px!important}
+#ten-day .ten-day-grid .day-pop{margin:6px 0 0!important;min-height:36px!important;padding:3px 0 0!important;border:0!important;display:flex!important;flex-direction:column!important;gap:2px!important;align-items:center!important;justify-content:flex-start!important}
+#ten-day .ten-day-grid .day-pop:empty{visibility:hidden!important}
+#ten-day .ten-day-grid .day-pop .rain-chance{font-size:clamp(10px,2.5vw,13px)!important;color:#9bdcff!important;font-weight:700!important;white-space:nowrap!important}
+#ten-day .ten-day-grid .day-pop .rain-amount{font-size:clamp(9px,2.25vw,11px)!important;color:#d2e4ed!important;white-space:nowrap!important}
+@media(max-width:760px){#ten-day .ten-day-grid .day-condition{min-height:77px!important}#ten-day .ten-day-grid .day-forecast{padding:7px 2px 8px!important}}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
