@@ -1,12 +1,12 @@
 {
   "date": "2026-11-08",
   "station": "KCAMORAG71",
-  "generated_utc": "2026-11-08T17:59:12.173813+00:00",
-  "last_observation_utc": "2026-11-08T15:29:00+00:00",
-  "high_f": 52.0,
+  "generated_utc": "2026-11-08T20:46:24.595133+00:00",
+  "last_observation_utc": "2026-11-08T19:53:00+00:00",
+  "high_f": 70.0,
   "low_f": 49.0,
   "rainfall_in": 0.0,
   "rainfall_source": "xweather_observations_summary",
-  "rainfall_as_of_utc": "2026-11-08T15:31:43.345937+00:00",
+  "rainfall_as_of_utc": "2026-11-08T19:54:38.725387+00:00",
   "rainfall_note": "Validated daily rainfall from station summary or climate ledger"
 }
