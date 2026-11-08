@@ -1414,26 +1414,27 @@ if(!significantRain&&!/thunder|storm|snow|sleet|heavy rain/i.test(condition[1]))
 const labelLower=condition[1].toLowerCase();
 // Colored minimalist weather pictograms: presentation only; no forecast classification changes.
 function moragaWeatherPictogram(kind){
- const sun='<g stroke="#FFC247" stroke-width="3.5" stroke-linecap="round" fill="none"><circle cx="31" cy="26" r="11" fill="#FFC247" fill-opacity=".22"/><path d="M31 7v5 M31 40v5 M12 26h5 M45 26h5 M18 13l4 4 M40 35l4 4 M44 13l-4 4 M22 35l-4 4"/></g>';
- const sunLarge='<g transform="translate(7 6) scale(1.13)">'+sun+'</g>';
- const cloud='<path d="M21 56 C10 56 10 42 21 39 C24 23 46 20 53 35 C67 32 76 43 72 53 Q70 59 61 59 H25 Q21 59 21 56Z" fill="#293C4A" stroke="#DDE7EF" stroke-width="3.5" stroke-linejoin="round"/>';
- const cloudSmall='<g transform="translate(23 21) scale(.67)">'+cloud+'</g>';
- const cloudMedium='<g transform="translate(12 14) scale(.82)">'+cloud+'</g>';
- const cloudLarge='<g transform="translate(-6 -3) scale(1.12)">'+cloud+'</g>';
- const drops='<g stroke="#258EE8" stroke-width="4.2" stroke-linecap="round"><path d="M29 65l-5 10 M47 65l-5 10 M65 65l-5 10"/></g>';
- const chance='<g stroke="#31C6D7" stroke-width="3.5" stroke-linecap="round"><path d="M37 65l-3 6 M57 65l-3 6"/></g>';
- const showers='<g stroke="#269FEF" stroke-width="3.8" stroke-linecap="round"><path d="M36 65l-5 9 M56 65l-5 9"/></g>';
- const drizzle='<g stroke="#30C7D5" stroke-width="3" stroke-linecap="round"><path d="M30 66l-2 4 M47 66l-2 4 M64 66l-2 4"/></g>';
- const lightning='<path d="M49 57 L38 72 H49 L44 82 L65 63 H53 L59 57" fill="#FFC247" stroke="#F4B52E" stroke-width="1.5" stroke-linejoin="round"/>';
- const snow='<g stroke="#B9EBFF" stroke-width="2.5" stroke-linecap="round"><path d="M29 65v11 M24 70h10 M48 65v11 M43 70h10 M67 65v11 M62 70h10"/></g>';
- const fog='<g stroke="#B4C5CF" stroke-width="3" stroke-linecap="round"><path d="M19 66h49 M25 74h37"/></g>';
- const parts=({
-  sun:sunLarge,mostlySun:sunLarge+cloudSmall,partly:sunLarge+cloudMedium,
-  mostlyCloudy:sun+cloudLarge,overcast:cloudLarge,clearing:sun+cloud,
-  chance:cloud+chance,slightRain:sun+cloud+chance,showers:sun+cloud+showers,drizzle:cloud+drizzle,
-  rain:cloudLarge+drops,storm:cloud+lightning,snow:cloud+snow,fog:cloud+fog
- })[kind]||cloud;
- return '<svg class="moraga-condition-svg" viewBox="0 0 90 88" width="46" height="46" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'+parts+'</svg>';
+ // Dimensional, Apple Weather-inspired original SVG artwork; no external assets.
+ const id='mw-'+kind.replace(/[^a-z]/gi,'');
+ const defs='<defs>'+
+ '<radialGradient id="'+id+'sun" cx="34%" cy="30%" r="70%"><stop stop-color="#FFF9CE"/><stop offset=".48" stop-color="#FFE16C"/><stop offset="1" stop-color="#F6A927"/></radialGradient>'+
+ '<linearGradient id="'+id+'cloud" x1=".15" y1="0" x2=".8" y2="1"><stop stop-color="#FFFFFF"/><stop offset=".48" stop-color="#E8F1F9"/><stop offset="1" stop-color="#9BAFC3"/></linearGradient>'+
+ '<linearGradient id="'+id+'dark" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#DCE8F3"/><stop offset=".6" stop-color="#8EA6BB"/><stop offset="1" stop-color="#5C748D"/></linearGradient>'+
+ '<linearGradient id="'+id+'rain" x1="0" y1="0" x2=".5" y2="1"><stop stop-color="#9CEBFF"/><stop offset="1" stop-color="#258EEA"/></linearGradient>'+
+ '<filter id="'+id+'blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>'+
+ '</defs>';
+ const sunny='<g><circle cx="33" cy="31" r="23" fill="#F7B935" opacity=".2" filter="url(#'+id+'blur)"/><g stroke="#FFD36B" stroke-width="3.6" stroke-linecap="round"><path d="M33 4v8 M33 50v8 M6 31h8 M52 31h8 M14 12l6 6 M46 44l6 6 M52 12l-6 6 M20 44l-6 6"/></g><circle cx="33" cy="31" r="17" fill="url(#'+id+'sun)"/><circle cx="28" cy="25" r="9" fill="#FFF9D5" opacity=".32"/></g>';
+ const cloud=(dark=false)=>'<g><ellipse cx="45" cy="58" rx="29" ry="6" fill="#152A42" opacity=".24" filter="url(#'+id+'blur)"/><path d="M20 58 C8 57 8 42 20 39 C23 24 43 21 51 35 C63 30 76 40 72 52 C71 58 66 60 58 60 H25 Q21 60 20 58Z" fill="url(#'+id+(dark?'dark':'cloud')+')"/><path d="M19 45 C22 39 26 39 29 39 C33 28 46 29 51 39" fill="none" stroke="#FFFFFF" stroke-opacity=".48" stroke-width="2.5" stroke-linecap="round"/></g>';
+ const smallCloud='<g transform="translate(17 17) scale(.72)">'+cloud()+'</g>';
+ const mediumCloud='<g transform="translate(6 10) scale(.9)">'+cloud()+'</g>';
+ const bigCloud='<g transform="translate(-4 -5) scale(1.1)">'+cloud(true)+'</g>';
+ const rain=(n=3)=>'<g stroke="url(#'+id+'rain)" stroke-width="4" stroke-linecap="round">'+(n===2?'<path d="M36 67l-5 9 M57 67l-5 9"/>':'<path d="M28 67l-5 9 M47 67l-5 9 M66 67l-5 9"/>')+'</g>';
+ const drizzle='<g stroke="#86D7F3" stroke-width="2.6" stroke-linecap="round"><path d="M30 67l-2 5 M47 67l-2 5 M64 67l-2 5"/></g>';
+ const lightning='<path d="M49 58 L37 72 H49 L44 84 L65 63 H53 L59 58Z" fill="#FFE06B" stroke="#FFBD36" stroke-width="1.3"/>';
+ const snow='<g stroke="#C5F0FF" stroke-width="2.4" stroke-linecap="round"><path d="M29 67v11 M24 72h10 M48 67v11 M43 72h10 M67 67v11 M62 72h10"/></g>';
+ const fog='<g stroke="#C8D9E7" stroke-width="3" stroke-linecap="round"><path d="M18 68h53 M25 77h40"/></g>';
+ const parts={sun:sunny,mostlySun:sunny+smallCloud,partly:sunny+mediumCloud,mostlyCloudy:sunny+bigCloud,overcast:bigCloud,clearing:sunny+cloud(),chance:cloud()+rain(2),slightRain:sunny+mediumCloud+rain(2),showers:sunny+cloud()+rain(2),drizzle:cloud()+drizzle,rain:bigCloud+rain(),storm:cloud(true)+lightning,snow:cloud()+snow,fog:cloud()+fog};
+ return '<svg class="moraga-condition-svg" viewBox="0 0 90 88" width="46" height="46" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'+defs+(parts[kind]||cloud())+'</svg>';
 }
 // Display-only simplification; preserve published condition and rainfall classification.
 if(condition[1]==='Chance of rain'||condition[1]==='Showers possible'){
