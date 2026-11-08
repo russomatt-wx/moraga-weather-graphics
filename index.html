@@ -2073,6 +2073,17 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 /* Readable low temperatures without increasing card height. */
 #ten-day .ten-day-grid .day-temps>small{font-size:.90em!important;line-height:1.05!important;font-weight:750!important}
 #ten-day .ten-day-grid .day-temps{gap:2px!important}
+
+/* Equal-height, compact 10-day cards across both rows. */
+#ten-day .ten-day-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;grid-auto-rows:205px!important;align-items:stretch!important;row-gap:10px!important}
+#ten-day .ten-day-grid .day-forecast{height:205px!important;min-height:205px!important;max-height:205px!important;box-sizing:border-box!important;padding:6px 2px 7px!important;justify-content:flex-start!important;overflow:hidden!important}
+#ten-day .ten-day-grid .day-condition{min-height:66px!important;height:66px!important;margin-top:5px!important;gap:1px!important;flex-shrink:0!important}
+#ten-day .ten-day-grid .day-condition span{font-size:clamp(23px,6.8vw,31px)!important;line-height:1.1!important}
+#ten-day .ten-day-grid .day-condition small{min-height:27px!important;font-size:clamp(9px,2.4vw,12px)!important;line-height:1.15!important}
+#ten-day .ten-day-grid .day-temps{margin:3px 0 0!important;gap:1px!important;font-size:clamp(21px,5.5vw,29px)!important;flex-shrink:0!important}
+#ten-day .ten-day-grid .day-temps>small{font-size:.88em!important}
+#ten-day .ten-day-grid .day-pop{margin-top:auto!important;min-height:29px!important;padding:0!important;gap:1px!important;flex-shrink:0!important;border:0!important}
+@media(min-width:761px){#ten-day .ten-day-grid{grid-auto-rows:225px!important}#ten-day .ten-day-grid .day-forecast{height:225px!important;min-height:225px!important;max-height:225px!important}}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
