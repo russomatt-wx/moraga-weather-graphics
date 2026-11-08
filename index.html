@@ -2336,6 +2336,33 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  #ten-day #ten-day-results .day-forecast>strong{font-size:16px!important}
  #ten-day #ten-day-results .day-forecast .day-date{font-size:14px!important}
 }
+
+/* Final horizontal-row polish: no internal dividers, compact uniform rows. */
+#ten-day #ten-day-results .day-forecast{
+ grid-template-rows:66px auto!important;
+ min-height:76px!important;
+ padding-top:5px!important;padding-bottom:5px!important;
+ background:linear-gradient(90deg,
+ color-mix(in srgb,var(--forecast-high) 16%,#142330),
+ #10202d 52%,
+ color-mix(in srgb,var(--forecast-low) 16%,#0b1722)) padding-box,
+ linear-gradient(90deg,var(--forecast-high),
+ color-mix(in srgb,var(--forecast-high) 50%,var(--forecast-low)),
+ var(--forecast-low)) border-box!important
+}
+#ten-day #ten-day-results .day-forecast.is-today{
+ background:linear-gradient(90deg,#17444d,#102d40 55%,#0a2948) padding-box,
+ linear-gradient(90deg,#23e3ef,#08c8eb) border-box!important
+}
+#ten-day #ten-day-results .day-forecast .day-pop{
+ margin:0 0 6px!important;
+ padding:0!important;
+ border:0!important;
+}
+#ten-day #ten-day-results .day-forecast .day-temps>span,
+#ten-day #ten-day-results .day-forecast .day-temps>small{
+ align-self:center!important;
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
