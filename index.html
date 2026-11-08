@@ -1454,7 +1454,7 @@ const ensembleP10=Number(guidance?.ensemble_threshold_pct?.['0.1']);
 const significantEnsembleRain=Number.isFinite(rawRainChance)&&rawRainChance>=30&&Number.isFinite(ensembleP10)&&ensembleP10>=50;
 const iconKind=/thunder|storm/.test(iconLabel)?'storm':/snow|sleet/.test(iconLabel)?'snow':/drizzle/.test(iconLabel)?'drizzle':/fog|mist/.test(iconLabel)?'fog':/am clouds.*pm sun|am low clouds.*sun/.test(iconLabel)?'clearing':/partly cloudy/.test(iconLabel)?'partly':/mostly cloudy|low clouds|increasing clouds/.test(iconLabel)?'mostlyCloudy':/overcast|cloudy/.test(iconLabel)?'overcast':/slight chance/.test(iconLabel)?'slightRain':/chance of rain/.test(iconLabel)?(significantEnsembleRain?'rain':'chance'):/shower/.test(iconLabel)?'showers':/rain/.test(iconLabel)?'rain':/mostly sunny/.test(iconLabel)?'mostlySun':/sunny|clear/.test(iconLabel)?'sun':'partly';
 // Approved photographic v12 weather icons, with the original SVG as a loading fallback.
-const weatherIconAssets={sun:'sun',mostlySun:'mostlySun',partly:'partly',mostlyCloudy:'cloudy',overcast:'overcast',clearing:'clearing',chance:'chance',slightRain:'showersSun',showers:'showers',drizzle:'drizzle',rain:'rain',storm:'storm',fog:'fog'};
+const weatherIconAssets={sun:'sun',mostlySun:'mostlySun',partly:'partly',mostlyCloudy:'clearing',overcast:'overcast',clearing:'clearing',chance:'chance',slightRain:'showersSun',showers:'showers',drizzle:'drizzle',rain:'rain',storm:'storm',fog:'fog'};
 const iconAsset=weatherIconAssets[iconKind];
 const conditionIcon=iconAsset
  ? '<span class="moraga-icon-stack"><img class="moraga-condition-photo" src="weather-icons/'+iconAsset+'.png" alt="" loading="lazy" decoding="async" onload="this.parentElement.classList.add(\'photo-ready\')" onerror="this.remove()">'+moragaWeatherPictogram(iconKind)+'</span>'
@@ -2690,7 +2690,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  position:relative!important;display:block!important;
  width:68px!important;height:47px!important;flex:0 0 47px!important;
  margin:-5px 0 6px!important;overflow:visible!important;
- transform:translateX(-15px)!important; /* Align artwork with the condition label's visual center. */
+ transform:translateX(0px)!important; /* Keep image centered above its own condition label. */
 }
 #ten-day #ten-day-results .moraga-icon-stack .moraga-condition-svg{
  position:absolute!important;left:9px!important;top:0!important;
@@ -2711,10 +2711,15 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 }
 /* Center the complete weather column in the forecast card, including precipitation. */
 #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition{
- transform:translateX(-20px)!important;
+ transform:translateX(-5px)!important;
 }
 #ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop{
- transform:translateX(-20px)!important;
+ transform:translateX(-5px)!important;
+}
+/* Rain-bearing icons need a taller blend area so their lower streaks remain visible. */
+#ten-day #ten-day-results .moraga-icon-stack:has(img[src*="showersSun.png"]) .moraga-condition-photo{
+ -webkit-mask-image:radial-gradient(ellipse 50% 58% at 50% 55%,#000 48%,rgba(0,0,0,.9) 70%,transparent 100%)!important;
+ mask-image:radial-gradient(ellipse 50% 58% at 50% 55%,#000 48%,rgba(0,0,0,.9) 70%,transparent 100%)!important;
 }
 </style>
 <script>
