@@ -2709,25 +2709,28 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  position:relative!important;z-index:1!important;
  margin-top:2px!important;
 }
-/* Center the complete weather column in the forecast card, including precipitation. */
-#ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition{
- transform:translateX(-5px)!important;
-}
+/* Forecast icon, caption, and precipitation: rely on their shared grid cell,
+   never independent pixel translations. */
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition,
+#ten-day #ten-day-results .ten-day-grid .day-forecast:has(.day-pop:not(:empty)) .day-condition,
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>small,
 #ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop{
- transform:translateX(-5px)!important;
+ transform:none!important;
 }
-/* Rain-bearing icons need a taller blend area so their lower streaks remain visible. */
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition{
+ align-items:center!important;
+ text-align:center!important;
+}
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>small{
+ align-self:center!important;
+ width:100%!important;
+ margin-left:0!important;
+ margin-right:0!important;
+}
+/* Preserve lower rain streaks on shower icons. */
 #ten-day #ten-day-results .moraga-icon-stack:has(img[src*="showersSun.png"]) .moraga-condition-photo{
  -webkit-mask-image:radial-gradient(ellipse 50% 58% at 50% 55%,#000 48%,rgba(0,0,0,.9) 70%,transparent 100%)!important;
  mask-image:radial-gradient(ellipse 50% 58% at 50% 55%,#000 48%,rgba(0,0,0,.9) 70%,transparent 100%)!important;
-}
-/* Align condition captions with the photographic icon center without moving icons or rain figures. */
-#ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>small{
- transform:translateX(33px)!important;
-}
-/* Keep the precipitation line under the same visual center as the icon and caption. */
-#ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop{
- transform:translateX(15px)!important;
 }
 </style>
 <script>
