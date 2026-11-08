@@ -2588,6 +2588,14 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 /* Final cascade override: rain percentage must remain legible on mobile. */
 #ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop .rain-chance{font-size:18px!important;font-weight:700!important;line-height:1.08!important;color:#a8e0ff!important}
 #ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop .rain-amount{font-size:11px!important;line-height:1.12!important}
+
+/* Subtle, symmetric temperature reduction without changing card geometry. */
+#ten-day #ten-day-results .day-forecast .day-temps>span,
+#ten-day #ten-day-results .day-forecast .day-temps>small{font-size:clamp(24px,6vw,31px)!important}
+@media(max-width:420px){
+ #ten-day #ten-day-results .day-forecast .day-temps>span,
+ #ten-day #ten-day-results .day-forecast .day-temps>small{font-size:25px!important}
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
