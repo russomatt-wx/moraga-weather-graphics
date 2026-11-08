@@ -1456,7 +1456,7 @@ const rangeStart=Math.max(0,Math.min(100,((Number.isFinite(lowValue)?lowValue:20
 const rangeEnd=Math.max(rangeStart,Math.min(100,((Number.isFinite(highValue)?highValue:110)-20)/90*100));
 const rangeGradient='linear-gradient(90deg,'+lowColor+','+spectrum((lowValue+highValue)/2)+','+highColor+')';
 
-return '<article class="day-forecast'+(date===today?' is-today':'')+'" style="--forecast-high:'+highColor+';--forecast-low:'+lowColor+';--forecast-border:'+highColor+'">'+(date===today?'<span class="today-pill">TODAY</span>':'<strong>'+day+'</strong>')+'<div class="day-date">'+label+'</div><div class="day-condition" title="Daily weather condition from Open-Meteo"><span aria-hidden="true">'+conditionIcon+'</span><small>'+condition[1]+'</small></div><div class="day-temps" style="background:transparent"><span style="color:'+highColor+'">'+highText+'</span> <small style="color:'+lowColor+'">'+lowText+'</small></div><div class="day-pop" title="Daily rain probability and ensemble-weighted expected rainfall">'+(remainingDayDry?'':dailyRainChance[date]===undefined?'<span class="rain-chance">—</span>':dailyRainChance[date]<10?'': '<span class="rain-chance">'+Math.min(100,Math.round(dailyRainChance[date]/10)*10)+'%</span>')+(rainAmountText?'<span class="rain-amount"><span class="rain-separator" aria-hidden="true">💧</span>'+rainAmountText.replace(/ in$/, '″')+'</span>':'')+'</div><details class="forecast-detail"><summary aria-label="Show model range">Model details</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Expected rainfall: '+(rainAmountText||'unavailable')+' ('+rainfallSourceLabel+') · '+rainTiming+'<br>Ensemble thresholds: '+thresholdText+'<br>Rain chance source: '+(rainChanceSource[date]||'unavailable')+' · NWS: '+(rainChanceComparison[date]?.nws??'—')+'% · Open-Meteo: '+(rainChanceComparison[date]?.openMeteo??'—')+'%<br>Raw weighted high: '+skillBlend(highEntries,wh)+' · Local adjustment: '+adjustmentLabel(highEntries,correctedHighs,wh)+'<br>Raw weighted low: '+skillBlend(lowEntries,wl)+' · Local adjustment: '+adjustmentLabel(lowEntries,correctedLows,wl)+'</p><h5>High temperature models</h5>'+detailTable(highEntries,bh,wh)+'<h5>Low temperature models</h5>'+detailTable(lowEntries,bl,wl)+'<p class="diagnostic-note">Bias = model minus observed station temperature; adjustment is the guarded correction actually applied. Recent hourly samples are provisional proxies for daily extremes. High weights: '+weightLabel(wh)+'; low weights: '+weightLabel(wl)+'.</p></details></article>';
+return '<article class="day-forecast'+(date===today?' is-today':'')+'" style="--forecast-high:'+highColor+';--forecast-low:'+lowColor+';--forecast-border:'+highColor+'">'+(date===today?'<span class="today-pill">TODAY</span>':'<strong>'+day+'</strong>')+'<div class="day-date">'+label+'</div><div class="day-condition" title="Daily weather condition from Open-Meteo"><span aria-hidden="true">'+conditionIcon+'</span><small>'+condition[1]+'</small></div><div class="day-temps" style="background:transparent"><span style="color:'+highColor+'">'+highText+'</span> <small style="color:'+lowColor+'">'+lowText+'</small></div><div class="day-pop" title="Daily rain probability and ensemble-weighted expected rainfall">'+(remainingDayDry?'':dailyRainChance[date]===undefined?'<span class="rain-chance">—</span>':dailyRainChance[date]<20?'': '<span class="rain-chance">'+Math.min(100,Math.round(dailyRainChance[date]/10)*10)+'%</span>')+(rainAmountText?'<span class="rain-amount"><span class="rain-separator" aria-hidden="true">💧</span>'+rainAmountText.replace(/ in$/, '″')+'</span>':'')+'</div><details class="forecast-detail"><summary aria-label="Show model range">Model details</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Expected rainfall: '+(rainAmountText||'unavailable')+' ('+rainfallSourceLabel+') · '+rainTiming+'<br>Ensemble thresholds: '+thresholdText+'<br>Rain chance source: '+(rainChanceSource[date]||'unavailable')+' · NWS: '+(rainChanceComparison[date]?.nws??'—')+'% · Open-Meteo: '+(rainChanceComparison[date]?.openMeteo??'—')+'%<br>Raw weighted high: '+skillBlend(highEntries,wh)+' · Local adjustment: '+adjustmentLabel(highEntries,correctedHighs,wh)+'<br>Raw weighted low: '+skillBlend(lowEntries,wl)+' · Local adjustment: '+adjustmentLabel(lowEntries,correctedLows,wl)+'</p><h5>High temperature models</h5>'+detailTable(highEntries,bh,wh)+'<h5>Low temperature models</h5>'+detailTable(lowEntries,bl,wl)+'<p class="diagnostic-note">Bias = model minus observed station temperature; adjustment is the guarded correction actually applied. Recent hourly samples are provisional proxies for daily extremes. High weights: '+weightLabel(wh)+'; low weights: '+weightLabel(wl)+'.</p></details></article>';
 }).join('')+'<div class="temp-spectrum-key" aria-label="Fixed temperature color scale from 20 to 110 degrees Fahrenheit"><div class="temp-spectrum-bar"></div><div class="temp-spectrum-labels"><span>20°</span><span>30°</span><span>40°</span><span>50°</span><span>60°</span><span>70°</span><span>80°</span><span>90°</span><span>100°</span><span>110°</span></div><div class="temp-spectrum-caption">Temperature color scale (°F) · highs and lows</div></div></div>';
 // Keep forecast diagnostics available by tapping a day card, without visible info icons.
 el.querySelectorAll('.day-forecast details').forEach((detail,index)=>{
@@ -2410,6 +2410,49 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  }
  #ten-day #ten-day-results .day-forecast .day-temps>span,
  #ten-day #ten-day-results .day-forecast .day-temps>small{font-size:32px!important}
+}
+
+/* Compact equal-height forecast rows: rainfall occupies condition area, not an extra grid track. */
+#ten-day #ten-day-results .day-forecast{
+ position:relative!important;
+ grid-template-rows:90px auto!important;
+ min-height:0!important;
+ height:auto!important;
+ padding:3px 9px!important;
+ box-sizing:border-box!important;
+}
+#ten-day #ten-day-results .day-forecast .day-condition{
+ grid-row:1!important;
+ align-self:center!important;
+ padding-bottom:13px!important;
+}
+#ten-day #ten-day-results .day-forecast .day-temps>span,
+#ten-day #ten-day-results .day-forecast .day-temps>small{
+ grid-row:1!important;
+ align-self:center!important;
+}
+#ten-day #ten-day-results .day-forecast .day-pop{
+ position:absolute!important;
+ left:calc(9px + 65px + 65px + 12px)!important;
+ right:calc(9px + 91px + 6px)!important;
+ bottom:9px!important;
+ width:auto!important;
+ max-width:none!important;
+ min-width:0!important;
+ margin:0!important;
+ padding:0!important;
+ grid-column:auto!important;
+ grid-row:auto!important;
+ justify-content:center!important;
+}
+#ten-day #ten-day-results .day-forecast .day-pop:empty{display:none!important}
+#ten-day #ten-day-results .day-forecast .forecast-detail{grid-row:2!important}
+@media(max-width:420px){
+ #ten-day #ten-day-results .day-forecast{grid-template-rows:90px auto!important;padding:3px 6px!important}
+ #ten-day #ten-day-results .day-forecast .day-pop{
+  left:calc(6px + 53px + 58px + 6px)!important;
+  right:calc(6px + 80px + 3px)!important;
+ }
 }
 </style>
 <script>
