@@ -2104,6 +2104,11 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 #ten-day .ten-day-grid .day-pop .rain-separator{padding-right:3px;color:#7799ac}
 
 #ten-day .ten-day-grid .day-pop .rain-separator{padding:0 3px!important;font-size:12px!important;color:#86d9ff!important}
+
+/* Prevent precipitation overflow on narrow five-column cards. */
+#ten-day .ten-day-grid .day-pop{display:flex!important;flex-direction:column!important;justify-content:flex-end!important;align-items:center!important;gap:1px!important;min-width:0!important;width:100%!important;max-width:100%!important;white-space:normal!important;overflow:hidden!important;min-height:36px!important;margin-bottom:4px!important;padding:0!important}
+#ten-day .ten-day-grid .day-pop .rain-chance,#ten-day .ten-day-grid .day-pop .rain-amount{display:block!important;font-size:clamp(10px,2.5vw,12px)!important;line-height:1.15!important;white-space:nowrap!important;max-width:100%!important}
+#ten-day .ten-day-grid .day-pop .rain-separator{padding:0 2px 0 0!important;font-size:11px!important}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
