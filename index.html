@@ -2084,6 +2084,14 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 #ten-day .ten-day-grid .day-temps>small{font-size:.88em!important}
 #ten-day .ten-day-grid .day-pop{margin-top:auto!important;min-height:29px!important;padding:0!important;gap:1px!important;flex-shrink:0!important;border:0!important}
 @media(min-width:761px){#ten-day .ten-day-grid{grid-auto-rows:225px!important}#ten-day .ten-day-grid .day-forecast{height:225px!important;min-height:225px!important;max-height:225px!important}}
+
+/* Final card spacing: give lows room and settle rainfall near the base. */
+#ten-day .ten-day-grid .day-temps{margin-top:3px!important;margin-bottom:0!important}
+#ten-day .ten-day-grid .day-pop{margin-top:auto!important;margin-bottom:3px!important;min-height:28px!important;padding-top:0!important;gap:2px!important;justify-content:flex-end!important}
+#ten-day .ten-day-grid .day-forecast{padding-bottom:8px!important}
+/* Let the forecast card wrap its contents instead of stretching to match a taller neighbor. */
+#ten-day{align-self:start!important;height:auto!important;min-height:0!important}
+#ten-day .method-note{margin-top:12px!important}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
