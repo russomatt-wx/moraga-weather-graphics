@@ -2685,11 +2685,29 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  vertical-align:1px;
 }
 
-/* Approved v12 photographic icons. Soft-edge the navy image tile into forecast gradients. */
-#ten-day #ten-day-results .moraga-icon-stack{position:relative;display:block;width:58px;height:52px;flex:none;overflow:visible}
-#ten-day #ten-day-results .moraga-icon-stack .moraga-condition-svg{position:absolute;inset:1px 4px;width:50px!important;height:50px!important}
-#ten-day #ten-day-results .moraga-icon-stack.photo-ready .moraga-condition-svg{visibility:hidden}
-#ten-day #ten-day-results .moraga-condition-photo{position:absolute;inset:-3px -3px;width:64px;height:58px;object-fit:contain;display:block;max-width:none;mix-blend-mode:normal;-webkit-mask-image:radial-gradient(ellipse 49% 48% at 50% 49%,#000 54%,transparent 100%);mask-image:radial-gradient(ellipse 49% 48% at 50% 49%,#000 54%,transparent 100%)}
+/* v12 presentation: crop out the rectangular tile, then blend softly into the navy card. */
+#ten-day #ten-day-results .day-condition .moraga-icon-stack{
+ position:relative!important;display:block!important;
+ width:68px!important;height:47px!important;flex:0 0 47px!important;
+ margin:-5px 0 6px!important;overflow:visible!important;
+}
+#ten-day #ten-day-results .moraga-icon-stack .moraga-condition-svg{
+ position:absolute!important;left:9px!important;top:0!important;
+ width:50px!important;height:46px!important;
+}
+#ten-day #ten-day-results .moraga-icon-stack.photo-ready .moraga-condition-svg{visibility:hidden!important}
+#ten-day #ten-day-results .moraga-condition-photo{
+ position:absolute!important;left:0!important;top:-3px!important;
+ width:68px!important;height:53px!important;max-width:none!important;
+ object-fit:cover!important;display:block!important;
+ mix-blend-mode:lighten!important;
+ -webkit-mask-image:radial-gradient(ellipse 46% 46% at 50% 48%,#000 40%,rgba(0,0,0,.92) 57%,transparent 100%)!important;
+ mask-image:radial-gradient(ellipse 46% 46% at 50% 48%,#000 40%,rgba(0,0,0,.92) 57%,transparent 100%)!important;
+}
+#ten-day #ten-day-results .day-condition>small{
+ position:relative!important;z-index:1!important;
+ margin-top:2px!important;
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
