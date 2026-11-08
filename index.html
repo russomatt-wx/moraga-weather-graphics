@@ -2092,6 +2092,10 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 /* Let the forecast card wrap its contents instead of stretching to match a taller neighbor. */
 #ten-day{align-self:start!important;height:auto!important;min-height:0!important}
 #ten-day .method-note{margin-top:12px!important}
+
+/* Prevent forecast card from stretching to the height of the adjacent guidance chart. */
+.focus-grid{align-items:start!important}
+.focus-grid>#ten-day{align-self:start!important;min-height:0!important;height:fit-content!important}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
