@@ -2248,6 +2248,71 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  #ten-day #ten-day-results .day-pop .rain-chance{font-size:10px!important}
  #ten-day #ten-day-results .day-pop .rain-amount{font-size:9px!important}
 }
+
+/* Four-zone forecast row: date | high | centered condition | low. */
+#ten-day #ten-day-results .day-forecast{
+ display:grid!important;
+ grid-template-columns:65px 65px minmax(0,1fr) 91px!important;
+ grid-template-rows:72px auto!important;
+ column-gap:6px!important;row-gap:0!important;
+ align-items:center!important;min-height:80px!important;height:auto!important;
+ padding:5px 9px!important;overflow:hidden!important
+}
+#ten-day #ten-day-results .day-forecast>strong,
+#ten-day #ten-day-results .day-forecast>.today-pill{
+ grid-column:1!important;grid-row:1!important;align-self:center!important;justify-self:start!important;
+ margin:-18px 0 0!important
+}
+#ten-day #ten-day-results .day-date{
+ grid-column:1!important;grid-row:1!important;align-self:center!important;justify-self:start!important;
+ margin:20px 0 0!important
+}
+#ten-day #ten-day-results .day-condition{
+ display:flex!important;grid-column:3!important;grid-row:1!important;
+ flex-direction:column!important;align-items:center!important;justify-content:center!important;
+ gap:3px!important;width:100%!important;min-width:0!important;height:auto!important;min-height:0!important;
+ margin:0!important;padding:0!important
+}
+#ten-day #ten-day-results .day-condition>span{
+ grid-column:auto!important;grid-row:auto!important;position:static!important;
+ font-size:clamp(30px,7vw,37px)!important;line-height:1.05!important;flex:0 0 auto!important
+}
+#ten-day #ten-day-results .day-condition>small{
+ grid-column:auto!important;grid-row:auto!important;display:block!important;position:static!important;
+ width:100%!important;min-width:0!important;max-width:100%!important;min-height:0!important;
+ font-size:clamp(12px,3vw,15px)!important;line-height:1.15!important;font-weight:600!important;
+ text-align:center!important;white-space:normal!important;overflow-wrap:normal!important;word-break:normal!important;
+ margin:0!important;padding:0!important
+}
+#ten-day #ten-day-results .day-temps{
+ display:contents!important
+}
+#ten-day #ten-day-results .day-temps>span{
+ grid-column:2!important;grid-row:1!important;justify-self:center!important;align-self:center!important;
+ font-size:clamp(26px,6.5vw,34px)!important;line-height:1!important;white-space:nowrap!important
+}
+#ten-day #ten-day-results .day-temps>small{
+ grid-column:4!important;grid-row:1!important;justify-self:end!important;align-self:center!important;
+ font-size:clamp(24px,5.9vw,31px)!important;line-height:1!important;white-space:nowrap!important
+}
+#ten-day #ten-day-results .day-pop{
+ grid-column:4!important;grid-row:1!important;align-self:end!important;justify-self:end!important;
+ display:flex!important;flex-direction:row!important;justify-content:flex-end!important;align-items:center!important;
+ width:auto!important;max-width:100%!important;min-width:0!important;height:auto!important;min-height:0!important;
+ margin:0 0 2px!important;padding:0!important;gap:2px!important;border:0!important;
+ overflow:hidden!important;white-space:nowrap!important
+}
+#ten-day #ten-day-results .day-pop .rain-chance{font-size:clamp(9px,2.3vw,11px)!important;white-space:nowrap!important}
+#ten-day #ten-day-results .day-pop .rain-amount{font-size:clamp(9px,2.2vw,11px)!important;white-space:nowrap!important}
+#ten-day #ten-day-results .day-pop .rain-separator{padding:0 1px!important;font-size:10px!important}
+#ten-day #ten-day-results .forecast-detail{grid-column:1/-1!important;grid-row:2!important}
+@media(max-width:420px){
+ #ten-day #ten-day-results .day-forecast{grid-template-columns:53px 54px minmax(0,1fr) 80px!important;column-gap:3px!important;padding:4px 6px!important}
+ #ten-day #ten-day-results .day-condition>span{font-size:30px!important}
+ #ten-day #ten-day-results .day-condition>small{font-size:12px!important}
+ #ten-day #ten-day-results .day-temps>span{font-size:27px!important}
+ #ten-day #ten-day-results .day-temps>small{font-size:24px!important}
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
