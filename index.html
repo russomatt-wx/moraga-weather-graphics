@@ -2590,6 +2590,58 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 
 /* Rain metrics: centered numeric stack, without redundant droplet. */
 #ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop .rain-amount{display:block!important;width:100%!important;text-align:center!important;font-size:12px!important;line-height:1.15!important}
+
+/* Centered, consistent weather column for wet and dry days.
+   Precipitation metrics sit BELOW the label, never beside the icon. */
+#ten-day #ten-day-results .ten-day-grid .day-forecast{
+ grid-template-rows:108px auto!important;
+ min-height:108px!important;
+}
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition,
+#ten-day #ten-day-results .ten-day-grid .day-forecast:has(.day-pop:not(:empty)) .day-condition{
+ grid-column:3!important;grid-row:1!important;
+ transform:none!important;
+ align-self:start!important;
+ justify-self:stretch!important;
+ height:76px!important;
+ padding:7px 0 0!important;
+ margin:0!important;
+ display:flex!important;flex-direction:column!important;
+ align-items:center!important;justify-content:flex-start!important;
+ gap:1px!important;
+ text-align:center!important;
+}
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>small{
+ font-size:clamp(10px,2.5vw,13px)!important;
+ line-height:1.1!important;
+ white-space:normal!important;
+ max-width:100%!important;
+}
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop{
+ grid-column:3!important;grid-row:1!important;
+ position:relative!important;
+ left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
+ transform:none!important;
+ align-self:end!important;justify-self:center!important;
+ width:100%!important;max-width:100%!important;
+ height:29px!important;
+ display:flex!important;flex-direction:row!important;
+ align-items:center!important;justify-content:center!important;
+ gap:7px!important;
+ margin:0!important;padding:0 0 7px!important;
+ overflow:visible!important;
+}
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop:empty{visibility:hidden!important}
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop .rain-chance{
+ font-size:16px!important;line-height:1!important;
+}
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop .rain-amount{
+ width:auto!important;font-size:12px!important;line-height:1!important;
+}
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-temps>span,
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-temps>small{
+ grid-row:1!important;align-self:center!important;
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
