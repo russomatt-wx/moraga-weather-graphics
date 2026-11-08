@@ -2515,6 +2515,44 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  var(--forecast-low)) border-box!important;
  box-shadow:none!important;
 }
+
+/* Rain probability above amount, to the right of the condition; no divider. */
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop{
+ position:absolute!important;
+ left:69%!important;
+ right:auto!important;
+ top:50%!important;
+ bottom:auto!important;
+ transform:translate(-50%,-50%)!important;
+ width:66px!important;
+ max-width:66px!important;
+ min-width:0!important;
+ display:flex!important;
+ flex-direction:column!important;
+ align-items:center!important;
+ justify-content:center!important;
+ gap:2px!important;
+ margin:0!important;
+ padding:0!important;
+ line-height:1.15!important;
+ white-space:nowrap!important;
+ border:0!important;
+}
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop:empty{display:none!important}
+#ten-day #ten-day-results .ten-day-grid .day-forecast:has(.day-pop:not(:empty)) .day-condition{
+ transform:translateX(-13px)!important;
+}
+@media(max-width:420px){
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop{
+  left:70%!important;
+  width:59px!important;
+  max-width:59px!important;
+  font-size:10px!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast:has(.day-pop:not(:empty)) .day-condition{
+  transform:translateX(-16px)!important;
+ }
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
