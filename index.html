@@ -2661,6 +2661,16 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>small{
  font-weight:700!important;
 }
+
+/* Small droplet separator between rain probability and expected amount. */
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop .rain-amount::before{
+ content:"💧";
+ display:inline-block;
+ font-size:10px;
+ line-height:1;
+ margin-right:3px;
+ vertical-align:1px;
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
