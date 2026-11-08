@@ -21,10 +21,38 @@ export default {
       const ob = record?.ob;
       if (!ob || !Number.isFinite(Number(ob.timestamp))) throw new Error('Invalid observation timestamp');
       const pick = key => Number.isFinite(Number(ob[key])) && ob[key] !== null && ob[key] !== '' ? Number(ob[key]) : null;
+      // Recover today's full Pacific-day temperature range from archived station samples.
+      // This does not depend on GitHub Actions or an open browser tab.
+      let dailyExtrema = null;
+      try {
+        const pacificDate = new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+        const archive = new URL('https://api.aerisapi.com/observations/archive/'+STATION);
+        archive.searchParams.set('from',pacificDate);
+        archive.searchParams.set('client_id',env.XWEATHER_CLIENT_ID);
+        archive.searchParams.set('client_secret',env.XWEATHER_CLIENT_SECRET);
+        const archivedResponse = await fetch(archive.toString(),{cf:{cacheTtl:600,cacheEverything:true}});
+        if(archivedResponse.ok){
+          const archived = await archivedResponse.json();
+          const records = Array.isArray(archived.response)?archived.response:[archived.response];
+          const values = [];
+          for(const record of records){
+            for(const sample of (Array.isArray(record?.periods)?record.periods:Array.isArray(record?.observations)?record.observations:[record])){
+              const obSample = sample?.ob||sample;
+              const stamp = Number(obSample?.timestamp);
+              const temp = Number(obSample?.tempF);
+              if(!Number.isFinite(stamp)||!Number.isFinite(temp)||temp< -30||temp>130)continue;
+              const sampleDay = new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(stamp*1000));
+              if(sampleDay===pacificDate && stamp*1000<=Date.now()+60000)values.push(temp);
+            }
+          }
+          if(values.length)dailyExtrema={date:pacificDate,high_f:Math.max(...values),low_f:Math.min(...values),samples:values.length};
+        }
+      }catch(_err){/* Keep current observations available when archive is delayed. */}
       return Response.json({
         station:'KCAMORAG71',
         observed_utc:new Date(Number(ob.timestamp)*1000).toISOString(),
         temperature_f:pick('tempF'),
+        daily_extrema:dailyExtrema,
         humidity_pct:pick('humidity'),
         dew_point_f:pick('dewpointF'),
         wind_mph:pick('windSpeedMPH'),
