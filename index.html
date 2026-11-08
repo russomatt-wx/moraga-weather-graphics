@@ -1458,7 +1458,7 @@ function moragaWeatherPictogram(kind){
  const parts=({
   sun:sunLarge,mostlySun:sunLarge+cloudSmall,partly:sun+cloud,
   mostlyCloudy:sun+cloudLarge,overcast:cloudLarge,clearing:sun+cloud,
-  chance:cloud+chance,showers:sun+cloud+showers,drizzle:cloud+drizzle,
+  chance:cloud+chance,slightRain:sun+cloud+chance,showers:sun+cloud+showers,drizzle:cloud+drizzle,
   rain:cloudLarge+drops,storm:cloud+lightning,snow:cloud+snow,fog:cloud+fog
  })[kind]||cloud;
  return '<svg class="moraga-condition-svg" viewBox="0 0 90 88" width="46" height="46" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'+parts+'</svg>';
@@ -1466,11 +1466,13 @@ function moragaWeatherPictogram(kind){
 // Display-only simplification; preserve published condition and rainfall classification.
 if(condition[1]==='Chance of rain'||condition[1]==='Showers possible'){
  const p10=Number(guidance?.ensemble_threshold_pct?.['0.1']);
- condition[1]=rawRainChance>=30&&Number.isFinite(p10)&&p10>=50?'Rain':shownRainChance>=50?'Showers likely':shownRainChance>=30?'Chance of rain':'Slight chance';
+ condition[1]=shownRainChance>=50?'Showers likely':shownRainChance>=30?'Chance of rain':'Slight chance of rain';
 }
 // Map the final displayed condition to a distinct icon; forecast values remain unchanged.
 const iconLabel=condition[1].toLowerCase();
-const iconKind=/thunder|storm/.test(iconLabel)?'storm':/snow|sleet/.test(iconLabel)?'snow':/drizzle/.test(iconLabel)?'drizzle':/fog|mist/.test(iconLabel)?'fog':/am clouds.*pm sun|am low clouds.*sun/.test(iconLabel)?'clearing':/chance|slight chance/.test(iconLabel)?'chance':/shower/.test(iconLabel)?'showers':/rain/.test(iconLabel)?'rain':/mostly cloudy|low clouds|increasing clouds/.test(iconLabel)?'mostlyCloudy':/overcast|cloudy/.test(iconLabel)?'overcast':/partly cloudy/.test(iconLabel)?'partly':/mostly sunny/.test(iconLabel)?'mostlySun':/sunny|clear/.test(iconLabel)?'sun':'partly';
+const ensembleP10=Number(guidance?.ensemble_threshold_pct?.['0.1']);
+const significantEnsembleRain=Number.isFinite(rawRainChance)&&rawRainChance>=30&&Number.isFinite(ensembleP10)&&ensembleP10>=50;
+const iconKind=/thunder|storm/.test(iconLabel)?'storm':/snow|sleet/.test(iconLabel)?'snow':/drizzle/.test(iconLabel)?'drizzle':/fog|mist/.test(iconLabel)?'fog':/am clouds.*pm sun|am low clouds.*sun/.test(iconLabel)?'clearing':/partly cloudy/.test(iconLabel)?'partly':/mostly cloudy|low clouds|increasing clouds/.test(iconLabel)?'mostlyCloudy':/overcast|cloudy/.test(iconLabel)?'overcast':/slight chance/.test(iconLabel)?'slightRain':/chance of rain/.test(iconLabel)?(significantEnsembleRain?'rain':'chance'):/shower/.test(iconLabel)?'showers':/rain/.test(iconLabel)?'rain':/mostly sunny/.test(iconLabel)?'mostlySun':/sunny|clear/.test(iconLabel)?'sun':'partly';
 const conditionIcon=moragaWeatherPictogram(iconKind);
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
