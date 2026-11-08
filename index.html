@@ -2732,6 +2732,15 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition .moraga-icon-stack{
  transform:translateX(-11px)!important;
 }
+/* Keep shower streaks within their icon box so they cannot cross caption text. */
+#ten-day #ten-day-results .day-condition .moraga-icon-stack:has(img[src*="showersSun.png"]){
+ overflow:hidden!important;
+ margin-bottom:9px!important;
+}
+#ten-day #ten-day-results .day-condition:has(img[src*="showersSun.png"])>small{
+ position:relative!important;
+ z-index:2!important;
+}
 /* Preserve lower rain streaks on shower icons. */
 #ten-day #ten-day-results .moraga-icon-stack:has(img[src*="showersSun.png"]) .moraga-condition-photo{
  -webkit-mask-image:radial-gradient(ellipse 50% 58% at 50% 55%,#000 48%,rgba(0,0,0,.9) 70%,transparent 100%)!important;
