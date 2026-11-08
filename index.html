@@ -2735,6 +2735,11 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 #ten-day #ten-day-results .day-condition:has(img[src$="/sun.png"])>small{
  padding-top:11px!important;
 }
+/* Balance spacing around the rainfall droplet by nudging only PoP right. */
+#ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop .rain-chance{
+ position:relative!important;
+ left:4px!important;
+}
 /* Rain amount matches the probability's cool blue; preserve droplet styling. */
 #ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop .rain-amount{
  color:#a8e0ff!important;
