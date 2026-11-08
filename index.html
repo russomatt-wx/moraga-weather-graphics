@@ -1088,6 +1088,20 @@ try{
   rainChanceComparison[date]={...(rainChanceComparison[date]||{}),nws:Math.round(value)};
  }
 }catch(error){console.warn('NWS rain probability unavailable; Open-Meteo fallback',error)}
+// Observatory-derived PoP is the display authority. NWS/Open-Meteo
+// values above remain independent comparison benchmarks only.
+for(const date of data.dates||[]){
+ const derived=data.rain_guidance?.[date]?.derived_pop_pct;
+ const method=data.rain_guidance?.[date]?.pop_method;
+ if(data.rain_probability_method&&method&&validPop(derived)){
+  rainChanceComparison[date]={...(rainChanceComparison[date]||{}),modelDerived:derived};
+  dailyRainChance[date]=Math.round(derived);
+  rainChanceSource[date]='Moraga EPS/GEFS';
+ }else if(data.rain_probability_method){
+  delete dailyRainChance[date];
+  rainChanceSource[date]='Model PoP unavailable';
+ }
+}
 window.moragaDailyRainChances={chances:dailyRainChance,source:rainChanceSource};window.dispatchEvent(new CustomEvent('moraga:daily-rain-chances',{detail:window.moragaDailyRainChances}));
 const models=Object.entries(data.temperature_models||{});
 let ensembleStatus='Awaiting verified EPS/GEFS temperature data';
