@@ -2741,11 +2741,10 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  position:relative!important;
  z-index:2!important;
 }
-/* Fade the source tile's rectangular edge without clipping the actual icon.
-   Keep rain streaks above the condition label. */
+/* Hide the source image's bottom tile boundary while retaining the cloud and rain. */
 #ten-day #ten-day-results .moraga-icon-stack:has(img[src*="showersSun.png"]) .moraga-condition-photo{
- -webkit-mask-image:radial-gradient(ellipse 48% 56% at 50% 49%,#000 43%,rgba(0,0,0,.88) 65%,transparent 100%)!important;
- mask-image:radial-gradient(ellipse 48% 56% at 50% 49%,#000 43%,rgba(0,0,0,.88) 65%,transparent 100%)!important;
+ -webkit-mask-image:radial-gradient(ellipse 48% 51% at 50% 43%,#000 40%,rgba(0,0,0,.82) 62%,transparent 100%)!important;
+ mask-image:radial-gradient(ellipse 48% 51% at 50% 43%,#000 40%,rgba(0,0,0,.82) 62%,transparent 100%)!important;
 }
 #ten-day #ten-day-results .day-condition:has(img[src*="showersSun.png"])>small{
  padding-top:5px!important;
