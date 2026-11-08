@@ -35,6 +35,7 @@ export default {
           const archived = await archivedResponse.json();
           const records = Array.isArray(archived.response)?archived.response:[archived.response];
           const values = [];
+          const timestamps = [];
           for(const record of records){
             for(const sample of (Array.isArray(record?.periods)?record.periods:Array.isArray(record?.observations)?record.observations:[record])){
               const obSample = sample?.ob||sample;
@@ -42,10 +43,27 @@ export default {
               const temp = Number(obSample?.tempF);
               if(!Number.isFinite(stamp)||!Number.isFinite(temp)||temp< -30||temp>130)continue;
               const sampleDay = new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(stamp*1000));
-              if(sampleDay===pacificDate && stamp*1000<=Date.now()+60000)values.push(temp);
+              if(sampleDay===pacificDate && stamp*1000<=Date.now()+60000){values.push(temp);timestamps.push(stamp*1000);}
             }
           }
-          if(values.length)dailyExtrema={date:pacificDate,high_f:Math.max(...values),low_f:Math.min(...values),samples:values.length};
+          if(values.length){
+            timestamps.sort((a,b)=>a-b);
+            const nowMs=Date.now();
+            const first=timestamps[0],last=timestamps[timestamps.length-1];
+            // Derive Pacific midnight as an absolute instant from the current local date,
+            // accounting for the timezone's current UTC offset.
+            const dayStart=Date.parse(pacificDate+'T00:00:00')+
+              (nowMs-new Date(new Date(nowMs).toLocaleString('en-US',{timeZone:'America/Los_Angeles'})).getTime());
+            let largestGap=0;
+            for(let i=1;i<timestamps.length;i++)largestGap=Math.max(largestGap,timestamps[i]-timestamps[i-1]);
+            const startGap=Math.max(0,first-dayStart);
+            const endGap=Math.max(0,nowMs-last);
+            const complete=startGap<=30*60000&&endGap<=30*60000&&largestGap<=45*60000;
+            dailyExtrema={date:pacificDate,high_f:Math.max(...values),low_f:Math.min(...values),samples:values.length,
+              complete,first_observed_utc:new Date(first).toISOString(),last_observed_utc:new Date(last).toISOString(),
+              largest_gap_minutes:Math.round(largestGap/60000),
+              coverage_status:complete?'complete':'incomplete'};
+          }
         }
       }catch(_err){/* Keep current observations available when archive is delayed. */}
       return Response.json({
