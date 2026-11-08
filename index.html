@@ -1461,6 +1461,7 @@ function moragaWeatherPictogram(kind){
  const sunLarge='<g transform="translate(7 6) scale(1.13)">'+sun+'</g>';
  const cloud='<path d="M21 56 C10 56 10 42 21 39 C24 23 46 20 53 35 C67 32 76 43 72 53 Q70 59 61 59 H25 Q21 59 21 56Z" fill="#293C4A" stroke="#DDE7EF" stroke-width="3.5" stroke-linejoin="round"/>';
  const cloudSmall='<g transform="translate(23 21) scale(.67)">'+cloud+'</g>';
+ const cloudMedium='<g transform="translate(12 14) scale(.82)">'+cloud+'</g>';
  const cloudLarge='<g transform="translate(-6 -3) scale(1.12)">'+cloud+'</g>';
  const drops='<g stroke="#258EE8" stroke-width="4.2" stroke-linecap="round"><path d="M29 65l-5 10 M47 65l-5 10 M65 65l-5 10"/></g>';
  const chance='<g stroke="#31C6D7" stroke-width="3.5" stroke-linecap="round"><path d="M37 65l-3 6 M57 65l-3 6"/></g>';
@@ -1470,7 +1471,7 @@ function moragaWeatherPictogram(kind){
  const snow='<g stroke="#B9EBFF" stroke-width="2.5" stroke-linecap="round"><path d="M29 65v11 M24 70h10 M48 65v11 M43 70h10 M67 65v11 M62 70h10"/></g>';
  const fog='<g stroke="#B4C5CF" stroke-width="3" stroke-linecap="round"><path d="M19 66h49 M25 74h37"/></g>';
  const parts=({
-  sun:sunLarge,mostlySun:sunLarge+cloudSmall,partly:sun+cloud,
+  sun:sunLarge,mostlySun:sunLarge+cloudSmall,partly:sunLarge+cloudMedium,
   mostlyCloudy:sun+cloudLarge,overcast:cloudLarge,clearing:sun+cloud,
   chance:cloud+chance,slightRain:sun+cloud+chance,showers:sun+cloud+showers,drizzle:cloud+drizzle,
   rain:cloudLarge+drops,storm:cloud+lightning,snow:cloud+snow,fog:cloud+fog
