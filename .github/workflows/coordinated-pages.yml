@@ -40,7 +40,7 @@ jobs:
         with:
           ref: main
       - name: Recover missed 10-day forecast schedule
-        if: github.event_name == 'schedule'
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push'
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
@@ -54,10 +54,10 @@ jobs:
           local=now.astimezone(ZoneInfo('America/Los_Angeles'))
           # Only check after a forecast cycle has had time to finish.
           cycle_hours=(4,9,14,19)
-          due=max((local.replace(hour=h,minute=10,second=0,microsecond=0)
+          due=max((local.replace(hour=h,minute=17,second=0,microsecond=0)
                    for h in cycle_hours if local.replace(hour=h,minute=10,second=0,microsecond=0)<=local),
                   default=None)
-          if due is None or local-due<timedelta(minutes=35) or local-due>timedelta(hours=2):
+          if due is None or local-due<timedelta(minutes=25) or local-due>timedelta(hours=4):
               print('Outside forecast recovery window; skipping')
               raise SystemExit(0)
           path=Path('moraga_forecast_10day.json')
