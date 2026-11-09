@@ -1709,9 +1709,19 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  for(const img of imgs){const src=img.getAttribute('src');if(!src||!src.match(/\.png(?:\?|$)|\.jpg(?:\?|$)|\.gif(?:\?|$)/i))continue;const url=new URL(src,location.href);url.search='';if(!sources.has(url.href))sources.set(url.href,[]);sources.get(url.href).push(img)}
  function pacificDate(iso){return new Date(iso).toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'})}
  function label(img,msg){const host=img.closest('a')||img;let el=host.nextElementSibling;if(!el||!el.classList.contains('chart-meta')){el=document.createElement('p');el.className='chart-meta';host.after(el)}if(msg.startsWith('Chart file updated:')){el.dataset.updated=msg}else{el.dataset.valid=msg}el.textContent=[el.dataset.valid,el.dataset.updated].filter(Boolean).join(' · ')}
- for(const [url,group] of sources){fetch(url,{method:'HEAD',cache:'no-store'}).then(res=>{if(!res.ok)return;const modified=res.headers.get('Last-Modified');if(!modified)return;for(const img of group)label(img,'Chart file updated: '+pacificDate(modified))}).catch(()=>{})}
+ for(const [url,group] of sources){fetch(url,{method:'HEAD',cache:'no-store'}).then(res=>{if(!res.ok)return;const modified=res.headers.get('Last-Modified');if(!modified)return;for(const img of group){if(img.id==='pacific-synoptic-image')continue;label(img,'Chart file updated: '+pacificDate(modified))}}).catch(()=>{})}
  const syn=document.getElementById('pacific-synoptic-image');
- if(syn){fetch('pacific_synoptic.json?ts='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.json()}).then(data=>{if(data.gfs_valid_utc)label(syn,'GFS forecast valid: '+pacificDate(data.gfs_valid_utc)+' · Updated file time shown when available')}).catch(()=>{})}
+ if(syn){fetch('pacific_synoptic.json?ts='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.json()}).then(data=>{
+  if(!data.gfs_valid_utc)return;
+  const valid=new Date(data.gfs_valid_utc),hoursOld=(Date.now()-valid.getTime())/3600000;
+  const src=new URL(syn.getAttribute('src'),location.href);
+  src.searchParams.set('valid',String(valid.getTime()));
+  syn.src=src.href;
+  const link=syn.closest('a');
+  if(link){const href=new URL(link.href,location.href);href.searchParams.set('valid',String(valid.getTime()));link.href=href.href}
+  const freshness=hoursOld>6?' · Older forecast — refresh pending':'';
+  label(syn,'GFS map valid: '+pacificDate(data.gfs_valid_utc)+freshness);
+ }).catch(()=>{label(syn,'GFS map validity unavailable — check source data')})}
 })();
 </script><script defer src="dashboard_enhancements.js?v=8"></script><script>
 (async function(){
