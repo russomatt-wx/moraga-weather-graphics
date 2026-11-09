@@ -1,8 +1,8 @@
 {
-  "generated_utc": "2026-11-07T20:20:48.042990+00:00",
+  "generated_utc": "2026-11-08T20:38:23.422644+00:00",
   "status": "diagnostic_only",
   "archive_health": {
-    "valid_records": 77,
+    "valid_records": 79,
     "invalid_records": 0,
     "duplicate_target_editions": [],
     "off_hour_archives": [
@@ -240,27 +240,27 @@
   },
   "assistant_bias": {
     "6 AM": {
-      "verified_days": 17,
-      "high_mean_error_f": -2.24,
-      "low_mean_error_f": 1.12,
+      "verified_days": 18,
+      "high_mean_error_f": -2.06,
+      "low_mean_error_f": 1.17,
       "calibration_ready": true
     },
     "11 AM": {
-      "verified_days": 17,
-      "high_mean_error_f": -2.29,
-      "low_mean_error_f": 0.59,
+      "verified_days": 18,
+      "high_mean_error_f": -2.11,
+      "low_mean_error_f": 0.56,
       "calibration_ready": true
     },
     "4 PM": {
-      "verified_days": 20,
-      "high_mean_error_f": -2.35,
-      "low_mean_error_f": 2.05,
+      "verified_days": 21,
+      "high_mean_error_f": -2.14,
+      "low_mean_error_f": 2.1,
       "calibration_ready": true
     },
     "9 PM": {
-      "verified_days": 19,
-      "high_mean_error_f": -2.26,
-      "low_mean_error_f": 2.0,
+      "verified_days": 20,
+      "high_mean_error_f": -2.05,
+      "low_mean_error_f": 2.05,
       "calibration_ready": true
     }
   },

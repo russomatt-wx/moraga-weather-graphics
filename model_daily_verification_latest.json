@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-08T13:54:13.626353+00:00",
+  "generated_utc": "2026-11-09T01:13:57.494614+00:00",
   "status": "verified_daily_extremes",
   "station": "KCAMORAG71",
   "model_scores": {
@@ -1062,7 +1062,7 @@
       "observed_low_f": 41.0,
       "high_error_f": 3.8,
       "low_error_f": 15.48,
-      "observation_count": 1407
+      "observation_count": 1415
     },
     {
       "model": "ecmwf",
@@ -1072,7 +1072,7 @@
       "observed_low_f": 41.0,
       "high_error_f": -0.7,
       "low_error_f": 6.84,
-      "observation_count": 1407
+      "observation_count": 1415
     },
     {
       "model": "icon",
@@ -1082,7 +1082,7 @@
       "observed_low_f": 41.0,
       "high_error_f": -1.78,
       "low_error_f": 9.72,
-      "observation_count": 1407
+      "observation_count": 1415
     },
     {
       "model": "gem",
@@ -1092,7 +1092,7 @@
       "observed_low_f": 41.0,
       "high_error_f": -5.92,
       "low_error_f": 2.52,
-      "observation_count": 1407
+      "observation_count": 1415
     },
     {
       "model": "nam",
