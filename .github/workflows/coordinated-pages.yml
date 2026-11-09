@@ -21,6 +21,7 @@ on:
     - cron: '47 * * * *'
 permissions:
   contents: write
+  actions: write
   pages: write
   id-token: write
 concurrency:
@@ -38,6 +39,53 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
+      - name: Recover missed 10-day forecast schedule
+        if: github.event_name == 'schedule'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request
+          from datetime import datetime, timedelta, timezone
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+          now=datetime.now(timezone.utc)
+          local=now.astimezone(ZoneInfo('America/Los_Angeles'))
+          # Only check after a forecast cycle has had time to finish.
+          cycle_hours=(4,9,14,19)
+          due=max((local.replace(hour=h,minute=10,second=0,microsecond=0)
+                   for h in cycle_hours if local.replace(hour=h,minute=10,second=0,microsecond=0)<=local),
+                  default=None)
+          if due is None or local-due<timedelta(minutes=35) or local-due>timedelta(hours=2):
+              print('Outside forecast recovery window; skipping')
+              raise SystemExit(0)
+          path=Path('moraga_forecast_10day.json')
+          try:
+              generated=datetime.fromisoformat(json.loads(path.read_text())['generated_utc'].replace('Z','+00:00'))
+          except (OSError,ValueError,KeyError) as exc:
+              print('Forecast timestamp unavailable:',exc)
+              generated=datetime.min.replace(tzinfo=timezone.utc)
+          if generated>=due.astimezone(timezone.utc):
+              print('Forecast current for cycle:',generated)
+              raise SystemExit(0)
+          headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],
+                   'Accept':'application/vnd.github+json','User-Agent':'MoragaWeatherObservatory'}
+          base='https://api.github.com/repos/russomatt-wx/moraga-weather-graphics'
+          req=urllib.request.Request(base+'/actions/workflows/rainfall_10day.yml/runs?per_page=15',headers=headers)
+          with urllib.request.urlopen(req,timeout=20) as response:
+              runs=json.load(response).get('workflow_runs',[])
+          recent=[r for r in runs if datetime.fromisoformat(r['created_at'].replace('Z','+00:00'))>=due.astimezone(timezone.utc)]
+          if recent:
+              print('Forecast cycle already attempted; avoiding duplicate dispatch:',recent[0]['id'],recent[0]['status'])
+              raise SystemExit(0)
+          print('::warning::Missed forecast cycle',due.isoformat(),'; dispatching recovery')
+          req=urllib.request.Request(base+'/actions/workflows/rainfall_10day.yml/dispatches',
+                data=json.dumps({'ref':'main'}).encode(),
+                headers={**headers,'Content-Type':'application/json'},method='POST')
+          with urllib.request.urlopen(req,timeout=20) as response:
+              print('Forecast recovery dispatch HTTP',response.status)
+          PY
       - name: Recover missed private Xweather collector schedule
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         continue-on-error: true
