@@ -7,8 +7,7 @@ on:
       - 'scripts/build_pacific_synoptic.py'
       - '.github/workflows/update-pacific-synoptic.yml'
   schedule:
-    - cron: '10 2,11,16,21 * 3-10 *'
-    - cron: '10 3,12,17,22 * 11,12,1,2 *'
+    - cron: '17 0,3,6,9,12,15,18,21 * * *'
 permissions:
   contents: write
 concurrency:
