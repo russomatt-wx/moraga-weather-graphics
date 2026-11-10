@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+"""Publish explicit RRFS CONUS guidance; fail closed rather than silently use GFS."""
+import csv,json,math,pathlib,urllib.parse,urllib.request
+from datetime import datetime,timezone
+ROOT=pathlib.Path("hrrr-data");ROOT.mkdir(exist_ok=True)
+LAT,LON=37.8201932,-122.1193876
+def fetch(model):
+    params={"latitude":LAT,"longitude":LON,"models":model,"hourly":"temperature_2m,precipitation","temperature_unit":"fahrenheit","precipitation_unit":"inch","forecast_hours":72,"timezone":"UTC"}
+    url="https://api.open-meteo.com/v1/forecast?"+urllib.parse.urlencode(params)
+    with urllib.request.urlopen(urllib.request.Request(url,headers={"User-Agent":"MoragaWeatherObservatory/1.0"}),timeout=55) as f:
+        d=json.load(f)
+    h=d.get("hourly") or {};t=h.get("time") or [];temp=h.get("temperature_2m") or [];rain=h.get("precipitation") or []
+    if not (len(t)>=48 and len(t)==len(temp)==len(rain)):raise ValueError("Missing 48 hours of model data")
+    rows=[]
+    for a,b,c in zip(t,temp,rain):
+        if b is None or c is None or not math.isfinite(float(b)) or not math.isfinite(float(c)):raise ValueError("Incomplete forecast values")
+        rows.append((a,float(b),float(c)))
+    return rows,url
+def main():
+    stamp=datetime.now(timezone.utc).isoformat()
+    try:
+        rrfs,url=fetch("ncep_rrfs_conus")
+        gfs,_=fetch("ncep_gfs_global")
+        common={x[0]:x[1] for x in gfs}
+        matched=[(v,common[t]) for t,v,_ in rrfs if t in common]
+        if len(matched)<24 or all(abs(a-b)<0.0001 for a,b in matched[:48]):
+            raise ValueError("RRFS series not independently distinguishable from GFS")
+        # Open-Meteo model selection is explicit; run initialization timestamp is not verified.
+        with (ROOT/"short_range.csv").open("w",newline="") as f:
+            w=csv.writer(f);w.writerow(["valid_time_utc","temperature_2m","precipitation"]);w.writerows(rrfs)
+        meta={"status":"available","model":"RRFS CONUS","source_model":"ncep_rrfs_conus","source_url":url,"retrieved_utc":stamp,"source_verified":True,"initialization_verified":False,"note":"Explicit RRFS selection and GFS independence screening; model cycle time not independently verified."}
+    except Exception as e:
+        (ROOT/"short_range.csv").unlink(missing_ok=True)
+        meta={"status":"unavailable","retrieved_utc":stamp,"source_verified":False,"reason":str(e)}
+    (ROOT/"short_range_metadata.json").write_text(json.dumps(meta,indent=2)+"\n")
+    print(meta["status"],meta.get("reason","RRFS data published"))
+if __name__=="__main__":main()
