@@ -6,8 +6,8 @@
   "marine_layer_proxy_chart": "moraga_marine_layer_proxy_96h.png",
   "marine_diagnostics_data": "moraga_marine_diagnostics_96h.json",
   "maps_status": "stale_withheld",
-  "initialized_utc": "2026-11-10T06:00:00+00:00",
-  "generated_utc": "2026-11-10T11:04:37.763870+00:00",
+  "initialized_utc": "2026-11-10T12:00:00+00:00",
+  "generated_utc": "2026-11-10T19:41:44.080673+00:00",
   "maps": [
     "gfs_h500_vorticity_f012.png",
     "gfs_h500_vorticity_f036.png",
