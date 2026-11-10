@@ -44,6 +44,19 @@ function render(){
   else {
    add(svg,'path',{d:vals.map((v,i)=>(i?'L':'M')+x(i)+' '+y(v)).join(' '),fill:'none',stroke:color,'stroke-width':3,'stroke-linecap':'round'});
    const high=Math.max(...vals),low=Math.min(...vals),hi=vals.indexOf(high),lo=vals.indexOf(low);
+   // Mark the next local calendar day at its first hourly forecast point.
+   const dayFmt=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',weekday:'short',month:'short',day:'numeric'});
+   const dayKey=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'});
+   let lastDay=dayKey.format(new Date(selected[0].valid_time_utc+'Z'));
+   selected.forEach((row,i)=>{
+    const dt=new Date(row.valid_time_utc+'Z'),key=dayKey.format(dt);
+    if(key!==lastDay){
+      const xx=x(i);
+      add(svg,'line',{x1:xx,x2:xx,y1:35,y2:190,stroke:'#6b8da8','stroke-width':1.2,'stroke-dasharray':'4 5',opacity:0.8});
+      add(svg,'text',{x:Math.min(xx+7,360),y:27,fill:'#b8d5ed','font-weight':'700'},dayFmt.format(dt));
+      lastDay=key;
+    }
+   });
    for(const [i,v,label,fill] of [[hi,high,'High','#ffbd75'],[lo,low,'Low','#80c9f7']]){
     add(svg,'circle',{cx:x(i),cy:y(v),r:5,fill,stroke:'#142438','stroke-width':2});
     const nearRight=x(i)>340,nearLeft=x(i)<105;
