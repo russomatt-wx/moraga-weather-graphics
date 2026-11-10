@@ -91,6 +91,48 @@ jobs:
           with urllib.request.urlopen(req,timeout=20) as response:
               print('Forecast recovery dispatch HTTP',response.status)
           PY
+      - name: Recover stale Pacific synoptic composite
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request
+          from datetime import datetime, timedelta, timezone
+          from pathlib import Path
+          now=datetime.now(timezone.utc)
+          try:
+              meta=json.loads(Path('pacific_synoptic.json').read_text())
+              valid=datetime.fromisoformat(meta['gfs_valid_utc'].replace('Z','+00:00'))
+          except (OSError, ValueError, KeyError) as exc:
+              print('Synoptic metadata missing or invalid:',exc)
+              valid=datetime.min.replace(tzinfo=timezone.utc)
+          # The map is a forecast-valid product: refresh before valid time passes.
+          if valid>=now+timedelta(hours=2):
+              print('Pacific synoptic valid time is sufficiently ahead:',valid)
+              raise SystemExit(0)
+          headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],
+                   'Accept':'application/vnd.github+json','User-Agent':'MoragaWeatherObservatory'}
+          base='https://api.github.com/repos/russomatt-wx/moraga-weather-graphics'
+          req=urllib.request.Request(base+'/actions/workflows/update-pacific-synoptic.yml/runs?per_page=15',headers=headers)
+          with urllib.request.urlopen(req,timeout=20) as response:
+              runs=json.load(response).get('workflow_runs',[])
+          recent=[r for r in runs if datetime.fromisoformat(r['created_at'].replace('Z','+00:00'))>=now-timedelta(minutes=90)]
+          active=[r for r in recent if r['status'] in ('queued','in_progress','waiting','pending','requested')]
+          if active:
+              print('Synoptic refresh already active:',active[0]['id'])
+              raise SystemExit(0)
+          if recent:
+              print('Synoptic refresh attempted within 90 minutes; avoiding repeated expensive renders:',recent[0]['id'])
+              raise SystemExit(0)
+          print('::warning::Pacific synoptic stale, dispatching refresh. Valid:',valid)
+          req=urllib.request.Request(base+'/actions/workflows/update-pacific-synoptic.yml/dispatches',
+              data=json.dumps({'ref':'main'}).encode(),
+              headers={**headers,'Content-Type':'application/json'},method='POST')
+          with urllib.request.urlopen(req,timeout=20) as response:
+              print('Synoptic recovery dispatch HTTP',response.status)
+          PY
       - name: Recover missed private Xweather collector schedule
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         continue-on-error: true
