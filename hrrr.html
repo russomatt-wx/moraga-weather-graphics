@@ -24,7 +24,7 @@ button[aria-pressed=true]{border-color:#7dd3fc;background:#24506c}
 <p id="totals" class="sub">Rainfall accumulation unavailable until independent HRRR guidance passes validation.</p>
 <small>Missing or suspect model data is never substituted with GFS, blended guidance, or station observations.</small></article>
 <script>
-const base='https://raw.githubusercontent.com/russomatt-wx/moraga-weather/main/model-data/expanded/';
+const base='./hrrr-data/';
 let rows=[],horizon=24;
 const $=id=>document.getElementById(id);
 function parseCSV(s){const lines=s.trim().split(/\r?\n/),head=lines.shift().split(',');return lines.map(line=>Object.fromEntries(line.split(',').map((v,i)=>[head[i],v])));}
@@ -45,7 +45,7 @@ function render(){
 for(const n of [24,48])$('b'+n).onclick=()=>{horizon=n;$('b24').setAttribute('aria-pressed',n===24);$('b48').setAttribute('aria-pressed',n===48);render()};
 (async()=>{
  try{
- const response=await fetch(base+'hrrr_metadata.json?ts='+Date.now(),{cache:'no-store'});if(!response.ok)throw Error('metadata request failed');
+ const response=await fetch(base+'hrrr_metadata.json?ts='+Date.now(),{cache:'no-store'});if(!response.ok)throw Error('Verified HRRR data has not yet been published');
  const m=await response.json();
  if(m.status==='quarantined'||m.initialization_verified!==true)throw Error(m.reason||'Model initialization and independence not verified');
  if(!m.model_initialization_utc)throw Error('Missing model cycle timestamp');
