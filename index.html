@@ -1730,7 +1730,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
   label(syn,'GFS map valid: '+pacificDate(data.gfs_valid_utc)+freshness);
  }).catch(()=>{label(syn,'GFS map validity unavailable — check source data')})}
 })();
-</script><script defer src="dashboard_enhancements.js?v=8"></script><script>
+</script><script defer src="dashboard_enhancements.js?v=20261110-compact2"></script><script>
 (async function(){
  const img=document.getElementById('temperature-guidance-image'),note=document.getElementById('temperature-chart-note');
  if(!img)return;
@@ -2991,7 +2991,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  updateStory();setInterval(updateStory,30*60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateStory()});
 })();
 </script>
-<script>(function(){const el=document.getElementById('moraga-local-date');if(!el)return;function update(){el.textContent=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(new Date())}update();setInterval(update,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)update()})})();</script><script defer src="rainfall_accuracy.js?v=20261106"></script><script>
+<script>(function(){const el=document.getElementById('moraga-local-date');if(!el)return;function update(){el.textContent=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(new Date())}update();setInterval(update,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)update()})})();</script><script defer src="rainfall_accuracy.js?v=20261110-compact2"></script><script>
 /* Refresh NOAA's direct image without requiring another GitHub Actions run.
    The timestamp below is the fetch attempt, NOT the NOAA analysis valid time. */
 (function(){
