@@ -44,8 +44,8 @@ def main():
         pwat = np.asarray(field, dtype=float) / 25.4  # GRIB PWAT kg/m² = mm liquid water.
         if not np.isfinite(pwat).any():
             raise RuntimeError("Invalid PWAT field")
-        fig = plt.figure(figsize=(10, 8.5), dpi=150, facecolor="white")
-        ax = fig.add_subplot(111, projection=ccrs.PlateCarree())
+        fig = plt.figure(figsize=(9.2, 7.0), dpi=175, facecolor="#122638")
+        ax = fig.add_axes([.055, .13, .91, .78], projection=ccrs.PlateCarree())
         ax.set_extent([-165, -112, 20, 60], crs=ccrs.PlateCarree())
         levels = np.arange(0, 2.76, .25)
         from matplotlib.colors import LinearSegmentedColormap
@@ -60,14 +60,22 @@ def main():
         ax.coastlines(resolution="110m", linewidth=.8)
         ax.add_feature(cfeature.BORDERS, linewidth=.4)
         ax.add_feature(cfeature.STATES, linewidth=.3)
-        ax.gridlines(draw_labels={"bottom":"x","left":"y"}, linewidth=.4, alpha=.35)
+        grid = ax.gridlines(draw_labels={"bottom":"x","left":"y"}, linewidth=.4, alpha=.25, color="#64748b")
+        grid.top_labels = False
+        grid.right_labels = False
+        grid.xlabel_style = {"size": 11, "weight": "bold", "color": "#e0edf7"}
+        grid.ylabel_style = {"size": 11, "weight": "bold", "color": "#e0edf7"}
         valid = run + dt.timedelta(hours=hour)
         local_valid = valid.astimezone(ZoneInfo("America/Los_Angeles"))
         lead = (valid - now).total_seconds() / 3600
-        ax.set_title(f"GFS precipitable water • ~+{lead:.0f}h from update\nValid {local_valid:%a %b %d %I:%M %p %Z} | GFS f{hour:03d}", weight="bold", fontsize=17, pad=15)
-        bar = fig.colorbar(m, ax=ax, orientation="horizontal", pad=.07, fraction=.05)
-        bar.set_label("Precipitable water (inches)")
-        fig.savefig(OUT / f"gfs_pwat_f{horizon:03d}.png", bbox_inches="tight", facecolor="white")
+        fig.text(.025, .987, "GFS | precipitable water", fontsize=18, weight="bold", ha="left", va="top", color="#e0edf7")
+        fig.text(.025, .947, f"Valid {local_valid:%a %b %d %I:%M %p %Z}  •  GFS f{hour:03d}  •  ~+{lead:.0f}h", fontsize=11, weight="bold", ha="left", va="top", color="#b8cbd9")
+        cax = fig.add_axes([.075, .065, .85, .028])
+        bar = fig.colorbar(m, cax=cax, orientation="horizontal")
+        bar.set_label("Precipitable water (inches)", fontsize=12, weight="bold", color="#e0edf7", labelpad=5)
+        bar.ax.tick_params(labelsize=12, colors="#e0edf7", pad=4)
+        bar.outline.set_edgecolor("#829aad")
+        fig.savefig(OUT / f"gfs_pwat_f{horizon:03d}.png", facecolor="#122638", pad_inches=0)
         plt.close(fig)
 if __name__ == "__main__":
     main()
