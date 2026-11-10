@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-10T07:44:47.178042+00:00",
+  "generated_utc": "2026-11-10T17:18:11.487550+00:00",
   "station": "KCAMORAG71",
   "status": "verified",
   "method": "Earliest complete pre-day Open-Meteo hourly precipitation snapshot, summed in mm and converted to inches; complete finalized KCAMORAG71 Xweather daily summaries only; 0.01 inch wet threshold.",
@@ -32,11 +32,11 @@
       ]
     },
     "7d": {
-      "days": 1,
+      "days": 2,
       "models": [
         {
           "model": "gfs",
-          "days": 1,
+          "days": 2,
           "wet_days": 0,
           "mae_in": 0.0,
           "wet_day_mae_in": null,
@@ -47,7 +47,7 @@
         },
         {
           "model": "ecmwf",
-          "days": 1,
+          "days": 2,
           "wet_days": 0,
           "mae_in": 0.0,
           "wet_day_mae_in": null,
@@ -59,11 +59,11 @@
       ]
     },
     "30d": {
-      "days": 1,
+      "days": 2,
       "models": [
         {
           "model": "gfs",
-          "days": 1,
+          "days": 2,
           "wet_days": 0,
           "mae_in": 0.0,
           "wet_day_mae_in": null,
@@ -74,7 +74,7 @@
         },
         {
           "model": "ecmwf",
-          "days": 1,
+          "days": 2,
           "wet_days": 0,
           "mae_in": 0.0,
           "wet_day_mae_in": null,
@@ -86,11 +86,11 @@
       ]
     },
     "90d": {
-      "days": 1,
+      "days": 2,
       "models": [
         {
           "model": "gfs",
-          "days": 1,
+          "days": 2,
           "wet_days": 0,
           "mae_in": 0.0,
           "wet_day_mae_in": null,
@@ -101,7 +101,7 @@
         },
         {
           "model": "ecmwf",
-          "days": 1,
+          "days": 2,
           "wet_days": 0,
           "mae_in": 0.0,
           "wet_day_mae_in": null,
