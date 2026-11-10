@@ -161,8 +161,9 @@ fig.subplots_adjust(left=.04,right=.98,bottom=.13,top=.895)
 bar_ax=fig.add_axes([.095,.085,.77,.018])
 sm=ScalarMappable(norm=norm,cmap=cmap)
 cb=fig.colorbar(sm,cax=bar_ax,orientation="horizontal",ticks=np.arange(480,595,6))
-cb.ax.tick_params(labelsize=8)
-fig.text(.875,.086,"dam",fontsize=9,color="#b8cbd9")
+cb.ax.tick_params(labelsize=10,colors="#e0edf7",pad=4)
+cb.outline.set_edgecolor("#829aad")
+fig.text(.875,.086,"dam",fontsize=10,color="#e0edf7")
 fig.savefig(OUT,dpi=175,facecolor="#122638")
 META.write_text(json.dumps({"gfs_valid_utc":valid.isoformat(),
  "fields":["sea-level pressure","1000-500 mb thickness"],"fronts":False,
