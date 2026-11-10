@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0a1422"><title>HRRR | Moraga Weather Observatory</title>
+<meta name="theme-color" content="#0a1422"><title>RRFS | Moraga Weather Observatory</title>
 <style>
 :root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#eaf3ff;background:#0a1422;color-scheme:dark}
 body{max-width:960px;margin:auto;padding:26px 18px;line-height:1.5}a{color:#80d4ff}.sub{color:#a9bed1}
@@ -13,15 +13,15 @@ button[aria-pressed=true]{border-color:#7dd3fc;background:#24506c}
 #status{color:#f4d8a9}small{color:#9bb6cd}
 </style>
 <a href="./index.html">← Moraga Weather Observatory</a>
-<p class="sub">SHORT-RANGE MODEL INTELLIGENCE</p><h1>HRRR | Next 48 Hours</h1>
+<p class="sub">SHORT-RANGE MODEL INTELLIGENCE</p><h1>RRFS | Next 48 Hours</h1>
 <p class="sub">Independent high-resolution guidance at KCAMORAG71. Raw model output only; calibration remains disabled until validated against observations.</p>
-<article><strong id="status">Checking HRRR source…</strong><p id="detail" class="sub">Forecasts are withheld when model independence or freshness cannot be verified.</p><small id="cycle"></small></article>
+<article><strong id="status">Checking RRFS source…</strong><p id="detail" class="sub">Forecasts are withheld when model independence or freshness cannot be verified.</p><small id="cycle"></small></article>
 <div class="grid">
-<article><h2>Temperature · °F</h2><svg id="temp" viewBox="0 0 440 230" role="img" aria-label="HRRR hourly temperature chart"></svg></article>
-<article><h2>Hourly rainfall · inches</h2><svg id="rain" viewBox="0 0 440 230" role="img" aria-label="HRRR hourly precipitation chart"></svg></article>
+<article><h2>Temperature · °F</h2><svg id="temp" viewBox="0 0 440 230" role="img" aria-label="RRFS hourly temperature chart"></svg></article>
+<article><h2>Hourly rainfall · inches</h2><svg id="rain" viewBox="0 0 440 230" role="img" aria-label="RRFS hourly precipitation chart"></svg></article>
 </div>
 <article><h2>Forecast horizon</h2><button id="b24" aria-pressed="true">24 hours</button> <button id="b48" aria-pressed="false">48 hours</button>
-<p id="totals" class="sub">Rainfall accumulation unavailable until independent HRRR guidance passes validation.</p>
+<p id="totals" class="sub">Rainfall accumulation unavailable until independent RRFS guidance passes validation.</p>
 <small>Missing or suspect model data is never substituted with GFS, blended guidance, or station observations.</small></article>
 <script>
 const base='./hrrr-data/';
@@ -40,24 +40,24 @@ function render(){
  else {let path=document.createElementNS(ns,'path');path.setAttribute('d',vals.map((v,i)=>(i?'L':'M')+x(i)+' '+y(v)).join(' '));path.setAttribute('fill','none');path.setAttribute('stroke',color);path.setAttribute('stroke-width',3);svg.append(path)}
  }
  chart('temp',t,'#ffbb77');chart('rain',p,'#58bff2',true);
- $('totals').textContent='Raw HRRR precipitation: '+p.reduce((a,b)=>a+b,0).toFixed(2)+' in over '+horizon+' hours. Model forecast, not observed rainfall.';
+ $('totals').textContent='Raw RRFS precipitation: '+p.reduce((a,b)=>a+b,0).toFixed(2)+' in over '+horizon+' hours. Model forecast, not observed rainfall.';
 }
 for(const n of [24,48])$('b'+n).onclick=()=>{horizon=n;$('b24').setAttribute('aria-pressed',n===24);$('b48').setAttribute('aria-pressed',n===48);render()};
 (async()=>{
  try{
- const response=await fetch(base+'hrrr_metadata.json?ts='+Date.now(),{cache:'no-store'});if(!response.ok)throw Error('Verified HRRR data has not yet been published');
+ const response=await fetch(base+'short_range_metadata.json?ts='+Date.now(),{cache:'no-store'});if(!response.ok)throw Error('Verified RRFS data has not yet been published');
  const m=await response.json();
- if(m.status==='quarantined'||m.initialization_verified!==true)throw Error(m.reason||'Model initialization and independence not verified');
- if(!m.model_initialization_utc)throw Error('Missing model cycle timestamp');
- if(Date.now()-Date.parse(m.retrieved_utc)>9*3600000)throw Error('HRRR collection is stale');
- const r=await fetch(base+'hrrr.csv?ts='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('forecast unavailable');
+ if(m.status!=='available'||m.source_verified!==true)throw Error(m.reason||'Model initialization and independence not verified');
+ if(m.source_model!=='ncep_rrfs_conus')throw Error('Unexpected model source');
+ if(Date.now()-Date.parse(m.retrieved_utc)>9*3600000)throw Error('RRFS collection is stale');
+ const r=await fetch(base+'short_range.csv?ts='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('forecast unavailable');
  const all=parseCSV(await r.text()),now=Date.now();
- rows=all.filter(x=>Date.parse(x.valid_time_utc+'Z')>=now && Number.isFinite(Number(x.temperature_2m)) && Number.isFinite(Number(x.precipitation))).slice(0,48);
+ rows=all.filter(x=>Date.parse(x.valid_time_utc.endsWith('Z')?x.valid_time_utc:x.valid_time_utc+'Z')>=now && Number.isFinite(Number(x.temperature_2m)) && Number.isFinite(Number(x.precipitation))).slice(0,48);
  if(rows.length<24)throw Error('Fewer than 24 valid forecast hours');
- $('status').textContent='Verified HRRR forecast';$('status').style.color='#9ee6c4';
+ $('status').textContent='Verified RRFS forecast';$('status').style.color='#9ee6c4';
  $('detail').textContent='Raw hourly model temperatures and precipitation. Calibration not yet enabled.';
- $('cycle').textContent='Model cycle: '+m.model_initialization_utc+' · Retrieved: '+m.retrieved_utc;
+ $('cycle').textContent='Source: RRFS CONUS (cycle not independently verified) · Retrieved: '+m.retrieved_utc;
  render();
- }catch(e){$('status').textContent='HRRR forecast temporarily unavailable';$('detail').textContent=e.message+' — independent model guidance is required before publication.';$('cycle').textContent='No substitute forecast is displayed.';}
+ }catch(e){$('status').textContent='RRFS forecast temporarily unavailable';$('detail').textContent=e.message+' — independent model guidance is required before publication.';$('cycle').textContent='No substitute forecast is displayed.';}
 })();
 </script></html>
