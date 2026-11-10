@@ -51,14 +51,13 @@ jobs:
           from pathlib import Path
           from zoneinfo import ZoneInfo
           now=datetime.now(timezone.utc)
-          local=now.astimezone(ZoneInfo('America/Los_Angeles'))
-          # Only check after a forecast cycle has had time to finish.
-          cycle_hours=(4,9,14,19)
-          due=max((local.replace(hour=h,minute=17,second=0,microsecond=0)
-                   for h in cycle_hours if local.replace(hour=h,minute=10,second=0,microsecond=0)<=local),
-                  default=None)
-          if due is None or local-due<timedelta(minutes=25) or local-due>timedelta(hours=4):
-              print('Outside forecast recovery window; skipping')
+          # Forecast runs every three hours at :17 UTC, regardless of DST.
+          # Wait at least 35 minutes before treating a cycle as missed.
+          due=now.replace(hour=(now.hour//3)*3,minute=17,second=0,microsecond=0)
+          if due>now:
+              due-=timedelta(hours=3)
+          if now-due<timedelta(minutes=35):
+              print('Forecast cycle still within normal completion window; skipping')
               raise SystemExit(0)
           path=Path('moraga_forecast_10day.json')
           try:
@@ -66,7 +65,7 @@ jobs:
           except (OSError,ValueError,KeyError) as exc:
               print('Forecast timestamp unavailable:',exc)
               generated=datetime.min.replace(tzinfo=timezone.utc)
-          if generated>=due.astimezone(timezone.utc):
+          if generated>=due:
               print('Forecast current for cycle:',generated)
               raise SystemExit(0)
           headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],
@@ -75,7 +74,7 @@ jobs:
           req=urllib.request.Request(base+'/actions/workflows/rainfall_10day.yml/runs?per_page=15',headers=headers)
           with urllib.request.urlopen(req,timeout=20) as response:
               runs=json.load(response).get('workflow_runs',[])
-          recent=[r for r in runs if datetime.fromisoformat(r['created_at'].replace('Z','+00:00'))>=due.astimezone(timezone.utc)]
+          recent=[r for r in runs if datetime.fromisoformat(r['created_at'].replace('Z','+00:00'))>=due]
           if recent:
               print('Forecast cycle already attempted; avoiding duplicate dispatch:',recent[0]['id'],recent[0]['status'])
               raise SystemExit(0)
