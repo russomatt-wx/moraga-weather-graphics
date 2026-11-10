@@ -11,6 +11,7 @@ on:
       - 'moraga_rainfall_10day.json'
       - 'moraga_rainfall_10day.png'
       - 'index.html'
+      - 'hrrr.html'
       - 'pacific_synoptic.png'
       - 'pacific_synoptic.json'
       - 'service-worker.js'
