@@ -18,7 +18,7 @@ on:
   schedule:
     # Hourly scheduled publication after the private :37 collector; push events can publish sooner.
     # Push events also publish new forecasts without waiting for the clock.
-    - cron: '47 * * * *'
+    - cron: '11,47 * * * *'
 permissions:
   contents: write
   actions: write
@@ -74,9 +74,15 @@ jobs:
           req=urllib.request.Request(base+'/actions/workflows/rainfall_10day.yml/runs?per_page=15',headers=headers)
           with urllib.request.urlopen(req,timeout=20) as response:
               runs=json.load(response).get('workflow_runs',[])
-          recent=[r for r in runs if datetime.fromisoformat(r['created_at'].replace('Z','+00:00'))>=due]
+          # A completed run is not proof that the forecast file was updated.
+          # Only suppress retries while a run is active or a retry was started recently.
+          recent=[r for r in runs if datetime.fromisoformat(r['created_at'].replace('Z','+00:00'))>=now-timedelta(minutes=55)]
+          active=[r for r in recent if r['status'] in ('queued','in_progress','waiting','pending','requested')]
+          if active:
+              print('Forecast already running:',active[0]['id'],active[0]['status'])
+              raise SystemExit(0)
           if recent:
-              print('Forecast cycle already attempted; avoiding duplicate dispatch:',recent[0]['id'],recent[0]['status'])
+              print('Forecast attempted within 55 minutes; waiting before retry:',recent[0]['id'])
               raise SystemExit(0)
           print('::warning::Missed forecast cycle',due.isoformat(),'; dispatching recovery')
           req=urllib.request.Request(base+'/actions/workflows/rainfall_10day.yml/dispatches',
