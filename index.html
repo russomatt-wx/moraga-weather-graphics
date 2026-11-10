@@ -748,7 +748,7 @@ main .card .chart-meta,main .card p.chart-meta{font-size:14px;line-height:1.5}
 <article class="card"><h3>Days 8–14 · Temperature</h3><img loading="lazy" src="https://www.cpc.ncep.noaa.gov/products/predictions/814day/814temp.new.gif" alt="NOAA CPC 8 to 14 day temperature outlook"><p><a href="https://www.cpc.ncep.noaa.gov/products/predictions/814day/" target="_blank" rel="noopener noreferrer">CPC 8–14 day discussion ↗</a></p></article>
 <article class="card"><h3>Days 8–14 · Precipitation</h3><img loading="lazy" src="https://www.cpc.ncep.noaa.gov/products/predictions/814day/814prcp.new.gif" alt="NOAA CPC 8 to 14 day precipitation outlook"></article>
 </div><p class="extended-source">CPC maps describe odds of temperature and precipitation relative to climatology, not exact daily highs or rainfall totals. Check the issue and valid dates printed on each NOAA map.</p></section>
-<section id="westcoast"><div class="intro"><div class="kicker">08 / Larger pattern</div><h2>West Coast atmospheric setup</h2><p>Jet stream, upper-air pattern and moisture.</p></div><div class="grid"><article class="card wide" id="pacific-synoptic-card"><h3>Pacific synoptic composite</h3><p><a href="pacific_synoptic.png?v=rainbow-thickness" target="_blank" rel="noopener noreferrer">Open custom map directly ↗</a></p><a href="pacific_synoptic.png" target="_blank" rel="noopener noreferrer"><img id="pacific-synoptic-image" loading="eager" alt="Pacific synoptic chart: black GFS pressure isobars and rainbow-colored 1000–500 mb thickness contours on a white background" style="width:100%;border-radius:9px"></a></article><article class="card wide"><h3>Current Pacific surface fronts</h3><p>NOAA Ocean Prediction Center · eastern Pacific analysis</p><a href="https://ocean.weather.gov/shtml/P_east_00hrsfc.gif" target="_blank" rel="noopener noreferrer"><img class="opc-surface" loading="lazy" src="https://ocean.weather.gov/shtml/P_east_00hrsfc.gif" alt="Latest NOAA Ocean Prediction Center eastern North Pacific surface analysis with fronts and pressure systems" onerror="this.style.display='none';this.nextElementSibling.hidden=false"><span class="pending" hidden>Map unavailable right now — open the NOAA analysis.</span></a><p><a href="https://ocean.weather.gov/Pac_tab.php" target="_blank" rel="noopener noreferrer">NOAA analysis and loops ↗</a></p></article><article class="card wide"><h3>10-day upper-air model forecast</h3><p>ECMWF versus GFS: 500 hPa geopotential heights and 850 hPa temperatures over Moraga. Weekday labels use Pacific time.</p><a href="moraga_upper_air_10day.png"><div class="chart-viewport" role="region" aria-label="Weather chart"><img loading="lazy" src="moraga_upper_air_10day.png" alt="10-day ECMWF and GFS upper-air model forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p></div>Chart awaiting first successful workflow run.</p>')"></a></article>
+<section id="westcoast"><div class="intro"><div class="kicker">08 / Larger pattern</div><h2>West Coast atmospheric setup</h2><p>Jet stream, upper-air pattern and moisture.</p></div><div class="grid"><article class="card wide" id="pacific-synoptic-card"><h3>Pacific synoptic composite</h3><p><a href="pacific_synoptic.png?v=rainbow-thickness" target="_blank" rel="noopener noreferrer">Open custom map directly ↗</a></p><a href="pacific_synoptic.png" target="_blank" rel="noopener noreferrer"><img id="pacific-synoptic-image" loading="eager" alt="Pacific synoptic chart: black GFS pressure isobars and rainbow-colored 1000–500 mb thickness contours on a white background" style="width:100%;border-radius:9px"></a></article><article class="card wide"><h3>Current Pacific surface fronts</h3><p>NOAA Ocean Prediction Center · eastern Pacific analysis</p><a href="https://ocean.weather.gov/shtml/P_east_00hrsfc.gif" target="_blank" rel="noopener noreferrer"><img class="opc-surface" id="opc-surface-image" loading="lazy" src="https://ocean.weather.gov/shtml/P_east_00hrsfc.gif" alt="Latest NOAA Ocean Prediction Center eastern North Pacific surface analysis with fronts and pressure systems" onerror="this.style.display='none';this.nextElementSibling.hidden=false"><span class="pending" hidden>Map unavailable right now — open the NOAA analysis.</span></a><p id="opc-surface-status" class="muted" style="font-size:.85rem">NOAA map issue and valid times are printed on the chart. Checking for a newer image…</p><p><a href="https://ocean.weather.gov/Pac_tab.php" target="_blank" rel="noopener noreferrer">NOAA analysis and loops ↗</a></p></article><article class="card wide"><h3>10-day upper-air model forecast</h3><p>ECMWF versus GFS: 500 hPa geopotential heights and 850 hPa temperatures over Moraga. Weekday labels use Pacific time.</p><a href="moraga_upper_air_10day.png"><div class="chart-viewport" role="region" aria-label="Weather chart"><img loading="lazy" src="moraga_upper_air_10day.png" alt="10-day ECMWF and GFS upper-air model forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p></div>Chart awaiting first successful workflow run.</p>')"></a></article>
 <article class="card"><h3>500 hPa vorticity • +12h</h3><img loading="lazy" src="gfs_h500_vorticity_f012.png?v=mobile-map-20261019-b29311" alt="500 hPa vorticity +12h"></article>
 <article class="card"><h3>500 hPa vorticity • +36h</h3><img loading="lazy" src="gfs_h500_vorticity_f036.png?v=mobile-map-20261019-b29311" alt="500 hPa vorticity +36h"></article>
 <article class="card"><h3>850 hPa temperature and wind • +12h</h3><img loading="lazy" src="gfs_t850_wind_f012.png?v=mobile-map-20261019-b29311" alt="850 hPa temperature and wind +12h"></article>
@@ -2984,4 +2984,30 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  updateStory();setInterval(updateStory,30*60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateStory()});
 })();
 </script>
-<script>(function(){const el=document.getElementById('moraga-local-date');if(!el)return;function update(){el.textContent=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(new Date())}update();setInterval(update,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)update()})})();</script><script defer src="rainfall_accuracy.js?v=20261106"></script></body></html>
+<script>(function(){const el=document.getElementById('moraga-local-date');if(!el)return;function update(){el.textContent=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(new Date())}update();setInterval(update,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)update()})})();</script><script defer src="rainfall_accuracy.js?v=20261106"></script><script>
+/* Refresh NOAA's direct image without requiring another GitHub Actions run.
+   The timestamp below is the fetch attempt, NOT the NOAA analysis valid time. */
+(function(){
+  const img=document.getElementById('opc-surface-image');
+  const status=document.getElementById('opc-surface-status');
+  if(!img)return;
+  const base='https://ocean.weather.gov/shtml/P_east_00hrsfc.gif';
+  function refreshOPC(){
+    const now=new Date();
+    const url=base+'?refresh='+Math.floor(now.getTime()/1800000);
+    const probe=new Image();
+    probe.onload=function(){
+      img.src=url;
+      if(status)status.textContent='NOAA image checked '+now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'})+' PT · See chart for NOAA issue/valid time.';
+    };
+    probe.onerror=function(){
+      if(status)status.textContent='NOAA image refresh unavailable; retaining last map. See chart for issue/valid time.';
+    };
+    probe.src=url;
+  }
+  refreshOPC();
+  setInterval(refreshOPC,30*60*1000);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)refreshOPC();});
+})();
+</script>
+</body></html>
