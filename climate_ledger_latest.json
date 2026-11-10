@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-10T01:44:48.029239+00:00",
+  "generated_utc": "2026-11-10T10:17:36.960626+00:00",
   "station": "KCAMORAG71",
   "days": {
     "2026-10-07": {
@@ -266,12 +266,22 @@
     "2026-11-09": {
       "sampled_low_f": 44.0,
       "sampled_high_f": 76.0,
-      "samples": 1045,
+      "samples": 1414,
       "first_utc": "2026-11-09T08:00:00+00:00",
-      "last_utc": "2026-11-10T01:43:00+00:00",
+      "last_utc": "2026-11-10T07:59:00+00:00",
       "daily_precipitation_in": 0.0,
       "precipitation_source": "xweather_observations_summary",
-      "precipitation_as_of_utc": "2026-11-10T01:44:43.770312+00:00"
+      "precipitation_as_of_utc": "2026-11-10T10:17:32.103360+00:00"
+    },
+    "2026-11-10": {
+      "sampled_low_f": 50.0,
+      "sampled_high_f": 53.0,
+      "samples": 134,
+      "first_utc": "2026-11-10T08:00:00+00:00",
+      "last_utc": "2026-11-10T10:15:00+00:00",
+      "daily_precipitation_in": 0.0,
+      "precipitation_source": "xweather_observations_summary",
+      "precipitation_as_of_utc": "2026-11-10T10:17:32.103360+00:00"
     }
   },
   "months": {
@@ -286,17 +296,17 @@
       "precipitation_status": "daily_observed_or_confirmed_minimum"
     },
     "2026-11": {
-      "sample_count": 12420,
-      "days_with_samples": 8,
-      "mean_sample_temperature_f": 55.71,
-      "mean_sampled_daily_high_f": 71.88,
-      "mean_sampled_daily_low_f": 44.12,
+      "sample_count": 12923,
+      "days_with_samples": 9,
+      "mean_sample_temperature_f": 55.74,
+      "mean_sampled_daily_high_f": 72.33,
+      "mean_sampled_daily_low_f": 44.11,
       "monthly_precipitation_in": 0.39,
       "annual_precipitation_in": null,
       "precipitation_status": "daily_observed_or_confirmed_minimum"
     }
   },
-  "observations": 34083,
+  "observations": 34586,
   "status": "partial_observed_climate_ledger",
   "caveat": "Uneven station sampling; monthly averages are not official daily-mean climate normals. Rainfall is source-reported month-to-date or a dated owner confirmation; cumulative readings are never summed.",
   "chart_status": "matplotlib_unavailable"
