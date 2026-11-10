@@ -6,8 +6,8 @@ on:
       - 'scripts/validate_forecast_publish.py'
       - '.github/workflows/rainfall_10day.yml'
   schedule:
-    - cron: '17 2,11,16,21 * 3-10 *'
-    - cron: '17 3,12,17,22 * 11,12,1,2 *'
+    # Every three hours in UTC; DST-independent and off the top of the hour.
+    - cron: '17 */3 * * *'
   workflow_dispatch:
 permissions:
   contents: write
