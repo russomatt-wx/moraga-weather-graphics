@@ -13,19 +13,17 @@ button[aria-pressed=true]{border-color:#7dd3fc;background:#24506c}
 #status{color:#f4d8a9}small{color:#9bb6cd}
 </style>
 <a href="./index.html">← Moraga Weather Observatory</a>
-<p class="sub">SHORT-RANGE MODEL INTELLIGENCE</p><h1>RRFS | Next 48 Hours</h1>
-<p class="sub">Independent high-resolution guidance at KCAMORAG71. Raw model output only; calibration remains disabled until validated against observations.</p>
-<article><strong id="status">Checking RRFS source…</strong><p id="detail" class="sub">Forecasts are withheld when model independence or freshness cannot be verified.</p><small id="cycle"></small></article>
+<p class="sub">SHORT-RANGE MODEL INTELLIGENCE</p><h1>RRFS | 48 Hours</h1>
+<p class="sub">48-hour temperature and rainfall forecast for Moraga.</p>
+<article><strong id="status">Checking RRFS source…</strong><p id="detail" class="sub"></p><small id="cycle"></small></article>
 <div class="grid">
 <article><h2>Temperature · °F</h2><svg id="temp" viewBox="0 0 440 230" role="img" aria-label="RRFS hourly temperature chart"></svg></article>
 <article><h2>Hourly rainfall · inches</h2><svg id="rain" viewBox="0 0 440 230" role="img" aria-label="RRFS hourly precipitation chart"></svg><p id="rain-note"></p></article>
 </div>
-<article><h2>Forecast horizon</h2><button id="b24" aria-pressed="true">24 hours</button> <button id="b48" aria-pressed="false">48 hours</button>
-<p id="totals" class="sub">Rainfall accumulation unavailable until independent RRFS guidance passes validation.</p>
-<small>Missing or suspect model data is never substituted with GFS, blended guidance, or station observations.</small></article>
+<article><h2>48-hour rainfall total</h2><p id="totals" class="sub">Awaiting forecast data.</p></article>
 <script>
 const base='./hrrr-data/';
-let rows=[],horizon=24;
+let rows=[],horizon=48;
 const $=id=>document.getElementById(id);
 function parseCSV(s){const lines=s.trim().split(/\r?\n/),head=lines.shift().split(',');return lines.map(line=>Object.fromEntries(line.split(',').map((v,i)=>[head[i],v])));}
 function render(){
@@ -48,9 +46,8 @@ function render(){
  chart('temp',t,'#ffbb77');chart('rain',p,'#58bff2',true);
  const total=p.reduce((a,b)=>a+b,0);
  $('rain-note').textContent=total===0?'Dry throughout the selected forecast window.':'Hourly bars show forecast rainfall, not observations.';
- $('totals').textContent='Raw RRFS precipitation: '+total.toFixed(2)+' in over '+horizon+' hours. Model forecast, not observed rainfall.';
+ $('totals').textContent=total.toFixed(2)+' in forecast over 48 hours';
 }
-for(const n of [24,48])$('b'+n).onclick=()=>{horizon=n;$('b24').setAttribute('aria-pressed',n===24);$('b48').setAttribute('aria-pressed',n===48);render()};
 (async()=>{
  try{
  const response=await fetch(base+'short_range_metadata.json?ts='+Date.now(),{cache:'no-store'});if(!response.ok)throw Error('Verified RRFS data has not yet been published');
@@ -63,8 +60,8 @@ for(const n of [24,48])$('b'+n).onclick=()=>{horizon=n;$('b24').setAttribute('ar
  rows=all.filter(x=>Date.parse(x.valid_time_utc.endsWith('Z')?x.valid_time_utc:x.valid_time_utc+'Z')>=now && Number.isFinite(Number(x.temperature_2m)) && Number.isFinite(Number(x.precipitation))).slice(0,48);
  if(rows.length<24)throw Error('Fewer than 24 valid forecast hours');
  $('status').textContent='Verified RRFS forecast';$('status').style.color='#9ee6c4';
- $('detail').textContent='Raw hourly model temperatures and precipitation. Calibration not yet enabled.';
- $('cycle').textContent='Source: RRFS CONUS (cycle not independently verified) · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',dateStyle:'medium',timeStyle:'short'}).format(new Date(m.retrieved_utc))+' Pacific';
+ $('detail').textContent='Raw model forecast · 48 hours';
+ $('cycle').textContent='Updated '+new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',dateStyle:'medium',timeStyle:'short'}).format(new Date(m.retrieved_utc))+' Pacific';
  render();
  }catch(e){$('status').textContent='RRFS forecast temporarily unavailable';$('detail').textContent=e.message+' — independent model guidance is required before publication.';$('cycle').textContent='No substitute forecast is displayed.';}
 })();
