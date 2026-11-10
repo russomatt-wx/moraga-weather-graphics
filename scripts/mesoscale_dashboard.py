@@ -6,6 +6,7 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+plt.rcParams.update({"text.color":"#e0edf7","axes.labelcolor":"#dceaf5","axes.edgecolor":"#68849a","xtick.color":"#b8cbd9","ytick.color":"#b8cbd9","axes.titlecolor":"#e0edf7","legend.facecolor":"#193247","legend.edgecolor":"#526c80","legend.labelcolor":"#e0edf7","grid.linestyle":"--"})
 # Shared high-legibility typography for charts embedded on narrow screens.
 plt.rcParams.update({
     "font.family": "DejaVu Sans",
@@ -38,8 +39,8 @@ def main():
     fig.subplots_adjust(left=.10,right=.97,top=.87,bottom=.10,hspace=.38)
     colors=["#1674ad","#17a398","#d8502d","#9356ab","#d3a029"]
     for axis in axes:
-        axis.set_facecolor("#f8fafc")
-    fig.patch.set_facecolor("#ffffff")
+        axis.set_facecolor("#122638")
+    fig.patch.set_facecolor("#122638")
     result={}
     for (name,h),c in zip(station.items(),colors):
         times=[datetime.fromisoformat(t).replace(tzinfo=TZ) for t in h["time"]]
@@ -73,7 +74,7 @@ def main():
     from matplotlib.ticker import FuncFormatter
     for ax in axes:
         ax.xaxis.set_minor_locator(midnight)
-        ax.grid(axis="x",which="minor",color="#b2c2d1",alpha=.75,linewidth=1)
+        ax.grid(axis="x",which="minor",color="#91a9bc",alpha=.485,linewidth=1)
     from datetime import timedelta
     start=delta_times[0].replace(hour=0,minute=0,second=0,microsecond=0)+timedelta(days=1)
     end=delta_times[-1]
@@ -86,11 +87,11 @@ def main():
     axes[1].set_ylabel("Dew point (°F)")
     axes[1].set_title("Dew point",loc="left",weight="bold",fontsize=16,pad=8)
     for ax in axes:
-        ax.grid(axis="y",color="#cbd5e1",alpha=.75);ax.grid(axis="x",which="major",color="#94a3b8",linestyle=":",linewidth=1.1,alpha=.65)
+        ax.grid(axis="y",color="#91a9bc",alpha=.485);ax.grid(axis="x",which="major",color="#91a9bc",linestyle=":",linewidth=1.1,alpha=.48)
         ax.tick_params(labelsize=15)
         for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")
         ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
-        ax.grid(axis="x",color="#94a3b8",linestyle=":",alpha=.65)
+        ax.grid(axis="x",color="#91a9bc",linestyle=":",alpha=.48)
         ax.tick_params(axis="both",labelsize=14,length=0,pad=6)
     axes[1].xaxis.set_major_locator(mdates.HourLocator(byhour=[0,12],tz=TZ))
     axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%a\n%-I %p",tz=TZ))
@@ -103,7 +104,7 @@ def main():
     models={"ECMWF":"ecmwf_ifs025","GFS":"ncep_gfs_seamless"}
     forecasts={};errors={}
     fig,ax=plt.subplots(figsize=(9,7.5),layout="constrained")
-    fig.patch.set_facecolor("#ffffff");ax.set_facecolor("#f8fafc")
+    fig.patch.set_facecolor("#122638");ax.set_facecolor("#122638")
     for name,model in models.items():
         try:
             h=fetch(*POINTS["Moraga"],model=model)
@@ -115,7 +116,7 @@ def main():
         except Exception as e:errors[name]=str(e)
     if not forecasts:raise RuntimeError("No model forecasts available: "+str(errors))
     ax.set_title("Moraga | 48-hour temperature model comparison",loc="left",weight="bold",fontsize=15)
-    ax.set_ylabel("2 m temperature (°F)");ax.grid(axis="y",color="#cbd5e1",alpha=.75);ax.grid(axis="x",which="major",color="#94a3b8",linestyle=":",linewidth=1.1,alpha=.65);ax.legend(fontsize=12)
+    ax.set_ylabel("2 m temperature (°F)");ax.grid(axis="y",color="#91a9bc",alpha=.485);ax.grid(axis="x",which="major",color="#91a9bc",linestyle=":",linewidth=1.1,alpha=.48);ax.legend(fontsize=12)
     ax.tick_params(labelsize=13)
     ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=12,tz=TZ))
