@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+plt.rcParams.update({"text.color":"#e0edf7","axes.labelcolor":"#dceaf5","axes.edgecolor":"#68849a","xtick.color":"#b8cbd9","ytick.color":"#b8cbd9","axes.titlecolor":"#e0edf7","legend.facecolor":"#193247","legend.edgecolor":"#526c80","legend.labelcolor":"#e0edf7","grid.linestyle":"--"})
 # Shared high-legibility typography for charts embedded on narrow screens.
 plt.rcParams.update({
     "font.family": "DejaVu Sans",
@@ -48,7 +49,7 @@ def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
     ts=[datetime.fromisoformat(t).replace(tzinfo=ZONE) for t in times]
     vals=np.array(values,dtype=float)
     fig,ax=plt.subplots(figsize=(9,7.8),layout="constrained")
-    fig.patch.set_facecolor("#ffffff");ax.set_facecolor("#f8fafc")
+    fig.patch.set_facecolor("#122638");ax.set_facecolor("#122638")
     past=np.array([t<=cutoff for t in ts])
     future=np.array([t>=cutoff for t in ts])
     ax.plot(np.array(ts)[past],vals[past],color="#1663a8",linewidth=2.5,label="Recent model analysis")
@@ -62,14 +63,14 @@ def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
     ax.set_title(title,fontsize=18,weight="bold",loc="left",pad=15)
     ax.set_xlabel("")
     ax.set_ylabel(ylabel)
-    ax.grid(axis="y",color="#cbd5e1",alpha=.7)
+    ax.grid(axis="y",color="#91a9bc",alpha=.48)
     ax.tick_params(labelsize=16)
     for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")
     ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
     ax.legend(loc="upper left",ncol=2,fontsize=14)
     import matplotlib.dates as mdates
     ax.xaxis.set_major_locator(mdates.DayLocator(interval=1,tz=ZONE))
-    ax.grid(axis="x", which="major", color="#94a3b8", linestyle=":", linewidth=1.1, alpha=.65)
+    ax.grid(axis="x", which="major", color="#91a9bc", linestyle=":", linewidth=1.1, alpha=.48)
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d",tz=ZONE))
     plt.setp(ax.get_xticklabels(),rotation=0,ha="center")
     fig.text(.07,.012,footnote,fontsize=9,color="#525d69",wrap=True)
