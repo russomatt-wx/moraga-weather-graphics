@@ -41,7 +41,18 @@ function render(){
   [0,Math.floor((vals.length-1)/2),vals.length-1].forEach(i=>{const dt=new Date(selected[i].valid_time_utc+'Z');add(svg,'text',{x:x(i),y:217,'text-anchor':i===0?'start':i===vals.length-1?'end':'middle'},fmt.format(dt))});
   if(dry){add(svg,'text',{x:230,y:105,'text-anchor':'middle',fill:'#9bb6cd'},'No precipitation forecast');return}
   if(bars){vals.forEach((v,i)=>{if(v>0)add(svg,'rect',{x:x(i)-3,y:y(v),width:Math.max(3,370/vals.length-2),height:190-y(v),fill:color})})}
-  else {add(svg,'path',{d:vals.map((v,i)=>(i?'L':'M')+x(i)+' '+y(v)).join(' '),fill:'none',stroke:color,'stroke-width':3,'stroke-linecap':'round'});add(svg,'text',{x:410,y:25,'text-anchor':'end',fill:color},'High '+Math.round(Math.max(...vals))+'°  ·  Low '+Math.round(Math.min(...vals))+'°')}
+  else {
+   add(svg,'path',{d:vals.map((v,i)=>(i?'L':'M')+x(i)+' '+y(v)).join(' '),fill:'none',stroke:color,'stroke-width':3,'stroke-linecap':'round'});
+   const high=Math.max(...vals),low=Math.min(...vals),hi=vals.indexOf(high),lo=vals.indexOf(low);
+   for(const [i,v,label,fill] of [[hi,high,'High','#ffbd75'],[lo,low,'Low','#80c9f7']]){
+    add(svg,'circle',{cx:x(i),cy:y(v),r:5,fill,stroke:'#142438','stroke-width':2});
+    const nearRight=x(i)>340,nearLeft=x(i)<105;
+    const tx=nearRight?x(i)-9:nearLeft?x(i)+9:x(i);
+    const anchor=nearRight?'end':nearLeft?'start':'middle';
+    const ty=label==='High'?Math.max(17,y(v)-13):Math.min(188,y(v)+21);
+    add(svg,'text',{x:tx,y:ty,'text-anchor':anchor,fill,'font-weight':'700'},label+' '+Math.round(v)+'°');
+   }
+  }
  }
  chart('temp',t,'#ffbb77');chart('rain',p,'#58bff2',true);
  const total=p.reduce((a,b)=>a+b,0);
