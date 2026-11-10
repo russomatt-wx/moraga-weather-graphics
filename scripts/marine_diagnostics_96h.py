@@ -57,7 +57,9 @@ def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
     ax.plot(np.array(ts)[past],vals[past],color="#69bdf5",linewidth=2.5,label="Recent model analysis")
     ax.plot(np.array(ts)[future],vals[future],color="#ffae65",linewidth=2.5,label="Model forecast")
     ax.axvline(cutoff,color="#b8d2e3",linestyle="--",linewidth=1.2,label="Now")
-    if reference is not None: ax.axhline(reference,color="#7b8794",linestyle=":",linewidth=1,label=f"{reference:g} ft reference")
+    if reference is not None:
+        ax.axhline(reference,color="#a6e3f4",linestyle=(0,(5,4)),linewidth=2.6,alpha=.95,zorder=2,label=f"Moraga {reference:g} ft")
+        ax.annotate(f"MORAGA · {reference:g} FT",xy=(.985,reference),xycoords=("axes fraction","data"),xytext=(-3,7),textcoords="offset points",ha="right",va="bottom",fontsize=10,fontweight="bold",color="#d6f5ff",bbox=dict(boxstyle="round,pad=0.2",facecolor="#122638",edgecolor="none",alpha=.88),zorder=5)
     if "pressure_gradient" in filename:
         ax.axhline(0,color="#a6e3f4",linewidth=2.6,alpha=.95,zorder=2)
         ax.annotate("0 hPa",xy=(.985,0),xycoords=("axes fraction","data"),xytext=(-3,6),textcoords="offset points",ha="right",va="bottom",fontsize=11,fontweight="bold",color="#d6f5ff",bbox=dict(boxstyle="round,pad=0.2",facecolor="#122638",edgecolor="none",alpha=.85))
