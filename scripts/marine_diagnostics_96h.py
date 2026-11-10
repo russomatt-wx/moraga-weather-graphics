@@ -59,7 +59,8 @@ def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
     ax.axvline(cutoff,color="#b8d2e3",linestyle="--",linewidth=1.2,label="Now")
     if reference is not None: ax.axhline(reference,color="#7b8794",linestyle=":",linewidth=1,label=f"{reference:g} ft reference")
     if "pressure_gradient" in filename:
-        ax.axhline(0,color="#475569",linewidth=1.3)
+        ax.axhline(0,color="#a6e3f4",linewidth=2.6,alpha=.95,zorder=2)
+        ax.annotate("0 hPa",xy=(.985,0),xycoords=("axes fraction","data"),xytext=(-3,6),textcoords="offset points",ha="right",va="bottom",fontsize=11,fontweight="bold",color="#d6f5ff",bbox=dict(boxstyle="round,pad=0.2",facecolor="#122638",edgecolor="none",alpha=.85))
     ax.set_title(title,fontsize=18,weight="bold",loc="left",pad=15)
     ax.set_xlabel("")
     ax.set_ylabel(ylabel)
