@@ -7,7 +7,7 @@
   "marine_diagnostics_data": "moraga_marine_diagnostics_96h.json",
   "maps_status": "stale_withheld",
   "initialized_utc": "2026-11-10T12:00:00+00:00",
-  "generated_utc": "2026-11-10T20:23:23.091905+00:00",
+  "generated_utc": "2026-11-10T20:42:23.863446+00:00",
   "maps": [
     "gfs_h500_vorticity_f012.png",
     "gfs_h500_vorticity_f036.png",
