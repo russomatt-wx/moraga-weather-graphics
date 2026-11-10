@@ -48,7 +48,9 @@ def series(data,key):
 def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
     ts=[datetime.fromisoformat(t).replace(tzinfo=ZONE) for t in times]
     vals=np.array(values,dtype=float)
-    fig,ax=plt.subplots(figsize=(9,7.8),layout="constrained")
+    fig,ax=plt.subplots(figsize=(9,7.8))
+    # Fixed margins keep date ticks and the source note in separate bands.
+    fig.subplots_adjust(left=.16,right=.97,top=.86,bottom=.27)
     fig.patch.set_facecolor("#122638");ax.set_facecolor("#122638")
     past=np.array([t<=cutoff for t in ts])
     future=np.array([t>=cutoff for t in ts])
@@ -71,8 +73,8 @@ def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
     ax.grid(axis="x", which="major", color="#91a9bc", linestyle=":", linewidth=1.1, alpha=.48)
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d",tz=ZONE))
     plt.setp(ax.get_xticklabels(),rotation=0,ha="center")
-    fig.subplots_adjust(bottom=.19)
-    fig.text(.10,.025,footnote,fontsize=9,color="#a9bfd0",wrap=True)
+    import textwrap
+    fig.text(.16,.065,textwrap.fill(footnote,width=85),fontsize=9,color="#a9bfd0",va="bottom")
     fig.savefig(ROOT/filename,dpi=155,bbox_inches="tight",facecolor=fig.get_facecolor())
     plt.close(fig)
 
