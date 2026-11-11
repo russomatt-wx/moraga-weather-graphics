@@ -4,7 +4,34 @@
 const STATION = 'PWS_KCAMORAG71';
 // Optional validated station IDs, supplied as Worker environment variables.
 // Do not select a station based on proximity alone without checking its exposure and freshness.
-const CITY_STATIONS = {moraga: STATION};
+const CITY_COORDS = {lafayette:'37.890,-122.115',danville:'37.813,-121.974'};
+const MAX_AGE_MS = 45 * 60 * 1000;
+function fresh(ob) {
+  const timestamp = Number(ob?.timestamp);
+  return Number.isFinite(timestamp) && timestamp > 0 &&
+    Date.now() - timestamp * 1000 <= MAX_AGE_MS &&
+    timestamp * 1000 <= Date.now() + 5 * 60 * 1000 &&
+    Number.isFinite(Number(ob?.tempF)) && ob.tempF !== null;
+}
+async function discoverStation(city, env) {
+  const endpoint = new URL('https://api.aerisapi.com/observations/closest');
+  endpoint.searchParams.set('p', CITY_COORDS[city]);
+  endpoint.searchParams.set('radius', '6mi');
+  endpoint.searchParams.set('limit', '30');
+  endpoint.searchParams.set('client_id', env.XWEATHER_CLIENT_ID);
+  endpoint.searchParams.set('client_secret', env.XWEATHER_CLIENT_SECRET);
+  const res = await fetch(endpoint.toString(), {cf:{cacheTtl:600,cacheEverything:true}});
+  if (!res.ok) throw new Error('Station discovery failed');
+  const payload = await res.json();
+  const records = Array.isArray(payload.response) ? payload.response : [];
+  const candidates = records.filter(record => {
+    const id = String(record?.id || '');
+    return /^PWS_[A-Za-z0-9_-]+$/.test(id) && fresh(record?.ob);
+  });
+  // Prefer nearest valid PWS; proximity alone does not establish siting quality.
+  candidates.sort((a,b) => Number(a?.relativeTo?.distanceMI ?? 999) - Number(b?.relativeTo?.distanceMI ?? 999));
+  return candidates[0] || null;
+}
 export default {
   async fetch(request, env) {
     const origin = env.ALLOWED_ORIGIN || 'https://russomatt-wx.github.io';
@@ -15,8 +42,13 @@ export default {
     if (!env.XWEATHER_CLIENT_ID || !env.XWEATHER_CLIENT_SECRET) return Response.json({error:'Live service not configured'},{status:503,headers:cors});
     const city = (url.searchParams.get('city') || 'moraga').toLowerCase();
     if (!['moraga','lafayette','danville'].includes(city)) return Response.json({error:'Unknown location'},{status:400,headers:cors});
-    const station = city==='moraga' ? STATION : (city==='lafayette' ? env.LAFAYETTE_STATION_ID : env.DANVILLE_STATION_ID);
-    if (!station || !/^PWS_[A-Za-z0-9_-]+$/.test(station)) return Response.json({error:'Verified local station not configured',city},{status:503,headers:cors});
+    let station = city === 'moraga' ? STATION : (city === 'lafayette' ? env.LAFAYETTE_STATION_ID : env.DANVILLE_STATION_ID);
+    let discovery = null;
+    if (!station && city !== 'moraga') {
+      try { discovery = await discoverStation(city, env); station = discovery?.id; }
+      catch (_) { return Response.json({error:'Nearby station discovery unavailable',city},{status:503,headers:cors}); }
+    }
+    if (!station || !/^PWS_[A-Za-z0-9_-]+$/.test(station)) return Response.json({error:'No fresh nearby PWS available',city},{status:503,headers:cors});
     const endpoint = new URL('https://api.aerisapi.com/observations/'+station);
     endpoint.searchParams.set('client_id',env.XWEATHER_CLIENT_ID);
     endpoint.searchParams.set('client_secret',env.XWEATHER_CLIENT_SECRET);
@@ -27,7 +59,7 @@ export default {
       const record = Array.isArray(payload.response) ? payload.response[0] : payload.response;
       const ob = record?.ob;
       if (!ob || !Number.isFinite(Number(ob.timestamp))) throw new Error('Invalid observation timestamp');
-      if(Date.now()-Number(ob.timestamp)*1000>45*60000 || Number(ob.timestamp)*1000>Date.now()+5*60000) throw new Error('Stale observation');
+      if(!fresh(ob)) throw new Error('Stale or invalid observation');
       const pick = key => Number.isFinite(Number(ob[key])) && ob[key] !== null && ob[key] !== '' ? Number(ob[key]) : null;
       // Recover today's full Pacific-day temperature range from archived station samples.
       // This does not depend on GitHub Actions or an open browser tab.
@@ -77,6 +109,8 @@ export default {
       return Response.json({
         station:station.replace(/^PWS_/,''),
         city,
+        station_selection:discovery?'automatic_nearest_fresh_pws':'configured',
+        station_distance_mi:discovery?.relativeTo?.distanceMI ?? null,
         observed_utc:new Date(Number(ob.timestamp)*1000).toISOString(),
         temperature_f:pick('tempF'),
         daily_extrema:dailyExtrema,
