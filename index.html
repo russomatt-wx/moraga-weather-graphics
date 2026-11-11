@@ -818,37 +818,21 @@ body:not(.public-mode) #observatory-return{display:block}
   }
  }
  async function updateStation(chosen,request,modelTemp){
-  // NWS station discovery is independent of the forecast service.
-  // Only show a public observation when its timestamp and temperature are valid.
-  if(chosen==='Moraga'){
-   set('public-station-status','Moraga: KCAMORAG71 station remains available in Observatory. Homepage temperature is model guidance.');
-   return;
-  }
+  const endpoint='https://moraga-live-observations.russo-matt.workers.dev/observations?city='+encodeURIComponent(chosen.toLowerCase());
   try{
-   const [lat,lon]=coords[chosen];
-   const response=await fetch('https://api.weather.gov/points/'+lat+','+lon+'/stations',{headers:{Accept:'application/geo+json'}});
-   if(!response.ok)throw Error('NWS station discovery unavailable');
-   const listing=await response.json();
-   const stations=(listing.features||[]).filter(f=>f.properties?.stationIdentifier).slice(0,8);
-   let best=null;
-   for(const station of stations){
-    const id=station.properties.stationIdentifier;
-    try{
-     const res=await fetch('https://api.weather.gov/stations/'+encodeURIComponent(id)+'/observations/latest',{headers:{Accept:'application/geo+json'}});
-     if(!res.ok)continue;
-     const obs=(await res.json()).properties;
-     const temp=obs?.temperature?.value;
-     const stamp=Date.parse(obs?.timestamp||'');
-     if(!Number.isFinite(temp)||!Number.isFinite(stamp)||Date.now()-stamp>90*60000||stamp>Date.now()+10*60000)continue;
-     best={id,name:station.properties.name||id,temp:temp*9/5+32,stamp};break;
-    }catch(e){}
-   }
+   const response=await fetch(endpoint,{cache:'no-store'});
+   if(!response.ok)throw Error('No verified local station available');
+   const ob=await response.json();
    if(request!==revision)return;
-   if(best){
-    set('public-current-temp',fmt(best.temp));
-    set('public-station-status','Observed at '+best.name+' ('+best.id+') · '+new Date(best.stamp).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'. Nearby station; conditions may differ at your address.');
-   }else set('public-station-status','No recent nearby NWS station observation found. Displaying modeled temperature, not a station measurement.');
-  }catch(e){if(request===revision)set('public-station-status','Public station feed unavailable. Displaying modeled temperature, not a station measurement.');}
+   const stamp=Date.parse(ob.observed_utc||'');
+   if(!Number.isFinite(stamp)||Date.now()-stamp>45*60000||stamp>Date.now()+5*60000||!Number.isFinite(ob.temperature_f))throw Error('Station observation unavailable or stale');
+   set('public-current-temp',fmt(ob.temperature_f));
+   const ext=ob.daily_extrema;
+   if(ext?.complete&&Number.isFinite(ext.high_f)&&Number.isFinite(ext.low_f))set('public-high-low',fmt(ext.high_f)+' / '+fmt(ext.low_f));
+   set('public-station-status','Observed at '+ob.station+' · '+new Date(stamp).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+' · Xweather. High/low uses station values only with complete coverage.');
+  }catch(e){
+   if(request===revision)set('public-station-status',chosen==='Moraga'?'Moraga station unavailable; displaying modeled current temperature.':'Verified Xweather station not yet configured or unavailable for '+chosen+'. Displaying modeled current temperature.');
+  }
  }
  async function refresh(){
   const request=++revision,chosen=city;
