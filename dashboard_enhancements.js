@@ -53,7 +53,7 @@ function accuracy(){
    const anchor=Number.isFinite(latest)?latest:Date.now();
    const cutoff=anchor-Number(period)*86400000;
    const rows=Array.isArray(data.matches)?data.matches.filter(r=>{const t=Date.parse(r.valid_local_date+'T12:00:00Z');return Number.isFinite(t)&&t>=cutoff&&t<=anchor;}):null;
-   const names=['ecmwf','gfs','icon','gem','nam'];
+   const names=['ecmwf','gfs','icon','gem','rrfs','eps','gefs'];
    area.replaceChildren();
    const scored=names.map(name=>{
     const matches=rows?.filter(r=>r.model===name)||[];
@@ -85,6 +85,16 @@ function accuracy(){
     card.append(label,compact(high,'High bias'),compact(low,'Low bias'),count);area.append(card);
 
    }
+   for(const name of ['rrfs','eps','gefs']){
+    const matches=rows?.filter(r=>r.model===name)||[];
+    const score=data.model_scores?.[name];
+    if(matches.length || (score&&score.verified_days))continue;
+    const card=document.createElement('div');
+    card.style.cssText='display:grid;grid-template-columns:62px minmax(0,1fr) minmax(0,1fr) 45px;align-items:center;gap:8px;border-bottom:1px solid #304b60;padding:10px 4px';
+    const label=document.createElement('strong');label.textContent=name.toUpperCase();label.style.cssText='font-size:13px;color:#e4f3fb';
+    const status=document.createElement('span');status.textContent='Awaiting verified daily high/low history';status.style.cssText='grid-column:2 / 5;font-size:12px;color:#9db8c9';
+    card.append(label,status);area.append(card);
+   }
    if(!area.children.length){area.textContent='Not enough completed verification days in this period.';}
   }
   for(const [key,label] of periods){
@@ -93,7 +103,7 @@ function accuracy(){
    btn.addEventListener('click',()=>render(key));buttons.push([key,btn]);tabs.append(btn);
   }
   el.replaceChildren(intro,tabs,area);
-  const note=document.createElement('details');note.className='skill-disclaimer';const noteSummary=document.createElement('summary');noteSummary.textContent='Verification methodology';note.append(noteSummary);const noteText=document.createElement('p');noteText.textContent='7, 30 and 90 days are lookback windows, not guaranteed sample counts. Daily high/low matches currently begin October 19; earlier hourly observations are separate. Best model is ranked by average absolute high/low error, not bias, using models with comparable verified days. Blue = too cool · Coral = too warm.';note.append(noteText);el.append(note);
+  const note=document.createElement('details');note.className='skill-disclaimer';const noteSummary=document.createElement('summary');noteSummary.textContent='Verification methodology';note.append(noteSummary);const noteText=document.createElement('p');noteText.textContent='7, 30 and 90 days are lookback windows, not guaranteed sample counts. Daily high/low matches currently begin October 19; earlier hourly observations are separate. Best model is ranked by average absolute high/low error, not bias, using models with comparable verified days. RRFS, EPS and GEFS remain unranked until verified daily high/low archives are published. Blue = too cool · Coral = too warm.';note.append(noteText);el.append(note);
   render('30');
  }).catch(()=>{el.textContent='Waiting for verified daily high and low data.'});
 }
