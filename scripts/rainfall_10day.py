@@ -4,7 +4,7 @@ import math
 Source: Open-Meteo deterministic forecast and ensemble-mean APIs.
 Daily totals are midnight-to-midnight America/Los_Angeles; units inches.
 """
-import json, urllib.parse, urllib.request, time
+import json, urllib.parse, urllib.request, time, os
 from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from pathlib import Path
@@ -26,7 +26,7 @@ plt.rcParams.update({
 })
 
 
-LAT, LON = 37.8201932, -122.1193876  # KCAMORAG71 user-provided station coordinates
+LAT, LON = (float(os.environ.get('WX_FORECAST_LAT', '37.8201932')), float(os.environ.get('WX_FORECAST_LON', '-122.1193876')))  # Location-specific model collection
 TZ = "America/Los_Angeles"
 BASE = {"latitude": LAT, "longitude": LON, "daily": "precipitation_sum",
         "timezone": TZ, "precipitation_unit": "inch", "forecast_days": 14}
@@ -352,10 +352,10 @@ forecast_dates = dates[:10]
 # Keep the forecast anchored to the Pacific local day; publication validation
 # rejects any missing or shifted day before updating the live site.
 assert len(forecast_dates) == 10 and forecast_dates[0] == datetime.now(ZoneInfo(TZ)).date().isoformat()
-Path("moraga_forecast_10day.json").write_text(json.dumps({
+Path(os.environ.get("WX_FORECAST_OUTPUT", "moraga_forecast_10day.json")).write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
     "dates": forecast_dates, "rain_guidance": {day:rain_guidance[day] for day in forecast_dates}, "temperature_models": {**ensemble_temperature, **{name: {**temperature_results[model], "dates": temperature_results[model]["dates"][:10], "high_f": temperature_results[model]["high_f"][:10], "low_f": temperature_results[model]["low_f"][:10]} for name, url, model in SOURCES if model in temperature_results}},
     "model_daily_inches": {name: values[:10] for name, values in results.items()}, "ensemble_rain_probability_pct": {day: model_derived_pop[day] for day in forecast_dates}, "benchmark_open_meteo_pop_pct": {day:benchmark_pop.get(day) for day in forecast_dates}, "rain_probability_method":"EPS/GEFS equal-family daily member fraction >=0.01 in", "daily_conditions": {day: conditions[day] for day in forecast_dates}, "hourly_conditions": {name: hourly_results[model] for name, url, model in SOURCES if model in hourly_results}, "errors": errors,
-    "method": "Available ECMWF, GFS, ICON, GEM and NAM temperature guidance; website applies provisional KCAMORAG71 hourly skill weights separately for daytime and overnight, using lead-specific history where sufficient. Displayed ranges are deterministic model spread, not probability intervals.",
+    "method": "Available ECMWF, GFS, ICON, GEM temperature guidance; location-specific calibration is applied only when verified observations are available. Displayed ranges are deterministic model spread, not probability intervals.",
     "source": "Open-Meteo", "note": "Model inputs are not bias-corrected; website skill weighting is provisional, based on hourly temperature errors. Generated timestamp is retrieval time, not model initialization."
 }, indent=2))
