@@ -281,6 +281,27 @@ jobs:
               if age > 3:
                   print(f'::warning::{name} is {age:.1f} hours old')
           PY
+      - name: Verify forecast freshness before Pages deployment
+        run: |
+          python3 - <<'PY'
+          import json
+          from datetime import datetime, timezone, timedelta
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+          now=datetime.now(timezone.utc)
+          today=now.astimezone(ZoneInfo('America/Los_Angeles')).date()
+          files=['moraga_forecast_10day.json','moraga_rainfall_10day.json']
+          for name in files:
+              d=json.loads(Path(name).read_text())
+              generated=datetime.fromisoformat(d['generated_utc'].replace('Z','+00:00'))
+              age=now-generated
+              if age < timedelta(minutes=-10) or age > timedelta(hours=4):
+                  raise RuntimeError(f'{name} is stale ({age}); refusing to report a successful forecast publication')
+              dates=d.get('dates',[])
+              if len(dates)<10 or dates[0]!=today.isoformat():
+                  raise RuntimeError(f'{name} starts {dates[0] if dates else "missing"}; expected {today}')
+              print(f'::notice::{name} fresh: {generated.isoformat()} ({age.total_seconds()/60:.0f} minutes old)')
+          PY
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload site
