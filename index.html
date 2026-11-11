@@ -868,13 +868,42 @@ body:not(.public-mode) #observatory-return{display:block}
 #public-shell .public-day-icon .public-observatory-icon{width:58px!important;height:58px!important}
 #public-shell .public-day-description{font-size:11px!important}
 }
+</style><style>
+/* Observatory parity pass: remove opaque black icon tiles, restore compact station hierarchy. */
+#public-shell .public-observatory-icon{mix-blend-mode:screen!important;background:transparent!important;filter:none!important}
+#public-shell .public-hero-icon{isolation:auto!important;background:transparent!important}
+#public-shell .public-row{display:grid!important;grid-template-columns:minmax(0,1fr) 110px!important;gap:6px!important;align-items:center!important;background:linear-gradient(150deg,#174d43,#103d37)!important;border:3px solid #2cbb8d!important;border-radius:23px!important;padding:17px 18px 12px!important;margin:16px 0 10px!important}
+#public-shell .public-row .public-temp{font-size:clamp(58px,10vw,80px)!important;line-height:1.03!important}
+#public-shell .public-hero-icon{justify-self:center!important}
+#public-shell .public-live-metrics{grid-column:1/-1!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;border-top:1px solid #5b968c!important;padding:12px 0 2px!important;margin-top:8px!important}
+#public-shell .public-live-metrics span{font-size:11px!important;color:#a7d4d2!important}
+#public-shell .public-live-metrics strong{font-size:14px!important}
+#public-shell .public-hero{padding:16px 18px!important}
+#public-shell .public-heading{font-size:27px!important}
+#public-shell .public-note{margin:8px 2px 0!important;font-size:13px!important;color:#b5d0da!important}
+#public-shell .public-day{min-height:76px!important;border-radius:16px!important;box-shadow:none!important}
+#public-shell .public-day:first-child{box-shadow:0 0 0 1px #55cde866!important}
+#public-shell .public-day-icon{height:55px!important}
+#public-shell .public-day-icon .public-observatory-icon{width:59px!important;height:59px!important}
+#public-shell .public-day-description{font-size:13px!important;font-weight:600!important}
+#public-shell .public-day-temps .high{font-size:20px!important}
+#public-shell .public-day-temps .low{font-size:15px!important}
+@media(max-width:440px){
+#public-shell .public-row{grid-template-columns:minmax(0,1fr) 88px!important;padding:14px 12px 11px!important}
+#public-shell .public-hero-icon .public-observatory-icon{width:88px!important;height:88px!important}
+#public-shell .public-live-metrics{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+#public-shell .public-live-metrics div:nth-child(4){display:none!important}
+#public-shell .public-day{grid-template-columns:42px 52px minmax(0,1fr) 66px 57px!important;gap:4px!important;padding:7px 7px!important}
+#public-shell .public-day-icon .public-observatory-icon{width:52px!important;height:52px!important}
+#public-shell .public-day-description{font-size:11px!important}
+}
 </style></head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div><div class="public-brand">Moraga Weather</div><div class="public-sub">Lamorinda &amp; San Ramon Valley</div></div></div><div class="public-view-tabs"><button type="button" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory">Observatory</button></div>
  <div class="public-locations" aria-label="Choose forecast location"><button data-public-city="Moraga" aria-pressed="true">Moraga</button><button data-public-city="Lafayette" aria-pressed="false">Lafayette</button><button data-public-city="Danville" aria-pressed="false">Danville</button></div>
  <div class="public-hero"><div class="public-heading" id="public-city-heading">Moraga</div><div class="public-sub" id="public-location-sub">KCAMORAG71 · Local observations</div>
- <div class="public-row" style="margin:20px 0"><div><div class="public-temp" id="public-current-temp">—°</div><div id="public-current-condition" style="font-size:18px;font-weight:600">Loading observations…</div></div><div class="public-hero-icon" id="public-hero-icon" aria-hidden="true">☀️</div></div>
- <div class="public-live-metrics"><div><span>Humidity</span><strong id="public-humidity">—</strong></div><div><span>Wind</span><strong id="public-wind">—</strong></div><div><span>Dew point</span><strong id="public-dew">—</strong></div><div><span>Pressure</span><strong id="public-pressure">—</strong></div></div><div class="public-note" id="public-summary">Local weather conditions and forecast at a glance.</div></div><div id="public-alerts" aria-live="polite"></div><section class="public-outlook" aria-label="Weather outlook"><div class="public-outlook-title">Weather Outlook <span>Next 72 hours</span></div><p id="public-discussion">Loading the local outlook…</p></section>
+ <div class="public-row" style="margin:20px 0"><div><div class="public-temp" id="public-current-temp">—°</div><div id="public-current-condition" style="font-size:18px;font-weight:600">Loading observations…</div></div><div class="public-hero-icon" id="public-hero-icon" aria-hidden="true">☀️</div></div><div class="public-live-metrics"><div><span>Humidity</span><strong id="public-humidity">—</strong></div><div><span>Wind</span><strong id="public-wind">—</strong></div><div><span>Dew point</span><strong id="public-dew">—</strong></div><div><span>Pressure</span><strong id="public-pressure">—</strong></div></div>
+ <div class="public-note" id="public-summary">Local weather conditions and forecast at a glance.</div></div><div id="public-alerts" aria-live="polite"></div><section class="public-outlook" aria-label="Weather outlook"><div class="public-outlook-title">Weather Outlook <span>Next 72 hours</span></div><p id="public-discussion">Loading the local outlook…</p></section>
  <div class="public-grid"><div class="public-tile"><div class="public-label">Today's high / low</div><div class="public-value" id="public-high-low">— / —</div></div><div class="public-tile"><div class="public-label">Rain today</div><div class="public-value" id="public-rain">—</div></div></div>
  <h3 style="margin:22px 0 10px">Next 10 days</h3><div class="public-days" id="public-days" aria-live="polite"></div><h3 style="margin:22px 0 10px">Next 24 hours</h3><div class="public-hourly" id="public-hourly" aria-live="polite"></div><div class="public-status" id="public-station-status">Checking nearby public weather observations…</div><div class="public-notice" id="public-data-notice">Moraga uses existing observatory data. Lafayette and Danville forecast feeds are being prepared; unavailable values will not be estimated.</div>
  <div style="margin-top:22px"><button id="public-more-details">View full forecast and technical charts ↗</button></div>
