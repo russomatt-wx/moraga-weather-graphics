@@ -1362,11 +1362,14 @@ body:not(.public-mode) #observatory-return{display:none!important}
       if(station.date===today&&Number.isFinite(last)&&Date.now()-last<90*60000){
        const hi=Number(station.high_f??station.max_temperature_f),lo=Number(station.low_f??station.min_temperature_f);
        const precip=Number(station.rainfall_in??station.rain_today_in??station.precipitation_in);
+       // The Local Weather summary shows the EXPECTED daily high/low for every
+       // location. Station extrema are observations so far, not the forecast.
+       // Keep these values available to the Observatory, but never overwrite
+       // the public forecast high/low or its forecast rainfall.
        if(Number.isFinite(hi)&&Number.isFinite(lo)){
-        set('public-today-high',fmt(hi));set('public-today-low',fmt(lo));
-        set('public-today-title','TODAY SO FAR');
+        el('public-today-high').title='Forecast high; observed so far: '+fmt(hi);
+        el('public-today-low').title='Forecast low; observed so far: '+fmt(lo);
        }
-       if(Number.isFinite(precip))set('public-rain',precip.toFixed(2)+' in');
       }
      }
     }catch(error){console.warn('Observed daily extrema unavailable',error)}
