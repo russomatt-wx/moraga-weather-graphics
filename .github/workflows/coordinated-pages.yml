@@ -1,9 +1,6 @@
 name: Coordinated weather site publication
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: ['Moraga 14-day rainfall graphic']
-    types: [completed]
   push:
     branches: [main]
     paths:
@@ -22,8 +19,8 @@ on:
       - 'service-worker.js'
       - '.github/workflows/coordinated-pages.yml'
   schedule:
-    # Hourly scheduled publication after the private :37 collector; push events can publish sooner.
-    # Push events also publish new forecasts without waiting for the clock.
+    # Scheduled fallback for observations and other feeds; forecast publication uses push only.
+    # Avoid workflow_run duplication when the forecast collector commits its artifacts.
     - cron: '11,47 * * * *'
 permissions:
   contents: write
@@ -35,7 +32,6 @@ concurrency:
   cancel-in-progress: false
 jobs:
   publish:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
