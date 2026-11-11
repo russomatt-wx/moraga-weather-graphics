@@ -758,6 +758,15 @@ body.public-mode #public-shell{display:block}
 #public-shell .public-notice{margin-top:15px;padding:12px 14px;border:1px solid #365064;border-radius:12px;color:#b6ccda;font-size:13px}
 #observatory-return{position:fixed;right:14px;bottom:14px;z-index:99999;background:#20364a;border:1px solid #4a849d;border-radius:999px;color:white;padding:12px 16px;font:600 14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:none;box-shadow:0 6px 22px #0007}
 body:not(.public-mode) #observatory-return{display:block}
+</style><style>
+#public-shell .public-days{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:12px 0 20px}
+#public-shell .public-day{background:#152a3b;border:1px solid #304e60;border-radius:13px;padding:12px 4px;text-align:center;min-width:0}
+#public-shell .public-day strong{display:block;font-size:13px}
+#public-shell .public-day .public-day-icon{font-size:26px;margin:8px 0}
+#public-shell .public-day .public-day-temps{font-weight:750;font-size:14px;white-space:nowrap}
+#public-shell .public-day .public-day-rain{font-size:11px;color:#90dafa;margin-top:5px}
+#public-shell .public-status{font-size:12px;color:#b1c8d5;margin-top:9px}
+@media(max-width:420px){#public-shell .public-days{gap:4px}#public-shell .public-day{padding:9px 2px}#public-shell .public-day .public-day-temps{font-size:12px}}
 </style></head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div><div class="public-brand">Local Weather</div><div class="public-sub">Lamorinda &amp; San Ramon Valley</div></div><button id="public-open-observatory">Observatory ↗</button></div>
@@ -766,39 +775,55 @@ body:not(.public-mode) #observatory-return{display:block}
  <div class="public-row" style="margin:20px 0"><div><div class="public-temp" id="public-current-temp">—°</div><div id="public-current-condition" style="font-size:18px;font-weight:600">Loading observations…</div></div><div style="font-size:64px" aria-hidden="true">☀️</div></div>
  <div class="public-note" id="public-summary">Local weather conditions and forecast at a glance.</div></div>
  <div class="public-grid"><div class="public-tile"><div class="public-label">Today's high / low</div><div class="public-value" id="public-high-low">— / —</div></div><div class="public-tile"><div class="public-label">Rain today</div><div class="public-value" id="public-rain">—</div></div></div>
- <div class="public-notice" id="public-data-notice">Moraga uses existing observatory data. Lafayette and Danville forecast feeds are being prepared; unavailable values will not be estimated.</div>
+ <h3 style="margin:22px 0 10px">Next 5 days</h3><div class="public-days" id="public-days" aria-live="polite"></div><div class="public-notice" id="public-data-notice">Moraga uses existing observatory data. Lafayette and Danville forecast feeds are being prepared; unavailable values will not be estimated.</div>
  <div style="margin-top:22px"><button id="public-more-details">View full forecast and technical charts ↗</button></div>
  </div><button id="observatory-return">← Simple forecast</button>
  <script>
  (function(){
- const body=document.body,shell=document.getElementById('public-shell');
- if(!shell)return;
+ const body=document.body;
+ const coords={Moraga:[37.8349,-122.1297],Lafayette:[37.890,-122.115],Danville:[37.813,-121.974]};
+ const subtitles={Moraga:'KCAMORAG71 · Moraga',Lafayette:'Reliez Valley · Lafayette',Danville:'Camino Tassajara · Danville'};
+ let city='Moraga',revision=0;
+ try{city=localStorage.getItem('wx-public-city')||city}catch(e){}
+ if(!coords[city])city='Moraga';
+ const el=id=>document.getElementById(id);
+ const set=(id,value)=>{const node=el(id);if(node)node.textContent=value};
  function showPublic(){body.classList.add('public-mode');try{sessionStorage.setItem('wx-view','public')}catch(e){}window.scrollTo(0,0);refresh()}
  function showObservatory(){body.classList.remove('public-mode');try{sessionStorage.setItem('wx-view','observatory')}catch(e){}window.scrollTo(0,0)}
- document.getElementById('public-open-observatory').onclick=showObservatory;
- document.getElementById('public-more-details').onclick=showObservatory;
- document.getElementById('observatory-return').onclick=showPublic;
- const cities={Moraga:'KCAMORAG71 · Local observations',Lafayette:'Reliez Valley · Public observation feed pending',Danville:'Camino Tassajara · Public observation feed pending'};
- let city='Moraga';try{city=localStorage.getItem('wx-public-city')||city}catch(e){}
- function refresh(){
-  document.getElementById('public-city-heading').textContent=city;
-  document.getElementById('public-location-sub').textContent=cities[city];
-  document.querySelectorAll('[data-public-city]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.publicCity===city)));
-  const t=document.getElementById('public-current-temp'),hl=document.getElementById('public-high-low'),rain=document.getElementById('public-rain'),condition=document.getElementById('public-current-condition'),summary=document.getElementById('public-summary');
-  t.textContent='—°';hl.textContent='— / —';rain.textContent='—';condition.textContent='Observations unavailable';summary.textContent='Forecast data is not yet connected for this location.';
-  if(city!=='Moraga')return;
+ el('public-open-observatory').onclick=showObservatory;
+ el('public-more-details').onclick=showObservatory;
+ el('observatory-return').onclick=showPublic;
+ const fmt=v=>Number.isFinite(v)?Math.round(v)+'°':'—';
+ const rain=v=>Number.isFinite(v)?v.toFixed(2)+'″':'—';
+ function icon(code){if(code===0)return '☀️';if(code<=2)return '🌤️';if(code===3)return '☁️';if(code===45||code===48)return '🌫️';if(code>=95)return '⛈️';if(code>=51&&code<=67)return '🌧️';if(code>=80&&code<=82)return '🌧️';if(code>=71&&code<=77)return '🌨️';return '🌤️'}
+ function description(code){if(code===0)return 'Sunny';if(code<=2)return 'Partly cloudy';if(code===3)return 'Cloudy';if(code===45||code===48)return 'Foggy';if(code>=95)return 'Thunderstorms';if(code>=51&&code<=67)return 'Rain';if(code>=80&&code<=82)return 'Showers';if(code>=71&&code<=77)return 'Snow';return 'Variable clouds'}
+ function renderDays(d){const host=el('public-days');host.replaceChildren();for(let i=0;i<Math.min(5,d.time.length);i++){const item=document.createElement('div');item.className='public-day';const day=new Date(d.time[i]+'T12:00:00').toLocaleDateString('en-US',{weekday:'short'});const pop=d.precipitation_probability_max?.[i];item.innerHTML='<strong>'+day+'</strong><div class="public-day-icon">'+icon(d.weather_code[i])+'</div><div class="public-day-temps">'+fmt(d.temperature_2m_max[i])+' / '+fmt(d.temperature_2m_min[i])+'</div><div class="public-day-rain">'+(Number.isFinite(pop)?Math.round(pop)+'% rain':'')+'</div>';host.appendChild(item)}}
+ async function refresh(){
+  const request=++revision,chosen=city;
+  set('public-city-heading',chosen);set('public-location-sub',subtitles[chosen]);
+  document.querySelectorAll('[data-public-city]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.publicCity===chosen)));
+  set('public-current-temp','—°');set('public-current-condition','Loading forecast…');set('public-high-low','— / —');set('public-rain','—');set('public-summary','Retrieving the latest forecast.');
+  el('public-days').replaceChildren();
+  const [lat,lon]=coords[chosen];
+  const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
   try{
-   const src=document.getElementById('station-today');
-   if(src){const text=src.innerText||'';const nums=text.match(/-?\d+(?:\.\d+)?°/g);if(nums&&nums.length>=2)hl.textContent=nums.slice(0,2).join(' / ');}
-   const current=document.querySelector('#current-temp, #current-temperature, [data-current-temp]');
-   if(current&&current.textContent.trim())t.textContent=current.textContent.trim();
-   const forecast=document.querySelector('#ten-day-results .day-forecast');
-   if(forecast){const hi=forecast.querySelector('.day-temps>span'),lo=forecast.querySelector('.day-temps>small'),cond=forecast.querySelector('.day-condition>small'),pop=forecast.querySelector('.rain-amount');if(hi&&lo)hl.textContent=hi.textContent+' / '+lo.textContent;if(cond)condition.textContent=cond.textContent;if(pop)rain.textContent=pop.textContent;summary.textContent='See the detailed outlook and model guidance in Observatory.';}
-  }catch(e){}
+   const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw Error('Forecast request '+response.status);
+   const data=await response.json();if(request!==revision)return;
+   const d=data.daily;if(!d||!d.time||!d.time.length)throw Error('Missing forecast days');
+   set('public-current-temp',fmt(data.current?.temperature_2m));
+   set('public-current-condition',description(data.current?.weather_code??d.weather_code[0]));
+   set('public-high-low',fmt(d.temperature_2m_max[0])+' / '+fmt(d.temperature_2m_min[0]));
+   set('public-rain',rain(d.precipitation_sum[0]));
+   const chance=d.precipitation_probability_max[0];
+   const wet=Number.isFinite(chance)&&chance>=40;
+   set('public-summary',wet?'Rain is possible today ('+Math.round(chance)+'% chance). Expected total: '+rain(d.precipitation_sum[0])+'.':'Today: '+description(d.weather_code[0]).toLowerCase()+', with a high near '+fmt(d.temperature_2m_max[0])+'.');
+   set('public-data-notice','Public forecast: Open-Meteo grid guidance for '+chosen+'. Current temperature is modeled, not a nearby station reading. Observatory retains the separate Moraga station and calibrated guidance. Updated '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'.');
+   renderDays(d);
+  }catch(err){if(request!==revision)return;set('public-current-condition','Forecast temporarily unavailable');set('public-summary','Unable to load live forecast guidance. Please try again later.');set('public-data-notice','Forecast service unavailable. No estimated values are shown.');}
  }
  document.querySelectorAll('[data-public-city]').forEach(b=>b.onclick=()=>{city=b.dataset.publicCity;try{localStorage.setItem('wx-public-city',city)}catch(e){}refresh()});
  try{if(sessionStorage.getItem('wx-view')==='observatory'){showObservatory()}else{showPublic()}}catch(e){showPublic()}
- setInterval(()=>{if(body.classList.contains('public-mode'))refresh()},60000);
+ setInterval(()=>{if(body.classList.contains('public-mode'))refresh()},15*60*1000);
  })();
  </script>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
