@@ -837,6 +837,37 @@ body:not(.public-mode) #observatory-return{display:block}
 #public-shell .public-day:first-child{border-color:#4fbad1!important;box-shadow:inset 4px 0 0 var(--high),0 0 0 1px #36aeca55!important}
 #public-shell .public-day:first-child .public-day-date strong{color:#7eddf3}
 @media(max-width:440px){#public-shell .public-hero{padding:16px 14px}#public-shell .public-row{padding:14px 12px}#public-shell .public-live-metrics{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:14px}}
+</style><style>
+/* Public horizontal forecast: Observatory's real photo icons and temperature-gradient border. */
+#public-shell .public-day{
+  border:2px solid transparent!important;
+  background:linear-gradient(110deg,#1b303e 0%,#102535 55%,#0e2232 100%) padding-box,
+  linear-gradient(135deg,var(--high) 0%,color-mix(in srgb,var(--high) 55%,var(--low)) 50%,var(--low) 100%) border-box!important;
+  box-shadow:inset 0 1px 0 #ffffff13!important;
+  border-radius:19px!important;
+  min-height:91px!important;
+}
+#public-shell .public-day:first-child{
+  background:linear-gradient(110deg,color-mix(in srgb,var(--high) 13%,#172a37),#102536 75%) padding-box,
+  linear-gradient(135deg,var(--high),var(--low)) border-box!important;
+  box-shadow:0 0 0 1px #3ac9df55!important;
+}
+#public-shell .public-day-icon{height:62px!important;overflow:visible!important}
+#public-shell .public-day-icon .public-observatory-icon{width:64px!important;height:64px!important;max-width:none!important;object-fit:contain!important;filter:drop-shadow(0 0 6px #ffd76b30)}
+#public-shell .public-hero-icon .public-observatory-icon{width:104px!important;height:104px!important;object-fit:contain!important}
+#public-shell .public-hour .public-observatory-icon{width:54px!important;height:54px!important;object-fit:contain!important}
+#public-shell .public-day-temps .high{font-weight:800!important}
+#public-shell .public-day-temps .low{font-weight:700!important}
+#public-shell .public-hero{padding:16px!important}
+#public-shell .public-row{min-height:0!important;padding:15px!important;margin:13px 0!important}
+#public-shell .public-temp{font-size:clamp(56px,10vw,74px)!important}
+#public-shell .public-live-metrics{padding:10px 0!important}
+#public-shell .public-note{font-size:13px!important}
+@media(max-width:440px){
+#public-shell .public-day{grid-template-columns:43px 58px minmax(0,1fr) 69px 57px!important;gap:5px!important;min-height:83px!important;padding:7px 8px!important}
+#public-shell .public-day-icon .public-observatory-icon{width:58px!important;height:58px!important}
+#public-shell .public-day-description{font-size:11px!important}
+}
 </style></head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div><div class="public-brand">Moraga Weather</div><div class="public-sub">Lamorinda &amp; San Ramon Valley</div></div></div><div class="public-view-tabs"><button type="button" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory">Observatory</button></div>
@@ -883,19 +914,10 @@ body:not(.public-mode) #observatory-return{display:block}
   if(code>=71&&code<=77)return 'overcast';return 'mostlySun';
  }
  function iconMarkup(code){
-  const sun='<circle cx="24" cy="24" r="9" fill="#f9c85b" stroke="#f9c85b" stroke-width="2"/><path d="M24 5v7M24 36v7M5 24h7M36 24h7M10.5 10.5l5 5M32.5 32.5l5 5M37.5 10.5l-5 5M15.5 32.5l-5 5" stroke="#f9c85b" stroke-width="2.5" stroke-linecap="round"/>';
-  const cloud='<path d="M17 38h26c7 0 11-5 11-11 0-6-5-11-11-11-2 0-4 .4-5.5 1.5C35 11 30 8 24 8c-9 0-16 7-16 16v1c-4 1-6 4-6 7 0 4 4 6 15 6Z" fill="#dbe9f3" stroke="#a8c7d9" stroke-width="2" stroke-linejoin="round"/>';
-  const drops='<path d="M16 43l-3 6M29 43l-3 6M42 43l-3 6" stroke="#5cc9f4" stroke-width="3.5" stroke-linecap="round"/>';
-  const fog='<path d="M8 43h45M15 50h35" stroke="#b6cddd" stroke-width="3" stroke-linecap="round"/>';
-  let art;
-  if(code===0)art=sun;
-  else if(code<=2)art='<g transform="translate(-5,-7) scale(.76)">'+sun+'</g><g transform="translate(13,15) scale(.76)">'+cloud+'</g>';
-  else if(code===3)art=cloud;
-  else if(code===45||code===48)art=cloud+fog;
-  else if(code>=51&&code<=82)art=cloud+drops;
-  else if(code>=95)art=cloud+'<path d="M31 39l-9 12h9l-5 10" stroke="#f9c85b" stroke-width="4" fill="none" stroke-linejoin="round"/>';
-  else art=cloud;
-  return '<svg viewBox="0 0 64 64" width="52" height="52" role="presentation" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">'+art+'</svg>';
+  const asset=code===0?'sun':code===1?'mostlySun':code===2?'clearing':code===3?'overcast':code===45||code===48?'fog':code>=95?'storm':code>=80&&code<=82?'showers':code>=61&&code<=67?'rain':code>=51&&code<=57?'drizzle':code>=71&&code<=77?'overcast':'mostlySun';
+  const img=document.createElement('img');img.src='weather-icons/'+asset+'.png';img.alt='';img.loading='lazy';img.decoding='async';img.className='public-observatory-icon';
+  img.onerror=()=>{img.replaceWith(document.createTextNode(icon(code)))};
+  return img.outerHTML;
  }
  function renderDays(d){
   const host=el('public-days');host.replaceChildren();
@@ -937,10 +959,10 @@ body:not(.public-mode) #observatory-return{display:block}
    if(request!==revision)return;
    const stamp=Date.parse(ob.observed_utc||'');
    if(!Number.isFinite(stamp)||Date.now()-stamp>45*60000||stamp>Date.now()+5*60000||!Number.isFinite(ob.temperature_f))throw Error('Station observation unavailable or stale');
-   set('public-current-temp',fmt(ob.temperature_f));set('public-humidity',Number.isFinite(ob.humidity_pct)?Math.round(ob.humidity_pct)+'%':'—');set('public-dew',Number.isFinite(ob.dewpoint_f)?fmt(ob.dewpoint_f):'—');set('public-pressure',Number.isFinite(ob.pressure_inhg)?ob.pressure_inhg.toFixed(2)+' inHg':'—');set('public-wind',Number.isFinite(ob.wind_mph)?(ob.wind_mph<1?'Calm':Math.round(ob.wind_mph)+' mph'):'—');
+   set('public-current-temp',fmt(ob.temperature_f));set('public-humidity',Number.isFinite(ob.humidity_pct)?Math.round(ob.humidity_pct)+'%':'—');set('public-dew',Number.isFinite(ob.dew_point_f)?fmt(ob.dew_point_f):'—');set('public-pressure',Number.isFinite(ob.pressure_inhg)?ob.pressure_inhg.toFixed(2)+' inHg':'—');set('public-wind',Number.isFinite(ob.wind_mph)?(ob.wind_mph<1?'Calm':Math.round(ob.wind_mph)+' mph'):'—');
    const ext=ob.daily_extrema;
    if(ext?.complete&&Number.isFinite(ext.high_f)&&Number.isFinite(ext.low_f))set('public-high-low',fmt(ext.high_f)+' / '+fmt(ext.low_f));
-   set('public-station-status','Observed at '+ob.station+' · '+new Date(stamp).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+' · Xweather. High/low uses station values only with complete coverage.');
+   set('public-station-status','Observed at '+ob.station+' · '+new Date(stamp).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+' · Xweather.');
   }catch(e){
    if(request===revision)set('public-station-status',chosen==='Moraga'?'Moraga station unavailable; displaying modeled current temperature.':'Verified Xweather station not yet configured or unavailable for '+chosen+'. Displaying modeled current temperature.');
   }
