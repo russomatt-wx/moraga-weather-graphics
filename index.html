@@ -767,6 +767,13 @@ body:not(.public-mode) #observatory-return{display:block}
 #public-shell .public-day .public-day-rain{font-size:11px;color:#90dafa;margin-top:5px}
 #public-shell .public-status{font-size:12px;color:#b1c8d5;margin-top:9px}
 @media(max-width:420px){#public-shell .public-days{gap:4px}#public-shell .public-day{padding:9px 2px}#public-shell .public-day .public-day-temps{font-size:12px}}
+</style><style>
+#public-shell .public-hourly{display:flex;gap:8px;overflow-x:auto;padding:5px 0 12px;scroll-snap-type:x proximity}
+#public-shell .public-hour{flex:0 0 88px;scroll-snap-align:start;text-align:center;border:1px solid #304e60;border-radius:14px;background:#152a3b;padding:12px 7px}
+#public-shell .public-hour div{margin:5px 0}
+#public-shell .public-days{grid-template-columns:repeat(5,minmax(0,1fr))}
+#public-shell .public-day .public-day-rain{line-height:1.4}
+@media(min-width:680px){#public-shell .public-days{grid-template-columns:repeat(10,minmax(0,1fr))}}
 </style></head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div><div class="public-brand">Local Weather</div><div class="public-sub">Lamorinda &amp; San Ramon Valley</div></div><button id="public-open-observatory">Observatory ↗</button></div>
@@ -775,7 +782,7 @@ body:not(.public-mode) #observatory-return{display:block}
  <div class="public-row" style="margin:20px 0"><div><div class="public-temp" id="public-current-temp">—°</div><div id="public-current-condition" style="font-size:18px;font-weight:600">Loading observations…</div></div><div style="font-size:64px" aria-hidden="true">☀️</div></div>
  <div class="public-note" id="public-summary">Local weather conditions and forecast at a glance.</div></div>
  <div class="public-grid"><div class="public-tile"><div class="public-label">Today's high / low</div><div class="public-value" id="public-high-low">— / —</div></div><div class="public-tile"><div class="public-label">Rain today</div><div class="public-value" id="public-rain">—</div></div></div>
- <h3 style="margin:22px 0 10px">Next 5 days</h3><div class="public-days" id="public-days" aria-live="polite"></div><div class="public-notice" id="public-data-notice">Moraga uses existing observatory data. Lafayette and Danville forecast feeds are being prepared; unavailable values will not be estimated.</div>
+ <h3 style="margin:22px 0 10px">Next 10 days</h3><div class="public-days" id="public-days" aria-live="polite"></div><h3 style="margin:22px 0 10px">Next 24 hours</h3><div class="public-hourly" id="public-hourly" aria-live="polite"></div><div class="public-status" id="public-station-status">Checking nearby public weather observations…</div><div class="public-notice" id="public-data-notice">Moraga uses existing observatory data. Lafayette and Danville forecast feeds are being prepared; unavailable values will not be estimated.</div>
  <div style="margin-top:22px"><button id="public-more-details">View full forecast and technical charts ↗</button></div>
  </div><button id="observatory-return">← Simple forecast</button>
  <script>
@@ -797,15 +804,60 @@ body:not(.public-mode) #observatory-return{display:block}
  const rain=v=>Number.isFinite(v)?v.toFixed(2)+'″':'—';
  function icon(code){if(code===0)return '☀️';if(code<=2)return '🌤️';if(code===3)return '☁️';if(code===45||code===48)return '🌫️';if(code>=95)return '⛈️';if(code>=51&&code<=67)return '🌧️';if(code>=80&&code<=82)return '🌧️';if(code>=71&&code<=77)return '🌨️';return '🌤️'}
  function description(code){if(code===0)return 'Sunny';if(code<=2)return 'Partly cloudy';if(code===3)return 'Cloudy';if(code===45||code===48)return 'Foggy';if(code>=95)return 'Thunderstorms';if(code>=51&&code<=67)return 'Rain';if(code>=80&&code<=82)return 'Showers';if(code>=71&&code<=77)return 'Snow';return 'Variable clouds'}
- function renderDays(d){const host=el('public-days');host.replaceChildren();for(let i=0;i<Math.min(5,d.time.length);i++){const item=document.createElement('div');item.className='public-day';const day=new Date(d.time[i]+'T12:00:00').toLocaleDateString('en-US',{weekday:'short'});const pop=d.precipitation_probability_max?.[i];item.innerHTML='<strong>'+day+'</strong><div class="public-day-icon">'+icon(d.weather_code[i])+'</div><div class="public-day-temps">'+fmt(d.temperature_2m_max[i])+' / '+fmt(d.temperature_2m_min[i])+'</div><div class="public-day-rain">'+(Number.isFinite(pop)?Math.round(pop)+'% rain':'')+'</div>';host.appendChild(item)}}
+ function renderDays(d){const host=el('public-days');host.replaceChildren();for(let i=0;i<Math.min(10,d.time.length);i++){const item=document.createElement('div');item.className='public-day';const day=new Date(d.time[i]+'T12:00:00').toLocaleDateString('en-US',{weekday:'short'});const pop=d.precipitation_probability_max?.[i];const total=d.precipitation_sum?.[i];item.innerHTML='<strong>'+day+'</strong><div class="public-day-icon">'+icon(d.weather_code[i])+'</div><div class="public-day-temps">'+fmt(d.temperature_2m_max[i])+' / '+fmt(d.temperature_2m_min[i])+'</div><div class="public-day-rain">'+(Number.isFinite(pop)?Math.round(pop)+'% rain':'')+(Number.isFinite(total)&&total>=0.01?'<br>'+rain(total):'')+'</div>';host.appendChild(item)}}
+ function renderHourly(hourly,currentTime){
+  const host=el('public-hourly');host.replaceChildren();
+  if(!hourly?.time?.length)return;
+  const start=Math.max(0,hourly.time.findIndex(t=>t>=String(currentTime||'')));
+  for(let i=start;i<Math.min(hourly.time.length,start+24);i+=2){
+   const card=document.createElement('div');card.className='public-hour';
+   const hour=new Date(hourly.time[i]).toLocaleTimeString('en-US',{hour:'numeric'});
+   const chance=hourly.precipitation_probability?.[i];
+   card.innerHTML='<strong>'+hour+'</strong><div style="font-size:25px">'+icon(hourly.weather_code[i])+'</div><strong>'+fmt(hourly.temperature_2m[i])+'</strong><div style="color:#90dafa;font-size:12px">'+(Number.isFinite(chance)?chance+'% rain':'—')+'</div>';
+   host.appendChild(card);
+  }
+ }
+ async function updateStation(chosen,request,modelTemp){
+  // NWS station discovery is independent of the forecast service.
+  // Only show a public observation when its timestamp and temperature are valid.
+  if(chosen==='Moraga'){
+   set('public-station-status','Moraga: KCAMORAG71 station remains available in Observatory. Homepage temperature is model guidance.');
+   return;
+  }
+  try{
+   const [lat,lon]=coords[chosen];
+   const response=await fetch('https://api.weather.gov/points/'+lat+','+lon+'/stations',{headers:{Accept:'application/geo+json'}});
+   if(!response.ok)throw Error('NWS station discovery unavailable');
+   const listing=await response.json();
+   const stations=(listing.features||[]).filter(f=>f.properties?.stationIdentifier).slice(0,8);
+   let best=null;
+   for(const station of stations){
+    const id=station.properties.stationIdentifier;
+    try{
+     const res=await fetch('https://api.weather.gov/stations/'+encodeURIComponent(id)+'/observations/latest',{headers:{Accept:'application/geo+json'}});
+     if(!res.ok)continue;
+     const obs=(await res.json()).properties;
+     const temp=obs?.temperature?.value;
+     const stamp=Date.parse(obs?.timestamp||'');
+     if(!Number.isFinite(temp)||!Number.isFinite(stamp)||Date.now()-stamp>90*60000||stamp>Date.now()+10*60000)continue;
+     best={id,name:station.properties.name||id,temp:temp*9/5+32,stamp};break;
+    }catch(e){}
+   }
+   if(request!==revision)return;
+   if(best){
+    set('public-current-temp',fmt(best.temp));
+    set('public-station-status','Observed at '+best.name+' ('+best.id+') · '+new Date(best.stamp).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'. Nearby station; conditions may differ at your address.');
+   }else set('public-station-status','No recent nearby NWS station observation found. Displaying modeled temperature, not a station measurement.');
+  }catch(e){if(request===revision)set('public-station-status','Public station feed unavailable. Displaying modeled temperature, not a station measurement.');}
+ }
  async function refresh(){
   const request=++revision,chosen=city;
   set('public-city-heading',chosen);set('public-location-sub',subtitles[chosen]);
   document.querySelectorAll('[data-public-city]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.publicCity===chosen)));
-  set('public-current-temp','—°');set('public-current-condition','Loading forecast…');set('public-high-low','— / —');set('public-rain','—');set('public-summary','Retrieving the latest forecast.');
-  el('public-days').replaceChildren();
+  set('public-station-status','Checking nearby public weather observations…');set('public-current-temp','—°');set('public-current-condition','Loading forecast…');set('public-high-low','— / —');set('public-rain','—');set('public-summary','Retrieving the latest forecast.');
+  el('public-days').replaceChildren();el('public-hourly').replaceChildren();
   const [lat,lon]=coords[chosen];
-  const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
+  const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code&hourly=temperature_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
   try{
    const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw Error('Forecast request '+response.status);
    const data=await response.json();if(request!==revision)return;
@@ -819,6 +871,8 @@ body:not(.public-mode) #observatory-return{display:block}
    set('public-summary',wet?'Rain is possible today ('+Math.round(chance)+'% chance). Expected total: '+rain(d.precipitation_sum[0])+'.':'Today: '+description(d.weather_code[0]).toLowerCase()+', with a high near '+fmt(d.temperature_2m_max[0])+'.');
    set('public-data-notice','Public forecast: Open-Meteo grid guidance for '+chosen+'. Current temperature is modeled, not a nearby station reading. Observatory retains the separate Moraga station and calibrated guidance. Updated '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'.');
    renderDays(d);
+   renderHourly(data.hourly,data.current?.time);
+   updateStation(chosen,request,data.current?.temperature_2m);
   }catch(err){if(request!==revision)return;set('public-current-condition','Forecast temporarily unavailable');set('public-summary','Unable to load live forecast guidance. Please try again later.');set('public-data-notice','Forecast service unavailable. No estimated values are shown.');}
  }
  document.querySelectorAll('[data-public-city]').forEach(b=>b.onclick=()=>{city=b.dataset.publicCity;try{localStorage.setItem('wx-public-city',city)}catch(e){}refresh()});
