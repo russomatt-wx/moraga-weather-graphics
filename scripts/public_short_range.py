@@ -4,7 +4,7 @@ import json, urllib.parse, urllib.request, os
 from datetime import datetime, timezone
 from pathlib import Path
 LOCATIONS={"moraga":(37.8201932,-122.1193876),"lafayette":(37.890,-122.115),"danville":(37.813,-121.974)}
-MODELS={"HRRR":("https://api.open-meteo.com/v1/gfs","hrrr_conus",.40),"RRFS":("https://api.open-meteo.com/v1/gfs","ncep_rrfs",.25),"ECMWF":("https://api.open-meteo.com/v1/forecast","ecmwf_ifs025",.20),"GFS":("https://api.open-meteo.com/v1/forecast","ncep_gfs_seamless",.15)}
+MODELS={"HRRR":("https://api.open-meteo.com/v1/forecast","ncep_hrrr_conus",.40),"RRFS":("https://api.open-meteo.com/v1/forecast","ncep_rrfs",.25),"ECMWF":("https://api.open-meteo.com/v1/forecast","ecmwf_ifs025",.20),"GFS":("https://api.open-meteo.com/v1/forecast","ncep_gfs_seamless",.15)}
 FIELDS=["temperature_2m","precipitation","precipitation_probability","weather_code"]
 def fetch(url,params):
     request=urllib.request.Request(url+"?"+urllib.parse.urlencode(params),headers={"User-Agent":"MoragaWeatherObservatory/1.0"})
@@ -40,4 +40,4 @@ def collect(name,lat,lon):
         output["hourly"][field]=values
     Path(name+"_short_range_24h.json").write_text(json.dumps(output,indent=2)+"\n")
     print(name,"sources",list(results),"failures",failures)
-for name,(lat,lon) in LOCATIONS.items():collect(name,lat,lon)
+for name,(lat,lon) in LOCATIONS.items():\n    try:collect(name,lat,lon)\n    except Exception as exc:print("Short-range blend unavailable for",name,":",exc)
