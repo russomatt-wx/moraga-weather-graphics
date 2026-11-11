@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-11T14:47:56.857915+00:00",
+  "generated_utc": "2026-11-11T15:14:16.815815+00:00",
   "timezone": "America/Los_Angeles",
   "latitude": 37.8201932,
   "longitude": -122.1193876,
@@ -53,13 +53,13 @@
       "pop_status": "available"
     },
     "2026-11-13": {
-      "expected_inches": 1.046,
+      "expected_inches": 1.042,
       "ensemble_share": 0.25,
       "ensemble_threshold_pct": {
         "0.01": 100,
         "0.1": 100,
-        "0.25": 93,
-        "0.5": 71
+        "0.25": 92,
+        "0.5": 70
       },
       "ensemble_models": [
         "EPS",
@@ -71,12 +71,12 @@
       "pop_status": "available"
     },
     "2026-11-14": {
-      "expected_inches": 0.113,
+      "expected_inches": 0.106,
       "ensemble_share": 0.6,
       "ensemble_threshold_pct": {
-        "0.01": 70,
-        "0.1": 48,
-        "0.25": 19,
+        "0.01": 69,
+        "0.1": 47,
+        "0.25": 14,
         "0.5": 3
       },
       "ensemble_models": [
@@ -84,43 +84,43 @@
         "GEFS"
       ],
       "ensemble_members": 80,
-      "derived_pop_pct": 70,
+      "derived_pop_pct": 69,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
       "pop_status": "available"
     },
     "2026-11-15": {
-      "expected_inches": 0.277,
+      "expected_inches": 0.236,
       "ensemble_share": 0.6,
       "ensemble_threshold_pct": {
-        "0.01": 82,
-        "0.1": 62,
-        "0.25": 41,
-        "0.5": 19
+        "0.01": 78,
+        "0.1": 57,
+        "0.25": 33,
+        "0.5": 16
       },
       "ensemble_models": [
         "EPS",
         "GEFS"
       ],
-      "ensemble_members": 80,
-      "derived_pop_pct": 82,
+      "ensemble_members": 78,
+      "derived_pop_pct": 78,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
       "pop_status": "available"
     },
     "2026-11-16": {
-      "expected_inches": 0.309,
+      "expected_inches": 0.313,
       "ensemble_share": 0.6,
       "ensemble_threshold_pct": {
-        "0.01": 89,
-        "0.1": 66,
-        "0.25": 49,
-        "0.5": 34
+        "0.01": 83,
+        "0.1": 62,
+        "0.25": 48,
+        "0.5": 32
       },
       "ensemble_models": [
         "EPS",
         "GEFS"
       ],
       "ensemble_members": 80,
-      "derived_pop_pct": 89,
+      "derived_pop_pct": 83,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
       "pop_status": "available"
     },
@@ -479,10 +479,10 @@
     "EPS mean": [
       0.0,
       0.0,
-      0.858,
-      0.185,
-      0.209,
-      0.543,
+      0.835,
+      0.154,
+      0.193,
+      0.437,
       0.02,
       0.756,
       0.299,
@@ -505,9 +505,9 @@
     "2026-11-11": 0,
     "2026-11-12": 5,
     "2026-11-13": 100,
-    "2026-11-14": 70,
-    "2026-11-15": 82,
-    "2026-11-16": 89,
+    "2026-11-14": 69,
+    "2026-11-15": 78,
+    "2026-11-16": 83,
     "2026-11-17": 35,
     "2026-11-18": 85,
     "2026-11-19": 64,
@@ -515,15 +515,15 @@
   },
   "benchmark_open_meteo_pop_pct": {
     "2026-11-11": 0,
-    "2026-11-12": 13,
-    "2026-11-13": 95,
-    "2026-11-14": 57,
-    "2026-11-15": 71,
-    "2026-11-16": 71,
-    "2026-11-17": 34,
-    "2026-11-18": 71,
-    "2026-11-19": 56,
-    "2026-11-20": 20
+    "2026-11-12": 11,
+    "2026-11-13": 98,
+    "2026-11-14": 50,
+    "2026-11-15": 76,
+    "2026-11-16": 76,
+    "2026-11-17": 37,
+    "2026-11-18": 67,
+    "2026-11-19": 59,
+    "2026-11-20": 11
   },
   "rain_probability_method": "EPS/GEFS equal-family daily member fraction >=0.01 in",
   "daily_conditions": {
@@ -4665,7 +4665,7 @@
     }
   },
   "errors": {},
-  "method": "Available ECMWF, GFS, ICON, GEM and NAM temperature guidance; website applies provisional KCAMORAG71 hourly skill weights separately for daytime and overnight, using lead-specific history where sufficient. Displayed ranges are deterministic model spread, not probability intervals.",
+  "method": "Available ECMWF, GFS, ICON, GEM temperature guidance; location-specific calibration is applied only when verified observations are available. Displayed ranges are deterministic model spread, not probability intervals.",
   "source": "Open-Meteo",
   "note": "Model inputs are not bias-corrected; website skill weighting is provisional, based on hourly temperature errors. Generated timestamp is retrieval time, not model initialization."
 }
