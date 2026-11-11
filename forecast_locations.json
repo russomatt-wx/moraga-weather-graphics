@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "methodology": "moraga-observatory-10day",
+  "timezone": "America/Los_Angeles",
+  "locations": {
+    "moraga": {
+      "latitude": 37.8201932,
+      "longitude": -122.1193876,
+      "display_name": "Moraga",
+      "forecast_file": "moraga_forecast_10day.json",
+      "calibration_station": "KCAMORAG71",
+      "status": "operational"
+    },
+    "lafayette": {
+      "latitude": 37.89,
+      "longitude": -122.115,
+      "display_name": "Lafayette — Reliez Valley",
+      "forecast_file": "lafayette_forecast_10day.json",
+      "calibration_station": null,
+      "status": "collector_pending"
+    },
+    "danville": {
+      "latitude": 37.813,
+      "longitude": -121.974,
+      "display_name": "Danville — Camino Tassajara",
+      "forecast_file": "danville_forecast_10day.json",
+      "calibration_station": null,
+      "status": "collector_pending"
+    }
+  },
+  "forecast_policy": {
+    "deterministic_models": [
+      "ECMWF",
+      "GFS"
+    ],
+    "ensemble_models": [
+      "EPS",
+      "GEFS"
+    ],
+    "short_range_models": [
+      "HRRR",
+      "RRFS"
+    ],
+    "ensemble_weight_by_lead": {
+      "days_1_3": 0.15,
+      "days_4_7": 0.4,
+      "days_8_10": 0.65
+    },
+    "rain_probability_method": "EPS/GEFS member threshold probability",
+    "calibration": "independent per location; no Moraga correction transferred",
+    "staleness_limit_hours": 18,
+    "require_explicit_source_status": true
+  }
+}
