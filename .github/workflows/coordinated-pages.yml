@@ -15,6 +15,8 @@ on:
       - 'rainfall_accuracy.js'
       - 'hrrr.html'
       - 'scripts/short_range_forecast.py'
+      - 'gfs_pwat_f012.png'
+      - 'gfs_pwat_f036.png'
       - 'pacific_synoptic.png'
       - 'pacific_synoptic.json'
       - 'service-worker.js'
