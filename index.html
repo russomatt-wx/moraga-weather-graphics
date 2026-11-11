@@ -969,6 +969,58 @@ border:3px solid transparent!important;border-radius:19px!important;
 #public-shell .public-day-observatory .public-ob-center{min-height:106px!important}
 #public-shell .public-day-observatory .public-day-description{font-size:12px!important}
 }
+</style><style>
+/* Match the Observatory's compact four-column forecast composition. */
+#public-shell .public-day.public-day-observatory{
+  grid-template-columns:70px 76px minmax(0,1fr) 69px!important;
+  gap:7px!important;min-height:104px!important;padding:8px 12px!important;
+  align-items:center!important;overflow:visible!important;
+  background:linear-gradient(95deg,color-mix(in srgb,var(--high) 19%,#1a3038),#102a37 53%,color-mix(in srgb,var(--low) 14%,#0d2b3a)) padding-box,
+    linear-gradient(110deg,var(--high),var(--low)) border-box!important;
+  border:3px solid transparent!important;border-radius:17px!important;
+}
+#public-shell .public-day-observatory .public-day-date{
+  display:flex!important;flex-direction:column!important;align-items:flex-start!important;
+  justify-content:center!important;gap:5px!important;min-width:0!important;
+}
+#public-shell .public-day-observatory .public-day-date em{
+  font-size:11px!important;padding:3px 6px!important;line-height:1.15!important;
+  max-width:100%!important;white-space:nowrap!important;
+}
+#public-shell .public-day-observatory .public-ob-high{font-size:34px!important;line-height:1!important;text-align:left!important}
+#public-shell .public-day-observatory .public-ob-low{font-size:32px!important;line-height:1!important;text-align:right!important}
+#public-shell .public-day-observatory .public-ob-center{
+  display:flex!important;flex-direction:column!important;justify-content:center!important;
+  align-items:center!important;min-height:91px!important;gap:1px!important;
+  overflow:visible!important;
+}
+#public-shell .public-day-observatory .public-day-icon{
+  height:49px!important;flex:0 0 49px!important;margin:0!important;
+}
+#public-shell .public-day-observatory .public-day-icon .public-observatory-icon{
+  width:68px!important;height:51px!important;max-width:100%!important;
+  object-fit:contain!important;
+}
+#public-shell .public-day-observatory .public-day-description{
+  display:block!important;visibility:visible!important;opacity:1!important;
+  position:static!important;min-height:15px!important;line-height:1.15!important;
+  font-size:12px!important;font-weight:750!important;white-space:normal!important;
+}
+#public-shell .public-day-observatory .public-ob-rain{
+  display:block!important;min-height:15px!important;line-height:1.2!important;
+  font-size:11px!important;color:#a5e2ff!important;white-space:nowrap!important;
+}
+@media(max-width:440px){
+ #public-shell .public-day.public-day-observatory{
+  grid-template-columns:55px 61px minmax(0,1fr) 55px!important;
+  gap:4px!important;padding:7px 8px!important;min-height:103px!important;
+ }
+ #public-shell .public-day-observatory .public-ob-high{font-size:29px!important}
+ #public-shell .public-day-observatory .public-ob-low{font-size:28px!important}
+ #public-shell .public-day-observatory .public-day-description{font-size:11px!important}
+ #public-shell .public-day-observatory .public-ob-rain{font-size:10px!important}
+ #public-shell .public-day-observatory .public-day-date em{font-size:10px!important;padding:3px 5px!important}
+}
 </style></head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div><div class="public-brand">Moraga Weather</div><div class="public-sub">Lamorinda &amp; San Ramon Valley</div></div></div><div class="public-view-tabs"><button type="button" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory">Observatory</button></div>
