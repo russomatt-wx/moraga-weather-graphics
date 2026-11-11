@@ -789,13 +789,22 @@ body:not(.public-mode) #observatory-return{display:block}
 #public-shell .public-hour img{width:52px;height:48px;object-fit:contain}
 #public-shell .public-hero-icon img{width:112px;height:112px;object-fit:contain}
 @media(max-width:440px){#public-shell .public-day .public-day-temps{font-size:16px}#public-shell .public-day .public-day-temps .low{font-size:14px}#public-shell .public-day .public-day-icon img{max-width:55px;height:44px}}
+#public-shell .public-outlook{margin:16px 0 10px;padding:18px 19px;background:linear-gradient(135deg,#183247,#112637);border:1px solid #355b70;border-radius:18px}
+#public-shell .public-outlook-title{font-size:17px;font-weight:750;letter-spacing:-.2px}
+#public-shell .public-outlook-title span{font-size:12px;color:#a6c9d9;font-weight:500;margin-left:7px}
+#public-shell .public-outlook p{font-size:15px;line-height:1.55;margin:8px 0 0;color:#d3e4ef}
+#public-shell .public-alert{margin:12px 0;padding:14px 16px;border-radius:14px;border:1px solid #e5a65c;background:#50351e;color:#fff0da}
+#public-shell .public-alert.severe{border-color:#ed7777;background:#56252c}
+#public-shell .public-alert strong{display:block;margin-bottom:3px}
+#public-shell .public-alert a{color:inherit;text-decoration:underline}
+#public-shell .public-alert-status{color:#9fb8cc;font-size:12px;margin:10px 0}
 </style></head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div><div class="public-brand">Local Weather</div><div class="public-sub">Lamorinda &amp; San Ramon Valley</div></div><button id="public-open-observatory">Observatory ↗</button></div>
  <div class="public-locations" aria-label="Choose forecast location"><button data-public-city="Moraga" aria-pressed="true">Moraga</button><button data-public-city="Lafayette" aria-pressed="false">Lafayette</button><button data-public-city="Danville" aria-pressed="false">Danville</button></div>
  <div class="public-hero"><div class="public-heading" id="public-city-heading">Moraga</div><div class="public-sub" id="public-location-sub">KCAMORAG71 · Local observations</div>
  <div class="public-row" style="margin:20px 0"><div><div class="public-temp" id="public-current-temp">—°</div><div id="public-current-condition" style="font-size:18px;font-weight:600">Loading observations…</div></div><div class="public-hero-icon" id="public-hero-icon" aria-hidden="true">☀️</div></div>
- <div class="public-note" id="public-summary">Local weather conditions and forecast at a glance.</div></div>
+ <div class="public-note" id="public-summary">Local weather conditions and forecast at a glance.</div></div><div id="public-alerts" aria-live="polite"></div><section class="public-outlook" aria-label="Weather outlook"><div class="public-outlook-title">Weather Outlook <span>Next 72 hours</span></div><p id="public-discussion">Loading the local outlook…</p></section>
  <div class="public-grid"><div class="public-tile"><div class="public-label">Today's high / low</div><div class="public-value" id="public-high-low">— / —</div></div><div class="public-tile"><div class="public-label">Rain today</div><div class="public-value" id="public-rain">—</div></div></div>
  <h3 style="margin:22px 0 10px">Next 10 days</h3><div class="public-days" id="public-days" aria-live="polite"></div><h3 style="margin:22px 0 10px">Next 24 hours</h3><div class="public-hourly" id="public-hourly" aria-live="polite"></div><div class="public-status" id="public-station-status">Checking nearby public weather observations…</div><div class="public-notice" id="public-data-notice">Moraga uses existing observatory data. Lafayette and Danville forecast feeds are being prepared; unavailable values will not be estimated.</div>
  <div style="margin-top:22px"><button id="public-more-details">View full forecast and technical charts ↗</button></div>
@@ -865,11 +874,41 @@ body:not(.public-mode) #observatory-return{display:block}
    if(request===revision)set('public-station-status',chosen==='Moraga'?'Moraga station unavailable; displaying modeled current temperature.':'Verified Xweather station not yet configured or unavailable for '+chosen+'. Displaying modeled current temperature.');
   }
  }
+ function weatherDiscussion(d,h,now){
+  const t=d.time||[],rainy=[],cooling=[];
+  for(let i=0;i<Math.min(3,t.length);i++){const chance=d.precipitation_probability_max?.[i],amount=d.precipitation_sum?.[i];if((chance>=35)||(amount>=0.08))rainy.push({i,chance,amount});}
+  const high=d.temperature_2m_max?.[0],next=d.temperature_2m_max?.[1],third=d.temperature_2m_max?.[2];
+  const today=description(d.weather_code?.[0]??2).toLowerCase();
+  let parts=['Expect '+today+' today'+(Number.isFinite(high)?', with afternoon temperatures near '+fmt(high):'')+'.'];
+  if(rainy.length){const first=rainy[0];const when=first.i===0?'today':first.i===1?'tomorrow':'the following day';parts.push('Rain chances '+(first.i===0?'continue':'increase')+' '+when+(Number.isFinite(first.chance)?' (around '+Math.round(first.chance/10)*10+'%)':'')+(Number.isFinite(first.amount)&&first.amount>=0.05?', with roughly '+rain(first.amount)+' possible':'')+'.');}
+  else parts.push('No significant rainfall is indicated over the next three days.');
+  if(Number.isFinite(high)&&Number.isFinite(next)&&Math.abs(next-high)>=6)parts.push('Tomorrow turns '+(next<high?'cooler':'warmer')+', with a high near '+fmt(next)+'.');
+  else if(Number.isFinite(high)&&Number.isFinite(third)&&Math.abs(third-high)>=7)parts.push('By '+new Date(t[2]+'T12:00:00').toLocaleDateString('en-US',{weekday:'long'})+', temperatures '+(third<high?'cool':'warm')+' toward '+fmt(third)+'.');
+  return parts.join(' ');
+ }
+ async function updateAlerts(chosen,request){
+  const host=el('public-alerts');host.replaceChildren();
+  const [lat,lon]=coords[chosen];
+  try{
+   const response=await fetch('https://api.weather.gov/alerts/active?point='+lat+','+lon,{headers:{Accept:'application/geo+json'},cache:'no-store'});
+   if(!response.ok)throw Error('NWS unavailable');
+   const data=await response.json();if(request!==revision)return;
+   const items=(data.features||[]).filter(x=>x.properties?.event).slice(0,5);
+   if(!items.length){const status=document.createElement('div');status.className='public-alert-status';status.textContent='No active NWS alerts for this location.';host.appendChild(status);return;}
+   for(const item of items){
+    const p=item.properties,card=document.createElement('div');card.className='public-alert'+(/warning|emergency/i.test(p.event)?' severe':'');
+    const heading=document.createElement('strong');heading.textContent='⚠ '+p.event;card.appendChild(heading);
+    const detail=document.createElement('div');detail.textContent=(p.headline||p.description||'Official weather alert').slice(0,240);card.appendChild(detail);
+    if(p.web){const link=document.createElement('a');link.href=p.web;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Official NWS details';card.appendChild(link);}
+    host.appendChild(card);
+   }
+  }catch(e){if(request!==revision)return;const status=document.createElement('div');status.className='public-alert-status';status.textContent='NWS alerts could not be checked. Check weather.gov for official warnings.';host.appendChild(status);}
+ }
  async function refresh(){
   const request=++revision,chosen=city;
   set('public-city-heading',chosen);set('public-location-sub',subtitles[chosen]);
   document.querySelectorAll('[data-public-city]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.publicCity===chosen)));
-  set('public-station-status','Checking nearby public weather observations…');set('public-current-temp','—°');set('public-current-condition','Loading forecast…');set('public-high-low','— / —');set('public-rain','—');set('public-summary','Retrieving the latest forecast.');
+  set('public-discussion','Loading the local outlook…');el('public-alerts').replaceChildren();updateAlerts(chosen,request);set('public-station-status','Checking nearby public weather observations…');set('public-current-temp','—°');set('public-current-condition','Loading forecast…');set('public-high-low','— / —');set('public-rain','—');set('public-summary','Retrieving the latest forecast.');
   el('public-days').replaceChildren();el('public-hourly').replaceChildren();
   const [lat,lon]=coords[chosen];
   const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code&hourly=temperature_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
@@ -886,9 +925,10 @@ body:not(.public-mode) #observatory-return{display:block}
    set('public-summary',wet?'Rain is possible today ('+Math.round(chance)+'% chance). Expected total: '+rain(d.precipitation_sum[0])+'.':'Today: '+description(d.weather_code[0]).toLowerCase()+', with a high near '+fmt(d.temperature_2m_max[0])+'.');
    set('public-data-notice','Public forecast: Open-Meteo grid guidance for '+chosen+'. Current temperature is modeled, not a nearby station reading. Observatory retains the separate Moraga station and calibrated guidance. Updated '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'.');
    renderDays(d);
+   set('public-discussion',weatherDiscussion(d,data.hourly,data.current));
    renderHourly(data.hourly,data.current?.time);
    updateStation(chosen,request,data.current?.temperature_2m);
-  }catch(err){if(request!==revision)return;set('public-current-condition','Forecast temporarily unavailable');set('public-summary','Unable to load live forecast guidance. Please try again later.');set('public-data-notice','Forecast service unavailable. No estimated values are shown.');}
+  }catch(err){if(request!==revision)return;set('public-current-condition','Forecast temporarily unavailable');set('public-summary','Unable to load live forecast guidance. Please try again later.');set('public-discussion','The outlook is temporarily unavailable.');set('public-data-notice','Forecast service unavailable. No estimated values are shown.');}
  }
  document.querySelectorAll('[data-public-city]').forEach(b=>b.onclick=()=>{city=b.dataset.publicCity;try{localStorage.setItem('wx-public-city',city)}catch(e){}refresh()});
  try{if(sessionStorage.getItem('wx-view')==='observatory'){showObservatory()}else{showPublic()}}catch(e){showPublic()}
