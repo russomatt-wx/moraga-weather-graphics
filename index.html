@@ -1194,6 +1194,39 @@ border:3px solid transparent!important;border-radius:19px!important;
    const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw Error('Forecast request '+response.status);
    const data=await response.json();if(request!==revision)return;
    const d=data.daily;if(!d||!d.time||!d.time.length)throw Error('Missing forecast days');
+   // Same-location Observatory model families, collected by the existing 3-hour workflow.
+   // Never substitute Moraga's bias correction for another location.
+   let blended=false;
+   const feedName=({Moraga:'moraga',Lafayette:'lafayette',Danville:'danville'})[chosen];
+   try{
+    const fr=await fetch(feedName+'_forecast_10day.json?t='+Date.now(),{cache:'no-store'});
+    if(fr.ok){
+     const f=await fr.json(),age=Date.now()-Date.parse(f.generated_utc);
+     const aligned=Number.isFinite(age)&&age>=-300000&&age<18*3600000&&
+      f.dates?.length>=10&&d.time.slice(0,10).every((day,i)=>f.dates[i]===day)&&
+      Math.abs(Number(f.latitude)-lat)<.002&&Math.abs(Number(f.longitude)-lon)<.002;
+     if(aligned){
+      const base={ECMWF:1,GFS:1,ICON:1,GEM:1};
+      const blend=(field,i)=>{
+       const values=Object.entries(f.temperature_models||{}).map(([name,m])=>[name,m[field]?.[i]]).filter(([n,v])=>Number.isFinite(v));
+       const ens=values.filter(([n])=>n==='EPS'||n==='GEFS'),det=values.filter(([n])=>n!=='EPS'&&n!=='GEFS');
+       if(!values.length)return null;
+       const mean=(entries)=>entries.reduce((s,[n,v])=>s+v,0)/entries.length;
+       const share=i<3?.15:i<7?.40:.65;
+       return ens.length&&det.length?mean(det)*(1-share)+mean(ens)*share:mean(values);
+      };
+      for(let i=0;i<10;i++){
+       const hi=blend('high_f',i),lo=blend('low_f',i);
+       if(Number.isFinite(hi)&&Number.isFinite(lo)&&hi>=lo){d.temperature_2m_max[i]=hi;d.temperature_2m_min[i]=lo}
+       const day=d.time[i],rg=f.rain_guidance?.[day];
+       if(Number.isFinite(rg?.expected_inches))d.precipitation_sum[i]=rg.expected_inches;
+       if(Number.isFinite(rg?.derived_pop_pct))d.precipitation_probability_max[i]=rg.derived_pop_pct;
+      }
+      blended=true;
+     }
+    }
+   }catch(error){console.warn('Local blended forecast unavailable',error)}
+   if(request!==revision)return;
    set('public-current-temp',fmt(data.current?.temperature_2m));
    set('public-current-condition',description(data.current?.weather_code??d.weather_code[0]));el('public-hero-icon').innerHTML=iconMarkup(data.current?.weather_code??d.weather_code[0]);el('public-current-temp').style.color=tempColor(data.current?.temperature_2m);
    set('public-high-low',fmt(d.temperature_2m_max[0])+' / '+fmt(d.temperature_2m_min[0]));
@@ -1201,7 +1234,7 @@ border:3px solid transparent!important;border-radius:19px!important;
    const chance=d.precipitation_probability_max[0];
    const wet=Number.isFinite(chance)&&chance>=40;
    set('public-summary',wet?'Rain is possible today ('+Math.round(chance)+'% chance). Expected total: '+rain(d.precipitation_sum[0])+'.':'Today: '+description(d.weather_code[0]).toLowerCase()+', with a high near '+fmt(d.temperature_2m_max[0])+'.');
-   set('public-data-notice','Public forecast: Open-Meteo grid guidance for '+chosen+'. Current temperature is modeled, not a nearby station reading. Observatory retains the separate Moraga station and calibrated guidance. Updated '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'.');
+   set('public-data-notice',(blended?'Daily forecast: ECMWF/GFS/ICON/GEM with EPS/GEFS ensemble blending and ensemble rainfall for ':'Daily blended model feed unavailable; temporary Open-Meteo fallback for ')+chosen+'. Current temperature and hourly detail remain Open-Meteo guidance, not station observations. Updated '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'.');
    renderDays(d);
    set('public-discussion',weatherDiscussion(d,data.hourly,data.current));
    renderHourly(data.hourly,data.current?.time);
