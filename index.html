@@ -1307,7 +1307,7 @@ body:not(.public-mode) #observatory-return{display:none!important}
    set('public-today-title',"TODAY'S FORECAST");
    set('public-high-low',fmt(d.temperature_2m_max[0])+' / '+fmt(d.temperature_2m_min[0]));
    set('public-today-high',fmt(d.temperature_2m_max[0]));set('public-today-low',fmt(d.temperature_2m_min[0]));
-   set('public-current-time',new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'America/Los_Angeles'}).toUpperCase()+'\\n'+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'})+' PT');
+   set('public-current-time',new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'America/Los_Angeles'}).toUpperCase()+String.fromCharCode(10)+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'})+' PT');
    set('public-rain',rain(d.precipitation_sum[0]));set('public-gust','—');
    const chance=d.precipitation_probability_max[0];
    const wet=Number.isFinite(chance)&&chance>=40;
