@@ -18,19 +18,20 @@ async function discoverStation(city, env) {
   endpoint.searchParams.set('p', CITY_COORDS[city]);
   endpoint.searchParams.set('radius', '6mi');
   endpoint.searchParams.set('limit', '30');
+  endpoint.searchParams.set('filter', 'allstations');
   endpoint.searchParams.set('client_id', env.XWEATHER_CLIENT_ID);
   endpoint.searchParams.set('client_secret', env.XWEATHER_CLIENT_SECRET);
   const res = await fetch(endpoint.toString(), {cf:{cacheTtl:600,cacheEverything:true}});
   if (!res.ok) throw new Error('Station discovery failed');
   const payload = await res.json();
-  const records = Array.isArray(payload.response) ? payload.response : [];
+  const records = Array.isArray(payload.response) ? payload.response : (payload.response ? [payload.response] : []);
   const candidates = records.filter(record => {
     const id = String(record?.id || '');
     return /^PWS_[A-Za-z0-9_-]+$/.test(id) && fresh(record?.ob);
   });
   // Prefer nearest valid PWS; proximity alone does not establish siting quality.
   candidates.sort((a,b) => Number(a?.relativeTo?.distanceMI ?? 999) - Number(b?.relativeTo?.distanceMI ?? 999));
-  return candidates[0] || null;
+  return {candidate:candidates[0] || null, searched:records.length, fresh_pws:candidates.length, api_error:payload.error?.code || null};
 }
 export default {
   async fetch(request, env) {
@@ -45,10 +46,10 @@ export default {
     let station = city === 'moraga' ? STATION : (city === 'lafayette' ? env.LAFAYETTE_STATION_ID : env.DANVILLE_STATION_ID);
     let discovery = null;
     if (!station && city !== 'moraga') {
-      try { discovery = await discoverStation(city, env); station = discovery?.id; }
+      try { discovery = await discoverStation(city, env); station = discovery?.candidate?.id; }
       catch (_) { return Response.json({error:'Nearby station discovery unavailable',city},{status:503,headers:cors}); }
     }
-    if (!station || !/^PWS_[A-Za-z0-9_-]+$/.test(station)) return Response.json({error:'No fresh nearby PWS available',city},{status:503,headers:cors});
+    if (!station || !/^PWS_[A-Za-z0-9_-]+$/.test(station)) return Response.json({error:'No fresh nearby PWS available',city,stations_returned:discovery?.searched ?? null,fresh_pws:discovery?.fresh_pws ?? null,upstream_error:discovery?.api_error ?? null},{status:503,headers:cors});
     const endpoint = new URL('https://api.aerisapi.com/observations/'+station);
     endpoint.searchParams.set('client_id',env.XWEATHER_CLIENT_ID);
     endpoint.searchParams.set('client_secret',env.XWEATHER_CLIENT_SECRET);
@@ -110,7 +111,7 @@ export default {
         station:station.replace(/^PWS_/,''),
         city,
         station_selection:discovery?'automatic_nearest_fresh_pws':'configured',
-        station_distance_mi:discovery?.relativeTo?.distanceMI ?? null,
+        station_distance_mi:discovery?.candidate?.relativeTo?.distanceMI ?? null,
         observed_utc:new Date(Number(ob.timestamp)*1000).toISOString(),
         temperature_f:pick('tempF'),
         daily_extrema:dailyExtrema,
