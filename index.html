@@ -1032,6 +1032,26 @@ border:3px solid transparent!important;border-radius:19px!important;
 }
 #public-shell .public-day-icon,
 #public-shell .public-hero-icon{background:transparent!important;border:0!important;box-shadow:none!important}
+</style><style>
+/* Public weather icons: use the same photo treatment as Observatory 10-day. */
+#public-shell img.public-observatory-icon,
+#public-shell .public-hour-icon img.public-observatory-icon{
+  display:block!important;object-fit:cover!important;
+  background:transparent!important;border:0!important;border-radius:0!important;
+  box-shadow:none!important;filter:none!important;
+  mix-blend-mode:lighten!important;
+  -webkit-mask-image:radial-gradient(ellipse 46% 46% at 50% 48%,#000 40%,rgba(0,0,0,.92) 57%,transparent 100%)!important;
+  mask-image:radial-gradient(ellipse 46% 46% at 50% 48%,#000 40%,rgba(0,0,0,.92) 57%,transparent 100%)!important;
+}
+#public-shell .public-day-icon,#public-shell .public-hero-icon,#public-shell .public-hour-icon{
+  isolation:auto!important;background:transparent!important;
+  border:0!important;box-shadow:none!important;
+}
+#public-shell img.public-observatory-icon[src*="showers.png"],
+#public-shell img.public-observatory-icon[src*="rain.png"]{
+  -webkit-mask-image:radial-gradient(ellipse 48% 51% at 50% 43%,#000 40%,rgba(0,0,0,.82) 62%,transparent 100%)!important;
+  mask-image:radial-gradient(ellipse 48% 51% at 50% 43%,#000 40%,rgba(0,0,0,.82) 62%,transparent 100%)!important;
+}
 </style></head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div><div class="public-brand">Moraga Weather</div><div class="public-sub">Lamorinda &amp; San Ramon Valley</div></div></div><div class="public-view-tabs"><button type="button" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory">Observatory</button></div>
