@@ -1081,6 +1081,23 @@ border:3px solid transparent!important;border-radius:19px!important;
 #public-shell .public-note{margin:15px 5px 0!important;font-size:12px!important;color:#a8c5d4!important}
 #public-shell .public-hero-icon[hidden],#public-shell .public-heading[hidden],#public-shell .public-sub[hidden],#public-shell #public-high-low[hidden]{display:none!important}
 @media(max-width:380px){#public-shell .public-obs-inner{padding:16px 11px!important}#public-shell .public-hero.public-obs-card{padding:10px!important}#public-shell .public-obs-top{gap:4px}}
+</style><style>
+/* Shared visible view switch, without obscuring Observatory content. */
+.observatory-view-switch{display:flex;gap:4px;max-width:680px;margin:16px auto 8px;padding:5px;border:1px solid #4b7389;border-radius:18px;background:#102437}
+.observatory-view-switch button{flex:1;border:0;border-radius:13px;padding:12px 6px;background:transparent;color:#b6cedc;font:700 15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer}
+.observatory-view-switch button[aria-current=page]{background:#23495f;color:#fff;box-shadow:inset 0 0 0 1px #6cb7d1}
+body.public-mode .observatory-view-switch{display:none}
+body:not(.public-mode) #observatory-return{display:none!important}
+/* Forecast card geometry and ordering: icon, rainfall, conditions. */
+#public-shell .public-day.public-day-observatory{min-height:88px!important;padding:6px 10px!important;gap:5px!important}
+#public-shell .public-day-observatory .public-ob-center{min-height:75px!important;gap:0!important}
+#public-shell .public-day-observatory .public-day-icon{height:43px!important;flex:0 0 43px!important}
+#public-shell .public-day-observatory .public-day-icon .public-observatory-icon{height:44px!important;width:64px!important}
+#public-shell .public-day-observatory .public-ob-rain{min-height:13px!important;line-height:1.1!important;font-size:11px!important}
+#public-shell .public-day-observatory .public-day-description{min-height:13px!important;line-height:1.1!important;font-size:11px!important}
+#public-shell .public-obs-title{letter-spacing:.09em!important;font-size:clamp(11px,2.7vw,15px)!important}
+#public-shell .public-obs-time{letter-spacing:.04em!important;font-size:clamp(11px,2.6vw,15px)!important}
+@media(max-width:440px){#public-shell .public-day.public-day-observatory{min-height:87px!important;padding:5px 7px!important}#public-shell .public-day-observatory .public-ob-center{min-height:75px!important}}
 </style></head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div><div class="public-brand">Moraga Weather</div><div class="public-sub">Lamorinda &amp; San Ramon Valley</div></div></div><div class="public-view-tabs"><button type="button" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory">Observatory</button></div>
@@ -1115,6 +1132,7 @@ border:3px solid transparent!important;border-radius:19px!important;
  el('public-open-observatory').onclick=showObservatory;
  el('public-more-details').onclick=showObservatory;
  el('observatory-return').onclick=showPublic;
+ document.querySelectorAll('[data-weather-view]').forEach(b=>b.addEventListener('click',()=>b.dataset.weatherView==='observatory'?showObservatory():showPublic()));
  const fmt=v=>Number.isFinite(v)?Math.round(v)+'°':'—';
  const rain=v=>Number.isFinite(v)?v.toFixed(2)+'″':'—';
  function icon(code){if(code===0)return '☀️';if(code<=2)return '🌤️';if(code===3)return '☁️';if(code===45||code===48)return '🌫️';if(code>=95)return '⛈️';if(code>=51&&code<=67)return '🌧️';if(code>=80&&code<=82)return '🌧️';if(code>=71&&code<=77)return '🌨️';return '🌤️'}
@@ -1155,7 +1173,7 @@ border:3px solid transparent!important;border-radius:19px!important;
    const rainLabel=wet?(Number.isFinite(pop)?Math.round(pop)+'%':'')+(Number.isFinite(total)&&total>=0.01?' 💧 '+rain(total):''):'';
    item.innerHTML='<div class="public-day-date">'+(i===0?'<em>TODAY</em>':'<strong>'+day+'</strong>')+'<small>'+label+'</small></div>'+
     '<div class="public-ob-high">'+fmt(high)+'</div>'+
-    '<div class="public-ob-center"><div class="public-day-icon">'+iconMarkup(wet&&d.weather_code[i]===0?61:d.weather_code[i])+'</div><div class="public-day-description">'+condition+'</div><div class="public-ob-rain">'+rainLabel+'</div></div>'+
+    '<div class="public-ob-center"><div class="public-day-icon">'+iconMarkup(wet&&d.weather_code[i]===0?61:d.weather_code[i])+'</div><div class="public-ob-rain">'+rainLabel+'</div><div class="public-day-description">'+condition+'</div></div>'+
     '<div class="public-ob-low">'+fmt(low)+'</div>';
    host.appendChild(item);
   }
@@ -1184,6 +1202,26 @@ border:3px solid transparent!important;border-radius:19px!important;
    set('public-current-temp',fmt(ob.temperature_f));set('public-humidity',Number.isFinite(ob.humidity_pct)?Math.round(ob.humidity_pct)+'%':'—');set('public-dew',Number.isFinite(ob.dew_point_f)?fmt(ob.dew_point_f):'—');set('public-pressure',Number.isFinite(ob.pressure_inhg)?ob.pressure_inhg.toFixed(2)+' inHg':'—');set('public-wind',Number.isFinite(ob.wind_mph)?(ob.wind_mph<1?'Calm':Math.round(ob.wind_mph)+' mph'):'—');
    const ext=ob.daily_extrema;
    if(ext?.complete&&Number.isFinite(ext.high_f)&&Number.isFinite(ext.low_f))set('public-high-low',fmt(ext.high_f)+' / '+fmt(ext.low_f));
+   const gust=Number(ob.wind_gust_mph??ob.wind_gust_speed_mph??ob.gust_mph);
+   set('public-gust',Number.isFinite(gust)?(gust<1?'Calm':Math.round(gust)+' mph'):'—');
+   if(chosen==='Moraga'){
+    try{
+     const sr=await fetch('moraga_station_today.json?t='+Date.now(),{cache:'no-store'});
+     if(sr.ok){
+      const station=await sr.json(),last=Date.parse(station.last_observation_utc||'');
+      const today=new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles'});
+      if(station.date===today&&Number.isFinite(last)&&Date.now()-last<90*60000){
+       const hi=Number(station.high_f??station.max_temperature_f),lo=Number(station.low_f??station.min_temperature_f);
+       const precip=Number(station.rainfall_in??station.rain_today_in??station.precipitation_in);
+       if(Number.isFinite(hi)&&Number.isFinite(lo)){
+        set('public-today-high',fmt(hi));set('public-today-low',fmt(lo));
+        set('public-today-title','TODAY SO FAR');
+       }
+       if(Number.isFinite(precip))set('public-rain',precip.toFixed(2)+' in');
+      }
+     }
+    }catch(error){console.warn('Observed daily extrema unavailable',error)}
+   }
    set('public-station-status','Observed at '+ob.station+' · '+new Date(stamp).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+' · Xweather.');
   }catch(e){
    if(request===revision)set('public-station-status',chosen==='Moraga'?'Moraga station unavailable; displaying modeled current temperature.':'Verified Xweather station not yet configured or unavailable for '+chosen+'. Displaying modeled current temperature.');
@@ -1266,6 +1304,7 @@ border:3px solid transparent!important;border-radius:19px!important;
    if(request!==revision)return;
    set('public-current-temp',fmt(data.current?.temperature_2m));
    set('public-current-condition',description(data.current?.weather_code??d.weather_code[0]));el('public-hero-icon').innerHTML=iconMarkup(data.current?.weather_code??d.weather_code[0]);el('public-current-temp').style.color=tempColor(data.current?.temperature_2m);
+   set('public-today-title',"TODAY'S FORECAST");
    set('public-high-low',fmt(d.temperature_2m_max[0])+' / '+fmt(d.temperature_2m_min[0]));
    set('public-today-high',fmt(d.temperature_2m_max[0]));set('public-today-low',fmt(d.temperature_2m_min[0]));
    set('public-current-time',new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'America/Los_Angeles'}).toUpperCase()+'\\n'+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'})+' PT');
@@ -1285,7 +1324,7 @@ border:3px solid transparent!important;border-radius:19px!important;
  setInterval(()=>{if(body.classList.contains('public-mode'))refresh()},15*60*1000);
  })();
  </script>
-<header><div class="kicker">Lamorinda • East Bay • California</div>
+<div class="observatory-view-switch" role="group" aria-label="Weather view"><button type="button" data-weather-view="public">Local Weather</button><button type="button" data-weather-view="observatory" aria-current="page">Observatory</button></div><header><div class="kicker">Lamorinda • East Bay • California</div>
 <h1>Moraga Weather Observatory</h1>
 <p class="station-id">KCAMORAG71 · Moraga, California</p><p id="moraga-local-date" aria-label="Today in Moraga"></p><p>Local observations · Forecast guidance · Pacific patterns</p></header>
 <main><nav aria-label="Weather dashboard sections"><a href="#observations">Now</a><a href="#forecast">Forecast</a><a href="./hrrr.html">RRFS 48h</a><a href="#marine">Marine</a><a href="#rainfall">Rain</a><a href="#satellite">Satellite</a><a href="#cpc-outlook">Extended &amp; CPC</a><a href="#westcoast">Pacific</a><a href="#accuracy">Model skill</a><a href="#chatgpt-accuracy">Briefing skill</a><a href="#climate">Climate</a></nav>
