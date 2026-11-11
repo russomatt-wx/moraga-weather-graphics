@@ -1115,6 +1115,16 @@ body:not(.public-mode) #observatory-return{display:none!important}
  background:var(--public-current-accent)!important;
  box-shadow:0 0 0 5px color-mix(in srgb,var(--public-current-accent) 20%,transparent)!important;
 }
+</style><style>
+/* Forecast condition hierarchy: separate precipitation metrics from descriptive label. */
+#public-shell .public-day-observatory .public-ob-center{gap:2px!important;min-height:76px!important}
+#public-shell .public-day-observatory .public-ob-rain{display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;min-height:17px!important;line-height:1.1!important;font-size:11px!important;font-variant-numeric:tabular-nums!important;color:#a7e5ff!important}
+#public-shell .public-day-observatory .public-rain-chance{font-weight:700!important;white-space:nowrap!important}
+#public-shell .public-day-observatory .public-rain-amount{display:inline-flex!important;align-items:center!important;gap:3px!important;white-space:nowrap!important;color:#b8e9ff!important}
+#public-shell .public-day-observatory .public-rain-amount>span{font-size:12px!important}
+#public-shell .public-day-observatory .public-day-description{font-size:11px!important;line-height:1.2!important;font-weight:750!important;min-height:14px!important;color:#e7f2f8!important;text-align:center!important;white-space:normal!important}
+#public-shell .public-day.public-day-observatory{min-height:94px!important;padding-top:7px!important;padding-bottom:7px!important}
+@media(max-width:440px){#public-shell .public-day-observatory .public-ob-rain{gap:6px!important;font-size:10.5px!important}#public-shell .public-day-observatory .public-day-description{font-size:11px!important}}
 </style></head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div><div class="public-brand">Moraga Weather</div><div class="public-sub">Lamorinda &amp; San Ramon Valley</div></div></div><div class="public-view-tabs"><button type="button" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory">Observatory</button></div>
@@ -1195,8 +1205,9 @@ body:not(.public-mode) #observatory-return{display:none!important}
    const published=forecastFeed?.daily_conditions?.[d.time[i]];
    const wet=(Number.isFinite(pop)&&pop>=20)||(Number.isFinite(total)&&total>=0.1);
    const condition=published?.label|| (wet&&d.weather_code[i]===0?'Chance of showers':description(d.weather_code[i]));
-   const conditionIcon=published?.icon==='🌧️'?61:published?.icon==='🌦️'?80:published?.icon==='☁️'?3:published?.icon==='🌥️'?3:published?.icon==='🌫️'?45:published?.icon==='☀️'?0:published?.icon==='🌤️'?1:published?.icon==='⛅'?2:(wet&&d.weather_code[i]===0?61:d.weather_code[i]);
-   const rainLabel=wet?(Number.isFinite(pop)?Math.round(pop)+'%':'')+(Number.isFinite(total)&&total>=0.01?' 💧 '+rain(total):''):'';
+   const mappedCondition=/mostly cloudy/i.test(condition)?2:/partly cloudy/i.test(condition)?1:/mostly sunny/i.test(condition)?1:/overcast/i.test(condition)?3:null;
+   const conditionIcon=mappedCondition!==null?mappedCondition:published?.icon==='🌧️'?61:published?.icon==='🌦️'?80:published?.icon==='☁️'?3:published?.icon==='🌥️'?2:published?.icon==='🌫️'?45:published?.icon==='☀️'?0:published?.icon==='🌤️'?1:published?.icon==='⛅'?2:(wet&&d.weather_code[i]===0?61:d.weather_code[i]);
+   const rainLabel=wet?'<span class="public-rain-chance">'+(Number.isFinite(pop)?Math.round(pop)+'%':'')+'</span>'+(Number.isFinite(total)&&total>=0.01?'<span class="public-rain-amount"><span aria-hidden="true">💧</span>'+rain(total)+'</span>':''):'';
    item.innerHTML='<div class="public-day-date">'+(i===0?'<em>TODAY</em>':'<strong>'+day+'</strong>')+'<small>'+label+'</small></div>'+
     '<div class="public-ob-high">'+fmt(high)+'</div>'+
     '<div class="public-ob-center"><div class="public-day-icon">'+iconMarkup(conditionIcon)+'</div><div class="public-ob-rain">'+rainLabel+'</div><div class="public-day-description">'+condition+'</div></div>'+
