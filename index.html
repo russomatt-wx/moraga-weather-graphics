@@ -735,8 +735,72 @@ main .card .chart-meta,main .card p.chart-meta{font-size:14px;line-height:1.5}
 #ten-day .ten-day-grid .day-temps>small{grid-column:4!important;grid-row:1!important;font-size:clamp(26px,4.2vw,40px)!important;line-height:1!important}
 #ten-day .ten-day-grid .forecast-detail{grid-column:1/-1!important;grid-row:2!important;width:100%!important}
 @media(max-width:760px){#ten-day .ten-day-grid .day-forecast{min-height:150px!important;padding:8px 4px!important}#ten-day .ten-day-grid .day-condition>span{height:60px!important}#ten-day .ten-day-grid .day-condition>small{font-size:clamp(13px,3.1vw,17px)!important}#ten-day .ten-day-grid .day-temps>span{font-size:clamp(25px,6vw,38px)!important}#ten-day .ten-day-grid .day-temps>small{font-size:clamp(24px,5.5vw,35px)!important}#ten-day #ten-day-results .day-forecast .day-condition>.day-pop .rain-chance,#ten-day #ten-day-results .day-forecast .day-condition>.day-pop .rain-amount{font-size:clamp(12px,2.8vw,16px)!important}}
+</style><style>
+/* Public-first shell; existing observatory remains untouched behind the tab. */
+body.public-mode>header,body.public-mode>main{display:none!important}
+#public-shell{display:none;max-width:860px;margin:0 auto;padding:24px 18px 60px;color:#eaf3ff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body.public-mode #public-shell{display:block}
+#public-shell .public-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}
+#public-shell .public-brand{font-size:19px;font-weight:800;letter-spacing:-.4px}
+#public-shell button{border:1px solid #395b71;border-radius:13px;padding:10px 13px;color:#e9f7ff;background:#20364a;font:inherit;cursor:pointer}
+#public-shell button[aria-pressed=true]{background:#167c99;border-color:#51d1ed}
+#public-shell .public-locations{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0 24px}
+#public-shell .public-hero{border:1px solid #355d70;border-radius:24px;padding:25px 21px;background:linear-gradient(135deg,#19384d,#102334 75%);box-shadow:0 14px 45px #0003}
+#public-shell .public-heading{font-size:clamp(26px,5vw,38px);font-weight:800;letter-spacing:-.6px}
+#public-shell .public-sub{color:#a8c7d6;font-size:15px}
+#public-shell .public-temp{font-size:clamp(58px,12vw,88px);font-weight:750;line-height:1.15}
+#public-shell .public-row{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+#public-shell .public-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}
+#public-shell .public-tile{border:1px solid #304e60;border-radius:16px;padding:16px;background:#152a3b}
+#public-shell .public-label{color:#a8c7d6;font-size:13px;margin-bottom:6px}
+#public-shell .public-value{font-size:23px;font-weight:700}
+#public-shell .public-note{color:#a8c7d6;line-height:1.5;font-size:14px}
+#public-shell .public-notice{margin-top:15px;padding:12px 14px;border:1px solid #365064;border-radius:12px;color:#b6ccda;font-size:13px}
+#observatory-return{position:fixed;right:14px;bottom:14px;z-index:99999;background:#20364a;border:1px solid #4a849d;border-radius:999px;color:white;padding:12px 16px;font:600 14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:none;box-shadow:0 6px 22px #0007}
+body:not(.public-mode) #observatory-return{display:block}
 </style></head>
-<body>
+<body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
+ <div class="public-top"><div><div class="public-brand">Local Weather</div><div class="public-sub">Lamorinda &amp; San Ramon Valley</div></div><button id="public-open-observatory">Observatory ↗</button></div>
+ <div class="public-locations" aria-label="Choose forecast location"><button data-public-city="Moraga" aria-pressed="true">Moraga</button><button data-public-city="Lafayette" aria-pressed="false">Lafayette</button><button data-public-city="Danville" aria-pressed="false">Danville</button></div>
+ <div class="public-hero"><div class="public-heading" id="public-city-heading">Moraga</div><div class="public-sub" id="public-location-sub">KCAMORAG71 · Local observations</div>
+ <div class="public-row" style="margin:20px 0"><div><div class="public-temp" id="public-current-temp">—°</div><div id="public-current-condition" style="font-size:18px;font-weight:600">Loading observations…</div></div><div style="font-size:64px" aria-hidden="true">☀️</div></div>
+ <div class="public-note" id="public-summary">Local weather conditions and forecast at a glance.</div></div>
+ <div class="public-grid"><div class="public-tile"><div class="public-label">Today's high / low</div><div class="public-value" id="public-high-low">— / —</div></div><div class="public-tile"><div class="public-label">Rain today</div><div class="public-value" id="public-rain">—</div></div></div>
+ <div class="public-notice" id="public-data-notice">Moraga uses existing observatory data. Lafayette and Danville forecast feeds are being prepared; unavailable values will not be estimated.</div>
+ <div style="margin-top:22px"><button id="public-more-details">View full forecast and technical charts ↗</button></div>
+ </div><button id="observatory-return">← Simple forecast</button>
+ <script>
+ (function(){
+ const body=document.body,shell=document.getElementById('public-shell');
+ if(!shell)return;
+ function showPublic(){body.classList.add('public-mode');try{sessionStorage.setItem('wx-view','public')}catch(e){}window.scrollTo(0,0);refresh()}
+ function showObservatory(){body.classList.remove('public-mode');try{sessionStorage.setItem('wx-view','observatory')}catch(e){}window.scrollTo(0,0)}
+ document.getElementById('public-open-observatory').onclick=showObservatory;
+ document.getElementById('public-more-details').onclick=showObservatory;
+ document.getElementById('observatory-return').onclick=showPublic;
+ const cities={Moraga:'KCAMORAG71 · Local observations',Lafayette:'Reliez Valley · Public observation feed pending',Danville:'Camino Tassajara · Public observation feed pending'};
+ let city='Moraga';try{city=localStorage.getItem('wx-public-city')||city}catch(e){}
+ function refresh(){
+  document.getElementById('public-city-heading').textContent=city;
+  document.getElementById('public-location-sub').textContent=cities[city];
+  document.querySelectorAll('[data-public-city]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.publicCity===city)));
+  const t=document.getElementById('public-current-temp'),hl=document.getElementById('public-high-low'),rain=document.getElementById('public-rain'),condition=document.getElementById('public-current-condition'),summary=document.getElementById('public-summary');
+  t.textContent='—°';hl.textContent='— / —';rain.textContent='—';condition.textContent='Observations unavailable';summary.textContent='Forecast data is not yet connected for this location.';
+  if(city!=='Moraga')return;
+  try{
+   const src=document.getElementById('station-today');
+   if(src){const text=src.innerText||'';const nums=text.match(/-?\d+(?:\.\d+)?°/g);if(nums&&nums.length>=2)hl.textContent=nums.slice(0,2).join(' / ');}
+   const current=document.querySelector('#current-temp, #current-temperature, [data-current-temp]');
+   if(current&&current.textContent.trim())t.textContent=current.textContent.trim();
+   const forecast=document.querySelector('#ten-day-results .day-forecast');
+   if(forecast){const hi=forecast.querySelector('.day-temps>span'),lo=forecast.querySelector('.day-temps>small'),cond=forecast.querySelector('.day-condition>small'),pop=forecast.querySelector('.rain-amount');if(hi&&lo)hl.textContent=hi.textContent+' / '+lo.textContent;if(cond)condition.textContent=cond.textContent;if(pop)rain.textContent=pop.textContent;summary.textContent='See the detailed outlook and model guidance in Observatory.';}
+  }catch(e){}
+ }
+ document.querySelectorAll('[data-public-city]').forEach(b=>b.onclick=()=>{city=b.dataset.publicCity;try{localStorage.setItem('wx-public-city',city)}catch(e){}refresh()});
+ try{if(sessionStorage.getItem('wx-view')==='observatory'){showObservatory()}else{showPublic()}}catch(e){showPublic()}
+ setInterval(()=>{if(body.classList.contains('public-mode'))refresh()},60000);
+ })();
+ </script>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
 <h1>Moraga Weather Observatory</h1>
 <p class="station-id">KCAMORAG71 · Moraga, California</p><p id="moraga-local-date" aria-label="Today in Moraga"></p><p>Local observations · Forecast guidance · Pacific patterns</p></header>
