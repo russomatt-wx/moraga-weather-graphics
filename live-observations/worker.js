@@ -2,6 +2,9 @@
 // Configure secrets XWEATHER_CLIENT_ID, XWEATHER_CLIENT_SECRET and ALLOWED_ORIGIN.
 // Never place credentials in the public website or source repository.
 const STATION = 'PWS_KCAMORAG71';
+// Optional validated station IDs, supplied as Worker environment variables.
+// Do not select a station based on proximity alone without checking its exposure and freshness.
+const CITY_STATIONS = {moraga: STATION};
 export default {
   async fetch(request, env) {
     const origin = env.ALLOWED_ORIGIN || 'https://russomatt-wx.github.io';
@@ -10,7 +13,11 @@ export default {
     if (request.method === 'OPTIONS') return new Response(null, {status:204, headers:{...cors,'Access-Control-Allow-Methods':'GET, OPTIONS','Access-Control-Allow-Headers':'Content-Type'}});
     if (request.method !== 'GET' || url.pathname !== '/observations') return new Response('Not found',{status:404,headers:cors});
     if (!env.XWEATHER_CLIENT_ID || !env.XWEATHER_CLIENT_SECRET) return Response.json({error:'Live service not configured'},{status:503,headers:cors});
-    const endpoint = new URL('https://api.aerisapi.com/observations/'+STATION);
+    const city = (url.searchParams.get('city') || 'moraga').toLowerCase();
+    if (!['moraga','lafayette','danville'].includes(city)) return Response.json({error:'Unknown location'},{status:400,headers:cors});
+    const station = city==='moraga' ? STATION : (city==='lafayette' ? env.LAFAYETTE_STATION_ID : env.DANVILLE_STATION_ID);
+    if (!station || !/^PWS_[A-Za-z0-9_-]+$/.test(station)) return Response.json({error:'Verified local station not configured',city},{status:503,headers:cors});
+    const endpoint = new URL('https://api.aerisapi.com/observations/'+station);
     endpoint.searchParams.set('client_id',env.XWEATHER_CLIENT_ID);
     endpoint.searchParams.set('client_secret',env.XWEATHER_CLIENT_SECRET);
     try {
@@ -20,13 +27,14 @@ export default {
       const record = Array.isArray(payload.response) ? payload.response[0] : payload.response;
       const ob = record?.ob;
       if (!ob || !Number.isFinite(Number(ob.timestamp))) throw new Error('Invalid observation timestamp');
+      if(Date.now()-Number(ob.timestamp)*1000>45*60000 || Number(ob.timestamp)*1000>Date.now()+5*60000) throw new Error('Stale observation');
       const pick = key => Number.isFinite(Number(ob[key])) && ob[key] !== null && ob[key] !== '' ? Number(ob[key]) : null;
       // Recover today's full Pacific-day temperature range from archived station samples.
       // This does not depend on GitHub Actions or an open browser tab.
       let dailyExtrema = null;
       try {
         const pacificDate = new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
-        const archive = new URL('https://api.aerisapi.com/observations/archive/'+STATION);
+        const archive = new URL('https://api.aerisapi.com/observations/archive/'+station);
         archive.searchParams.set('from',pacificDate);
         archive.searchParams.set('client_id',env.XWEATHER_CLIENT_ID);
         archive.searchParams.set('client_secret',env.XWEATHER_CLIENT_SECRET);
@@ -67,7 +75,8 @@ export default {
         }
       }catch(_err){/* Keep current observations available when archive is delayed. */}
       return Response.json({
-        station:'KCAMORAG71',
+        station:station.replace(/^PWS_/,''),
+        city,
         observed_utc:new Date(Number(ob.timestamp)*1000).toISOString(),
         temperature_f:pick('tempF'),
         daily_extrema:dailyExtrema,
