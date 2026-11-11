@@ -897,6 +897,34 @@ body:not(.public-mode) #observatory-return{display:block}
 #public-shell .public-day-icon .public-observatory-icon{width:52px!important;height:52px!important}
 #public-shell .public-day-description{font-size:11px!important}
 }
+</style><style>
+/* Stronger Observatory temperature-spectrum fills, shared by daily and hourly forecasts. */
+#public-shell .public-day{
+background:
+ radial-gradient(ellipse at 0% 50%,color-mix(in srgb,var(--high) 34%,transparent),transparent 77%),
+ radial-gradient(ellipse at 100% 110%,color-mix(in srgb,var(--low) 23%,transparent),transparent 70%),
+ linear-gradient(110deg,#1b3341,#102535 85%)!important;
+border:2px solid transparent!important;
+background:
+ radial-gradient(ellipse at 0% 50%,color-mix(in srgb,var(--high) 32%,transparent),transparent 80%) padding-box,
+ linear-gradient(110deg,color-mix(in srgb,var(--high) 17%,#182e3e),color-mix(in srgb,var(--low) 14%,#102535)) padding-box,
+ linear-gradient(125deg,var(--high),var(--low)) border-box!important;
+}
+#public-shell .public-day:first-child{
+background:
+ radial-gradient(ellipse at 0% 45%,color-mix(in srgb,var(--high) 36%,transparent),transparent 78%) padding-box,
+ linear-gradient(110deg,#233742,#102a3a) padding-box,
+ linear-gradient(125deg,var(--high),var(--low)) border-box!important;
+}
+#public-shell .public-hour{
+background:linear-gradient(160deg,color-mix(in srgb,var(--hour-color) 28%,#193145),color-mix(in srgb,var(--hour-color) 9%,#102234))!important;
+border:1px solid color-mix(in srgb,var(--hour-color) 55%,#35546a)!important;
+border-radius:15px!important;
+box-shadow:inset 0 2px 0 color-mix(in srgb,var(--hour-color) 55%,transparent)!important;
+}
+#public-shell .public-hour-temp{color:var(--hour-color)!important;font-size:19px!important}
+#public-shell .public-hour-icon{height:49px;display:flex;align-items:center;justify-content:center}
+#public-shell .public-hour-icon img{width:50px!important;height:50px!important;object-fit:contain!important;mix-blend-mode:screen!important}
 </style></head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div><div class="public-brand">Moraga Weather</div><div class="public-sub">Lamorinda &amp; San Ramon Valley</div></div></div><div class="public-view-tabs"><button type="button" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory">Observatory</button></div>
@@ -972,10 +1000,10 @@ body:not(.public-mode) #observatory-return{display:block}
   if(!hourly?.time?.length)return;
   const start=Math.max(0,hourly.time.findIndex(t=>t>=String(currentTime||'')));
   for(let i=start;i<Math.min(hourly.time.length,start+24);i+=2){
-   const card=document.createElement('div');card.className='public-hour';
+   const card=document.createElement('div');card.className='public-hour';card.style.setProperty('--hour-color',tempColor(hourly.temperature_2m[i]));
    const hour=new Date(hourly.time[i]).toLocaleTimeString('en-US',{hour:'numeric'});
    const chance=hourly.precipitation_probability?.[i];
-   card.innerHTML='<strong>'+hour+'</strong><div style="font-size:25px">'+icon(hourly.weather_code[i])+'</div><strong>'+fmt(hourly.temperature_2m[i])+'</strong><div style="color:#90dafa;font-size:12px">'+(Number.isFinite(chance)?chance+'% rain':'—')+'</div>';
+   card.innerHTML='<strong>'+hour+'</strong><div class="public-hour-icon">'+iconMarkup(hourly.weather_code[i])+'</div><strong class="public-hour-temp">'+fmt(hourly.temperature_2m[i])+'</strong><div style="color:#90dafa;font-size:12px">'+(Number.isFinite(chance)?chance+'% rain':'—')+'</div>';
    host.appendChild(card);
   }
  }
