@@ -1265,16 +1265,58 @@ body:not(.public-mode) #observatory-return{display:none!important}
   }
  }
  function weatherDiscussion(d,h,now){
-  const t=d.time||[],rainy=[],cooling=[];
-  for(let i=0;i<Math.min(3,t.length);i++){const chance=d.precipitation_probability_max?.[i],amount=d.precipitation_sum?.[i];if((chance>=35)||(amount>=0.08))rainy.push({i,chance,amount});}
-  const high=d.temperature_2m_max?.[0],next=d.temperature_2m_max?.[1],third=d.temperature_2m_max?.[2];
-  const today=description(d.weather_code?.[0]??2).toLowerCase();
-  let parts=['Expect '+today+' today'+(Number.isFinite(high)?', with afternoon temperatures near '+fmt(high):'')+'.'];
-  if(rainy.length){const first=rainy[0];const when=first.i===0?'today':first.i===1?'tomorrow':'the following day';parts.push('Rain chances '+(first.i===0?'continue':'increase')+' '+when+(Number.isFinite(first.chance)?' (around '+Math.round(first.chance/10)*10+'%)':'')+(Number.isFinite(first.amount)&&first.amount>=0.05?', with roughly '+rain(first.amount)+' possible':'')+'.');}
-  else parts.push('No significant rainfall is indicated over the next three days.');
-  if(Number.isFinite(high)&&Number.isFinite(next)&&Math.abs(next-high)>=6)parts.push('Tomorrow turns '+(next<high?'cooler':'warmer')+', with a high near '+fmt(next)+'.');
-  else if(Number.isFinite(high)&&Number.isFinite(third)&&Math.abs(third-high)>=7)parts.push('By '+new Date(t[2]+'T12:00:00').toLocaleDateString('en-US',{weekday:'long'})+', temperatures '+(third<high?'cool':'warm')+' toward '+fmt(third)+'.');
-  return parts.join(' ');
+  const days=d.time||[];
+  if(!days.length)return 'The latest forecast discussion is temporarily unavailable.';
+  const high=d.temperature_2m_max||[],low=d.temperature_2m_min||[];
+  const pop=d.precipitation_probability_max||[],amount=d.precipitation_sum||[];
+  const name=i=>new Date(days[i]+'T12:00:00').toLocaleDateString('en-US',{weekday:'long'});
+  const degrees=v=>Math.round(v)+'°';
+  const sky=i=>{
+   const code=d.weather_code?.[i];
+   if(code===0)return 'sunshine';
+   if(code===1||code===2)return 'a mix of sun and clouds';
+   if(code===3)return 'mostly cloudy skies';
+   if(code===45||code===48)return 'morning fog and low clouds';
+   if(code>=51&&code<=82)return 'clouds and occasional showers';
+   if(code>=95)return 'showers and possible thunderstorms';
+   return 'variable cloud cover';
+  };
+  const wet=i=>Number(pop[i])>=35||Number(amount[i])>=0.08;
+  const meaningful=Array.from({length:Math.min(3,days.length)},(_,i)=>i).filter(wet);
+  const first=meaningful[0],h0=high[0],h1=high[1],h2=high[2];
+  let story='';
+  if(Number.isFinite(h0)){
+   const opening=sky(0);
+   story=wet(0)
+    ?'Keep an umbrella handy today as '+opening+' bring a chance of rain, with temperatures reaching around '+degrees(h0)+'.'
+    :'Look for '+opening+' today, with afternoon temperatures reaching around '+degrees(h0)+'.';
+  }else story='A changeable stretch of weather is ahead.';
+  if(first!==undefined){
+   const i=first;
+   const when=i===0?'today':i===1?'tomorrow ('+name(i)+')':'by '+name(i);
+   const total=Number(amount[i]),chance=Number(pop[i]);
+   const significant=Number.isFinite(total)&&total>=0.5;
+   const likely=Number.isFinite(chance)&&chance>=60;
+   if(i===0){
+    if(significant)story+=' Rain could become substantial, with around '+total.toFixed(2)+' inches indicated in the latest forecast.';
+    else if(Number.isFinite(total)&&total>=0.1)story+=' Rainfall could add up to around '+total.toFixed(2)+' inches.';
+   }else{
+    story+=' '+(significant?'A notably wetter pattern is expected ':'Rain chances '+(likely?'increase ':'return '))+when;
+    if(significant)story+=', with the forecast suggesting around '+total.toFixed(2)+' inches of rain';
+    else if(Number.isFinite(total)&&total>=0.1)story+=', with roughly '+total.toFixed(2)+' inches possible';
+    story+='.';
+   }
+   if(meaningful.length>1&&meaningful.some(j=>j>i)){
+    const last=meaningful[meaningful.length-1];
+    if(last>i)story+=' Showers may linger into '+name(last)+'.';
+   }
+  }else story+=' The next few days look relatively dry, with no meaningful rainfall signal at this point.';
+  const target=Number.isFinite(h2)&&Math.abs(h2-h0)>=6?2:Number.isFinite(h1)&&Math.abs(h1-h0)>=5?1:null;
+  if(target!==null){
+   const delta=high[target]-h0;
+   story+=' '+(delta<0?'A cooler air mass follows':'Temperatures trend warmer')+', with '+name(target)+' highs '+(delta<0?'near ':'around ')+degrees(high[target])+'.';
+  }
+  return story;
  }
  async function updateAlerts(chosen,request){
   const host=el('public-alerts');host.replaceChildren();
