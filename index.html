@@ -1513,11 +1513,12 @@ body:not(.public-mode) #observatory-return{display:none!important}
       // temperature algorithm for Larch; same ensemble lead-time weighting
       // for every location. Never invent local verification for other towns.
       let skillRows=[];
-      if(chosen==='Moraga'&&typeof forecastSkill==='function'){
+      const shared=window.DiabloForecastLogic;
+      if(chosen==='Moraga'&&shared){
        try{
         const vr=await fetch('hourly_matches.csv?t='+Date.now(),{cache:'no-store'});
-        if(vr.ok)skillRows=forecastSkill(await vr.text());
-        if(typeof loadDailyModelSkill==='function')await loadDailyModelSkill();
+        if(vr.ok)skillRows=shared.forecastSkill(await vr.text());
+        await shared.loadDailyModelSkill();
        }catch(e){console.warn('Moraga skill unavailable',e)}
       }
       const blend=(field,i)=>{
@@ -1528,11 +1529,11 @@ body:not(.public-mode) #observatory-return{display:none!important}
        }).filter(([name,v])=>Number.isFinite(v));
        if(!entries.length)return null;
        const names=entries.map(([name])=>name);
-       if(typeof hybridWeights==='function'&&typeof skillWeights==='function'&&typeof skillBlend==='function'){
-        const weights=hybridWeights(skillWeights(skillRows,i,phase,names),entries,i);
-        const bias=chosen==='Moraga'&&typeof localBias==='function'?localBias(skillRows,i,phase,names):{corrections:{}};
-        const corrected=typeof correctedEntries==='function'?correctedEntries(entries,bias):entries;
-        const value=parseFloat(skillBlend(corrected,weights));
+       if(shared){
+        const weights=shared.hybridWeights(shared.skillWeights(skillRows,i,phase,names),entries,i);
+        const bias=chosen==='Moraga'?shared.localBias(skillRows,i,phase,names):{corrections:{}};
+        const corrected=shared.correctedEntries(entries,bias);
+        const value=parseFloat(shared.skillBlend(corrected,weights));
         return Number.isFinite(value)?value:null;
        }
        const ens=entries.filter(([n])=>n==='EPS'||n==='GEFS'),det=entries.filter(([n])=>n!=='EPS'&&n!=='GEFS');
@@ -1926,6 +1927,7 @@ function skillBlend(entries,weights){
  return Math.round(value)+'°';
 }
 
+window.DiabloForecastLogic={forecastSkill,loadDailyModelSkill,skillWeights,hybridWeights,localBias,correctedEntries,skillBlend};
 async function refresh(){
 try{
 const res=await fetch('moraga_forecast_10day.json?t='+Date.now(),{cache:'no-store'});
