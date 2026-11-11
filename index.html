@@ -957,6 +957,18 @@ border:3px solid transparent!important;border-radius:19px!important;
 #public-shell .public-ob-rain{font-size:10px}
 #public-shell .public-ob-center .public-observatory-icon{width:60px!important;height:56px!important}
 }
+</style><style>
+/* Keep rain-day conditions visible: reserve three independent lines below the icon. */
+#public-shell .public-day.public-day-observatory{min-height:132px!important;overflow:visible!important}
+#public-shell .public-day-observatory .public-ob-center{min-height:112px!important;overflow:visible!important;gap:2px!important}
+#public-shell .public-day-observatory .public-day-icon{height:56px!important;flex:0 0 56px!important}
+#public-shell .public-day-observatory .public-day-description{display:block!important;visibility:visible!important;opacity:1!important;position:static!important;min-height:17px!important;line-height:1.2!important;flex-shrink:0!important;white-space:normal!important}
+#public-shell .public-day-observatory .public-ob-rain{display:block!important;min-height:15px!important;line-height:1.3!important;flex-shrink:0!important;white-space:normal!important}
+@media(max-width:440px){
+#public-shell .public-day.public-day-observatory{min-height:125px!important}
+#public-shell .public-day-observatory .public-ob-center{min-height:106px!important}
+#public-shell .public-day-observatory .public-day-description{font-size:12px!important}
+}
 </style></head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div><div class="public-brand">Moraga Weather</div><div class="public-sub">Lamorinda &amp; San Ramon Valley</div></div></div><div class="public-view-tabs"><button type="button" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory">Observatory</button></div>
