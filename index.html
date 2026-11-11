@@ -719,6 +719,21 @@ main .card .chart-meta,main .card p.chart-meta{font-size:14px;line-height:1.5}
  #atmospheric-intelligence #ai-model-detail{font-size:14px}
 }
 
+</style><style>
+/* 2026-11-10: forecast cards — icon, precipitation and condition share one center axis. */
+#ten-day .ten-day-grid .day-forecast{display:grid!important;grid-template-columns:19% 19% minmax(0,43%) 19%!important;grid-template-rows:70px 24px 26px!important;align-items:center!important;justify-items:center!important;min-height:132px!important;padding:6px 5px!important;gap:0!important;text-align:center!important}
+#ten-day .ten-day-grid .day-forecast>strong,#ten-day .ten-day-grid .day-forecast>.today-pill{grid-column:1!important;grid-row:1!important;align-self:end!important;margin-bottom:24px!important}
+#ten-day .ten-day-grid .day-forecast>.day-date{grid-column:1!important;grid-row:1!important;align-self:end!important;margin-bottom:5px!important}
+#ten-day .ten-day-grid .day-condition{display:contents!important}
+#ten-day .ten-day-grid .day-condition>span{grid-column:3!important;grid-row:1!important;display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:66px!important;margin:0!important}
+#ten-day .ten-day-grid .day-condition>small{grid-column:3!important;grid-row:3!important;display:block!important;width:100%!important;margin:0!important;min-height:0!important;white-space:nowrap!important;font-size:clamp(10px,1.7vw,15px)!important;line-height:1.2!important;text-align:center!important}
+#ten-day .ten-day-grid .day-temps{display:contents!important}
+#ten-day .ten-day-grid .day-temps>span{grid-column:2!important;grid-row:1!important;font-size:clamp(24px,4.5vw,43px)!important;line-height:1!important}
+#ten-day .ten-day-grid .day-temps>small{grid-column:4!important;grid-row:1!important;font-size:clamp(23px,4.2vw,40px)!important;line-height:1!important}
+#ten-day .ten-day-grid .day-pop{grid-column:3!important;grid-row:2!important;display:flex!important;flex-direction:row!important;gap:6px!important;justify-content:center!important;align-items:center!important;min-height:0!important;margin:0!important;white-space:nowrap!important}
+#ten-day .ten-day-grid .day-pop .rain-chance,#ten-day .ten-day-grid .day-pop .rain-amount{font-size:clamp(10px,1.8vw,15px)!important;line-height:1.15!important}
+#ten-day .ten-day-grid .forecast-detail{grid-column:1/-1!important;grid-row:4!important;width:100%!important}
+@media(max-width:760px){#ten-day .ten-day-grid .day-forecast{grid-template-rows:62px 22px 23px!important;min-height:119px!important;padding:5px 3px!important}#ten-day .ten-day-grid .day-condition>span{height:58px!important}#ten-day .ten-day-grid .day-condition>small{font-size:clamp(9px,2.4vw,13px)!important}#ten-day .ten-day-grid .day-temps>span{font-size:clamp(23px,6vw,38px)!important}#ten-day .ten-day-grid .day-temps>small{font-size:clamp(22px,5.5vw,35px)!important}}
 </style></head>
 <body>
 <header><div class="kicker">Lamorinda • East Bay • California</div>
