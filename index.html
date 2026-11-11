@@ -1149,7 +1149,7 @@ body:not(.public-mode) #observatory-return{display:none!important}
  el('public-open-observatory').onclick=showObservatory;
  el('public-more-details').onclick=showObservatory;
  el('observatory-return').onclick=showPublic;
- document.querySelectorAll('[data-weather-view]').forEach(b=>b.addEventListener('click',()=>b.dataset.weatherView==='observatory'?showObservatory():showPublic()));
+ document.addEventListener('click',event=>{const button=event.target.closest('[data-weather-view]');if(!button)return;event.preventDefault();button.dataset.weatherView==='observatory'?showObservatory():showPublic();});
  const fmt=v=>Number.isFinite(v)?Math.round(v)+'°':'—';
  const rain=v=>Number.isFinite(v)?v.toFixed(2)+'″':'—';
  function icon(code){if(code===0)return '☀️';if(code<=2)return '🌤️';if(code===3)return '☁️';if(code===45||code===48)return '🌫️';if(code>=95)return '⛈️';if(code>=51&&code<=67)return '🌧️';if(code>=80&&code<=82)return '🌧️';if(code>=71&&code<=77)return '🌨️';return '🌤️'}
