@@ -3,7 +3,7 @@
 import json, urllib.parse, urllib.request, os
 from datetime import datetime, timezone
 from pathlib import Path
-LOCATIONS={"moraga":(37.8201932,-122.1193876),"lafayette":(37.890,-122.115),"danville":(37.813,-121.974)}
+LOCATIONS={"moraga":(37.8201932,-122.1193876),"lafayette":(37.890,-122.115),"danville":(37.813,-121.974),"greenbrook":(37.799,-121.970)}
 MODELS={"HRRR":("https://api.open-meteo.com/v1/forecast","ncep_hrrr_conus",.40),"RRFS":("https://api.open-meteo.com/v1/forecast","ncep_rrfs",.25),"ECMWF":("https://api.open-meteo.com/v1/forecast","ecmwf_ifs025",.20),"GFS":("https://api.open-meteo.com/v1/forecast","ncep_gfs_seamless",.15)}
 FIELDS=["temperature_2m","precipitation","precipitation_probability","weather_code"]
 def fetch(url,params):
