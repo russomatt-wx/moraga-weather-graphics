@@ -1336,11 +1336,24 @@ body:not(.public-mode) #observatory-return{display:none!important}
    const label=date.toLocaleDateString('en-US',{month:'short',day:'numeric'});
    const pop=d.precipitation_probability_max?.[i],total=d.precipitation_sum?.[i];
    const published=forecastFeed?.daily_conditions?.[d.time[i]];
-   const wet=(Number.isFinite(pop)&&pop>=20)||(Number.isFinite(total)&&total>=0.1);
-   const condition=published?.label|| (wet&&d.weather_code[i]===0?'Chance of showers':description(d.weather_code[i]));
+   const roundedPop=Number.isFinite(pop)?Math.min(100,Math.round(pop/10)*10):null;
+   const wet=roundedPop!==null?roundedPop>=20:(Number.isFinite(total)&&total>=0.1);
+   let condition=published?.label|| (wet&&d.weather_code[i]===0?'Chance of showers':description(d.weather_code[i]));
+   // Match Observatory's PoP-driven daily categories and 0.10-inch
+   // ensemble threshold, rather than retaining inconsistent feed labels.
+   if(roundedPop!==null){
+    const threshold=Number(forecastFeed?.rain_guidance?.[d.time[i]]?.ensemble_threshold_pct?.['0.1']);
+    const substantial=Number.isFinite(threshold)&&threshold>=50;
+    if(roundedPop>=80)condition='Rain';
+    else if(roundedPop>=60)condition='Rain likely';
+    else if(roundedPop>=30)condition='Chance of rain';
+    else if(roundedPop>=20)condition='Slight chance of rain';
+    else if(/rain|shower|drizzle/i.test(condition))condition=description(d.weather_code[i]===0?1:d.weather_code[i]);
+    if(roundedPop>=30&&roundedPop<60&&substantial)condition='Rain';
+   }
    const mappedCondition=/mostly cloudy/i.test(condition)?2:/partly cloudy/i.test(condition)?1:/mostly sunny/i.test(condition)?1:/overcast/i.test(condition)?3:null;
-   const conditionIcon=mappedCondition!==null?mappedCondition:published?.icon==='🌧️'?61:published?.icon==='🌦️'?80:published?.icon==='☁️'?3:published?.icon==='🌥️'?2:published?.icon==='🌫️'?45:published?.icon==='☀️'?0:published?.icon==='🌤️'?1:published?.icon==='⛅'?2:(wet&&d.weather_code[i]===0?61:d.weather_code[i]);
-   const rainLabel=wet?'<span class="public-rain-chance">'+(Number.isFinite(pop)?Math.round(pop)+'%':'')+'</span>'+(Number.isFinite(total)&&total>=0.01?'<span class="public-rain-amount"><span aria-hidden="true">💧</span>'+rain(total)+'</span>':''):'';
+   const conditionIcon=/rain likely|^rain$/i.test(condition)?61:/chance of rain|slight chance of rain/i.test(condition)?80:mappedCondition!==null?mappedCondition:published?.icon==='🌧️'?61:published?.icon==='🌦️'?80:published?.icon==='☁️'?3:published?.icon==='🌥️'?2:published?.icon==='🌫️'?45:published?.icon==='☀️'?0:published?.icon==='🌤️'?1:published?.icon==='⛅'?2:(wet&&d.weather_code[i]===0?61:d.weather_code[i]);
+   const rainLabel=wet?'<span class="public-rain-chance">'+(Number.isFinite(pop)?Math.min(100,Math.round(pop/10)*10)+'%':'')+'</span>'+(Number.isFinite(total)&&total>=0.01?'<span class="public-rain-amount"><span aria-hidden="true">💧</span>'+rain(total)+'</span>':''):'';
    item.innerHTML='<div class="public-day-date">'+(i===0?'<em>TODAY</em>':'<strong>'+day+'</strong>')+'<small>'+label+'</small></div>'+
     '<div class="public-ob-high">'+fmt(high)+'</div>'+
     '<div class="public-ob-center"><div class="public-day-icon">'+iconMarkup(conditionIcon)+'</div><div class="public-ob-rain">'+rainLabel+'</div><div class="public-day-description">'+condition+'</div></div>'+
@@ -1496,14 +1509,36 @@ body:not(.public-mode) #observatory-return{display:none!important}
       f.dates?.length>=10&&d.time.slice(0,10).every((day,i)=>f.dates[i]===day)&&
       Math.abs(Number(f.latitude)-lat)<.002&&Math.abs(Number(f.longitude)-lon)<.002;
      if(aligned){
-      const base={ECMWF:1,GFS:1,ICON:1,GEM:1};
+      // Use the Observatory's actual skill-weighted, bias-corrected
+      // temperature algorithm for Larch; same ensemble lead-time weighting
+      // for every location. Never invent local verification for other towns.
+      let skillRows=[];
+      if(chosen==='Moraga'&&typeof forecastSkill==='function'){
+       try{
+        const vr=await fetch('hourly_matches.csv?t='+Date.now(),{cache:'no-store'});
+        if(vr.ok)skillRows=forecastSkill(await vr.text());
+        if(typeof loadDailyModelSkill==='function')await loadDailyModelSkill();
+       }catch(e){console.warn('Moraga skill unavailable',e)}
+      }
       const blend=(field,i)=>{
-       const values=Object.entries(f.temperature_models||{}).map(([name,m])=>[name,m[field]?.[i]]).filter(([n,v])=>Number.isFinite(v));
-       const ens=values.filter(([n])=>n==='EPS'||n==='GEFS'),det=values.filter(([n])=>n!=='EPS'&&n!=='GEFS');
-       if(!values.length)return null;
-       const mean=(entries)=>entries.reduce((s,[n,v])=>s+v,0)/entries.length;
+       const phase=field==='high_f'?'high':'low';
+       const entries=Object.entries(f.temperature_models||{}).map(([name,m])=>{
+        const idx=Array.isArray(m.dates)?m.dates.indexOf(d.time[i]):i;
+        return [name,idx>=0?m[field]?.[idx]:null];
+       }).filter(([name,v])=>Number.isFinite(v));
+       if(!entries.length)return null;
+       const names=entries.map(([name])=>name);
+       if(typeof hybridWeights==='function'&&typeof skillWeights==='function'&&typeof skillBlend==='function'){
+        const weights=hybridWeights(skillWeights(skillRows,i,phase,names),entries,i);
+        const bias=chosen==='Moraga'&&typeof localBias==='function'?localBias(skillRows,i,phase,names):{corrections:{}};
+        const corrected=typeof correctedEntries==='function'?correctedEntries(entries,bias):entries;
+        const value=parseFloat(skillBlend(corrected,weights));
+        return Number.isFinite(value)?value:null;
+       }
+       const ens=entries.filter(([n])=>n==='EPS'||n==='GEFS'),det=entries.filter(([n])=>n!=='EPS'&&n!=='GEFS');
+       const mean=xs=>xs.reduce((s,[n,v])=>s+v,0)/xs.length;
        const share=i<3?.15:i<7?.40:.65;
-       return ens.length&&det.length?mean(det)*(1-share)+mean(ens)*share:mean(values);
+       return ens.length&&det.length?mean(det)*(1-share)+mean(ens)*share:mean(entries);
       };
       for(let i=0;i<10;i++){
        const hi=blend('high_f',i),lo=blend('low_f',i);
@@ -1526,7 +1561,7 @@ body:not(.public-mode) #observatory-return{display:none!important}
    set('public-rain',rain(d.precipitation_sum[0]));set('public-gust','—');
    const chance=d.precipitation_probability_max[0];
    const wet=Number.isFinite(chance)&&chance>=40;
-   set('public-summary',wet?'Rain is possible today ('+Math.round(chance)+'% chance). Expected total: '+rain(d.precipitation_sum[0])+'.':'Today: '+description(d.weather_code[0]).toLowerCase()+', with a high near '+fmt(d.temperature_2m_max[0])+'.');
+   set('public-summary',wet?'Rain is possible today ('+Math.min(100,Math.round(chance/10)*10)+'% chance). Expected total: '+rain(d.precipitation_sum[0])+'.':'Today: '+description(d.weather_code[0]).toLowerCase()+', with a high near '+fmt(d.temperature_2m_max[0])+'.');
    set('public-data-notice',(blended?'Daily forecast: ECMWF/GFS/ICON/GEM with EPS/GEFS ensemble blending and ensemble rainfall for ':'Daily blended model feed unavailable; temporary Open-Meteo fallback for ')+chosen+'. Current temperature and hourly detail remain Open-Meteo guidance, not station observations. Updated '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'.');
    renderDays(d,publicForecastFeed);
    set('public-discussion',weatherDiscussion(d,data.hourly,data.current));
