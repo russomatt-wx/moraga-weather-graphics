@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'scripts/rainfall_10day.py'
+      - 'scripts/public_short_range.py'
       - 'scripts/validate_forecast_publish.py'
       - '.github/workflows/rainfall_10day.yml'
   schedule:
@@ -34,6 +35,8 @@ jobs:
             (cd "/tmp/wx-${location}" && WX_FORECAST_LAT="$lat" WX_FORECAST_LON="$lon" WX_FORECAST_OUTPUT="${location}_forecast_10day.json" python "$GITHUB_WORKSPACE/scripts/rainfall_10day.py")
             cp "/tmp/wx-${location}/${location}_forecast_10day.json" ./
           done
+      - name: Collect 24-hour short-range model blends
+        run: python scripts/public_short_range.py
       - name: Validate forecast before publishing
         run: python scripts/validate_forecast_publish.py
       - name: Commit published graphic and data with safe retries
@@ -43,12 +46,12 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           mkdir -p /tmp/moraga-rainfall-publish
-          cp moraga_rainfall_10day.png moraga_rainfall_10day.json moraga_forecast_10day.json lafayette_forecast_10day.json danville_forecast_10day.json /tmp/moraga-rainfall-publish/
+          cp moraga_rainfall_10day.png moraga_rainfall_10day.json moraga_forecast_10day.json lafayette_forecast_10day.json danville_forecast_10day.json *_short_range_24h.json /tmp/moraga-rainfall-publish/
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             git reset --hard origin/main
             cp /tmp/moraga-rainfall-publish/* ./
-            git add moraga_rainfall_10day.png moraga_rainfall_10day.json moraga_forecast_10day.json lafayette_forecast_10day.json danville_forecast_10day.json
+            git add moraga_rainfall_10day.png moraga_rainfall_10day.json moraga_forecast_10day.json lafayette_forecast_10day.json danville_forecast_10day.json *_short_range_24h.json
             if git diff --cached --quiet; then exit 0; fi
             git commit -m 'Update rolling 10-day forecast and 14-day rainfall'
             if git push origin HEAD:main; then exit 0; fi
