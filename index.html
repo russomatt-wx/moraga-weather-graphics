@@ -1021,6 +1021,17 @@ border:3px solid transparent!important;border-radius:19px!important;
  #public-shell .public-day-observatory .public-ob-rain{font-size:10px!important}
  #public-shell .public-day-observatory .public-day-date em{font-size:10px!important;padding:3px 5px!important}
 }
+</style><style>
+/* Visually integrate the existing square-backed PNG weather icons with forecast surfaces. */
+#public-shell .public-observatory-icon{
+  background:transparent!important;border:0!important;border-radius:0!important;
+  box-shadow:none!important;
+  mix-blend-mode:screen!important;
+  -webkit-mask-image:radial-gradient(ellipse 65% 65% at center,#000 48%,rgba(0,0,0,.96) 62%,transparent 98%)!important;
+  mask-image:radial-gradient(ellipse 65% 65% at center,#000 48%,rgba(0,0,0,.96) 62%,transparent 98%)!important;
+}
+#public-shell .public-day-icon,
+#public-shell .public-hero-icon{background:transparent!important;border:0!important;box-shadow:none!important}
 </style></head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div><div class="public-brand">Moraga Weather</div><div class="public-sub">Lamorinda &amp; San Ramon Valley</div></div></div><div class="public-view-tabs"><button type="button" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory">Observatory</button></div>
