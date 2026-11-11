@@ -11,6 +11,8 @@ on:
       - 'moraga_rainfall_10day.json'
       - 'moraga_rainfall_10day.png'
       - 'index.html'
+      - 'dashboard_enhancements.js'
+      - 'rainfall_accuracy.js'
       - 'hrrr.html'
       - 'scripts/short_range_forecast.py'
       - 'pacific_synoptic.png'
