@@ -925,6 +925,38 @@ box-shadow:inset 0 2px 0 color-mix(in srgb,var(--hour-color) 55%,transparent)!im
 #public-shell .public-hour-temp{color:var(--hour-color)!important;font-size:19px!important}
 #public-shell .public-hour-icon{height:49px;display:flex;align-items:center;justify-content:center}
 #public-shell .public-hour-icon img{width:50px!important;height:50px!important;object-fit:contain!important;mix-blend-mode:screen!important}
+</style><style>
+/* Observatory composition on the public horizontal daily rows: date, high, icon/condition/rain, low. */
+#public-shell .public-day.public-day-observatory{
+display:grid!important;grid-template-columns:76px 86px minmax(0,1fr) 78px!important;
+gap:5px!important;align-items:center!important;min-height:115px!important;
+padding:11px 14px!important;
+background:
+ linear-gradient(90deg,color-mix(in srgb,var(--high) 21%,#1a2d38),#112c38 47%,color-mix(in srgb,var(--low) 14%,#0b2636)) padding-box,
+ linear-gradient(90deg,var(--high),var(--low)) border-box!important;
+border:3px solid transparent!important;border-radius:19px!important;
+}
+#public-shell .public-day-observatory .public-day-date{align-items:flex-start!important;gap:4px}
+#public-shell .public-day-observatory .public-day-date strong{font-size:17px!important}
+#public-shell .public-day-observatory .public-day-date small{font-size:14px!important;color:#b3c6d5!important}
+#public-shell .public-day-observatory .public-day-date em{font-style:normal;font-size:12px;font-weight:850;color:white;background:#20b8d3;padding:4px 8px;border-radius:15px}
+#public-shell .public-ob-high{font-size:37px;font-weight:850;color:var(--high);letter-spacing:-1.3px;white-space:nowrap}
+#public-shell .public-ob-low{font-size:34px;font-weight:800;color:var(--low);letter-spacing:-1px;text-align:right;white-space:nowrap}
+#public-shell .public-ob-center{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;gap:0;text-align:center}
+#public-shell .public-ob-center .public-day-icon{height:59px!important;margin:0!important}
+#public-shell .public-ob-center .public-observatory-icon{height:61px!important;width:74px!important;object-fit:contain!important}
+#public-shell .public-ob-center .public-day-description{font-size:13px!important;font-weight:750!important;color:#e4f0f8!important;white-space:normal}
+#public-shell .public-ob-rain{font-size:12px;color:#a5e2ff;min-height:0;line-height:1.25;white-space:nowrap}
+@media(max-width:440px){
+#public-shell .public-day.public-day-observatory{grid-template-columns:54px 65px minmax(0,1fr) 56px!important;gap:2px!important;padding:9px 9px!important;min-height:104px!important}
+#public-shell .public-ob-high{font-size:28px}
+#public-shell .public-ob-low{font-size:27px}
+#public-shell .public-day-observatory .public-day-date strong{font-size:14px!important}
+#public-shell .public-day-observatory .public-day-date small{font-size:11px!important}
+#public-shell .public-ob-center .public-day-description{font-size:11px!important}
+#public-shell .public-ob-rain{font-size:10px}
+#public-shell .public-ob-center .public-observatory-icon{width:60px!important;height:56px!important}
+}
 </style></head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div><div class="public-brand">Moraga Weather</div><div class="public-sub">Lamorinda &amp; San Ramon Valley</div></div></div><div class="public-view-tabs"><button type="button" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory">Observatory</button></div>
@@ -979,19 +1011,20 @@ box-shadow:inset 0 2px 0 color-mix(in srgb,var(--hour-color) 55%,transparent)!im
  function renderDays(d){
   const host=el('public-days');host.replaceChildren();
   for(let i=0;i<Math.min(10,d.time.length);i++){
-   const item=document.createElement('div');item.className='public-day';
-   item.style.setProperty('--high',tempColor(d.temperature_2m_max[i]));
-   item.style.setProperty('--low',tempColor(d.temperature_2m_min[i]));
+   const item=document.createElement('div');item.className='public-day public-day-observatory';
+   const high=d.temperature_2m_max[i],low=d.temperature_2m_min[i];
+   item.style.setProperty('--high',tempColor(high));item.style.setProperty('--low',tempColor(low));
    const date=new Date(d.time[i]+'T12:00:00');
    const day=date.toLocaleDateString('en-US',{weekday:'short'});
    const label=date.toLocaleDateString('en-US',{month:'short',day:'numeric'});
    const pop=d.precipitation_probability_max?.[i],total=d.precipitation_sum?.[i];
-   const wet=Number.isFinite(pop)&&pop>=20;
-   item.innerHTML='<div class="public-day-date"><strong>'+day+'</strong><small>'+label+'</small></div>'+
-    '<div class="public-day-icon">'+iconMarkup(d.weather_code[i])+'</div>'+
-    '<div class="public-day-description">'+description(d.weather_code[i])+'</div>'+
-    '<div class="public-day-temps"><span class="high">'+fmt(d.temperature_2m_max[i])+'</span><span class="low">'+fmt(d.temperature_2m_min[i])+'</span></div>'+
-    '<div class="public-day-rain">'+(wet?Math.round(pop)+'% rain':'')+(Number.isFinite(total)&&total>=0.01?'<span>'+rain(total)+'</span>':'')+'</div>';
+   const wet=(Number.isFinite(pop)&&pop>=30)||(Number.isFinite(total)&&total>=0.1);
+   const condition=wet && d.weather_code[i]===0?'Chance of Rain':description(d.weather_code[i]);
+   const rainLabel=wet?(Number.isFinite(pop)?Math.round(pop)+'%':'')+(Number.isFinite(total)&&total>=0.01?' 💧 '+rain(total):''):'';
+   item.innerHTML='<div class="public-day-date">'+(i===0?'<em>TODAY</em>':'<strong>'+day+'</strong>')+'<small>'+label+'</small></div>'+
+    '<div class="public-ob-high">'+fmt(high)+'</div>'+
+    '<div class="public-ob-center"><div class="public-day-icon">'+iconMarkup(wet&&d.weather_code[i]===0?61:d.weather_code[i])+'</div><div class="public-day-description">'+condition+'</div><div class="public-ob-rain">'+rainLabel+'</div></div>'+
+    '<div class="public-ob-low">'+fmt(low)+'</div>';
    host.appendChild(item);
   }
  }
