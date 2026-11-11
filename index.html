@@ -2789,6 +2789,15 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 #ten-day #ten-day-results .day-condition:has(img[src*="showersSun.png"])>small{
  padding-top:5px!important;
 }
+
+/* Give every West Coast atmospheric chart more usable width on phones. */
+#westcoast .card > img{display:block;width:100%;max-width:100%;height:auto;object-fit:contain;margin-inline:auto}
+@media(max-width:760px){
+  #westcoast .grid{gap:12px}
+  #westcoast .card{padding:10px 7px 12px!important;border-radius:14px}
+  #westcoast .card > h3{margin:4px 6px 9px}
+  #westcoast .card > img{border-radius:9px}
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
