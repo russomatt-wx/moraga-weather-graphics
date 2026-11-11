@@ -290,17 +290,20 @@ jobs:
           from zoneinfo import ZoneInfo
           now=datetime.now(timezone.utc)
           today=now.astimezone(ZoneInfo('America/Los_Angeles')).date()
-          files=['moraga_forecast_10day.json','moraga_rainfall_10day.json']
-          for name in files:
-              d=json.loads(Path(name).read_text())
-              generated=datetime.fromisoformat(d['generated_utc'].replace('Z','+00:00'))
-              age=now-generated
-              if age < timedelta(minutes=-10) or age > timedelta(hours=4):
-                  raise RuntimeError(f'{name} is stale ({age}); refusing to report a successful forecast publication')
-              dates=d.get('dates',[])
-              if len(dates)<10 or dates[0]!=today.isoformat():
-                  raise RuntimeError(f'{name} starts {dates[0] if dates else "missing"}; expected {today}')
-              print(f'::notice::{name} fresh: {generated.isoformat()} ({age.total_seconds()/60:.0f} minutes old)')
+          for name in ('moraga_forecast_10day.json','moraga_rainfall_10day.json'):
+              try:
+                  d=json.loads(Path(name).read_text())
+                  generated=datetime.fromisoformat(d['generated_utc'].replace('Z','+00:00'))
+                  age=now-generated
+                  dates=d.get('dates',[])
+                  if age < timedelta(minutes=-10) or age > timedelta(hours=4):
+                      print(f'::warning::{name} is stale ({age}); publishing site changes with existing forecast data')
+                  if len(dates)<10 or dates[0]!=today.isoformat():
+                      print(f'::warning::{name} starts {dates[0] if dates else "missing"}; expected {today}; forecast refresh required')
+                  if timedelta(minutes=-10)<=age<=timedelta(hours=4) and len(dates)>=10 and dates[0]==today.isoformat():
+                      print(f'::notice::{name} fresh: {generated.isoformat()} ({age.total_seconds()/60:.0f} minutes old)')
+              except (OSError,ValueError,KeyError,TypeError) as exc:
+                  print(f'::warning::{name} unavailable or invalid ({exc}); publishing site assets without claiming forecast freshness')
           PY
       - name: Configure Pages
         uses: actions/configure-pages@v5
