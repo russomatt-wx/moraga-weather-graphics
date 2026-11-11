@@ -1179,10 +1179,22 @@ body:not(.public-mode) #observatory-return{display:none!important}
   mask-composite:intersect;
 }
 @media(max-width:560px){#public-shell .diablo-banner-art img,.diablo-banner-observatory img{-webkit-mask-image:radial-gradient(ellipse 75% 63% at 50% 48%,#000 67%,transparent 100%);mask-image:radial-gradient(ellipse 75% 63% at 50% 48%,#000 67%,transparent 100%)}}
+</style><style>
+/* Swipeable hyperlocal neighborhood selector with persistent favorites. */
+#public-shell .public-locations{display:flex!important;flex-wrap:nowrap!important;grid-template-columns:none!important;gap:10px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:none;padding:3px 2px 10px!important;margin:13px 0 18px!important}
+#public-shell .public-locations::-webkit-scrollbar{display:none}
+#public-shell .public-location-item{position:relative;display:block;flex:0 0 170px;min-width:0;scroll-snap-align:start}
+#public-shell .public-locations .public-location-choice{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;text-align:left!important;gap:5px!important;width:100%!important;min-height:78px!important;padding:12px 38px 12px 14px!important;white-space:normal!important;font-size:16px!important;line-height:1.12!important;border-radius:17px!important}
+#public-shell .public-locations .local-neighborhood{font-size:16px!important;font-weight:700!important}
+#public-shell .public-locations .local-city{font-size:12px!important;letter-spacing:.035em!important;opacity:.82!important;font-weight:500!important}
+#public-shell .public-location-favorite{position:absolute!important;right:7px;top:50%;transform:translateY(-50%);width:31px!important;height:35px!important;min-height:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;color:#a5c7d6!important;font-size:25px!important;line-height:1!important;z-index:1}
+#public-shell .public-location-favorite[aria-pressed="true"]{color:#ffd36d!important}
+#public-shell .public-location-choice[aria-pressed="true"]{background:#147f9d!important;border-color:#56d9f1!important}
+@media(max-width:430px){#public-shell .public-location-item{flex-basis:154px}#public-shell .public-locations .public-location-choice{min-height:73px!important;padding-left:12px!important}#public-shell .public-locations .local-neighborhood{font-size:14px!important}}
 </style></head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div class="diablo-banner-art" aria-label="Diablo Weather Lab — Hyperlocal Weather Intelligence"><img src="./1F9E2AE6-6D16-4CE3-B329-F602DA154D9D.png?v=2" alt="Diablo Weather Lab mountain sunrise and rain banner" loading="eager"></div><div class="diablo-public-lockup"><svg class="diablo-brand-symbol" viewBox="0 0 160 96" role="img" aria-label="Mountain, sun, cloud and rain" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="dwl-ridge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#effbff"/><stop offset="1" stop-color="#45c8ee"/></linearGradient></defs><circle cx="119" cy="31" r="15" fill="#f8bd39"/><g stroke="#f8bd39" stroke-width="3" stroke-linecap="round"><path d="M119 8v-5M119 54v5M96 31h-5M142 31h5M103 15l-4-4M135 15l4-4"/></g><path d="M6 77Q28 69 43 62L84 27Q89 23 94 28L151 78Q112 60 91 42Q87 38 83 42L51 70Q27 74 6 77Z" fill="url(#dwl-ridge)"/><path d="M18 84Q58 76 84 56Q102 69 147 84Q105 75 83 69Q55 84 18 84Z" fill="#35bde5" opacity=".8"/><path d="M18 30a13 13 0 0 1 16-13 19 19 0 0 1 35 6 12 12 0 0 1 3 23H20a11 11 0 0 1-2-16Z" fill="#b8e5f5"/><g stroke="#62d8f5" stroke-width="3.5" stroke-linecap="round"><path d="M28 52l-5 9M42 52l-5 9M56 52l-5 9"/></g></svg><div><div class="public-brand">Diablo Weather Lab</div><div class="public-sub">Hyperlocal Weather Intelligence</div></div></div></div><div class="public-view-tabs"><button type="button" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory">Observatory</button></div>
- <div class="public-locations" aria-label="Choose forecast location"><button data-public-city="Moraga" aria-pressed="true">Moraga</button><button data-public-city="Lafayette" aria-pressed="false">Lafayette</button><button data-public-city="Danville" aria-pressed="false"><span class="local-neighborhood">Sycamore Valley</span><span class="local-city">Danville</span></button><button data-public-city="Greenbrook" aria-pressed="false"><span class="local-neighborhood">Greenbrook</span><span class="local-city">Danville</span></button></div>
+ <div class="public-locations" aria-label="Swipe to choose a hyperlocal forecast location"><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Moraga" aria-pressed="true"><span class="local-neighborhood">Moraga station area</span><span class="local-city">Moraga</span></button><button type="button" class="public-location-favorite" data-favorite-city="Moraga" aria-label="Set Moraga station area, Moraga as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Lafayette" aria-pressed="false"><span class="local-neighborhood">Reliez Valley</span><span class="local-city">Lafayette</span></button><button type="button" class="public-location-favorite" data-favorite-city="Lafayette" aria-label="Set Reliez Valley, Lafayette as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Danville" aria-pressed="false"><span class="local-neighborhood">Sycamore Valley</span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Danville" aria-label="Set Sycamore Valley, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Greenbrook" aria-pressed="false"><span class="local-neighborhood">Greenbrook</span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Greenbrook" aria-label="Set Greenbrook, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div></div>
  <div class="public-hero public-obs-card">
   <div class="public-obs-inner">
    <div class="public-obs-top"><div class="public-obs-title"><span class="public-obs-dot"></span><span>CURRENT CONDITIONS</span></div><div class="public-obs-time" id="public-current-time">—</div></div>
@@ -1202,10 +1214,20 @@ body:not(.public-mode) #observatory-return{display:none!important}
  (function(){
  const body=document.body;
  const coords={Moraga:[37.8201932,-122.1193876],Lafayette:[37.890,-122.115],Danville:[37.813,-121.974],Greenbrook:[37.799,-121.970]};
- const subtitles={Moraga:'KCAMORAG71 · Moraga',Lafayette:'Reliez Valley · Lafayette',Danville:'Sycamore Valley · Danville',Greenbrook:'Greenbrook · Danville'};
- let city='Moraga',revision=0;
- try{city=localStorage.getItem('wx-public-city')||city}catch(e){}
- if(!coords[city])city='Moraga';
+ const subtitles={Moraga:'Moraga station area · Moraga',Lafayette:'Reliez Valley · Lafayette',Danville:'Sycamore Valley · Danville',Greenbrook:'Greenbrook · Danville'};
+ let city='Moraga',favoriteCity='Moraga',revision=0;
+ try{favoriteCity=localStorage.getItem('wx-favorite-city')||'Moraga'}catch(e){}
+ if(!coords[favoriteCity])favoriteCity='Moraga';
+ city=favoriteCity;
+ function syncLocationButtons(){
+  document.querySelectorAll('[data-public-city]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.publicCity===city)));
+  document.querySelectorAll('[data-favorite-city]').forEach(b=>{
+   const selected=b.dataset.favoriteCity===favoriteCity;
+   b.setAttribute('aria-pressed',String(selected));
+   b.textContent=selected?'★':'☆';
+   b.setAttribute('aria-label',(selected?'Favorite location: ':'Set as favorite: ')+b.dataset.favoriteCity);
+  });
+ }
  const el=id=>document.getElementById(id);
  const set=(id,value)=>{const node=el(id);if(node)node.textContent=value};
  function showPublic(){body.classList.add('public-mode');try{sessionStorage.setItem('wx-view','public')}catch(e){}window.scrollTo(0,0);refresh()}
@@ -1393,7 +1415,7 @@ body:not(.public-mode) #observatory-return{display:none!important}
  async function refresh(){
   const request=++revision,chosen=city;
   set('public-city-heading',chosen==='Danville'?'Sycamore Valley, Danville':chosen==='Greenbrook'?'Greenbrook, Danville':chosen);set('public-location-sub',subtitles[chosen]);
-  document.querySelectorAll('[data-public-city]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.publicCity===chosen)));
+  syncLocationButtons();
   ['public-humidity','public-dew','public-pressure','public-wind'].forEach(id=>set(id,'—'));set('public-discussion','Loading the local outlook…');el('public-alerts').replaceChildren();updateAlerts(chosen,request);set('public-station-status','Checking nearby public weather observations…');set('public-current-temp','—°');set('public-current-condition','Loading forecast…');set('public-high-low','— / —');set('public-rain','—');set('public-summary','Retrieving the latest forecast.');
   el('public-days').replaceChildren();el('public-hourly').replaceChildren();
   const [lat,lon]=coords[chosen];
@@ -1474,7 +1496,8 @@ body:not(.public-mode) #observatory-return{display:none!important}
    updateStation(chosen,request,data.current?.temperature_2m);
   }catch(err){if(request!==revision)return;set('public-current-condition','Forecast temporarily unavailable');set('public-summary','Unable to load live forecast guidance. Please try again later.');set('public-discussion','The outlook is temporarily unavailable.');set('public-data-notice','Forecast service unavailable. No estimated values are shown.');}
  }
- document.querySelectorAll('[data-public-city]').forEach(b=>b.onclick=()=>{city=b.dataset.publicCity;try{localStorage.setItem('wx-public-city',city)}catch(e){}refresh()});
+ document.querySelectorAll('[data-public-city]').forEach(b=>b.onclick=()=>{city=b.dataset.publicCity;syncLocationButtons();refresh()});
+ document.querySelectorAll('[data-favorite-city]').forEach(b=>b.onclick=()=>{favoriteCity=b.dataset.favoriteCity;try{localStorage.setItem('wx-favorite-city',favoriteCity)}catch(e){}syncLocationButtons()});
  try{if(sessionStorage.getItem('wx-view')==='observatory'){showObservatory()}else{showPublic()}}catch(e){showPublic()}
  setInterval(()=>{if(body.classList.contains('public-mode'))refresh()},15*60*1000);
  })();
