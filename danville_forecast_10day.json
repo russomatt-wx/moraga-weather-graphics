@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-11T15:16:45.393691+00:00",
+  "generated_utc": "2026-11-11T15:19:29.670902+00:00",
   "timezone": "America/Los_Angeles",
   "latitude": 37.813,
   "longitude": -121.974,
@@ -26,165 +26,175 @@
         "0.5": 0
       },
       "ensemble_models": [
-        "EPS"
+        "EPS",
+        "GEFS"
       ],
-      "ensemble_members": 50,
-      "derived_pop_pct": null,
+      "ensemble_members": 80,
+      "derived_pop_pct": 0,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
-      "pop_status": "missing_ensemble_family"
+      "pop_status": "available"
     },
     "2026-11-12": {
       "expected_inches": 0.0,
       "ensemble_share": 0.25,
       "ensemble_threshold_pct": {
-        "0.01": 6,
+        "0.01": 5,
         "0.1": 0,
         "0.25": 0,
         "0.5": 0
       },
       "ensemble_models": [
-        "EPS"
+        "EPS",
+        "GEFS"
       ],
-      "ensemble_members": 50,
-      "derived_pop_pct": null,
+      "ensemble_members": 80,
+      "derived_pop_pct": 5,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
-      "pop_status": "missing_ensemble_family"
+      "pop_status": "available"
     },
     "2026-11-13": {
-      "expected_inches": 0.93,
+      "expected_inches": 0.896,
       "ensemble_share": 0.25,
       "ensemble_threshold_pct": {
         "0.01": 100,
         "0.1": 100,
-        "0.25": 98,
-        "0.5": 86
+        "0.25": 92,
+        "0.5": 70
       },
       "ensemble_models": [
-        "EPS"
+        "EPS",
+        "GEFS"
       ],
-      "ensemble_members": 50,
-      "derived_pop_pct": null,
+      "ensemble_members": 80,
+      "derived_pop_pct": 100,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
-      "pop_status": "missing_ensemble_family"
+      "pop_status": "available"
     },
     "2026-11-14": {
-      "expected_inches": 0.074,
+      "expected_inches": 0.093,
       "ensemble_share": 0.6,
       "ensemble_threshold_pct": {
-        "0.01": 54,
-        "0.1": 30,
-        "0.25": 12,
-        "0.5": 2
+        "0.01": 69,
+        "0.1": 47,
+        "0.25": 14,
+        "0.5": 3
       },
       "ensemble_models": [
-        "EPS"
+        "EPS",
+        "GEFS"
       ],
-      "ensemble_members": 50,
-      "derived_pop_pct": null,
+      "ensemble_members": 80,
+      "derived_pop_pct": 69,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
-      "pop_status": "missing_ensemble_family"
+      "pop_status": "available"
     },
     "2026-11-15": {
-      "expected_inches": 0.277,
+      "expected_inches": 0.226,
       "ensemble_share": 0.6,
       "ensemble_threshold_pct": {
-        "0.01": 90,
-        "0.1": 75,
-        "0.25": 50,
-        "0.5": 25
+        "0.01": 78,
+        "0.1": 57,
+        "0.25": 33,
+        "0.5": 16
       },
       "ensemble_models": [
-        "EPS"
+        "EPS",
+        "GEFS"
       ],
-      "ensemble_members": 48,
-      "derived_pop_pct": null,
+      "ensemble_members": 78,
+      "derived_pop_pct": 78,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
-      "pop_status": "missing_ensemble_family"
+      "pop_status": "available"
     },
     "2026-11-16": {
-      "expected_inches": 0.303,
+      "expected_inches": 0.317,
       "ensemble_share": 0.6,
       "ensemble_threshold_pct": {
-        "0.01": 76,
-        "0.1": 58,
-        "0.25": 42,
-        "0.5": 24
+        "0.01": 83,
+        "0.1": 62,
+        "0.25": 48,
+        "0.5": 32
       },
       "ensemble_models": [
-        "EPS"
+        "EPS",
+        "GEFS"
       ],
-      "ensemble_members": 50,
-      "derived_pop_pct": null,
+      "ensemble_members": 80,
+      "derived_pop_pct": 83,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
-      "pop_status": "missing_ensemble_family"
+      "pop_status": "available"
     },
     "2026-11-17": {
-      "expected_inches": 0.027,
+      "expected_inches": 0.034,
       "ensemble_share": 0.6,
       "ensemble_threshold_pct": {
-        "0.01": 44,
-        "0.1": 12,
-        "0.25": 4,
-        "0.5": 2
+        "0.01": 35,
+        "0.1": 14,
+        "0.25": 7,
+        "0.5": 3
       },
       "ensemble_models": [
-        "EPS"
+        "EPS",
+        "GEFS"
       ],
-      "ensemble_members": 50,
-      "derived_pop_pct": null,
+      "ensemble_members": 80,
+      "derived_pop_pct": 35,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
-      "pop_status": "missing_ensemble_family"
+      "pop_status": "available"
     },
     "2026-11-18": {
-      "expected_inches": 0.745,
+      "expected_inches": 0.546,
       "ensemble_share": 0.8,
       "ensemble_threshold_pct": {
-        "0.01": 96,
-        "0.1": 92,
-        "0.25": 88,
-        "0.5": 76
+        "0.01": 85,
+        "0.1": 74,
+        "0.25": 64,
+        "0.5": 55
       },
       "ensemble_models": [
-        "EPS"
+        "EPS",
+        "GEFS"
       ],
-      "ensemble_members": 50,
-      "derived_pop_pct": null,
+      "ensemble_members": 80,
+      "derived_pop_pct": 85,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
-      "pop_status": "missing_ensemble_family"
+      "pop_status": "available"
     },
     "2026-11-19": {
-      "expected_inches": 0.365,
+      "expected_inches": 0.334,
       "ensemble_share": 0.8,
       "ensemble_threshold_pct": {
-        "0.01": 74,
-        "0.1": 42,
-        "0.25": 30,
-        "0.5": 14
+        "0.01": 64,
+        "0.1": 43,
+        "0.25": 25,
+        "0.5": 9
       },
       "ensemble_models": [
-        "EPS"
+        "EPS",
+        "GEFS"
       ],
-      "ensemble_members": 50,
-      "derived_pop_pct": null,
+      "ensemble_members": 80,
+      "derived_pop_pct": 64,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
-      "pop_status": "missing_ensemble_family"
+      "pop_status": "available"
     },
     "2026-11-20": {
-      "expected_inches": 0.016,
+      "expected_inches": 0.012,
       "ensemble_share": 0.8,
       "ensemble_threshold_pct": {
-        "0.01": 6,
+        "0.01": 10,
         "0.1": 4,
-        "0.25": 2,
-        "0.5": 2
+        "0.25": 1,
+        "0.5": 1
       },
       "ensemble_models": [
-        "EPS"
+        "EPS",
+        "GEFS"
       ],
-      "ensemble_members": 50,
-      "derived_pop_pct": null,
+      "ensemble_members": 80,
+      "derived_pop_pct": 10,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
-      "pop_status": "missing_ensemble_family"
+      "pop_status": "available"
     }
   },
   "temperature_models": {
@@ -492,16 +502,16 @@
     ]
   },
   "ensemble_rain_probability_pct": {
-    "2026-11-11": null,
-    "2026-11-12": null,
-    "2026-11-13": null,
-    "2026-11-14": null,
-    "2026-11-15": null,
-    "2026-11-16": null,
-    "2026-11-17": null,
-    "2026-11-18": null,
-    "2026-11-19": null,
-    "2026-11-20": null
+    "2026-11-11": 0,
+    "2026-11-12": 5,
+    "2026-11-13": 100,
+    "2026-11-14": 69,
+    "2026-11-15": 78,
+    "2026-11-16": 83,
+    "2026-11-17": 35,
+    "2026-11-18": 85,
+    "2026-11-19": 64,
+    "2026-11-20": 10
   },
   "benchmark_open_meteo_pop_pct": {
     "2026-11-11": 0,
@@ -532,50 +542,50 @@
       "cloud_model_count": 4
     },
     "2026-11-13": {
-      "icon": "\u2601\ufe0f",
-      "label": "Overcast",
+      "icon": "\ud83c\udf27\ufe0f",
+      "label": "Rain likely",
       "morning_cloud_pct": 99,
       "afternoon_cloud_pct": 97,
       "cloud_model_count": 4
     },
     "2026-11-14": {
-      "icon": "\ud83c\udf25\ufe0f",
-      "label": "Mostly cloudy",
+      "icon": "\ud83c\udf26\ufe0f",
+      "label": "Chance of showers",
       "morning_cloud_pct": 52,
       "afternoon_cloud_pct": 60,
       "cloud_model_count": 4
     },
     "2026-11-15": {
-      "icon": "\ud83c\udf25\ufe0f",
-      "label": "Mostly cloudy",
+      "icon": "\ud83c\udf27\ufe0f",
+      "label": "Rain likely",
       "morning_cloud_pct": 73,
       "afternoon_cloud_pct": 84,
       "cloud_model_count": 4
     },
     "2026-11-16": {
-      "icon": "\u26c5",
-      "label": "Partly cloudy",
+      "icon": "\ud83c\udf27\ufe0f",
+      "label": "Rain likely",
       "morning_cloud_pct": 52,
       "afternoon_cloud_pct": 38,
       "cloud_model_count": 4
     },
     "2026-11-17": {
-      "icon": "\ud83c\udf24\ufe0f",
-      "label": "Mostly sunny",
+      "icon": "\ud83c\udf26\ufe0f",
+      "label": "Chance of showers",
       "morning_cloud_pct": 22,
       "afternoon_cloud_pct": 37,
       "cloud_model_count": 4
     },
     "2026-11-18": {
-      "icon": "\ud83c\udf25\ufe0f",
-      "label": "Mostly cloudy",
+      "icon": "\ud83c\udf27\ufe0f",
+      "label": "Rain likely",
       "morning_cloud_pct": 67,
       "afternoon_cloud_pct": 94,
       "cloud_model_count": 4
     },
     "2026-11-19": {
-      "icon": "\ud83c\udf25\ufe0f",
-      "label": "Mostly cloudy",
+      "icon": "\ud83c\udf27\ufe0f",
+      "label": "Rain likely",
       "morning_cloud_pct": 88,
       "afternoon_cloud_pct": 73,
       "cloud_model_count": 4
@@ -4654,9 +4664,7 @@
       ]
     }
   },
-  "errors": {
-    "GEFS_members": "<urlopen error _ssl.c:994: The handshake operation timed out>"
-  },
+  "errors": {},
   "method": "Available ECMWF, GFS, ICON, GEM temperature guidance; location-specific calibration is applied only when verified observations are available. Displayed ranges are deterministic model spread, not probability intervals.",
   "source": "Open-Meteo",
   "note": "Model inputs are not bias-corrected; website skill weighting is provisional, based on hourly temperature errors. Generated timestamp is retrieval time, not model initialization."
