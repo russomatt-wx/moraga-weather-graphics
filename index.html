@@ -1125,7 +1125,7 @@ body:not(.public-mode) #observatory-return{display:none!important}
 #public-shell .public-day-observatory .public-day-description{font-size:11px!important;line-height:1.2!important;font-weight:750!important;min-height:14px!important;color:#e7f2f8!important;text-align:center!important;white-space:normal!important}
 #public-shell .public-day.public-day-observatory{min-height:94px!important;padding-top:7px!important;padding-bottom:7px!important}
 @media(max-width:440px){#public-shell .public-day-observatory .public-ob-rain{gap:6px!important;font-size:10.5px!important}#public-shell .public-day-observatory .public-day-description{font-size:11px!important}}
-</style></head>
+</style><style>#public-shell .public-short-range-source{font-size:11px;color:#9fb8c9;margin:8px 4px 12px;line-height:1.4}</style></head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div><div class="public-brand">Moraga Weather</div><div class="public-sub">Lamorinda &amp; San Ramon Valley</div></div></div><div class="public-view-tabs"><button type="button" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory">Observatory</button></div>
  <div class="public-locations" aria-label="Choose forecast location"><button data-public-city="Moraga" aria-pressed="true">Moraga</button><button data-public-city="Lafayette" aria-pressed="false">Lafayette</button><button data-public-city="Danville" aria-pressed="false">Danville</button></div>
@@ -1141,7 +1141,7 @@ body:not(.public-mode) #observatory-return{display:none!important}
   <div class="public-hero-icon" id="public-hero-icon" aria-hidden="true" hidden></div>
   <div class="public-heading" id="public-city-heading" hidden>Moraga</div><div class="public-sub" id="public-location-sub" hidden></div><div id="public-high-low" hidden>— / —</div>
  </div><div id="public-alerts" aria-live="polite"></div><section class="public-outlook" aria-label="Weather outlook"><div class="public-outlook-title">Weather Outlook <span>Next 72 hours</span></div><p id="public-discussion">Loading the local outlook…</p></section>
- <h3 style="margin:22px 0 10px">Next 10 days</h3><div class="public-days" id="public-days" aria-live="polite"></div><h3 style="margin:22px 0 10px">Next 24 hours</h3><div class="public-hourly" id="public-hourly" aria-live="polite"></div><div class="public-status" id="public-station-status">Checking nearby public weather observations…</div><div class="public-notice" id="public-data-notice">Moraga uses existing observatory data. Lafayette and Danville forecast feeds are being prepared; unavailable values will not be estimated.</div>
+ <div id="public-short-range-source" class="public-short-range-source" aria-live="polite"></div><h3 style="margin:22px 0 10px">Next 10 days</h3><div class="public-days" id="public-days" aria-live="polite"></div><h3 style="margin:22px 0 10px">Next 24 hours</h3><div class="public-hourly" id="public-hourly" aria-live="polite"></div><div class="public-status" id="public-station-status">Checking nearby public weather observations…</div><div class="public-notice" id="public-data-notice">Moraga uses existing observatory data. Lafayette and Danville forecast feeds are being prepared; unavailable values will not be estimated.</div>
  <div style="margin-top:22px"><button id="public-more-details">View full forecast and technical charts ↗</button></div>
  </div><button id="observatory-return">← Simple forecast</button>
  <script>
@@ -1394,7 +1394,29 @@ body:not(.public-mode) #observatory-return{display:none!important}
    set('public-data-notice',(blended?'Daily forecast: ECMWF/GFS/ICON/GEM with EPS/GEFS ensemble blending and ensemble rainfall for ':'Daily blended model feed unavailable; temporary Open-Meteo fallback for ')+chosen+'. Current temperature and hourly detail remain Open-Meteo guidance, not station observations. Updated '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'.');
    renderDays(d,publicForecastFeed);
    set('public-discussion',weatherDiscussion(d,data.hourly,data.current));
-   renderHourly(data.hourly,data.current?.time);
+   let hourlyForecast=data.hourly,shortRangeSources='';
+   try{
+    const shortResponse=await fetch(feedName+'_short_range_24h.json?t='+Date.now(),{cache:'no-store'});
+    if(shortResponse.ok){
+     const short=await shortResponse.json(),age=Date.now()-Date.parse(short.generated_utc);
+     const valid=Number.isFinite(age)&&age>=-300000&&age<5*3600000&&
+       Math.abs(Number(short.latitude)-lat)<.002&&Math.abs(Number(short.longitude)-lon)<.002&&
+       short.hourly?.time?.length>=18&&short.hourly?.temperature_2m?.length===short.hourly.time.length;
+     if(valid){
+      const merged={...data.hourly};
+      for(const field of ['temperature_2m','precipitation','precipitation_probability','weather_code']){
+       merged[field]=[...data.hourly[field]];
+       short.hourly.time.forEach((time,i)=>{
+        const j=merged.time.indexOf(time),value=short.hourly[field]?.[i];
+        if(j>=0&&Number.isFinite(value))merged[field][j]=value;
+       });
+      }
+      hourlyForecast=merged;shortRangeSources=(short.model_sources||[]).join(', ');
+     }
+    }
+   }catch(error){console.warn('Short-range model feed unavailable',error)}
+   renderHourly(hourlyForecast,data.current?.time);
+   set('public-short-range-source',shortRangeSources?'24-hour guidance: '+shortRangeSources+' blended; refreshed with the model collector.':'24-hour guidance: Open-Meteo fallback; dedicated short-range blend unavailable.');
    updateStation(chosen,request,data.current?.temperature_2m);
   }catch(err){if(request!==revision)return;set('public-current-condition','Forecast temporarily unavailable');set('public-summary','Unable to load live forecast guidance. Please try again later.');set('public-discussion','The outlook is temporarily unavailable.');set('public-data-notice','Forecast service unavailable. No estimated values are shown.');}
  }
