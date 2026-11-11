@@ -1,7 +1,7 @@
 {
-  "name": "Moraga WX",
-  "short_name": "Moraga WX",
-  "description": "Moraga microclimate observations, forecasts and Pacific weather graphics.",
+  "name": "Diablo Weather Lab",
+  "short_name": "Diablo WX",
+  "description": "Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville. Independent model-guided forecasts and station observations.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
