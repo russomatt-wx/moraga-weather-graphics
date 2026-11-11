@@ -1052,14 +1052,51 @@ border:3px solid transparent!important;border-radius:19px!important;
   -webkit-mask-image:radial-gradient(ellipse 48% 51% at 50% 43%,#000 40%,rgba(0,0,0,.82) 62%,transparent 100%)!important;
   mask-image:radial-gradient(ellipse 48% 51% at 50% 43%,#000 40%,rgba(0,0,0,.82) 62%,transparent 100%)!important;
 }
+</style><style>
+/* Public current conditions: Observatory's cyan inset panel and three-column today summary. */
+#public-shell .public-hero.public-obs-card{display:block!important;position:relative!important;margin:12px 0!important;padding:14px!important;background:linear-gradient(155deg,#192f43,#0d2032)!important;border:2px solid #37546b!important;border-radius:28px!important;box-shadow:none!important}
+#public-shell .public-obs-inner{padding:22px 18px 20px!important;border:5px solid #28a8d0!important;border-radius:25px!important;background:linear-gradient(160deg,#1b4b5d,#103446 75%)!important;box-shadow:inset 0 0 18px #27c3e514!important}
+#public-shell .public-obs-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:20px}
+#public-shell .public-obs-title{display:flex;align-items:center;gap:10px;font-size:clamp(12px,3.1vw,16px);letter-spacing:.15em;font-weight:850;color:#a5deed}
+#public-shell .public-obs-dot{width:12px;height:12px;flex:none;border-radius:50%;background:#61d5ae;box-shadow:0 0 0 5px #61d5ae20}
+#public-shell .public-obs-time{text-align:right;font-size:clamp(11px,2.8vw,15px);line-height:1.35;letter-spacing:.07em;font-weight:800;color:#a5deed;white-space:pre-line}
+#public-shell .public-obs-main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:12px;align-items:center;padding-bottom:18px;border-bottom:1px solid #7bb1c13a}
+#public-shell .public-obs-temp-wrap{min-width:0}
+#public-shell .public-temp{font-size:clamp(52px,12vw,78px)!important;line-height:1!important;color:#eff8ff!important;letter-spacing:-.06em!important}
+#public-shell .public-obs-condition{font-size:13px!important;color:#c3dbe7!important;margin-top:4px}
+#public-shell .public-obs-primary{display:flex;flex-direction:column;gap:10px;min-width:0}
+#public-shell .public-obs-primary>div{display:flex;flex-wrap:wrap;gap:5px;font-size:clamp(13px,3.4vw,18px);color:#c2d7e3}
+#public-shell .public-obs-primary strong{font-weight:500;color:#e3f3fa}
+#public-shell .public-obs-secondary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;padding-top:17px;text-align:center}
+#public-shell .public-obs-secondary>div,#public-shell .public-obs-today>div{display:flex;flex-direction:column;align-items:center;gap:10px;min-width:0}
+#public-shell .public-obs-secondary span{font-size:clamp(11px,2.8vw,15px);color:#a9c3d1}
+#public-shell .public-obs-secondary strong{font-size:clamp(13px,3.6vw,20px);color:#e6f5fc;white-space:nowrap}
+#public-shell .public-obs-today-title{font-size:14px;letter-spacing:.15em;font-weight:850;color:#a5deed;margin:20px 6px 15px}
+#public-shell .public-obs-today{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));text-align:center;gap:6px}
+#public-shell .public-obs-today span{font-size:clamp(14px,3.4vw,20px);color:#a9c3d1}
+#public-shell .public-obs-today strong{font-size:clamp(24px,6vw,39px);font-weight:850;white-space:nowrap}
+#public-shell #public-today-high{color:#f6a85d}
+#public-shell #public-today-low{color:#75c0eb}
+#public-shell #public-rain{color:#7ed6dc}
+#public-shell .public-note{margin:15px 5px 0!important;font-size:12px!important;color:#a8c5d4!important}
+#public-shell .public-hero-icon[hidden],#public-shell .public-heading[hidden],#public-shell .public-sub[hidden],#public-shell #public-high-low[hidden]{display:none!important}
+@media(max-width:380px){#public-shell .public-obs-inner{padding:16px 11px!important}#public-shell .public-hero.public-obs-card{padding:10px!important}#public-shell .public-obs-top{gap:4px}}
 </style></head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div><div class="public-brand">Moraga Weather</div><div class="public-sub">Lamorinda &amp; San Ramon Valley</div></div></div><div class="public-view-tabs"><button type="button" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory">Observatory</button></div>
  <div class="public-locations" aria-label="Choose forecast location"><button data-public-city="Moraga" aria-pressed="true">Moraga</button><button data-public-city="Lafayette" aria-pressed="false">Lafayette</button><button data-public-city="Danville" aria-pressed="false">Danville</button></div>
- <div class="public-hero"><div class="public-heading" id="public-city-heading">Moraga</div><div class="public-sub" id="public-location-sub">KCAMORAG71 · Local observations</div>
- <div class="public-row" style="margin:20px 0"><div><div class="public-temp" id="public-current-temp">—°</div><div id="public-current-condition" style="font-size:18px;font-weight:600">Loading observations…</div></div><div class="public-hero-icon" id="public-hero-icon" aria-hidden="true">☀️</div></div><div class="public-live-metrics"><div><span>Humidity</span><strong id="public-humidity">—</strong></div><div><span>Wind</span><strong id="public-wind">—</strong></div><div><span>Dew point</span><strong id="public-dew">—</strong></div><div><span>Pressure</span><strong id="public-pressure">—</strong></div></div>
- <div class="public-note" id="public-summary">Local weather conditions and forecast at a glance.</div></div><div id="public-alerts" aria-live="polite"></div><section class="public-outlook" aria-label="Weather outlook"><div class="public-outlook-title">Weather Outlook <span>Next 72 hours</span></div><p id="public-discussion">Loading the local outlook…</p></section>
- <div class="public-grid"><div class="public-tile"><div class="public-label">Today's high / low</div><div class="public-value" id="public-high-low">— / —</div></div><div class="public-tile"><div class="public-label">Rain today</div><div class="public-value" id="public-rain">—</div></div></div>
+ <div class="public-hero public-obs-card">
+  <div class="public-obs-inner">
+   <div class="public-obs-top"><div class="public-obs-title"><span class="public-obs-dot"></span><span>CURRENT CONDITIONS</span></div><div class="public-obs-time" id="public-current-time">—</div></div>
+   <div class="public-obs-main"><div class="public-obs-temp-wrap"><div class="public-temp" id="public-current-temp">—°</div><div class="public-obs-condition" id="public-current-condition">Loading…</div></div><div class="public-obs-primary"><div><span>Humidity</span><strong id="public-humidity">—</strong></div><div><span>Wind</span><strong id="public-wind">—</strong></div></div></div>
+   <div class="public-obs-secondary"><div><span>Dew point</span><strong id="public-dew">—</strong></div><div><span>Pressure</span><strong id="public-pressure">—</strong></div><div><span>Wind gust</span><strong id="public-gust">—</strong></div></div>
+  </div>
+  <div class="public-obs-today-title" id="public-today-title">TODAY'S FORECAST</div>
+  <div class="public-obs-today"><div><span>High</span><strong id="public-today-high">—</strong></div><div><span>Low</span><strong id="public-today-low">—</strong></div><div><span>Rainfall</span><strong id="public-rain">—</strong></div></div>
+  <div class="public-note" id="public-summary">Local weather conditions and forecast at a glance.</div>
+  <div class="public-hero-icon" id="public-hero-icon" aria-hidden="true" hidden></div>
+  <div class="public-heading" id="public-city-heading" hidden>Moraga</div><div class="public-sub" id="public-location-sub" hidden></div><div id="public-high-low" hidden>— / —</div>
+ </div><div id="public-alerts" aria-live="polite"></div><section class="public-outlook" aria-label="Weather outlook"><div class="public-outlook-title">Weather Outlook <span>Next 72 hours</span></div><p id="public-discussion">Loading the local outlook…</p></section>
  <h3 style="margin:22px 0 10px">Next 10 days</h3><div class="public-days" id="public-days" aria-live="polite"></div><h3 style="margin:22px 0 10px">Next 24 hours</h3><div class="public-hourly" id="public-hourly" aria-live="polite"></div><div class="public-status" id="public-station-status">Checking nearby public weather observations…</div><div class="public-notice" id="public-data-notice">Moraga uses existing observatory data. Lafayette and Danville forecast feeds are being prepared; unavailable values will not be estimated.</div>
  <div style="margin-top:22px"><button id="public-more-details">View full forecast and technical charts ↗</button></div>
  </div><button id="observatory-return">← Simple forecast</button>
@@ -1230,7 +1267,9 @@ border:3px solid transparent!important;border-radius:19px!important;
    set('public-current-temp',fmt(data.current?.temperature_2m));
    set('public-current-condition',description(data.current?.weather_code??d.weather_code[0]));el('public-hero-icon').innerHTML=iconMarkup(data.current?.weather_code??d.weather_code[0]);el('public-current-temp').style.color=tempColor(data.current?.temperature_2m);
    set('public-high-low',fmt(d.temperature_2m_max[0])+' / '+fmt(d.temperature_2m_min[0]));
-   set('public-rain',rain(d.precipitation_sum[0]));
+   set('public-today-high',fmt(d.temperature_2m_max[0]));set('public-today-low',fmt(d.temperature_2m_min[0]));
+   set('public-current-time',new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'America/Los_Angeles'}).toUpperCase()+'\\n'+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'})+' PT');
+   set('public-rain',rain(d.precipitation_sum[0]));set('public-gust','—');
    const chance=d.precipitation_probability_max[0];
    const wet=Number.isFinite(chance)&&chance>=40;
    set('public-summary',wet?'Rain is possible today ('+Math.round(chance)+'% chance). Expected total: '+rain(d.precipitation_sum[0])+'.':'Today: '+description(d.weather_code[0]).toLowerCase()+', with a high near '+fmt(d.temperature_2m_max[0])+'.');
