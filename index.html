@@ -1158,7 +1158,7 @@ body:not(.public-mode) #observatory-return{display:none!important}
   img.onerror=()=>{img.replaceWith(document.createTextNode(icon(code)))};
   return img.outerHTML;
  }
- function renderDays(d){
+ function renderDays(d,forecastFeed=null){
   const host=el('public-days');host.replaceChildren();
   for(let i=0;i<Math.min(10,d.time.length);i++){
    const item=document.createElement('div');item.className='public-day public-day-observatory';
@@ -1168,12 +1168,14 @@ body:not(.public-mode) #observatory-return{display:none!important}
    const day=date.toLocaleDateString('en-US',{weekday:'short'});
    const label=date.toLocaleDateString('en-US',{month:'short',day:'numeric'});
    const pop=d.precipitation_probability_max?.[i],total=d.precipitation_sum?.[i];
-   const wet=(Number.isFinite(pop)&&pop>=30)||(Number.isFinite(total)&&total>=0.1);
-   const condition=wet && d.weather_code[i]===0?'Chance of Rain':description(d.weather_code[i]);
+   const published=forecastFeed?.daily_conditions?.[d.time[i]];
+   const wet=(Number.isFinite(pop)&&pop>=20)||(Number.isFinite(total)&&total>=0.1);
+   const condition=published?.label|| (wet&&d.weather_code[i]===0?'Chance of showers':description(d.weather_code[i]));
+   const conditionIcon=published?.icon==='🌧️'?61:published?.icon==='🌦️'?80:published?.icon==='☁️'?3:published?.icon==='🌥️'?3:published?.icon==='🌫️'?45:published?.icon==='☀️'?0:published?.icon==='🌤️'?1:published?.icon==='⛅'?2:(wet&&d.weather_code[i]===0?61:d.weather_code[i]);
    const rainLabel=wet?(Number.isFinite(pop)?Math.round(pop)+'%':'')+(Number.isFinite(total)&&total>=0.01?' 💧 '+rain(total):''):'';
    item.innerHTML='<div class="public-day-date">'+(i===0?'<em>TODAY</em>':'<strong>'+day+'</strong>')+'<small>'+label+'</small></div>'+
     '<div class="public-ob-high">'+fmt(high)+'</div>'+
-    '<div class="public-ob-center"><div class="public-day-icon">'+iconMarkup(wet&&d.weather_code[i]===0?61:d.weather_code[i])+'</div><div class="public-ob-rain">'+rainLabel+'</div><div class="public-day-description">'+condition+'</div></div>'+
+    '<div class="public-ob-center"><div class="public-day-icon">'+iconMarkup(conditionIcon)+'</div><div class="public-ob-rain">'+rainLabel+'</div><div class="public-day-description">'+condition+'</div></div>'+
     '<div class="public-ob-low">'+fmt(low)+'</div>';
    host.appendChild(item);
   }
@@ -1271,7 +1273,7 @@ body:not(.public-mode) #observatory-return{display:none!important}
    const d=data.daily;if(!d||!d.time||!d.time.length)throw Error('Missing forecast days');
    // Same-location Observatory model families, collected by the existing 3-hour workflow.
    // Never substitute Moraga's bias correction for another location.
-   let blended=false;
+   let blended=false,publicForecastFeed=null;
    const feedName=({Moraga:'moraga',Lafayette:'lafayette',Danville:'danville'})[chosen];
    try{
     const fr=await fetch(feedName+'_forecast_10day.json?t='+Date.now(),{cache:'no-store'});
@@ -1297,7 +1299,7 @@ body:not(.public-mode) #observatory-return{display:none!important}
        if(Number.isFinite(rg?.expected_inches))d.precipitation_sum[i]=rg.expected_inches;
        if(Number.isFinite(rg?.derived_pop_pct))d.precipitation_probability_max[i]=rg.derived_pop_pct;
       }
-      blended=true;
+      blended=true;publicForecastFeed=f;
      }
     }
    }catch(error){console.warn('Local blended forecast unavailable',error)}
@@ -1313,7 +1315,7 @@ body:not(.public-mode) #observatory-return{display:none!important}
    const wet=Number.isFinite(chance)&&chance>=40;
    set('public-summary',wet?'Rain is possible today ('+Math.round(chance)+'% chance). Expected total: '+rain(d.precipitation_sum[0])+'.':'Today: '+description(d.weather_code[0]).toLowerCase()+', with a high near '+fmt(d.temperature_2m_max[0])+'.');
    set('public-data-notice',(blended?'Daily forecast: ECMWF/GFS/ICON/GEM with EPS/GEFS ensemble blending and ensemble rainfall for ':'Daily blended model feed unavailable; temporary Open-Meteo fallback for ')+chosen+'. Current temperature and hourly detail remain Open-Meteo guidance, not station observations. Updated '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'.');
-   renderDays(d);
+   renderDays(d,publicForecastFeed);
    set('public-discussion',weatherDiscussion(d,data.hourly,data.current));
    renderHourly(data.hourly,data.current?.time);
    updateStation(chosen,request,data.current?.temperature_2m);
