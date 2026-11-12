@@ -1928,7 +1928,7 @@ function skillBlend(entries,weights){
  return Math.round(value)+'°';
 }
 
-window.DiabloForecastLogic={forecastSkill,loadDailyModelSkill,skillWeights,hybridWeights,localBias,correctedEntries,skillBlend};
+window.DiabloForecastLogic={forecastSkill,loadDailyModelSkill,skillWeights,localBias,correctedEntries,skillBlend};
 async function refresh(){
 try{
 const res=await fetch('moraga_forecast_10day.json?t='+Date.now(),{cache:'no-store'});
@@ -1990,6 +1990,7 @@ const hybridWeights=(base,entries,lead)=>{
  for(const n of ens)weights[n]=share/ens.length;
  return weights;
 };
+window.DiabloForecastLogic.hybridWeights=hybridWeights;
 
 // Wind and persistent fog are separate from cloud cover and rain probability.
 // Open-Meteo provides sustained 10-m wind and gust maxima in mph; hourly
