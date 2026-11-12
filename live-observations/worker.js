@@ -4,7 +4,7 @@
 const STATION = 'PWS_KCAMORAG71';
 // Optional validated station IDs, supplied as Worker environment variables.
 // Do not select a station based on proximity alone without checking its exposure and freshness.
-const CITY_COORDS = {lafayette:'37.890,-122.115',danville:'37.813,-121.974'};
+const CITY_COORDS = {lafayette:'37.890,-122.115',danville:'37.813,-121.974',greenbrook:'37.799,-121.970'};
 const MAX_AGE_MS = 45 * 60 * 1000;
 function fresh(ob) {
   const timestamp = Number(ob?.timestamp);
@@ -29,8 +29,21 @@ async function discoverStation(city, env) {
     const id = String(record?.id || '');
     return /^PWS_[A-Za-z0-9_-]+$/.test(id) && fresh(record?.ob);
   });
-  // Prefer nearest valid PWS; proximity alone does not establish siting quality.
-  candidates.sort((a,b) => Number(a?.relativeTo?.distanceMI ?? 999) - Number(b?.relativeTo?.distanceMI ?? 999));
+  // Prefer recent, complete observations; distance breaks ties rather than
+  // allowing an incomplete nearby station to beat a usable neighborhood PWS.
+  const fields = ['humidity','dewpointF','windSpeedMPH','pressureIN','windGustMPH'];
+  const completeness = record => fields.reduce((n,key) => {
+    const value = record?.ob?.[key];
+    return n + (value !== null && value !== '' && Number.isFinite(Number(value)) ? 1 : 0);
+  },0);
+  candidates.sort((a,b) => {
+    const quality = completeness(b)-completeness(a);
+    if (quality) return quality;
+    const aAge = Date.now()-Number(a.ob.timestamp)*1000;
+    const bAge = Date.now()-Number(b.ob.timestamp)*1000;
+    if (Math.abs(aAge-bAge)>15*60000) return aAge-bAge;
+    return Number(a?.relativeTo?.distanceMI ?? 999)-Number(b?.relativeTo?.distanceMI ?? 999);
+  });
   return {candidate:candidates[0] || null, searched:records.length, fresh_pws:candidates.length, api_error:payload.error?.code || null};
 }
 export default {
@@ -42,8 +55,8 @@ export default {
     if (request.method !== 'GET' || url.pathname !== '/observations') return new Response('Not found',{status:404,headers:cors});
     if (!env.XWEATHER_CLIENT_ID || !env.XWEATHER_CLIENT_SECRET) return Response.json({error:'Live service not configured'},{status:503,headers:cors});
     const city = (url.searchParams.get('city') || 'moraga').toLowerCase();
-    if (!['moraga','lafayette','danville'].includes(city)) return Response.json({error:'Unknown location'},{status:400,headers:cors});
-    let station = city === 'moraga' ? STATION : (city === 'lafayette' ? env.LAFAYETTE_STATION_ID : env.DANVILLE_STATION_ID);
+    if (!['moraga','lafayette','danville','greenbrook'].includes(city)) return Response.json({error:'Unknown location'},{status:400,headers:cors});
+    let station = city === 'moraga' ? STATION : (city === 'lafayette' ? env.LAFAYETTE_STATION_ID : city === 'greenbrook' ? env.GREENBROOK_STATION_ID : env.DANVILLE_STATION_ID);
     let discovery = null;
     if (!station && city !== 'moraga') {
       try { discovery = await discoverStation(city, env); station = discovery?.candidate?.id; }
@@ -66,6 +79,7 @@ export default {
       // This does not depend on GitHub Actions or an open browser tab.
       let dailyExtrema = null;
       try {
+        if(city === 'moraga') {
         const pacificDate = new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
         const archive = new URL('https://api.aerisapi.com/observations/archive/'+station);
         archive.searchParams.set('from',pacificDate);
@@ -106,12 +120,14 @@ export default {
               coverage_status:complete?'complete':'incomplete'};
           }
         }
+        }
       }catch(_err){/* Keep current observations available when archive is delayed. */}
       return Response.json({
         station:station.replace(/^PWS_/,''),
         city,
         station_selection:discovery?'automatic_nearest_fresh_pws':'configured',
         station_distance_mi:discovery?.candidate?.relativeTo?.distanceMI ?? null,
+        station_completeness_fields:['humidity','dewpointF','windSpeedMPH','pressureIN','windGustMPH'].filter(key=>ob[key]!==null&&ob[key]!==''&&Number.isFinite(Number(ob[key]))).length,
         observed_utc:new Date(Number(ob.timestamp)*1000).toISOString(),
         temperature_f:pick('tempF'),
         daily_extrema:dailyExtrema,
