@@ -1428,7 +1428,7 @@ body:not(.public-mode) #observatory-return{display:none!important}
    }
    set('public-station-status','Observed at '+ob.station+' · '+new Date(stamp).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+' · Xweather.');
   }catch(e){
-   if(request===revision)set('public-station-status',chosen==='Moraga'?'Moraga station unavailable; displaying modeled current temperature.':'Verified Xweather station not yet configured or unavailable for '+chosen+'. Displaying modeled current temperature.');
+   if(request===revision)set('public-station-status',chosen==='Moraga'?'Moraga station unavailable; showing Open-Meteo modeled current conditions.':'No verified local station available for '+chosen+'; showing Open-Meteo modeled current conditions (not station measurements).');
   }
  }
  function weatherDiscussion(d,h,now){
@@ -1510,7 +1510,7 @@ body:not(.public-mode) #observatory-return{display:none!important}
   ['public-humidity','public-dew','public-pressure','public-wind'].forEach(id=>set(id,'—'));set('public-discussion','Loading the local outlook…');el('public-alerts').replaceChildren();updateAlerts(chosen,request);set('public-station-status','Checking nearby public weather observations…');set('public-current-temp','—°');set('public-current-condition','Loading forecast…');set('public-high-low','— / —');set('public-rain','—');set('public-summary','Retrieving the latest forecast.');
   el('public-days').replaceChildren();el('public-hourly').replaceChildren();
   const [lat,lon]=coords[chosen];
-  const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code&hourly=temperature_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
+  const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code%2Crelative_humidity_2m%2Cdew_point_2m%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m&wind_speed_unit=mph&hourly=temperature_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
   try{
    const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw Error('Forecast request '+response.status);
    const data=await response.json();if(request!==revision)return;
@@ -1577,7 +1577,13 @@ body:not(.public-mode) #observatory-return{display:none!important}
    set('public-high-low',fmt(d.temperature_2m_max[0])+' / '+fmt(d.temperature_2m_min[0]));
    set('public-today-high',fmt(d.temperature_2m_max[0]));set('public-today-low',fmt(d.temperature_2m_min[0]));
    set('public-current-time',new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'America/Los_Angeles'}).toUpperCase()+String.fromCharCode(10)+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'})+' PT');
-   set('public-rain',rain(d.precipitation_sum[0]));set('public-gust','—');
+   set('public-rain',rain(d.precipitation_sum[0]));
+   const mc=data.current||{};
+   set('public-humidity',Number.isFinite(mc.relative_humidity_2m)?Math.round(mc.relative_humidity_2m)+'%':'—');
+   set('public-dew',Number.isFinite(mc.dew_point_2m)?fmt(mc.dew_point_2m):'—');
+   set('public-pressure',Number.isFinite(mc.pressure_msl)?(mc.pressure_msl*0.029529983).toFixed(2)+' inHg':'—');
+   set('public-wind',Number.isFinite(mc.wind_speed_10m)?(mc.wind_speed_10m<1?'Calm':Math.round(mc.wind_speed_10m)+' mph'):'—');
+   set('public-gust',Number.isFinite(mc.wind_gusts_10m)?(mc.wind_gusts_10m<1?'Calm':Math.round(mc.wind_gusts_10m)+' mph'):'—');
    const chance=d.precipitation_probability_max[0];
    const wet=Number.isFinite(chance)&&chance>=40;
    set('public-summary',wet?'Rain is possible today ('+Math.min(100,Math.round(chance/10)*10)+'% chance). Expected total: '+rain(d.precipitation_sum[0])+'.':'Today: '+description(d.weather_code[0]).toLowerCase()+', with a high near '+fmt(d.temperature_2m_max[0])+'.');
