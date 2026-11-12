@@ -1,0 +1,69 @@
+name: Additional locations 10-day forecasts
+on:
+  workflow_dispatch:
+  schedule:
+    # Twice daily: 02:37 and 14:37 UTC (6:37 AM/PM PST; 7:37 AM/PM PDT).
+    - cron: '37 2,14 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: additional-location-forecasts
+  cancel-in-progress: false
+jobs:
+  locations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install matplotlib
+      - name: Collect additional locations
+        shell: bash
+        run: |
+          set -euo pipefail
+          for location in lafayette danville greenbrook; do
+            case "$location" in
+              lafayette) lat=37.890; lon=-122.115 ;;
+              danville) lat=37.813; lon=-121.974 ;;
+              greenbrook) lat=37.799; lon=-121.970 ;;
+            esac
+            mkdir -p "/tmp/wx-$location"
+            (cd "/tmp/wx-$location" && WX_FORECAST_LAT="$lat" WX_FORECAST_LON="$lon" WX_FORECAST_OUTPUT="${location}_forecast_10day.json" python "$GITHUB_WORKSPACE/scripts/rainfall_10day.py")
+            cp "/tmp/wx-$location/${location}_forecast_10day.json" "./${location}_forecast_10day.json"
+          done
+      - name: Validate independent location forecasts
+        run: |
+          python - <<'PY'
+          import json, datetime, pathlib
+          from zoneinfo import ZoneInfo
+          today=datetime.datetime.now(ZoneInfo('America/Los_Angeles')).date()
+          dates=[(today+datetime.timedelta(days=i)).isoformat() for i in range(10)]
+          for name,lat,lon in [('lafayette',37.890,-122.115),('danville',37.813,-121.974),('greenbrook',37.799,-121.970)]:
+              data=json.loads(pathlib.Path(f'{name}_forecast_10day.json').read_text())
+              assert data['dates']==dates, f'{name}: wrong dates'
+              assert abs(data['latitude']-lat)<0.002 and abs(data['longitude']-lon)<0.002, f'{name}: wrong coordinates'
+              assert len(data.get('temperature_models',{}))>=2, f'{name}: insufficient models'
+              assert all(day in data.get('rain_guidance',{}) for day in dates), f'{name}: missing rain guidance'
+              print(name,'validated')
+          PY
+      - name: Publish only additional location feeds
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/additional-location-publish
+          cp lafayette_forecast_10day.json danville_forecast_10day.json greenbrook_forecast_10day.json /tmp/additional-location-publish/
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/additional-location-publish/* ./
+            git add lafayette_forecast_10day.json danville_forecast_10day.json greenbrook_forecast_10day.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m 'Refresh twice-daily additional location forecasts'
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
