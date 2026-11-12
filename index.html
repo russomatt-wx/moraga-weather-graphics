@@ -1400,6 +1400,10 @@ body:not(.public-mode) #observatory-return{display:none!important}
    if(request!==revision)return;
    const stamp=Date.parse(ob.observed_utc||'');
    if(!Number.isFinite(stamp)||Date.now()-stamp>45*60000||stamp>Date.now()+5*60000||!Number.isFinite(ob.temperature_f))throw Error('Station observation unavailable or stale');
+   // Reject clearly inconsistent nearby PWS values, often caused by sun exposure
+   // or a station outside the intended neighborhood microclimate.
+   if(Number.isFinite(modelTemp)&&Math.abs(ob.temperature_f-modelTemp)>12)throw Error('Nearby station differs excessively from regional guidance');
+   if(chosen==='Greenbrook'&&Number.isFinite(ob.station_distance_mi)&&ob.station_distance_mi>3)throw Error('Station too far from Greenbrook');
    set('public-current-temp',fmt(ob.temperature_f));updatePublicCurrentAccent(ob.temperature_f);set('public-humidity',Number.isFinite(ob.humidity_pct)?Math.round(ob.humidity_pct)+'%':'—');set('public-dew',Number.isFinite(ob.dew_point_f)?fmt(ob.dew_point_f):'—');set('public-pressure',Number.isFinite(ob.pressure_inhg)?ob.pressure_inhg.toFixed(2)+' inHg':'—');set('public-wind',Number.isFinite(ob.wind_mph)?(ob.wind_mph<1?'Calm':Math.round(ob.wind_mph)+' mph'):'—');
    const ext=ob.daily_extrema;
    if(ext?.complete&&Number.isFinite(ext.high_f)&&Number.isFinite(ext.low_f))set('public-high-low',fmt(ext.high_f)+' / '+fmt(ext.low_f));
@@ -1428,7 +1432,15 @@ body:not(.public-mode) #observatory-return{display:none!important}
    }
    set('public-station-status','Observed at '+ob.station+' · '+new Date(stamp).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+' · Xweather.');
   }catch(e){
-   if(request===revision)set('public-station-status',chosen==='Moraga'?'Moraga station unavailable; showing Open-Meteo modeled current conditions.':'No verified local station available for '+chosen+'; showing Open-Meteo modeled current conditions (not station measurements).');
+   if(request===revision){
+    const note=chosen==='Moraga'?'Moraga station unavailable.':'No verified local station available for '+chosen+'.';
+    set('public-station-status',note+(modeledConflict?' Modeled temperature conflicts with today’s forecast; current reading withheld.':' Showing Open-Meteo modeled conditions, not station measurements.'));
+    if(modeledConflict){
+     set('public-current-temp','—');
+     set('public-current-condition','Station data unavailable');
+     ['public-humidity','public-dew','public-pressure','public-wind','public-gust'].forEach(id=>set(id,'—'));
+    }
+   }
   }
  }
  function weatherDiscussion(d,h,now){
@@ -1571,8 +1583,14 @@ body:not(.public-mode) #observatory-return{display:none!important}
     }
    }catch(error){console.warn('Local blended forecast unavailable',error)}
    if(request!==revision)return;
-   set('public-current-temp',fmt(data.current?.temperature_2m));updatePublicCurrentAccent(data.current?.temperature_2m);
-   set('public-current-condition',description(data.current?.weather_code??d.weather_code[0]));el('public-hero-icon').innerHTML=iconMarkup(data.current?.weather_code??d.weather_code[0]);el('public-current-temp').style.color=tempColor(data.current?.temperature_2m);
+   // Modeled current conditions are provisional until verified against local station data.
+   // Never present a current value above today's forecast high as a trusted station reading.
+   const modeledNow=data.current?.temperature_2m;
+   const todayHigh=d.temperature_2m_max[0],todayLow=d.temperature_2m_min[0];
+   const modeledConflict=Number.isFinite(modeledNow)&&Number.isFinite(todayHigh)&&modeledNow>todayHigh+3;
+   set('public-current-temp',modeledConflict?'—':fmt(modeledNow));
+   updatePublicCurrentAccent(modeledConflict?NaN:modeledNow);
+   set('public-current-condition',modeledConflict?'Awaiting verified observation':description(data.current?.weather_code??d.weather_code[0]));el('public-hero-icon').innerHTML=iconMarkup(data.current?.weather_code??d.weather_code[0]);el('public-current-temp').style.color=tempColor(modeledConflict?NaN:modeledNow);
    set('public-today-title',"TODAY'S FORECAST");
    set('public-high-low',fmt(d.temperature_2m_max[0])+' / '+fmt(d.temperature_2m_min[0]));
    set('public-today-high',fmt(d.temperature_2m_max[0]));set('public-today-low',fmt(d.temperature_2m_min[0]));
