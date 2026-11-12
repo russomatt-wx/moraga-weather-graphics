@@ -6,6 +6,8 @@ const STATION = 'PWS_KCAMORAG71';
 // Do not select a station based on proximity alone without checking its exposure and freshness.
 const CITY_COORDS = {lafayette:'37.890,-122.115',danville:'37.813,-121.974',greenbrook:'37.799,-121.970'};
 const MAX_AGE_MS = 45 * 60 * 1000;
+// Greenbrook station excluded after inconsistent local temperature reports.
+const GREENBROOK_EXCLUDED = new Set(['PWS_KCASANRA808']);
 function fresh(ob) {
   const timestamp = Number(ob?.timestamp);
   return Number.isFinite(timestamp) && timestamp > 0 &&
@@ -27,7 +29,7 @@ async function discoverStation(city, env) {
   const records = Array.isArray(payload.response) ? payload.response : (payload.response ? [payload.response] : []);
   const candidates = records.filter(record => {
     const id = String(record?.id || '');
-    return /^PWS_[A-Za-z0-9_-]+$/.test(id) && fresh(record?.ob);
+    return /^PWS_[A-Za-z0-9_-]+$/.test(id) && fresh(record?.ob) && (city !== 'greenbrook' || !GREENBROOK_EXCLUDED.has(id));
   });
   // Prefer recent, complete observations; distance breaks ties rather than
   // allowing an incomplete nearby station to beat a usable neighborhood PWS.
@@ -57,6 +59,8 @@ export default {
     const city = (url.searchParams.get('city') || 'moraga').toLowerCase();
     if (!['moraga','lafayette','danville','greenbrook'].includes(city)) return Response.json({error:'Unknown location'},{status:400,headers:cors});
     let station = city === 'moraga' ? STATION : (city === 'lafayette' ? env.LAFAYETTE_STATION_ID : city === 'greenbrook' ? env.GREENBROOK_STATION_ID : env.DANVILLE_STATION_ID);
+    // Never serve the known-problematic Greenbrook station, even if pinned in settings.
+    if(city === 'greenbrook' && GREENBROOK_EXCLUDED.has(station)) station = null;
     let discovery = null;
     if (!station && city !== 'moraga') {
       try { discovery = await discoverStation(city, env); station = discovery?.candidate?.id; }
