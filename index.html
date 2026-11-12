@@ -1249,6 +1249,23 @@ body:not(.public-mode) #observatory-return{display:none!important}
  #public-shell .diablo-transparent-wordmark small,.diablo-banner-observatory .diablo-transparent-wordmark small{font-size:clamp(6px,1.4vw,9px)!important;letter-spacing:.12em!important;margin-top:7px!important}
 }
 </style><!-- Republish Observatory 10-day forecast: 2026-11-11 16:35 PST -->
+<style>
+/* 2026-11-11 readability and transparent brand cleanup: both public and Observatory. */
+#public-shell .diablo-banner-art,.diablo-banner-observatory{gap:9px!important;padding:12px 0 20px!important;background:transparent!important}
+#public-shell .diablo-banner-art img,.diablo-banner-observatory img{flex:0 0 25%!important;width:25%!important;max-width:150px!important;filter:drop-shadow(0 3px 5px rgba(0,0,0,.12))!important}
+#public-shell .diablo-transparent-wordmark strong,.diablo-banner-observatory .diablo-transparent-wordmark strong{font-size:clamp(27px,5.9vw,58px)!important;letter-spacing:-.045em!important}
+#public-shell .diablo-transparent-wordmark small,.diablo-banner-observatory .diablo-transparent-wordmark small{font-size:clamp(10px,1.9vw,15px)!important;letter-spacing:.10em!important;line-height:1.4!important;margin-top:7px!important}
+#public-shell .public-hero p,#public-shell .public-hero small,#public-shell .public-day-description,#public-shell .public-short-range-source{font-size:max(14px,1em)!important;line-height:1.48!important}
+#public-shell .public-obs-card .public-obs-title,#public-shell .public-obs-card .public-obs-time{font-size:clamp(14px,2.8vw,18px)!important}
+#public-shell .public-obs-card .public-obs-label,#public-shell .public-obs-card .public-obs-meta{font-size:clamp(15px,2.9vw,19px)!important}
+#public-shell .public-locations .local-city{font-size:14px!important}
+#public-shell .public-locations .local-neighborhood{font-size:clamp(16px,3.7vw,20px)!important}
+#public-shell .public-hero .public-day-description{font-size:15px!important}
+#observatory-shell p,#observatory-shell small,#observatory-shell .day-date,#observatory-shell .method-note,#observatory-shell .chart-note{font-size:clamp(14px,2.5vw,17px)!important;line-height:1.5!important}
+#observatory-shell .day-forecast .day-date,#observatory-shell .day-condition small{font-size:14px!important}
+#observatory-shell h3{font-size:clamp(20px,3vw,26px)!important}
+@media(max-width:520px){#public-shell .diablo-banner-art,.diablo-banner-observatory{gap:7px!important}#public-shell .diablo-transparent-wordmark strong,.diablo-banner-observatory .diablo-transparent-wordmark strong{font-size:clamp(25px,5.8vw,32px)!important}#public-shell .diablo-transparent-wordmark small,.diablo-banner-observatory .diablo-transparent-wordmark small{font-size:clamp(9px,2vw,12px)!important;letter-spacing:.08em!important}}
+</style>
 </head>
 <body class="public-mode"><div id="public-shell" aria-label="Public local weather forecast">
  <div class="public-top"><div class="diablo-banner-art" aria-label="Diablo Weather Lab — Hyperlocal Weather Intelligence"><img src="./diablo-header-transparent.svg?v=2" alt="Mountains, cloud, rain and sunrise" loading="eager"><div class="diablo-transparent-wordmark"><strong>Diablo <span>Weather Lab</span></strong><small>HYPERLOCAL WEATHER INTELLIGENCE</small></div></div><div class="diablo-public-lockup"><svg class="diablo-brand-symbol" viewBox="0 0 160 96" role="img" aria-label="Mountain, sun, cloud and rain" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="dwl-ridge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#effbff"/><stop offset="1" stop-color="#45c8ee"/></linearGradient></defs><circle cx="119" cy="31" r="15" fill="#f8bd39"/><g stroke="#f8bd39" stroke-width="3" stroke-linecap="round"><path d="M119 8v-5M119 54v5M96 31h-5M142 31h5M103 15l-4-4M135 15l4-4"/></g><path d="M6 77Q28 69 43 62L84 27Q89 23 94 28L151 78Q112 60 91 42Q87 38 83 42L51 70Q27 74 6 77Z" fill="url(#dwl-ridge)"/><path d="M18 84Q58 76 84 56Q102 69 147 84Q105 75 83 69Q55 84 18 84Z" fill="#35bde5" opacity=".8"/><path d="M18 30a13 13 0 0 1 16-13 19 19 0 0 1 35 6 12 12 0 0 1 3 23H20a11 11 0 0 1-2-16Z" fill="#b8e5f5"/><g stroke="#62d8f5" stroke-width="3.5" stroke-linecap="round"><path d="M28 52l-5 9M42 52l-5 9M56 52l-5 9"/></g></svg><div><div class="public-brand">Diablo Weather Lab</div><div class="public-sub">Hyperlocal Weather Intelligence</div></div></div></div><div class="public-view-tabs"><button type="button" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory">Observatory</button></div>
