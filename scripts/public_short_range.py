@@ -40,4 +40,8 @@ def collect(name,lat,lon):
         output["hourly"][field]=values
     Path(name+"_short_range_24h.json").write_text(json.dumps(output,indent=2)+"\n")
     print(name,"sources",list(results),"failures",failures)
-for name,(lat,lon) in LOCATIONS.items():\n    try:collect(name,lat,lon)\n    except Exception as exc:print("Short-range blend unavailable for",name,":",exc)
+for name,(lat,lon) in LOCATIONS.items():
+    try:
+        collect(name,lat,lon)
+    except Exception as exc:
+        print("Short-range blend unavailable for",name,":",exc)
