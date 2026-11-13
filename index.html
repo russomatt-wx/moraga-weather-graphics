@@ -1379,6 +1379,18 @@ body:not(.public-mode) #observatory-return{display:none!important}
    host.appendChild(item);
   }
  }
+ function nightIconMarkup(code){
+  const rainy=(code>=51&&code<=67)||(code>=80&&code<=82)||code>=95;
+  const cloudy=rainy||code===3||code===2||code===45||code===48;
+  const partly=code===1||code===2;
+  const moon='<path d="M63 8a25 25 0 1 0 24 40A27 27 0 0 1 63 8Z" fill="#f6f1d5" stroke="#d4e4ef" stroke-width="1.4"/>';
+  const cloud='<g filter="url(#shadow)"><path d="M26 68c-12 0-15-17-5-22 3-12 18-17 27-9 11-13 31-6 33 8 17-1 20 23 2 23Z" fill="url(#cloud)" stroke="#9ab2c2" stroke-width="1"/></g>';
+  const rain='<g stroke="#54c9f6" stroke-width="3" stroke-linecap="round" opacity=".95"><path d="M34 75l-5 11M49 75l-5 11M64 75l-5 11M79 75l-5 11"/></g>';
+  const fog='<g stroke="#9ab6c8" stroke-width="3" stroke-linecap="round"><path d="M20 77h66M29 86h50"/></g>';
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 100" aria-hidden="true"><defs><linearGradient id="cloud" x1="0" y1="0" x2=".4" y2="1"><stop stop-color="#f1f7fa"/><stop offset="1" stop-color="#788fa5"/></linearGradient><filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceAlpha" stdDeviation="2"/><feOffset dy="2"/><feComponentTransfer><feFuncA type="linear" slope=".4"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'+
+    moon+(cloudy||partly?cloud:'')+(rainy?rain:'')+(code===45||code===48?fog:'')+'</svg>';
+  return '<span class="public-night-icon" role="img" aria-label="'+(rainy?'Rain at night':cloudy?'Cloudy night':partly?'Partly cloudy night':'Clear night')+'">'+svg+'</span>';
+ }
  function renderHourly(hourly,currentTime){
   const host=el('public-hourly');host.replaceChildren();
   if(!hourly?.time?.length)return;
@@ -1387,7 +1399,7 @@ body:not(.public-mode) #observatory-return{display:none!important}
    const card=document.createElement('div');card.className='public-hour';card.style.setProperty('--hour-color',tempColor(hourly.temperature_2m[i]));
    const hour=new Date(hourly.time[i]).toLocaleTimeString('en-US',{hour:'numeric'});
    const chance=hourly.precipitation_probability?.[i];
-   card.innerHTML='<strong>'+hour+'</strong><div class="public-hour-icon">'+iconMarkup(hourly.weather_code[i])+'</div><strong class="public-hour-temp">'+fmt(hourly.temperature_2m[i])+'</strong><div style="color:#90dafa;font-size:12px">'+(Number.isFinite(chance)?chance+'% rain':'—')+'</div>';
+   card.innerHTML='<strong>'+hour+'</strong><div class="public-hour-icon">'+(hourly.is_day?.[i]===0?nightIconMarkup(hourly.weather_code[i]):iconMarkup(hourly.weather_code[i]))+'</div><strong class="public-hour-temp">'+fmt(hourly.temperature_2m[i])+'</strong><div style="color:#90dafa;font-size:12px">'+(Number.isFinite(chance)?chance+'% rain':'—')+'</div>';
    host.appendChild(card);
   }
  }
@@ -1522,7 +1534,7 @@ body:not(.public-mode) #observatory-return{display:none!important}
   ['public-humidity','public-dew','public-pressure','public-wind'].forEach(id=>set(id,'—'));set('public-discussion','Loading the local outlook…');el('public-alerts').replaceChildren();updateAlerts(chosen,request);set('public-station-status','Checking nearby public weather observations…');set('public-current-temp','—°');set('public-current-condition','Loading forecast…');set('public-high-low','— / —');set('public-rain','—');set('public-summary','Retrieving the latest forecast.');
   el('public-days').replaceChildren();el('public-hourly').replaceChildren();
   const [lat,lon]=coords[chosen];
-  const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code%2Crelative_humidity_2m%2Cdew_point_2m%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m&wind_speed_unit=mph&hourly=temperature_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
+  const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code%2Crelative_humidity_2m%2Cdew_point_2m%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m&wind_speed_unit=mph&hourly=temperature_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code%2Cis_day&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
   try{
    const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw Error('Forecast request '+response.status);
    const data=await response.json();if(request!==revision)return;
@@ -4083,6 +4095,8 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    letter-spacing:.04em!important;white-space:nowrap!important;
  }
 }
+
+#public-shell .public-night-icon{display:inline-flex;width:100%;height:100%;align-items:center;justify-content:center}#public-shell .public-night-icon svg{display:block;width:100%;height:100%;max-width:85px;max-height:75px}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
