@@ -3835,6 +3835,46 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 .diablo-observatory-lockup{display:flex!important}
 .diablo-observatory-lockup .diablo-brand-symbol{display:none!important}
 .diablo-observatory-lockup:before{content:"";display:block;flex:none;width:clamp(90px,15vw,145px);height:78px;background:url("./diablo-sunrise-sleek.svg?v=1") center/contain no-repeat}
+
+/* Mobile forecast repair: lock weekday/date together and remove empty vertical space. */
+@media(max-width:760px){
+ #ten-day #ten-day-results .ten-day-grid .day-forecast{
+   position:relative!important;
+   grid-template-rows:100px auto!important;
+   min-height:100px!important;
+   padding:0 7px!important;
+   align-items:center!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast>strong,
+ #ten-day #ten-day-results .ten-day-grid .day-forecast>.today-pill{
+   position:absolute!important;left:11px!important;top:11px!important;
+   margin:0!important;grid-column:auto!important;grid-row:auto!important;
+   align-self:auto!important;z-index:4!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-date{
+   position:absolute!important;left:11px!important;top:42px!important;
+   margin:0!important;grid-column:auto!important;grid-row:auto!important;
+   align-self:auto!important;line-height:1.15!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition,
+ #ten-day #ten-day-results .ten-day-grid .day-forecast:has(.day-pop:not(:empty)) .day-condition{
+   height:78px!important;min-height:0!important;
+   padding:0!important;align-self:start!important;
+   justify-content:flex-start!important;overflow:visible!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>small{
+   min-height:0!important;max-height:none!important;
+   line-height:1.1!important;font-size:clamp(10px,2.5vw,13px)!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop{
+   bottom:5px!important;top:auto!important;min-height:0!important;
+   height:18px!important;margin:0!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-temps>span,
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-temps>small{
+   align-self:center!important;
+ }
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
