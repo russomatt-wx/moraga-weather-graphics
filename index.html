@@ -4033,6 +4033,56 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    line-height:1.1!important;margin:1px 0 0!important;
  }
 }
+
+/* Shared final brand typography: strong futuristic single-line lockup. */
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&display=swap');
+#public-shell .diablo-banner-art,.diablo-banner-observatory{
+ gap:clamp(8px,1.4vw,18px)!important;
+}
+#public-shell .diablo-banner-art .diablo-transparent-wordmark strong,
+.diablo-banner-observatory .diablo-transparent-wordmark strong{
+ font-family:'Chakra Petch','Arial Narrow',sans-serif!important;
+ font-weight:700!important;font-stretch:normal!important;
+ font-size:clamp(21px,3.8vw,52px)!important;
+ letter-spacing:-.035em!important;line-height:1.08!important;
+ white-space:nowrap!important;text-transform:uppercase!important;
+}
+#public-shell .diablo-banner-art .diablo-transparent-wordmark strong span,
+.diablo-banner-observatory .diablo-transparent-wordmark strong span{
+ display:inline!important;white-space:nowrap!important;
+}
+#public-shell .diablo-banner-art .diablo-transparent-wordmark small,
+.diablo-banner-observatory .diablo-transparent-wordmark small{
+ font-family:'Chakra Petch',Arial,sans-serif!important;
+ font-size:clamp(9px,1.28vw,16px)!important;
+ font-weight:600!important;letter-spacing:.13em!important;
+ white-space:nowrap!important;
+}
+@media(max-width:760px){
+ #public-shell .diablo-banner-art,.diablo-banner-observatory{
+   gap:5px!important;min-height:96px!important;
+   padding:10px 0!important;
+ }
+ #public-shell .diablo-banner-art>img,.diablo-banner-observatory>img{
+   flex:0 0 17%!important;width:17%!important;max-width:92px!important;
+ }
+ #public-shell .diablo-banner-art .diablo-transparent-wordmark,
+ .diablo-banner-observatory .diablo-transparent-wordmark{
+   flex:1 1 0!important;min-width:0!important;
+ }
+ #public-shell .diablo-banner-art .diablo-transparent-wordmark strong,
+ .diablo-banner-observatory .diablo-transparent-wordmark strong{
+   font-family:'Chakra Petch','Arial Narrow',sans-serif!important;
+   font-size:clamp(17px,4.2vw,29px)!important;
+   font-weight:700!important;letter-spacing:-.065em!important;
+   white-space:nowrap!important;
+ }
+ #public-shell .diablo-banner-art .diablo-transparent-wordmark small,
+ .diablo-banner-observatory .diablo-transparent-wordmark small{
+   font-size:clamp(7px,1.85vw,12px)!important;
+   letter-spacing:.04em!important;white-space:nowrap!important;
+ }
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
