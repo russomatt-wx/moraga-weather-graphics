@@ -1473,8 +1473,8 @@ async function getNwsDiscussion(){
   const issued=Date.parse(product.issuanceTime||item.issuanceTime||'');
   if(!Number.isFinite(issued)||Date.now()-issued>18*3600000||issued>Date.now()+300000)throw Error('NWS discussion is stale');
   const raw=String(product.productText||'');
-  const section=raw.match(/\\.\\.(?:SYNOPSIS|SHORT TERM|DISCUSSION)\\.\\.[^\\n]*\\n([\\s\\S]*?)(?=\\n\\s*\\.\\.(?:LONG TERM|AVIATION|MARINE|FIRE WEATHER|HYDROLOGY|BEACHES|MTR WATCHES|UPDATE)\\.|\\n&&|$)/i);
-  const text=(section?.[1]||'').replace(/\\n/g,' ').replace(/\\s+/g,' ').trim();
+  const section=raw.match(/\.\.(?:SYNOPSIS|SHORT TERM|DISCUSSION)\.\.[^\n]*\n([\s\S]*?)(?=\n\s*\.\.(?:LONG TERM|AVIATION|MARINE|FIRE WEATHER|HYDROLOGY|BEACHES|MTR WATCHES|UPDATE)\.|\n&&|$)/i);
+  const text=(section?.[1]||'').replace(/\n/g,' ').replace(/\s+/g,' ').trim();
   if(text.length<50)throw Error('NWS section unavailable');
   value={text,issued};
  }catch(err){console.warn('NWS AFD not available; using local forecast only',err)}
@@ -1485,7 +1485,7 @@ function nwsWeatherOutlook(afd,d,h,now){
  const fallback=weatherDiscussion(d,h,now);
  if(!afd)return fallback;
  const sentences=afd.text.match(/[^.!?]+[.!?]+/g)||[];
- const relevant=sentences.map(x=>x.trim()).filter(x=>x.length>=35&&x.length<=240&&!/\\b(?:airport|terminal|TAF|runway|marine zone|knots|kt|flight rules)\\b/i.test(x));
+ const relevant=sentences.map(x=>x.trim()).filter(x=>x.length>=35&&x.length<=240&&!/\b(?:airport|terminal|TAF|runway|marine zone|knots|kt|flight rules)\b/i.test(x));
  const context=relevant.slice(0,2).join(' ');
  if(!context)return fallback;
  const clock=new Date();
