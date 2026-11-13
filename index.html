@@ -2108,7 +2108,7 @@ function skillBlend(entries,weights){
  return Math.round(value)+'°';
 }
 
-window.DiabloForecastLogic={forecastSkill,loadDailyModelSkill,skillWeights,localBias,correctedEntries,skillBlend};
+window.DiabloForecastLogic={forecastSkill,loadDailyModelSkill,skillWeights,localBias,correctedEntries,skillBlend,hybridWeights};
 async function refresh(){
 try{
 const res=await fetch('moraga_forecast_10day.json?t='+Date.now(),{cache:'no-store'});
