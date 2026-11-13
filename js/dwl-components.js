@@ -75,7 +75,17 @@
       '</' + tag + '>';
   }
 
-  window.DWL = { tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard };
+  /* Moraga blended forecast, published by the Observatory renderer so Local Weather
+     shows exactly the same skill-weighted, bias-corrected highs and lows. */
+  var moraga = {};
+  function publishBlend(date, high, low) {
+    if (Number.isFinite(high) && Number.isFinite(low)) moraga[date] = { high: high, low: low };
+  }
+  function blendReady() { window.dispatchEvent(new CustomEvent('dwl:blend')); }
+  function moragaBlend(date) { return moraga[date] || null; }
+
+  window.DWL = { tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard,
+    publishBlend: publishBlend, blendReady: blendReady, moragaBlend: moragaBlend };
 
   // Section tabs: highlight the tab for the section currently in view.
   document.addEventListener('DOMContentLoaded', function () {

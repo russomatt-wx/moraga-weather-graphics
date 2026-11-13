@@ -92,7 +92,43 @@
   card.style.setProperty('--public-current-accent',accent);
   card.style.setProperty('--public-current-temperature',String(temperature));
  }
+ /* Same model blend for every path (live Open-Meteo or published-feed fallback). */
+ function feedBlend(f,day,i,field,skillRows,isMoraga){
+  const phase=field==='high_f'?'high':'low';
+  const shared=window.DiabloForecastLogic;
+  const entries=Object.entries(f.temperature_models||{}).map(([name,m])=>{
+   const idx=Array.isArray(m.dates)?m.dates.indexOf(day):i;
+   return [name,idx>=0?m[field]?.[idx]:null];
+  }).filter(([name,v])=>Number.isFinite(v));
+  if(!entries.length)return null;
+  const names=entries.map(([name])=>name);
+  if(shared?.hybridWeights){
+   const weights=shared.hybridWeights(shared.skillWeights(skillRows,i,phase,names),entries,i);
+   const bias=isMoraga?shared.localBias(skillRows,i,phase,names):{corrections:{}};
+   const value=parseFloat(shared.skillBlend(shared.correctedEntries(entries,bias),weights));
+   return Number.isFinite(value)?value:null;
+  }
+  const ens=entries.filter(([n])=>n==='EPS'||n==='GEFS'),det=entries.filter(([n])=>n!=='EPS'&&n!=='GEFS');
+  const mean=xs=>xs.reduce((s,[n,v])=>s+v,0)/xs.length;
+  const share=i<3?.15:i<7?.40:.65;
+  return ens.length&&det.length?mean(det)*(1-share)+mean(ens)*share:mean(entries);
+ }
+ /* Moraga: use the Observatory's own blended values so both views always agree. */
+ let lastDaily=null;
+ function applyMoragaBlend(d){
+  if(city!=='Moraga'||!window.DWL)return;
+  d.time.forEach((t,i)=>{const b=DWL.moragaBlend(t);if(b){d.temperature_2m_max[i]=b.high;d.temperature_2m_min[i]=b.low;}});
+ }
+ function showToday(d){
+  set('public-high-low',fmt(d.temperature_2m_max[0])+' / '+fmt(d.temperature_2m_min[0]));
+  set('public-today-high',fmt(d.temperature_2m_max[0]));set('public-today-low',fmt(d.temperature_2m_min[0]));
+ }
+ window.addEventListener('dwl:blend',()=>{
+  if(!lastDaily||lastDaily.city!=='Moraga'||city!=='Moraga')return;
+  applyMoragaBlend(lastDaily.d);showToday(lastDaily.d);renderDays(lastDaily.d,lastDaily.feed);
+ });
  function renderDays(d,forecastFeed=null){
+  lastDaily={d,feed:forecastFeed,city};
   const host=el('public-days');host.replaceChildren();host.classList.add('dwl-days');
   for(let i=0;i<Math.min(10,d.time.length);i++){
    
@@ -154,7 +190,7 @@
    host.appendChild(card);
   }
  }
- async function updateStation(chosen,request,modelTemp){
+ async function updateStation(chosen,request,modelTemp,modeledConflict=false){
   const endpoint='https://moraga-live-observations.russo-matt.workers.dev/observations?city='+encodeURIComponent(chosen.toLowerCase());
   try{
    const response=await fetch(endpoint,{cache:'no-store'});
@@ -384,26 +420,7 @@ function nwsWeatherOutlook(afd,d,h,now){
         await shared.loadDailyModelSkill();
        }catch(e){console.warn('Moraga skill unavailable',e)}
       }
-      const blend=(field,i)=>{
-       const phase=field==='high_f'?'high':'low';
-       const entries=Object.entries(f.temperature_models||{}).map(([name,m])=>{
-        const idx=Array.isArray(m.dates)?m.dates.indexOf(d.time[i]):i;
-        return [name,idx>=0?m[field]?.[idx]:null];
-       }).filter(([name,v])=>Number.isFinite(v));
-       if(!entries.length)return null;
-       const names=entries.map(([name])=>name);
-       if(shared){
-        const weights=shared.hybridWeights(shared.skillWeights(skillRows,i,phase,names),entries,i);
-        const bias=chosen==='Moraga'?shared.localBias(skillRows,i,phase,names):{corrections:{}};
-        const corrected=shared.correctedEntries(entries,bias);
-        const value=parseFloat(shared.skillBlend(corrected,weights));
-        return Number.isFinite(value)?value:null;
-       }
-       const ens=entries.filter(([n])=>n==='EPS'||n==='GEFS'),det=entries.filter(([n])=>n!=='EPS'&&n!=='GEFS');
-       const mean=xs=>xs.reduce((s,[n,v])=>s+v,0)/xs.length;
-       const share=i<3?.15:i<7?.40:.65;
-       return ens.length&&det.length?mean(det)*(1-share)+mean(ens)*share:mean(entries);
-      };
+      const blend=(field,i)=>feedBlend(f,d.time[i],i,field,skillRows,chosen==='Moraga');
       for(let i=0;i<10;i++){
        const hi=blend('high_f',i),lo=blend('low_f',i);
        if(Number.isFinite(hi)&&Number.isFinite(lo)&&hi>=lo){d.temperature_2m_max[i]=hi;d.temperature_2m_min[i]=lo}
@@ -416,6 +433,7 @@ function nwsWeatherOutlook(afd,d,h,now){
     }
    }catch(error){console.warn('Local blended forecast unavailable',error)}
    if(request!==revision)return;
+   applyMoragaBlend(d);
    // Modeled current conditions are provisional until verified against local station data.
    // Never present a current value above today's forecast high as a trusted station reading.
    const modeledNow=data.current?.temperature_2m;
@@ -465,7 +483,7 @@ function nwsWeatherOutlook(afd,d,h,now){
    }catch(error){console.warn('Short-range model feed unavailable',error)}
    renderHourly(hourlyForecast,data.current?.time);
    set('public-short-range-source',shortRangeSources?'24-hour guidance: '+shortRangeSources+' blended; refreshed with the model collector.':'24-hour guidance: Open-Meteo fallback; dedicated short-range blend unavailable.');
-   updateStation(chosen,request,data.current?.temperature_2m);
+   updateStation(chosen,request,data.current?.temperature_2m,modeledConflict);
   }catch(err){
    if(request!==revision)return;
    console.warn('Live forecast failed; recovering from published location guidance',err);
@@ -494,12 +512,13 @@ function nwsWeatherOutlook(afd,d,h,now){
     };
     const daily={
      time:feed.dates,
-     temperature_2m_max:feed.dates.map(date=>temperatures(date,'high_f')),
-     temperature_2m_min:feed.dates.map(date=>temperatures(date,'low_f')),
+     temperature_2m_max:feed.dates.map((date,i)=>feedBlend(feed,date,i,'high_f',[],chosen==='Moraga')??temperatures(date,'high_f')),
+     temperature_2m_min:feed.dates.map((date,i)=>feedBlend(feed,date,i,'low_f',[],chosen==='Moraga')??temperatures(date,'low_f')),
      precipitation_sum:feed.dates.map(date=>Number(feed.rain_guidance?.[date]?.expected_inches)||0),
      precipitation_probability_max:feed.dates.map(date=>Number(feed.ensemble_rain_probability_pct?.[date])||0),
      weather_code:feed.dates.map(codeFor)
     };
+    applyMoragaBlend(daily);
     renderDays(daily,feed);
     set('public-today-title',"TODAY'S FORECAST");
     set('public-today-high',fmt(daily.temperature_2m_max[0]));
@@ -1309,8 +1328,10 @@ const rangeStart=Math.max(0,Math.min(100,((Number.isFinite(lowValue)?lowValue:20
 const rangeEnd=Math.max(rangeStart,Math.min(100,((Number.isFinite(highValue)?highValue:110)-20)/90*100));
 const rangeGradient='linear-gradient(90deg,'+lowColor+','+spectrum((lowValue+highValue)/2)+','+highColor+')';
 
+DWL.publishBlend(date,highValue,lowValue);
 return DWL.dayCard({cls:'day-forecast',today:date===today,day,date:label,high:highValue,low:lowValue,highText,lowText,iconCode:obsCode,condition:String(condition[1]).toLowerCase().replace(/\b[a-z]/g,c=>c.toUpperCase()).replace(/\b(Of|And|The)\b/g,c=>c.toLowerCase()),pop:(remainingDayDry||!Number.isFinite(dailyRainChance[date])||Math.round(dailyRainChance[date]/10)*10<20?'':Math.min(100,Math.round(dailyRainChance[date]/10)*10)+'%'),amount:(Number.isFinite(dailyRainChance[date])&&Math.round(dailyRainChance[date]/10)*10>=20&&rainAmountText?rainAmountText.replace(/ in$/,'″'):''),extra:'<details class="forecast-detail"><summary aria-label="Show model range">Model details</summary><p>High '+spread(highs)+'<br>Low '+spread(lows)+'<br>Expected rainfall: '+(rainAmountText||'unavailable')+' ('+rainfallSourceLabel+') · '+rainTiming+'<br>Ensemble thresholds: '+thresholdText+'<br>Rain chance source: '+(rainChanceSource[date]||'unavailable')+' · NWS: '+(rainChanceComparison[date]?.nws??'—')+'% · Open-Meteo: '+(rainChanceComparison[date]?.openMeteo??'—')+'%<br>Raw weighted high: '+skillBlend(highEntries,wh)+' · Local adjustment: '+adjustmentLabel(highEntries,correctedHighs,wh)+'<br>Raw weighted low: '+skillBlend(lowEntries,wl)+' · Local adjustment: '+adjustmentLabel(lowEntries,correctedLows,wl)+'</p><h5>High temperature models</h5>'+detailTable(highEntries,bh,wh)+'<h5>Low temperature models</h5>'+detailTable(lowEntries,bl,wl)+'<p class="diagnostic-note">Bias = model minus observed station temperature; adjustment is the guarded correction actually applied. Recent hourly samples are provisional proxies for daily extremes. High weights: '+weightLabel(wh)+'; low weights: '+weightLabel(wl)+'.</p></details>'});
 }).join('')+'<div class="temp-spectrum-key" aria-label="Fixed temperature color scale from 20 to 110 degrees Fahrenheit"><div class="temp-spectrum-bar"></div><div class="temp-spectrum-labels"><span>20°</span><span>30°</span><span>40°</span><span>50°</span><span>60°</span><span>70°</span><span>80°</span><span>90°</span><span>100°</span><span>110°</span></div><div class="temp-spectrum-caption">Temperature color scale (°F) · highs and lows</div></div></div>';
+DWL.blendReady();
 // Keep forecast diagnostics available by tapping a day card, without visible info icons.
 el.querySelectorAll('.day-forecast details').forEach((detail,index)=>{
  const card=detail.closest('.day-forecast');
