@@ -1908,6 +1908,12 @@ el.innerHTML=html;
 </script><script>
 (async function(){
 const el=document.getElementById('ten-day-results');
+// Scoped icon renderer: the public-site iconMarkup is not visible inside this module.
+function iconMarkup(code){
+ const asset=code===0?'sun':code===1?'mostlySun':code===2?'partly':code===3?'overcast':code===45||code===48?'fog':code>=95?'storm':code>=80&&code<=82?'showersSun':code>=61&&code<=67?'rain':code>=51&&code<=57?'drizzle':code>=71&&code<=77?'overcast':'mostlySun';
+ return '<img class="unified-weather-photo public-observatory-icon" src="weather-icons/'+asset+'.png" alt="" loading="lazy" decoding="async">';
+}
+
 const dateKey=d=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
 
 /* Compare only paired station hours and similar retrieval lead times.
