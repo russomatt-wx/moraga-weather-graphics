@@ -1332,7 +1332,8 @@ body:not(.public-mode) #observatory-return{display:none!important}
  }
  function iconMarkup(code){
   const asset=code===0?'sun':code===1?'mostlySun':code===2?'partly':code===3?'overcast':code===45||code===48?'fog':code>=95?'storm':code>=80&&code<=82?'showersSun':code>=61&&code<=67?'rain':code>=51&&code<=57?'drizzle':code>=71&&code<=77?'overcast':'mostlySun';
-  return '<img class="unified-weather-photo public-observatory-icon" src="weather-icons/'+asset+'.png" alt="" loading="lazy" decoding="async">';
+  const symbol=({sun:'☀️',mostlySun:'🌤️',partly:'⛅',overcast:'☁️',fog:'🌫️',storm:'⛈️',showersSun:'🌦️',rain:'🌧️',drizzle:'🌦️'})[asset]||'☁️';
+  return '<span class="diablo-simple-icon public-observatory-icon" role="img" aria-label="Weather">'+symbol+'</span>';
  }
  function updatePublicCurrentAccent(temperature){
   const card=el('public-shell')?.querySelector('.public-obs-card');
@@ -1911,7 +1912,8 @@ const el=document.getElementById('ten-day-results');
 // Scoped icon renderer: the public-site iconMarkup is not visible inside this module.
 function iconMarkup(code){
  const asset=code===0?'sun':code===1?'mostlySun':code===2?'partly':code===3?'overcast':code===45||code===48?'fog':code>=95?'storm':code>=80&&code<=82?'showersSun':code>=61&&code<=67?'rain':code>=51&&code<=57?'drizzle':code>=71&&code<=77?'overcast':'mostlySun';
- return '<img class="unified-weather-photo public-observatory-icon" src="weather-icons/'+asset+'.png" alt="" loading="lazy" decoding="async">';
+ const symbol=({sun:'☀️',mostlySun:'🌤️',partly:'⛅',overcast:'☁️',fog:'🌫️',storm:'⛈️',showersSun:'🌦️',rain:'🌧️',drizzle:'🌦️'})[asset]||'☁️';
+  return '<span class="diablo-simple-icon public-observatory-icon" role="img" aria-label="Weather">'+symbol+'</span>';
 }
 
 const dateKey=d=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
@@ -4292,6 +4294,12 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  }
  #ten-day #ten-day-results .moraga-condition-photo{height:45px!important;top:0!important;object-fit:contain!important}
 }
+
+/* Stable native weather symbols: no photo tiles, masks, or network image assets. */
+#ten-day #ten-day-results .moraga-condition-photo{display:none!important}
+#ten-day #ten-day-results .moraga-icon-stack .moraga-condition-svg{visibility:visible!important}
+#ten-day #ten-day-results .moraga-icon-stack.photo-ready .moraga-condition-svg{visibility:visible!important}
+#public-shell .diablo-simple-icon{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:100%!important;font-size:36px!important;line-height:1!important;background:transparent!important;filter:none!important;mask:none!important;-webkit-mask:none!important}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
