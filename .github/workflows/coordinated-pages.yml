@@ -38,7 +38,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout latest weather graphics
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: main
       - name: Recover missed 10-day forecast schedule
@@ -302,11 +302,11 @@ jobs:
                   print(f'::warning::{name} unavailable or invalid ({exc}); publishing site assets without claiming forecast freshness')
           PY
       - name: Configure Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
       - name: Upload site
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: .
       - name: Deploy site
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

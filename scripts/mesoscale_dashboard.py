@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Model-only East Bay transect and Moraga hourly outlook; never label model output as observations."""
-import json, urllib.request, urllib.parse
+import json, time, urllib.request, urllib.parse, urllib.error
 from datetime import datetime,timezone
 from pathlib import Path
 import matplotlib
@@ -29,7 +29,17 @@ def fetch(lat,lon,model=None):
     q={"latitude":lat,"longitude":lon,"hourly":"temperature_2m,dew_point_2m,wind_speed_10m,wind_direction_10m,precipitation_probability","temperature_unit":"fahrenheit","wind_speed_unit":"mph","timezone":"America/Los_Angeles","past_hours":1,"forecast_hours":97}
     if model:q["models"]=model
     url="https://api.open-meteo.com/v1/forecast?"+urllib.parse.urlencode(q)
-    with urllib.request.urlopen(urllib.request.Request(url,headers={"User-Agent":"MoragaWeatherGraphics/1.0"}),timeout=45) as f: d=json.load(f)
+    # Retry transient network failures (TLS handshake timeouts, resets, 5xx/429)
+    # so one slow Open-Meteo response doesn't fail the whole scheduled run.
+    for attempt in range(4):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url,headers={"User-Agent":"MoragaWeatherGraphics/1.0"}),timeout=45) as f: d=json.load(f)
+            break
+        except urllib.error.HTTPError as exc:
+            if exc.code not in (429,500,502,503,504) or attempt==3:raise
+        except (urllib.error.URLError,TimeoutError,ConnectionError,json.JSONDecodeError):
+            if attempt==3:raise
+        time.sleep(5*(2**attempt))
     if "hourly" not in d:raise RuntimeError(str(d))
     return d["hourly"]
 def main():
