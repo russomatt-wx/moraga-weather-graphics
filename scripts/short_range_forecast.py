@@ -1,14 +1,24 @@
 #!/usr/bin/env python3
 """Publish explicit RRFS CONUS guidance; fail closed rather than silently use GFS."""
-import csv,json,math,pathlib,urllib.parse,urllib.request
+import csv,json,math,pathlib,time,urllib.parse,urllib.request
 from datetime import datetime,timezone
 ROOT=pathlib.Path("hrrr-data");ROOT.mkdir(exist_ok=True)
 LAT,LON=37.8201932,-122.1193876
 def fetch(model):
     params={"latitude":LAT,"longitude":LON,"models":model,"hourly":"temperature_2m,precipitation","temperature_unit":"fahrenheit","precipitation_unit":"inch","forecast_hours":72,"timezone":"UTC"}
     url="https://api.open-meteo.com/v1/forecast?"+urllib.parse.urlencode(params)
-    with urllib.request.urlopen(urllib.request.Request(url,headers={"User-Agent":"MoragaWeatherObservatory/1.0"}),timeout=55) as f:
-        d=json.load(f)
+    # Retry transient TLS handshake, gateway, and network timeouts before declaring failure.
+    last_error=None
+    for attempt in range(4):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url,headers={"User-Agent":"MoragaWeatherObservatory/1.0","Accept":"application/json"}),timeout=75) as f:
+                d=json.load(f)
+            break
+        except (OSError, TimeoutError, ValueError) as exc:
+            last_error=exc
+            if attempt==3:
+                raise RuntimeError(f"RRFS provider unavailable after 4 attempts: {last_error}") from exc
+            time.sleep((attempt+1)*5)
     h=d.get("hourly") or {};t=h.get("time") or [];temp=h.get("temperature_2m") or [];rain=h.get("precipitation") or []
     if not (len(t)>=48 and len(t)==len(temp)==len(rain)):raise ValueError("Missing 48 hours of model data")
     rows=[]
