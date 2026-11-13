@@ -3824,6 +3824,17 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    width:100%!important;height:20px!important;
  }
 }
+
+/* Sleek sunrise branding: use transparent mark and native text, not a cropped screenshot. */
+#public-shell .diablo-banner-art{display:flex!important;align-items:center!important;gap:clamp(8px,2vw,18px)!important;aspect-ratio:auto!important;min-height:86px!important;overflow:visible!important;background:transparent!important}
+#public-shell .diablo-banner-art>img{position:static!important;display:block!important;width:clamp(96px,23vw,175px)!important;height:auto!important;max-width:35%!important;transform:none!important;object-fit:contain!important;flex:none!important}
+#public-shell .diablo-banner-art .diablo-transparent-wordmark{position:static!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;min-width:0!important;transform:none!important;opacity:1!important;visibility:visible!important}
+#public-shell .diablo-banner-art .diablo-transparent-wordmark strong{font-size:clamp(22px,5.2vw,43px)!important;line-height:1.08!important;color:#f5f9ff!important;white-space:normal!important}
+#public-shell .diablo-banner-art .diablo-transparent-wordmark small{font-size:clamp(8px,1.75vw,14px)!important;letter-spacing:.12em!important;color:#d4e5ef!important;white-space:normal!important}
+.diablo-banner-observatory{display:none!important}
+.diablo-observatory-lockup{display:flex!important}
+.diablo-observatory-lockup .diablo-brand-symbol{display:none!important}
+.diablo-observatory-lockup:before{content:"";display:block;flex:none;width:clamp(90px,15vw,145px);height:78px;background:url("./diablo-sunrise-sleek.svg?v=1") center/contain no-repeat}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
