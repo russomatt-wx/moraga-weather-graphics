@@ -3957,6 +3957,54 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
   overflow:visible!important;
  }
 }
+
+/* 2026-11-12 brand lockup: one-line geometric wordmark on both views. */
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&display=swap');
+#public-shell .diablo-banner-art .diablo-transparent-wordmark strong,
+.diablo-banner-observatory .diablo-transparent-wordmark strong{
+ font-family:'Oxanium','Arial Narrow',sans-serif!important;
+ font-weight:700!important;letter-spacing:-.055em!important;
+ text-transform:uppercase!important;white-space:nowrap!important;
+ overflow-wrap:normal!important;word-break:keep-all!important;
+ font-size:clamp(17px,3.25vw,45px)!important;line-height:1.12!important;
+}
+#public-shell .diablo-banner-art .diablo-transparent-wordmark strong span,
+.diablo-banner-observatory .diablo-transparent-wordmark strong span{
+ display:inline!important;white-space:nowrap!important;
+}
+#public-shell .diablo-banner-art .diablo-transparent-wordmark small,
+.diablo-banner-observatory .diablo-transparent-wordmark small{
+ font-size:clamp(8px,1.25vw,16px)!important;letter-spacing:.12em!important;
+ white-space:nowrap!important;line-height:1.5!important;margin-top:7px!important;
+}
+@media(max-width:760px){
+ #public-shell .diablo-banner-art,.diablo-banner-observatory{
+   gap:clamp(5px,1.8vw,12px)!important;min-height:84px!important;
+ }
+ #public-shell .diablo-banner-art>img,.diablo-banner-observatory>img{
+   flex:0 0 21%!important;width:21%!important;max-width:115px!important;
+ }
+ #public-shell .diablo-banner-art .diablo-transparent-wordmark,
+ .diablo-banner-observatory .diablo-transparent-wordmark{
+   flex:1 1 0!important;min-width:0!important;
+ }
+ #public-shell .diablo-banner-art .diablo-transparent-wordmark strong,
+ .diablo-banner-observatory .diablo-transparent-wordmark strong{
+   font-family:'Oxanium','Arial Narrow',sans-serif!important;
+   font-size:clamp(13px,3.6vw,24px)!important;
+   white-space:nowrap!important;letter-spacing:-.075em!important;
+ }
+ #public-shell .diablo-banner-art .diablo-transparent-wordmark strong span,
+ .diablo-banner-observatory .diablo-transparent-wordmark strong span{
+   display:inline!important;white-space:nowrap!important;
+ }
+ #public-shell .diablo-banner-art .diablo-transparent-wordmark small,
+ .diablo-banner-observatory .diablo-transparent-wordmark small{
+   font-size:clamp(6px,1.48vw,10px)!important;
+   white-space:nowrap!important;letter-spacing:.065em!important;
+   margin-top:5px!important;
+ }
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
