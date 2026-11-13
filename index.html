@@ -4005,6 +4005,34 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    margin-top:5px!important;
  }
 }
+
+/* Compact mobile 10-day cards without sacrificing weather descriptions. */
+@media(max-width:760px){
+ #ten-day #ten-day-results .ten-day-grid .day-forecast{
+   grid-template-rows:108px!important;
+   min-height:108px!important;height:108px!important;
+   padding:4px 7px!important;overflow:hidden!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition,
+ #ten-day #ten-day-results .ten-day-grid .day-forecast:has(.day-pop:not(:empty)) .day-condition{
+   height:100px!important;min-height:0!important;max-height:100px!important;
+   gap:1px!important;justify-content:center!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>span{
+   flex:0 0 45px!important;height:45px!important;
+   min-height:45px!important;max-height:45px!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>small{
+   flex:0 0 auto!important;min-height:0!important;
+   font-size:clamp(10px,2.5vw,13px)!important;
+   line-height:1.12!important;padding:0!important;margin:0!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>.day-pop{
+   flex:0 0 auto!important;min-height:17px!important;
+   font-size:clamp(10px,2.5vw,13px)!important;
+   line-height:1.1!important;margin:1px 0 0!important;
+ }
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
