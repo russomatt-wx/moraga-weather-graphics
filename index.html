@@ -1455,6 +1455,53 @@ body:not(.public-mode) #observatory-return{display:none!important}
    }
   }
  }
+
+// NWS Bay Area forecast discussion supplies synoptic context; local model totals stay local.
+let nwsDiscussionCache=null;
+async function getNwsDiscussion(){
+ if(nwsDiscussionCache&&Date.now()-nwsDiscussionCache.checked<30*60*1000)return nwsDiscussionCache.value;
+ let value=null;
+ try{
+  const listing=await fetch('https://api.weather.gov/products/types/AFD/locations/MTR',{headers:{Accept:'application/geo+json'},cache:'no-store'});
+  if(!listing.ok)throw Error('NWS discussion listing unavailable');
+  const items=(await listing.json())['@graph']||[];
+  const item=items[0];
+  if(!item?.id)throw Error('No NWS discussion');
+  const response=await fetch('https://api.weather.gov/products/'+encodeURIComponent(item.id),{cache:'no-store'});
+  if(!response.ok)throw Error('NWS discussion unavailable');
+  const product=await response.json();
+  const issued=Date.parse(product.issuanceTime||item.issuanceTime||'');
+  if(!Number.isFinite(issued)||Date.now()-issued>18*3600000||issued>Date.now()+300000)throw Error('NWS discussion is stale');
+  const raw=String(product.productText||'');
+  const section=raw.match(/\\.\\.(?:SYNOPSIS|SHORT TERM|DISCUSSION)\\.\\.[^\\n]*\\n([\\s\\S]*?)(?=\\n\\s*\\.\\.(?:LONG TERM|AVIATION|MARINE|FIRE WEATHER|HYDROLOGY|BEACHES|MTR WATCHES|UPDATE)\\.|\\n&&|$)/i);
+  const text=(section?.[1]||'').replace(/\\n/g,' ').replace(/\\s+/g,' ').trim();
+  if(text.length<50)throw Error('NWS section unavailable');
+  value={text,issued};
+ }catch(err){console.warn('NWS AFD not available; using local forecast only',err)}
+ nwsDiscussionCache={checked:Date.now(),value};
+ return value;
+}
+function nwsWeatherOutlook(afd,d,h,now){
+ const fallback=weatherDiscussion(d,h,now);
+ if(!afd)return fallback;
+ const sentences=afd.text.match(/[^.!?]+[.!?]+/g)||[];
+ const relevant=sentences.map(x=>x.trim()).filter(x=>x.length>=35&&x.length<=240&&!/\\b(?:airport|terminal|TAF|runway|marine zone|knots|kt|flight rules)\\b/i.test(x));
+ const context=relevant.slice(0,2).join(' ');
+ if(!context)return fallback;
+ const clock=new Date();
+ const hour=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',hourCycle:'h23'}).format(clock));
+ const date=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(clock);
+ const index=d.time?.[0]===date&&hour>=18?1:0;
+ const amount=Number(d.precipitation_sum?.[index]);
+ const chance=Number(d.precipitation_probability_max?.[index]);
+ const high=Number(d.temperature_2m_max?.[index]);
+ const label=index===1?'Tomorrow':'Today';
+ let local=label+' in this location: ';
+ local+=Number.isFinite(chance)&&chance>=30?'rain chances near '+Math.round(chance/10)*10+'%':'limited rain chances';
+ if(Number.isFinite(amount)&&amount>=.01)local+=', with around '+amount.toFixed(2)+' inches in the local forecast';
+ if(Number.isFinite(high)&&!(index===0&&hour>=15))local+=', and a high near '+Math.round(high)+'°';
+ return context+' '+local+'.';
+}
  function weatherDiscussion(d,h,now){
   const days=d.time||[];
   if(!days.length)return 'The latest forecast discussion is temporarily unavailable.';
@@ -1634,6 +1681,7 @@ body:not(.public-mode) #observatory-return{display:none!important}
    set('public-data-notice',(blended?'Daily forecast: ECMWF/GFS/ICON/GEM with EPS/GEFS ensemble blending and ensemble rainfall for ':'Daily blended model feed unavailable; temporary Open-Meteo fallback for ')+chosen+'. Current temperature and hourly detail remain Open-Meteo guidance, not station observations. Updated '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'.');
    renderDays(d,publicForecastFeed);
    set('public-discussion',weatherDiscussion(d,data.hourly,data.current));
+   getNwsDiscussion().then(afd=>{if(request===revision)set('public-discussion',nwsWeatherOutlook(afd,d,data.hourly,data.current));});
    let hourlyForecast=data.hourly,shortRangeSources='';
    try{
     const shortResponse=await fetch(feedName+'_short_range_24h.json?t='+Date.now(),{cache:'no-store'});
