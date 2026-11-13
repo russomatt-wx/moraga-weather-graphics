@@ -1,6 +1,6 @@
 {
   "status": "unavailable",
-  "retrieved_utc": "2026-11-13T05:21:38.932254+00:00",
+  "retrieved_utc": "2026-11-13T05:47:11.164437+00:00",
   "source_verified": false,
   "reason": "<urlopen error _ssl.c:983: The handshake operation timed out>"
 }
