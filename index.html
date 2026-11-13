@@ -1648,25 +1648,34 @@ async function getNwsDiscussion(){
  return value;
 }
 function nwsWeatherOutlook(afd,d,h,now){
- const fallback=weatherDiscussion(d,h,now);
- if(!afd)return fallback;
- const sentences=afd.text.match(/[^.!?]+[.!?]+/g)||[];
- const relevant=sentences.map(x=>x.trim()).filter(x=>x.length>=35&&x.length<=240&&!/\b(?:airport|terminal|TAF|runway|marine zone|knots|kt|flight rules)\b/i.test(x));
- const context=relevant.slice(0,2).join(' ');
- if(!context)return fallback;
- const clock=new Date();
- const hour=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',hourCycle:'h23'}).format(clock));
- const date=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(clock);
- const index=d.time?.[0]===date&&hour>=18?1:0;
- const amount=Number(d.precipitation_sum?.[index]);
- const chance=Number(d.precipitation_probability_max?.[index]);
- const high=Number(d.temperature_2m_max?.[index]);
- const label=index===1?'Tomorrow':'Today';
- let local=label+' in this location: ';
- local+=Number.isFinite(chance)&&chance>=30?'rain chances near '+Math.round(chance/10)*10+'%':'limited rain chances';
- if(Number.isFinite(amount)&&amount>=.01)local+=', with around '+amount.toFixed(2)+' inches in the local forecast';
- if(Number.isFinite(high)&&!(index===0&&hour>=15))local+=', and a high near '+Math.round(high)+'°';
- return context+' '+local+'.';
+ const localTime=new Date();
+ const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',hourCycle:'h23'}).formatToParts(localTime);
+ const part=k=>parts.find(x=>x.type===k)?.value||'';
+ const today=part('year')+'-'+part('month')+'-'+part('day');
+ const hour=Number(part('hour'));
+ const stamp=today+'T'+String(hour).padStart(2,'0')+':00';
+ const location=city==='Moraga'?'Moraga':subtitles[city]||city;
+ const hourly=(h?.time||[]).map((t,i)=>({t,prob:Number(h.precipitation_probability?.[i]),rain:Number(h.precipitation?.[i]),temp:Number(h.temperature_2m?.[i])})).filter(x=>x.t>=stamp).slice(0,72);
+ const first24=hourly.slice(0,24),next48=hourly.slice(24);
+ const sum=a=>a.reduce((v,x)=>v+(Number.isFinite(x.rain)?Math.max(0,x.rain):0),0);
+ const wetHours=first24.filter(x=>(Number.isFinite(x.prob)&&x.prob>=50)||(Number.isFinite(x.rain)&&x.rain>=.03));
+ const fmt=v=>v.toFixed(2)+' inches';
+ const modelText=first24.length?'Local hourly model guidance indicates '+(wetHours.length>=8?'periods of rain':wetHours.length>=2?'intermittent rain or showers':'limited additional rainfall')+' over the next 24 hours'+(sum(first24)>=.01?', with roughly '+fmt(sum(first24))+' forecast in that period':'')+'.':'Local hourly model timing is temporarily unavailable.';
+ const later=next48.length&&sum(next48)>=.1?' Model guidance also indicates another '+fmt(sum(next48))+' during hours 24–72, although timing and amounts remain uncertain.':'';
+ if(!afd){
+  return 'The latest NWS Bay Area Area Forecast Discussion is unavailable or out of date. '+modelText+later+' This is model-only guidance, not a verified meteorological discussion.';
+ }
+ const raw=afd.text.replace(/\\s+/g,' ').trim();
+ const sentences=(raw.match(/[^.!?]+[.!?]+/g)||[]).map(x=>x.trim()).filter(x=>x.length>=35&&x.length<=300&&!/\\b(?:airport|terminal|TAF|runway|flight rules|marine zone)\\b/i.test(x));
+ const selected=[];
+ const patterns=[/front|frontal|rain band|atmospheric river|trough|upper.low|cold.air|post.frontal/i,/showers|precipitation|rainfall|heavy rain|storm/i,/sunday|monday|tomorrow|weekend|next system|another system|later/i];
+ for(const pattern of patterns){const hit=sentences.find(x=>pattern.test(x)&&!selected.includes(x));if(hit)selected.push(hit);}
+ if(!selected.length&&sentences.length)selected.push(sentences[0]);
+ const age=Math.max(0,Math.round((Date.now()-afd.issued)/3600000));
+ const context=selected.slice(0,3).join(' ');
+ const historical=/moved through|passed through|earlier today|this morning|already|has passed|behind the front|post.frontal/i.test(context);
+ const note=historical?' The NWS discussion describes conditions that have already occurred; the following amounts refer only to future model hours.':' Forecast daily totals are not the same as rainfall still to come.';
+ return 'NWS Bay Area discussion (issued about '+age+' hour'+(age===1?'':'s')+' ago): '+context+' For '+location+', '+modelText+later+note;
 }
  function weatherDiscussion(d,h,now){
   const days=d.time||[];
@@ -1846,8 +1855,8 @@ function nwsWeatherOutlook(afd,d,h,now){
    set('public-summary',wet?'Rain is possible today ('+Math.min(100,Math.round(chance/10)*10)+'% chance). Expected total: '+rain(d.precipitation_sum[0])+'.':'Today: '+description(d.weather_code[0]).toLowerCase()+', with a high near '+fmt(d.temperature_2m_max[0])+'.');
    set('public-data-notice',(blended?'Daily forecast: ECMWF/GFS/ICON/GEM with EPS/GEFS ensemble blending and ensemble rainfall for ':'Daily blended model feed unavailable; temporary Open-Meteo fallback for ')+chosen+'. Current temperature and hourly detail remain Open-Meteo guidance, not station observations. Updated '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'.');
    renderDays(d,publicForecastFeed);
-   set('public-discussion',weatherDiscussion(d,data.hourly,data.current));
-   getNwsDiscussion().then(afd=>{if(request===revision)set('public-discussion',nwsWeatherOutlook(afd,d,data.hourly,data.current));});
+   set('public-discussion','Retrieving the latest NWS Bay Area forecast discussion and local hourly guidance…');
+   getNwsDiscussion().then(afd=>{if(request===revision)set('public-discussion',nwsWeatherOutlook(afd,d,data.hourly,data.current));}).catch(()=>{if(request===revision)set('public-discussion',nwsWeatherOutlook(null,d,data.hourly,data.current));});
    let hourlyForecast=data.hourly,shortRangeSources='';
    try{
     const shortResponse=await fetch(feedName+'_short_range_24h.json?t='+Date.now(),{cache:'no-store'});
