@@ -1,0 +1,276 @@
+/* Diablo Weather Lab — site stylesheet.
+   One source of truth for the shared look of both views (Local Weather and Observatory).
+   Change design values in :root; add new component rules here, never as inline <style> blocks.
+   Section-specific rules not yet rebuilt still live in legacy.css (loaded before this file). */
+
+:root {
+  color-scheme: dark;
+  --bg-top: #05284a;
+  --bg-mid: #03182d;
+  --bg-bottom: #020b17;
+  --panel: rgba(9, 31, 49, .82);
+  --panel-deep: rgba(4, 20, 34, .88);
+  --line: rgba(44, 196, 234, .48);
+  --line-soft: rgba(150, 200, 225, .22);
+  --accent: #19dcf6;
+  --accent-deep: #0a8fc2;
+  --gold: #ffbf2e;
+  --text: #f2f8ff;
+  --text-2: #cfdeea;
+  --muted: #9fb6c8;
+  --radius: 18px;
+  --radius-sm: 13px;
+  --gutter: 16px;
+  --font-ui: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-brand: "Michroma", "Outfit", -apple-system, sans-serif;
+  --glow: 0 0 16px -3px rgba(25, 220, 246, .45);
+}
+
+/* ---------- Page ---------- */
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  font-family: var(--font-ui);
+  background:
+    radial-gradient(ellipse 150% 1100px at 50% 0, var(--bg-top) 0%, var(--bg-mid) 45%, transparent 100%) no-repeat,
+    var(--bg-bottom);
+}
+h1, h2, h3, h4 { font-family: var(--font-ui); color: var(--text); }
+a { color: #7fdcf5; }
+
+/* View switching (Local Weather <-> Observatory) */
+#public-shell { display: none; }
+body.public-mode #public-shell { display: block; }
+body.public-mode > header,
+body.public-mode > main,
+body.public-mode > .dwl-toggle { display: none !important; }
+#observatory-return { display: none !important; }
+
+#public-shell,
+body > header,
+main {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+#public-shell, main { padding-bottom: 48px; }
+main > section { margin: 0 0 30px; scroll-margin-top: 72px; }
+
+/* ---------- Header ---------- */
+.dwl-header {
+  position: relative;
+  margin: 0 calc(-1 * var(--gutter));
+  padding: 26px var(--gutter) 40px;
+  text-align: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse 70% 60% at 50% 105%, rgba(16, 150, 214, .55), transparent 70%);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+@media (max-width: 700px) { .dwl-header { -webkit-mask-image: none; mask-image: none; } }
+.dwl-brand { display: flex; align-items: center; justify-content: center; gap: clamp(10px, 3vw, 18px); }
+.dwl-mark { width: clamp(92px, 27vw, 150px); height: auto; flex: none; filter: drop-shadow(0 0 9px rgba(25, 220, 246, .65)); }
+.dwl-wordmark {
+  display: flex; flex-direction: column; align-items: flex-start;
+  font-family: var(--font-brand); text-transform: uppercase; line-height: 1.12; text-align: left;
+}
+.dwl-wm-1, .dwl-wm-2 { font-size: clamp(17px, 5vw, 34px); letter-spacing: .03em; white-space: nowrap; -webkit-text-stroke: .05em currentColor; }
+.dwl-wm-1 { color: #fff; }
+.dwl-wm-2 { color: var(--accent); text-shadow: 0 0 14px rgba(25, 220, 246, .55); }
+.dwl-tagline {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  margin-top: 12px;
+  font-size: clamp(8.5px, 2.4vw, 12px); font-weight: 600; letter-spacing: .32em; text-transform: uppercase;
+  color: #dbe9f3; white-space: nowrap;
+}
+.dwl-tagline::before, .dwl-tagline::after {
+  content: ""; width: clamp(18px, 7vw, 48px); height: 2px; border-radius: 2px;
+  background: var(--accent); box-shadow: 0 0 8px var(--accent);
+}
+.dwl-ridge {
+  position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 34px;
+  fill: #031426; filter: drop-shadow(0 -3px 9px rgba(20, 170, 235, .8));
+}
+
+/* ---------- View toggle (small segmented control) ---------- */
+.dwl-toggle {
+  display: flex; width: max-content; margin: 4px auto 14px; padding: 3px; gap: 2px;
+  border: 1px solid var(--line-soft); border-radius: 999px; background: rgba(4, 20, 34, .75);
+}
+.dwl-toggle button,
+#public-shell .dwl-toggle button {
+  appearance: none; border: 0; cursor: pointer;
+  padding: 6px 14px; border-radius: 999px;
+  font: 600 12.5px/1.2 var(--font-ui); letter-spacing: .02em;
+  color: var(--muted); background: transparent;
+}
+.dwl-toggle button[aria-current="page"],
+#public-shell .dwl-toggle button[aria-current="page"] {
+  color: #fff;
+  background: linear-gradient(180deg, rgba(14, 110, 145, .9), rgba(7, 66, 92, .9));
+  box-shadow: inset 0 0 0 1px rgba(25, 220, 246, .7), 0 0 10px -2px rgba(25, 220, 246, .7);
+}
+
+/* ---------- Section tabs ---------- */
+main > nav {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+  margin: 0 calc(-1 * var(--gutter)) 16px; padding: 10px var(--gutter);
+  background: linear-gradient(180deg, rgba(3, 20, 36, .96), rgba(3, 20, 36, .86));
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+main > nav::-webkit-scrollbar { display: none; }
+main > nav a {
+  flex: none; display: inline-flex; align-items: center;
+  padding: 10px 16px; border-radius: var(--radius-sm);
+  border: 1.5px solid rgba(70, 170, 210, .5);
+  background: rgba(8, 30, 48, .8);
+  color: #e6f3fb; text-decoration: none; white-space: nowrap;
+  font: 500 15px/1 var(--font-ui);
+  transition: background .2s, box-shadow .2s, border-color .2s;
+}
+main > nav a.is-active {
+  border-color: var(--accent);
+  background: linear-gradient(180deg, #0b5f7e, #073f58);
+  box-shadow: 0 0 12px rgba(25, 220, 246, .5), inset 0 0 10px rgba(25, 220, 246, .3);
+}
+
+/* ---------- Section titles ---------- */
+.dwl-title { margin: 26px 2px 14px; }
+.dwl-title h2 {
+  display: flex; align-items: center; gap: 10px; margin: 0;
+  font: 700 clamp(21px, 5.6vw, 28px)/1.15 var(--font-ui);
+}
+.dwl-title h2::before {
+  content: ""; flex: none; width: 16px; height: 21px; background: var(--accent);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 21'%3E%3Cpath d='M8 0a8 8 0 0 0-8 8c0 5.6 8 13 8 13s8-7.4 8-13a8 8 0 0 0-8-8Zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 21'%3E%3Cpath d='M8 0a8 8 0 0 0-8 8c0 5.6 8 13 8 13s8-7.4 8-13a8 8 0 0 0-8-8Zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  filter: drop-shadow(0 0 6px var(--accent));
+}
+.dwl-title p {
+  margin: 7px 0 0 26px;
+  font: 500 12px/1.3 var(--font-ui); letter-spacing: .2em; text-transform: uppercase; color: var(--text-2);
+}
+.dwl-title p:empty { display: none; }
+
+.intro { margin: 34px 2px 14px; }
+.intro .kicker { display: none; }
+.intro h2 {
+  display: flex; align-items: center; gap: 11px; margin: 0;
+  font: 700 clamp(20px, 5.2vw, 26px)/1.2 var(--font-ui);
+}
+.intro h2::before {
+  content: ""; flex: none; width: 4px; height: 1.05em; border-radius: 2px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-deep)); box-shadow: 0 0 8px var(--accent);
+}
+.intro p { margin: 6px 0 0 15px; font: 400 14px/1.45 var(--font-ui); color: var(--muted); }
+
+.dwl-label {
+  margin: 12px 0 8px 4px;
+  font: 700 12px/1 var(--font-ui); letter-spacing: .16em; text-transform: uppercase; color: #8fe3f5;
+}
+
+/* ---------- Panels (one frame for every boxed area) ---------- */
+.card,
+.public-outlook,
+#public-shell .public-hero {
+  --public-current-accent: var(--accent);
+  box-sizing: border-box;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, var(--panel), var(--panel-deep));
+  box-shadow: var(--glow), inset 0 1px 0 rgba(255, 255, 255, .04);
+  padding: 16px;
+}
+.card > h3 { margin: 0 0 10px; font: 600 17px/1.3 var(--font-ui); color: var(--text); }
+.public-outlook { margin: 14px 0; }
+.public-outlook-title { font: 700 18px/1.3 var(--font-ui); margin-bottom: 6px; }
+.public-outlook-title span { margin-left: 6px; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.public-outlook p { margin: 0; font-size: 15px; line-height: 1.5; color: var(--text-2); }
+.public-short-range-source { margin: 8px 4px 0; font-size: 11px; color: var(--muted); }
+
+/* Chart frames inside panels */
+main .card .chart-viewport { border-radius: 12px; background: rgba(3, 16, 28, .6); box-shadow: 0 0 0 1px var(--line-soft); }
+main .card .chart-viewport img { background: transparent; border-radius: 12px; }
+
+/* The daily outlook article is a plain container: each day card is its own frame. */
+#ten-day { border: 0; background: none; box-shadow: none; padding: 0; }
+
+/* ---------- Forecast day cards (shared by both views; markup from js/dwl-components.js) ---------- */
+.dwl-days { display: flex; flex-direction: column; gap: 12px; margin: 0 0 18px; }
+.dwl-day {
+  --hi: #37b95a; --lo: #1cb5b8;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(66px, 21%) minmax(64px, 19%) minmax(0, 1fr) minmax(60px, 18%);
+  align-items: center;
+  min-height: 104px; padding: 12px 14px 12px 16px;
+  border: 2px solid transparent; border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, #0b2335, #061827) padding-box,
+    linear-gradient(100deg, var(--hi), var(--lo)) border-box;
+  box-shadow: 0 0 14px -3px var(--lo), inset 0 0 22px rgba(25, 220, 246, .07);
+}
+.dwl-day.is-today {
+  background:
+    linear-gradient(105deg, #1d2414, #0b2335 40%, #061827) padding-box,
+    linear-gradient(100deg, var(--gold), #ffe56b 25%, var(--accent) 75%) border-box;
+  box-shadow: 0 0 16px -3px rgba(255, 191, 46, .75), inset 0 0 22px rgba(255, 191, 46, .06);
+}
+.dwl-day[role="button"] { cursor: pointer; }
+.dwl-day[role="button"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.dwl-day-when {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+  align-self: stretch; justify-content: center;
+  padding-right: 8px; border-right: 1px solid var(--line-soft);
+}
+.dwl-day-when strong { font: 700 clamp(19px, 5.4vw, 24px)/1.05 var(--font-ui); text-transform: uppercase; letter-spacing: .01em; }
+.dwl-day-when span { font: 400 clamp(14px, 4vw, 17px)/1.2 var(--font-ui); text-transform: uppercase; color: var(--text-2); white-space: nowrap; }
+.dwl-pill {
+  display: inline-block; margin-bottom: 3px; padding: 3px 9px; border-radius: 999px;
+  background: var(--accent); color: #032233 !important;
+  font: 800 10.5px/1.2 var(--font-ui) !important; letter-spacing: .1em; text-transform: uppercase;
+}
+
+.dwl-day-hi, .dwl-day-lo {
+  font: 700 clamp(28px, 8.2vw, 40px)/1 var(--font-ui); letter-spacing: -.01em; white-space: nowrap;
+}
+.dwl-day-hi { padding-left: 12px; color: var(--hi); text-shadow: 0 0 14px color-mix(in srgb, var(--hi) 45%, transparent); }
+.dwl-day-lo {
+  align-self: stretch; display: flex; align-items: center; justify-content: flex-end;
+  padding-left: 8px; border-left: 1px solid var(--line-soft);
+  color: var(--lo); text-shadow: 0 0 14px color-mix(in srgb, var(--lo) 45%, transparent);
+}
+
+.dwl-day-sky { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 0; padding: 0 4px; }
+.dwl-icon { display: block; width: 72px; height: 54px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .35)); }
+.dwl-day-cond {
+  margin-top: 3px;
+  font: 600 clamp(10.5px, 3vw, 13px)/1.2 var(--font-ui); letter-spacing: .03em; text-transform: uppercase; color: #eef6fc;
+}
+.dwl-day-rain { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 3px; font: 500 clamp(13px, 3.7vw, 16px)/1.2 var(--font-ui); color: var(--text-2); }
+.dwl-day-amount { display: inline-flex; align-items: center; gap: 6px; }
+.dwl-day-amount i {
+  width: 9px; height: 12px; background: #2bc4ff;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 12'%3E%3Cpath d='M4.5 0S0 5.2 0 7.6A4.5 4.5 0 0 0 9 7.6C9 5.2 4.5 0 4.5 0Z'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 12'%3E%3Cpath d='M4.5 0S0 5.2 0 7.6A4.5 4.5 0 0 0 9 7.6C9 5.2 4.5 0 4.5 0Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+/* Observatory cards open their diagnostics in a panel; the inline <details> is moved there by script. */
+.dwl-day > details { display: none; }
+
+@media (max-width: 360px) {
+  .dwl-day { grid-template-columns: minmax(58px, 21%) minmax(54px, 19%) minmax(0, 1fr) minmax(52px, 18%); padding: 10px 10px 10px 12px; }
+  .dwl-icon { width: 60px; height: 45px; }
+}
+@media (min-width: 700px) {
+  .dwl-day { min-height: 112px; padding: 14px 22px; }
+  .dwl-icon { width: 88px; height: 64px; }
+}
+
+/* Icons used outside day cards (hourly strip, current conditions) */
+#public-shell .public-hour .dwl-icon { width: 52px; height: 40px; margin: 4px auto; }
