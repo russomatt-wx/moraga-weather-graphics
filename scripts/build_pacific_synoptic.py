@@ -11,6 +11,8 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import dwl_chart_style as dwl
+dwl.apply()
 from matplotlib.colors import LinearSegmentedColormap, Normalize
 from matplotlib.cm import ScalarMappable
 import matplotlib.patheffects as pe
@@ -73,7 +75,7 @@ for key in ("pressure_msl","geopotential_height_500hPa","geopotential_height_100
 pressure=fields["pressure_msl"]
 thickness=(fields["geopotential_height_500hPa"]-fields["geopotential_height_1000hPa"])/10
 if not (940<np.nanmin(pressure)<1080 and 460<np.nanmean(thickness)<610):raise RuntimeError("Unexpected field units")
-fig=plt.figure(figsize=(11,10),facecolor="#122638")
+fig=plt.figure(figsize=(11,10),facecolor="#071b2c")
 ax=plt.axes(projection=ccrs.PlateCarree())
 ax.set_extent([-175,-105,20,65],crs=ccrs.PlateCarree())
 ax.set_facecolor("white")
@@ -152,19 +154,19 @@ for kind,iy,ix in chosen:
 ax.plot(-122.13,37.83,"o",ms=5,color="#222222",transform=ccrs.PlateCarree(),zorder=8)
 ax.text(-121.5,38.4,"MORAGA",color="#222222",fontsize=9,transform=ccrs.PlateCarree())
 fig.text(.06,.96,"PACIFIC SYNOPTIC • SURFACE + 1000–500 mb THICKNESS",
-         color="#e0edf7",fontsize=18,weight="bold")
+         color="#f2f8ff",fontsize=18,weight="bold")
 fig.text(.06,.924,"GFS sea-level pressure (gray, 8 hPa)  •  1000–500 mb thickness (shaded + dashed, dam)  •  540 dam (blue solid)",
-         color="#b8cbd9",fontsize=10)
+         color="#9fb6c8",fontsize=10)
 fig.text(.06,.025,f"GFS valid {valid:%d %b %Y %HZ}  |  Source: Open-Meteo / GFS",
-         color="#b8cbd9",fontsize=12)
+         color="#9fb6c8",fontsize=12)
 fig.subplots_adjust(left=.04,right=.98,bottom=.13,top=.895)
 bar_ax=fig.add_axes([.095,.085,.77,.018])
 sm=ScalarMappable(norm=norm,cmap=cmap)
 cb=fig.colorbar(sm,cax=bar_ax,orientation="horizontal",ticks=np.arange(480,595,6))
-cb.ax.tick_params(labelsize=10,colors="#e0edf7",pad=4)
-cb.outline.set_edgecolor("#829aad")
-fig.text(.875,.086,"dam",fontsize=10,color="#e0edf7")
-fig.savefig(OUT,dpi=175,facecolor="#122638")
+cb.ax.tick_params(labelsize=10,colors="#f2f8ff",pad=4)
+cb.outline.set_edgecolor("#9fb6c8")
+fig.text(.875,.086,"dam",fontsize=10,color="#f2f8ff")
+fig.savefig(OUT,dpi=175,facecolor="#071b2c")
 META.write_text(json.dumps({"gfs_valid_utc":valid.isoformat(),
  "fields":["sea-level pressure","1000-500 mb thickness"],"fronts":False,
  "thickness_color_range_dam":[480,594],"highlight_dam":540}))

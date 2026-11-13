@@ -378,7 +378,7 @@ body.chart-viewer-open{overflow:hidden}
 .method-note{margin-top:12px}
 /* ---- legacy block 21 ---- */
 .card>p{font-size:13px}
-.card img{background:#fff;border:1px solid #d5e0e9;max-width:100%;object-fit:contain}
+.card img{max-width:100%;object-fit:contain}
 .card a:focus-visible, summary:focus-visible{outline:2px solid #8ed8f3;outline-offset:3px}
 .card details{border-top:1px solid var(--wx-rule);padding-top:9px}
 .card details summary{font-size:12px;font-weight:650;color:#b9d8e8}

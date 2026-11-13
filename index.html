@@ -1583,7 +1583,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
 (async function(){
  const img=document.getElementById('temperature-guidance-image'),note=document.getElementById('temperature-chart-note');
  if(!img)return;
- const colors={GFS:'#2679b5',ECMWF:'#e88936',HRRR:'#419e55',NAM:'#cf4749',ICON:'#9372bb',GEM:'#856052'};
+ const colors={GFS:'#5aa9ff',ECMWF:'#ffbf2e',HRRR:'#37d67a',NAM:'#ff7a59',ICON:'#a78bfa',GEM:'#f472b6'};
  const sources=[['GFS','ncep_gfs_seamless'],['ECMWF','ecmwf_ifs025'],['HRRR','ncep_hrrr_conus'],['NAM','ncep_nam_conus'],['ICON','icon_seamless'],['GEM','gem_seamless']];
  const tz='America/Los_Angeles',lat=37.8201932,lon=-122.1193876;
  const fetched=await Promise.allSettled(sources.map(async ([name,model])=>{
@@ -1610,9 +1610,9 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
   const min=Math.floor((Math.min(...vals)-4)/10)*10,max=Math.ceil((Math.max(...vals)+4)/10)*10;
   const px=ms=>L+(ms-start)/(axisEnd-start)*(W-L-R);
   const py=v=>T+(max-v)/(max-min)*(H-T-B);
-  let svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'"><rect width="'+W+'" height="'+H+'" rx="15" fill="white"/><text x="'+L+'" y="43" font-family="Arial,sans-serif" font-size="25" font-weight="800" fill="#111">'+title+'</text>';
-  for(let v=min;v<=max;v+=10){const yy=py(v);svg+='<path d="M'+L+' '+yy+'H'+(W-R)+'" stroke="#e4e4e4"/>';for(const side of [L-13,W-R+13])svg+='<text x="'+side+'" y="'+(yy+4)+'" text-anchor="'+(side<L?'end':'start')+'" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#26394d"">'+v+'</text>'}
-  for(let ms=start;ms<=axisEnd;ms+=3*86400000){const xx=px(ms);svg+='<path d="M'+xx+' '+T+'V'+(H-B)+'" stroke="#94a3b8" stroke-dasharray="3 6" stroke-opacity=".65"/><text x="'+xx+'" y="'+(H-B+35)+'" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#26394d"">'+dayFmt.format(new Date(ms))+'</text>'}
+  let svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'"><rect width="'+W+'" height="'+H+'" rx="15" fill="#071b2c"/><text x="'+L+'" y="43" font-family="Outfit,Helvetica,Arial,sans-serif" font-size="25" font-weight="800" fill="#f2f8ff">'+title+'</text>';
+  for(let v=min;v<=max;v+=10){const yy=py(v);svg+='<path d="M'+L+' '+yy+'H'+(W-R)+'" stroke="#1e3a50"/>';for(const side of [L-13,W-R+13])svg+='<text x="'+side+'" y="'+(yy+4)+'" text-anchor="'+(side<L?'end':'start')+'" font-family="Outfit,Helvetica,Arial,sans-serif" font-size="22" font-weight="700" fill="#9fb6c8">'+v+'</text>'}
+  for(let ms=start;ms<=axisEnd;ms+=3*86400000){const xx=px(ms);svg+='<path d="M'+xx+' '+T+'V'+(H-B)+'" stroke="#5f7f96" stroke-dasharray="3 6" stroke-opacity=".65"/><text x="'+xx+'" y="'+(H-B+35)+'" text-anchor="middle" font-family="Outfit,Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#9fb6c8">'+dayFmt.format(new Date(ms))+'</text>'}
   for(const m of plotSeries){
    const points=m.time.map((t,i)=>({ms:Date.parse(t),v:m.temp[i],low:m.low?.[i],high:m.high?.[i]})).filter(p=>Number.isFinite(p.v)&&p.ms>=start&&p.ms<=axisEnd);
    if(!points.length)continue;
@@ -1623,8 +1623,8 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
    svg+='<polyline points="'+points.map(p=>px(p.ms).toFixed(1)+','+py(p.v).toFixed(1)).join(' ')+'" fill="none" stroke="'+m.color+'" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>';
   }
   const legendX=L+16;
-  plotSeries.forEach((m,i)=>{const xx=legendX+(i%3)*220,yy=75+Math.floor(i/3)*38;svg+='<path d="M'+xx+' '+yy+'h22" stroke="'+m.color+'" stroke-width="4"/><text x="'+(xx+27)+'" y="'+(yy+4)+'" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#26394d">'+m.name+'</text>'});
-  svg+='<rect x="'+L+'" y="'+T+'" width="'+(W-L-R)+'" height="'+(H-T-B)+'" fill="none" stroke="#777"/><text x="29" y="'+H/2+'" transform="rotate(-90 29 '+H/2+')" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#26394d">Temperature (°F)</text><text x="'+(W-29)+'" y="'+H/2+'" transform="rotate(90 '+(W-29)+' '+H/2+')" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#26394d">Temperature (°F)</text></svg>';
+  plotSeries.forEach((m,i)=>{const xx=legendX+(i%3)*220,yy=75+Math.floor(i/3)*38;svg+='<path d="M'+xx+' '+yy+'h22" stroke="'+m.color+'" stroke-width="4"/><text x="'+(xx+27)+'" y="'+(yy+4)+'" font-family="Outfit,Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#9fb6c8">'+m.name+'</text>'});
+  svg+='<rect x="'+L+'" y="'+T+'" width="'+(W-L-R)+'" height="'+(H-T-B)+'" fill="none" stroke="#2e5570"/><text x="29" y="'+H/2+'" transform="rotate(-90 29 '+H/2+')" font-family="Outfit,Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#9fb6c8">Temperature (°F)</text><text x="'+(W-10)+'" y="'+H/2+'" transform="rotate(90 '+(W-10)+' '+H/2+')" font-family="Outfit,Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#9fb6c8">Temperature (°F)</text></svg>';
   return URL.createObjectURL(new Blob([svg],{type:'image/svg+xml;charset=utf-8'}));
  };
  // Surface the actual chart source, so fallback PNGs cannot silently appear current.

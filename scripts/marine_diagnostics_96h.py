@@ -9,20 +9,8 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-plt.rcParams.update({"text.color":"#e0edf7","axes.labelcolor":"#dceaf5","axes.edgecolor":"#68849a","xtick.color":"#b8cbd9","ytick.color":"#b8cbd9","axes.titlecolor":"#e0edf7","legend.facecolor":"#193247","legend.edgecolor":"#526c80","legend.labelcolor":"#e0edf7","grid.linestyle":"--"})
-# Shared high-legibility typography for charts embedded on narrow screens.
-plt.rcParams.update({
-    "font.family": "DejaVu Sans",
-    "font.size": 14,
-    "font.weight": "semibold",
-    "axes.titlesize": 17,
-    "axes.titleweight": "bold",
-    "axes.labelsize": 14,
-    "axes.labelweight": "bold",
-    "xtick.labelsize": 12,
-    "ytick.labelsize": 12,
-    "legend.fontsize": 12,
-})
+import dwl_chart_style as dwl
+dwl.apply()
 
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -51,33 +39,33 @@ def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
     fig,ax=plt.subplots(figsize=(9,7.8))
     # Fixed margins keep date ticks and the source note in separate bands.
     fig.subplots_adjust(left=.16,right=.97,top=.86,bottom=.27)
-    fig.patch.set_facecolor("#122638");ax.set_facecolor("#122638")
+    fig.patch.set_facecolor("#071b2c");ax.set_facecolor("#071b2c")
     past=np.array([t<=cutoff for t in ts])
     future=np.array([t>=cutoff for t in ts])
-    ax.plot(np.array(ts)[past],vals[past],color="#69bdf5",linewidth=2.5,label="Recent model analysis")
-    ax.plot(np.array(ts)[future],vals[future],color="#ffae65",linewidth=2.5,label="Model forecast")
-    ax.axvline(cutoff,color="#b8d2e3",linestyle="--",linewidth=1.2,label="Now")
+    ax.plot(np.array(ts)[past],vals[past],color="#5aa9ff",linewidth=2.5,label="Recent model analysis")
+    ax.plot(np.array(ts)[future],vals[future],color="#ffbf2e",linewidth=2.5,label="Model forecast")
+    ax.axvline(cutoff,color="#c9dbe8",linestyle="--",linewidth=1.2,label="Now")
     if reference is not None:
-        ax.axhline(reference,color="#a6e3f4",linestyle=(0,(5,4)),linewidth=2.6,alpha=.95,zorder=2,label=f"Moraga {reference:g} ft")
-        ax.annotate(f"MORAGA · {reference:g} FT",xy=(.985,reference),xycoords=("axes fraction","data"),xytext=(-3,7),textcoords="offset points",ha="right",va="bottom",fontsize=10,fontweight="bold",color="#d6f5ff",bbox=dict(boxstyle="round,pad=0.2",facecolor="#122638",edgecolor="none",alpha=.88),zorder=5)
+        ax.axhline(reference,color="#19dcf6",linestyle=(0,(5,4)),linewidth=2.6,alpha=.95,zorder=2,label=f"Moraga {reference:g} ft")
+        ax.annotate(f"MORAGA · {reference:g} FT",xy=(.985,reference),xycoords=("axes fraction","data"),xytext=(-3,7),textcoords="offset points",ha="right",va="bottom",fontsize=10,fontweight="bold",color="#d6f5ff",bbox=dict(boxstyle="round,pad=0.2",facecolor="#071b2c",edgecolor="none",alpha=.88),zorder=5)
     if "pressure_gradient" in filename:
-        ax.axhline(0,color="#a6e3f4",linewidth=2.6,alpha=.95,zorder=2)
-        ax.annotate("0 hPa",xy=(.985,0),xycoords=("axes fraction","data"),xytext=(-3,6),textcoords="offset points",ha="right",va="bottom",fontsize=11,fontweight="bold",color="#d6f5ff",bbox=dict(boxstyle="round,pad=0.2",facecolor="#122638",edgecolor="none",alpha=.85))
+        ax.axhline(0,color="#19dcf6",linewidth=2.6,alpha=.95,zorder=2)
+        ax.annotate("0 hPa",xy=(.985,0),xycoords=("axes fraction","data"),xytext=(-3,6),textcoords="offset points",ha="right",va="bottom",fontsize=11,fontweight="bold",color="#d6f5ff",bbox=dict(boxstyle="round,pad=0.2",facecolor="#071b2c",edgecolor="none",alpha=.85))
     ax.set_title(title,fontsize=18,weight="bold",loc="left",pad=15)
     ax.set_xlabel("")
     ax.set_ylabel(ylabel)
-    ax.grid(axis="y",color="#91a9bc",alpha=.45,linestyle="--")
+    ax.grid(axis="y",color="#5f7f96",alpha=.45,linestyle="--")
     ax.tick_params(labelsize=12,pad=7)
     for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")
     ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
     ax.legend(loc="upper left",ncol=2,fontsize=11)
     import matplotlib.dates as mdates
     ax.xaxis.set_major_locator(mdates.DayLocator(interval=1,tz=ZONE))
-    ax.grid(axis="x", which="major", color="#91a9bc", linestyle=":", linewidth=1.1, alpha=.48)
+    ax.grid(axis="x", which="major", color="#5f7f96", linestyle=":", linewidth=1.1, alpha=.48)
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d",tz=ZONE))
     plt.setp(ax.get_xticklabels(),rotation=0,ha="center")
     import textwrap
-    fig.text(.16,.065,textwrap.fill(footnote,width=85),fontsize=9,color="#a9bfd0",va="bottom")
+    fig.text(.16,.065,textwrap.fill(footnote,width=85),fontsize=9,color="#9fb6c8",va="bottom")
     fig.savefig(ROOT/filename,dpi=155,bbox_inches="tight",facecolor=fig.get_facecolor())
     plt.close(fig)
 

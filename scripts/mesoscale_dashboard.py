@@ -6,20 +6,8 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-plt.rcParams.update({"text.color":"#e0edf7","axes.labelcolor":"#dceaf5","axes.edgecolor":"#68849a","xtick.color":"#b8cbd9","ytick.color":"#b8cbd9","axes.titlecolor":"#e0edf7","legend.facecolor":"#193247","legend.edgecolor":"#526c80","legend.labelcolor":"#e0edf7","grid.linestyle":"--"})
-# Shared high-legibility typography for charts embedded on narrow screens.
-plt.rcParams.update({
-    "font.family": "DejaVu Sans",
-    "font.size": 14,
-    "font.weight": "semibold",
-    "axes.titlesize": 17,
-    "axes.titleweight": "bold",
-    "axes.labelsize": 14,
-    "axes.labelweight": "bold",
-    "xtick.labelsize": 12,
-    "ytick.labelsize": 12,
-    "legend.fontsize": 12,
-})
+import dwl_chart_style as dwl
+dwl.apply()
 
 import matplotlib.dates as mdates
 from zoneinfo import ZoneInfo
@@ -47,10 +35,10 @@ def main():
     station={n:fetch(*p) for n,p in POINTS.items()}
     fig,axes=plt.subplots(3,1,figsize=(9,11),sharex=True,gridspec_kw={'height_ratios':[2.4,2.4,1.0]})
     fig.subplots_adjust(left=.10,right=.97,top=.87,bottom=.10,hspace=.38)
-    colors=["#1674ad","#17a398","#d8502d","#9356ab","#d3a029"]
+    colors=["#5aa9ff","#19dcf6","#ffbf2e","#a78bfa","#ff7a59"]
     for axis in axes:
-        axis.set_facecolor("#122638")
-    fig.patch.set_facecolor("#122638")
+        axis.set_facecolor("#071b2c")
+    fig.patch.set_facecolor("#071b2c")
     result={}
     for (name,h),c in zip(station.items(),colors):
         times=[datetime.fromisoformat(t).replace(tzinfo=TZ) for t in h["time"]]
@@ -72,10 +60,10 @@ def main():
         if value is not None and other is not None:
             delta_times.append(datetime.fromisoformat(stamp))
             delta.append(value-other)
-    axes[2].plot(delta_times,delta,color="#d8502d",linewidth=2.5,zorder=3)
-    axes[2].axhline(0,color="#64748b",linewidth=1.1,linestyle="--")
-    axes[2].fill_between(delta_times,delta,0,where=[v>=0 for v in delta],color="#d8502d",alpha=.12)
-    axes[2].fill_between(delta_times,delta,0,where=[v<0 for v in delta],color="#1674ad",alpha=.12)
+    axes[2].plot(delta_times,delta,color="#ffbf2e",linewidth=2.5,zorder=3)
+    axes[2].axhline(0,color="#5f7f96",linewidth=1.1,linestyle="--")
+    axes[2].fill_between(delta_times,delta,0,where=[v>=0 for v in delta],color="#ffbf2e",alpha=.12)
+    axes[2].fill_between(delta_times,delta,0,where=[v<0 for v in delta],color="#5aa9ff",alpha=.12)
     axes[2].set_title("Moraga − Oakland temperature gap",loc="left",weight="bold",fontsize=14,pad=8)
     axes[2].set_ylabel("ΔT (°F)")
     # Consistent midnight separators across all three panels, with day labels
@@ -84,37 +72,37 @@ def main():
     from matplotlib.ticker import FuncFormatter
     for ax in axes:
         ax.xaxis.set_minor_locator(midnight)
-        ax.grid(axis="x",which="minor",color="#91a9bc",alpha=.485,linewidth=1)
+        ax.grid(axis="x",which="minor",color="#5f7f96",alpha=.485,linewidth=1)
     from datetime import timedelta
     start=delta_times[0].replace(hour=0,minute=0,second=0,microsecond=0)+timedelta(days=1)
     end=delta_times[-1]
     cursor=start
     while cursor<=end:
-        axes[0].annotate(cursor.strftime("%a %b %-d"),xy=(cursor,1),xycoords=("data","axes fraction"),xytext=(4,3),textcoords="offset points",fontsize=9,color="#64748b",weight="bold",ha="left",va="bottom")
+        axes[0].annotate(cursor.strftime("%a %b %-d"),xy=(cursor,1),xycoords=("data","axes fraction"),xytext=(4,3),textcoords="offset points",fontsize=9,color="#5f7f96",weight="bold",ha="left",va="bottom")
         cursor+=timedelta(days=1)
-    axes[0].set_title("Temperature",loc="left",weight="bold",fontsize=16,pad=8)
+    axes[0].set_title("Temperature",loc="left",weight="bold",fontsize=16,pad=20)
     axes[0].set_ylabel("Temperature (°F)")
     axes[1].set_ylabel("Dew point (°F)")
     axes[1].set_title("Dew point",loc="left",weight="bold",fontsize=16,pad=8)
     for ax in axes:
-        ax.grid(axis="y",color="#91a9bc",alpha=.485);ax.grid(axis="x",which="major",color="#91a9bc",linestyle=":",linewidth=1.1,alpha=.48)
+        ax.grid(axis="y",color="#5f7f96",alpha=.485);ax.grid(axis="x",which="major",color="#5f7f96",linestyle=":",linewidth=1.1,alpha=.48)
         ax.tick_params(labelsize=15)
         for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")
         ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
-        ax.grid(axis="x",color="#91a9bc",linestyle=":",alpha=.48)
+        ax.grid(axis="x",color="#5f7f96",linestyle=":",alpha=.48)
         ax.tick_params(axis="both",labelsize=14,length=0,pad=6)
     axes[1].xaxis.set_major_locator(mdates.HourLocator(byhour=[0,12],tz=TZ))
     axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%a\n%-I %p",tz=TZ))
     handles,labels=axes[0].get_legend_handles_labels()
     fig.legend(handles,labels,loc="upper center",bbox_to_anchor=(.52,.965),ncol=3,frameon=False,fontsize=14)
-    fig.text(.075,.982,"BAY → VALLEY  |  96-HOUR MODEL FORECAST",fontsize=12,weight="bold",color="#27394a",va="top")
-    fig.text(.075,.035,"Model guidance · Open-Meteo best match · Not live observations",fontsize=10,color="#617184")
+    fig.text(.075,.982,"BAY → VALLEY  |  96-HOUR MODEL FORECAST",fontsize=12,weight="bold",color="#19dcf6",va="top")
+    fig.text(.075,.035,"Model guidance · Open-Meteo best match · Not live observations",fontsize=10,color="#9fb6c8")
     fig.savefig("moraga_marine_transect.png",dpi=155,bbox_inches="tight");plt.close(fig)
     # Compare actual independently requested model grids, not station measurements.
     models={"ECMWF":"ecmwf_ifs025","GFS":"ncep_gfs_seamless"}
     forecasts={};errors={}
     fig,ax=plt.subplots(figsize=(9,7.5),layout="constrained")
-    fig.patch.set_facecolor("#122638");ax.set_facecolor("#122638")
+    fig.patch.set_facecolor("#071b2c");ax.set_facecolor("#071b2c")
     for name,model in models.items():
         try:
             h=fetch(*POINTS["Moraga"],model=model)
@@ -126,12 +114,11 @@ def main():
         except Exception as e:errors[name]=str(e)
     if not forecasts:raise RuntimeError("No model forecasts available: "+str(errors))
     ax.set_title("Moraga | 48-hour temperature model comparison",loc="left",weight="bold",fontsize=15)
-    ax.set_ylabel("2 m temperature (°F)");ax.grid(axis="y",color="#91a9bc",alpha=.485);ax.grid(axis="x",which="major",color="#91a9bc",linestyle=":",linewidth=1.1,alpha=.48);ax.legend(fontsize=12)
+    ax.set_ylabel("2 m temperature (°F)");ax.grid(axis="y",color="#5f7f96",alpha=.485);ax.grid(axis="x",which="major",color="#5f7f96",linestyle=":",linewidth=1.1,alpha=.48);ax.legend(fontsize=12)
     ax.tick_params(labelsize=13)
     ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
     ax.xaxis.set_major_locator(mdates.HourLocator(interval=12,tz=TZ))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d\
-%I %p",tz=TZ))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %-d\n%-I %p",tz=TZ))
     fig.savefig("moraga_temperature_model_comparison.png",dpi=155,bbox_inches="tight");plt.close(fig)
     Path("moraga_mesoscale_data.json").write_text(json.dumps({"generated_utc":datetime.now(timezone.utc).isoformat(),"source":"Open-Meteo model data, not station observations","transect":result,"temperature_models":forecasts,"errors":errors,"requested_station_coordinates":{"latitude":37.8201932,"longitude":-122.1193876},"verification_status":"pending_station_observations_and_archived_forecasts"},indent=2)+"\n")
 if __name__=="__main__":main()

@@ -8,19 +8,8 @@ from zoneinfo import ZoneInfo
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-# Shared high-legibility typography for charts embedded on narrow screens.
-plt.rcParams.update({
-    "font.family": "DejaVu Sans",
-    "font.size": 14,
-    "font.weight": "semibold",
-    "axes.titlesize": 17,
-    "axes.titleweight": "bold",
-    "axes.labelsize": 14,
-    "axes.labelweight": "bold",
-    "xtick.labelsize": 12,
-    "ytick.labelsize": 12,
-    "legend.fontsize": 12,
-})
+import dwl_chart_style as dwl
+dwl.apply()
 
 import matplotlib.dates as mdates
 
@@ -29,10 +18,9 @@ LOCAL=ZoneInfo("America/Los_Angeles")
 MODELS={"ECMWF":"ecmwf_ifs025","GFS":"ncep_gfs_seamless"}
 FIELDS="geopotential_height_500hPa,temperature_850hPa"
 fig,axes=plt.subplots(2,1,figsize=(9,10),sharex=True,layout="constrained")
-colors={"ECMWF":"#d56b16","GFS":"#087e9a"}
-plt.rcParams.update({"text.color":"#e0edf7","axes.labelcolor":"#dceaf5","axes.edgecolor":"#68849a","xtick.color":"#b8cbd9","ytick.color":"#b8cbd9","axes.titlecolor":"#e0edf7","legend.facecolor":"#193247","legend.edgecolor":"#526c80","legend.labelcolor":"#e0edf7"})
-fig.patch.set_facecolor("#122638")
-for axis in axes:axis.set_facecolor("#122638")
+colors={"ECMWF":"#ffbf2e","GFS":"#19dcf6"}
+fig.patch.set_facecolor("#071b2c")
+for axis in axes:axis.set_facecolor("#071b2c")
 results={}
 for label,model in MODELS.items():
     query=urllib.parse.urlencode({"latitude":LAT,"longitude":LON,"hourly":FIELDS,"models":model,"timezone":"America/Los_Angeles","forecast_days":10})
@@ -86,19 +74,19 @@ axes[0].set_ylabel("Geopotential height (m)")
 axes[1].set_title("850 hPa temperature | air-mass evolution",loc="left",fontweight="bold")
 axes[1].set_ylabel("Temperature (°C)")
 for ax in axes:
-    ax.grid(axis="y",color="#91a9bc",alpha=.48,linestyle="--")
-    ax.grid(axis="x",which="major",color="#91a9bc",linestyle="--",linewidth=1,alpha=.48)
-    ax.tick_params(labelsize=13,colors="#b8cbd9")
-    ax.yaxis.label.set_color("#dceaf5")
-    ax.title.set_color("#e0edf7")
+    ax.grid(axis="y",color="#5f7f96",alpha=.48,linestyle="--")
+    ax.grid(axis="x",which="major",color="#5f7f96",linestyle="--",linewidth=1,alpha=.48)
+    ax.tick_params(labelsize=13,colors="#9fb6c8")
+    ax.yaxis.label.set_color("#f2f8ff")
+    ax.title.set_color("#f2f8ff")
     for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")
     ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
-    legend=ax.legend(loc="best",frameon=True,fontsize=13,facecolor="#193247",edgecolor="#526c80")
-    for label in legend.get_texts(): label.set_color("#e0edf7")
+    legend=ax.legend(loc="best",frameon=True,fontsize=13,facecolor="#0d2a40",edgecolor="#2e5570")
+    for label in legend.get_texts(): label.set_color("#f2f8ff")
 axes[1].xaxis.set_major_locator(mdates.DayLocator(interval=1,tz=LOCAL))
 axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d",tz=LOCAL))
-axes[1].tick_params(axis="x",rotation=30,colors="#b8cbd9")
+axes[1].tick_params(axis="x",rotation=30,colors="#9fb6c8")
 fig.suptitle("MORAGA | 10-DAY UPPER-AIR MODEL FORECAST",fontweight="bold",fontsize=18)
-fig.savefig("moraga_upper_air_10day.png",dpi=165,facecolor="#122638",bbox_inches="tight",pad_inches=.3)
+fig.savefig("moraga_upper_air_10day.png",dpi=165,facecolor="#071b2c",bbox_inches="tight",pad_inches=.3)
 plt.close(fig)
 Path("moraga_upper_air_10day.json").write_text(json.dumps({"generated_utc":datetime.now(timezone.utc).isoformat(),"requested_latitude":LAT,"requested_longitude":LON,"models":results},indent=2)+"\n")

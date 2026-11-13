@@ -11,19 +11,8 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-# Shared high-legibility typography for charts embedded on narrow screens.
-plt.rcParams.update({
-    "font.family": "DejaVu Sans",
-    "font.size": 14,
-    "font.weight": "semibold",
-    "axes.titlesize": 17,
-    "axes.titleweight": "bold",
-    "axes.labelsize": 14,
-    "axes.labelweight": "bold",
-    "xtick.labelsize": 12,
-    "ytick.labelsize": 12,
-    "legend.fontsize": 12,
-})
+import dwl_chart_style as dwl
+dwl.apply()
 
 
 LAT, LON = (float(os.environ.get('WX_FORECAST_LAT', '37.8201932')), float(os.environ.get('WX_FORECAST_LON', '-122.1193876')))  # Location-specific model collection
@@ -210,15 +199,11 @@ for i,day in enumerate(dates):
 
 now = datetime.now(timezone.utc)
 # Shared light chart style: readable on mobile, matching the observatory's other graphics.
-plt.rcParams.update({"font.family":"DejaVu Sans","font.size":14,"font.weight":"semibold",
-    "axes.edgecolor":"#68849a","axes.labelcolor":"#dceaf5",
-    "xtick.color":"#b8cbd9","ytick.color":"#b8cbd9",
-    "text.color":"#e0edf7","savefig.facecolor":"#122638"})
-fig, ax = plt.subplots(figsize=(9, 10.5), dpi=160, facecolor="#122638")
-ax.set_facecolor("#122638")
-colors = {"ECMWF":"#55c9df","GFS":"#ffad64","ICON":"#60d7a5",
-          "GEM":"#ff78ad","EPS mean":"#70b8ff",
-          "GEFS mean":"#c7a0ff"}
+fig, ax = plt.subplots(figsize=(9, 10.5), dpi=160, facecolor="#071b2c")
+ax.set_facecolor("#071b2c")
+colors = {"ECMWF":"#19dcf6","GFS":"#ffbf2e","ICON":"#37d67a",
+          "GEM":"#f472b6","EPS mean":"#5aa9ff",
+          "GEFS mean":"#a78bfa"}
 for name, vals in results.items():
     available=[v for v in vals if isinstance(v,(float,int))]
     if not available: continue
@@ -236,20 +221,20 @@ max_daily = max((float(v) for vals in results.values() for v in vals if isinstan
 axis_ceiling = max(1.0, math.ceil(max_daily / 0.2) * 0.2)
 ax.set_ylim(0, axis_ceiling)
 ax.set_yticks([round(i * 0.2, 2) for i in range(int(round(axis_ceiling / 0.2)) + 1)])
-ax.grid(axis="y",color="#91a9bc",alpha=.48,linestyle="--",linewidth=.8)
-ax.grid(axis="x",which="major",color="#91a9bc",linestyle="--",linewidth=1,alpha=.48)
+ax.grid(axis="y",color="#5f7f96",alpha=.48,linestyle="--",linewidth=.8)
+ax.grid(axis="x",which="major",color="#5f7f96",linestyle="--",linewidth=1,alpha=.48)
 ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
 fig.suptitle("MORAGA  |  14-DAY RAINFALL",fontsize=23,fontweight="bold",
              x=.085,ha="left",y=.974)
-fig.text(.085,.915,"Model comparison  ·  Daily precipitation",fontsize=14,color="#b8cbd9")
+fig.text(.085,.915,"Model comparison  ·  Daily precipitation",fontsize=14,color="#9fb6c8")
 handles,labels=ax.get_legend_handles_labels()
 fig.legend(handles,labels,loc="upper left",bbox_to_anchor=(.085,.885),
-           ncol=2,fontsize=16,frameon=False,labelcolor="#e0edf7",
+           ncol=2,fontsize=16,frameon=False,labelcolor="#f2f8ff",
            columnspacing=2.5,handlelength=2.3,labelspacing=.75)
 fig.text(.085,.026,
          f"Updated {now:%b %d %H:%M} UTC  ·  Open-Meteo  ·  Gaps indicate unavailable model days",
-         fontsize=11,color="#a9bfd0")
+         fontsize=11,color="#9fb6c8")
 fig.subplots_adjust(left=.085,right=.98,bottom=.18,top=.72)
 out=Path("moraga_rainfall_10day.png")
 fig.savefig(out,facecolor=fig.get_facecolor())
