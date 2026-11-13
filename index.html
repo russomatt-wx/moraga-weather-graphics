@@ -4257,6 +4257,13 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  -webkit-mask-image:radial-gradient(ellipse 48% 49% at 50% 48%,#000 38%,rgba(0,0,0,.88) 57%,transparent 91%)!important;
  mask-image:radial-gradient(ellipse 48% 49% at 50% 48%,#000 38%,rgba(0,0,0,.88) 57%,transparent 91%)!important;
 }
+
+/* Mobile ten-day card density: restore compact rows without shrinking type. */
+@media(max-width:760px){
+ #ten-day #ten-day-results .ten-day-grid .day-forecast{height:96px!important;min-height:96px!important;grid-template-rows:96px!important;padding-top:4px!important;padding-bottom:4px!important}
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition{height:88px!important;max-height:88px!important}
+ #public-shell .public-day-observatory{height:96px!important;min-height:96px!important}
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
