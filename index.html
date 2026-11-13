@@ -3775,6 +3775,55 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
   #westcoast .card > h3{margin:4px 6px 9px}
   #westcoast .card > img{border-radius:9px}
 }
+
+/* 2026-11-12: restore forecast descriptions and grouped weekday/date on mobile. */
+@media(max-width:760px){
+ #ten-day #ten-day-results .ten-day-grid .day-forecast{
+   grid-template-rows:112px auto!important;
+   min-height:112px!important;
+   padding-top:5px!important;
+   padding-bottom:5px!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast>strong,
+ #ten-day #ten-day-results .ten-day-grid .day-forecast>.today-pill{
+   grid-column:1!important;grid-row:1!important;
+   align-self:start!important;justify-self:start!important;
+   margin:8px 0 0!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-date{
+   grid-column:1!important;grid-row:1!important;
+   align-self:start!important;justify-self:start!important;
+   margin:39px 0 0!important;
+   font-size:clamp(12px,3.3vw,15px)!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition,
+ #ten-day #ten-day-results .ten-day-grid .day-forecast:has(.day-pop:not(:empty)) .day-condition{
+   height:86px!important;min-height:86px!important;
+   align-self:start!important;justify-content:flex-start!important;
+   padding:2px 0 0!important;gap:0!important;
+   overflow:visible!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition .moraga-icon-stack{
+   margin:-3px 0 1px!important;
+   flex:0 0 47px!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>small{
+   display:block!important;visibility:visible!important;opacity:1!important;
+   position:relative!important;z-index:3!important;
+   height:auto!important;min-height:18px!important;max-height:none!important;
+   overflow:visible!important;
+   font-size:clamp(11px,2.7vw,14px)!important;
+   line-height:1.15!important;
+   padding:0!important;margin:0!important;
+   text-align:center!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-pop{
+   position:absolute!important;top:auto!important;bottom:5px!important;
+   left:auto!important;right:auto!important;transform:none!important;
+   grid-column:3!important;justify-self:stretch!important;
+   width:100%!important;height:20px!important;
+ }
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
