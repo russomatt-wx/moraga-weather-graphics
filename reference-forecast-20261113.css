@@ -35,3 +35,37 @@ body.public-mode{background:radial-gradient(ellipse at 50% 4%,#073451 0%,#03192d
  #public-shell .public-day-observatory .public-day-description{font-size:clamp(9px,2.45vw,11px)!important}
  #public-shell .public-day-observatory .public-ob-rain{font-size:clamp(10px,2.7vw,12px)!important;gap:4px!important}
 }
+
+
+/* Cohesive shell: match the reference's dense, luminous presentation. */
+body.public-mode #public-shell{width:min(100%,900px)!important;padding:0 16px 36px!important}
+#public-shell .public-top{margin:0 -16px 8px!important}
+#public-shell .diablo-banner-art{aspect-ratio:3.1/1!important;max-height:270px!important;background:radial-gradient(ellipse at 50% 100%,#08628a,#02101e 75%)!important}
+#public-shell .diablo-banner-art>img{object-fit:cover!important;object-position:center bottom!important;opacity:.95!important}
+#public-shell .diablo-banner-art .diablo-transparent-wordmark{inset:18% 3% auto 35%!important;width:62%!important}
+#public-shell .diablo-banner-art .diablo-transparent-wordmark strong{font-size:clamp(20px,5.1vw,48px)!important}
+#public-shell .diablo-banner-art .diablo-transparent-wordmark small{font-size:clamp(7px,1.5vw,13px)!important;letter-spacing:.14em!important;margin-top:9px!important}
+#public-shell .public-view-tabs{display:flex!important;gap:9px!important;margin:6px 0 13px!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important}
+#public-shell .public-view-tabs button{flex:1!important;min-height:42px!important;padding:9px 12px!important;border:1px solid #2d9bca!important;border-radius:13px!important;background:#041b2b!important;color:#e8f5ff!important;font-size:clamp(12px,2.8vw,17px)!important;font-weight:600!important;box-shadow:inset 0 0 8px #008ac51a!important}
+#public-shell .public-view-tabs button[aria-current=page]{border-color:#02ecff!important;background:linear-gradient(#086f92,#06435d)!important;color:white!important;box-shadow:0 0 10px #03dfff99,inset 0 0 12px #07dfff65!important}
+#public-shell .public-locations{display:flex!important;gap:7px!important;margin:5px 0 13px!important;padding:2px 0 5px!important;scroll-snap-type:x proximity!important}
+#public-shell .public-location-item{flex:0 0 auto!important;min-width:0!important;max-width:170px!important;border-radius:12px!important;background:linear-gradient(145deg,#09263c,#061a2c)!important;border:1px solid #287fa5!important;box-shadow:inset 0 0 8px #00d4ff15!important}
+#public-shell .public-location-choice{min-height:47px!important;padding:7px 28px 7px 10px!important;font-size:13px!important;line-height:1.1!important}
+#public-shell .public-location-choice .local-neighborhood{font-size:clamp(12px,2.7vw,16px)!important;font-weight:750!important}
+#public-shell .public-location-choice .local-city{font-size:clamp(10px,2.2vw,12px)!important}
+#public-shell .public-location-favorite{font-size:17px!important;right:4px!important;top:50%!important;transform:translateY(-50%)!important;min-width:22px!important;min-height:27px!important}
+#public-shell .public-hero.public-obs-card{margin:6px 0 12px!important;padding:11px 13px!important;border:2px solid #0dd8e6!important;border-radius:19px!important;background:linear-gradient(120deg,#072b3b,#052033 65%,#063d48)!important;box-shadow:0 0 11px #02dcf433,inset 0 0 16px #03c7e519!important}
+#public-shell .public-obs-inner{padding:10px 12px!important;border-radius:15px!important}
+#public-shell .public-obs-top{margin-bottom:6px!important}
+#public-shell .public-obs-title{color:#b9f5ff!important;letter-spacing:.12em!important;font-size:clamp(11px,2.8vw,15px)!important}
+#public-shell .public-obs-main{gap:12px!important}
+#public-shell .public-temp{font-size:clamp(45px,9vw,78px)!important;line-height:1!important}
+#public-shell .public-obs-secondary{margin-top:9px!important;padding-top:8px!important}
+#public-shell .public-obs-today{margin-top:6px!important}
+#public-shell .public-note{font-size:12px!important;line-height:1.35!important}
+#public-shell .public-outlook{margin:11px 0!important;padding:12px 14px!important;border:1px solid #218db3!important;border-radius:15px!important;background:linear-gradient(125deg,#092b40,#061a2d)!important}
+#public-shell .public-outlook-title{color:#eaf9ff!important}
+#public-shell .public-outlook p{font-size:13px!important;line-height:1.45!important}
+#public-shell h3{font-size:clamp(18px,4vw,25px)!important;color:#f2f9ff!important;margin:15px 0 8px!important}
+@media(min-width:760px){#public-shell .diablo-banner-art{aspect-ratio:4.4/1!important}#public-shell .public-view-tabs{max-width:100%!important}}
+@media(max-width:420px){body.public-mode #public-shell{padding:0 10px 28px!important}#public-shell .public-top{margin:0 -10px 6px!important}#public-shell .diablo-banner-art{aspect-ratio:2.8/1!important}#public-shell .public-view-tabs{gap:6px!important}#public-shell .public-location-item{max-width:135px!important}#public-shell .public-location-choice{min-height:43px!important;padding:5px 24px 5px 8px!important}#public-shell .public-obs-inner{padding:8px!important}}
