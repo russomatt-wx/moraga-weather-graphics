@@ -1330,7 +1330,10 @@ body:not(.public-mode) #observatory-return{display:none!important}
   if(code>=51&&code<=67)return 'rain';if(code>=80&&code<=82)return 'showers';
   if(code>=71&&code<=77)return 'overcast';return 'mostlySun';
  }
- function iconMarkup(code){return nightIconMarkup(code,false)}
+ function iconMarkup(code){
+  const asset=code===0?'sun':code===1?'mostlySun':code===2?'partly':code===3?'overcast':code===45||code===48?'fog':code>=95?'storm':code>=80&&code<=82?'showersSun':code>=61&&code<=67?'rain':code>=51&&code<=57?'drizzle':code>=71&&code<=77?'overcast':'mostlySun';
+  return '<img class="unified-weather-photo public-observatory-icon" src="weather-icons/'+asset+'.png" alt="" loading="lazy" decoding="async">';
+ }
  function updatePublicCurrentAccent(temperature){
   const card=el('public-shell')?.querySelector('.public-obs-card');
   if(!card||!Number.isFinite(temperature))return;
@@ -2523,7 +2526,7 @@ const iconKind=/thunder|storm/.test(iconLabel)?'storm':/snow|sleet/.test(iconLab
 const weatherIconAssets={sun:'sun',mostlySun:'mostlySun',partly:'mostlySun',mostlyCloudy:'clearing',overcast:'overcast',clearing:'clearing',chance:'chance',slightRain:'showersSun',showers:'showers',drizzle:'drizzle',rain:'rain',storm:'storm',fog:'fog'};
 const iconAsset=weatherIconAssets[iconKind];
 const obsCode={sun:0,mostlySun:1,partly:1,mostlyCloudy:2,overcast:3,clearing:2,chance:80,slightRain:80,showers:80,drizzle:51,rain:61,storm:95,fog:45}[iconKind]??2;
-const conditionIcon=observatoryUnifiedIcon(obsCode,false);
+const conditionIcon=iconMarkup(obsCode);
 const d=new Date(date+'T12:00:00Z');
 const day=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',weekday:'short'});
 const label=d.toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'});
@@ -4172,6 +4175,17 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 
 /* Observatory uses the shared illustrated SVG icon family */
 .moraga-day .unified-weather-icon,.day-condition .unified-weather-icon{display:inline-flex;align-items:center;justify-content:center;width:100%;height:100%}.moraga-day .unified-weather-icon svg,.day-condition .unified-weather-icon svg{width:100%;height:100%;max-width:100%;max-height:100%}
+
+/* Shared high-detail weather art: Observatory + all Local Weather forecast cards */
+#public-shell .unified-weather-photo,
+#ten-day .unified-weather-photo,
+.day-condition .unified-weather-photo,
+.public-day-icon .unified-weather-photo{
+ display:block!important;width:100%!important;height:100%!important;
+ max-width:100%!important;max-height:100%!important;
+ object-fit:contain!important;object-position:center!important;
+ background:none!important;border:0!important;filter:none!important;
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
