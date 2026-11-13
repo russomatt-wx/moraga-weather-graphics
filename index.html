@@ -4264,6 +4264,34 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition{height:88px!important;max-height:88px!important}
  #public-shell .public-day-observatory{height:96px!important;min-height:96px!important}
 }
+
+/* Keep complete forecast labels visible on narrow screens. */
+@media(max-width:760px){
+ #ten-day #ten-day-results .ten-day-grid .day-forecast{
+  height:112px!important;min-height:112px!important;grid-template-rows:104px!important;
+  padding:4px 7px!important;overflow:visible!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition{
+  height:104px!important;min-height:104px!important;max-height:none!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;
+  justify-content:center!important;gap:2px!important;overflow:visible!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>span{
+  flex:0 0 45px!important;height:45px!important;min-height:45px!important;max-height:45px!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>.day-pop{
+  flex:0 0 auto!important;min-height:16px!important;margin:0!important;line-height:1.1!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>small{
+  flex:0 0 auto!important;height:auto!important;min-height:15px!important;
+  line-height:1.12!important;margin:0!important;padding:0!important;
+  white-space:normal!important;text-align:center!important;
+ }
+ #ten-day #ten-day-results .moraga-icon-stack{
+  height:45px!important;flex:0 0 45px!important;margin:0!important;
+ }
+ #ten-day #ten-day-results .moraga-condition-photo{height:45px!important;top:0!important;object-fit:contain!important}
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
