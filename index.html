@@ -4189,6 +4189,53 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 
 /* Consistent uppercase condition labels across daily forecast cards */
 #ten-day .day-condition small,#ten-day .day-condition>small,#public-shell .public-day-condition,#public-shell .public-day-condition small,#public-shell .public-day-description{ text-transform:uppercase!important;letter-spacing:.025em!important; }
+
+/* Screenshot-matched compact ten-day forecast on both views */
+@media(max-width:760px){
+ #public-shell .public-day-observatory{
+   min-height:100px!important;height:100px!important;
+   padding:6px 9px!important;overflow:hidden!important;
+ }
+ #public-shell .public-day-observatory .public-ob-center{
+   display:flex!important;flex-direction:column!important;align-items:center!important;
+   justify-content:center!important;gap:2px!important;height:94px!important;
+   min-height:0!important;overflow:visible!important;
+ }
+ #public-shell .public-day-observatory .public-day-icon{
+   height:52px!important;min-height:52px!important;max-height:52px!important;
+   width:100%!important;display:flex!important;justify-content:center!important;
+   align-items:center!important;margin:0!important;
+ }
+ #public-shell .public-day-observatory .public-day-description{
+   order:3!important;font-weight:700!important;text-transform:uppercase!important;
+   line-height:1.1!important;font-size:clamp(10px,2.55vw,13px)!important;
+   white-space:nowrap!important;margin:0!important;
+ }
+ #public-shell .public-day-observatory .public-ob-rain{
+   order:2!important;min-height:16px!important;line-height:1.1!important;
+   margin:0!important;
+ }
+ #public-shell .public-day-observatory .public-day-icon{order:1!important}
+ #ten-day #ten-day-results .ten-day-grid .day-forecast{
+   grid-template-rows:108px!important;height:108px!important;min-height:108px!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition{
+   height:103px!important;min-height:0!important;max-height:103px!important;
+   justify-content:center!important;gap:2px!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>span{
+   order:1!important;flex:0 0 52px!important;height:52px!important;
+   min-height:52px!important;max-height:52px!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>.day-pop{
+   order:2!important;min-height:16px!important;margin:0!important;
+ }
+ #ten-day #ten-day-results .ten-day-grid .day-forecast .day-condition>small{
+   order:3!important;min-height:14px!important;font-weight:700!important;
+   text-transform:uppercase!important;font-size:clamp(10px,2.5vw,13px)!important;
+   line-height:1.12!important;white-space:nowrap!important;
+ }
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
