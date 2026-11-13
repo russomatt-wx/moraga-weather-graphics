@@ -4247,6 +4247,16 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
    line-height:1.12!important;white-space:nowrap!important;
  }
 }
+
+/* Fade baked-in rectangular backgrounds on forecast artwork. */
+#ten-day #ten-day-results img.moraga-condition-photo,
+#ten-day #ten-day-results img.unified-weather-photo,
+#public-shell img.unified-weather-photo{
+ background:transparent!important;
+ mix-blend-mode:screen!important;
+ -webkit-mask-image:radial-gradient(ellipse 48% 49% at 50% 48%,#000 38%,rgba(0,0,0,.88) 57%,transparent 91%)!important;
+ mask-image:radial-gradient(ellipse 48% 49% at 50% 48%,#000 38%,rgba(0,0,0,.88) 57%,transparent 91%)!important;
+}
 </style>
 <script>
 /* Weather story: factual, readable, varied, and driven by published guidance. */
