@@ -1600,7 +1600,7 @@ function nwsWeatherOutlook(afd,d,h,now){
   const [lat,lon]=coords[chosen];
   const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code%2Crelative_humidity_2m%2Cdew_point_2m%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m&wind_speed_unit=mph&hourly=temperature_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code%2Cis_day&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
   try{
-   const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw Error('Forecast request '+response.status);
+   const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),12000);let response;try{response=await fetch(url,{cache:'no-store',signal:controller.signal});}finally{clearTimeout(timeout)}if(!response.ok)throw Error('Forecast request '+response.status);
    const data=await response.json();if(request!==revision)return;
    const d=data.daily;if(!d||!d.time||!d.time.length)throw Error('Missing forecast days');
    // Same-location Observatory model families, collected by the existing 3-hour workflow.
