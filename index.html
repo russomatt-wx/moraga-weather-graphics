@@ -1632,7 +1632,63 @@ body:not(.public-mode) #observatory-return{display:none!important}
    renderHourly(hourlyForecast,data.current?.time);
    set('public-short-range-source',shortRangeSources?'24-hour guidance: '+shortRangeSources+' blended; refreshed with the model collector.':'24-hour guidance: Open-Meteo fallback; dedicated short-range blend unavailable.');
    updateStation(chosen,request,data.current?.temperature_2m);
-  }catch(err){if(request!==revision)return;set('public-current-condition','Forecast temporarily unavailable');set('public-summary','Unable to load live forecast guidance. Please try again later.');set('public-discussion','The outlook is temporarily unavailable.');set('public-data-notice','Forecast service unavailable. No estimated values are shown.');}
+  }catch(err){
+   if(request!==revision)return;
+   console.warn('Live forecast failed; recovering from published location guidance',err);
+   const feedName=({Moraga:'moraga',Lafayette:'lafayette',Danville:'danville',Greenbrook:'greenbrook'})[chosen];
+   try{
+    const response=await fetch(feedName+'_forecast_10day.json?t='+Date.now(),{cache:'no-store'});
+    if(!response.ok)throw Error('Published forecast HTTP '+response.status);
+    const feed=await response.json();
+    if(request!==revision)return;
+    if(!Array.isArray(feed.dates)||feed.dates.length<7)throw Error('Incomplete published forecast');
+    const models=feed.temperature_models||{};
+    const temperatures=(date,kind)=>{
+     const values=Object.values(models).map(m=>{
+      const i=m.dates?.indexOf(date);
+      return i>=0?Number(m[kind]?.[i]):NaN;
+     }).filter(Number.isFinite);
+     return values.length?values.reduce((a,b)=>a+b,0)/values.length:NaN;
+    };
+    const codeFor=date=>{
+     const label=(feed.daily_conditions?.[date]?.label||'').toLowerCase();
+     if(/rain|shower/.test(label))return 61;
+     if(/fog/.test(label))return 45;
+     if(/mostly cloudy|partly cloudy/.test(label))return 2;
+     if(/cloud|overcast/.test(label))return 3;
+     return 1;
+    };
+    const daily={
+     time:feed.dates,
+     temperature_2m_max:feed.dates.map(date=>temperatures(date,'high_f')),
+     temperature_2m_min:feed.dates.map(date=>temperatures(date,'low_f')),
+     precipitation_sum:feed.dates.map(date=>Number(feed.rain_guidance?.[date]?.expected_inches)||0),
+     precipitation_probability_max:feed.dates.map(date=>Number(feed.ensemble_rain_probability_pct?.[date])||0),
+     weather_code:feed.dates.map(codeFor)
+    };
+    renderDays(daily,feed);
+    set('public-today-title',"TODAY'S FORECAST");
+    set('public-today-high',fmt(daily.temperature_2m_max[0]));
+    set('public-today-low',fmt(daily.temperature_2m_min[0]));
+    set('public-high-low',fmt(daily.temperature_2m_max[0])+' / '+fmt(daily.temperature_2m_min[0]));
+    set('public-rain',rain(daily.precipitation_sum[0]));
+    set('public-current-temp','—°');
+    set('public-current-condition','Live observation unavailable');
+    set('public-summary','Published forecast available; live observations temporarily unavailable.');
+    set('public-discussion','The published 10-day model outlook is available below. Current observations and live hourly guidance are temporarily unavailable.');
+    const issued=Date.parse(feed.generated_utc);
+    const age=Number.isFinite(issued)?Math.round((Date.now()-issued)/3600000):NaN;
+    set('public-data-notice','Using published '+chosen+' model guidance'+(Number.isFinite(age)?' (issued '+Math.max(0,age)+' hours ago)':'')+'. Live forecast service unavailable; temperatures are uncalibrated model averages.');
+    set('public-short-range-source','Live hourly guidance unavailable.');
+    set('public-station-status','Live station observations unavailable.');
+   }catch(fallbackError){
+    console.warn('Published forecast fallback failed',fallbackError);
+    set('public-current-condition','Forecast temporarily unavailable');
+    set('public-summary','Unable to load live forecast guidance. Please try again later.');
+    set('public-discussion','The outlook is temporarily unavailable.');
+    set('public-data-notice','Forecast service unavailable. No estimated values are shown.');
+   }
+  }
  }
  document.querySelectorAll('[data-public-city]').forEach(b=>b.onclick=()=>{city=b.dataset.publicCity;syncLocationButtons();refresh()});
  document.querySelectorAll('[data-favorite-city]').forEach(b=>b.onclick=()=>{favoriteCity=b.dataset.favoriteCity;try{localStorage.setItem('wx-favorite-city',favoriteCity)}catch(e){}syncLocationButtons()});
