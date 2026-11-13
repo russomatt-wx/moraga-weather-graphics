@@ -36,7 +36,7 @@ def main():
     now=datetime.now(TZ).replace(minute=0,second=0,microsecond=0)
     station={n:fetch(*p) for n,p in POINTS.items()}
     fig,axes=plt.subplots(3,1,figsize=(9,11),sharex=True,gridspec_kw={'height_ratios':[2.4,2.4,1.0]})
-    fig.subplots_adjust(left=.10,right=.97,top=.87,bottom=.10,hspace=.38)
+    fig.subplots_adjust(left=.10,right=.97,top=.835,bottom=.10,hspace=.38)
     colors=["#5aa9ff","#19dcf6","#ffbf2e","#a78bfa","#ff7a59"]
     for axis in axes:
         axis.set_facecolor("#071b2c")

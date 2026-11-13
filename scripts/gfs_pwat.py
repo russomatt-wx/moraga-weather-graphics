@@ -77,7 +77,7 @@ def main():
         bar.set_label("Precipitable water (inches)", fontsize=12, weight="bold", color="#f2f8ff", labelpad=5)
         bar.ax.tick_params(labelsize=12, colors="#f2f8ff", pad=4)
         bar.outline.set_edgecolor("#9fb6c8")
-        fig.savefig(OUT / f"gfs_pwat_f{horizon:03d}.png", facecolor="#071b2c", pad_inches=0)
+        fig.savefig(OUT / f"gfs_pwat_f{horizon:03d}.png", facecolor="#071b2c", bbox_inches="tight", pad_inches=.15)
         plt.close(fig)
 if __name__ == "__main__":
     main()
