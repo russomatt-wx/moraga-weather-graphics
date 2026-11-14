@@ -67,7 +67,7 @@ async function wuSolarAverage(station, env, current, log) {
       }
     }
   } catch (_) { /* current reading alone */ }
-  return values.length ? values.reduce((a, b) => a + b, 0) / values.length : null;
+  return values.length ? values : null;
 }
 
 // Solar elevation in degrees (NOAA approximation).
@@ -86,10 +86,10 @@ export const clearSkyGhi = (elevDeg) => { const c = Math.sin(elevDeg * Math.PI /
 
 // Sky words from the measured / clear-sky ratio. Code is the site's weather code (WMO style).
 export function solarSky(ratio) {
-  if (ratio >= 0.8) return { text: 'Sunny', code: 0 };
-  if (ratio >= 0.6) return { text: 'Mostly sunny', code: 1 };
-  if (ratio >= 0.4) return { text: 'Partly cloudy', code: 2 };
-  if (ratio >= 0.22) return { text: 'Mostly cloudy', code: 2 };
+  if (ratio >= 0.85) return { text: 'Sunny', code: 0 };
+  if (ratio >= 0.65) return { text: 'Mostly sunny', code: 1 };
+  if (ratio >= 0.45) return { text: 'Partly cloudy', code: 2 };
+  if (ratio >= 0.25) return { text: 'Mostly cloudy', code: 2 };
   return { text: 'Cloudy', code: 3 };
 }
 
@@ -127,14 +127,21 @@ export async function skyFor(city, env, solarNow, log) {
   if (twc && twc.code >= 45) return { ...twc, source: 'twc' };
   // Daytime with the sun high enough for a meaningful reading.
   const station = WU_STATIONS[city];
-  if (elev >= 15 && (station || Number.isFinite(solarNow))) {
-    const avg = station && wuKey(env) ? await wuSolarAverage(station, env, solarNow, log) : solarNow;
+  // solarNow: one reading or an array of recent readings (W/m²).
+  const given = (Array.isArray(solarNow) ? solarNow : [solarNow]).filter(Number.isFinite);
+  if (elev >= 15 && (station || given.length)) {
+    const samples = station && wuKey(env) ? (await wuSolarAverage(station, env, given[given.length - 1], log)) || given : given;
+    const avg = samples.length ? samples.reduce((a, b) => a + b, 0) / samples.length : null;
     const clear = clearSkyGhi(elev);
     if (Number.isFinite(avg) && clear > 0) {
       const ratio = avg / clear;
       // A shaded sensor reads 'cloudy' under a clear sky: if The Weather Company sees few clouds, trust it.
       if (twc && ratio < 0.4 && Number.isFinite(twc.cloud_cover_pct) && twc.cloud_cover_pct <= 25) return { ...twc, source: 'twc', clear_sky_ratio: Math.round(ratio * 100) / 100 };
-      return { ...solarSky(ratio), is_day: true, source: 'station_sunlight', clear_sky_ratio: Math.round(ratio * 100) / 100 };
+      let s = solarSky(ratio);
+      // Sunlight jumping between bright and dim within 30 minutes means broken clouds, not a clear sky.
+      const swing = samples.length >= 3 ? (Math.max(...samples) - Math.min(...samples)) / clear : 0;
+      if (swing > 0.35 && s.code < 2) s = { text: 'Partly cloudy', code: 2 };
+      return { ...s, is_day: true, source: 'station_sunlight', clear_sky_ratio: Math.round(ratio * 100) / 100, samples: samples.length };
     }
   }
   if (twc) return { ...twc, source: 'twc' };

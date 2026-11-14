@@ -118,6 +118,7 @@ export default {
       // Recover today's full Pacific-day temperature range from archived station samples.
       // This does not depend on GitHub Actions or an open browser tab.
       let dailyExtrema = null;
+      const solarRecent = []; // sunlight samples from the last 30 minutes (Moraga archive)
       try {
         if(city === 'moraga') {
         const pacificDate = new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
@@ -139,6 +140,8 @@ export default {
               if(!Number.isFinite(stamp)||!Number.isFinite(temp)||temp< -30||temp>130)continue;
               const sampleDay = new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(stamp*1000));
               if(sampleDay===pacificDate && stamp*1000<=Date.now()+60000){values.push(temp);timestamps.push(stamp*1000);}
+              const sol = Number(obSample?.solradWM2);
+              if(Number.isFinite(sol) && obSample?.solradWM2 !== null && Date.now()-stamp*1000 <= 30*60000) solarRecent.push(sol);
             }
           }
           if(values.length){
@@ -183,7 +186,7 @@ export default {
         pressure_inhg:pick('pressureIN'),
         solar_radiation_wm2:pick('solradWM2'),
         // Sunlight only from vetted stations; an auto-discovered station's sensor may be shaded.
-        sky:await sky(discovery ? null : pick('solradWM2')),
+        sky:await sky(discovery ? null : [...solarRecent, pick('solradWM2')]),
         diagnostics:wuLog.length?wuLog:undefined,
         source:'Xweather'
       },{headers:cors});

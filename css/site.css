@@ -395,3 +395,33 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .dwl-alert-status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
 .dwl-alert-status.is-clear::before { background: #6fdc8c; box-shadow: 0 0 8px #6fdc8c; }
 .dwl-alert-status.is-error::before { background: var(--gold); }
+
+/* ---------- Local Weather current conditions (matches the Observation Lab card) ---------- */
+#public-shell .public-obs-card { border-color: var(--public-current-accent, #1cb5b8) !important; }
+#public-shell .dwl-cc {
+  --acc: var(--public-current-accent, #1cb5b8);
+  padding: 15px 18px 16px; border-radius: 16px; border: 3px solid var(--acc);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--acc) 28%, #142330), color-mix(in srgb, var(--acc) 13%, #10202d) 48%, color-mix(in srgb, var(--acc) 25%, #0b1722));
+  transition: background .6s ease, border-color .6s ease;
+}
+#public-shell .dwl-cc-top { display: flex; align-items: center; gap: 9px; color: #a8d9e6; font-size: 11px; font-weight: 800; letter-spacing: .12em; }
+#public-shell .dwl-cc-dot { width: 8px; height: 8px; flex: none; border-radius: 50%; background: #65d5ad; box-shadow: 0 0 0 3px #65d5ad22; }
+#public-shell .dwl-cc-time { margin-left: auto; text-align: right; white-space: pre-line; line-height: 1.4; letter-spacing: .08em; font-size: clamp(12px, 2.8vw, 14px); }
+#public-shell .dwl-cc-main { display: flex; align-items: center; gap: 22px; margin-top: 9px; }
+#public-shell .dwl-cc-tempwrap { display: flex; flex-direction: column; min-width: 0; }
+#public-shell .dwl-cc-temp { font-size: clamp(42px, 8.5vw, 64px); font-weight: 750; letter-spacing: -.06em; line-height: 1; color: #edf7ff; white-space: nowrap; }
+#public-shell .dwl-cc-deg { display: inline-block; font-size: .43em; position: relative; top: -1.1em; margin-left: 7px; letter-spacing: 0; }
+#public-shell .dwl-cc-cond { margin-top: 5px; font-size: 13px; color: #c2d4e3; white-space: nowrap; }
+#public-shell .dwl-cc-details { display: flex; flex-direction: column; gap: 7px; font-size: clamp(13px, 3.5vw, 16px); line-height: 1.35; color: #c2d4e3; min-width: 0; }
+#public-shell .dwl-cc-details b { font-weight: 400; color: #c2d4e3; }
+#public-shell .dwl-cc-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; padding-top: 11px; border-top: 1px solid #35546c; text-align: center; }
+#public-shell .dwl-cc-metrics > div { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+#public-shell .dwl-cc-metrics span { font-size: 11px; color: #a6bdcf; }
+#public-shell .dwl-cc-metrics strong { font-size: clamp(13px, 3.4vw, 17px); font-weight: 650; color: #edf7ff; white-space: nowrap; }
+#public-shell .dwl-cc-metrics b { font-weight: inherit; }
+#public-shell .dwl-cc-trend { margin-left: 5px; font-size: .95em; color: #a8d9e6; }
+#public-shell .dwl-cc-today-title { margin: 14px 4px 8px; font-size: 12px; font-weight: 800; letter-spacing: .15em; color: #8fd4f5; }
+#public-shell .dwl-cc-today { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; text-align: center; }
+#public-shell .dwl-cc-today > div { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
+#public-shell .dwl-cc-today span { font-size: clamp(14px, 3.4vw, 18px); color: #a9c3d1; }
+#public-shell .dwl-cc-today strong { font-size: clamp(26px, 6.5vw, 36px); font-weight: 750; white-space: nowrap; }
