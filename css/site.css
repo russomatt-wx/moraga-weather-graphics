@@ -244,7 +244,7 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .dwl-day-hi { padding-left: 12px; color: var(--hi); text-shadow: 0 0 14px color-mix(in srgb, var(--hi) 45%, transparent); }
 .dwl-day-lo {
   align-self: stretch; display: flex; align-items: center; justify-content: flex-end;
-  padding-left: 8px; border-left: 1px solid var(--line-soft);
+  padding-left: 8px;
   color: var(--lo); text-shadow: 0 0 14px color-mix(in srgb, var(--lo) 45%, transparent);
 }
 
