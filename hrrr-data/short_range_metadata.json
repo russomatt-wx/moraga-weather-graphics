@@ -1,6 +1,10 @@
 {
-  "status": "unavailable",
-  "retrieved_utc": "2026-11-13T23:51:02.762769+00:00",
-  "source_verified": false,
-  "reason": "RRFS provider unavailable after 4 attempts: <urlopen error _ssl.c:983: The handshake operation timed out>"
+  "status": "available",
+  "model": "RRFS CONUS",
+  "source_model": "ncep_rrfs_conus",
+  "source_url": "https://api.open-meteo.com/v1/forecast?latitude=37.8201932&longitude=-122.1193876&models=ncep_rrfs_conus&hourly=temperature_2m%2Cprecipitation&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_hours=72&timezone=UTC",
+  "retrieved_utc": "2026-11-14T00:01:44.236570+00:00",
+  "source_verified": true,
+  "initialization_verified": false,
+  "note": "Explicit RRFS selection and GFS independence screening; model cycle time not independently verified."
 }
