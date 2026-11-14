@@ -177,7 +177,61 @@
     btn.textContent = open ? 'Show fewer days' : 'Show ' + more + ' more days';
   }
 
-  window.DWL = { tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts, collapseDays: collapseDays,
+  /* Rain timing for a day's condition label. amounts = expected rain (in) in each local period:
+     {overnight: 0-6h, morning: 6-12h, afternoon: 12-18h, evening: 18-24h}. Returns a short prefix,
+     or '' when rain is spread through the day. */
+  function timingPrefix(a) {
+    if (!a) return '';
+    var o = a.overnight || 0, m = a.morning || 0, f = a.afternoon || 0, e = a.evening || 0, t = o + m + f + e;
+    if (t < 0.01) return '';
+    if (e / t >= 0.65) return 'Evening';
+    if (o / t >= 0.65) return 'Early AM';
+    if ((o + m) / t >= 0.7) return 'AM';
+    if ((f + e) / t >= 0.7) return 'PM';
+    return '';
+  }
+  // Hourly series {time:['YYYY-MM-DDTHH:MM'], precipitation:[in]} → per-period totals for one date.
+  function periodAmounts(hourly, date) {
+    if (!hourly || !hourly.time) return null;
+    var out = { overnight: 0, morning: 0, afternoon: 0, evening: 0 }, n = 0;
+    for (var i = 0; i < hourly.time.length; i++) {
+      var t = hourly.time[i];
+      if (t.slice(0, 10) !== date) continue;
+      var v = Number(hourly.precipitation[i]); if (!Number.isFinite(v)) continue;
+      var h = Number(t.slice(11, 13)); n++;
+      out[h < 6 ? 'overnight' : h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening'] += Math.max(0, v);
+    }
+    return n >= 18 ? out : null;
+  }
+  // Same per-period amounts from a feed's hourly_conditions {model: {time, precipitation_mm}}:
+  // average of the models that cover at least 18 hours of that date. Used by both views.
+  function modelPeriodAmounts(hc, date) {
+    if (!hc) return null;
+    var out = { overnight: 0, morning: 0, afternoon: 0, evening: 0 }, models = [];
+    Object.keys(hc).forEach(function (name) {
+      var sr = hc[name]; if (!sr || !sr.time) return;
+      var hours = [];
+      sr.time.forEach(function (t, i) { if (t.slice(0, 10) === date) { var v = Number(sr.precipitation_mm && sr.precipitation_mm[i]); if (Number.isFinite(v)) hours.push({ h: Number(t.slice(11, 13)), v: Math.max(0, v) }); } });
+      if (hours.length >= 18) models.push(hours);
+    });
+    if (!models.length) return null;
+    models.forEach(function (hours) { hours.forEach(function (x) { out[x.h < 6 ? 'overnight' : x.h < 12 ? 'morning' : x.h < 18 ? 'afternoon' : 'evening'] += x.v / models.length; }); });
+    return out;
+  }
+  // Fold the timing into a rain condition: 'Rain' → 'AM Rain', 'Chance of Rain' → 'PM Showers'.
+  function timedCondition(cond, prefix) {
+    if (!prefix) return cond;
+    var c = String(cond);
+    if (/slight chance/i.test(c)) return c;
+    if (/heavy rain/i.test(c)) return prefix + ' Heavy Rain';
+    if (/^rain$|rain likely/i.test(c)) return prefix + ' Rain';
+    if (/chance of (rain|showers)|^showers?$/i.test(c)) return prefix + ' Showers';
+    if (/drizzle/i.test(c)) return prefix + ' Drizzle';
+    if (/thunder/i.test(c)) return prefix + ' Storms';
+    return c;
+  }
+
+  window.DWL = { tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts, collapseDays: collapseDays, timingPrefix: timingPrefix, periodAmounts: periodAmounts, modelPeriodAmounts: modelPeriodAmounts, timedCondition: timedCondition,
     publishBlend: publishBlend, blendReady: blendReady, moragaBlend: moragaBlend };
 
   // Section tabs: highlight the tab for the section currently in view.
