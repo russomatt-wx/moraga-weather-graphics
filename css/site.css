@@ -15,6 +15,7 @@
   --accent: #19dcf6;
   --accent-deep: #0a8fc2;
   --gold: #ffbf2e;
+  --rain: #5ec8ff;          /* rain chance and amounts */
   --text: #f2f8ff;
   --text-2: #cfdeea;
   --muted: #9fb6c8;
@@ -253,7 +254,7 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
   margin-top: 3px;
   font: 600 clamp(10.5px, 3vw, 13px)/1.2 var(--font-ui); letter-spacing: .03em; text-transform: uppercase; color: #eef6fc;
 }
-.dwl-day-rain { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 3px; font: 500 clamp(13px, 3.7vw, 16px)/1.2 var(--font-ui); color: var(--text-2); }
+.dwl-day-rain { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 3px; font: 500 clamp(13px, 3.7vw, 16px)/1.2 var(--font-ui); color: var(--rain); }
 .dwl-day-amount { display: inline-flex; align-items: center; gap: 6px; }
 .dwl-day-amount i {
   width: 9px; height: 12px; background: #2bc4ff;
@@ -315,7 +316,7 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 /* Outlook source line */
 .public-outlook-source { margin-top: 8px; font-size: 11px; letter-spacing: .04em; color: var(--muted); }
 .public-outlook-source:empty { display: none; }
-#public-shell .public-hour-rain { min-height: 1.2em; font-size: 12px; color: #90dafa; }
+#public-shell .public-hour-rain { min-height: 1.2em; font-size: 12px; color: var(--rain); }
 #public-shell .public-notice { margin: 6px 4px 0; padding: 0; border: 0; font-size: 11px; letter-spacing: .04em; color: var(--muted); }
 #public-shell .public-notice:empty { display: none; }
 #public-shell .public-alert-near { margin: 3px 0 4px; font-size: 12px; color: #ffd27a; }

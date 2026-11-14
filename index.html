@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=12"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=12"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=12">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114c"><link rel="stylesheet" href="css/site.css?v=20261114f">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114c"><link rel="stylesheet" href="css/site.css?v=20261114g">
 
 
 
@@ -65,7 +65,7 @@
  const fmt=v=>Number.isFinite(v)?Math.round(v)+'°':'—';
  const rain=v=>Number.isFinite(v)?v.toFixed(2)+'″':'—';
  function icon(code){if(code===0)return '☀️';if(code<=2)return '🌤️';if(code===3)return '☁️';if(code===45||code===48)return '🌫️';if(code>=95)return '⛈️';if(code>=51&&code<=67)return '🌧️';if(code>=80&&code<=82)return '🌧️';if(code>=71&&code<=77)return '🌨️';return '🌤️'}
- function description(code){if(code===0)return 'Sunny';if(code<=2)return 'Partly cloudy';if(code===3)return 'Cloudy';if(code===45||code===48)return 'Foggy';if(code>=95)return 'Thunderstorms';if(code>=51&&code<=67)return 'Rain';if(code>=80&&code<=82)return 'Showers';if(code>=71&&code<=77)return 'Snow';return 'Variable clouds'}
+ function description(code,night=false){if(code===0)return night?'Clear':'Sunny';if(code===1)return night?'Mostly clear':'Mostly sunny';if(code<=2)return 'Partly cloudy';if(code===3)return 'Cloudy';if(code===45||code===48)return 'Foggy';if(code>=95)return 'Thunderstorms';if(code>=51&&code<=67)return 'Rain';if(code>=80&&code<=82)return 'Showers';if(code>=71&&code<=77)return 'Snow';return 'Variable clouds'}
  function tempColor(value){
   if(!Number.isFinite(value))return '#68859b';
   const stops=[[20,'#7c66bd'],[35,'#4b9fd4'],[45,'#42bdd7'],[55,'#63bb8d'],[65,'#a4c75b'],[75,'#e7c45e'],[85,'#f3a44f'],[95,'#e36b59'],[105,'#d95886'],[110,'#e79cc0']];
@@ -160,7 +160,7 @@
    const conditionIcon=/rain likely|^rain$/i.test(condition)?61:/chance of rain|slight chance of rain/i.test(condition)?80:mappedCondition!==null?mappedCondition:published?.icon==='🌧️'?61:published?.icon==='🌦️'?80:published?.icon==='☁️'?3:published?.icon==='🌥️'?2:published?.icon==='🌫️'?45:published?.icon==='☀️'?0:published?.icon==='🌤️'?1:published?.icon==='⛅'?2:(wet&&d.weather_code[i]===0?61:d.weather_code[i]);
    const rainLabel=wet?'<span class="public-rain-chance">'+(Number.isFinite(pop)?Math.min(100,Math.round(pop/10)*10)+'%':'')+'</span>'+(Number.isFinite(total)&&total>=0.01?'<span class="public-rain-amount"><span aria-hidden="true">💧</span>'+rain(total)+'</span>':''):'';
    host.insertAdjacentHTML('beforeend',DWL.dayCard({tag:'div',today:i===0,day,date:label,high,low,highText:fmt(high),lowText:fmt(low),iconCode:conditionIcon,condition,
-    pop:wet&&Number.isFinite(pop)?Math.min(100,Math.round(pop/10)*10)+'%':'',amount:wet&&Number.isFinite(total)&&total>=0.01?rain(total):''}));
+    pop:wet&&Number.isFinite(pop)?Math.min(100,Math.round(pop/10)*10)+'%':'',amount:wet&&Number.isFinite(total)?(total<0.01?'<0.01″':rain(total)):''}));
   }
  }
 
@@ -363,7 +363,7 @@ function nwsWeatherOutlook(afd,d,h){
   ['public-humidity','public-dew','public-pressure','public-wind'].forEach(id=>set(id,'—'));set('public-discussion','Loading the local outlook…');set('public-outlook-source','');el('public-alerts').replaceChildren();updateAlerts(chosen,request);set('public-station-status','Checking nearby public weather observations…');set('public-current-temp','—°');set('public-current-condition','Loading forecast…');set('public-high-low','— / —');set('public-rain','—');set('public-summary','Retrieving the latest forecast.');
   el('public-days').replaceChildren();el('public-hourly').replaceChildren();
   const [lat,lon]=coords[chosen];
-  const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code%2Crelative_humidity_2m%2Cdew_point_2m%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m&wind_speed_unit=mph&hourly=temperature_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code%2Cis_day%2Cwind_gusts_10m%2Ccloud_cover&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
+  const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code%2Cis_day%2Crelative_humidity_2m%2Cdew_point_2m%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m&wind_speed_unit=mph&hourly=temperature_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code%2Cis_day%2Cwind_gusts_10m%2Ccloud_cover&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
   try{
    const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),12000);let response;try{response=await fetch(url,{cache:'no-store',signal:controller.signal});}finally{clearTimeout(timeout)}if(!response.ok)throw Error('Forecast request '+response.status);
    const data=await response.json();if(request!==revision)return;
@@ -413,7 +413,7 @@ function nwsWeatherOutlook(afd,d,h){
    const modeledConflict=Number.isFinite(modeledNow)&&Number.isFinite(todayHigh)&&modeledNow>todayHigh+3;
    set('public-current-temp',modeledConflict?'—':fmt(modeledNow));
    updatePublicCurrentAccent(modeledConflict?NaN:modeledNow);
-   set('public-current-condition',modeledConflict?'Awaiting verified observation':description(data.current?.weather_code??d.weather_code[0]));el('public-hero-icon').innerHTML=iconMarkup(data.current?.weather_code??d.weather_code[0]);el('public-current-temp').style.color=tempColor(modeledConflict?NaN:modeledNow);
+   set('public-current-condition',modeledConflict?'Awaiting verified observation':description(data.current?.weather_code??d.weather_code[0],data.current?.is_day===0));el('public-hero-icon').innerHTML=iconMarkup(data.current?.weather_code??d.weather_code[0]);el('public-current-temp').style.color=tempColor(modeledConflict?NaN:modeledNow);
    set('public-today-title',"TODAY'S FORECAST");
    set('public-high-low',fmt(d.temperature_2m_max[0])+' / '+fmt(d.temperature_2m_min[0]));
    set('public-today-high',fmt(d.temperature_2m_max[0]));set('public-today-low',fmt(d.temperature_2m_min[0]));
@@ -1151,7 +1151,7 @@ const rains=Object.values(data.model_daily_inches||{}).map(a=>a[data.dates.index
 const guidance=data.rain_guidance?.[date];
 const rainMean=Number.isFinite(guidance?.expected_inches)?guidance.expected_inches:(rains.length?mean(rains):(Number.isFinite(fallbackRainAmounts[date])?fallbackRainAmounts[date]:null));
 // Mean across available published models, not a probability-derived rainfall estimate.
-const rainAmountText=rainMean===null||rainMean<0.01?'':rainMean.toFixed(2)+' in';
+const rainAmountText=rainMean===null?'':rainMean<0.01?'<0.01 in':rainMean.toFixed(2)+' in';
 const rainfallSourceLabel=Number.isFinite(guidance?.expected_inches)?'ensemble blend':rains.length?'published models':Number.isFinite(fallbackRainAmounts[date])?'Open-Meteo fallback':'unavailable';
 // Hourly consensus timing is local Pacific time, not a daily all-day-rain label.
 const hourlyVotes=Object.values(hourlyModels).map(days=>(days[date]||[]).filter(h=>Number.isFinite(h.rain))).filter(hours=>hours.length>=18);
