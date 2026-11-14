@@ -13,6 +13,30 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import dwl_chart_style as dwl
 dwl.apply()
+try:
+    import requests
+    _SESSION = requests.Session()
+    _SESSION.headers["User-Agent"] = "MoragaWeatherGraphics/1.0"
+except ImportError:
+    _SESSION = None
+
+
+def fetch_json(url, timeout=60):
+    """GET JSON with one keep-alive session and retries. Fresh TLS handshakes to Open-Meteo
+    time out on GitHub runners; a single failure used to blank a whole ensemble family."""
+    for attempt in range(4):
+        try:
+            if _SESSION is not None:
+                r = _SESSION.get(url, timeout=(20, timeout))
+                r.raise_for_status()
+                return r.json()
+            req = urllib.request.Request(url, headers={"User-Agent": "MoragaWeatherGraphics/1.0"})
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return json.load(resp)
+        except Exception:
+            if attempt == 3:
+                raise
+            time.sleep(5 * (attempt + 1))
 
 
 LAT, LON = (float(os.environ.get('WX_FORECAST_LAT', '37.8201932')), float(os.environ.get('WX_FORECAST_LON', '-122.1193876')))  # Location-specific model collection
@@ -34,16 +58,7 @@ def get(url, model):
     if "ensemble" not in url:
         params.update(daily="precipitation_sum,temperature_2m_max,temperature_2m_min", hourly="precipitation,cloud_cover", temperature_unit="fahrenheit")
     q = urllib.parse.urlencode(params)
-    req = urllib.request.Request(url + "?" + q, headers={"User-Agent": "MoragaWeatherGraphics/1.0"})
-    for attempt in range(3):
-        try:
-            with urllib.request.urlopen(req, timeout=40) as resp:
-                payload = json.load(resp)
-            break
-        except (OSError, ValueError):
-            if attempt == 2:
-                raise
-            time.sleep(2 * (attempt + 1))
+    payload = fetch_json(url + "?" + q, 40)
     daily = payload["daily"]
     if "hourly" in payload and "temperature_2m_max" in daily:
         hourly = payload["hourly"]
@@ -79,9 +94,7 @@ def fetch_rain_probability():
     params = {"latitude": LAT, "longitude": LON, "daily": "precipitation_probability_max",
               "timezone": TZ, "forecast_days": 14}
     url = "https://api.open-meteo.com/v1/forecast?" + urllib.parse.urlencode(params)
-    req = urllib.request.Request(url, headers={"User-Agent": "MoragaWeatherGraphics/1.0"})
-    with urllib.request.urlopen(req, timeout=40) as resp:
-        payload = json.load(resp)
+    payload = fetch_json(url, 40)
     daily = payload["daily"]
     dates = daily["time"]
     probabilities = daily["precipitation_probability_max"]
@@ -116,9 +129,7 @@ def ensemble_daily(model):
             "models":model,"timezone":TZ,"precipitation_unit":"inch",
             "forecast_days":14}
     url="https://ensemble-api.open-meteo.com/v1/ensemble?"+urllib.parse.urlencode(params)
-    req=urllib.request.Request(url,headers={"User-Agent":"MoragaWeatherGraphics/1.0"})
-    with urllib.request.urlopen(req,timeout=70) as response:
-        payload=json.load(response)
+    payload=fetch_json(url,70)
     hourly=payload["hourly"]
     keys=[k for k in hourly if k.startswith("precipitation_member")]
     out={}
@@ -142,9 +153,7 @@ def ensemble_temperature_daily(model):
     params={"latitude":LAT,"longitude":LON,"hourly":"temperature_2m","models":model,
             "timezone":TZ,"temperature_unit":"fahrenheit","forecast_days":10}
     url="https://ensemble-api.open-meteo.com/v1/ensemble?"+urllib.parse.urlencode(params)
-    req=urllib.request.Request(url,headers={"User-Agent":"MoragaWeatherGraphics/1.0"})
-    with urllib.request.urlopen(req,timeout=70) as response:
-        hourly=json.load(response)["hourly"]
+    hourly=fetch_json(url,70)["hourly"]
     keys=[k for k in hourly if k.startswith("temperature_2m_member")]
     highs,lows=[],[]
     for day in dates[:10]:
@@ -173,11 +182,19 @@ model_derived_pop={}
 for day in dates:
     families={name:days[day] for name,days in ensemble_members.items()
               if day in days and days[day]["members"]>=10}
-    if len(families)==2:
-        model_derived_pop[day]=round(100*sum(v["thresholds"]["0.01"] for v in families.values())/2)
+    if families:
+        # Both families: equal weight. One family (the other failed to download): use it alone
+        # rather than publishing no rain chance at all.
+        model_derived_pop[day]=round(100*sum(v["thresholds"]["0.01"] for v in families.values())/len(families))
     else:
         model_derived_pop[day]=None
 benchmark_pop=ensemble_rain_probability
+# Last resort: if neither ensemble family downloaded for a day, use Open-Meteo's published
+# daily rain probability rather than publishing no chance (which mislabeled rain days as cloudy).
+for day in dates:
+    if model_derived_pop.get(day) is None and isinstance(benchmark_pop.get(day),(int,float)):
+        model_derived_pop[day]=round(benchmark_pop[day])
+        errors.setdefault("pop_fallback",[]).append(day)
 ensemble_rain_probability={day:value for day,value in model_derived_pop.items() if value is not None}
 rain_guidance={}
 for i,day in enumerate(dates):
@@ -195,7 +212,7 @@ for i,day in enumerate(dates):
         "ensemble_threshold_pct":thresholds,"ensemble_models":list(available),
         "ensemble_members":sum(v["members"] for v in available.values()),
         "derived_pop_pct":model_derived_pop[day], "pop_method":"EPS/GEFS equal-family member fraction >=0.01 in",
-        "pop_status":"available" if model_derived_pop[day] is not None else "missing_ensemble_family"}
+        "pop_status":("open_meteo_fallback" if not available else "available" if len(available)>=2 else "single_ensemble_family") if model_derived_pop[day] is not None else "missing_ensemble_family"}
 
 now = datetime.now(timezone.utc)
 # Shared light chart style: readable on mobile, matching the observatory's other graphics.

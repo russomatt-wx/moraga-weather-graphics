@@ -174,6 +174,18 @@
   if(code>=51&&code<=82)return 3;
   return code;
  }
+ // Is the sun up at a local (America/Los_Angeles) hour string 'YYYY-MM-DDTHH:MM'? NOAA solar position, ±few min.
+ function sunUp(local,lat,lon){
+  const probe=new Date(local+':00Z');
+  const ptHour=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'2-digit',hourCycle:'h23'}).format(probe));
+  const utc=new Date(probe.getTime()+((Number(local.slice(11,13))-ptHour+24)%24)*3600000);
+  const d=(utc-Date.UTC(utc.getUTCFullYear(),0,0))/86400000,g=2*Math.PI/365*(d-1+(utc.getUTCHours()-12)/24);
+  const decl=0.006918-0.399912*Math.cos(g)+0.070257*Math.sin(g)-0.006758*Math.cos(2*g)+0.000907*Math.sin(2*g)-0.002697*Math.cos(3*g)+0.00148*Math.sin(3*g);
+  const eq=229.18*(0.000075+0.001868*Math.cos(g)-0.032077*Math.sin(g)-0.014615*Math.cos(2*g)-0.040849*Math.sin(2*g));
+  const tst=utc.getUTCHours()*60+utc.getUTCMinutes()+eq+4*lon,ha=(tst/4-180)*Math.PI/180,la=lat*Math.PI/180;
+  const elev=Math.asin(Math.sin(la)*Math.sin(decl)+Math.cos(la)*Math.cos(decl)*Math.cos(ha))*180/Math.PI;
+  return elev>-0.833;
+ }
  function renderHourly(hourly,currentTime){
   const host=el('public-hourly');host.replaceChildren();
   if(!hourly?.time?.length)return;
@@ -365,7 +377,14 @@ function nwsWeatherOutlook(afd,d,h){
   const [lat,lon]=coords[chosen];
   const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code%2Cis_day%2Crelative_humidity_2m%2Cdew_point_2m%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m&wind_speed_unit=mph&hourly=temperature_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code%2Cis_day%2Cwind_gusts_10m%2Ccloud_cover&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
   try{
-   const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),12000);let response;try{response=await fetch(url,{cache:'no-store',signal:controller.signal});}finally{clearTimeout(timeout)}if(!response.ok)throw Error('Forecast request '+response.status);
+   let response;
+   // Slow mobile connections: allow 20 s and one retry before falling back to published data.
+   for(let attempt=0;attempt<2;attempt++){
+    const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),20000);
+    try{response=await fetch(url,{cache:'no-store',signal:controller.signal});if(response.ok)break;}catch(e){if(attempt===1)throw e;}finally{clearTimeout(timeout)}
+    if(request!==revision)return;
+   }
+   if(!response?.ok)throw Error('Forecast request '+(response?response.status:'failed'));
    const data=await response.json();if(request!==revision)return;
    const d=data.daily;if(!d||!d.time||!d.time.length)throw Error('Missing forecast days');
    // Same-location Observatory model families, collected by the existing 3-hour workflow.
@@ -512,7 +531,19 @@ function nwsWeatherOutlook(afd,d,h){
     const issued=Date.parse(feed.generated_utc);
     const age=Number.isFinite(issued)?Math.round((Date.now()-issued)/3600000):NaN;
     set('public-days-updated',updatedAt(Date.parse(feed.generated_utc)));
-    set('public-short-range-source','Hourly forecast unavailable');
+    // Live hourly guidance failed too: use the published HRRR/RRFS/ECMWF/GFS blend (refreshed twice hourly).
+    try{
+     const sr=await fetch(feedName+'_short_range_24h.json?t='+Date.now(),{cache:'no-store'});
+     const short=sr.ok?await sr.json():null,age=short?Date.now()-Date.parse(short.generated_utc):NaN;
+     if(request!==revision)return;
+     if(short?.hourly?.time?.length>=12&&age<5*3600000){
+      const h={...short.hourly,is_day:short.hourly.time.map(t=>sunUp(t,lat,lon)?1:0)};
+      const p=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+      const g=k=>p.find(x=>x.type===k)?.value;
+      renderHourly(h,g('year')+'-'+g('month')+'-'+g('day')+'T'+g('hour')+':00');
+      set('public-short-range-source',updatedAt(Date.parse(short.generated_utc)));
+     }else set('public-short-range-source','Hourly forecast unavailable');
+    }catch(e){set('public-short-range-source','Hourly forecast unavailable');}
     set('public-station-status','Live station observations unavailable.');
    }catch(fallbackError){
     console.warn('Published forecast fallback failed',fallbackError);

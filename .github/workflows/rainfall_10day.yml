@@ -24,7 +24,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - run: pip install matplotlib
+      - run: pip install matplotlib requests
       - run: python scripts/rainfall_10day.py
       - name: Validate forecast before publishing
         run: python scripts/validate_forecast_publish.py
