@@ -320,3 +320,8 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 #public-shell .public-notice { margin: 6px 4px 0; padding: 0; border: 0; font-size: 11px; letter-spacing: .04em; color: var(--muted); }
 #public-shell .public-notice:empty { display: none; }
 #public-shell .public-alert-near { margin: 3px 0 4px; font-size: 12px; color: #ffd27a; }
+
+/* Outlook headline */
+.public-outlook-headline { margin: 2px 0 8px; font: 700 clamp(17px, 4.6vw, 20px)/1.25 var(--font-ui); color: var(--accent); }
+.public-outlook-headline:empty { display: none; }
+.public-outlook p#public-discussion { white-space: pre-line; }

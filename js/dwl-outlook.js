@@ -1,5 +1,5 @@
 /* Diablo Weather Lab — 72-hour outlook writer.
-   Builds a 3–4 sentence synopsis for one location from:
+   Builds a headline and a short, lively forecast story (next 72 hours, then the 10-day horizon) from:
      • the latest NWS Bay Area (MTR) Area Forecast Discussion: key messages, short/long term, and
      • that location's hourly model guidance (rain, wind gusts, weather codes) and blended daily temps.
    High-impact weather leads. Local numbers always come from model data; the NWS discussion supplies
@@ -166,7 +166,8 @@
     if (v < 0.9) return 'close to three-quarters of an inch';
     if (v < 1.25) return 'around an inch';
     if (v < 1.75) return 'an inch to an inch and a half';
-    return 'two inches or more';
+    var half = Math.round(v * 2) / 2, whole = Math.floor(half);
+    return 'about ' + whole + (half > whole ? '½' : '') + ' inches';
   }
   function rainType(r) {
     if (r.thunder) return 'rain and a few thunderstorms';
@@ -272,6 +273,91 @@
     return lead + (closing ? 'and ' : '') + (closing ? 'temperatures' : 'Temperatures') + ' stay comfortable, with highs ' + highTxt + ' and lows in the ' + band(lo);
   }
 
+  /* ---------- Beyond 72 hours: what the models show through day 10 ---------- */
+  function dayIdx(daily, nowParts) {
+    var t = daily && daily.time || [], start = t.indexOf(nowParts.date);
+    return start < 0 ? 0 : start;
+  }
+  function dayName(daily, i, i0) {
+    var w = weekday(daily.time[i]);
+    return i - i0 >= 7 ? 'next ' + w : w;
+  }
+  function horizon(daily, nowParts, place) {
+    if (!daily || !daily.time) return { text: '', total10: 0, bigLater: null, frost: false };
+    var i0 = dayIdx(daily, nowParts), n = Math.min(daily.time.length, i0 + 10);
+    var amt = function (i) { var v = Number(daily.precipitation_sum && daily.precipitation_sum[i]); return Number.isFinite(v) ? v : 0; };
+    var pop = function (i) { var v = Number(daily.precipitation_probability_max && daily.precipitation_probability_max[i]); return Number.isFinite(v) ? v : 0; };
+    var total10 = 0; for (var k = i0; k < n; k++) total10 += amt(k);
+    // Wet-day runs after the first 72 hours.
+    var runsL = [], cur = null;
+    for (var i = i0 + 3; i < n; i++) {
+      var wet = pop(i) >= 50 && amt(i) >= 0.15;
+      if (wet) { if (!cur) { cur = { a: i, b: i, total: 0 }; runsL.push(cur); } cur.b = i; cur.total += amt(i); } else cur = null;
+    }
+    var big = runsL.reduce(function (x, r) { return !x || r.total > x.total ? r : x; }, null);
+    var parts = [];
+    var range = function (r) { return r.a === r.b ? dayName(daily, r.a, i0) : dayName(daily, r.a, i0) + ' into ' + weekday(daily.time[r.b]); };
+    if (big) {
+      var label = big.total >= 2 ? 'a potent storm' : big.total >= 1 ? 'a stronger storm' : big.total >= 0.5 ? 'another solid round of rain' : 'more showers';
+      parts.push('the models are lining up ' + label + ' for ' + range(big) + ', with ' + amountWords(big.total) + ' possible');
+      // A dry spell after it?
+      var dry = 0, j = big.b + 1; while (j < n && amt(j) < 0.05) { dry++; j++; }
+      if (dry >= 3) parts[parts.length - 1] += ', before things dry out ' + (big.b + 1 - i0 >= 7 ? 'next ' : '') + weekday(daily.time[big.b + 1]);
+    } else {
+      var anyLater = false; for (var q = i0 + 3; q < n; q++) if (amt(q) >= 0.05 && pop(q) >= 40) anyLater = true;
+      parts.push(anyLater ? 'the models show only light, hit-or-miss showers' : 'the models keep things dry right through ' + dayName(daily, n - 1, i0));
+    }
+    // Temperature trend and cold mornings later in the period.
+    var hi = function (i) { return Number(daily.temperature_2m_max[i]); }, lo = function (i) { return Number(daily.temperature_2m_min[i]); };
+    var avg = function (a, b, f) { var v = [], m; for (m = a; m < b; m++) if (Number.isFinite(f(m))) v.push(f(m)); return v.length ? v.reduce(function (x, y) { return x + y; }, 0) / v.length : NaN; };
+    var near = avg(i0, i0 + 3, hi), later = avg(i0 + 3, n, hi), trend = '';
+    if (later - near >= 6) trend = 'a nice warm-up';
+    else if (near - later >= 6) trend = 'colder air settling in';
+    var coldest = null; for (var c = i0 + 3; c < n; c++) if (Number.isFinite(lo(c)) && (!coldest || lo(c) < coldest.v)) coldest = { v: lo(c), i: c };
+    var frost = coldest && coldest.v <= 36;
+    if (frost) trend = (trend ? trend + ' and ' : '') + 'frosty mornings near ' + Math.round(coldest.v) + '° by ' + dayName(daily, coldest.i, i0);
+    var text = 'Looking further out, ' + parts.join(' ') + (trend ? (big ? ', along with ' : ', with ') + trend : '');
+    if (total10 >= 1) text += '. All told, ' + place + ' could pick up ' + amountWords(total10).replace(/^around /, 'about ') + ' over the next 10 days';
+    return { text: text, total10: total10, bigLater: big, frost: frost };
+  }
+
+  /* ---------- What the NWS forecasters are talking about, in plain English ---------- */
+  var INSIGHTS = [
+    [/landslide|mudslide|debris flow/i, "soggy hillsides could see mudslides"],
+    [/soil(?:s)? (?:saturat|are saturat)|saturated soil|soil saturation/i, "soils are getting saturated, so each storm runs off faster"],
+    [/power outage|downed trees|down(?:ed)? (?:trees|branches)/i, "gusty winds could bring down branches and knock out power"],
+    [/atmospheric river/i, "an atmospheric river is in the mix"],
+    [/snowpack|sierra/i, "the Sierra is picking up a healthy dose of snow"],
+    [/fire weather threat|fire season|reducing our fire|red flag/i, "the rain is great news for fire season"],
+    [/freez|frost|cold weather (?:products|advisory)/i, "cold mornings could bring frost to the valleys"],
+    [/thunderstorm|lightning|hail/i, "a few thunderstorms with lightning can't be ruled out"],
+    [/above (?:the )?(?:seasonal )?(?:average|normal)|active pattern|pattern remains active/i, "the pattern looks active, with rain running above normal into late November"],
+    [/heat advisory|excessive heat|record (?:high|heat)/i, "the heat could approach records"],
+  ];
+  function nwsInsight(afd, already) {
+    if (!afd) return '';
+    var text = afd.key.join(' . ') + ' ' + afd.short + ' ' + afd.long, got = [];
+    INSIGHTS.forEach(function (x) { if (got.length < 2 && x[0].test(text) && !(already && already.test(x[1]))) got.push(x[1]); });
+    if (!got.length) return '';
+    var list = got.length === 1 ? got[0] : got[0] + ', and ' + got[1];
+    return 'The National Weather Service notes that ' + list;
+  }
+
+  function headline(rs, hz, daily, nowParts, region) {
+    var wet72 = rs.filter(function (r) { return r.wet; }).reduce(function (s, r) { return s + r.rain; }, 0);
+    var thunder = rs.some(function (r) { return r.thunder; });
+    var hiMax = -99, i0 = daily && daily.time ? dayIdx(daily, nowParts) : 0;
+    if (daily && daily.time) for (var i = i0; i < Math.min(daily.time.length, i0 + 10); i++) hiMax = Math.max(hiMax, Number(daily.temperature_2m_max[i]) || -99);
+    if (thunder) return 'Thunder is in the forecast';
+    if (hz.bigLater && hz.bigLater.total >= 1 && hz.bigLater.total > wet72) return 'The biggest storm is still to come';
+    if (hz.total10 >= 2) return 'A soggy stretch is setting up across ' + region;
+    if (wet72 >= 0.5) return 'A wet few days ahead for ' + region;
+    if (hiMax >= 95) return 'Heat is building across ' + region;
+    if (hz.frost) return 'Frosty mornings are on the way';
+    if (hz.total10 < 0.05) return 'Dry, quiet weather settles in';
+    return '';
+  }
+
   /* ---------- Public API ---------- */
   function build(opts) {
     var now = opts.now || new Date();
@@ -279,12 +365,16 @@
     var afd = opts.afdText ? parseAfd(opts.afdText) : null;
     if (afd && !afd.short && !afd.long && !afd.key.length) afd = null;
     var rs = runs(blocks(opts.hourly, nowParts));
-    var st = story(rs, afd, opts.place || 'Moraga');
-    var out = st.sentences.concat([tempSentence(opts.daily, nowParts, st.closing), nwsHighlight(afd)])
-      .filter(Boolean).slice(0, 4).map(function (s) { return /[.!?]$/.test(s) ? s : s + '.'; });
+    var place = opts.place || 'Moraga', region = opts.region || 'Lamorinda';
+    var st = story(rs, afd, place);
+    var hz = horizon(opts.daily, nowParts, place);
+    var dot = function (x) { return /[.!?]$/.test(x) ? x : x + '.'; };
+    var nearTerm = st.sentences.concat([tempSentence(opts.daily, nowParts, st.closing)]).filter(Boolean).map(dot);
+    var farTerm = [hz.text, nwsInsight(afd, /mudslide|frost/.test(hz.text) ? /frost/ : null) || nwsHighlight(afd)].filter(Boolean).map(dot);
     var issued = opts.issued ? new Date(opts.issued).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', minute: '2-digit' }) : '';
     return {
-      text: out.join(' '),
+      headline: headline(rs, hz, opts.daily, nowParts, region),
+      text: nearTerm.join(' ') + (farTerm.length ? '\n\n' + farTerm.join(' ') : ''),
       source: afd ? 'Based on the NWS Bay Area forecast discussion (' + issued + ') and local model guidance' : 'Local model guidance · NWS discussion not available'
     };
   }
