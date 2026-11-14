@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#0a1422"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="/moraga-weather-graphics/A188EC9F-32F0-402A-9D51-5B5A30DFBCB2.png?v=11"><link rel="apple-touch-icon" sizes="180x180" href="/moraga-weather-graphics/A188EC9F-32F0-402A-9D51-5B5A30DFBCB2.png?v=11"><link rel="apple-touch-icon-precomposed" href="/moraga-weather-graphics/A188EC9F-32F0-402A-9D51-5B5A30DFBCB2.png?v=11">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114c"><link rel="stylesheet" href="css/site.css?v=20261114d">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114c"><link rel="stylesheet" href="css/site.css?v=20261114e">
 
 
 
@@ -32,7 +32,7 @@
   <div class="public-hero-icon" id="public-hero-icon" aria-hidden="true" hidden></div>
   <div class="public-heading" id="public-city-heading" hidden>Moraga</div><div class="public-sub" id="public-location-sub" hidden></div><div id="public-high-low" hidden>— / —</div>
  </div><div id="public-alerts" aria-live="polite"></div><section class="public-outlook" aria-label="Weather outlook"><div class="public-outlook-title">Weather Outlook <span>Next 72 hours</span></div><p id="public-discussion" aria-live="polite">Loading the local outlook…</p><div class="public-outlook-source" id="public-outlook-source"></div></section>
- <div class="dwl-title"><h2>Daily Outlook</h2><p id="public-days-updated">Next 10 days</p></div><div class="public-days" id="public-days" aria-live="polite"></div><div class="dwl-title"><h2>Next 24 Hours</h2><p id="public-short-range-source" aria-live="polite"></p></div><div class="public-hourly" id="public-hourly" aria-live="polite"></div><div class="public-status" id="public-station-status">Checking nearby public weather observations…</div><div class="public-notice" id="public-data-notice">Moraga uses existing observatory data. Lafayette and Danville forecast feeds are being prepared; unavailable values will not be estimated.</div>
+ <div class="dwl-title"><h2>Daily Outlook</h2><p id="public-days-updated"></p></div><div class="public-days" id="public-days" aria-live="polite"></div><div class="dwl-title"><h2>Next 24 Hours</h2><p id="public-short-range-source" aria-live="polite"></p></div><div class="public-hourly" id="public-hourly" aria-live="polite"></div><div class="public-status" id="public-station-status">Checking nearby public weather observations…</div><div class="public-notice" id="public-data-notice"></div>
  <div style="margin-top:22px"><button id="public-more-details">View full forecast and technical charts ↗</button></div>
  </div><button id="observatory-return">← Simple forecast</button>
  <script>
@@ -54,6 +54,7 @@
   });
  }
  const el=id=>document.getElementById(id);
+ const updatedAt=ms=>Number.isFinite(ms)?'Updated '+new Date(ms).toLocaleString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' PT':'';
  const set=(id,value)=>{const node=el(id);if(node)node.textContent=value};
  function showPublic(){body.classList.add('public-mode');try{sessionStorage.setItem('wx-view','public')}catch(e){}window.scrollTo(0,0);refresh()}
  function showObservatory(){body.classList.remove('public-mode');try{sessionStorage.setItem('wx-view','observatory')}catch(e){}window.scrollTo(0,0)}
@@ -428,11 +429,11 @@ function nwsWeatherOutlook(afd,d,h){
    const chance=d.precipitation_probability_max[0];
    const wet=Number.isFinite(chance)&&chance>=40;
    set('public-summary',wet?'Rain is possible today ('+Math.min(100,Math.round(chance/10)*10)+'% chance). Expected total: '+rain(d.precipitation_sum[0])+'.':'Today: '+description(d.weather_code[0]).toLowerCase()+', with a high near '+fmt(d.temperature_2m_max[0])+'.');
-   set('public-data-notice',(blended?'Daily forecast: ECMWF/GFS/ICON/GEM with EPS/GEFS ensemble blending and ensemble rainfall for ':'Daily blended model feed unavailable; temporary Open-Meteo fallback for ')+chosen+'. Current temperature and hourly detail remain Open-Meteo guidance, not station observations. Updated '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'.');
+   set('public-days-updated',updatedAt(publicForecastFeed?Date.parse(publicForecastFeed.generated_utc):Date.now()));
    renderDays(d,publicForecastFeed);
    set('public-discussion','Retrieving the latest NWS Bay Area forecast discussion and local hourly guidance…');
    getNwsDiscussion().then(afd=>{if(request===revision)set('public-discussion',nwsWeatherOutlook(afd,d,data.hourly,data.current));}).catch(()=>{if(request===revision)set('public-discussion',nwsWeatherOutlook(null,d,data.hourly,data.current));});
-   let hourlyForecast=data.hourly,shortRangeSources='';
+   let hourlyForecast=data.hourly,shortRangeSources='',shortUpdated=null;
    try{
     const shortResponse=await fetch(feedName+'_short_range_24h.json?t='+Date.now(),{cache:'no-store'});
     if(shortResponse.ok){
@@ -449,12 +450,12 @@ function nwsWeatherOutlook(afd,d,h){
         if(j>=0&&Number.isFinite(value))merged[field][j]=value;
        });
       }
-      hourlyForecast=merged;shortRangeSources=(short.model_sources||[]).join(', ');
+      hourlyForecast=merged;shortRangeSources=(short.model_sources||[]).join(', ');shortUpdated=Date.parse(short.generated_utc);
      }
     }
    }catch(error){console.warn('Short-range model feed unavailable',error)}
    renderHourly(hourlyForecast,data.current?.time);
-   set('public-short-range-source',shortRangeSources?shortRangeSources.split(', ').join(' · ')+' blend':'Open-Meteo forecast · model blend unavailable');
+   set('public-short-range-source',updatedAt(shortUpdated||Date.now()));
    updateStation(chosen,request,data.current?.temperature_2m,modeledConflict);
   }catch(err){
    if(request!==revision)return;
@@ -510,8 +511,8 @@ function nwsWeatherOutlook(afd,d,h){
     }
     const issued=Date.parse(feed.generated_utc);
     const age=Number.isFinite(issued)?Math.round((Date.now()-issued)/3600000):NaN;
-    set('public-data-notice','Using published '+chosen+' model guidance'+(Number.isFinite(age)?' (issued '+Math.max(0,age)+' hours ago)':'')+'. Live forecast service unavailable; temperatures are uncalibrated model averages.');
-    set('public-short-range-source','Live hourly guidance unavailable.');
+    set('public-days-updated',updatedAt(Date.parse(feed.generated_utc)));
+    set('public-short-range-source','Hourly forecast unavailable');
     set('public-station-status','Live station observations unavailable.');
    }catch(fallbackError){
     console.warn('Published forecast fallback failed',fallbackError);
