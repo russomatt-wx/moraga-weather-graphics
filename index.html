@@ -28,7 +28,7 @@
   </div>
   <div class="public-obs-today-title" id="public-today-title">TODAY'S FORECAST</div>
   <div class="public-obs-today"><div><span>High</span><strong id="public-today-high">—</strong></div><div><span>Low</span><strong id="public-today-low">—</strong></div><div><span>Rainfall</span><strong id="public-rain">—</strong></div></div>
-  <div class="public-note" id="public-summary">Local weather conditions and forecast at a glance.</div>
+  <div class="public-note" id="public-summary" hidden></div>
   <div class="public-hero-icon" id="public-hero-icon" aria-hidden="true" hidden></div>
   <div class="public-heading" id="public-city-heading" hidden>Moraga</div><div class="public-sub" id="public-location-sub" hidden></div><div id="public-high-low" hidden>— / —</div>
  </div><div id="public-alerts" aria-live="polite"></div><section class="public-outlook" aria-label="Weather outlook"><div class="public-outlook-title">Weather Outlook <span>What's ahead</span></div><div class="public-outlook-headline" id="public-outlook-headline"></div><p id="public-discussion" aria-live="polite">Loading the local outlook…</p><div class="public-outlook-source" id="public-outlook-source"></div></section>
@@ -130,6 +130,12 @@
   applyMoragaBlend(lastDaily.d);showToday(lastDaily.d);renderDays(lastDaily.d,lastDaily.feed,lastDaily.hourly);
   if(lastOutlook)set('public-discussion',nwsWeatherOutlook(lastOutlook.afd,lastOutlook.d,lastOutlook.h));
  });
+ // Today's rainfall matches today's 10-day card: after 6 AM, only the rain still to come.
+ function todayRain(wholeDay,feed,date){
+  const r=DWL.restOfToday(feed?.hourly_conditions,date);
+  if(!r)return rain(wholeDay);
+  return r.chance<20&&r.amount<0.025?'0.00″':r.amount<0.025?'<0.05″':rain(r.amount);
+ }
  function renderDays(d,forecastFeed=null,hourly=null){
   lastDaily={d,feed:forecastFeed,city,hourly};
   // Rain timing uses the published multi-model hours (shared with the Observation Lab so both
@@ -436,7 +442,7 @@ function nwsWeatherOutlook(afd,d,h){
     set('public-today-high',fmt(daily.temperature_2m_max[0]));
     set('public-today-low',fmt(daily.temperature_2m_min[0]));
     set('public-high-low',fmt(daily.temperature_2m_max[0])+' / '+fmt(daily.temperature_2m_min[0]));
-    set('public-rain',rain(daily.precipitation_sum[0]));
+    set('public-rain',todayRain(daily.precipitation_sum[0],feed,daily.time[0]));
     if(!prefill){set('public-current-temp','—°');set('public-current-condition','Live observation unavailable');set('public-summary','Published forecast available; live observations temporarily unavailable.');}
     else set('public-current-condition','Loading current conditions…');
     {
@@ -545,7 +551,7 @@ function nwsWeatherOutlook(afd,d,h){
    set('public-high-low',fmt(d.temperature_2m_max[0])+' / '+fmt(d.temperature_2m_min[0]));
    set('public-today-high',fmt(d.temperature_2m_max[0]));set('public-today-low',fmt(d.temperature_2m_min[0]));
    set('public-current-time',new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'America/Los_Angeles'}).toUpperCase()+String.fromCharCode(10)+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'})+' PT');
-   set('public-rain',rain(d.precipitation_sum[0]));
+   set('public-rain',todayRain(d.precipitation_sum[0],publicForecastFeed,d.time[0]));
    const mc=data.current||{};
    set('public-humidity',Number.isFinite(mc.relative_humidity_2m)?Math.round(mc.relative_humidity_2m)+'%':'—');
    set('public-dew',Number.isFinite(mc.dew_point_2m)?fmt(mc.dew_point_2m):'—');
@@ -554,7 +560,7 @@ function nwsWeatherOutlook(afd,d,h){
    set('public-gust',Number.isFinite(mc.wind_gusts_10m)?(mc.wind_gusts_10m<1?'Calm':Math.round(mc.wind_gusts_10m)+' mph'):'—');
    const chance=d.precipitation_probability_max[0];
    const wet=Number.isFinite(chance)&&chance>=40;
-   set('public-summary',wet?'Rain is possible today ('+Math.min(100,Math.round(chance/10)*10)+'% chance). Expected total: '+rain(d.precipitation_sum[0])+'.':'Today: '+description(d.weather_code[0]).toLowerCase()+', with a high near '+fmt(d.temperature_2m_max[0])+'.');
+   // (Summary sentence removed: it repeated the whole-day ensemble chance and contradicted today's card.)
    set('public-days-updated',updatedAt(publicForecastFeed?Date.parse(publicForecastFeed.generated_utc):Date.now()));
    renderDays(d,publicForecastFeed,data.hourly);
    set('public-discussion','Retrieving the latest NWS Bay Area forecast discussion and local hourly guidance…');
