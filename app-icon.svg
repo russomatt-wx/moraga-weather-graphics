@@ -16,6 +16,10 @@
       <stop offset="0" stop-color="#19dcf6" stop-opacity=".16"/>
       <stop offset="1" stop-color="#19dcf6" stop-opacity="0"/>
     </radialGradient>
+    <linearGradient id="cloud" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#bfeefc"/>
+    </linearGradient>
     <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#8cf6ff"/>
       <stop offset="1" stop-color="#0aa8de"/>
@@ -32,7 +36,7 @@
   <path d="M0 842 L70 812 L128 828 L204 784 L262 806 L352 750 L428 790 L492 770 L574 812 L648 782 L742 822 L812 796 L896 830 L956 812 L1024 838" fill="none" stroke="#3fe3ff" stroke-opacity=".85" stroke-width="4" stroke-linejoin="round"/>
 
   <!-- the mark (same geometry as the header logo, viewBox 160x84) -->
-  <g transform="translate(152 268) scale(4.5)">
+  <g transform="translate(152 292) scale(4.5)">
     <!-- soft glow: wide translucent strokes under the shapes -->
     <path d="M74 40a32 32 0 0 1 64 0" fill="none" stroke="#19dcf6" stroke-opacity=".10" stroke-width="16" stroke-linecap="round"/>
     <path d="M2 80 58 30l22 17 30-30 48 63-50-40-28 25-22-15Z" fill="none" stroke="#19dcf6" stroke-opacity=".10" stroke-width="10" stroke-linejoin="round"/>
@@ -41,5 +45,11 @@
     <!-- shapes -->
     <path d="M74 40a32 32 0 0 1 64 0" fill="none" stroke="url(#mark)" stroke-width="5" stroke-linecap="round"/>
     <path d="M2 80 58 30l22 17 30-30 48 63-50-40-28 25-22-15Z" fill="url(#mark)"/>
+    <!-- cloud above the saddle, left of the sun -->
+    <g transform="translate(62 -1)">
+      <path d="M8 22H34A7 7 0 0 0 34 8A10 10 0 0 0 15 6A8 8 0 0 0 6 12A5 5 0 0 0 8 22Z" fill="none" stroke="#19dcf6" stroke-opacity=".12" stroke-width="9" stroke-linejoin="round"/>
+      <path d="M8 22H34A7 7 0 0 0 34 8A10 10 0 0 0 15 6A8 8 0 0 0 6 12A5 5 0 0 0 8 22Z" fill="none" stroke="#04213a" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M8 22H34A7 7 0 0 0 34 8A10 10 0 0 0 15 6A8 8 0 0 0 6 12A5 5 0 0 0 8 22Z" fill="url(#cloud)"/>
+    </g>
   </g>
 </svg>
