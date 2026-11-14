@@ -9,8 +9,8 @@ except ImportError:
 from datetime import datetime, timezone
 from pathlib import Path
 LOCATIONS={"moraga":(37.8201932,-122.1193876),"lafayette":(37.890,-122.115),"danville":(37.813,-121.974),"greenbrook":(37.799,-121.970)}
-MODELS={"HRRR":("https://api.open-meteo.com/v1/forecast","ncep_hrrr_conus",.40),"RRFS":("https://api.open-meteo.com/v1/forecast","ncep_rrfs_conus",.25),"ECMWF":("https://api.open-meteo.com/v1/forecast","ecmwf_ifs025",.20),"GFS":("https://api.open-meteo.com/v1/forecast","ncep_gfs_seamless",.15)}
-FIELDS=["temperature_2m","precipitation","precipitation_probability","weather_code"]
+MODELS={"HRRR":("https://api.open-meteo.com/v1/forecast","ncep_hrrr_conus",.40),"RRFS":("https://api.open-meteo.com/v1/forecast","ncep_rrfs_conus",.25),"ECMWF":("https://api.open-meteo.com/v1/forecast","ecmwf_ifs025",.20),"GFS":("https://api.open-meteo.com/v1/forecast","ncep_gfs_global",.15)}
+FIELDS=["temperature_2m","precipitation","precipitation_probability","weather_code","cloud_cover"]
 def fetch(url,params):
     # One keep-alive session with retries: fresh TLS handshakes to Open-Meteo time out on GitHub runners.
     for attempt in range(3):
@@ -48,9 +48,26 @@ def collect(name,lat,lon):
                 idx=h["time"].index(t);v=h.get(field,[])
                 if idx<len(v) and isinstance(v[idx],(int,float)):entries.append((v[idx],source["weight"]))
             if not entries:values.append(None)
-            elif field=="weather_code":values.append(max(entries,key=lambda x:x[1])[0])
+            elif field=="weather_code":
+                # Only carry codes the sky/rain logic below cannot infer: thunder or fog that a
+                # weighted majority of models agree on. Sky and rain icons come from blended data.
+                total=sum(w for _,w in entries)
+                thunder=sum(w for v,w in entries if v>=95)/total
+                fog=sum(w for v,w in entries if v in (45,48))/total
+                values.append(95 if thunder>=.4 else 45 if fog>=.5 else None)
             else:values.append(round(sum(v*w for v,w in entries)/sum(w for _,w in entries),3))
         output["hourly"][field]=values
+    # Sky condition from blended cloud cover, smoothed over 3 hours so one noisy model hour
+    # cannot flip the icon between clear and overcast.
+    cc=output["hourly"]["cloud_cover"]
+    smooth=[]
+    for i in range(len(cc)):
+        win=[v for v in cc[max(0,i-1):i+2] if isinstance(v,(int,float))]
+        smooth.append(round(sum(win)/len(win),1) if win else None)
+    output["hourly"]["cloud_cover"]=smooth
+    sky=lambda c:None if c is None else 0 if c<20 else 1 if c<45 else 2 if c<75 else 3
+    output["hourly"]["weather_code"]=[w if w is not None else sky(c) for w,c in zip(output["hourly"]["weather_code"],smooth)]
+    output["method"]="Weighted HRRR/RRFS/ECMWF/GFS blend. Sky icon from 3-hour smoothed blended cloud cover; rain icon from blended rain chance; thunder/fog only when a weighted majority of models agree."
     Path(name+"_short_range_24h.json").write_text(json.dumps(output,indent=2)+"\n")
     print(name,"sources",list(results),"failures",failures)
 for name,(lat,lon) in LOCATIONS.items():
