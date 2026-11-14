@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Moraga mesoscale diagnostics. Model past is NOT surface observations."""
 import json
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -19,12 +20,18 @@ URL="https://api.open-meteo.com/v1/forecast"
 LOCATIONS={"SFO":(37.619,-122.375),"ACV":(40.978,-124.109),"SAC":(38.513,-121.493),"WMC":(40.901,-117.806),"Coastal proxy":(37.50,-122.50)}
 VARIABLES="pressure_msl,boundary_layer_height"
 
+SESSION=requests.Session()
 def retrieve(name,coords):
-    r=requests.get(URL,params={"latitude":coords[0],"longitude":coords[1],
-       "hourly":VARIABLES,"past_hours":48,"forecast_hours":49,
-       "timezone":"America/Los_Angeles","models":"best_match"},timeout=50)
-    r.raise_for_status()
-    j=r.json()
+    # One keep-alive session with retries: single slow Open-Meteo responses were failing whole runs.
+    params={"latitude":coords[0],"longitude":coords[1],"hourly":VARIABLES,"past_hours":48,"forecast_hours":49,
+       "timezone":"America/Los_Angeles","models":"best_match"}
+    for attempt in range(4):
+        try:
+            r=SESSION.get(URL,params=params,timeout=(20,60))
+            r.raise_for_status();j=r.json();break
+        except (requests.exceptions.RequestException,ValueError):
+            if attempt==3:raise
+            time.sleep(5*(2**attempt))
     if "hourly" not in j: raise RuntimeError(f"{name}: no hourly data: {j}")
     return j
 
