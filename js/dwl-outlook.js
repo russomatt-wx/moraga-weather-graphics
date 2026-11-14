@@ -343,19 +343,33 @@
     return 'The National Weather Service notes that ' + list;
   }
 
-  function headline(rs, hz, daily, nowParts, region) {
+  // Headline in a forecaster's voice: the single most interesting thing about the next 10 days.
+  function headline(rs, hz, daily, nowParts, region, afd) {
     var wet72 = rs.filter(function (r) { return r.wet; }).reduce(function (s, r) { return s + r.rain; }, 0);
     var thunder = rs.some(function (r) { return r.thunder; });
-    var hiMax = -99, i0 = daily && daily.time ? dayIdx(daily, nowParts) : 0;
-    if (daily && daily.time) for (var i = i0; i < Math.min(daily.time.length, i0 + 10); i++) hiMax = Math.max(hiMax, Number(daily.temperature_2m_max[i]) || -99);
-    if (thunder) return 'Thunder is in the forecast';
+    var i0 = daily && daily.time ? dayIdx(daily, nowParts) : 0, n = daily && daily.time ? Math.min(daily.time.length, i0 + 10) : 0;
+    var hiMax = -99, events = 0, inRain = false;
+    for (var i = i0; i < n; i++) {
+      hiMax = Math.max(hiMax, Number(daily.temperature_2m_max[i]) || -99);
+      var wet = Number(daily.precipitation_probability_max && daily.precipitation_probability_max[i]) >= 50 && Number(daily.precipitation_sum && daily.precipitation_sum[i]) >= 0.15;
+      if (wet && !inRain) events++;
+      inRain = wet;
+    }
+    var nws = afd ? afd.key.join(' ') + ' ' + afd.short + ' ' + afd.long : '';
+    if (thunder) return 'Thunderstorms could rumble through ' + region;
+    if (/atmospheric river/i.test(nws) && hz.total10 >= 1) return 'An atmospheric river is taking aim at the Bay Area';
+    if (events >= 3) return 'The Pacific storm train is here';
     if (hz.bigLater && hz.bigLater.total >= 1 && hz.bigLater.total > wet72) return 'The biggest storm is still to come';
+    if (events === 2) return 'Two storms are lined up for ' + region;
     if (hz.total10 >= 2) return 'A soggy stretch is setting up for ' + region;
     if (wet72 >= 0.5) return 'A wet few days ahead for ' + region;
+    if (hiMax >= 100) return 'A heat wave is on the way';
     if (hiMax >= 95) return 'Heat is building in ' + region;
-    if (hz.frost) return 'Frosty mornings are on the way';
-    if (hz.total10 < 0.05) return 'Dry, quiet weather settles in';
-    return '';
+    if (/red flag|critical fire weather|offshore wind/i.test(nws)) return 'Fire weather is back on the radar';
+    if (hz.frost) return 'Jack Frost is knocking';
+    if (/marine layer|low clouds and fog|stratus/i.test(nws) && hz.total10 < 0.05) return 'The marine layer is in charge';
+    if (hz.total10 < 0.05) return 'High pressure takes charge: dry days ahead';
+    return 'A quiet stretch of weather for ' + region;
   }
 
   // Friendly opener for the local time of day.
@@ -381,7 +395,7 @@
     var farTerm = [hz.text, nwsInsight(afd, /mudslide|frost/.test(hz.text) ? /frost/ : null) || nwsHighlight(afd)].filter(Boolean).map(dot);
     var issued = opts.issued ? new Date(opts.issued).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', minute: '2-digit' }) : '';
     return {
-      headline: headline(rs, hz, opts.daily, nowParts, region),
+      headline: headline(rs, hz, opts.daily, nowParts, region, afd),
       text: greeting(nowParts.hour, place) + ' ' + nearTerm.join(' ') + (farTerm.length ? '\n\n' + farTerm.join(' ') : ''),
       source: afd ? 'Based on the NWS Bay Area forecast discussion (' + issued + ') and local model guidance' : 'Local model guidance · NWS discussion not available'
     };
