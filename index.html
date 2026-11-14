@@ -227,7 +227,8 @@
    // or a station outside the intended neighborhood microclimate.
    if(Number.isFinite(modelTemp)&&Math.abs(ob.temperature_f-modelTemp)>12)throw Error('Nearby station differs excessively from regional guidance');
    if(chosen==='Greenbrook'&&Number.isFinite(ob.station_distance_mi)&&ob.station_distance_mi>3)throw Error('Station too far from Greenbrook');
-   lastObs={temp:ob.temperature_f,at:stamp,city:chosen};if(lastHourly&&lastHourly.city===chosen)renderHourly(lastHourly.hourly,lastHourly.currentTime);
+   lastObs={temp:ob.temperature_f,at:stamp,city:chosen};
+   if(/unavailable|Loading/i.test(el('public-current-condition')?.textContent||'')){set('public-current-condition',lastSky&&lastSky.city===chosen?description(lastSky.code,lastSky.isDay===0):'');if(/live observations temporarily unavailable/.test(el('public-summary')?.textContent||''))set('public-summary','');}if(lastHourly&&lastHourly.city===chosen)renderHourly(lastHourly.hourly,lastHourly.currentTime);
    set('public-current-temp',fmt(ob.temperature_f));updatePublicCurrentAccent(ob.temperature_f);set('public-humidity',Number.isFinite(ob.humidity_pct)?Math.round(ob.humidity_pct)+'%':'—');set('public-dew',Number.isFinite(ob.dew_point_f)?fmt(ob.dew_point_f):'—');set('public-pressure',Number.isFinite(ob.pressure_inhg)?ob.pressure_inhg.toFixed(2)+' inHg':'—');set('public-wind',Number.isFinite(ob.wind_mph)?(ob.wind_mph<1?'Calm':Math.round(ob.wind_mph)+' mph'):'—');
    const ext=ob.daily_extrema;
    if(ext?.complete&&Number.isFinite(ext.high_f)&&Number.isFinite(ext.low_f))set('public-high-low',fmt(ext.high_f)+' / '+fmt(ext.low_f));
