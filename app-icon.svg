@@ -33,12 +33,9 @@
 
   <!-- the mark (same geometry as the header logo, viewBox 160x84) -->
   <g transform="translate(152 292) scale(4.5)">
-    <!-- the arc and peaks are masked out behind the cloud so the background shows through it -->
-    <mask id="cloudcut" maskUnits="userSpaceOnUse" x="-10" y="-10" width="180" height="104">
-      <rect x="-10" y="-10" width="180" height="104" fill="#fff"/>
-      <path transform="translate(62 -1)" d="M8 22H34A7 7 0 0 0 34 8A10 10 0 0 0 15 6A8 8 0 0 0 6 12A5 5 0 0 0 8 22Z" fill="#000" stroke="#000" stroke-width="3.4" stroke-linejoin="round"/>
-    </mask>
-    <g mask="url(#cloudcut)">
+    <!-- the arc and peaks are clipped out behind the cloud so the background shows through it -->
+    <clipPath id="cloudcut"><path clip-rule="evenodd" d="M-10 -10H170V94H-10Z M70 21H96A7 7 0 0 0 96 7A10 10 0 0 0 77 5A8 8 0 0 0 68 11A5 5 0 0 0 70 21Z"/></clipPath>
+    <g clip-path="url(#cloudcut)">
     <!-- soft glow: wide translucent strokes under the shapes -->
     <path d="M74 40a32 32 0 0 1 64 0" fill="none" stroke="#19dcf6" stroke-opacity=".10" stroke-width="16" stroke-linecap="round"/>
     <path d="M2 80 58 30l22 17 30-30 48 63-50-40-28 25-22-15Z" fill="none" stroke="#19dcf6" stroke-opacity=".10" stroke-width="10" stroke-linejoin="round"/>
