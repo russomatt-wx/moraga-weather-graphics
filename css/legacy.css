@@ -486,7 +486,6 @@ main .card .chart-meta, main .card p.chart-meta{font-size:14px;line-height:1.5}
 body.public-mode>main{display:none!important}
 #public-shell button{border:1px solid #395b71;border-radius:13px;padding:10px 13px;color:#e9f7ff;background:#20364a;font:inherit;cursor:pointer}
 #public-shell button[aria-pressed=true]{background:#167c99;border-color:#51d1ed}
-#public-shell .public-locations{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0 24px}
 #public-shell .public-heading{font-size:clamp(26px,5vw,38px);font-weight:800;letter-spacing:-.6px}
 #public-shell .public-sub{color:#a8c7d6;font-size:15px}
 #public-shell .public-temp{font-size:clamp(58px,12vw,88px);font-weight:750;line-height:1.15}
@@ -603,60 +602,16 @@ box-shadow:inset 0 2px 0 color-mix(in srgb,var(--hour-color) 55%,transparent)!im
 #public-shell .public-obs-card .public-obs-dot{background:var(--public-current-accent)!important;
  box-shadow:0 0 0 5px color-mix(in srgb,var(--public-current-accent) 20%,transparent)!important;}
 /* ---- legacy block 68 ---- */
-#public-shell .public-locations button[data-public-city="Danville"], #public-shell .public-locations button[data-public-city="Greenbrook"]{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.15;padding:9px 12px}
-#public-shell .public-locations .local-neighborhood{font-weight:700;font-size:inherit}
-#public-shell .public-locations .local-city{font-size:.75em;opacity:.77;font-weight:500;letter-spacing:.02em}
-@media(max-width:420px){
-#public-shell .public-locations{gap:6px}
-#public-shell .public-locations button{font-size:13px!important;padding:9px 10px!important}
-}
 /* ---- legacy block 69 ---- */
-#public-shell .public-locations{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important;margin:15px 0 22px!important}
-#public-shell .public-locations button{width:100%!important;min-width:0!important;min-height:57px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important;padding:9px 7px!important;font-size:clamp(15px,3.5vw,19px)!important;line-height:1.16!important;text-align:center!important}
-#public-shell .public-locations .local-city{font-size:12px!important;letter-spacing:.04em!important;opacity:.82!important}
-@media(min-width:720px){
-#public-shell .public-locations{grid-template-columns:repeat(4,minmax(0,1fr))!important}
-}
 /* ---- legacy block 71 ---- */
-#public-shell .public-locations{display:flex!important;flex-wrap:nowrap!important;grid-template-columns:none!important;gap:10px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:none;padding:3px 2px 10px!important;margin:13px 0 18px!important}
-#public-shell .public-locations::-webkit-scrollbar{display:none}
-#public-shell .public-location-item{position:relative;display:block;flex:0 0 170px;min-width:0;scroll-snap-align:start}
-#public-shell .public-locations .public-location-choice{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;text-align:left!important;gap:5px!important;width:100%!important;min-height:78px!important;padding:12px 38px 12px 14px!important;white-space:normal!important;font-size:16px!important;line-height:1.12!important;border-radius:17px!important}
-#public-shell .public-locations .local-neighborhood{font-size:16px!important;font-weight:700!important}
-#public-shell .public-locations .local-city{font-size:12px!important;letter-spacing:.035em!important;opacity:.82!important;font-weight:500!important}
-#public-shell .public-location-favorite{position:absolute!important;right:7px;top:50%;transform:translateY(-50%);width:31px!important;height:35px!important;min-height:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;color:#a5c7d6!important;font-size:25px!important;line-height:1!important;z-index:1}
-#public-shell .public-location-favorite[aria-pressed="true"]{color:#ffd36d!important}
-#public-shell .public-location-choice[aria-pressed="true"]{background:#147f9d!important;border-color:#56d9f1!important}
-@media(max-width:430px){
-#public-shell .public-location-item{flex-basis:154px}
-#public-shell .public-locations .public-location-choice{min-height:73px!important;padding-left:12px!important}
-#public-shell .public-locations .local-neighborhood{font-size:14px!important}
-}
 /* ---- legacy block 72 ---- */
-#public-shell .public-locations .public-location-item{position:relative!important;flex:0 0 174px!important;width:174px!important;min-width:174px!important;scroll-snap-align:start}
-#public-shell .public-locations button.public-location-choice{position:relative!important;display:flex!important;width:100%!important;min-width:0!important;min-height:78px!important;padding:12px 42px 12px 13px!important;text-align:left!important;align-items:flex-start!important;justify-content:center!important;white-space:normal!important;cursor:pointer!important;z-index:1}
-#public-shell .public-locations button.public-location-favorite{position:absolute!important;display:flex!important;align-items:center!important;justify-content:center!important;right:7px!important;top:50%!important;left:auto!important;bottom:auto!important;transform:translateY(-50%)!important;width:34px!important;min-width:34px!important;max-width:34px!important;height:38px!important;min-height:38px!important;max-height:38px!important;padding:0!important;margin:0!important;border:0!important;border-radius:8px!important;background:rgba(8,27,45,.25)!important;box-shadow:none!important;font-size:24px!important;line-height:1!important;z-index:3!important;cursor:pointer!important;touch-action:manipulation!important}
-#public-shell .public-locations button.public-location-favorite[aria-pressed="true"]{color:#ffd36d!important}
-#public-shell .public-locations button.public-location-favorite[aria-pressed="false"]{color:#b3cbd6!important}
-@media(max-width:430px){
-#public-shell .public-locations .public-location-item{flex-basis:166px!important;width:166px!important;min-width:166px!important}
-#public-shell .public-locations button.public-location-choice{padding:11px 42px 11px 12px!important;min-height:76px!important}
-}
 /* ---- legacy block 77 ---- */
 #public-shell .public-hero p, #public-shell .public-hero small{font-size:max(14px,1em)!important;line-height:1.48!important}
 #public-shell .public-obs-card .public-obs-title, #public-shell .public-obs-card .public-obs-time{font-size:clamp(14px,2.8vw,18px)!important}
 #public-shell .public-obs-card .public-obs-label, #public-shell .public-obs-card .public-obs-meta{font-size:clamp(15px,2.9vw,19px)!important}
-#public-shell .public-locations .local-city{font-size:14px!important}
-#public-shell .public-locations .local-neighborhood{font-size:clamp(16px,3.7vw,20px)!important}
 #observatory-shell p, #observatory-shell small, #observatory-shell .method-note, #observatory-shell .chart-note{font-size:clamp(14px,2.5vw,17px)!important;line-height:1.5!important}
 #observatory-shell h3{font-size:clamp(20px,3vw,26px)!important}
 /* ---- legacy block 79 ---- */
-#public-shell .public-locations{display:flex!important;gap:7px!important;margin:5px 0 13px!important;padding:2px 0 5px!important;scroll-snap-type:x proximity!important}
-#public-shell .public-location-item{flex:0 0 auto!important;min-width:0!important;max-width:170px!important;border-radius:12px!important;background:linear-gradient(145deg,#09263c,#061a2c)!important;border:1px solid #287fa5!important;box-shadow:inset 0 0 8px #00d4ff15!important}
-#public-shell .public-location-choice{min-height:47px!important;padding:7px 28px 7px 10px!important;font-size:13px!important;line-height:1.1!important}
-#public-shell .public-location-choice .local-neighborhood{font-size:clamp(12px,2.7vw,16px)!important;font-weight:750!important}
-#public-shell .public-location-choice .local-city{font-size:clamp(10px,2.2vw,12px)!important}
-#public-shell .public-location-favorite{font-size:17px!important;right:4px!important;top:50%!important;transform:translateY(-50%)!important;min-width:22px!important;min-height:27px!important}
 #public-shell .public-obs-inner{padding:10px 12px!important;border-radius:15px!important}
 #public-shell .public-obs-top{margin-bottom:6px!important}
 #public-shell .public-obs-title{color:#b9f5ff!important;letter-spacing:.12em!important;font-size:clamp(11px,2.8vw,15px)!important}
@@ -667,8 +622,6 @@ box-shadow:inset 0 2px 0 color-mix(in srgb,var(--hour-color) 55%,transparent)!im
 #public-shell .public-note{font-size:12px!important;line-height:1.35!important}
 #public-shell h3{font-size:clamp(18px,4vw,25px)!important;color:#f2f9ff!important;margin:15px 0 8px!important}
 @media(max-width:420px){
-#public-shell .public-location-item{max-width:135px!important}
-#public-shell .public-location-choice{min-height:43px!important;padding:5px 24px 5px 8px!important}
 #public-shell .public-obs-inner{padding:8px!important}
 }
 /* ---- legacy block 81 ---- */

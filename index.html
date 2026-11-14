@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#0a1422"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="/moraga-weather-graphics/A188EC9F-32F0-402A-9D51-5B5A30DFBCB2.png?v=11"><link rel="apple-touch-icon" sizes="180x180" href="/moraga-weather-graphics/A188EC9F-32F0-402A-9D51-5B5A30DFBCB2.png?v=11"><link rel="apple-touch-icon-precomposed" href="/moraga-weather-graphics/A188EC9F-32F0-402A-9D51-5B5A30DFBCB2.png?v=11">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261113a"><link rel="stylesheet" href="css/site.css?v=20261113a">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114a"><link rel="stylesheet" href="css/site.css?v=20261114a">
 
 
 
@@ -17,9 +17,9 @@
 
 
 </head>
-<body class="public-mode"><script src="js/dwl-components.js?v=20261113a"></script><div id="public-shell" aria-label="Public local weather forecast">
+<body class="public-mode"><script src="js/dwl-components.js?v=20261113a"></script><script src="js/dwl-outlook.js?v=20261114a"></script><div id="public-shell" aria-label="Public local weather forecast">
  <div class="dwl-header" aria-label="Diablo Weather Lab — Hyperlocal Weather Intelligence"><div class="dwl-brand"><svg class="dwl-mark" viewBox="0 0 160 84" aria-hidden="true"><defs><linearGradient id="dwl-mark-ga" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7cf3ff"/><stop offset="1" stop-color="#0aa8de"/></linearGradient></defs><path d="M74 40a32 32 0 0 1 64 0" fill="none" stroke="url(#dwl-mark-ga)" stroke-width="5" stroke-linecap="round"/><path d="M2 80 58 30l22 17 30-30 48 63-50-40-28 25-22-15Z" fill="url(#dwl-mark-ga)"/></svg><div class="dwl-wordmark"><span class="dwl-wm-1">Diablo</span><span class="dwl-wm-2">Weather Lab</span></div></div><div class="dwl-tagline">Hyperlocal Weather Intelligence</div><svg class="dwl-ridge" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40V30l28-8 22 5 30-14 26 9 34-17 28 12 24-6 30 13 26-9 34 11 28-7 30 9 22-5 38 13V40Z"/></svg></div><div class="dwl-toggle" role="group" aria-label="Weather view"><button type="button" data-weather-view="public" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory" data-weather-view="observatory">Observatory</button></div>
- <div class="public-locations" aria-label="Swipe to choose a hyperlocal forecast location"><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Moraga" aria-pressed="true"><span class="local-neighborhood">Larch</span><span class="local-city">Moraga</span></button><button type="button" class="public-location-favorite" data-favorite-city="Moraga" aria-label="Set Moraga station area, Moraga as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Lafayette" aria-pressed="false"><span class="local-neighborhood">Reliez Valley</span><span class="local-city">Lafayette</span></button><button type="button" class="public-location-favorite" data-favorite-city="Lafayette" aria-label="Set Reliez Valley, Lafayette as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Danville" aria-pressed="false"><span class="local-neighborhood">Sycamore Valley</span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Danville" aria-label="Set Sycamore Valley, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Greenbrook" aria-pressed="false"><span class="local-neighborhood">Greenbrook</span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Greenbrook" aria-label="Set Greenbrook, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div></div>
+ <div class="public-locations" role="group" aria-label="Choose a forecast location"><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Moraga" aria-pressed="true"><span class="local-neighborhood">Larch</span><span class="local-city">Moraga</span></button><button type="button" class="public-location-favorite" data-favorite-city="Moraga" aria-label="Set Moraga station area, Moraga as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Lafayette" aria-pressed="false"><span class="local-neighborhood">Reliez Valley</span><span class="local-city">Lafayette</span></button><button type="button" class="public-location-favorite" data-favorite-city="Lafayette" aria-label="Set Reliez Valley, Lafayette as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Danville" aria-pressed="false"><span class="local-neighborhood">Sycamore Valley</span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Danville" aria-label="Set Sycamore Valley, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Greenbrook" aria-pressed="false"><span class="local-neighborhood">Greenbrook</span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Greenbrook" aria-label="Set Greenbrook, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div></div>
  <div class="public-hero public-obs-card">
   <div class="public-obs-inner">
    <div class="public-obs-top"><div class="public-obs-title"><span class="public-obs-dot"></span><span>CURRENT CONDITIONS</span></div><div class="public-obs-time" id="public-current-time">—</div></div>
@@ -31,7 +31,7 @@
   <div class="public-note" id="public-summary">Local weather conditions and forecast at a glance.</div>
   <div class="public-hero-icon" id="public-hero-icon" aria-hidden="true" hidden></div>
   <div class="public-heading" id="public-city-heading" hidden>Moraga</div><div class="public-sub" id="public-location-sub" hidden></div><div id="public-high-low" hidden>— / —</div>
- </div><div id="public-alerts" aria-live="polite"></div><section class="public-outlook" aria-label="Weather outlook"><div class="public-outlook-title">Weather Outlook <span>Next 72 hours</span></div><p id="public-discussion">Loading the local outlook…</p></section>
+ </div><div id="public-alerts" aria-live="polite"></div><section class="public-outlook" aria-label="Weather outlook"><div class="public-outlook-title">Weather Outlook <span>Next 72 hours</span></div><p id="public-discussion" aria-live="polite">Loading the local outlook…</p><div class="public-outlook-source" id="public-outlook-source"></div></section>
  <div id="public-short-range-source" class="public-short-range-source" aria-live="polite"></div><div class="dwl-title"><h2>Daily Outlook</h2><p id="public-days-updated">Next 10 days</p></div><div class="public-days" id="public-days" aria-live="polite"></div><div class="dwl-title"><h2>Next 24 Hours</h2></div><div class="public-hourly" id="public-hourly" aria-live="polite"></div><div class="public-status" id="public-station-status">Checking nearby public weather observations…</div><div class="public-notice" id="public-data-notice">Moraga uses existing observatory data. Lafayette and Danville forecast feeds are being prepared; unavailable values will not be estimated.</div>
  <div style="margin-top:22px"><button id="public-more-details">View full forecast and technical charts ↗</button></div>
  </div><button id="observatory-return">← Simple forecast</button>
@@ -126,6 +126,7 @@
  window.addEventListener('dwl:blend',()=>{
   if(!lastDaily||lastDaily.city!=='Moraga'||city!=='Moraga')return;
   applyMoragaBlend(lastDaily.d);showToday(lastDaily.d);renderDays(lastDaily.d,lastDaily.feed);
+  if(lastOutlook)set('public-discussion',nwsWeatherOutlook(lastOutlook.afd,lastOutlook.d,lastOutlook.h));
  });
  function renderDays(d,forecastFeed=null){
   lastDaily={d,feed:forecastFeed,city};
@@ -259,44 +260,21 @@ async function getNwsDiscussion(){
   const product=await response.json();
   const issued=Date.parse(product.issuanceTime||item.issuanceTime||'');
   if(!Number.isFinite(issued)||Date.now()-issued>18*3600000||issued>Date.now()+300000)throw Error('NWS discussion is stale');
-  const raw=String(product.productText||'');
-  const section=raw.match(/\.\.(?:SYNOPSIS|SHORT TERM|DISCUSSION)\.\.[^\n]*\n([\s\S]*?)(?=\n\s*\.\.(?:LONG TERM|AVIATION|MARINE|FIRE WEATHER|HYDROLOGY|BEACHES|MTR WATCHES|UPDATE)\.|\n&&|$)/i);
-  const text=(section?.[1]||'').replace(/\n/g,' ').replace(/\s+/g,' ').trim();
-  if(text.length<50)throw Error('NWS section unavailable');
+  const text=String(product.productText||'');
+  if(!/\.(?:KEY MESSAGES|SHORT TERM|SYNOPSIS|DISCUSSION|LONG TERM)\.\.\./.test(text))throw Error('NWS discussion sections not found');
   value={text,issued};
  }catch(err){console.warn('NWS AFD not available; using local forecast only',err)}
  nwsDiscussionCache={checked:Date.now(),value};
  return value;
 }
-function nwsWeatherOutlook(afd,d,h,now){
- const localTime=new Date();
- const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',hourCycle:'h23'}).formatToParts(localTime);
- const part=k=>parts.find(x=>x.type===k)?.value||'';
- const today=part('year')+'-'+part('month')+'-'+part('day');
- const hour=Number(part('hour'));
- const stamp=today+'T'+String(hour).padStart(2,'0')+':00';
- const location=city==='Moraga'?'Moraga':subtitles[city]||city;
- const hourly=(h?.time||[]).map((t,i)=>({t,prob:Number(h.precipitation_probability?.[i]),rain:Number(h.precipitation?.[i]),temp:Number(h.temperature_2m?.[i])})).filter(x=>x.t>=stamp).slice(0,72);
- const first24=hourly.slice(0,24),next48=hourly.slice(24);
- const sum=a=>a.reduce((v,x)=>v+(Number.isFinite(x.rain)?Math.max(0,x.rain):0),0);
- const wetHours=first24.filter(x=>(Number.isFinite(x.prob)&&x.prob>=50)||(Number.isFinite(x.rain)&&x.rain>=.03));
- const fmt=v=>v.toFixed(2)+' inches';
- const modelText=first24.length?'Local hourly model guidance indicates '+(wetHours.length>=8?'periods of rain':wetHours.length>=2?'intermittent rain or showers':'limited additional rainfall')+' over the next 24 hours'+(sum(first24)>=.01?', with roughly '+fmt(sum(first24))+' forecast in that period':'')+'.':'Local hourly model timing is temporarily unavailable.';
- const later=next48.length&&sum(next48)>=.1?' Model guidance also indicates another '+fmt(sum(next48))+' during hours 24–72, although timing and amounts remain uncertain.':'';
- if(!afd){
-  return 'The latest NWS Bay Area Area Forecast Discussion is unavailable or out of date. '+modelText+later+' This is model-only guidance, not a verified meteorological discussion.';
- }
- const raw=afd.text.replace(/\\s+/g,' ').trim();
- const sentences=(raw.match(/[^.!?]+[.!?]+/g)||[]).map(x=>x.trim()).filter(x=>x.length>=35&&x.length<=300&&!/\\b(?:airport|terminal|TAF|runway|flight rules|marine zone)\\b/i.test(x));
- const selected=[];
- const patterns=[/front|frontal|rain band|atmospheric river|trough|upper.low|cold.air|post.frontal/i,/showers|precipitation|rainfall|heavy rain|storm/i,/sunday|monday|tomorrow|weekend|next system|another system|later/i];
- for(const pattern of patterns){const hit=sentences.find(x=>pattern.test(x)&&!selected.includes(x));if(hit)selected.push(hit);}
- if(!selected.length&&sentences.length)selected.push(sentences[0]);
- const age=Math.max(0,Math.round((Date.now()-afd.issued)/3600000));
- const context=selected.slice(0,3).join(' ');
- const historical=/moved through|passed through|earlier today|this morning|already|has passed|behind the front|post.frontal/i.test(context);
- const note=historical?' The NWS discussion describes conditions that have already occurred; the following amounts refer only to future model hours.':' Forecast daily totals are not the same as rainfall still to come.';
- return 'NWS Bay Area discussion (issued about '+age+' hour'+(age===1?'':'s')+' ago): '+context+' For '+location+', '+modelText+later+note;
+let lastOutlook=null;
+function nwsWeatherOutlook(afd,d,h){
+ const place=city==='Moraga'?'Moraga':(({Lafayette:'Reliez Valley',Danville:'Sycamore Valley',Greenbrook:'Greenbrook'})[city]||city);
+ lastOutlook={afd,d,h};
+ if(!window.DWLOutlook)return 'The outlook is temporarily unavailable.';
+ const r=DWLOutlook.build({afdText:afd?.text,issued:afd?.issued,hourly:h,daily:d,place});
+ set('public-outlook-source',r.source);
+ return r.text||'The outlook is temporarily unavailable.';
 }
  function weatherDiscussion(d,h,now){
   const days=d.time||[];
@@ -388,10 +366,10 @@ function nwsWeatherOutlook(afd,d,h,now){
   const request=++revision,chosen=city;
   set('public-city-heading',chosen==='Danville'?'Sycamore Valley, Danville':chosen==='Greenbrook'?'Greenbrook, Danville':chosen);set('public-location-sub',subtitles[chosen]);
   syncLocationButtons();
-  ['public-humidity','public-dew','public-pressure','public-wind'].forEach(id=>set(id,'—'));set('public-discussion','Loading the local outlook…');el('public-alerts').replaceChildren();updateAlerts(chosen,request);set('public-station-status','Checking nearby public weather observations…');set('public-current-temp','—°');set('public-current-condition','Loading forecast…');set('public-high-low','— / —');set('public-rain','—');set('public-summary','Retrieving the latest forecast.');
+  ['public-humidity','public-dew','public-pressure','public-wind'].forEach(id=>set(id,'—'));set('public-discussion','Loading the local outlook…');set('public-outlook-source','');el('public-alerts').replaceChildren();updateAlerts(chosen,request);set('public-station-status','Checking nearby public weather observations…');set('public-current-temp','—°');set('public-current-condition','Loading forecast…');set('public-high-low','— / —');set('public-rain','—');set('public-summary','Retrieving the latest forecast.');
   el('public-days').replaceChildren();el('public-hourly').replaceChildren();
   const [lat,lon]=coords[chosen];
-  const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code%2Crelative_humidity_2m%2Cdew_point_2m%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m&wind_speed_unit=mph&hourly=temperature_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code%2Cis_day&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
+  const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code%2Crelative_humidity_2m%2Cdew_point_2m%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m&wind_speed_unit=mph&hourly=temperature_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code%2Cis_day%2Cwind_gusts_10m&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
   try{
    const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),12000);let response;try{response=await fetch(url,{cache:'no-store',signal:controller.signal});}finally{clearTimeout(timeout)}if(!response.ok)throw Error('Forecast request '+response.status);
    const data=await response.json();if(request!==revision)return;
@@ -520,6 +498,7 @@ function nwsWeatherOutlook(afd,d,h,now){
     };
     applyMoragaBlend(daily);
     renderDays(daily,feed);
+    updateStation(chosen,request,NaN,false);
     set('public-today-title',"TODAY'S FORECAST");
     set('public-today-high',fmt(daily.temperature_2m_max[0]));
     set('public-today-low',fmt(daily.temperature_2m_min[0]));
@@ -528,7 +507,13 @@ function nwsWeatherOutlook(afd,d,h,now){
     set('public-current-temp','—°');
     set('public-current-condition','Live observation unavailable');
     set('public-summary','Published forecast available; live observations temporarily unavailable.');
-    set('public-discussion','The published 10-day model outlook is available below. Current observations and live hourly guidance are temporarily unavailable.');
+    {
+     const hc=feed.hourly_conditions||{},names=Object.keys(hc).filter(n=>Array.isArray(hc[n]?.time));
+     const base=names.length?hc[names[0]].time:[];
+     const hourly={time:base,precipitation:base.map((t,i)=>{const v=names.map(n=>Number(hc[n].precipitation_mm?.[hc[n].time.indexOf(t)])).filter(Number.isFinite);return v.length?v.reduce((a,b)=>a+b,0)/v.length/25.4:null;})};
+     set('public-discussion','Retrieving the latest NWS Bay Area forecast discussion…');
+     getNwsDiscussion().then(afd=>{if(request===revision)set('public-discussion',nwsWeatherOutlook(afd,daily,hourly));}).catch(()=>{if(request===revision)set('public-discussion',nwsWeatherOutlook(null,daily,hourly));});
+    }
     const issued=Date.parse(feed.generated_utc);
     const age=Number.isFinite(issued)?Math.round((Date.now()-issued)/3600000):NaN;
     set('public-data-notice','Using published '+chosen+' model guidance'+(Number.isFinite(age)?' (issued '+Math.max(0,age)+' hours ago)':'')+'. Live forecast service unavailable; temperatures are uncalibrated model averages.');

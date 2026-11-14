@@ -274,3 +274,44 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 
 /* Icons used outside day cards (hourly strip, current conditions) */
 #public-shell .public-hour .dwl-icon { width: 52px; height: 40px; margin: 4px auto; }
+
+/* ---------- Location selector (Local Weather) ---------- */
+#public-shell .public-locations {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;
+  margin: 0 0 16px;
+}
+@media (min-width: 640px) { #public-shell .public-locations { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+#public-shell .public-location-item { position: relative; min-width: 0; }
+#public-shell .public-location-choice {
+  appearance: none; cursor: pointer; width: 100%; box-sizing: border-box;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
+  min-height: 54px; padding: 9px 38px 9px 12px; margin: 0;
+  border: 1.5px solid rgba(70, 170, 210, .38); border-radius: var(--radius-sm);
+  background: rgba(8, 30, 48, .78); color: var(--text); text-align: left;
+  font: inherit; transition: border-color .2s, background .2s, box-shadow .2s;
+}
+#public-shell .public-location-choice .local-neighborhood {
+  font: 600 15px/1.2 var(--font-ui); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+}
+#public-shell .public-location-choice .local-city {
+  font: 500 11px/1.2 var(--font-ui); letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+}
+#public-shell .public-location-choice[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: linear-gradient(180deg, rgba(11, 95, 126, .85), rgba(7, 63, 88, .85));
+  box-shadow: 0 0 12px rgba(25, 220, 246, .45), inset 0 0 10px rgba(25, 220, 246, .25);
+}
+#public-shell .public-location-choice[aria-pressed="true"] .local-city { color: #bfefff; }
+#public-shell .public-location-choice:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+#public-shell .public-location-favorite {
+  position: absolute; top: 50%; right: 6px; transform: translateY(-50%);
+  appearance: none; cursor: pointer; width: 30px; height: 30px; padding: 0; margin: 0;
+  display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent;
+  color: rgba(159, 182, 200, .7); font: 400 17px/1 var(--font-ui);
+}
+#public-shell .public-location-favorite[aria-pressed="true"] { color: var(--gold); background: transparent; border: 0; text-shadow: 0 0 8px rgba(255, 191, 46, .6); }
+#public-shell .public-location-favorite:focus-visible { outline: 2px solid var(--accent); }
+
+/* Outlook source line */
+.public-outlook-source { margin-top: 8px; font-size: 11px; letter-spacing: .04em; color: var(--muted); }
+.public-outlook-source:empty { display: none; }
