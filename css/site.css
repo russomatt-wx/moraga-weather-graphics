@@ -211,7 +211,9 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
   align-items: center;
   min-height: 78px; padding: 8px 12px 8px 14px;
   border: 2px solid transparent; border-radius: 15px;
+  /* Soft temperature tint inside the card (high colour → low colour), over the dark base. */
   background:
+    linear-gradient(100deg, color-mix(in srgb, var(--hi) 30%, transparent), color-mix(in srgb, var(--hi) 10%, transparent) 45%, color-mix(in srgb, var(--lo) 28%, transparent)) padding-box,
     linear-gradient(180deg, #0b2335, #061827) padding-box,
     linear-gradient(100deg, var(--hi), var(--lo)) border-box;
   box-shadow: 0 0 14px -3px var(--lo), inset 0 0 22px rgba(25, 220, 246, .07);
