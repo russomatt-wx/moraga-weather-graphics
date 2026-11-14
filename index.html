@@ -368,6 +368,86 @@ function nwsWeatherOutlook(afd,d,h){
    }
   }catch(e){if(request!==revision)return;const status=document.createElement('div');status.className='public-alert-status';status.textContent='NWS alerts could not be checked. Check weather.gov for official warnings.';host.appendChild(status);}
  }
+ // Published (same-origin) forecast: shown immediately on every refresh so the page never sits
+ // empty while the live Open-Meteo request is slow, and kept as the fallback if it fails.
+ let liveRendered=0;
+ async function renderPublished(chosen,request,lat,lon,prefill){
+  const stale=()=>request!==revision||(prefill&&liveRendered===request);
+  const feedName=({Moraga:'moraga',Lafayette:'lafayette',Danville:'danville',Greenbrook:'greenbrook'})[chosen];
+  try{
+    const response=await fetch(feedName+'_forecast_10day.json?t='+Date.now(),{cache:'no-store'});
+    if(!response.ok)throw Error('Published forecast HTTP '+response.status);
+    const feed=await response.json();
+    if(stale())return;
+    if(!Array.isArray(feed.dates)||feed.dates.length<7)throw Error('Incomplete published forecast');
+    const models=feed.temperature_models||{};
+    const temperatures=(date,kind)=>{
+     const values=Object.values(models).map(m=>{
+      const i=m.dates?.indexOf(date);
+      return i>=0?Number(m[kind]?.[i]):NaN;
+     }).filter(Number.isFinite);
+     return values.length?values.reduce((a,b)=>a+b,0)/values.length:NaN;
+    };
+    const codeFor=date=>{
+     const label=(feed.daily_conditions?.[date]?.label||'').toLowerCase();
+     if(/rain|shower/.test(label))return 61;
+     if(/fog/.test(label))return 45;
+     if(/mostly cloudy|partly cloudy/.test(label))return 2;
+     if(/cloud|overcast/.test(label))return 3;
+     return 1;
+    };
+    const daily={
+     time:feed.dates,
+     temperature_2m_max:feed.dates.map((date,i)=>feedBlend(feed,date,i,'high_f',[],chosen==='Moraga')??temperatures(date,'high_f')),
+     temperature_2m_min:feed.dates.map((date,i)=>feedBlend(feed,date,i,'low_f',[],chosen==='Moraga')??temperatures(date,'low_f')),
+     precipitation_sum:feed.dates.map(date=>Number(feed.rain_guidance?.[date]?.expected_inches)||0),
+     precipitation_probability_max:feed.dates.map(date=>Number(feed.ensemble_rain_probability_pct?.[date])||0),
+     weather_code:feed.dates.map(codeFor)
+    };
+    applyMoragaBlend(daily);
+    renderDays(daily,feed);
+    if(!prefill)updateStation(chosen,request,NaN,false);
+    set('public-today-title',"TODAY'S FORECAST");
+    set('public-today-high',fmt(daily.temperature_2m_max[0]));
+    set('public-today-low',fmt(daily.temperature_2m_min[0]));
+    set('public-high-low',fmt(daily.temperature_2m_max[0])+' / '+fmt(daily.temperature_2m_min[0]));
+    set('public-rain',rain(daily.precipitation_sum[0]));
+    if(!prefill){set('public-current-temp','—°');set('public-current-condition','Live observation unavailable');set('public-summary','Published forecast available; live observations temporarily unavailable.');}
+    else set('public-current-condition','Loading current conditions…');
+    {
+     const hc=feed.hourly_conditions||{},names=Object.keys(hc).filter(n=>Array.isArray(hc[n]?.time));
+     const base=names.length?hc[names[0]].time:[];
+     const avg=(t,key,scale=1)=>{const v=names.map(n=>Number(hc[n][key]?.[hc[n].time.indexOf(t)])).filter(Number.isFinite);return v.length?v.reduce((a,b)=>a+b,0)/v.length*scale:null;};
+     const hourly={time:base,precipitation:base.map(t=>avg(t,'precipitation_mm',1/25.4)),cloud_cover:base.map(t=>avg(t,'cloud_cover_pct'))};
+     set('public-discussion','Retrieving the latest NWS Bay Area forecast discussion…');
+     getNwsDiscussion().then(afd=>{if(request===revision)set('public-discussion',nwsWeatherOutlook(afd,daily,hourly));}).catch(()=>{if(request===revision)set('public-discussion',nwsWeatherOutlook(null,daily,hourly));});
+    }
+    const issued=Date.parse(feed.generated_utc);
+    const age=Number.isFinite(issued)?Math.round((Date.now()-issued)/3600000):NaN;
+    set('public-days-updated',updatedAt(Date.parse(feed.generated_utc)));
+    // Live hourly guidance failed too: use the published HRRR/RRFS/ECMWF/GFS blend (refreshed twice hourly).
+    try{
+     const sr=await fetch(feedName+'_short_range_24h.json?t='+Date.now(),{cache:'no-store'});
+     const short=sr.ok?await sr.json():null,age=short?Date.now()-Date.parse(short.generated_utc):NaN;
+     if(stale())return;
+     if(short?.hourly?.time?.length>=12&&age<5*3600000){
+      const h={...short.hourly,is_day:short.hourly.time.map(t=>sunUp(t,lat,lon)?1:0)};
+      const p=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+      const g=k=>p.find(x=>x.type===k)?.value;
+      renderHourly(h,g('year')+'-'+g('month')+'-'+g('day')+'T'+g('hour')+':00');
+      set('public-short-range-source',updatedAt(Date.parse(short.generated_utc)));
+     }else set('public-short-range-source','Hourly forecast unavailable');
+    }catch(e){set('public-short-range-source','Hourly forecast unavailable');}
+    if(!prefill)set('public-station-status','Live station observations unavailable.');
+   }catch(fallbackError){
+    console.warn('Published forecast fallback failed',fallbackError);
+    if(prefill)return;
+    set('public-current-condition','Forecast temporarily unavailable');
+    set('public-summary','Unable to load live forecast guidance. Please try again later.');
+    set('public-discussion','The outlook is temporarily unavailable.');
+    set('public-data-notice','Forecast service unavailable. No estimated values are shown.');
+   }
+ }
  async function refresh(){
   const request=++revision,chosen=city;
   set('public-city-heading',chosen==='Danville'?'Sycamore Valley, Danville':chosen==='Greenbrook'?'Greenbrook, Danville':chosen);set('public-location-sub',subtitles[chosen]);
@@ -375,6 +455,7 @@ function nwsWeatherOutlook(afd,d,h){
   ['public-humidity','public-dew','public-pressure','public-wind'].forEach(id=>set(id,'—'));set('public-discussion','Loading the local outlook…');set('public-outlook-source','');el('public-alerts').replaceChildren();updateAlerts(chosen,request);set('public-station-status','Checking nearby public weather observations…');set('public-current-temp','—°');set('public-current-condition','Loading forecast…');set('public-high-low','— / —');set('public-rain','—');set('public-summary','Retrieving the latest forecast.');
   el('public-days').replaceChildren();el('public-hourly').replaceChildren();
   const [lat,lon]=coords[chosen];
+  renderPublished(chosen,request,lat,lon,true);
   const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code%2Cis_day%2Crelative_humidity_2m%2Cdew_point_2m%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m&wind_speed_unit=mph&hourly=temperature_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code%2Cis_day%2Cwind_gusts_10m%2Ccloud_cover&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
   try{
    let response;
@@ -387,6 +468,7 @@ function nwsWeatherOutlook(afd,d,h){
    if(!response?.ok)throw Error('Forecast request '+(response?response.status:'failed'));
    const data=await response.json();if(request!==revision)return;
    const d=data.daily;if(!d||!d.time||!d.time.length)throw Error('Missing forecast days');
+   liveRendered=request;
    // Same-location Observatory model families, collected by the existing 3-hour workflow.
    // Never substitute Moraga's bias correction for another location.
    let blended=false,publicForecastFeed=null;
@@ -477,81 +559,8 @@ function nwsWeatherOutlook(afd,d,h){
    updateStation(chosen,request,data.current?.temperature_2m,modeledConflict);
   }catch(err){
    if(request!==revision)return;
-   console.warn('Live forecast failed; recovering from published location guidance',err);
-   const feedName=({Moraga:'moraga',Lafayette:'lafayette',Danville:'danville',Greenbrook:'greenbrook'})[chosen];
-   try{
-    const response=await fetch(feedName+'_forecast_10day.json?t='+Date.now(),{cache:'no-store'});
-    if(!response.ok)throw Error('Published forecast HTTP '+response.status);
-    const feed=await response.json();
-    if(request!==revision)return;
-    if(!Array.isArray(feed.dates)||feed.dates.length<7)throw Error('Incomplete published forecast');
-    const models=feed.temperature_models||{};
-    const temperatures=(date,kind)=>{
-     const values=Object.values(models).map(m=>{
-      const i=m.dates?.indexOf(date);
-      return i>=0?Number(m[kind]?.[i]):NaN;
-     }).filter(Number.isFinite);
-     return values.length?values.reduce((a,b)=>a+b,0)/values.length:NaN;
-    };
-    const codeFor=date=>{
-     const label=(feed.daily_conditions?.[date]?.label||'').toLowerCase();
-     if(/rain|shower/.test(label))return 61;
-     if(/fog/.test(label))return 45;
-     if(/mostly cloudy|partly cloudy/.test(label))return 2;
-     if(/cloud|overcast/.test(label))return 3;
-     return 1;
-    };
-    const daily={
-     time:feed.dates,
-     temperature_2m_max:feed.dates.map((date,i)=>feedBlend(feed,date,i,'high_f',[],chosen==='Moraga')??temperatures(date,'high_f')),
-     temperature_2m_min:feed.dates.map((date,i)=>feedBlend(feed,date,i,'low_f',[],chosen==='Moraga')??temperatures(date,'low_f')),
-     precipitation_sum:feed.dates.map(date=>Number(feed.rain_guidance?.[date]?.expected_inches)||0),
-     precipitation_probability_max:feed.dates.map(date=>Number(feed.ensemble_rain_probability_pct?.[date])||0),
-     weather_code:feed.dates.map(codeFor)
-    };
-    applyMoragaBlend(daily);
-    renderDays(daily,feed);
-    updateStation(chosen,request,NaN,false);
-    set('public-today-title',"TODAY'S FORECAST");
-    set('public-today-high',fmt(daily.temperature_2m_max[0]));
-    set('public-today-low',fmt(daily.temperature_2m_min[0]));
-    set('public-high-low',fmt(daily.temperature_2m_max[0])+' / '+fmt(daily.temperature_2m_min[0]));
-    set('public-rain',rain(daily.precipitation_sum[0]));
-    set('public-current-temp','—°');
-    set('public-current-condition','Live observation unavailable');
-    set('public-summary','Published forecast available; live observations temporarily unavailable.');
-    {
-     const hc=feed.hourly_conditions||{},names=Object.keys(hc).filter(n=>Array.isArray(hc[n]?.time));
-     const base=names.length?hc[names[0]].time:[];
-     const avg=(t,key,scale=1)=>{const v=names.map(n=>Number(hc[n][key]?.[hc[n].time.indexOf(t)])).filter(Number.isFinite);return v.length?v.reduce((a,b)=>a+b,0)/v.length*scale:null;};
-     const hourly={time:base,precipitation:base.map(t=>avg(t,'precipitation_mm',1/25.4)),cloud_cover:base.map(t=>avg(t,'cloud_cover_pct'))};
-     set('public-discussion','Retrieving the latest NWS Bay Area forecast discussion…');
-     getNwsDiscussion().then(afd=>{if(request===revision)set('public-discussion',nwsWeatherOutlook(afd,daily,hourly));}).catch(()=>{if(request===revision)set('public-discussion',nwsWeatherOutlook(null,daily,hourly));});
-    }
-    const issued=Date.parse(feed.generated_utc);
-    const age=Number.isFinite(issued)?Math.round((Date.now()-issued)/3600000):NaN;
-    set('public-days-updated',updatedAt(Date.parse(feed.generated_utc)));
-    // Live hourly guidance failed too: use the published HRRR/RRFS/ECMWF/GFS blend (refreshed twice hourly).
-    try{
-     const sr=await fetch(feedName+'_short_range_24h.json?t='+Date.now(),{cache:'no-store'});
-     const short=sr.ok?await sr.json():null,age=short?Date.now()-Date.parse(short.generated_utc):NaN;
-     if(request!==revision)return;
-     if(short?.hourly?.time?.length>=12&&age<5*3600000){
-      const h={...short.hourly,is_day:short.hourly.time.map(t=>sunUp(t,lat,lon)?1:0)};
-      const p=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
-      const g=k=>p.find(x=>x.type===k)?.value;
-      renderHourly(h,g('year')+'-'+g('month')+'-'+g('day')+'T'+g('hour')+':00');
-      set('public-short-range-source',updatedAt(Date.parse(short.generated_utc)));
-     }else set('public-short-range-source','Hourly forecast unavailable');
-    }catch(e){set('public-short-range-source','Hourly forecast unavailable');}
-    set('public-station-status','Live station observations unavailable.');
-   }catch(fallbackError){
-    console.warn('Published forecast fallback failed',fallbackError);
-    set('public-current-condition','Forecast temporarily unavailable');
-    set('public-summary','Unable to load live forecast guidance. Please try again later.');
-    set('public-discussion','The outlook is temporarily unavailable.');
-    set('public-data-notice','Forecast service unavailable. No estimated values are shown.');
-   }
+   console.warn('Live forecast failed; using published location guidance',err);
+   renderPublished(chosen,request,lat,lon,false);
   }
  }
  document.querySelectorAll('[data-public-city]').forEach(b=>b.onclick=()=>{city=b.dataset.publicCity;syncLocationButtons();refresh()});
