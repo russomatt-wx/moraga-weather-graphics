@@ -16,7 +16,7 @@ def fetch(url,params):
     for attempt in range(3):
         try:
             if SESSION is not None:
-                r=SESSION.get(url,params=params,timeout=(20,40));r.raise_for_status();return r.json()
+                r=SESSION.get(url,params=params,timeout=(20,60));r.raise_for_status();return r.json()
             request=urllib.request.Request(url+"?"+urllib.parse.urlencode(params),headers={"User-Agent":"MoragaWeatherObservatory/1.0"})
             with urllib.request.urlopen(request,timeout=25) as response:return json.load(response)
         except Exception:
@@ -68,7 +68,16 @@ def collect(name,lat,lon):
     sky=lambda c:None if c is None else 0 if c<20 else 1 if c<45 else 2 if c<75 else 3
     output["hourly"]["weather_code"]=[w if w is not None else sky(c) for w,c in zip(output["hourly"]["weather_code"],smooth)]
     output["method"]="Weighted HRRR/RRFS/ECMWF/GFS blend. Sky icon from 3-hour smoothed blended cloud cover; rain icon from blended rain chance; thunder/fog only when a weighted majority of models agree."
-    Path(name+"_short_range_24h.json").write_text(json.dumps(output,indent=2)+"\n")
+    path=Path(name+"_short_range_24h.json")
+    # Don't replace a recent complete blend with one missing the high-resolution models.
+    if any(m in failures for m in ("HRRR","RRFS")) and path.exists():
+        try:
+            prev=json.loads(path.read_text())
+            age=(datetime.now(timezone.utc)-datetime.fromisoformat(prev["generated_utc"])).total_seconds()
+            if age<2*3600 and not prev.get("failed_sources") and "method" in prev:
+                print(name,"kept previous complete blend; this run failed",list(failures));return
+        except Exception:pass
+    path.write_text(json.dumps(output,indent=2)+"\n")
     print(name,"sources",list(results),"failures",failures)
 for name,(lat,lon) in LOCATIONS.items():
     try:
