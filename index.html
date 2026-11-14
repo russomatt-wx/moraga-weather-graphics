@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=19"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=19"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=19">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114c"><link rel="stylesheet" href="css/site.css?v=20261114q">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261114r">
 
 
 
@@ -224,10 +224,10 @@
   const skyOk=lastSky&&lastSky.city===city&&Date.now()-lastSky.at<90*60000;
   const cards=[];
   for(let i=start;i<Math.min(hourly.time.length,start+24);i+=2){
-   const chance=hourly.precipitation_probability?.[i];
+   const chance=Number(hourly.precipitation_probability?.[i]??NaN);
    const icon=DWL.icon(hourIconCode(i===start&&skyOk?lastSky.code:hourly.weather_code[i],chance),'',(i===start&&skyOk?lastSky.isDay===0:hourly.is_day?.[i]===0));
    cards.push({key:hourly.time[i],hour:new Date(hourly.time[i]).toLocaleTimeString('en-US',{hour:'numeric'}),color:tempColor(tempAt(i)),temp:fmt(tempAt(i)),
-     src:icon.match(/src="([^"]+)"/)[1],alt:(icon.match(/alt="([^"]*)"/)||[])[1]||'',icon,rain:'<div class="public-hour-rain">'+(Number.isFinite(chance)&&Math.round(chance/10)*10>=20?Math.min(100,Math.round(chance/10)*10)+'% rain':'&nbsp;')+'</div>'});
+     src:icon.match(/src="([^"]+)"/)[1],alt:(icon.match(/alt="([^"]*)"/)||[])[1]||'',icon,rain:'<div class="public-hour-rain">'+(Number.isFinite(chance)&&Math.round(chance/10)*10>=20?Math.min(100,Math.round(chance/10)*10)+'%':'&nbsp;')+'</div>'});
   }
   // Same hours already on screen (e.g. the station reading just arrived): update in place rather than
   // rebuilding, so images are never re-created (Safari could leave a re-inserted icon blank).
@@ -404,19 +404,35 @@ function nwsWeatherOutlook(afd,d,h){
  async function updateAlerts(chosen,request){
   const host=el('public-alerts');host.replaceChildren();
   const [lat,lon]=coords[chosen];
+  const status=(text,cls)=>{const s=document.createElement('div');s.className='dwl-alert-status'+(cls?' '+cls:'');s.textContent=text;host.appendChild(s);};
+  const when=t=>new Date(t).toLocaleString('en-US',{timeZone:'America/Los_Angeles',weekday:'short',hour:'numeric',minute:'2-digit'}).replace(':00','');
+  const level=e=>/warning|emergency/i.test(e)?'warning':/watch/i.test(e)?'watch':/advisory/i.test(e)?'advisory':'statement';
   try{
    const features=await DWL.fetchAlerts(lat,lon);if(request!==revision)return;
    const items=features.filter(x=>x.properties?.event).slice(0,5);
-   if(!items.length){const status=document.createElement('div');status.className='public-alert-status';status.textContent='No active NWS alerts for this location.';host.appendChild(status);return;}
+   if(!items.length){status('No active NWS alerts','is-clear');return;}
    for(const item of items){
-    const p=item.properties,card=document.createElement('div');card.className='public-alert'+(/warning|emergency/i.test(p.event)?' severe':'');
-    const heading=document.createElement('strong');heading.textContent='⚠ '+p.event+(item._upcoming?' · upcoming':'');card.appendChild(heading);
-    if(item._nearby){const near=document.createElement('div');near.className='public-alert-near';const where=(String(p.description||'').match(/(?:[A-Z][a-z]+(?:ern)? )?Contra Costa County/)||[])[0];near.textContent='Nearby: covers '+(where||String(p.areaDesc||'Contra Costa County').replace(/, CA/g,''))+' — check whether it includes your neighborhood.';card.appendChild(near);}
-    const detail=document.createElement('div');detail.textContent=(p.headline||p.description||'Official weather alert').slice(0,240);card.appendChild(detail);
-    if(p.web){const link=document.createElement('a');link.href=p.web;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Official NWS details';card.appendChild(link);}
-    host.appendChild(card);
+    const p=item.properties,card=document.createElement('details');card.className='dwl-alert is-'+level(p.event);
+    const sum=document.createElement('summary');
+    const badge=document.createElement('span');badge.className='dwl-alert-badge';badge.setAttribute('aria-hidden','true');
+    badge.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 3 22 20H2Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M12 9.5v5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="17.3" r="1.3" fill="currentColor"/></svg>';
+    const main=document.createElement('span');main.className='dwl-alert-main';
+    const eye=document.createElement('span');eye.className='dwl-alert-eyebrow';eye.textContent='NWS '+level(p.event)+(item._nearby?' · Nearby':'')+(item._upcoming?' · Upcoming':'');
+    const title=document.createElement('span');title.className='dwl-alert-title';title.textContent=p.event;
+    const time=document.createElement('span');time.className='dwl-alert-when';
+    const end=p.ends||p.expires;time.textContent=item._upcoming&&p.onset?'Starts '+when(p.onset)+(end?' · until '+when(end):''):end?'Until '+when(end):'In effect';
+    main.append(eye,title,time);
+    const chev=document.createElement('span');chev.className='dwl-alert-chev';chev.setAttribute('aria-hidden','true');chev.textContent='⌄';
+    sum.append(badge,main,chev);card.appendChild(sum);
+    const body=document.createElement('div');body.className='dwl-alert-body';
+    if(item._nearby){const near=document.createElement('p');near.className='dwl-alert-near';const where=(String(p.description||'').match(/(?:[A-Z][a-z]+(?:ern)? )?Contra Costa County/)||[])[0];near.textContent='Covers '+(where||String(p.areaDesc||'Contra Costa County').replace(/, CA/g,''))+'. Check whether it includes your neighborhood.';body.appendChild(near);}
+    const text=String(p.description||p.headline||'Official weather alert').replace(/\n(?!\n)/g,' ').replace(/\n{2,}/g,'\n').replace(/^ *\* ?([A-Z][A-Z ]+?)\.\.\./gm,(m,k)=>k[0]+k.slice(1).toLowerCase()+': ').trim();
+    const detail=document.createElement('p');detail.textContent=text.length>900?text.slice(0,900).replace(/\s+\S*$/,'')+'…':text;body.appendChild(detail);
+    if(p.instruction){const ins=document.createElement('p');ins.className='dwl-alert-instruction';ins.textContent=String(p.instruction).replace(/\n(?!\n)/g,' ').trim();body.appendChild(ins);}
+    const link=document.createElement('a');link.href=p.web&&/^https?:/.test(p.web)?p.web:'https://forecast.weather.gov/MapClick.php?lat='+lat+'&lon='+lon;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Full NWS alert ›';body.appendChild(link);
+    card.appendChild(body);host.appendChild(card);
    }
-  }catch(e){if(request!==revision)return;const status=document.createElement('div');status.className='public-alert-status';status.textContent='NWS alerts could not be checked. Check weather.gov for official warnings.';host.appendChild(status);}
+  }catch(e){if(request!==revision)return;status('NWS alerts could not be checked. See weather.gov for official warnings.','is-error');}
  }
  // Published (same-origin) forecast: shown immediately on every refresh so the page never sits
  // empty while the live Open-Meteo request is slow, and kept as the fallback if it fails.

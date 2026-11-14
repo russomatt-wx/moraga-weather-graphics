@@ -506,11 +506,6 @@ body.public-mode>main{display:none!important}
 #public-shell .public-temp{letter-spacing:-3px}
 #public-shell .public-hour img{width:52px;height:48px;object-fit:contain}
 #public-shell .public-hero-icon img{width:112px;height:112px;object-fit:contain}
-#public-shell .public-alert{margin:12px 0;padding:14px 16px;border-radius:14px;border:1px solid #e5a65c;background:#50351e;color:#fff0da}
-#public-shell .public-alert.severe{border-color:#ed7777;background:#56252c}
-#public-shell .public-alert strong{display:block;margin-bottom:3px}
-#public-shell .public-alert a{color:inherit;text-decoration:underline}
-#public-shell .public-alert-status{color:#9fb8cc;font-size:12px;margin:10px 0}
 /* ---- legacy block 47 ---- */
 #public-shell .public-hero-icon svg{width:104px;height:104px}
 #public-shell .public-hour svg{width:48px;height:48px}

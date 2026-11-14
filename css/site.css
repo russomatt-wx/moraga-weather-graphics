@@ -318,7 +318,6 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 #public-shell .public-hour-rain { min-height: 1.2em; font-size: 12px; color: var(--rain); }
 #public-shell .public-notice { margin: 6px 4px 0; padding: 0; border: 0; font-size: 11px; letter-spacing: .04em; color: var(--muted); }
 #public-shell .public-notice:empty { display: none; }
-#public-shell .public-alert-near { margin: 3px 0 4px; font-size: 12px; color: #ffd27a; }
 
 /* Outlook headline */
 .public-outlook-headline { margin: 2px 0 8px; font: 700 clamp(17px, 4.6vw, 20px)/1.25 var(--font-ui); color: var(--accent); }
@@ -336,3 +335,50 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .dwl-more::after { content: " ▾"; }
 .dwl-more[aria-expanded="true"]::after { content: " ▴"; }
 #public-shell .dwl-more { border: 1.5px solid var(--line); border-radius: var(--radius-sm); background: rgba(8, 30, 48, .7); color: var(--accent); padding: 12px 16px; }
+
+/* ---------- NWS alert banner (Local Weather) ---------- */
+#public-alerts:empty { display: none; }
+#public-alerts { display: grid; gap: 10px; margin: 14px 0; }
+.dwl-alert {
+  --al: #ffbf2e;
+  border: 1.5px solid color-mix(in srgb, var(--al) 70%, transparent);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(100deg, color-mix(in srgb, var(--al) 18%, transparent), color-mix(in srgb, var(--al) 4%, transparent) 70%),
+    linear-gradient(180deg, var(--panel), var(--panel-deep));
+  box-shadow: 0 0 18px -4px color-mix(in srgb, var(--al) 55%, transparent);
+  overflow: hidden;
+}
+.dwl-alert.is-warning { --al: #ff5d6c; }
+.dwl-alert.is-statement { --al: var(--accent); }
+.dwl-alert summary { display: flex; align-items: center; gap: 12px; padding: 13px 14px; cursor: pointer; list-style: none; }
+.dwl-alert summary::-webkit-details-marker { display: none; }
+.dwl-alert-badge {
+  flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+  color: var(--al); background: color-mix(in srgb, var(--al) 16%, transparent);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--al) 60%, transparent);
+}
+.dwl-alert-badge svg { width: 22px; height: 22px; }
+.dwl-alert.is-warning .dwl-alert-badge { animation: dwl-alert-pulse 2s ease-in-out infinite; }
+@keyframes dwl-alert-pulse { 50% { box-shadow: inset 0 0 0 1.5px var(--al), 0 0 14px 2px color-mix(in srgb, var(--al) 55%, transparent); } }
+@media (prefers-reduced-motion: reduce) { .dwl-alert.is-warning .dwl-alert-badge { animation: none; } }
+.dwl-alert-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.dwl-alert-eyebrow { font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--al); }
+.dwl-alert-title { font: 700 clamp(17px, 4.6vw, 20px)/1.2 var(--font-ui); color: var(--text); }
+.dwl-alert-when { font-size: 13px; color: var(--text-2); }
+.dwl-alert-chev { flex: none; font-size: 20px; line-height: 1; color: var(--al); transition: transform .2s; }
+.dwl-alert[open] .dwl-alert-chev { transform: rotate(180deg); }
+.dwl-alert-body { padding: 0 16px 14px 66px; font-size: 14px; line-height: 1.5; color: var(--text-2); }
+.dwl-alert-body p { margin: 0 0 8px; white-space: pre-line; }
+.dwl-alert-near { color: var(--al); font-weight: 600; }
+.dwl-alert-instruction { color: var(--text); }
+.dwl-alert-body a { font-weight: 600; color: var(--al); text-decoration: none; }
+@media (max-width: 480px) { .dwl-alert-body { padding-left: 16px; } }
+.dwl-alert-status {
+  justify-self: start; display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 13px; border: 1px solid var(--line-soft); border-radius: 999px;
+  background: rgba(4, 20, 34, .75); font-size: 12.5px; font-weight: 600; letter-spacing: .03em; color: var(--text-2);
+}
+.dwl-alert-status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+.dwl-alert-status.is-clear::before { background: #6fdc8c; box-shadow: 0 0 8px #6fdc8c; }
+.dwl-alert-status.is-error::before { background: var(--gold); }
