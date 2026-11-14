@@ -318,3 +318,4 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 #public-shell .public-hour-rain { min-height: 1.2em; font-size: 12px; color: #90dafa; }
 #public-shell .public-notice { margin: 6px 4px 0; padding: 0; border: 0; font-size: 11px; letter-spacing: .04em; color: var(--muted); }
 #public-shell .public-notice:empty { display: none; }
+#public-shell .public-alert-near { margin: 3px 0 4px; font-size: 12px; color: #ffd27a; }

@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=12"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=12"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=12">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114c"><link rel="stylesheet" href="css/site.css?v=20261114e">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114c"><link rel="stylesheet" href="css/site.css?v=20261114f">
 
 
 
@@ -17,7 +17,7 @@
 
 
 </head>
-<body class="public-mode"><script src="js/dwl-components.js?v=20261114c"></script><script src="js/dwl-outlook.js?v=20261114b"></script><div id="public-shell" aria-label="Public local weather forecast">
+<body class="public-mode"><script src="js/dwl-components.js?v=20261114d"></script><script src="js/dwl-outlook.js?v=20261114b"></script><div id="public-shell" aria-label="Public local weather forecast">
  <div class="dwl-header" aria-label="Diablo Weather Lab — Hyperlocal Weather Intelligence"><div class="dwl-brand"><svg class="dwl-mark" viewBox="0 0 160 84" aria-hidden="true"><defs><linearGradient id="dwl-mark-ga" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7cf3ff"/><stop offset="1" stop-color="#0aa8de"/></linearGradient></defs><path d="M74 40a32 32 0 0 1 64 0" fill="none" stroke="url(#dwl-mark-ga)" stroke-width="5" stroke-linecap="round"/><path d="M2 80 58 30l22 17 30-30 48 63-50-40-28 25-22-15Z" fill="url(#dwl-mark-ga)"/></svg><div class="dwl-wordmark"><span class="dwl-wm-1">Diablo</span><span class="dwl-wm-2">Weather Lab</span></div></div><div class="dwl-tagline">Hyperlocal Weather Intelligence</div><svg class="dwl-ridge" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40V30l28-8 22 5 30-14 26 9 34-17 28 12 24-6 30 13 26-9 34 11 28-7 30 9 22-5 38 13V40Z"/></svg></div><div class="dwl-toggle" role="group" aria-label="Weather view"><button type="button" data-weather-view="public" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory" data-weather-view="observatory">Observatory</button></div>
  <div class="public-locations" role="group" aria-label="Choose a forecast location"><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Moraga" aria-pressed="true"><span class="local-neighborhood">Larch</span><span class="local-city">Moraga</span></button><button type="button" class="public-location-favorite" data-favorite-city="Moraga" aria-label="Set Moraga station area, Moraga as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Lafayette" aria-pressed="false"><span class="local-neighborhood">Reliez Valley</span><span class="local-city">Lafayette</span></button><button type="button" class="public-location-favorite" data-favorite-city="Lafayette" aria-label="Set Reliez Valley, Lafayette as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Danville" aria-pressed="false"><span class="local-neighborhood">Sycamore Valley</span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Danville" aria-label="Set Sycamore Valley, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Greenbrook" aria-pressed="false"><span class="local-neighborhood">Greenbrook</span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Greenbrook" aria-label="Set Greenbrook, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div></div>
  <div class="public-hero public-obs-card">
@@ -343,14 +343,13 @@ function nwsWeatherOutlook(afd,d,h){
   const host=el('public-alerts');host.replaceChildren();
   const [lat,lon]=coords[chosen];
   try{
-   const response=await fetch('https://api.weather.gov/alerts/active?point='+lat+','+lon,{headers:{Accept:'application/geo+json'},cache:'no-store'});
-   if(!response.ok)throw Error('NWS unavailable');
-   const data=await response.json();if(request!==revision)return;
-   const items=(data.features||[]).filter(x=>x.properties?.event).slice(0,5);
+   const features=await DWL.fetchAlerts(lat,lon);if(request!==revision)return;
+   const items=features.filter(x=>x.properties?.event).slice(0,5);
    if(!items.length){const status=document.createElement('div');status.className='public-alert-status';status.textContent='No active NWS alerts for this location.';host.appendChild(status);return;}
    for(const item of items){
     const p=item.properties,card=document.createElement('div');card.className='public-alert'+(/warning|emergency/i.test(p.event)?' severe':'');
-    const heading=document.createElement('strong');heading.textContent='⚠ '+p.event;card.appendChild(heading);
+    const heading=document.createElement('strong');heading.textContent='⚠ '+p.event+(item._upcoming?' · upcoming':'');card.appendChild(heading);
+    if(item._nearby){const near=document.createElement('div');near.className='public-alert-near';const where=(String(p.description||'').match(/(?:[A-Z][a-z]+(?:ern)? )?Contra Costa County/)||[])[0];near.textContent='Nearby: covers '+(where||String(p.areaDesc||'Contra Costa County').replace(/, CA/g,''))+' — check whether it includes your neighborhood.';card.appendChild(near);}
     const detail=document.createElement('div');detail.textContent=(p.headline||p.description||'Official weather alert').slice(0,240);card.appendChild(detail);
     if(p.web){const link=document.createElement('a');link.href=p.web;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Official NWS details';card.appendChild(link);}
     host.appendChild(card);
@@ -528,6 +527,8 @@ function nwsWeatherOutlook(afd,d,h){
  document.querySelectorAll('[data-favorite-city]').forEach(b=>b.onclick=()=>{favoriteCity=b.dataset.favoriteCity;try{localStorage.setItem('wx-favorite-city',favoriteCity)}catch(e){}syncLocationButtons()});
  try{if(sessionStorage.getItem('wx-view')==='observatory'){showObservatory()}else{showPublic()}}catch(e){showPublic()}
  setInterval(()=>{if(body.classList.contains('public-mode'))refresh()},15*60*1000);
+ // Alerts can be short-lived (e.g. flood advisories): re-check them every 5 minutes.
+ setInterval(()=>{if(body.classList.contains('public-mode'))updateAlerts(city,revision)},5*60*1000);
  })();
  </script>
 <header><div class="dwl-header" aria-label="Diablo Weather Lab — Hyperlocal Weather Intelligence"><div class="dwl-brand"><svg class="dwl-mark" viewBox="0 0 160 84" aria-hidden="true"><defs><linearGradient id="dwl-mark-gb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7cf3ff"/><stop offset="1" stop-color="#0aa8de"/></linearGradient></defs><path d="M74 40a32 32 0 0 1 64 0" fill="none" stroke="url(#dwl-mark-gb)" stroke-width="5" stroke-linecap="round"/><path d="M2 80 58 30l22 17 30-30 48 63-50-40-28 25-22-15Z" fill="url(#dwl-mark-gb)"/></svg><div class="dwl-wordmark"><span class="dwl-wm-1">Diablo</span><span class="dwl-wm-2">Weather Lab</span></div></div><div class="dwl-tagline">Hyperlocal Weather Intelligence</div><svg class="dwl-ridge" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40V30l28-8 22 5 30-14 26 9 34-17 28 12 24-6 30 13 26-9 34 11 28-7 30 9 22-5 38 13V40Z"/></svg></div><p id="moraga-local-date" hidden></p></header><div class="dwl-toggle" role="group" aria-label="Weather view"><button type="button" data-weather-view="public">Local Weather</button><button type="button" data-weather-view="observatory" aria-current="page">Observatory</button></div>
@@ -1873,7 +1874,6 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
 (function(){
  const root=document.getElementById('moraga-alerts');
  if(!root)return;
- const endpoint='https://api.weather.gov/alerts/active?point=37.8349,-122.1297';
  const severityClass=f=>{
    const event=String(f.properties?.event||'');
    if(/warning/i.test(event)||f.properties?.severity==='Extreme'||f.properties?.severity==='Severe')return 'alert-warning';
@@ -1883,14 +1883,8 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
  };
  async function refreshAlerts(){
    try{
-     const response=await fetch(endpoint,{headers:{Accept:'application/geo+json'},cache:'no-store'});
-     if(!response.ok)throw Error('NWS alerts unavailable');
-     const data=await response.json();
-     const now=Date.now();
-     const features=(Array.isArray(data.features)?data.features:[]).filter(f=>{
-       const p=f.properties||{};
-       return p.status==='Actual' && p.messageType!=='Cancel' && (!p.expires||Date.parse(p.expires)>now) && (!p.onset||Date.parse(p.onset)<=now);
-     });
+     const features=await DWL.fetchAlerts(37.8202,-122.1194);
+     if(!features.length){root.replaceChildren();return;}
      root.replaceChildren();
      const order={'alert-warning':0,'alert-watch':1,'alert-advisory':2,'alert-statement':3};
      features.sort((a,b)=>order[severityClass(a)]-order[severityClass(b)]);
@@ -1901,7 +1895,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
        const summary=document.createElement('summary');
        const icon=document.createElement('span');icon.className='nws-alert-symbol';icon.textContent='⚠';
        const main=document.createElement('span');main.className='nws-alert-main';
-       const eyebrow=document.createElement('span');eyebrow.className='nws-alert-eyebrow';eyebrow.textContent='NWS WEATHER ALERT';
+       const eyebrow=document.createElement('span');eyebrow.className='nws-alert-eyebrow';eyebrow.textContent=(feature._nearby?'NEARBY · ':'')+(feature._upcoming?'UPCOMING · ':'')+'NWS WEATHER ALERT';
        const title=document.createElement('strong');title.textContent=p.event||'Weather Alert';
        const headline=document.createElement('span');headline.className='nws-alert-headline';headline.textContent=p.headline||'Official National Weather Service alert for the Moraga area.';
        main.append(eyebrow,title);

@@ -87,7 +87,52 @@
   function blendReady() { window.dispatchEvent(new CustomEvent('dwl:blend')); }
   function moragaBlend(date) { return moraga[date] || null; }
 
-  window.DWL = { tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard,
+  /* NWS alerts for a location. A point query alone misses storm-based alerts (Flood Advisory,
+     Flash Flood / Severe Thunderstorm Warning) whose polygon edge passes just outside the point —
+     e.g. the Nov 13 2026 Flood Advisory for central Contra Costa skirted Moraga by ~20 m.
+     So also include alerts issued for the location's county, flagged as "nearby". */
+  var zoneCache = {};
+  function countyFor(lat, lon) {
+    var key = lat.toFixed(3) + ',' + lon.toFixed(3);
+    if (!zoneCache[key]) {
+      zoneCache[key] = fetch('https://api.weather.gov/points/' + lat.toFixed(4) + ',' + lon.toFixed(4), { headers: { Accept: 'application/geo+json' } })
+        .then(function (r) { if (!r.ok) throw Error('points ' + r.status); return r.json(); })
+        .then(function (j) { return String(j.properties && j.properties.county || '').split('/').pop() || 'CAC013'; })
+        .catch(function () { return 'CAC013'; }); // Contra Costa County: all Local Weather towns
+    }
+    return zoneCache[key];
+  }
+  var RANK = function (p) {
+    var e = String(p.event || '');
+    if (/warning/i.test(e) || p.severity === 'Extreme' || p.severity === 'Severe') return 0;
+    if (/watch/i.test(e)) return 1;
+    if (/advisory/i.test(e)) return 2;
+    return 3;
+  };
+  function fetchAlerts(lat, lon) {
+    var get = function (q) {
+      return fetch('https://api.weather.gov/alerts/active?' + q, { headers: { Accept: 'application/geo+json' }, cache: 'no-store' })
+        .then(function (r) { if (!r.ok) throw Error('NWS alerts ' + r.status); return r.json(); })
+        .then(function (j) { return Array.isArray(j.features) ? j.features : []; });
+    };
+    var point = get('point=' + lat.toFixed(4) + ',' + lon.toFixed(4));
+    var county = countyFor(lat, lon).then(function (z) { return get('zone=' + z); }).catch(function () { return []; });
+    return Promise.all([point, county]).then(function (res) {
+      var now = Date.now(), seen = {}, out = [];
+      var keep = function (f, nearby) {
+        var p = f.properties || {}, id = p.id || f.id;
+        if (!id || seen[id] || p.status !== 'Actual' || p.messageType === 'Cancel') return;
+        var end = Date.parse(p.ends || p.expires || '');
+        if (Number.isFinite(end) && end <= now) return;
+        seen[id] = 1; f._nearby = nearby; f._upcoming = Number.isFinite(Date.parse(p.onset)) && Date.parse(p.onset) > now; out.push(f);
+      };
+      res[0].forEach(function (f) { keep(f, false); });
+      res[1].forEach(function (f) { keep(f, true); });
+      return out.sort(function (a, b) { return RANK(a.properties) - RANK(b.properties) || (a._nearby - b._nearby); });
+    });
+  }
+
+  window.DWL = { tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts,
     publishBlend: publishBlend, blendReady: blendReady, moragaBlend: moragaBlend };
 
   // Section tabs: highlight the tab for the section currently in view.
