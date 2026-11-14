@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=16"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=16"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=16">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114c"><link rel="stylesheet" href="css/site.css?v=20261114n">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114c"><link rel="stylesheet" href="css/site.css?v=20261114o">
 
 
 
@@ -17,7 +17,7 @@
 
 
 </head>
-<body class="public-mode"><script src="js/dwl-components.js?v=20261114i"></script><script src="js/dwl-outlook.js?v=20261114g"></script><div id="public-shell" aria-label="Public local weather forecast">
+<body class="public-mode"><script src="js/dwl-components.js?v=20261114j"></script><script src="js/dwl-outlook.js?v=20261114g"></script><div id="public-shell" aria-label="Public local weather forecast">
  <div class="dwl-header" aria-label="Diablo Weather Lab — Hyperlocal Weather Intelligence"><div class="dwl-brand"><svg class="dwl-mark" viewBox="0 -6 160 90" aria-hidden="true"><defs><linearGradient id="dwl-mark-ga" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7cf3ff"/><stop offset="1" stop-color="#0aa8de"/></linearGradient></defs><clipPath id="dwl-cloud-ma"><path clip-rule="evenodd" d="M-10 -10H170V94H-10Z M70 21H96A7 7 0 0 0 96 7A10 10 0 0 0 77 5A8 8 0 0 0 68 11A5 5 0 0 0 70 21Z"/></clipPath><g clip-path="url(#dwl-cloud-ma)"><path d="M74 40a32 32 0 0 1 64 0" fill="none" stroke="url(#dwl-mark-ga)" stroke-width="5" stroke-linecap="round"/><path d="M2 80 58 30l22 17 30-30 48 63-50-40-28 25-22-15Z" fill="url(#dwl-mark-ga)"/></g><g transform="translate(62 -1)"><path d="M8 22H34A7 7 0 0 0 34 8A10 10 0 0 0 15 6A8 8 0 0 0 6 12A5 5 0 0 0 8 22Z" fill="none" stroke="#ffffff" stroke-width="3.4" stroke-linejoin="round"/></g></svg><div class="dwl-wordmark"><span class="dwl-wm-1">Diablo</span><span class="dwl-wm-2">Weather Lab</span></div></div><div class="dwl-tagline">Hyperlocal Weather Intelligence</div><svg class="dwl-ridge" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40V30l28-8 22 5 30-14 26 9 34-17 28 12 24-6 30 13 26-9 34 11 28-7 30 9 22-5 38 13V40Z"/></svg></div><div class="dwl-toggle" role="group" aria-label="Weather view"><button type="button" data-weather-view="public" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory" data-weather-view="observatory">Observation Lab</button></div>
  <div class="public-locations" role="group" aria-label="Choose a forecast location"><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Moraga" aria-pressed="true"><span class="local-neighborhood">Larch</span><span class="local-city">Moraga</span></button><button type="button" class="public-location-favorite" data-favorite-city="Moraga" aria-label="Set Moraga station area, Moraga as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Lafayette" aria-pressed="false"><span class="local-neighborhood">Reliez Valley</span><span class="local-city">Lafayette</span></button><button type="button" class="public-location-favorite" data-favorite-city="Lafayette" aria-label="Set Reliez Valley, Lafayette as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Danville" aria-pressed="false"><span class="local-neighborhood">Sycamore Valley</span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Danville" aria-label="Set Sycamore Valley, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Greenbrook" aria-pressed="false"><span class="local-neighborhood">Greenbrook</span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Greenbrook" aria-label="Set Greenbrook, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div></div>
  <div class="public-hero public-obs-card">
@@ -192,15 +192,25 @@
   const elev=Math.asin(Math.sin(la)*Math.sin(decl)+Math.cos(la)*Math.cos(decl)*Math.cos(ha))*180/Math.PI;
   return elev>-0.833;
  }
+ // Latest station reading and live sky, used to anchor the first hours of the strip to reality.
+ let lastObs=null,lastSky=null,lastHourly=null;
  function renderHourly(hourly,currentTime){
   const host=el('public-hourly');host.replaceChildren();
   if(!hourly?.time?.length)return;
-  const start=Math.max(0,hourly.time.findIndex(t=>t>=String(currentTime||'')));
+  lastHourly={hourly,currentTime,city};
+  const hourStamp=String(currentTime||'').slice(0,13);
+  let start=hourly.time.findIndex(t=>t.slice(0,13)>=hourStamp);if(start<0)start=0;
+  // Models often run warm/cool at night: nudge the first hours toward the observed temperature,
+  // fading back to the forecast over 6 hours.
+  const obsOk=lastObs&&lastObs.city===city&&Date.now()-lastObs.at<60*60000&&Number.isFinite(hourly.temperature_2m[start]);
+  const offset=obsOk?Math.max(-10,Math.min(10,lastObs.temp-hourly.temperature_2m[start])):0;
+  const tempAt=i=>{const v=hourly.temperature_2m[i];return Number.isFinite(v)?v+offset*Math.max(0,1-(i-start)/6):v;};
+  const skyOk=lastSky&&lastSky.city===city&&Date.now()-lastSky.at<90*60000;
   for(let i=start;i<Math.min(hourly.time.length,start+24);i+=2){
-   const card=document.createElement('div');card.className='public-hour';card.style.setProperty('--hour-color',tempColor(hourly.temperature_2m[i]));
+   const card=document.createElement('div');card.className='public-hour';card.style.setProperty('--hour-color',tempColor(tempAt(i)));
    const hour=new Date(hourly.time[i]).toLocaleTimeString('en-US',{hour:'numeric'});
    const chance=hourly.precipitation_probability?.[i];
-   card.innerHTML='<strong>'+hour+'</strong><div class="public-hour-icon">'+DWL.icon(hourIconCode(hourly.weather_code[i],chance),'',hourly.is_day?.[i]===0)+'</div><strong class="public-hour-temp">'+fmt(hourly.temperature_2m[i])+'</strong><div class="public-hour-rain">'+(Number.isFinite(chance)&&Math.round(chance/10)*10>=20?Math.min(100,Math.round(chance/10)*10)+'% rain':'&nbsp;')+'</div>';
+   card.innerHTML='<strong>'+hour+'</strong><div class="public-hour-icon">'+DWL.icon(hourIconCode(i===start&&skyOk?lastSky.code:hourly.weather_code[i],chance),'',(i===start&&skyOk?lastSky.isDay===0:hourly.is_day?.[i]===0))+'</div><strong class="public-hour-temp">'+fmt(tempAt(i))+'</strong><div class="public-hour-rain">'+(Number.isFinite(chance)&&Math.round(chance/10)*10>=20?Math.min(100,Math.round(chance/10)*10)+'% rain':'&nbsp;')+'</div>';
    host.appendChild(card);
   }
  }
@@ -217,6 +227,7 @@
    // or a station outside the intended neighborhood microclimate.
    if(Number.isFinite(modelTemp)&&Math.abs(ob.temperature_f-modelTemp)>12)throw Error('Nearby station differs excessively from regional guidance');
    if(chosen==='Greenbrook'&&Number.isFinite(ob.station_distance_mi)&&ob.station_distance_mi>3)throw Error('Station too far from Greenbrook');
+   lastObs={temp:ob.temperature_f,at:stamp,city:chosen};if(lastHourly&&lastHourly.city===chosen)renderHourly(lastHourly.hourly,lastHourly.currentTime);
    set('public-current-temp',fmt(ob.temperature_f));updatePublicCurrentAccent(ob.temperature_f);set('public-humidity',Number.isFinite(ob.humidity_pct)?Math.round(ob.humidity_pct)+'%':'—');set('public-dew',Number.isFinite(ob.dew_point_f)?fmt(ob.dew_point_f):'—');set('public-pressure',Number.isFinite(ob.pressure_inhg)?ob.pressure_inhg.toFixed(2)+' inHg':'—');set('public-wind',Number.isFinite(ob.wind_mph)?(ob.wind_mph<1?'Calm':Math.round(ob.wind_mph)+' mph'):'—');
    const ext=ob.daily_extrema;
    if(ext?.complete&&Number.isFinite(ext.high_f)&&Number.isFinite(ext.low_f))set('public-high-low',fmt(ext.high_f)+' / '+fmt(ext.low_f));
@@ -547,7 +558,7 @@ function nwsWeatherOutlook(afd,d,h){
     const shortResponse=await fetch(feedName+'_short_range_24h.json?t='+Date.now(),{cache:'no-store'});
     if(shortResponse.ok){
      const short=await shortResponse.json(),age=Date.now()-Date.parse(short.generated_utc);
-     const valid=Number.isFinite(age)&&age>=-300000&&age<5*3600000&&
+     const valid=Number.isFinite(age)&&age>=-300000&&age<2*3600000&&
        Math.abs(Number(short.latitude)-lat)<.002&&Math.abs(Number(short.longitude)-lon)<.002&&
        short.hourly?.time?.length>=18&&short.hourly?.temperature_2m?.length===short.hourly.time.length;
      if(valid){
@@ -563,6 +574,7 @@ function nwsWeatherOutlook(afd,d,h){
      }
     }
    }catch(error){console.warn('Short-range model feed unavailable',error)}
+   if(Number.isFinite(data.current?.weather_code))lastSky={code:data.current.weather_code,isDay:data.current.is_day,at:Date.now(),city:chosen};
    renderHourly(hourlyForecast,data.current?.time);
    set('public-short-range-source',updatedAt(shortUpdated||Date.now()));
    updateStation(chosen,request,data.current?.temperature_2m,modeledConflict);

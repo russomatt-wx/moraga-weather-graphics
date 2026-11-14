@@ -91,13 +91,13 @@
     var rainLine = (o.pop || o.amount)
       ? '<div class="dwl-day-rain">' + (o.pop ? '<span>' + esc(o.pop) + '</span>' : '') +
         (o.amount ? '<span class="dwl-day-amount"><i aria-hidden="true"></i>' + esc(o.amount) + '</span>' : '') + '</div>'
-      : '';
+      : '<div class="dwl-day-rain" aria-hidden="true">&nbsp;</div>'; // keep every card the same height
     return '<' + tag + ' class="dwl-day' + (o.cls ? ' ' + o.cls : '') + (o.today ? ' is-today' : '') + '" style="--hi:' + hi + ';--lo:' + lo + '">' +
       '<div class="dwl-day-when">' + (o.today ? '<span class="dwl-pill">Today</span>' : '') +
         '<strong>' + esc(o.day) + '</strong><span>' + esc(o.date) + '</span></div>' +
       '<div class="dwl-day-hi" aria-label="High">' + esc(o.highText) + '</div>' +
       '<div class="dwl-day-sky">' + icon(o.iconCode) +
-        '<div class="dwl-day-cond">' + esc(o.condition) + '</div>' + rainLine + '</div>' +
+        '<div class="dwl-day-cond">' + esc(String(o.condition).replace(/^slight chance of (rain|showers)$/i, 'Slight Chance')) + '</div>' + rainLine + '</div>' +
       '<div class="dwl-day-lo" aria-label="Low">' + esc(o.lowText) + '</div>' +
       (o.extra || '') +
       '</' + tag + '>';

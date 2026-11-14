@@ -209,7 +209,7 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
   display: grid;
   grid-template-columns: minmax(66px, 21%) minmax(64px, 19%) minmax(0, 1fr) minmax(60px, 18%);
   align-items: center;
-  min-height: 78px; padding: 8px 12px 8px 14px;
+  height: 96px; box-sizing: border-box; padding: 8px 12px 8px 14px;
   border: 2px solid transparent; border-radius: 15px;
   /* Soft temperature tint inside the card (high colour → low colour), over the dark base. */
   background:
@@ -248,7 +248,7 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .dwl-day-sky { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 0; padding: 0 4px; }
 .dwl-icon { display: block; width: 56px; height: 40px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .35)); }
 .dwl-day-cond {
-  margin-top: 2px;
+  margin-top: 2px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   font: 600 clamp(10px, 2.8vw, 12px)/1.2 var(--font-ui); letter-spacing: .03em; text-transform: uppercase; color: #eef6fc;
 }
 .dwl-day-rain { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 2px; font: 500 clamp(12px, 3.3vw, 14px)/1.2 var(--font-ui); color: var(--rain); }
@@ -266,7 +266,7 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
   .dwl-icon { width: 48px; height: 34px; }
 }
 @media (min-width: 700px) {
-  .dwl-day { min-height: 86px; padding: 10px 20px; }
+  .dwl-day { height: 104px; padding: 10px 20px; }
   .dwl-icon { width: 66px; height: 46px; }
 }
 
