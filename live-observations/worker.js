@@ -11,18 +11,19 @@ const MAX_AGE_MS = 45 * 60 * 1000;
 // Hand-picked neighborhood stations, tried before automatic discovery (which can land on a station
 // in a cooler pocket). Danville = Sycamore Valley: KCADANVI231 (Central Camino Tassajara).
 const PREFERRED = {danville:['PWS_KCADANVI231'], greenbrook:['PWS_KCADANVI128']};
-async function preferredStation(city, env) {
+async function preferredStation(city, env, log) {
   for (const id of PREFERRED[city] || []) {
     try {
       const endpoint = new URL('https://api.aerisapi.com/observations/'+id);
       endpoint.searchParams.set('client_id', env.XWEATHER_CLIENT_ID);
       endpoint.searchParams.set('client_secret', env.XWEATHER_CLIENT_SECRET);
       const res = await fetch(endpoint.toString(), {cf:{cacheTtl:120,cacheEverything:true}});
-      if (!res.ok) continue;
+      if (!res.ok) { log.push(id+': http '+res.status); continue; }
       const payload = await res.json();
       const record = Array.isArray(payload.response) ? payload.response[0] : payload.response;
       if (fresh(record?.ob)) return id;
-    } catch (_) { /* fall through to the next station */ }
+      log.push(id+': '+(payload.error?.code || (record?.ob ? 'stale' : 'no observation')));
+    } catch (_) { log.push(id+': error'); }
   }
   return null;
 }
@@ -86,8 +87,8 @@ export default {
     let station = city === 'moraga' ? STATION : (city === 'lafayette' ? env.LAFAYETTE_STATION_ID : city === 'greenbrook' ? env.GREENBROOK_STATION_ID : env.DANVILLE_STATION_ID);
     // Never serve the known-problematic Greenbrook station, even if pinned in settings.
     if(city === 'greenbrook' && GREENBROOK_EXCLUDED.has(station)) station = null;
-    let discovery = null, preferred = false;
-    if (!station && PREFERRED[city]) { station = await preferredStation(city, env); preferred = !!station; }
+    let discovery = null, preferred = false; const preferredLog = [];
+    if (!station && PREFERRED[city]) { station = await preferredStation(city, env, preferredLog); preferred = !!station; }
     if (!station && city !== 'moraga') {
       try { discovery = await discoverStation(city, env); station = discovery?.candidate?.id; }
       catch (_) { return Response.json({error:'Nearby station discovery unavailable',city},{status:503,headers:cors}); }
@@ -156,6 +157,7 @@ export default {
         station:station.replace(/^PWS_/,''),
         city,
         station_selection:preferred?'preferred_neighborhood_pws':discovery?'automatic_nearest_fresh_pws':'configured',
+        preferred_station_check:preferredLog.length?preferredLog:undefined,
         station_distance_mi:discovery?.candidate?.relativeTo?.distanceMI ?? null,
         station_completeness_fields:['humidity','dewpointF','windSpeedMPH','pressureIN','windGustMPH'].filter(key=>ob[key]!==null&&ob[key]!==''&&Number.isFinite(Number(ob[key]))).length,
         observed_utc:new Date(Number(ob.timestamp)*1000).toISOString(),
