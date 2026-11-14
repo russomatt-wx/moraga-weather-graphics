@@ -295,7 +295,36 @@
    cards.forEach(d=>{const card=document.createElement('div');card.className='public-hour';card.dataset.key=d.key;card.style.setProperty('--hour-color',d.color);
     card.innerHTML='<strong>'+d.hour+'</strong><div class="public-hour-icon">'+d.icon+'</div><strong class="public-hour-temp">'+d.temp+'</strong>'+d.rain;host.appendChild(card);});
   }
-  if(!(el('public-current-condition')?.textContent||'').trim()||/Loading current/.test(el('public-current-condition')?.textContent||'')){const w=lastSky&&lastSky.city===city?description(lastSky.code,lastSky.isDay===0):publishedSky(city);if(w)set('public-current-condition',w);}
+  if(!(el('public-current-condition')?.textContent||'').trim()||/Loading current/.test(el('public-current-condition')?.textContent||'')){const w=lastSky&&lastSky.city===city?skyWords(lastSky):publishedSky(city);if(w)set('public-current-condition',w);}
+ }
+ // Observed sky from the nearest NWS airport stations (METAR), so "current conditions" reflect what is
+ // actually overhead rather than a model's estimate. Falls back to the model when no fresh report exists.
+ const SKY_STATIONS={Moraga:['KCCR','KOAK'],Lafayette:['KCCR','KOAK'],Danville:['KCCR','KLVK'],Greenbrook:['KCCR','KLVK']};
+ const skyWords=s=>s&&s.text?s.text:description(s.code,s.isDay===0);
+ async function updateSky(chosen,request){
+  for(const id of SKY_STATIONS[chosen]||[]){
+   try{
+    const r=await fetch('https://api.weather.gov/stations/'+id+'/observations/latest',{headers:{Accept:'application/geo+json'},cache:'no-store'});
+    if(!r.ok)continue;
+    const p=(await r.json()).properties||{},stamp=Date.parse(p.timestamp||'');
+    if(!Number.isFinite(stamp)||Date.now()-stamp>90*60000)continue;
+    const rank={CLR:0,SKC:0,NCD:0,NSC:0,FEW:1,SCT:2,BKN:3,OVC:4,VV:4};
+    const layers=(p.cloudLayers||[]).map(c=>rank[c.amount]).filter(Number.isFinite);
+    const wx=(p.presentWeather||[]).map(w=>String(w.weather||'')),vis=Number(p.visibility?.value);
+    if(!layers.length&&!wx.length&&!/clear|cloud|fair|sunny/i.test(p.textDescription||''))continue;
+    const cover=layers.length?Math.max(...layers):0;
+    let code=[0,1,2,2,3][cover],text=['','','','Mostly cloudy','Cloudy'][cover]||'';
+    if(wx.some(w=>/thunder/.test(w))){code=95;text='';}
+    else if(wx.some(w=>/rain|shower/.test(w))){code=wx.some(w=>/shower/.test(w))?80:61;text='';}
+    else if(wx.some(w=>/drizzle/.test(w))){code=51;text='';}
+    else if(wx.some(w=>w==='fog')||(wx.some(w=>/fog/.test(w))&&Number.isFinite(vis)&&vis<2000)){code=45;text='';}
+    if(request!==revision)return;
+    lastSky={code,text,isDay:/\/night\//.test(p.icon||'')?0:1,at:Date.now(),city:chosen,observed:id};
+    set('public-current-condition',skyWords(lastSky));el('public-hero-icon').innerHTML=DWL.icon(code,'',lastSky.isDay===0);
+    if(lastHourly&&lastHourly.city===chosen)renderHourly(lastHourly.hourly,lastHourly.currentTime);
+    return;
+   }catch(e){}
+  }
  }
  async function updateStation(chosen,request,modelTemp,modeledConflict=false){
   const endpoint='https://moraga-live-observations.russo-matt.workers.dev/observations?city='+encodeURIComponent(chosen.toLowerCase());
@@ -311,7 +340,7 @@
    if(Number.isFinite(modelTemp)&&Math.abs(ob.temperature_f-modelTemp)>12)throw Error('Nearby station differs excessively from regional guidance');
    if(chosen==='Greenbrook'&&Number.isFinite(ob.station_distance_mi)&&ob.station_distance_mi>3)throw Error('Station too far from Greenbrook');
    lastObs={temp:ob.temperature_f,at:stamp,city:chosen};
-   if(/^$|unavailable|Loading/i.test((el('public-current-condition')?.textContent||'').trim())){set('public-current-condition',lastSky&&lastSky.city===chosen?description(lastSky.code,lastSky.isDay===0):publishedSky(chosen));if(/live observations temporarily unavailable/.test(el('public-summary')?.textContent||''))set('public-summary','');}if(lastHourly&&lastHourly.city===chosen)renderHourly(lastHourly.hourly,lastHourly.currentTime);
+   if(/^$|unavailable|Loading/i.test((el('public-current-condition')?.textContent||'').trim())){set('public-current-condition',lastSky&&lastSky.city===chosen?skyWords(lastSky):publishedSky(chosen));if(/live observations temporarily unavailable/.test(el('public-summary')?.textContent||''))set('public-summary','');}if(lastHourly&&lastHourly.city===chosen)renderHourly(lastHourly.hourly,lastHourly.currentTime);
    set('public-current-temp',fmt(ob.temperature_f));updatePublicCurrentAccent(ob.temperature_f);set('public-humidity',Number.isFinite(ob.humidity_pct)?Math.round(ob.humidity_pct)+'%':'—');set('public-dew',Number.isFinite(ob.dew_point_f)?fmt(ob.dew_point_f):'—');set('public-pressure',Number.isFinite(ob.pressure_inhg)?ob.pressure_inhg.toFixed(2)+' inHg':'—');set('public-wind',Number.isFinite(ob.wind_mph)?(ob.wind_mph<1?'Calm':Math.round(ob.wind_mph)+' mph'):'—');
    const ext=ob.daily_extrema;
    if(ext?.complete&&Number.isFinite(ext.high_f)&&Number.isFinite(ext.low_f))set('public-high-low',fmt(ext.high_f)+' / '+fmt(ext.low_f));
@@ -579,6 +608,7 @@ function nwsWeatherOutlook(afd,d,h){
   const [lat,lon]=coords[chosen];
   renderPublished(chosen,request,lat,lon,true);
   updateStation(chosen,request,NaN,false); // station reading right away, independent of the forecast
+  updateSky(chosen,request); // observed sky from nearby airports
   const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code%2Cis_day%2Crelative_humidity_2m%2Cdew_point_2m%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m&wind_speed_unit=mph&hourly=temperature_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code%2Cis_day%2Cwind_gusts_10m%2Ccloud_cover&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
   try{
    let response;
@@ -637,7 +667,8 @@ function nwsWeatherOutlook(afd,d,h){
    const modeledConflict=Number.isFinite(modeledNow)&&Number.isFinite(todayHigh)&&modeledNow>todayHigh+3;
    set('public-current-temp',modeledConflict?'—':fmt(modeledNow));
    updatePublicCurrentAccent(modeledConflict?NaN:modeledNow);
-   set('public-current-condition',modeledConflict?'Awaiting verified observation':description(data.current?.weather_code??d.weather_code[0],data.current?.is_day===0));el('public-hero-icon').innerHTML=iconMarkup(data.current?.weather_code??d.weather_code[0]);el('public-current-temp').style.color=tempColor(modeledConflict?NaN:modeledNow);
+   const obsSky=lastSky&&lastSky.observed&&lastSky.city===chosen&&Date.now()-lastSky.at<90*60000?lastSky:null;
+   set('public-current-condition',obsSky?skyWords(obsSky):modeledConflict?'Awaiting verified observation':description(data.current?.weather_code??d.weather_code[0],data.current?.is_day===0));el('public-hero-icon').innerHTML=obsSky?DWL.icon(obsSky.code,'',obsSky.isDay===0):iconMarkup(data.current?.weather_code??d.weather_code[0]);el('public-current-temp').style.color=tempColor(modeledConflict?NaN:modeledNow);
    set('public-today-title',"TODAY'S FORECAST");
    set('public-high-low',fmt(d.temperature_2m_max[0])+' / '+fmt(d.temperature_2m_min[0]));
    set('public-today-high',fmt(d.temperature_2m_max[0]));set('public-today-low',fmt(d.temperature_2m_min[0]));
@@ -677,7 +708,7 @@ function nwsWeatherOutlook(afd,d,h){
      }
     }
    }catch(error){console.warn('Short-range model feed unavailable',error)}
-   if(Number.isFinite(data.current?.weather_code))lastSky={code:data.current.weather_code,isDay:data.current.is_day,at:Date.now(),city:chosen};
+   if(Number.isFinite(data.current?.weather_code)&&!(lastSky&&lastSky.observed&&lastSky.city===chosen&&Date.now()-lastSky.at<90*60000))lastSky={code:data.current.weather_code,isDay:data.current.is_day,at:Date.now(),city:chosen};
    renderHourly(hourlyForecast,data.current?.time);
    set('public-short-range-source',updatedAt(shortUpdated||Date.now()));
    updateStation(chosen,request,data.current?.temperature_2m,modeledConflict);
