@@ -338,7 +338,20 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 
 /* ---------- NWS alert banner (Local Weather) ---------- */
 #public-alerts:empty { display: none; }
-#public-alerts { display: grid; gap: 10px; margin: 14px 0; }
+#public-alerts { display: grid; gap: 10px; }
+.dwl-alert-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 14px 0; }
+.dwl-alert-bar > #public-alerts:has(.dwl-alert) { flex-basis: 100%; }
+#public-push:empty { display: none; }
+#public-push { display: contents; }
+#public-shell .dwl-push-btn {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 14px 6px 11px;
+  border: 1px solid var(--line); border-radius: 999px; background: rgba(4, 20, 34, .75);
+  font: 600 12.5px/1.2 var(--font-ui); letter-spacing: .03em; color: var(--accent); cursor: pointer;
+}
+#public-shell .dwl-push-btn svg { width: 16px; height: 16px; flex: none; }
+#public-shell .dwl-push-btn.is-on { background: color-mix(in srgb, var(--accent) 14%, rgba(4, 20, 34, .75)); box-shadow: var(--glow); }
+#public-shell .dwl-push-btn:disabled { opacity: .6; cursor: progress; }
+.dwl-push-note { flex-basis: 100%; margin: 0; font-size: 13px; line-height: 1.45; color: var(--text-2); }
 .dwl-alert {
   --al: #ffbf2e;
   border: 1.5px solid color-mix(in srgb, var(--al) 70%, transparent);

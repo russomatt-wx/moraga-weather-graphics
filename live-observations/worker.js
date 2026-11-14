@@ -1,4 +1,6 @@
-// Moraga Observatory live station proxy. Deploy as a Cloudflare Worker.
+// Moraga Observatory live station proxy and push alerts. Deploy as a Cloudflare Worker.
+import { AlertPush, handlePush, runAlertCheck } from './push.js';
+export { AlertPush };
 // Configure secrets XWEATHER_CLIENT_ID, XWEATHER_CLIENT_SECRET and ALLOWED_ORIGIN.
 // Never place credentials in the public website or source repository.
 const STATION = 'PWS_KCAMORAG71';
@@ -49,10 +51,15 @@ async function discoverStation(city, env) {
   return {candidate:candidates[0] || null, searched:records.length, fresh_pws:candidates.length, api_error:payload.error?.code || null};
 }
 export default {
+  // Cron (wrangler.toml): check NWS alerts for every town and send push notifications.
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(runAlertCheck(env));
+  },
   async fetch(request, env) {
     const origin = env.ALLOWED_ORIGIN || 'https://russomatt-wx.github.io';
     const cors = {'Access-Control-Allow-Origin': origin, 'Vary': 'Origin', 'Cache-Control': 'public, max-age=120'};
     const url = new URL(request.url);
+    if (url.pathname.startsWith('/push/')) return handlePush(request, env, {'Access-Control-Allow-Origin': origin, 'Vary': 'Origin'});
     if (request.method === 'OPTIONS') return new Response(null, {status:204, headers:{...cors,'Access-Control-Allow-Methods':'GET, OPTIONS','Access-Control-Allow-Headers':'Content-Type'}});
     if (request.method !== 'GET' || url.pathname !== '/observations') return new Response('Not found',{status:404,headers:cors});
     if (!env.XWEATHER_CLIENT_ID || !env.XWEATHER_CLIENT_SECRET) return Response.json({error:'Live service not configured'},{status:503,headers:cors});

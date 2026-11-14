@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=19"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=19"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=19">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261114r">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261114s">
 
 
 
@@ -31,7 +31,7 @@
   <div class="public-note" id="public-summary" hidden></div>
   <div class="public-hero-icon" id="public-hero-icon" aria-hidden="true" hidden></div>
   <div class="public-heading" id="public-city-heading" hidden>Moraga</div><div class="public-sub" id="public-location-sub" hidden></div><div id="public-high-low" hidden>— / —</div>
- </div><div id="public-alerts" aria-live="polite"></div><section class="public-outlook" aria-label="Weather outlook"><div class="public-outlook-title">Weather Outlook <span>What's ahead</span></div><div class="public-outlook-headline" id="public-outlook-headline"></div><p id="public-discussion" aria-live="polite">Loading the local outlook…</p><div class="public-outlook-source" id="public-outlook-source"></div></section>
+ </div><div class="dwl-alert-bar"><div id="public-alerts" aria-live="polite"></div><div id="public-push"></div></div><section class="public-outlook" aria-label="Weather outlook"><div class="public-outlook-title">Weather Outlook <span>What's ahead</span></div><div class="public-outlook-headline" id="public-outlook-headline"></div><p id="public-discussion" aria-live="polite">Loading the local outlook…</p><div class="public-outlook-source" id="public-outlook-source"></div></section>
  <div class="dwl-title"><h2>Daily Outlook</h2><p id="public-days-updated"></p></div><div class="public-days" id="public-days" aria-live="polite"></div><div class="dwl-title"><h2>Next 24 Hours</h2><p id="public-short-range-source" aria-live="polite"></p></div><div class="public-hourly" id="public-hourly" aria-live="polite"></div><div class="public-status" id="public-station-status">Checking nearby public weather observations…</div><div class="public-notice" id="public-data-notice"></div>
  <div style="margin-top:22px"><button id="public-more-details">View full forecast and technical charts ↗</button></div>
  </div><button id="observatory-return">← Simple forecast</button>
@@ -44,7 +44,60 @@
  try{favoriteCity=localStorage.getItem('wx-favorite-city')||'Moraga'}catch(e){}
  if(!coords[favoriteCity])favoriteCity='Moraga';
  city=favoriteCity;
+ // A push notification links to ?city=Town: open that town in Local Weather.
+ try{const q=new URLSearchParams(location.search).get('city');if(q&&coords[q]){city=q;sessionStorage.setItem('wx-view','public');}}catch(e){}
+ // ---------- Push alerts (Cloudflare worker sends NWS alerts for the towns this phone follows) ----------
+ const PUSH_API='https://moraga-live-observations.russo-matt.workers.dev/push/';
+ const pushTowns=()=>{try{const t=JSON.parse(localStorage.getItem('wx-push-towns')||'[]');return Array.isArray(t)?t.filter(x=>coords[x]):[]}catch(e){return []}};
+ const savePushTowns=t=>{try{localStorage.setItem('wx-push-towns',JSON.stringify(t))}catch(e){}};
+ const pushSupported=()=>'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window;
+ const isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ const standalone=()=>navigator.standalone===true||matchMedia('(display-mode: standalone)').matches;
+ let pushBusy=false,pushNote='';
+ async function pushSubscription(){
+  const reg=await navigator.serviceWorker.ready;
+  const key=(await (await fetch(PUSH_API+'key',{cache:'no-store'})).json()).publicKey;
+  let sub=await reg.pushManager.getSubscription();
+  const have=sub?.options?.applicationServerKey?btoa(String.fromCharCode(...new Uint8Array(sub.options.applicationServerKey))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''):null;
+  if(sub&&have&&have!==key){await sub.unsubscribe();sub=null;}
+  if(!sub){const raw=Uint8Array.from(atob(key.replace(/-/g,'+').replace(/_/g,'/')+'==='.slice((key.length+3)%4)),c=>c.charCodeAt(0));
+   sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:raw});}
+  return sub;
+ }
+ async function sendPushTowns(towns){
+  const sub=await pushSubscription();
+  const r=await fetch(PUSH_API+'subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscription:sub.toJSON(),towns})});
+  if(!r.ok)throw Error('push '+r.status);
+  if(!towns.length)await sub.unsubscribe().catch(()=>{});
+  savePushTowns(towns);
+ }
+ async function togglePush(){
+  if(pushBusy)return;
+  if(!pushSupported()){pushNote=isIOS&&!standalone()?'On iPhone, add this site to your Home Screen first: tap Share, then “Add to Home Screen.” Open it from there and tap this button again.':'This browser can’t receive push notifications.';renderPush();return;}
+  const towns=pushTowns(),on=towns.includes(city);
+  pushBusy=true;pushNote='';renderPush();
+  try{
+   if(!on&&(await Notification.requestPermission())!=='granted'){pushNote='Notifications are turned off for this app. You can allow them in Settings → Notifications.';return;}
+   await sendPushTowns(on?towns.filter(t=>t!==city):[...towns,city]);
+   pushNote=on?'Push alerts are off for '+city+'.':'You’re set. We’ll notify you when NWS issues an alert for '+city+'.';
+  }catch(e){pushNote='Couldn’t update push alerts. Please try again.';}
+  finally{pushBusy=false;renderPush();}
+ }
+ function renderPush(){
+  const host=el('public-push');if(!host)return;
+  const iosNeedsHome=!pushSupported()&&isIOS&&!standalone();
+  if(!pushSupported()&&!iosNeedsHome){host.replaceChildren();return;}
+  const on=pushSupported()&&Notification.permission!=='denied'&&pushTowns().includes(city);
+  const btn=document.createElement('button');btn.type='button';btn.className='dwl-push-btn'+(on?' is-on':'');btn.setAttribute('aria-pressed',String(on));btn.disabled=pushBusy;
+  btn.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z" fill="'+(on?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 20.5a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  btn.append(pushBusy?'Updating…':on?'Push alerts on · '+city:'Get push alerts for '+city);btn.onclick=togglePush;
+  const nodes=[btn];if(pushNote){const n=document.createElement('p');n.className='dwl-push-note';n.textContent=pushNote;nodes.push(n);}
+  host.replaceChildren(...nodes);
+ }
+ // Keep the worker's copy of this phone's subscription current (push endpoints can rotate).
+ if(pushSupported()&&pushTowns().length&&Notification.permission==='granted')sendPushTowns(pushTowns()).catch(()=>{});
  function syncLocationButtons(){
+  pushNote='';renderPush();
   document.querySelectorAll('[data-public-city]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.publicCity===city)));
   document.querySelectorAll('[data-favorite-city]').forEach(b=>{
    const selected=b.dataset.favoriteCity===favoriteCity;

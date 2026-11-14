@@ -2,3 +2,16 @@ name = "moraga-live-observations"
 main = "worker.js"
 compatibility_date = "2026-10-01"
 workers_dev = true
+
+# Push alerts: one Durable Object holds subscriptions and sent-alert history (SQLite, free plan).
+[[durable_objects.bindings]]
+name = "ALERT_PUSH"
+class_name = "AlertPush"
+
+[[migrations]]
+tag = "v1-alert-push"
+new_sqlite_classes = ["AlertPush"]
+
+# Check NWS alerts every 2 minutes.
+[triggers]
+crons = ["*/2 * * * *"]
