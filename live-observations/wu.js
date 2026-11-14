@@ -128,6 +128,8 @@ export async function skyFor(city, env, solarNow, log) {
     const clear = clearSkyGhi(elev);
     if (Number.isFinite(avg) && clear > 0) {
       const ratio = avg / clear;
+      // A shaded sensor reads 'cloudy' under a clear sky: if The Weather Company sees few clouds, trust it.
+      if (twc && ratio < 0.4 && Number.isFinite(twc.cloud_cover_pct) && twc.cloud_cover_pct <= 25) return { ...twc, source: 'twc', clear_sky_ratio: Math.round(ratio * 100) / 100 };
       return { ...solarSky(ratio), is_day: true, source: 'station_sunlight', clear_sky_ratio: Math.round(ratio * 100) / 100 };
     }
   }

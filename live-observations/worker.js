@@ -182,7 +182,8 @@ export default {
         wind_gust_direction:typeof ob.windGustDir==='string'?ob.windGustDir:null,
         pressure_inhg:pick('pressureIN'),
         solar_radiation_wm2:pick('solradWM2'),
-        sky:await sky(pick('solradWM2')),
+        // Sunlight only from vetted stations; an auto-discovered station's sensor may be shaded.
+        sky:await sky(discovery ? null : pick('solradWM2')),
         diagnostics:wuLog.length?wuLog:undefined,
         source:'Xweather'
       },{headers:cors});
