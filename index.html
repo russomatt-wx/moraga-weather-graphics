@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#0a1422"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="/moraga-weather-graphics/A188EC9F-32F0-402A-9D51-5B5A30DFBCB2.png?v=11"><link rel="apple-touch-icon" sizes="180x180" href="/moraga-weather-graphics/A188EC9F-32F0-402A-9D51-5B5A30DFBCB2.png?v=11"><link rel="apple-touch-icon-precomposed" href="/moraga-weather-graphics/A188EC9F-32F0-402A-9D51-5B5A30DFBCB2.png?v=11">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114a"><link rel="stylesheet" href="css/site.css?v=20261114a">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114b"><link rel="stylesheet" href="css/site.css?v=20261114a">
 
 
 
@@ -17,7 +17,7 @@
 
 
 </head>
-<body class="public-mode"><script src="js/dwl-components.js?v=20261113a"></script><script src="js/dwl-outlook.js?v=20261114a"></script><div id="public-shell" aria-label="Public local weather forecast">
+<body class="public-mode"><script src="js/dwl-components.js?v=20261114b"></script><script src="js/dwl-outlook.js?v=20261114a"></script><div id="public-shell" aria-label="Public local weather forecast">
  <div class="dwl-header" aria-label="Diablo Weather Lab — Hyperlocal Weather Intelligence"><div class="dwl-brand"><svg class="dwl-mark" viewBox="0 0 160 84" aria-hidden="true"><defs><linearGradient id="dwl-mark-ga" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7cf3ff"/><stop offset="1" stop-color="#0aa8de"/></linearGradient></defs><path d="M74 40a32 32 0 0 1 64 0" fill="none" stroke="url(#dwl-mark-ga)" stroke-width="5" stroke-linecap="round"/><path d="M2 80 58 30l22 17 30-30 48 63-50-40-28 25-22-15Z" fill="url(#dwl-mark-ga)"/></svg><div class="dwl-wordmark"><span class="dwl-wm-1">Diablo</span><span class="dwl-wm-2">Weather Lab</span></div></div><div class="dwl-tagline">Hyperlocal Weather Intelligence</div><svg class="dwl-ridge" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40V30l28-8 22 5 30-14 26 9 34-17 28 12 24-6 30 13 26-9 34 11 28-7 30 9 22-5 38 13V40Z"/></svg></div><div class="dwl-toggle" role="group" aria-label="Weather view"><button type="button" data-weather-view="public" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory" data-weather-view="observatory">Observatory</button></div>
  <div class="public-locations" role="group" aria-label="Choose a forecast location"><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Moraga" aria-pressed="true"><span class="local-neighborhood">Larch</span><span class="local-city">Moraga</span></button><button type="button" class="public-location-favorite" data-favorite-city="Moraga" aria-label="Set Moraga station area, Moraga as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Lafayette" aria-pressed="false"><span class="local-neighborhood">Reliez Valley</span><span class="local-city">Lafayette</span></button><button type="button" class="public-location-favorite" data-favorite-city="Lafayette" aria-label="Set Reliez Valley, Lafayette as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Danville" aria-pressed="false"><span class="local-neighborhood">Sycamore Valley</span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Danville" aria-label="Set Sycamore Valley, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Greenbrook" aria-pressed="false"><span class="local-neighborhood">Greenbrook</span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Greenbrook" aria-label="Set Greenbrook, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div></div>
  <div class="public-hero public-obs-card">
@@ -162,23 +162,7 @@
     pop:wet&&Number.isFinite(pop)?Math.min(100,Math.round(pop/10)*10)+'%':'',amount:wet&&Number.isFinite(total)&&total>=0.01?rain(total):''}));
   }
  }
- function nightIconMarkup(code,isNight=true){
-  const rain=(code>=51&&code<=67)||(code>=80&&code<=82)||code>=95;
-  const fog=code===45||code===48;
-  const cover=code===3||fog||rain;
-  const partly=code===1||code===2;
-  const heavy=code===3||code>=61&&code<=67||code>=81;
-  const moon='<g filter="url(#nightGlow)"><path d="M66 9 C48 18 44 39 55 54 C64 68 84 67 96 54 C76 58 62 45 62 29 C62 21 63 15 66 9Z" fill="url(#moonSurface)" stroke="#fff4d5" stroke-width=".7"/><path d="M66 9 C52 25 53 42 67 52 C77 59 88 57 96 54 C77 58 62 45 62 29Z" fill="#fff9df" opacity=".42"/></g>';
-  const baseCloud='<g filter="url(#nightShadow)"><ellipse cx="53" cy="66" rx="38" ry="14" fill="#344b65" opacity=".5"/><path d="M19 68 C11 66 12 55 19 51 C23 47 28 47 33 48 C37 34 51 29 61 35 C67 39 70 44 71 48 C80 43 90 49 91 57 C94 67 86 72 77 72 L29 72 C25 72 22 71 19 68Z" fill="url(#cloudDepth)"/><path d="M18 58 C20 51 27 48 34 51 C39 36 52 32 61 38 C68 42 70 48 71 51 C80 46 87 50 89 56 C77 52 73 56 68 58 C60 49 48 47 41 58 C33 55 27 56 18 58Z" fill="url(#cloudHighlight)" opacity=".92"/><ellipse cx="49" cy="42" rx="13" ry="7" fill="#f2f6ff" opacity=".28"/></g>';
-  const extra='<g filter="url(#nightShadow)" opacity=".94"><path d="M22 51 C18 43 24 36 33 37 C39 24 54 23 62 33 C73 28 84 36 83 46 C89 52 83 58 76 58 L31 58 C25 58 22 55 22 51Z" fill="url(#cloudDepth)"/><path d="M25 42 C34 37 36 41 39 39 C45 27 55 28 62 36 C71 32 79 38 80 43 C70 40 67 43 63 46 C55 38 44 39 40 48 C33 43 28 45 25 42Z" fill="url(#cloudHighlight)" opacity=".8"/></g>';
-  const drops='<g stroke="url(#rainShine)" stroke-width="2.5" stroke-linecap="round" opacity=".95"><path d="M34 77l-5 12M48 77l-5 12M62 77l-5 12M76 77l-5 12"/></g>';
-  const mist='<g stroke="#b4ccdc" stroke-width="2.8" stroke-linecap="round" opacity=".7"><path d="M17 80h73M27 88h53"/></g>';
-  const stars='<g fill="#d9efff" opacity=".65"><circle cx="20" cy="20" r="1.2"/><circle cx="90" cy="16" r="1"/><circle cx="14" cy="38" r=".8"/></g>';
-  const defs='<defs><radialGradient id="moonSurface" cx="38%" cy="26%" r="83%"><stop stop-color="#fffefa"/><stop offset=".48" stop-color="#fff3c6"/><stop offset="1" stop-color="#d9d4c8"/></radialGradient><linearGradient id="cloudDepth" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#f7fbff"/><stop offset=".4" stop-color="#d1dfea"/><stop offset=".75" stop-color="#8faac1"/><stop offset="1" stop-color="#526f8a"/></linearGradient><linearGradient id="cloudHighlight" x1="0" y1="0" x2=".2" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#c1d3e4"/></linearGradient><linearGradient id="rainShine" x1="0" y1="0" x2=".2" y2="1"><stop stop-color="#b7f1ff"/><stop offset="1" stop-color="#2ea8e9"/></linearGradient><filter id="nightShadow" x="-30%" y="-40%" width="170%" height="190%"><feGaussianBlur in="SourceAlpha" stdDeviation="2"/><feOffset dy="2"/><feComponentTransfer><feFuncA type="linear" slope=".3"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="nightGlow" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur in="SourceAlpha" stdDeviation="2.5"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
-  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 100" aria-hidden="true">'+defs+stars+moon+(heavy?extra:'')+(cover||partly?baseCloud:'')+(rain?drops:'')+(fog?mist:'')+'</svg>';
-  const label=rain?'Rain at night':fog?'Fog at night':cover?'Cloudy night':partly?'Partly cloudy night':'Clear night';
-  return '<span class="public-night-icon unified-weather-icon" role="img" aria-label="'+label+'">'+svg+'</span>';
- }
+
  function renderHourly(hourly,currentTime){
   const host=el('public-hourly');host.replaceChildren();
   if(!hourly?.time?.length)return;
@@ -187,7 +171,7 @@
    const card=document.createElement('div');card.className='public-hour';card.style.setProperty('--hour-color',tempColor(hourly.temperature_2m[i]));
    const hour=new Date(hourly.time[i]).toLocaleTimeString('en-US',{hour:'numeric'});
    const chance=hourly.precipitation_probability?.[i];
-   card.innerHTML='<strong>'+hour+'</strong><div class="public-hour-icon">'+(hourly.is_day?.[i]===0?nightIconMarkup(hourly.weather_code[i]):iconMarkup(hourly.weather_code[i]))+'</div><strong class="public-hour-temp">'+fmt(hourly.temperature_2m[i])+'</strong><div style="color:#90dafa;font-size:12px">'+(Number.isFinite(chance)?chance+'% rain':'—')+'</div>';
+   card.innerHTML='<strong>'+hour+'</strong><div class="public-hour-icon">'+DWL.icon(hourly.weather_code[i],'',hourly.is_day?.[i]===0)+'</div><strong class="public-hour-temp">'+fmt(hourly.temperature_2m[i])+'</strong><div style="color:#90dafa;font-size:12px">'+(Number.isFinite(chance)?chance+'% rain':'—')+'</div>';
    host.appendChild(card);
   }
  }

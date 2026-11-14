@@ -42,10 +42,13 @@
     if (code >= 71 && code <= 77) return 'overcast';
     return 'mostlySun';
   }
-  function icon(code, extraClass) {
-    var name = iconName(code);
-    return '<img class="dwl-icon' + (extraClass ? ' ' + extraClass : '') + '" src="weather-icons/clear/' + name +
-      '.png?v=1" alt="' + ICON_LABEL[name] + '" width="72" height="54" decoding="async">';
+  // Icons containing a sun have night versions (moon) in weather-icons/clear/night/.
+  var NIGHT = { sun: 1, mostlySun: 1, partly: 1, clearing: 1, showersSun: 1, slightRain: 1 };
+  var NIGHT_LABEL = { sun: 'Clear', mostlySun: 'Mostly clear', partly: 'Partly cloudy', clearing: 'Clearing', showersSun: 'Showers', slightRain: 'Light rain' };
+  function icon(code, extraClass, night) {
+    var name = iconName(code), isNight = !!night && NIGHT[name];
+    return '<img class="dwl-icon' + (extraClass ? ' ' + extraClass : '') + '" src="weather-icons/clear/' + (isNight ? 'night/' : '') + name +
+      '.png?v=2" alt="' + (isNight ? NIGHT_LABEL[name] : ICON_LABEL[name]) + '" width="72" height="54" decoding="async">';
   }
 
   function esc(s) {
