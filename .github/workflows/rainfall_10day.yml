@@ -1,6 +1,7 @@
 name: Moraga 14-day rainfall graphic
 on:
   push:
+    branches: [main]
     paths:
       - 'scripts/rainfall_10day.py'
       - 'scripts/public_short_range.py'

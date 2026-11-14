@@ -2,6 +2,7 @@ name: Moraga upper-air forecast
 on:
   workflow_dispatch:
   push:
+    branches: [main]
     paths:
       - 'scripts/upper_air_forecast.py'
       - '.github/workflows/upper_air_forecast.yml'

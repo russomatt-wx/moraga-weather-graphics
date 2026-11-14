@@ -1,6 +1,7 @@
 name: Render GFS PWAT maps
 on:
   push:
+    branches: [main]
     paths:
       - 'scripts/gfs_pwat.py'
       - '.github/workflows/gfs-pwat.yml'

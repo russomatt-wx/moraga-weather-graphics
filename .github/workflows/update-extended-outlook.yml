@@ -1,6 +1,7 @@
 name: Update Moraga extended ensemble outlook
 on:
   push:
+    branches: [main]
     paths:
       - 'scripts/build_extended_outlook.py'
       - '.github/workflows/update-extended-outlook.yml'

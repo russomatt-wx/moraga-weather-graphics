@@ -1,6 +1,7 @@
 name: Moraga marine diagnostics (96h)
 on:
   push:
+    branches: [main]
     paths:
       - 'scripts/marine_diagnostics_96h.py'
       - '.github/workflows/marine_diagnostics_96h.yml'

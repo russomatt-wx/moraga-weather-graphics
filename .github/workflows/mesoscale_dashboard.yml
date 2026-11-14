@@ -1,6 +1,7 @@
 name: Moraga mesoscale forecast charts
 on:
   push:
+    branches: [main]
     paths:
       - 'scripts/mesoscale_dashboard.py'
       - '.github/workflows/mesoscale_dashboard.yml'

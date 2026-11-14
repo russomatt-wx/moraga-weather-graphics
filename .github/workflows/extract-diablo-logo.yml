@@ -1,6 +1,7 @@
 name: Extract original Diablo logo (one time)
 on:
   push:
+    branches: [main]
     paths:
       - .github/workflows/extract-diablo-logo.yml
   workflow_dispatch:
