@@ -1,13 +1,19 @@
 {
-  "generated_utc": "2026-11-14T02:24:49.458860+00:00",
+  "generated_utc": "2026-11-14T10:16:22.512742+00:00",
   "requested_latitude": 37.8201932,
   "requested_longitude": -122.1193876,
   "models": {
     "ECMWF": {
-      "error": "<urlopen error _ssl.c:994: The handshake operation timed out>"
+      "model": "ecmwf_ifs025",
+      "hours": 240,
+      "grid_latitude": 37.75,
+      "grid_longitude": -122.0
     },
     "GFS": {
-      "error": "<urlopen error _ssl.c:994: The handshake operation timed out>"
+      "model": "ncep_gfs_seamless",
+      "hours": 240,
+      "grid_latitude": 37.82783,
+      "grid_longitude": -122.11667
     },
     "EPS": {
       "model": "ecmwf_ifs025_ensemble_mean",
