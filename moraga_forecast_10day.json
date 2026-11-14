@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-14T18:00:20.160125+00:00",
+  "generated_utc": "2026-11-14T19:03:02.836768+00:00",
   "timezone": "America/Los_Angeles",
   "latitude": 37.8201932,
   "longitude": -122.1193876,
@@ -17,7 +17,7 @@
   ],
   "rain_guidance": {
     "2026-11-14": {
-      "expected_inches": 0.029,
+      "expected_inches": 0.032,
       "ensemble_share": 0.25,
       "ensemble_threshold_pct": {
         "0.01": 50,
@@ -326,7 +326,7 @@
         "2026-11-23"
       ],
       "high_f": [
-        59.9,
+        59.0,
         57.6,
         57.6,
         57.9,
@@ -441,7 +441,7 @@
       0.0
     ],
     "GFS": [
-      0.028,
+      0.043,
       0.665,
       0.12,
       0.0,
@@ -530,8 +530,8 @@
     "2026-11-14": {
       "icon": "\ud83c\udf26\ufe0f",
       "label": "Chance of showers",
-      "morning_cloud_pct": 36,
-      "afternoon_cloud_pct": 70,
+      "morning_cloud_pct": 41,
+      "afternoon_cloud_pct": 71,
       "cloud_model_count": 4
     },
     "2026-11-15": {
@@ -1966,7 +1966,7 @@
         0.0,
         0.0,
         0.0,
-        0.0,
+        0.016,
         0.0,
         0.0,
         0.0,
@@ -2302,11 +2302,11 @@
         27,
         34,
         3,
-        39,
         100,
-        59,
-        51,
-        97,
+        81,
+        100,
+        84,
+        96,
         100,
         100,
         100,
