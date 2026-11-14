@@ -356,10 +356,10 @@
       inRain = wet;
     }
     var nws = afd ? afd.key.join(' ') + ' ' + afd.short + ' ' + afd.long : '';
-    if (thunder) return 'Thunderstorms could rumble through ' + region;
+    if (thunder) return pick(['Thunderstorms could rumble through ' + region, 'Thunder is in the forecast'], nowParts);
     if (/atmospheric river/i.test(nws) && hz.total10 >= 1) return 'An atmospheric river is taking aim at the Bay Area';
-    if (events >= 3) return 'The Pacific storm train is here';
-    if (hz.bigLater && hz.bigLater.total >= 1 && hz.bigLater.total > wet72) return 'The biggest storm is still to come';
+    if (events >= 3) return pick(['The Pacific storm train is here', 'All aboard the Pacific storm train', 'The storm door is wide open'], nowParts);
+    if (hz.bigLater && hz.bigLater.total >= 1 && hz.bigLater.total > wet72) return pick(['The biggest storm is still to come', 'Save your umbrella: the big one is coming'], nowParts);
     if (events === 2) return 'Two storms are lined up for ' + region;
     if (hz.total10 >= 2) return 'A soggy stretch is setting up for ' + region;
     if (wet72 >= 0.5) return 'A wet few days ahead for ' + region;
@@ -368,8 +368,74 @@
     if (/red flag|critical fire weather|offshore wind/i.test(nws)) return 'Fire weather is back on the radar';
     if (hz.frost) return 'Jack Frost is knocking';
     if (/marine layer|low clouds and fog|stratus/i.test(nws) && hz.total10 < 0.05) return 'The marine layer is in charge';
-    if (hz.total10 < 0.05) return 'High pressure takes charge: dry days ahead';
+    if (hz.total10 < 0.05) return pick(['High pressure takes charge: dry days ahead', 'Sunglasses weather is here', 'A dry stretch settles in'], nowParts);
     return 'A quiet stretch of weather for ' + region;
+  }
+
+  /* ---------- Concise one-paragraph version (what the page shows) ---------- */
+  function nearConcise(rs, afd, place) {
+    var wet = rs.filter(function (r) { return r.wet; });
+    var main = wet.reduce(function (a, r) { return !a || r.rain > a.rain ? r : a; }, null);
+    var peak = maxGust(rs), windy = peak.gust >= 35, g = Math.round(peak.gust / 5) * 5;
+    var windBit = windy ? ' and gusts up to ' + g + ' mph' : '';
+    if (!main || main.rain < 0.05) {
+      var day = rs.reduce(function (a, r) { return a.concat(r.blocks); }, []).filter(function (b) { return b.part === 1 || b.part === 2; });
+      var sk = sky(day);
+      var lastBlocks = rs[rs.length - 1].blocks, lastDay = weekday(lastBlocks[lastBlocks.length - 1].labelDate);
+      return 'Expect ' + (sk ? sk + ' and dry weather' : 'dry weather') + ' through ' + lastDay + (windy ? ', though gusts could reach ' + g + ' mph' : '');
+    }
+    var cause = causeFor(afd, main.start.dayName, main.start.isNow), t = tip(main, peak.gust), amt = amountWords(main.rain);
+    var i = rs.indexOf(main), before = rs[i - 1], after = rs[i + 1];
+    if (main.start.isNow) {
+      var verb = main.thunder ? 'Storms keep rolling in' : main.rain >= 0.3 ? 'The rain keeps coming' : 'Showers hang around';
+      return verb + ' ' + until(main) + ' with ' + amt + ' more' + windBit + (after && !after.wet ? ', then we dry out ' + startDay(after) : '') + (t ? ' — ' + t : '');
+    }
+    var round = /third/.test(cause) ? 'round three' : /second|another/.test(cause) ? 'round two' : '';
+    var dn = before && !before.wet ? dryName(before) : '';
+    var pre = /day$/.test(dn) ? 'After a dry ' + dn + ', ' : '';
+    var what = round ? round + ' rolls in ' : (main.thunder ? 'storms roll in ' : 'rain moves in ');
+    var how = cause && cause !== 'post-frontal' ? ' as ' + cause + ' brings ' + amt + windBit : ' with ' + amt + windBit;
+    var body = pre + what + main.span + how + (t ? ' — ' + t : '');
+    return cap(body);
+  }
+  function farConcise(hz, daily, nowParts) {
+    if (!daily || !daily.time) return '';
+    var i0 = dayIdx(daily, nowParts), big = hz.bigLater;
+    var range = function (r) { return r.a === r.b ? dayName(daily, r.a, i0) : dayName(daily, r.a, i0) + ' into ' + weekday(daily.time[r.b]); };
+    var total = hz.total10 >= 1 ? ', pushing 10-day totals to ' + amountWords(hz.total10).replace(/^around /, 'about ') : '';
+    if (big) {
+      var label = big.total >= 2 ? 'a potent storm' : big.total >= 1 ? 'a stronger storm' : big.total >= 0.5 ? 'another solid soaking' : 'a few more showers';
+      return 'Then the models line up ' + label + ' for ' + range(big) + ' with ' + amountWords(big.total) + total + (hz.frost ? ', plus some frosty mornings' : '');
+    }
+    var n = Math.min(daily.time.length, i0 + 10);
+    return 'Beyond that, the models keep things mostly dry through ' + dayName(daily, n - 1, i0) + (hz.frost ? ', with frosty mornings in the mix' : '');
+  }
+  var NUGGETS = [
+    [/landslide|mudslide|debris flow/i, 'Forecasters are also keeping an eye on soggy hillsides for mudslides'],
+    [/atmospheric river/i, 'Forecasters are tracking an atmospheric river, so stay tuned'],
+    [/power outage|downed trees|down(?:ed)? (?:trees|branches)/i, 'Forecasters warn gusty winds could bring down branches and power lines'],
+    [/red flag|critical fire weather/i, 'Forecasters are flagging critical fire weather, so be careful with anything that sparks'],
+    [/snowpack|sierra/i, 'Good news for the Sierra, too: the snowpack is getting a boost'],
+    [/fire weather threat|reducing our fire/i, 'Good news, too: the rain is knocking down the fire threat'],
+    [/freez|frost|cold weather (?:products|advisory)/i, 'Forecasters also mention frost in the colder valleys, so cover tender plants'],
+    [/heat advisory|excessive heat|record (?:high|heat)/i, 'Forecasters say the heat could flirt with records'],
+    [/above (?:the )?(?:seasonal )?(?:average|normal)|pattern remains active/i, 'Forecasters expect the active pattern to keep rain totals above normal'],
+  ];
+  function nwsNugget(afd) {
+    if (!afd) return '';
+    var text = afd.key.join(' . ') + ' ' + afd.short + ' ' + afd.long;
+    for (var i = 0; i < NUGGETS.length; i++) if (NUGGETS[i][0].test(text)) return NUGGETS[i][1];
+    return '';
+  }
+  // Only mention temperatures when they matter (frost, freeze, heat, a real chill).
+  function tempNote(daily, nowParts) {
+    var t = tempSentence(daily, nowParts, '');
+    return /freeze|frost|hot/i.test(t) ? t : '';
+  }
+  // Rotate headline wording by date so it stays fresh day to day.
+  function pick(list, nowParts) {
+    var d = Number(nowParts.date.replace(/-/g, '')) || 0;
+    return list[d % list.length];
   }
 
   // Friendly opener for the local time of day.
@@ -394,9 +460,14 @@
     var nearTerm = st.sentences.concat([tempSentence(opts.daily, nowParts, st.closing)]).filter(Boolean).map(dot);
     var farTerm = [hz.text, nwsInsight(afd, /mudslide|frost/.test(hz.text) ? /frost/ : null) || nwsHighlight(afd)].filter(Boolean).map(dot);
     var issued = opts.issued ? new Date(opts.issued).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', minute: '2-digit' }) : '';
+    var near = nearConcise(rs, afd, place), far = farConcise(hz, opts.daily, nowParts);
+    if (/^Beyond that/.test(far) && /dry weather through/.test(near) && far.slice(-12) === near.slice(-12)) far = '';
+    var para = [near, tempNote(opts.daily, nowParts), far, nwsNugget(afd)]
+      .filter(Boolean).map(dot);
     return {
       headline: headline(rs, hz, opts.daily, nowParts, region, afd),
-      text: greeting(nowParts.hour, place) + ' ' + nearTerm.join(' ') + (farTerm.length ? '\n\n' + farTerm.join(' ') : ''),
+      text: greeting(nowParts.hour, place) + ' ' + para.join(' '),
+      long: greeting(nowParts.hour, place) + ' ' + nearTerm.join(' ') + (farTerm.length ? '\n\n' + farTerm.join(' ') : ''),
       source: afd ? 'Based on the NWS Bay Area forecast discussion (' + issued + ') and local model guidance' : 'Local model guidance · NWS discussion not available'
     };
   }

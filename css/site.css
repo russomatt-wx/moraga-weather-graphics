@@ -325,3 +325,15 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .public-outlook-headline { margin: 2px 0 8px; font: 700 clamp(17px, 4.6vw, 20px)/1.25 var(--font-ui); color: var(--accent); }
 .public-outlook-headline:empty { display: none; }
 .public-outlook p#public-discussion { white-space: pre-line; }
+
+/* 10-day lists: first 5 days, then "Show 5 more days" */
+.dwl-days.is-collapsed > .dwl-day ~ .dwl-day ~ .dwl-day ~ .dwl-day ~ .dwl-day ~ .dwl-day { display: none; }
+.dwl-more {
+  display: block; width: 100%; margin: -6px 0 18px; padding: 12px 16px; cursor: pointer;
+  border: 1.5px solid var(--line); border-radius: var(--radius-sm);
+  background: rgba(8, 30, 48, .7); color: var(--accent);
+  font: 600 15px/1 var(--font-ui); letter-spacing: .02em;
+}
+.dwl-more::after { content: " ▾"; }
+.dwl-more[aria-expanded="true"]::after { content: " ▴"; }
+#public-shell .dwl-more { border: 1.5px solid var(--line); border-radius: var(--radius-sm); background: rgba(8, 30, 48, .7); color: var(--accent); padding: 12px 16px; }

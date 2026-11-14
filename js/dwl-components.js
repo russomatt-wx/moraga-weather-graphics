@@ -157,7 +157,27 @@
     });
   }
 
-  window.DWL = { tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts,
+  /* Show the first 5 forecast days, with a button for the rest. State is remembered per list
+     (key), so re-rendering the cards keeps the reader's choice. */
+  var expanded = {};
+  function collapseDays(list, key) {
+    if (!list) return;
+    var cards = list.querySelectorAll('.dwl-day');
+    var btn = list.nextElementSibling && list.nextElementSibling.classList.contains('dwl-more') ? list.nextElementSibling : null;
+    if (cards.length <= 5) { list.classList.remove('is-collapsed'); if (btn) btn.remove(); return; }
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'dwl-more';
+      list.insertAdjacentElement('afterend', btn);
+      btn.addEventListener('click', function () { expanded[key] = !expanded[key]; collapseDays(list, key); });
+    }
+    var open = !!expanded[key], more = cards.length - 5;
+    list.classList.toggle('is-collapsed', !open);
+    btn.setAttribute('aria-expanded', String(open));
+    btn.textContent = open ? 'Show fewer days' : 'Show ' + more + ' more days';
+  }
+
+  window.DWL = { tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts, collapseDays: collapseDays,
     publishBlend: publishBlend, blendReady: blendReady, moragaBlend: moragaBlend };
 
   // Section tabs: highlight the tab for the section currently in view.
