@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
-  <!-- Diablo Weather Lab app icon: the header mark (sunrise arc over twin peaks) on the site's night navy.
+  <!-- Diablo Weather Lab app icon: the header mark (cloud and sunrise arc over faceted peaks) on the site's night navy.
        No filters, so cairosvg (generate-app-icons workflow) renders it the same as browsers. -->
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
@@ -31,21 +31,21 @@
   <path d="M0 842 L70 812 L128 828 L204 784 L262 806 L352 750 L428 790 L492 770 L574 812 L648 782 L742 822 L812 796 L896 830 L956 812 L1024 838" fill="none" stroke="#19dcf6" stroke-opacity=".14" stroke-width="22" stroke-linejoin="round"/>
   <path d="M0 842 L70 812 L128 828 L204 784 L262 806 L352 750 L428 790 L492 770 L574 812 L648 782 L742 822 L812 796 L896 830 L956 812 L1024 838" fill="none" stroke="#3fe3ff" stroke-opacity=".85" stroke-width="4" stroke-linejoin="round"/>
 
-  <!-- the mark (same geometry as the header logo, viewBox 160x84) -->
-  <g transform="translate(152 292) scale(4.5)">
-    <!-- the arc and peaks are clipped out behind the cloud so the background shows through it -->
-    <clipPath id="cloudcut"><path clip-rule="evenodd" d="M-10 -20H170V94H-10Z M46.4 19.6H80.2A9.1 9.1 0 0 0 80.2 1.4A13 13 0 0 0 55.5 -1.2A10.4 10.4 0 0 0 43.8 6.6A6.5 6.5 0 0 0 46.4 19.6Z"/></clipPath>
-    <g clip-path="url(#cloudcut)">
-    <!-- soft glow: wide translucent strokes under the shapes -->
-    <path d="M74 40a32 32 0 0 1 64 0" fill="none" stroke="#19dcf6" stroke-opacity=".10" stroke-width="16" stroke-linecap="round"/>
-    <path d="M2 80 58 30l22 17 30-30 48 63-50-40-28 25-22-15Z" fill="none" stroke="#19dcf6" stroke-opacity=".10" stroke-width="10" stroke-linejoin="round"/>
-    <path d="M74 40a32 32 0 0 1 64 0" fill="none" stroke="#19dcf6" stroke-opacity=".16" stroke-width="9" stroke-linecap="round"/>
-    <path d="M2 80 58 30l22 17 30-30 48 63-50-40-28 25-22-15Z" fill="none" stroke="#19dcf6" stroke-opacity=".16" stroke-width="5" stroke-linejoin="round"/>
-    <!-- shapes -->
-    <path d="M74 40a32 32 0 0 1 64 0" fill="none" stroke="url(#mark)" stroke-width="5" stroke-linecap="round"/>
-    <path d="M2 80 58 30l22 17 30-30 48 63-50-40-28 25-22-15Z" fill="url(#mark)"/>
-    </g>
-    <!-- cloud outline (white, like the DIABLO wordmark) above the saddle, left of the sun -->
-    <path d="M46.4 19.6H80.2A9.1 9.1 0 0 0 80.2 1.4A13 13 0 0 0 55.5 -1.2A10.4 10.4 0 0 0 43.8 6.6A6.5 6.5 0 0 0 46.4 19.6Z" fill="none" stroke="#ffffff" stroke-width="3.4" stroke-linejoin="round"/>
+  <!-- the mark (same geometry as the header logo, viewBox 160x90) -->
+  <g transform="translate(152 300) scale(4.5)">
+<defs>
+<linearGradient id="lt-ic" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4feff"/><stop offset="1" stop-color="#8fe6ff"/></linearGradient>
+<linearGradient id="dk-ic" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5fd6f7"/><stop offset="1" stop-color="#0a9fd6"/></linearGradient>
+<linearGradient id="arc-ic" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a6f6ff"/><stop offset="1" stop-color="#16bdec"/></linearGradient>
+<linearGradient id="cl-ic" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#dde6f0"/><stop offset="1" stop-color="#8b9fb5"/></linearGradient>
+</defs>
+<path d="M87.6 13.8A32 32 0 0 1 138 40" fill="none" stroke="#19dcf6" stroke-opacity=".12" stroke-width="7" stroke-linecap="round"/>
+<path d="M87.6 13.8A32 32 0 0 1 138 40" fill="none" stroke="url(#arc-ic)" stroke-width="3.6" stroke-linecap="round"/>
+<path d="M2 80 58 30 58 50Z" fill="url(#lt-ic)"/>
+<path d="M58 30 80 47 80 65 58 50Z" fill="#79dcf8"/>
+<path d="M80 47 110 17 108 40 80 65Z" fill="url(#lt-ic)"/>
+<path d="M110 17 158 80 108 40Z" fill="url(#dk-ic)"/>
+<path d="M47.4 27.6H81.2A9.1 9.1 0 0 0 81.2 9.4A13 13 0 0 0 56.5 6.8A10.4 10.4 0 0 0 44.8 14.6A6.5 6.5 0 0 0 47.4 27.6Z" fill="none" stroke="#ffffff" stroke-opacity=".06" stroke-width="5" stroke-linejoin="round"/>
+<path d="M47.4 27.6H81.2A9.1 9.1 0 0 0 81.2 9.4A13 13 0 0 0 56.5 6.8A10.4 10.4 0 0 0 44.8 14.6A6.5 6.5 0 0 0 47.4 27.6Z" fill="url(#cl-ic)"/>
   </g>
 </svg>
