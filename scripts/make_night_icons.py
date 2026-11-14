@@ -1,8 +1,8 @@
 """Create night versions of the illustrated weather icons.
 
-Takes the transparent day icons in weather-icons/clear/ and repaints the sun as a
-moon (cool silver-blue, soft craters, crescent for the clear-sky icon), leaving
-clouds and rain untouched so day and night icons share one illustrated style.
+Every day icon with a sun gets a night twin: a drawn crescent moon placed behind
+the same illustrated cloud / rain artwork from weather-icons/clear/, so day and
+night icons share one style and the moon can never be mistaken for a sun.
 Output: weather-icons/clear/night/<name>.png
 """
 from pathlib import Path
@@ -60,26 +60,47 @@ def crescent(size=220):
     return img.crop(img.getbbox())
 
 
+def place(canvas, img, width, x, y, solid=False):
+    img = img.copy()
+    h = round(img.height * width / img.width)
+    img = img.resize((width, h), Image.LANCZOS)
+    if solid:
+        # Cloud bodies were keyed from a dark background and are slightly see-through;
+        # firm them up so the moon behind does not show through.
+        a = np.asarray(img).astype(float)
+        lum = a[..., :3].mean(-1) / 255
+        body = np.clip((lum - .45) / .2, 0, 1)          # bright cloud body only, not rain or haze
+        firm = 255 * (a[..., 3] / 255) ** 0.55
+        a[..., 3] = a[..., 3] * (1 - body) + firm * body
+        # Drop the faint dark haze left between rain streaks by the background removal.
+        # Rain art carries a faint blue mist around the streaks; keep only the streaks themselves.
+        blue = (a[..., 2] - a[..., 0]) > 60
+        a[..., 3] = np.where(blue, a[..., 3] * np.clip((a[..., 3] - 60) / 50, 0, 1), a[..., 3])
+        # Dark, semi-transparent fringe left by the background removal.
+        a[..., 3] = np.where((lum < .4) & (a[..., 3] < 170), 0, a[..., 3])
+        img = Image.fromarray(a.astype(np.uint8), "RGBA")
+    canvas.alpha_composite(img, (x, y))
+
+
+def compose(cloud_name, moon_size, cloud_width, cloud_xy, moon_xy=(6, 0)):
+    """Crescent moon tucked behind an illustrated cloud (night version of a sun+cloud icon)."""
+    canvas = Image.new("RGBA", (300, 260), (0, 0, 0, 0))
+    moon = crescent(size=moon_size * 2)  # crescent() draws the moon at ~60% of its canvas
+    canvas.alpha_composite(moon, moon_xy)
+    place(canvas, Image.open(SRC / f"{cloud_name}.png").convert("RGBA"), cloud_width, *cloud_xy, solid=True)
+    return canvas.crop(canvas.getbbox())
+
+
+# name -> (cloud artwork, moon size, cloud width, cloud position)
+RECIPES = {
+    "mostlySun": ("cloudy", 108, 170, (80, 104)),
+    "partly": ("cloudy", 98, 220, (40, 84)),
+    "clearing": ("cloudy", 98, 220, (40, 84)),
+    "showersSun": ("chance", 94, 230, (34, 68)),
+    "slightRain": ("chance", 94, 230, (34, 68)),
+}
+
 for name in WITH_SUN:
-    im = Image.open(SRC / f"{name}.png").convert("RGBA")
-    a = np.asarray(im).astype(float)
-    rgb, alpha = a[..., :3], a[..., 3]
-    w = sunness(rgb)
-    # Disk core vs. rays/glow: bright warm pixels are the disk.
-    val = rgb.max(-1) / 255                      # brightness of the sun pixel (orange is bright in V)
-    shade = rgb[..., 1] / 255                    # green channel carries the sun's 3D shading
-    tex = np.asarray(craters(*w.shape)).astype(float) / 255
-    moon_core = np.stack([238, 243, 252], -1) * (0.62 + 0.38 * shade[..., None]) * (0.82 + 0.18 * tex[..., None])
-    moon_glow = np.stack([170, 205, 240], -1) * (0.45 + 0.55 * val[..., None])
-    core = np.clip((val - .82) / .12, 0, 1)[..., None] * np.clip((shade - .35) / .2, 0, 1)[..., None]
-    moon = moon_core * core + moon_glow * (1 - core)
-    w3 = w[..., None]
-    rgb2 = rgb * (1 - w3) + moon * w3
-    # Rays fade: a moon glows, it does not shine rays.
-    alpha2 = alpha * (1 - w * (1 - core[..., 0]) * .55)
-    out = np.dstack([np.clip(rgb2, 0, 255), alpha2]).astype(np.uint8)
-    img = Image.fromarray(out, "RGBA")
-    if name == "sun":
-        img = crescent(size=220)
+    img = crescent(size=220) if name == "sun" else compose(*RECIPES[name])
     img.save(OUT / f"{name}.png", optimize=True)
     print(name, img.size)

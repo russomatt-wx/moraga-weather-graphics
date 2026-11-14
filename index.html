@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#0a1422"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="/moraga-weather-graphics/A188EC9F-32F0-402A-9D51-5B5A30DFBCB2.png?v=11"><link rel="apple-touch-icon" sizes="180x180" href="/moraga-weather-graphics/A188EC9F-32F0-402A-9D51-5B5A30DFBCB2.png?v=11"><link rel="apple-touch-icon-precomposed" href="/moraga-weather-graphics/A188EC9F-32F0-402A-9D51-5B5A30DFBCB2.png?v=11">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114b"><link rel="stylesheet" href="css/site.css?v=20261114c">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114c"><link rel="stylesheet" href="css/site.css?v=20261114d">
 
 
 
@@ -17,7 +17,7 @@
 
 
 </head>
-<body class="public-mode"><script src="js/dwl-components.js?v=20261114b"></script><script src="js/dwl-outlook.js?v=20261114a"></script><div id="public-shell" aria-label="Public local weather forecast">
+<body class="public-mode"><script src="js/dwl-components.js?v=20261114c"></script><script src="js/dwl-outlook.js?v=20261114a"></script><div id="public-shell" aria-label="Public local weather forecast">
  <div class="dwl-header" aria-label="Diablo Weather Lab — Hyperlocal Weather Intelligence"><div class="dwl-brand"><svg class="dwl-mark" viewBox="0 0 160 84" aria-hidden="true"><defs><linearGradient id="dwl-mark-ga" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7cf3ff"/><stop offset="1" stop-color="#0aa8de"/></linearGradient></defs><path d="M74 40a32 32 0 0 1 64 0" fill="none" stroke="url(#dwl-mark-ga)" stroke-width="5" stroke-linecap="round"/><path d="M2 80 58 30l22 17 30-30 48 63-50-40-28 25-22-15Z" fill="url(#dwl-mark-ga)"/></svg><div class="dwl-wordmark"><span class="dwl-wm-1">Diablo</span><span class="dwl-wm-2">Weather Lab</span></div></div><div class="dwl-tagline">Hyperlocal Weather Intelligence</div><svg class="dwl-ridge" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40V30l28-8 22 5 30-14 26 9 34-17 28 12 24-6 30 13 26-9 34 11 28-7 30 9 22-5 38 13V40Z"/></svg></div><div class="dwl-toggle" role="group" aria-label="Weather view"><button type="button" data-weather-view="public" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory" data-weather-view="observatory">Observatory</button></div>
  <div class="public-locations" role="group" aria-label="Choose a forecast location"><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Moraga" aria-pressed="true"><span class="local-neighborhood">Larch</span><span class="local-city">Moraga</span></button><button type="button" class="public-location-favorite" data-favorite-city="Moraga" aria-label="Set Moraga station area, Moraga as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Lafayette" aria-pressed="false"><span class="local-neighborhood">Reliez Valley</span><span class="local-city">Lafayette</span></button><button type="button" class="public-location-favorite" data-favorite-city="Lafayette" aria-label="Set Reliez Valley, Lafayette as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Danville" aria-pressed="false"><span class="local-neighborhood">Sycamore Valley</span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Danville" aria-label="Set Sycamore Valley, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Greenbrook" aria-pressed="false"><span class="local-neighborhood">Greenbrook</span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Greenbrook" aria-label="Set Greenbrook, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div></div>
  <div class="public-hero public-obs-card">
@@ -163,6 +163,16 @@
   }
  }
 
+ // Hourly icon follows the displayed (blended) rain chance, with the 10-day cards' thresholds:
+ // >=60% rain, 20-50% chance of showers, <20% never a rain icon. Thunder codes are kept.
+ function hourIconCode(code,chance){
+  const pop=Number.isFinite(chance)?Math.min(100,Math.round(chance/10)*10):null;
+  if(code>=95||pop===null)return code;
+  if(pop>=60)return code>=61&&code<=67?code:61;
+  if(pop>=20)return 80;
+  if(code>=51&&code<=82)return 3;
+  return code;
+ }
  function renderHourly(hourly,currentTime){
   const host=el('public-hourly');host.replaceChildren();
   if(!hourly?.time?.length)return;
@@ -171,7 +181,7 @@
    const card=document.createElement('div');card.className='public-hour';card.style.setProperty('--hour-color',tempColor(hourly.temperature_2m[i]));
    const hour=new Date(hourly.time[i]).toLocaleTimeString('en-US',{hour:'numeric'});
    const chance=hourly.precipitation_probability?.[i];
-   card.innerHTML='<strong>'+hour+'</strong><div class="public-hour-icon">'+DWL.icon(hourly.weather_code[i],'',hourly.is_day?.[i]===0)+'</div><strong class="public-hour-temp">'+fmt(hourly.temperature_2m[i])+'</strong><div class="public-hour-rain">'+(Number.isFinite(chance)&&Math.round(chance/10)*10>=20?Math.min(100,Math.round(chance/10)*10)+'% rain':'&nbsp;')+'</div>';
+   card.innerHTML='<strong>'+hour+'</strong><div class="public-hour-icon">'+DWL.icon(hourIconCode(hourly.weather_code[i],chance),'',hourly.is_day?.[i]===0)+'</div><strong class="public-hour-temp">'+fmt(hourly.temperature_2m[i])+'</strong><div class="public-hour-rain">'+(Number.isFinite(chance)&&Math.round(chance/10)*10>=20?Math.min(100,Math.round(chance/10)*10)+'% rain':'&nbsp;')+'</div>';
    host.appendChild(card);
   }
  }

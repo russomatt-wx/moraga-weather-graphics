@@ -273,7 +273,7 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 }
 
 /* Icons used outside day cards (hourly strip, current conditions) */
-#public-shell .public-hour .dwl-icon { width: 52px; height: 40px; margin: 4px auto; }
+#public-shell .public-hour .dwl-icon { width: 64px; height: 52px; margin: 0 auto; }
 
 /* ---------- Location selector (Local Weather) ---------- */
 #public-shell .public-locations {
