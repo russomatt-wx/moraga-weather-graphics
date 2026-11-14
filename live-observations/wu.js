@@ -14,6 +14,10 @@ export const WU_STATIONS = { moraga: 'KCAMORAG71', danville: 'KCADANVI231', gree
 export const WU_PRIMARY = new Set(['danville', 'greenbrook']);
 export const TOWN_COORDS = { moraga: [37.8202, -122.1194], lafayette: [37.890, -122.115], danville: [37.813, -121.974], greenbrook: [37.799, -121.970] };
 const MAX_AGE_MS = 45 * 60 * 1000;
+// The secret as pasted, minus stray whitespace/quotes.
+const wuKey = (env) => String(env.WU_API_KEY || '').trim().replace(/^["']+|["']+$/g, '');
+// Shape of the key for diagnostics only (never the key itself). WU API keys are 32 hex characters.
+export const wuKeyShape = (env) => { const k = wuKey(env); return k ? (/^[0-9a-f]{32}$/i.test(k) ? 'key format ok' : 'key format unexpected: ' + k.length + ' chars' + (/[^0-9a-z]/i.test(k) ? ', has non-alphanumeric characters' : '')) : 'no key'; };
 const num = (v) => (v !== null && v !== '' && Number.isFinite(Number(v)) ? Number(v) : null);
 
 async function getJson(url, ttl, log, label) {
@@ -32,9 +36,9 @@ function pwsUrl(path, station, key) {
 
 // Current Weather Underground reading, or null. Shape matches the worker's /observations fields.
 export async function wuCurrent(station, env, log) {
-  if (!env.WU_API_KEY || !station) return null;
+  if (!wuKey(env) || !station) return null;
   try {
-    const data = await getJson(pwsUrl('observations/current', station, env.WU_API_KEY), 60, log, station);
+    const data = await getJson(pwsUrl('observations/current', station, wuKey(env)), 60, log, station);
     const ob = data?.observations?.[0];
     const at = Date.parse(ob?.obsTimeUtc || '');
     if (!ob || !Number.isFinite(at) || Date.now() - at > MAX_AGE_MS || at > Date.now() + 5 * 60000) { if (ob) log.push(station + ': stale'); return null; }
@@ -54,7 +58,7 @@ export async function wuCurrent(station, env, log) {
 async function wuSolarAverage(station, env, current, log) {
   const values = Number.isFinite(current) ? [current] : [];
   try {
-    const data = await getJson(pwsUrl('observations/all/1day', station, env.WU_API_KEY), 240, log, station + ' 1day');
+    const data = await getJson(pwsUrl('observations/all/1day', station, wuKey(env)), 240, log, station + ' 1day');
     for (const ob of data?.observations || []) {
       const t = Date.parse(ob.obsTimeUtc || '');
       if (Number.isFinite(t) && Date.now() - t <= 30 * 60000) {
@@ -110,11 +114,11 @@ export async function skyFor(city, env, solarNow, log) {
   if (!coords) return null;
   const elev = sunElevation(coords[0], coords[1]);
   let twc = null;
-  if (env.WU_API_KEY) {
+  if (wuKey(env)) {
     try {
       const u = new URL('https://api.weather.com/v3/wx/observations/current');
       u.searchParams.set('geocode', coords[0] + ',' + coords[1]); u.searchParams.set('units', 'e');
-      u.searchParams.set('language', 'en-US'); u.searchParams.set('format', 'json'); u.searchParams.set('apiKey', env.WU_API_KEY);
+      u.searchParams.set('language', 'en-US'); u.searchParams.set('format', 'json'); u.searchParams.set('apiKey', wuKey(env));
       const d = await getJson(u.toString(), 300, log, 'twc current');
       const code = twcCode(num(d?.iconCode));
       if (d && code !== null) twc = { text: sentence(d.wxPhraseLong || d.wxPhraseMedium), code, is_day: d.dayOrNight !== 'N', cloud_cover_pct: num(d.cloudCover) };
@@ -124,7 +128,7 @@ export async function skyFor(city, env, solarNow, log) {
   // Daytime with the sun high enough for a meaningful reading.
   const station = WU_STATIONS[city];
   if (elev >= 15 && (station || Number.isFinite(solarNow))) {
-    const avg = station && env.WU_API_KEY ? await wuSolarAverage(station, env, solarNow, log) : solarNow;
+    const avg = station && wuKey(env) ? await wuSolarAverage(station, env, solarNow, log) : solarNow;
     const clear = clearSkyGhi(elev);
     if (Number.isFinite(avg) && clear > 0) {
       const ratio = avg / clear;

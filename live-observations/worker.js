@@ -1,6 +1,6 @@
 // Moraga Observatory live station proxy and push alerts. Deploy as a Cloudflare Worker.
 import { AlertPush, handlePush, runAlertCheck } from './push.js';
-import { WU_STATIONS, WU_PRIMARY, wuCurrent, skyFor } from './wu.js';
+import { WU_STATIONS, WU_PRIMARY, wuCurrent, skyFor, wuKeyShape } from './wu.js';
 export { AlertPush };
 // Configure secrets XWEATHER_CLIENT_ID, XWEATHER_CLIENT_SECRET and ALLOWED_ORIGIN.
 // Never place credentials in the public website or source repository.
@@ -86,9 +86,9 @@ export default {
     const city = (url.searchParams.get('city') || 'moraga').toLowerCase();
     if (!['moraga','lafayette','danville','greenbrook'].includes(city)) return Response.json({error:'Unknown location'},{status:400,headers:cors});
     const wuLog = [];
-    const sky = async solar => { try { return await skyFor(city, env, solar, wuLog); } catch (_) { wuLog.push('sky: error'); return null; } };
+    const sky = async solar => { try { return await skyFor(city, env, solar, wuLog); } catch (_) { wuLog.push('sky: error'); return null; } finally { if (wuLog.some(x => / 401$/.test(x)) && !wuLog.some(x => x.startsWith('key format'))) wuLog.push(wuKeyShape(env)); } };
     // Hand-picked Weather Underground station first (needs WU_API_KEY); Xweather below is the fallback.
-    if (WU_PRIMARY.has(city) && env.WU_API_KEY) {
+    if (WU_PRIMARY.has(city) && String(env.WU_API_KEY || '').trim()) {
       const wu = await wuCurrent(WU_STATIONS[city], env, wuLog);
       if (wu) return Response.json({...wu, city, station_selection:'weather_underground', sky: await sky(wu.solar_radiation_wm2), source:'Weather Underground', diagnostics: wuLog.length ? wuLog : undefined}, {headers:cors});
     }
