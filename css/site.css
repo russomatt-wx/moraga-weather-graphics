@@ -315,3 +315,4 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 /* Outlook source line */
 .public-outlook-source { margin-top: 8px; font-size: 11px; letter-spacing: .04em; color: var(--muted); }
 .public-outlook-source:empty { display: none; }
+#public-shell .public-hour-rain { min-height: 1.2em; font-size: 12px; color: #90dafa; }

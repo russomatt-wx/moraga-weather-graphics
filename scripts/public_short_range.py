@@ -1,14 +1,27 @@
 #!/usr/bin/env python3
 """Independent, source-labelled 24-hour forecast blends for Local Weather."""
-import json, urllib.parse, urllib.request, os
+import json, time, urllib.parse, urllib.request, os
+try:
+    import requests
+    SESSION=requests.Session();SESSION.headers["User-Agent"]="MoragaWeatherObservatory/1.0"
+except ImportError:
+    SESSION=None
 from datetime import datetime, timezone
 from pathlib import Path
 LOCATIONS={"moraga":(37.8201932,-122.1193876),"lafayette":(37.890,-122.115),"danville":(37.813,-121.974),"greenbrook":(37.799,-121.970)}
-MODELS={"HRRR":("https://api.open-meteo.com/v1/forecast","ncep_hrrr_conus",.40),"RRFS":("https://api.open-meteo.com/v1/forecast","ncep_rrfs",.25),"ECMWF":("https://api.open-meteo.com/v1/forecast","ecmwf_ifs025",.20),"GFS":("https://api.open-meteo.com/v1/forecast","ncep_gfs_seamless",.15)}
+MODELS={"HRRR":("https://api.open-meteo.com/v1/forecast","ncep_hrrr_conus",.40),"RRFS":("https://api.open-meteo.com/v1/forecast","ncep_rrfs_conus",.25),"ECMWF":("https://api.open-meteo.com/v1/forecast","ecmwf_ifs025",.20),"GFS":("https://api.open-meteo.com/v1/forecast","ncep_gfs_seamless",.15)}
 FIELDS=["temperature_2m","precipitation","precipitation_probability","weather_code"]
 def fetch(url,params):
-    request=urllib.request.Request(url+"?"+urllib.parse.urlencode(params),headers={"User-Agent":"MoragaWeatherObservatory/1.0"})
-    with urllib.request.urlopen(request,timeout=25) as response:return json.load(response)
+    # One keep-alive session with retries: fresh TLS handshakes to Open-Meteo time out on GitHub runners.
+    for attempt in range(3):
+        try:
+            if SESSION is not None:
+                r=SESSION.get(url,params=params,timeout=(20,40));r.raise_for_status();return r.json()
+            request=urllib.request.Request(url+"?"+urllib.parse.urlencode(params),headers={"User-Agent":"MoragaWeatherObservatory/1.0"})
+            with urllib.request.urlopen(request,timeout=25) as response:return json.load(response)
+        except Exception:
+            if attempt==2:raise
+            time.sleep(4*(attempt+1))
 def collect(name,lat,lon):
     results={};failures={}
     for model,(endpoint,identifier,weight) in MODELS.items():

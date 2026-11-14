@@ -12,6 +12,7 @@ on:
       - 'rainfall_accuracy.js'
       - 'hrrr.html'
       - 'scripts/short_range_forecast.py'
+      - 'scripts/public_short_range.py'
       - 'gfs_pwat_f012.png'
       - 'gfs_pwat_f036.png'
       - 'pacific_synoptic.png'
@@ -242,12 +243,15 @@ jobs:
       - name: Refresh independent short-range RRFS guidance
         continue-on-error: true
         run: python3 scripts/short_range_forecast.py
+      - name: Refresh 24-hour HRRR/RRFS/ECMWF/GFS blend for Local Weather
+        continue-on-error: true
+        run: python3 scripts/public_short_range.py
       - name: Commit refreshed public station data
         continue-on-error: true
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add moraga_station_today.json climate_ledger_latest.json hrrr-data/
+          git add moraga_station_today.json climate_ledger_latest.json hrrr-data/ moraga_short_range_24h.json lafayette_short_range_24h.json danville_short_range_24h.json greenbrook_short_range_24h.json
           if ! git diff --cached --quiet; then
             git commit -m "Refresh verified public station observations [skip ci]"
             for attempt in 1 2 3; do
