@@ -23,7 +23,7 @@
   --radius-sm: 13px;
   --gutter: 16px;
   --font-ui: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-brand: "Lexend Exa", "Outfit", -apple-system, sans-serif;
+  --font-brand: "Archivo", "Outfit", -apple-system, sans-serif;
   --glow: 0 0 16px -3px rgba(25, 220, 246, .45);
 }
 
@@ -79,7 +79,9 @@ main > section { margin: 0 0 30px; scroll-margin-top: 72px; }
   display: flex; flex-direction: column; align-items: flex-start;
   font-family: var(--font-brand); text-transform: uppercase; line-height: 1.12; text-align: left;
 }
-.dwl-wm-1, .dwl-wm-2 { font-size: clamp(17px, 5vw, 34px); font-weight: 700; letter-spacing: 0; white-space: nowrap; }
+.dwl-wm-1, .dwl-wm-2 { font-size: clamp(17px, 5vw, 34px); font-weight: 600; font-stretch: 125%; font-variation-settings: "wdth" 125; letter-spacing: .02em; white-space: nowrap; }
+/* Stretch the wordmark wider than Archivo's widest cut to match the logo; the margin reserves the extra 18% of layout width. */
+.dwl-wordmark { transform: scaleX(1.18); transform-origin: left center; margin-right: 1.7em; font-size: clamp(17px, 5vw, 34px); }
 .dwl-wm-1 { color: #fff; }
 .dwl-wm-2 { color: var(--accent); text-shadow: 0 0 14px rgba(25, 220, 246, .55); }
 .dwl-tagline {
