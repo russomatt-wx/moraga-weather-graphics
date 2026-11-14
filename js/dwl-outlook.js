@@ -350,12 +350,20 @@
     if (daily && daily.time) for (var i = i0; i < Math.min(daily.time.length, i0 + 10); i++) hiMax = Math.max(hiMax, Number(daily.temperature_2m_max[i]) || -99);
     if (thunder) return 'Thunder is in the forecast';
     if (hz.bigLater && hz.bigLater.total >= 1 && hz.bigLater.total > wet72) return 'The biggest storm is still to come';
-    if (hz.total10 >= 2) return 'A soggy stretch is setting up across ' + region;
+    if (hz.total10 >= 2) return 'A soggy stretch is setting up for ' + region;
     if (wet72 >= 0.5) return 'A wet few days ahead for ' + region;
-    if (hiMax >= 95) return 'Heat is building across ' + region;
+    if (hiMax >= 95) return 'Heat is building in ' + region;
     if (hz.frost) return 'Frosty mornings are on the way';
     if (hz.total10 < 0.05) return 'Dry, quiet weather settles in';
     return '';
+  }
+
+  // Friendly opener for the local time of day.
+  function greeting(hour, place) {
+    if (hour >= 5 && hour < 12) return 'Good morning, ' + place + '!';
+    if (hour >= 12 && hour < 17) return 'Good afternoon, ' + place + '!';
+    if (hour >= 17 && hour < 22) return 'Good evening, ' + place + '!';
+    return 'Hello, ' + place + ' night owls!';
   }
 
   /* ---------- Public API ---------- */
@@ -365,7 +373,7 @@
     var afd = opts.afdText ? parseAfd(opts.afdText) : null;
     if (afd && !afd.short && !afd.long && !afd.key.length) afd = null;
     var rs = runs(blocks(opts.hourly, nowParts));
-    var place = opts.place || 'Moraga', region = opts.region || 'Lamorinda';
+    var place = opts.place || 'Moraga', region = opts.region || place;
     var st = story(rs, afd, place);
     var hz = horizon(opts.daily, nowParts, place);
     var dot = function (x) { return /[.!?]$/.test(x) ? x : x + '.'; };
@@ -374,7 +382,7 @@
     var issued = opts.issued ? new Date(opts.issued).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', minute: '2-digit' }) : '';
     return {
       headline: headline(rs, hz, opts.daily, nowParts, region),
-      text: nearTerm.join(' ') + (farTerm.length ? '\n\n' + farTerm.join(' ') : ''),
+      text: greeting(nowParts.hour, place) + ' ' + nearTerm.join(' ') + (farTerm.length ? '\n\n' + farTerm.join(' ') : ''),
       source: afd ? 'Based on the NWS Bay Area forecast discussion (' + issued + ') and local model guidance' : 'Local model guidance · NWS discussion not available'
     };
   }
