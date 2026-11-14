@@ -34,7 +34,7 @@
   <!-- the mark (same geometry as the header logo, viewBox 160x84) -->
   <g transform="translate(152 292) scale(4.5)">
     <!-- the arc and peaks are clipped out behind the cloud so the background shows through it -->
-    <clipPath id="cloudcut"><path clip-rule="evenodd" d="M-10 -10H170V94H-10Z M70 21H96A7 7 0 0 0 96 7A10 10 0 0 0 77 5A8 8 0 0 0 68 11A5 5 0 0 0 70 21Z"/></clipPath>
+    <clipPath id="cloudcut"><path clip-rule="evenodd" d="M-10 -20H170V94H-10Z M46.4 19.6H80.2A9.1 9.1 0 0 0 80.2 1.4A13 13 0 0 0 55.5 -1.2A10.4 10.4 0 0 0 43.8 6.6A6.5 6.5 0 0 0 46.4 19.6Z"/></clipPath>
     <g clip-path="url(#cloudcut)">
     <!-- soft glow: wide translucent strokes under the shapes -->
     <path d="M74 40a32 32 0 0 1 64 0" fill="none" stroke="#19dcf6" stroke-opacity=".10" stroke-width="16" stroke-linecap="round"/>
@@ -46,8 +46,6 @@
     <path d="M2 80 58 30l22 17 30-30 48 63-50-40-28 25-22-15Z" fill="url(#mark)"/>
     </g>
     <!-- cloud outline (white, like the DIABLO wordmark) above the saddle, left of the sun -->
-    <g transform="translate(62 -1)">
-      <path d="M8 22H34A7 7 0 0 0 34 8A10 10 0 0 0 15 6A8 8 0 0 0 6 12A5 5 0 0 0 8 22Z" fill="none" stroke="#ffffff" stroke-width="3.4" stroke-linejoin="round"/>
-    </g>
+    <path d="M46.4 19.6H80.2A9.1 9.1 0 0 0 80.2 1.4A13 13 0 0 0 55.5 -1.2A10.4 10.4 0 0 0 43.8 6.6A6.5 6.5 0 0 0 46.4 19.6Z" fill="none" stroke="#ffffff" stroke-width="3.4" stroke-linejoin="round"/>
   </g>
 </svg>
