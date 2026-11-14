@@ -63,7 +63,8 @@
  el('observatory-return').onclick=showPublic;
  document.addEventListener('click',event=>{const button=event.target.closest('[data-weather-view]');if(!button)return;event.preventDefault();button.dataset.weatherView==='observatory'?showObservatory():showPublic();});
  const fmt=v=>Number.isFinite(v)?Math.round(v)+'°':'—';
- const rain=v=>Number.isFinite(v)?v.toFixed(2)+'″':'—';
+ // Forecast rainfall is shown to the nearest 0.05″; anything that rounds to zero reads '<0.05″'.
+ const rain=v=>!Number.isFinite(v)?'—':v<=0?'0.00″':v<0.025?'<0.05″':(Math.round(v/0.05)*0.05).toFixed(2)+'″';
  function icon(code){if(code===0)return '☀️';if(code<=2)return '🌤️';if(code===3)return '☁️';if(code===45||code===48)return '🌫️';if(code>=95)return '⛈️';if(code>=51&&code<=67)return '🌧️';if(code>=80&&code<=82)return '🌧️';if(code>=71&&code<=77)return '🌨️';return '🌤️'}
  function description(code,night=false){if(code===0)return night?'Clear':'Sunny';if(code===1)return night?'Mostly clear':'Mostly sunny';if(code<=2)return 'Partly cloudy';if(code===3)return 'Cloudy';if(code===45||code===48)return 'Foggy';if(code>=95)return 'Thunderstorms';if(code>=51&&code<=67)return 'Rain';if(code>=80&&code<=82)return 'Showers';if(code>=71&&code<=77)return 'Snow';return 'Variable clouds'}
  function tempColor(value){
@@ -160,7 +161,7 @@
    const conditionIcon=/rain likely|^rain$/i.test(condition)?61:/chance of rain|slight chance of rain/i.test(condition)?80:mappedCondition!==null?mappedCondition:published?.icon==='🌧️'?61:published?.icon==='🌦️'?80:published?.icon==='☁️'?3:published?.icon==='🌥️'?2:published?.icon==='🌫️'?45:published?.icon==='☀️'?0:published?.icon==='🌤️'?1:published?.icon==='⛅'?2:(wet&&d.weather_code[i]===0?61:d.weather_code[i]);
    const rainLabel=wet?'<span class="public-rain-chance">'+(Number.isFinite(pop)?Math.min(100,Math.round(pop/10)*10)+'%':'')+'</span>'+(Number.isFinite(total)&&total>=0.01?'<span class="public-rain-amount"><span aria-hidden="true">💧</span>'+rain(total)+'</span>':''):'';
    host.insertAdjacentHTML('beforeend',DWL.dayCard({tag:'div',today:i===0,day,date:label,high,low,highText:fmt(high),lowText:fmt(low),iconCode:conditionIcon,condition,
-    pop:wet&&Number.isFinite(pop)?Math.min(100,Math.round(pop/10)*10)+'%':'',amount:wet&&Number.isFinite(total)?(total<0.01?'<0.01″':rain(total)):''}));
+    pop:wet&&Number.isFinite(pop)?Math.min(100,Math.round(pop/10)*10)+'%':'',amount:wet&&Number.isFinite(total)?(total<0.025?'<0.05″':rain(total)):''}));
   }
   DWL.collapseDays(host,'local');
  }
@@ -1194,7 +1195,7 @@ const rains=Object.values(data.model_daily_inches||{}).map(a=>a[data.dates.index
 const guidance=data.rain_guidance?.[date];
 const rainMean=Number.isFinite(guidance?.expected_inches)?guidance.expected_inches:(rains.length?mean(rains):(Number.isFinite(fallbackRainAmounts[date])?fallbackRainAmounts[date]:null));
 // Mean across available published models, not a probability-derived rainfall estimate.
-const rainAmountText=rainMean===null?'':rainMean<0.01?'<0.01 in':rainMean.toFixed(2)+' in';
+const rainAmountText=rainMean===null?'':rainMean<0.025?'<0.05 in':(Math.round(rainMean/0.05)*0.05).toFixed(2)+' in';
 const rainfallSourceLabel=Number.isFinite(guidance?.expected_inches)?'ensemble blend':rains.length?'published models':Number.isFinite(fallbackRainAmounts[date])?'Open-Meteo fallback':'unavailable';
 // Hourly consensus timing is local Pacific time, not a daily all-day-rain label.
 const hourlyVotes=Object.values(hourlyModels).map(days=>(days[date]||[]).filter(h=>Number.isFinite(h.rain))).filter(hours=>hours.length>=18);
