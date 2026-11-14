@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-14T19:02:44.219550+00:00",
+  "generated_utc": "2026-11-14T19:09:33.694893+00:00",
   "location": "danville",
   "latitude": 37.813,
   "longitude": -121.974,
@@ -90,8 +90,8 @@
       0.0
     ],
     "precipitation_probability": [
-      0.0,
-      0.0,
+      0.533,
+      1.067,
       0.0,
       0.0,
       0.533,
