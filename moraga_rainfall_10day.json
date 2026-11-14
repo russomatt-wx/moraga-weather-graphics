@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-14T04:27:36.118131+00:00",
+  "generated_utc": "2026-11-14T04:58:52.828431+00:00",
   "timezone": "America/Los_Angeles",
   "latitude": 37.8201932,
   "longitude": -122.1193876,
@@ -20,6 +20,54 @@
     "2026-11-26"
   ],
   "model_daily_inches": {
+    "ECMWF": [
+      0.618,
+      0.004,
+      0.579,
+      0.268,
+      0.0,
+      1.193,
+      1.138,
+      0.0,
+      0.0,
+      0.524,
+      0.02,
+      0.063,
+      0.134,
+      1.142
+    ],
+    "GFS": [
+      0.571,
+      0.0,
+      0.22,
+      0.004,
+      0.0,
+      1.606,
+      0.717,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.098,
+      0.594,
+      0.11
+    ],
+    "ICON": [
+      0.787,
+      0.0,
+      1.157,
+      0.0,
+      0.0,
+      3.102,
+      0.276,
+      0.016,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
     "GEM": [
       0.882,
       0.02,
@@ -101,11 +149,7 @@
     "2026-11-25": 42,
     "2026-11-26": 52
   },
-  "errors": {
-    "ECMWF": "HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=20)",
-    "GFS": "HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=20)",
-    "ICON": "HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=20)"
-  },
+  "errors": {},
   "source": "Open-Meteo",
   "note": "API does not explicitly expose model initialization times here; generated time is not initialization time."
 }

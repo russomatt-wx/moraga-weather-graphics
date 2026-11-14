@@ -27,7 +27,7 @@ def fetch_json(url, timeout=60):
     for attempt in range(4):
         try:
             if _SESSION is not None:
-                r = _SESSION.get(url, timeout=(20, timeout))
+                r = _SESSION.get(url, timeout=(30, max(timeout, 90)))
                 r.raise_for_status()
                 return r.json()
             req = urllib.request.Request(url, headers={"User-Agent": "MoragaWeatherGraphics/1.0"})
@@ -354,7 +354,21 @@ forecast_dates = dates[:10]
 # Keep the forecast anchored to the Pacific local day; publication validation
 # rejects any missing or shifted day before updating the live site.
 assert len(forecast_dates) == 10 and forecast_dates[0] == datetime.now(ZoneInfo(TZ)).date().isoformat()
-Path(os.environ.get("WX_FORECAST_OUTPUT", "moraga_forecast_10day.json")).write_text(json.dumps({
+_out = Path(os.environ.get("WX_FORECAST_OUTPUT", "moraga_forecast_10day.json"))
+# Don't replace a recent feed with one that lost deterministic models to download timeouts:
+# Local Weather shows this file first, so a degraded copy reads as "no rain" until live data loads.
+_DET = ("ECMWF", "GFS", "ICON", "GEM")
+try:
+    _prev = json.loads(_out.read_text())
+    _prev_age = (now - datetime.fromisoformat(_prev["generated_utc"])).total_seconds()
+    _prev_n = sum(1 for m in _DET if m in _prev.get("model_daily_inches", {}))
+    _new_n = sum(1 for m in _DET if m in results)
+    if _new_n < _prev_n and _prev_age < 6 * 3600 and _prev.get("dates", [None])[0] == forecast_dates[0]:
+        print(f"Keeping previous feed ({_prev_n} models, {_prev_age/3600:.1f} h old); this run got only {_new_n}: {errors}")
+        raise SystemExit(0)
+except (FileNotFoundError, KeyError, ValueError):
+    pass
+_out.write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
     "dates": forecast_dates, "rain_guidance": {day:rain_guidance[day] for day in forecast_dates}, "temperature_models": {**ensemble_temperature, **{name: {**temperature_results[model], "dates": temperature_results[model]["dates"][:10], "high_f": temperature_results[model]["high_f"][:10], "low_f": temperature_results[model]["low_f"][:10]} for name, url, model in SOURCES if model in temperature_results}},
     "model_daily_inches": {name: values[:10] for name, values in results.items()}, "ensemble_rain_probability_pct": {day: model_derived_pop[day] for day in forecast_dates}, "benchmark_open_meteo_pop_pct": {day:benchmark_pop.get(day) for day in forecast_dates}, "rain_probability_method":"EPS/GEFS equal-family daily member fraction >=0.01 in", "daily_conditions": {day: conditions[day] for day in forecast_dates}, "hourly_conditions": {name: hourly_results[model] for name, url, model in SOURCES if model in hourly_results}, "errors": errors,

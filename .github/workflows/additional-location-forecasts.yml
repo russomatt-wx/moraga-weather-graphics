@@ -30,6 +30,8 @@ jobs:
               greenbrook) lat=37.799; lon=-121.970 ;;
             esac
             mkdir -p "/tmp/wx-$location"
+            # Let the script compare against the current feed (it keeps it if a new run lost models).
+            cp "./${location}_forecast_10day.json" "/tmp/wx-$location/" 2>/dev/null || true
             (cd "/tmp/wx-$location" && WX_FORECAST_LAT="$lat" WX_FORECAST_LON="$lon" WX_FORECAST_OUTPUT="${location}_forecast_10day.json" python "$GITHUB_WORKSPACE/scripts/rainfall_10day.py")
             cp "/tmp/wx-$location/${location}_forecast_10day.json" "./${location}_forecast_10day.json"
           done
