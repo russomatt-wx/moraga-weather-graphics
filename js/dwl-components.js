@@ -4,6 +4,31 @@
 (function () {
   'use strict';
 
+  /* Share identical same-site data downloads. Several page scripts fetch the same JSON/CSV
+     files (each with its own cache-busting ?t=…), which on a phone connection delayed the
+     files Local Weather needs. Within 60 s, one download is shared and each caller gets
+     its own copy of the response. Cross-site requests are untouched. */
+  if (window.fetch && !window.fetch.__dwlShared) {
+    var nativeFetch = window.fetch.bind(window), shared = {};
+    var sharedFetch = function (input, init) {
+      try {
+        var method = (init && init.method) || (input && input.method) || 'GET';
+        var url = new URL(typeof input === 'string' ? input : input.url, location.href);
+        if (method === 'GET' && url.origin === location.origin && /\.(json|csv)$/i.test(url.pathname)) {
+          var key = url.pathname, hit = shared[key], now = Date.now();
+          if (!hit || now - hit.at > 60000) {
+            hit = shared[key] = { at: now, p: nativeFetch(input, init) };
+            hit.p.then(function (r) { if (!r.ok) delete shared[key]; }, function () { delete shared[key]; });
+          }
+          return hit.p.then(function (r) { return r.clone(); });
+        }
+      } catch (e) { /* fall through to a normal fetch */ }
+      return nativeFetch(input, init);
+    };
+    sharedFetch.__dwlShared = true;
+    window.fetch = sharedFetch;
+  }
+
   // Single temperature palette for the whole site (20–110 °F).
   var STOPS = [
     [20, [105, 68, 186]], [30, [88, 114, 217]], [40, [54, 158, 224]], [50, [28, 181, 184]],
