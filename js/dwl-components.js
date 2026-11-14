@@ -231,7 +231,7 @@
     return c;
   }
 
-  window.DWL = { tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts, collapseDays: collapseDays, timingPrefix: timingPrefix, periodAmounts: periodAmounts, modelPeriodAmounts: modelPeriodAmounts, timedCondition: timedCondition,
+  window.DWL = { tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts, collapseDays: collapseDays, resetDays: function (key) { delete expanded[key]; }, timingPrefix: timingPrefix, periodAmounts: periodAmounts, modelPeriodAmounts: modelPeriodAmounts, timedCondition: timedCondition,
     publishBlend: publishBlend, blendReady: blendReady, moragaBlend: moragaBlend };
 
   // Section tabs: highlight the tab for the section currently in view.
