@@ -200,6 +200,16 @@
  }
  // Latest station reading and live sky, used to anchor the first hours of the strip to reality.
  let lastObs=null,lastSky=null,lastHourly=null;
+ // Sky words for 'now' from the hourly series already on screen (published blend), when live sky is unavailable.
+ function publishedSky(chosen){
+  const h=lastHourly&&lastHourly.city===chosen?lastHourly.hourly:null;if(!h?.time)return '';
+  const p=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+  const g=k=>p.find(x=>x.type===k)?.value,stamp=g('year')+'-'+g('month')+'-'+g('day')+'T'+g('hour');
+  const i=h.time.findIndex(t=>t.slice(0,13)===stamp);if(i<0)return '';
+  const code=h.weather_code?.[i];if(!Number.isFinite(code))return '';
+  const night=h.is_day?h.is_day[i]===0:!sunUp(h.time[i],coords[chosen][0],coords[chosen][1]);
+  return description(code,night);
+ }
  function renderHourly(hourly,currentTime){
   const host=el('public-hourly');
   // Reuse icon images already on screen so a redraw (e.g. when the station reading arrives)
@@ -224,6 +234,7 @@
    const fresh=card.querySelector('img'),old=fresh&&keep[fresh.getAttribute('src')]?.shift();if(old)fresh.replaceWith(old);
    host.appendChild(card);
   }
+  if(!(el('public-current-condition')?.textContent||'').trim()||/Loading current/.test(el('public-current-condition')?.textContent||'')){const w=lastSky&&lastSky.city===city?description(lastSky.code,lastSky.isDay===0):publishedSky(city);if(w)set('public-current-condition',w);}
  }
  async function updateStation(chosen,request,modelTemp,modeledConflict=false){
   const endpoint='https://moraga-live-observations.russo-matt.workers.dev/observations?city='+encodeURIComponent(chosen.toLowerCase());
@@ -239,7 +250,7 @@
    if(Number.isFinite(modelTemp)&&Math.abs(ob.temperature_f-modelTemp)>12)throw Error('Nearby station differs excessively from regional guidance');
    if(chosen==='Greenbrook'&&Number.isFinite(ob.station_distance_mi)&&ob.station_distance_mi>3)throw Error('Station too far from Greenbrook');
    lastObs={temp:ob.temperature_f,at:stamp,city:chosen};
-   if(/unavailable|Loading/i.test(el('public-current-condition')?.textContent||'')){set('public-current-condition',lastSky&&lastSky.city===chosen?description(lastSky.code,lastSky.isDay===0):'');if(/live observations temporarily unavailable/.test(el('public-summary')?.textContent||''))set('public-summary','');}if(lastHourly&&lastHourly.city===chosen)renderHourly(lastHourly.hourly,lastHourly.currentTime);
+   if(/^$|unavailable|Loading/i.test((el('public-current-condition')?.textContent||'').trim())){set('public-current-condition',lastSky&&lastSky.city===chosen?description(lastSky.code,lastSky.isDay===0):publishedSky(chosen));if(/live observations temporarily unavailable/.test(el('public-summary')?.textContent||''))set('public-summary','');}if(lastHourly&&lastHourly.city===chosen)renderHourly(lastHourly.hourly,lastHourly.currentTime);
    set('public-current-temp',fmt(ob.temperature_f));updatePublicCurrentAccent(ob.temperature_f);set('public-humidity',Number.isFinite(ob.humidity_pct)?Math.round(ob.humidity_pct)+'%':'—');set('public-dew',Number.isFinite(ob.dew_point_f)?fmt(ob.dew_point_f):'—');set('public-pressure',Number.isFinite(ob.pressure_inhg)?ob.pressure_inhg.toFixed(2)+' inHg':'—');set('public-wind',Number.isFinite(ob.wind_mph)?(ob.wind_mph<1?'Calm':Math.round(ob.wind_mph)+' mph'):'—');
    const ext=ob.daily_extrema;
    if(ext?.complete&&Number.isFinite(ext.high_f)&&Number.isFinite(ext.low_f))set('public-high-low',fmt(ext.high_f)+' / '+fmt(ext.low_f));
@@ -488,6 +499,7 @@ function nwsWeatherOutlook(afd,d,h){
   el('public-days').replaceChildren();el('public-hourly').replaceChildren();
   const [lat,lon]=coords[chosen];
   renderPublished(chosen,request,lat,lon,true);
+  updateStation(chosen,request,NaN,false); // station reading right away, independent of the forecast
   const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code%2Cis_day%2Crelative_humidity_2m%2Cdew_point_2m%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m&wind_speed_unit=mph&hourly=temperature_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code%2Cis_day%2Cwind_gusts_10m%2Ccloud_cover&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
   try{
    let response;
