@@ -17,7 +17,7 @@
 
 
 </head>
-<body class="public-mode"><script src="js/dwl-components.js?v=20261114k"></script><script src="js/dwl-outlook.js?v=20261114g"></script><div id="public-shell" aria-label="Public local weather forecast">
+<body class="public-mode"><script src="js/dwl-components.js?v=20261114l"></script><script src="js/dwl-outlook.js?v=20261114g"></script><div id="public-shell" aria-label="Public local weather forecast">
  <div class="dwl-header" aria-label="Diablo Weather Lab — Hyperlocal Weather Intelligence"><div class="dwl-brand"><svg class="dwl-mark" viewBox="0 -6 160 90" aria-hidden="true"><defs><linearGradient id="dwl-mark-ga" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7cf3ff"/><stop offset="1" stop-color="#0aa8de"/></linearGradient></defs><clipPath id="dwl-cloud-ma"><path clip-rule="evenodd" d="M-10 -10H170V94H-10Z M70 21H96A7 7 0 0 0 96 7A10 10 0 0 0 77 5A8 8 0 0 0 68 11A5 5 0 0 0 70 21Z"/></clipPath><g clip-path="url(#dwl-cloud-ma)"><path d="M74 40a32 32 0 0 1 64 0" fill="none" stroke="url(#dwl-mark-ga)" stroke-width="5" stroke-linecap="round"/><path d="M2 80 58 30l22 17 30-30 48 63-50-40-28 25-22-15Z" fill="url(#dwl-mark-ga)"/></g><g transform="translate(62 -1)"><path d="M8 22H34A7 7 0 0 0 34 8A10 10 0 0 0 15 6A8 8 0 0 0 6 12A5 5 0 0 0 8 22Z" fill="none" stroke="#ffffff" stroke-width="3.4" stroke-linejoin="round"/></g></svg><div class="dwl-wordmark"><span class="dwl-wm-1">Diablo</span><span class="dwl-wm-2">Weather Lab</span></div></div><div class="dwl-tagline">Hyperlocal Weather Intelligence</div><svg class="dwl-ridge" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40V30l28-8 22 5 30-14 26 9 34-17 28 12 24-6 30 13 26-9 34 11 28-7 30 9 22-5 38 13V40Z"/></svg></div><div class="dwl-toggle" role="group" aria-label="Weather view"><button type="button" data-weather-view="public" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory" data-weather-view="observatory">Observation Lab</button></div>
  <div class="public-locations" role="group" aria-label="Choose a forecast location"><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Moraga" aria-pressed="true"><span class="local-neighborhood">Larch</span><span class="local-city">Moraga</span></button><button type="button" class="public-location-favorite" data-favorite-city="Moraga" aria-label="Set Moraga station area, Moraga as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Lafayette" aria-pressed="false"><span class="local-neighborhood">Reliez Valley</span><span class="local-city">Lafayette</span></button><button type="button" class="public-location-favorite" data-favorite-city="Lafayette" aria-label="Set Reliez Valley, Lafayette as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Danville" aria-pressed="false"><span class="local-neighborhood">Sycamore Valley</span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Danville" aria-label="Set Sycamore Valley, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Greenbrook" aria-pressed="false"><span class="local-neighborhood">Greenbrook</span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Greenbrook" aria-label="Set Greenbrook, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div></div>
  <div class="public-hero public-obs-card">
@@ -212,11 +212,7 @@
  }
  function renderHourly(hourly,currentTime){
   const host=el('public-hourly');
-  // Reuse icon images already on screen so a redraw (e.g. when the station reading arrives)
-  // doesn't flash blank icons while they reload.
-  const keep={};host.querySelectorAll('img').forEach(im=>{(keep[im.getAttribute('src')]??=[]).push(im);});
-  host.replaceChildren();
-  if(!hourly?.time?.length)return;
+  if(!hourly?.time?.length){host.replaceChildren();return;}
   lastHourly={hourly,currentTime,city};
   const hourStamp=String(currentTime||'').slice(0,13);
   let start=hourly.time.findIndex(t=>t.slice(0,13)>=hourStamp);if(start<0)start=0;
@@ -226,13 +222,25 @@
   const offset=obsOk?Math.max(-10,Math.min(10,lastObs.temp-hourly.temperature_2m[start])):0;
   const tempAt=i=>{const v=hourly.temperature_2m[i];return Number.isFinite(v)?v+offset*Math.max(0,1-(i-start)/6):v;};
   const skyOk=lastSky&&lastSky.city===city&&Date.now()-lastSky.at<90*60000;
+  const cards=[];
   for(let i=start;i<Math.min(hourly.time.length,start+24);i+=2){
-   const card=document.createElement('div');card.className='public-hour';card.style.setProperty('--hour-color',tempColor(tempAt(i)));
-   const hour=new Date(hourly.time[i]).toLocaleTimeString('en-US',{hour:'numeric'});
    const chance=hourly.precipitation_probability?.[i];
-   card.innerHTML='<strong>'+hour+'</strong><div class="public-hour-icon">'+DWL.icon(hourIconCode(i===start&&skyOk?lastSky.code:hourly.weather_code[i],chance),'',(i===start&&skyOk?lastSky.isDay===0:hourly.is_day?.[i]===0))+'</div><strong class="public-hour-temp">'+fmt(tempAt(i))+'</strong><div class="public-hour-rain">'+(Number.isFinite(chance)&&Math.round(chance/10)*10>=20?Math.min(100,Math.round(chance/10)*10)+'% rain':'&nbsp;')+'</div>';
-   const fresh=card.querySelector('img'),old=fresh&&keep[fresh.getAttribute('src')]?.shift();if(old)fresh.replaceWith(old);
-   host.appendChild(card);
+   const icon=DWL.icon(hourIconCode(i===start&&skyOk?lastSky.code:hourly.weather_code[i],chance),'',(i===start&&skyOk?lastSky.isDay===0:hourly.is_day?.[i]===0));
+   cards.push({key:hourly.time[i],hour:new Date(hourly.time[i]).toLocaleTimeString('en-US',{hour:'numeric'}),color:tempColor(tempAt(i)),temp:fmt(tempAt(i)),
+     src:icon.match(/src="([^"]+)"/)[1],alt:(icon.match(/alt="([^"]*)"/)||[])[1]||'',icon,rain:'<div class="public-hour-rain">'+(Number.isFinite(chance)&&Math.round(chance/10)*10>=20?Math.min(100,Math.round(chance/10)*10)+'% rain':'&nbsp;')+'</div>'});
+  }
+  // Same hours already on screen (e.g. the station reading just arrived): update in place rather than
+  // rebuilding, so images are never re-created (Safari could leave a re-inserted icon blank).
+  const existing=[...host.querySelectorAll('.public-hour')];
+  if(existing.length===cards.length&&existing.every((c,j)=>c.dataset.key===cards[j].key)){
+   existing.forEach((c,j)=>{const d=cards[j];c.style.setProperty('--hour-color',d.color);
+    c.querySelector('.public-hour-temp').textContent=d.temp;
+    const im=c.querySelector('img');if(im&&im.getAttribute('src')!==d.src){im.setAttribute('src',d.src);im.alt=d.alt;}
+    const r=c.querySelector('.public-hour-rain');if(r)r.outerHTML=d.rain;});
+  }else{
+   host.replaceChildren();
+   cards.forEach(d=>{const card=document.createElement('div');card.className='public-hour';card.dataset.key=d.key;card.style.setProperty('--hour-color',d.color);
+    card.innerHTML='<strong>'+d.hour+'</strong><div class="public-hour-icon">'+d.icon+'</div><strong class="public-hour-temp">'+d.temp+'</strong>'+d.rain;host.appendChild(card);});
   }
   if(!(el('public-current-condition')?.textContent||'').trim()||/Loading current/.test(el('public-current-condition')?.textContent||'')){const w=lastSky&&lastSky.city===city?description(lastSky.code,lastSky.isDay===0):publishedSky(city);if(w)set('public-current-condition',w);}
  }
