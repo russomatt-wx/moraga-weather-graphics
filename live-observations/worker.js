@@ -1,5 +1,6 @@
 // Moraga Observatory live station proxy and push alerts. Deploy as a Cloudflare Worker.
 import { AlertPush, handlePush, runAlertCheck } from './push.js';
+import { WU_STATIONS, WU_PRIMARY, wuCurrent, skyFor } from './wu.js';
 export { AlertPush };
 // Configure secrets XWEATHER_CLIENT_ID, XWEATHER_CLIENT_SECRET and ALLOWED_ORIGIN.
 // Never place credentials in the public website or source repository.
@@ -82,9 +83,16 @@ export default {
     if (url.pathname.startsWith('/push/')) return handlePush(request, env, {'Access-Control-Allow-Origin': origin, 'Vary': 'Origin'});
     if (request.method === 'OPTIONS') return new Response(null, {status:204, headers:{...cors,'Access-Control-Allow-Methods':'GET, OPTIONS','Access-Control-Allow-Headers':'Content-Type'}});
     if (request.method !== 'GET' || url.pathname !== '/observations') return new Response('Not found',{status:404,headers:cors});
-    if (!env.XWEATHER_CLIENT_ID || !env.XWEATHER_CLIENT_SECRET) return Response.json({error:'Live service not configured'},{status:503,headers:cors});
     const city = (url.searchParams.get('city') || 'moraga').toLowerCase();
     if (!['moraga','lafayette','danville','greenbrook'].includes(city)) return Response.json({error:'Unknown location'},{status:400,headers:cors});
+    const wuLog = [];
+    const sky = async solar => { try { return await skyFor(city, env, solar, wuLog); } catch (_) { wuLog.push('sky: error'); return null; } };
+    // Hand-picked Weather Underground station first (needs WU_API_KEY); Xweather below is the fallback.
+    if (WU_PRIMARY.has(city) && env.WU_API_KEY) {
+      const wu = await wuCurrent(WU_STATIONS[city], env, wuLog);
+      if (wu) return Response.json({...wu, city, station_selection:'weather_underground', sky: await sky(wu.solar_radiation_wm2), source:'Weather Underground', diagnostics: wuLog.length ? wuLog : undefined}, {headers:cors});
+    }
+    if (!env.XWEATHER_CLIENT_ID || !env.XWEATHER_CLIENT_SECRET) return Response.json({error:'Live service not configured'},{status:503,headers:cors});
     let station = city === 'moraga' ? STATION : (city === 'lafayette' ? env.LAFAYETTE_STATION_ID : city === 'greenbrook' ? env.GREENBROOK_STATION_ID : env.DANVILLE_STATION_ID);
     // Never serve the known-problematic Greenbrook station, even if pinned in settings.
     if(city === 'greenbrook' && GREENBROOK_EXCLUDED.has(station)) station = null;
@@ -173,6 +181,9 @@ export default {
         wind_gust_direction_deg:pick('windGustDirDEG'),
         wind_gust_direction:typeof ob.windGustDir==='string'?ob.windGustDir:null,
         pressure_inhg:pick('pressureIN'),
+        solar_radiation_wm2:pick('solradWM2'),
+        sky:await sky(pick('solradWM2')),
+        diagnostics:wuLog.length?wuLog:undefined,
         source:'Xweather'
       },{headers:cors});
     } catch(e) {

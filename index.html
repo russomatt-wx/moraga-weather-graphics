@@ -319,6 +319,7 @@
     else if(wx.some(w=>/drizzle/.test(w))){code=51;text='';}
     else if(wx.some(w=>w==='fog')||(wx.some(w=>/fog/.test(w))&&Number.isFinite(vis)&&vis<2000)){code=45;text='';}
     if(request!==revision)return;
+    if(lastSky&&lastSky.observed==='station'&&lastSky.city===chosen&&Date.now()-lastSky.at<90*60000)return; // station sky wins
     lastSky={code,text,isDay:/\/night\//.test(p.icon||'')?0:1,at:Date.now(),city:chosen,observed:id};
     set('public-current-condition',skyWords(lastSky));el('public-hero-icon').innerHTML=DWL.icon(code,'',lastSky.isDay===0);
     if(lastHourly&&lastHourly.city===chosen)renderHourly(lastHourly.hourly,lastHourly.currentTime);
@@ -340,6 +341,12 @@
    if(Number.isFinite(modelTemp)&&Math.abs(ob.temperature_f-modelTemp)>12)throw Error('Nearby station differs excessively from regional guidance');
    if(chosen==='Greenbrook'&&Number.isFinite(ob.station_distance_mi)&&ob.station_distance_mi>3)throw Error('Station too far from Greenbrook');
    lastObs={temp:ob.temperature_f,at:stamp,city:chosen};
+   // Sky from the station's measured sunlight / The Weather Company (worker), preferred over airport reports.
+   if(ob.sky&&ob.sky.text&&Number.isFinite(ob.sky.code)){
+    lastSky={code:ob.sky.code,text:ob.sky.text,isDay:ob.sky.is_day===false?0:1,at:Date.now(),city:chosen,observed:'station'};
+    set('public-current-condition',skyWords(lastSky));el('public-hero-icon').innerHTML=DWL.icon(lastSky.code,'',lastSky.isDay===0);
+    if(lastHourly&&lastHourly.city===chosen)renderHourly(lastHourly.hourly,lastHourly.currentTime);
+   }
    if(/^$|unavailable|Loading/i.test((el('public-current-condition')?.textContent||'').trim())){set('public-current-condition',lastSky&&lastSky.city===chosen?skyWords(lastSky):publishedSky(chosen));if(/live observations temporarily unavailable/.test(el('public-summary')?.textContent||''))set('public-summary','');}if(lastHourly&&lastHourly.city===chosen)renderHourly(lastHourly.hourly,lastHourly.currentTime);
    set('public-current-temp',fmt(ob.temperature_f));updatePublicCurrentAccent(ob.temperature_f);set('public-humidity',Number.isFinite(ob.humidity_pct)?Math.round(ob.humidity_pct)+'%':'—');set('public-dew',Number.isFinite(ob.dew_point_f)?fmt(ob.dew_point_f):'—');set('public-pressure',Number.isFinite(ob.pressure_inhg)?ob.pressure_inhg.toFixed(2)+' inHg':'—');set('public-wind',Number.isFinite(ob.wind_mph)?(ob.wind_mph<1?'Calm':Math.round(ob.wind_mph)+' mph'):'—');
    const ext=ob.daily_extrema;
