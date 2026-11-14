@@ -202,26 +202,21 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 #ten-day { border: 0; background: none; box-shadow: none; padding: 0; }
 
 /* ---------- Forecast day cards (shared by both views; markup from js/dwl-components.js) ---------- */
-.dwl-days { display: flex; flex-direction: column; gap: 12px; margin: 0 0 18px; }
+.dwl-days { display: flex; flex-direction: column; gap: 8px; margin: 0 0 16px; }
 .dwl-day {
   --hi: #37b95a; --lo: #1cb5b8;
   position: relative;
   display: grid;
   grid-template-columns: minmax(66px, 21%) minmax(64px, 19%) minmax(0, 1fr) minmax(60px, 18%);
   align-items: center;
-  min-height: 104px; padding: 12px 14px 12px 16px;
-  border: 2px solid transparent; border-radius: var(--radius);
+  min-height: 78px; padding: 8px 12px 8px 14px;
+  border: 2px solid transparent; border-radius: 15px;
   background:
     linear-gradient(180deg, #0b2335, #061827) padding-box,
     linear-gradient(100deg, var(--hi), var(--lo)) border-box;
   box-shadow: 0 0 14px -3px var(--lo), inset 0 0 22px rgba(25, 220, 246, .07);
 }
-.dwl-day.is-today {
-  background:
-    linear-gradient(105deg, #1d2414, #0b2335 40%, #061827) padding-box,
-    linear-gradient(100deg, var(--gold), #ffe56b 25%, var(--accent) 75%) border-box;
-  box-shadow: 0 0 16px -3px rgba(255, 191, 46, .75), inset 0 0 22px rgba(255, 191, 46, .06);
-}
+/* Today uses the same temperature-gradient outline as every other day; the TODAY tag marks it. */
 .dwl-day[role="button"] { cursor: pointer; }
 .dwl-day[role="button"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
@@ -230,16 +225,16 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
   align-self: stretch; justify-content: center;
   padding-right: 8px; border-right: 1px solid var(--line-soft);
 }
-.dwl-day-when strong { font: 700 clamp(19px, 5.4vw, 24px)/1.05 var(--font-ui); text-transform: uppercase; letter-spacing: .01em; }
-.dwl-day-when span { font: 400 clamp(14px, 4vw, 17px)/1.2 var(--font-ui); text-transform: uppercase; color: var(--text-2); white-space: nowrap; }
+.dwl-day-when strong { font: 700 clamp(16px, 4.6vw, 20px)/1.05 var(--font-ui); text-transform: uppercase; letter-spacing: .01em; }
+.dwl-day-when span { font: 400 clamp(12px, 3.4vw, 14px)/1.2 var(--font-ui); text-transform: uppercase; color: var(--text-2); white-space: nowrap; }
 .dwl-pill {
-  display: inline-block; margin-bottom: 3px; padding: 3px 9px; border-radius: 999px;
+  display: inline-block; margin-bottom: 2px; padding: 2px 7px; border-radius: 999px;
   background: var(--accent); color: #032233 !important;
-  font: 800 10.5px/1.2 var(--font-ui) !important; letter-spacing: .1em; text-transform: uppercase;
+  font: 800 9.5px/1.2 var(--font-ui) !important; letter-spacing: .1em; text-transform: uppercase;
 }
 
 .dwl-day-hi, .dwl-day-lo {
-  font: 700 clamp(28px, 8.2vw, 40px)/1 var(--font-ui); letter-spacing: -.01em; white-space: nowrap;
+  font: 700 clamp(24px, 7vw, 32px)/1 var(--font-ui); letter-spacing: -.01em; white-space: nowrap;
 }
 .dwl-day-hi { padding-left: 12px; color: var(--hi); text-shadow: 0 0 14px color-mix(in srgb, var(--hi) 45%, transparent); }
 .dwl-day-lo {
@@ -249,12 +244,12 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 }
 
 .dwl-day-sky { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 0; padding: 0 4px; }
-.dwl-icon { display: block; width: 72px; height: 54px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .35)); }
+.dwl-icon { display: block; width: 56px; height: 40px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .35)); }
 .dwl-day-cond {
-  margin-top: 3px;
-  font: 600 clamp(10.5px, 3vw, 13px)/1.2 var(--font-ui); letter-spacing: .03em; text-transform: uppercase; color: #eef6fc;
+  margin-top: 2px;
+  font: 600 clamp(10px, 2.8vw, 12px)/1.2 var(--font-ui); letter-spacing: .03em; text-transform: uppercase; color: #eef6fc;
 }
-.dwl-day-rain { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 3px; font: 500 clamp(13px, 3.7vw, 16px)/1.2 var(--font-ui); color: var(--rain); }
+.dwl-day-rain { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 2px; font: 500 clamp(12px, 3.3vw, 14px)/1.2 var(--font-ui); color: var(--rain); }
 .dwl-day-amount { display: inline-flex; align-items: center; gap: 6px; }
 .dwl-day-amount i {
   width: 9px; height: 12px; background: #2bc4ff;
@@ -266,11 +261,11 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 
 @media (max-width: 360px) {
   .dwl-day { grid-template-columns: minmax(58px, 21%) minmax(54px, 19%) minmax(0, 1fr) minmax(52px, 18%); padding: 10px 10px 10px 12px; }
-  .dwl-icon { width: 60px; height: 45px; }
+  .dwl-icon { width: 48px; height: 34px; }
 }
 @media (min-width: 700px) {
-  .dwl-day { min-height: 112px; padding: 14px 22px; }
-  .dwl-icon { width: 88px; height: 64px; }
+  .dwl-day { min-height: 86px; padding: 10px 20px; }
+  .dwl-icon { width: 66px; height: 46px; }
 }
 
 /* Icons used outside day cards (hourly strip, current conditions) */
