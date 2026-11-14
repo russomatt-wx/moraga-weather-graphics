@@ -73,7 +73,8 @@
   function icon(code, extraClass, night) {
     var name = iconName(code), isNight = !!night && NIGHT[name];
     return '<img class="dwl-icon' + (extraClass ? ' ' + extraClass : '') + '" src="weather-icons/clear/' + (isNight ? 'night/' : '') + name +
-      '.png?v=3" alt="' + (isNight ? NIGHT_LABEL[name] : ICON_LABEL[name]) + '" width="72" height="54" decoding="async">';
+      '.png?v=3" alt="' + (isNight ? NIGHT_LABEL[name] : ICON_LABEL[name]) + '" width="72" height="54" decoding="async"' +
+      (isNight ? ' onerror="this.onerror=null;this.src=this.src.replace(\'/night/\',\'/\')"' : '') + '>';
   }
 
   function esc(s) {
@@ -218,6 +219,54 @@
     models.forEach(function (hours) { hours.forEach(function (x) { out[x.h < 6 ? 'overnight' : x.h < 12 ? 'morning' : x.h < 18 ? 'afternoon' : 'evening'] += x.v / models.length; }); });
     return out;
   }
+  /* Today's card should describe the rest of today, not rain that already fell before dawn.
+     From the published multi-model hours: share of models with ≥0.01" still to come (as a
+     rounded chance), mean remaining amount, cloud cover and timing. Null before 6 AM or late
+     at night, when the whole-day numbers are still the right summary. */
+  function laHour() { return Number(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour: '2-digit', hourCycle: 'h23' }).format(new Date())); }
+  function restOfToday(hc, date) {
+    var now = laHour();
+    if (!hc || now < 6 || now > 20) return null;
+    var models = [];
+    Object.keys(hc).forEach(function (name) {
+      var sr = hc[name]; if (!sr || !sr.time) return;
+      var rain = 0, cloud = [], hours = 0, per = { overnight: 0, morning: 0, afternoon: 0, evening: 0 };
+      sr.time.forEach(function (t, i) {
+        var h = Number(t.slice(11, 13));
+        if (t.slice(0, 10) !== date || h < now) return;
+        var v = Number(sr.precipitation_mm && sr.precipitation_mm[i]), c = Number(sr.cloud_cover_pct && sr.cloud_cover_pct[i]);
+        if (Number.isFinite(v)) { rain += Math.max(0, v); hours++; per[h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening'] += Math.max(0, v); }
+        if (Number.isFinite(c)) cloud.push(c);
+      });
+      if (hours >= Math.max(3, (24 - now) * 0.75)) models.push({ rain: rain, per: per, cloud: cloud.length ? cloud.reduce(function (a, b) { return a + b; }, 0) / cloud.length : null });
+    });
+    if (!models.length) return null;
+    var avg = function (f) { var v = models.map(f).filter(function (x) { return x !== null; }); return v.length ? v.reduce(function (a, b) { return a + b; }, 0) / v.length : null; };
+    var per = { overnight: 0, morning: avg(function (m) { return m.per.morning; }), afternoon: avg(function (m) { return m.per.afternoon; }), evening: avg(function (m) { return m.per.evening; }) };
+    return {
+      chance: Math.round(100 * models.filter(function (m) { return m.rain >= 0.25; }).length / models.length / 10) * 10,
+      amount: avg(function (m) { return m.rain; }) / 25.4,
+      cloud: avg(function (m) { return m.cloud; }),
+      periods: per
+    };
+  }
+  function applyRestOfToday(o, hc, date) {
+    if (!o || !o.today) return o;
+    var r = restOfToday(hc, date);
+    if (!r) return o;
+    if (r.chance < 20 && r.amount < 0.025) {
+      var c = r.cloud === null ? 50 : r.cloud;
+      o.pop = ''; o.amount = '';
+      o.iconCode = c < 30 ? 1 : c < 70 ? 2 : 3;
+      o.condition = c < 30 ? 'Mostly sunny' : c < 70 ? 'Partly cloudy' : 'Cloudy';
+    } else {
+      o.pop = Math.max(20, r.chance) + '%';
+      o.amount = r.amount < 0.025 ? '<0.05″' : (Math.round(r.amount / 0.05) * 0.05).toFixed(2) + '″';
+      o.iconCode = r.chance >= 60 ? 61 : 80;
+      o.condition = timedCondition(r.chance >= 60 ? 'Rain' : r.chance >= 30 ? 'Chance of rain' : 'Slight chance of rain', timingPrefix(r.periods));
+    }
+    return o;
+  }
   // Fold the timing into a rain condition: 'Rain' → 'AM Rain', 'Chance of Rain' → 'PM Showers'.
   function timedCondition(cond, prefix) {
     if (!prefix) return cond;
@@ -231,7 +280,7 @@
     return c;
   }
 
-  window.DWL = { tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts, collapseDays: collapseDays, resetDays: function (key) { delete expanded[key]; }, timingPrefix: timingPrefix, periodAmounts: periodAmounts, modelPeriodAmounts: modelPeriodAmounts, timedCondition: timedCondition,
+  window.DWL = { tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts, collapseDays: collapseDays, resetDays: function (key) { delete expanded[key]; }, timingPrefix: timingPrefix, periodAmounts: periodAmounts, modelPeriodAmounts: modelPeriodAmounts, timedCondition: timedCondition, applyRestOfToday: applyRestOfToday, restOfToday: restOfToday,
     publishBlend: publishBlend, blendReady: blendReady, moragaBlend: moragaBlend };
 
   // Section tabs: highlight the tab for the section currently in view.
