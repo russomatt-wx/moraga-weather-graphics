@@ -428,7 +428,7 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 
 
 /* The Pacific synoptic map is the densest image: give it the full card width on phones. */
-@media (max-width: 600px) { #pacific-synoptic-card { padding-left: 6px !important; padding-right: 6px !important; } #pacific-synoptic-card p { padding: 0 8px; } }
+
 
 /* Featured Pacific pattern map: full width, edge to edge on phones. */
 #pattern .grid { grid-template-columns: 1fr; }
@@ -436,3 +436,18 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 #pacific-synoptic-card img { display: block; width: 100%; height: auto; }
 #pacific-synoptic-card .synoptic-note { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); }
 @media (max-width: 600px) { #pattern .grid { margin-left: -10px; margin-right: -10px; } }
+
+/* Phones: charts use the full card width (no inner padding) and the page margins are trimmed,
+   so the chart images are as large as the screen allows. Satellite crops keep their own frames. */
+@media (max-width: 600px) {
+  main { padding-left: 8px; padding-right: 8px; }
+  main > nav { margin-left: -8px; margin-right: -8px; padding-left: 8px; padding-right: 8px; }
+  main .card { padding-left: 12px !important; padding-right: 12px !important; }
+  main .card > .chart-viewport, main .card > a > .chart-viewport,
+  main .card > img, main .card > a > img,
+  main .card > #rrfs-compact-chart, main .card > #rrfs-compact-rain-chart {
+    display: block; width: calc(100% + 22px) !important; max-width: none !important; margin-left: -11px !important; margin-right: -11px !important;
+  }
+  main .card > .chart-viewport, main .card > a > .chart-viewport, main .card > img, main .card > a > img { border-radius: 8px; }
+  #pattern .grid { margin-left: 0; margin-right: 0; }
+}
