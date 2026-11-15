@@ -41,39 +41,35 @@ def series(data,key):
     return {t:float(v) for t,v in zip(h["time"],h[key]) if v is not None}
 
 def chart(times,values,cutoff,title,ylabel,filename,footnote,reference=None):
+    """Phone-first chart: ~6.4 in wide so text stays readable when the PNG is shown ~330 px wide."""
+    import matplotlib.dates as mdates, textwrap
     ts=[datetime.fromisoformat(t).replace(tzinfo=ZONE) for t in times]
     vals=np.array(values,dtype=float)
-    fig,ax=plt.subplots(figsize=(9,7.8))
-    # Fixed margins keep date ticks and the source note in separate bands.
-    fig.subplots_adjust(left=.16,right=.97,top=.86,bottom=.27)
-    fig.patch.set_facecolor("#071b2c");ax.set_facecolor("#071b2c")
-    past=np.array([t<=cutoff for t in ts])
-    future=np.array([t>=cutoff for t in ts])
-    ax.plot(np.array(ts)[past],vals[past],color="#5aa9ff",linewidth=2.5,label="Recent model analysis")
-    ax.plot(np.array(ts)[future],vals[future],color="#ffbf2e",linewidth=2.5,label="Model forecast")
-    ax.axvline(cutoff,color="#c9dbe8",linestyle="--",linewidth=1.2,label="Now")
+    fig,ax=plt.subplots(figsize=(6.4,5.4))
+    fig.patch.set_facecolor(dwl.BG);ax.set_facecolor(dwl.BG)
+    past=np.array([t<=cutoff for t in ts]); future=np.array([t>=cutoff for t in ts])
+    ax.plot(np.array(ts)[past],vals[past],color=dwl.PAST,linewidth=3,label="Recent")
+    ax.plot(np.array(ts)[future],vals[future],color=dwl.FUTURE,linewidth=3,label="Forecast")
+    ax.axvline(cutoff,color=dwl.NOW,linestyle="--",linewidth=1.4,label="Now")
     if reference is not None:
-        ax.axhline(reference,color="#19dcf6",linestyle=(0,(5,4)),linewidth=2.6,alpha=.95,zorder=2,label=f"Moraga {reference:g} ft")
-        ax.annotate(f"MORAGA · {reference:g} FT",xy=(.985,reference),xycoords=("axes fraction","data"),xytext=(-3,7),textcoords="offset points",ha="right",va="bottom",fontsize=10,fontweight="bold",color="#d6f5ff",bbox=dict(boxstyle="round,pad=0.2",facecolor="#071b2c",edgecolor="none",alpha=.88),zorder=5)
+        ax.axhline(reference,color=dwl.ACCENT,linestyle=(0,(5,4)),linewidth=2.6,alpha=.95,zorder=2)
+        ax.annotate(f"Moraga {reference:g} ft",xy=(.99,reference),xycoords=("axes fraction","data"),xytext=(-3,7),textcoords="offset points",ha="right",va="bottom",fontsize=13,fontweight="bold",color="#d6f5ff",bbox=dict(boxstyle="round,pad=0.2",facecolor=dwl.BG,edgecolor="none",alpha=.88),zorder=5)
     if "pressure_gradient" in filename:
-        ax.axhline(0,color="#19dcf6",linewidth=2.6,alpha=.95,zorder=2)
-        ax.annotate("0 hPa",xy=(.985,0),xycoords=("axes fraction","data"),xytext=(-3,6),textcoords="offset points",ha="right",va="bottom",fontsize=11,fontweight="bold",color="#d6f5ff",bbox=dict(boxstyle="round,pad=0.2",facecolor="#071b2c",edgecolor="none",alpha=.85))
-    ax.set_title(title,fontsize=18,weight="bold",loc="left",pad=15)
-    ax.set_xlabel("")
-    ax.set_ylabel(ylabel)
-    ax.grid(axis="y",color="#5f7f96",alpha=.45,linestyle="--")
-    ax.tick_params(labelsize=12,pad=7)
-    for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")
-    ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
-    ax.legend(loc="upper left",ncol=2,fontsize=11)
-    import matplotlib.dates as mdates
+        ax.axhline(0,color=dwl.ACCENT,linewidth=2.4,alpha=.95,zorder=2)
+    main,_,sub=title.partition("|")
+    ax.text(0,1.24,main.strip(),transform=ax.transAxes,fontsize=19,fontweight="bold",color=dwl.TEXT,va="bottom")
+    if sub: ax.text(0,1.15,sub.strip(),transform=ax.transAxes,fontsize=14,color=dwl.MUTED,va="bottom")
+    ax.legend(loc="lower left",bbox_to_anchor=(0,1.0),ncol=3,fontsize=13,frameon=False,handlelength=1.6,columnspacing=1.2,borderaxespad=.3)
+    ax.set_ylabel(ylabel,fontsize=14)
+    ax.grid(axis="y",color=dwl.GRID,alpha=.45,linestyle="--")
+    ax.tick_params(labelsize=15,pad=6)
     ax.xaxis.set_major_locator(mdates.DayLocator(interval=1,tz=ZONE))
-    ax.grid(axis="x", which="major", color="#5f7f96", linestyle=":", linewidth=1.1, alpha=.48)
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a %b %d",tz=ZONE))
-    plt.setp(ax.get_xticklabels(),rotation=0,ha="center")
-    import textwrap
-    fig.text(.16,.065,textwrap.fill(footnote,width=85),fontsize=9,color="#9fb6c8",va="bottom")
-    fig.savefig(ROOT/filename,dpi=155,bbox_inches="tight",facecolor=fig.get_facecolor())
+    ax.grid(axis="x",which="major",color=dwl.GRID,linestyle=":",linewidth=1.1,alpha=.48)
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%a",tz=ZONE))
+    ax.yaxis.set_major_locator(plt.MaxNLocator(6))
+    ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
+    ax.text(0,-.13,textwrap.fill(footnote,width=62),transform=ax.transAxes,fontsize=11.5,color=dwl.MUTED,va="top")
+    fig.savefig(ROOT/filename,dpi=200,bbox_inches="tight",pad_inches=.25,facecolor=fig.get_facecolor())
     plt.close(fig)
 
 def main():
@@ -91,13 +87,13 @@ def main():
     north_south=[pressure["ACV"][t]-pressure["SFO"][t] for t in common]
     pbl_ft=[pbl[t]*3.28084 for t in common]
     if not all(np.isfinite(winnemucca)) or not all(np.isfinite(gradient)) or not all(np.isfinite(north_south)) or not all(np.isfinite(pbl_ft)): raise RuntimeError("Nonfinite model values")
-    chart(common,gradient,cutoff,"SFO − Sacramento | Onshore pressure gradient","Sea-level pressure difference (hPa)","moraga_pressure_gradient_96h.png",
+    chart(common,gradient,cutoff,"SFO − Sacramento | Onshore pressure gradient","Pressure difference (hPa)","moraga_pressure_gradient_96h.png",
       "MODEL-BASED recent 48 h and next 48 h. Positive = coast higher pressure; not station observations.")
-    chart(common,winnemucca,cutoff,"SFO − Winnemucca | Regional onshore / offshore gradient","Sea-level pressure difference (hPa)","moraga_winnemucca_pressure_gradient_96h.png",
+    chart(common,winnemucca,cutoff,"SFO − Winnemucca | Onshore / offshore gradient","Pressure difference (hPa)","moraga_winnemucca_pressure_gradient_96h.png",
       "MODEL-BASED 48 h history + 48 h forecast. Positive favors onshore; negative favors offshore. Not observations.")
-    chart(common,north_south,cutoff,"Arcata (ACV) − SFO | North–south pressure gradient","Sea-level pressure difference (hPa)","moraga_north_south_pressure_gradient_96h.png",
+    chart(common,north_south,cutoff,"Arcata − SFO | North–south pressure gradient","Pressure difference (hPa)","moraga_north_south_pressure_gradient_96h.png",
       "MODEL-BASED recent 48 h and next 48 h. Positive = higher pressure to the north; not observed METAR pressures.")
-    chart(common,pbl_ft,cutoff,"Coastal boundary-layer height | Marine-layer proxy","Boundary-layer height (feet AGL)","moraga_marine_layer_proxy_96h.png",
+    chart(common,pbl_ft,cutoff,"Coastal boundary-layer height | Marine-layer proxy","Height (ft above ground)","moraga_marine_layer_proxy_96h.png",
       "MODEL PBL HEIGHT, NOT OBSERVED MARINE INVERSION OR CLOUD TOP. Coastal grid point; 650 ft reference is Moraga elevation.",650)
     payload={"generated_utc":datetime.now(timezone.utc).isoformat(),"source":"Open-Meteo best_match model",
        "note":"Recent 48h is model-based, not station observations. Boundary-layer height is NOT marine inversion depth.",

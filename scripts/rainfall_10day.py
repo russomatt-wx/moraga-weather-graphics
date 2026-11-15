@@ -216,7 +216,8 @@ for i,day in enumerate(dates):
 
 now = datetime.now(timezone.utc)
 # Shared light chart style: readable on mobile, matching the observatory's other graphics.
-fig, ax = plt.subplots(figsize=(9, 10.5), dpi=160, facecolor="#071b2c")
+# Phone-first: ~6.4 in wide so text stays readable when shown ~330 px wide.
+fig, ax = plt.subplots(figsize=(6.4, 8.4), dpi=200, facecolor="#071b2c")
 ax.set_facecolor("#071b2c")
 colors = {"ECMWF":"#19dcf6","GFS":"#ffbf2e","ICON":"#37d67a",
           "GEM":"#f472b6","EPS mean":"#5aa9ff",
@@ -225,14 +226,14 @@ for name, vals in results.items():
     available=[v for v in vals if isinstance(v,(float,int))]
     if not available: continue
     ax.plot(range(len(vals)), vals, label=f"{name}  {sum(available):.2f} in",
-            marker="o", markersize=6, linewidth=3 if "mean" not in name else 2.8,
+            marker="o", markersize=5, linewidth=2.6 if "mean" not in name else 2.4,
             linestyle="--" if "mean" in name else "-",color=colors[name])
 ax.set_xlim(-.35,13.35)
 ax.set_xticks(range(14))
-ax.set_xticklabels([datetime.fromisoformat(d).strftime("%b %-d") for d in dates],
-                   rotation=55,ha="right",fontsize=15,fontweight="semibold")
+ax.set_xticklabels([datetime.fromisoformat(d).strftime("%a")[0] + "\n" + datetime.fromisoformat(d).strftime("%-d") for d in dates],
+                   fontsize=14,fontweight="semibold")
 ax.tick_params(axis="y",labelsize=15)
-ax.set_ylabel("Daily rainfall (inches)",fontsize=15,fontweight="bold",labelpad=12)
+ax.set_ylabel("Inches per day",fontsize=14,fontweight="bold",labelpad=8)
 max_daily = max((float(v) for vals in results.values() for v in vals if isinstance(v, (float, int))), default=0.0)
 # Keep a consistent scale between routine updates; expand only for exceptional rainfall.
 axis_ceiling = max(1.0, math.ceil(max_daily / 0.2) * 0.2)
@@ -242,17 +243,17 @@ ax.grid(axis="y",color="#5f7f96",alpha=.48,linestyle="--",linewidth=.8)
 ax.grid(axis="x",which="major",color="#5f7f96",linestyle="--",linewidth=1,alpha=.48)
 ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
-fig.suptitle("MORAGA  |  14-DAY RAINFALL",fontsize=23,fontweight="bold",
-             x=.085,ha="left",y=.974)
-fig.text(.085,.915,"Model comparison  ·  Daily precipitation",fontsize=14,color="#9fb6c8")
+_d0, _d1 = datetime.fromisoformat(dates[0]), datetime.fromisoformat(dates[-1])
+fig.suptitle("Moraga · 14-day rainfall",fontsize=21,fontweight="bold",x=.11,ha="left",y=.975)
+fig.text(.11,.932,f"Daily rain by model, {_d0:%b %-d}–{_d1:%b %-d}",fontsize=14,color="#9fb6c8",va="top")
 handles,labels=ax.get_legend_handles_labels()
-fig.legend(handles,labels,loc="upper left",bbox_to_anchor=(.085,.885),
-           ncol=2,fontsize=16,frameon=False,labelcolor="#f2f8ff",
-           columnspacing=2.5,handlelength=2.3,labelspacing=.75)
-fig.text(.085,.026,
-         f"Updated {now:%b %d %H:%M} UTC  ·  Open-Meteo  ·  Gaps indicate unavailable model days",
+fig.legend(handles,labels,loc="upper left",bbox_to_anchor=(.09,.892),
+           ncol=2,fontsize=13.5,frameon=False,labelcolor="#f2f8ff",
+           columnspacing=1.4,handlelength=1.8,labelspacing=.6)
+fig.text(.11,.012,
+         f"Updated {now:%b %d %H:%M} UTC · Open-Meteo · gaps = model day unavailable",
          fontsize=11,color="#9fb6c8")
-fig.subplots_adjust(left=.085,right=.98,bottom=.18,top=.72)
+fig.subplots_adjust(left=.13,right=.98,bottom=.135,top=.71)
 out=Path("moraga_rainfall_10day.png")
 fig.savefig(out,facecolor=fig.get_facecolor())
 plt.close(fig)

@@ -35,8 +35,9 @@ def fetch(lat,lon,model=None):
 def main():
     now=datetime.now(TZ).replace(minute=0,second=0,microsecond=0)
     station={n:fetch(*p) for n,p in POINTS.items()}
-    fig,axes=plt.subplots(3,1,figsize=(9,11),sharex=True,gridspec_kw={'height_ratios':[2.4,2.4,1.0]})
-    fig.subplots_adjust(left=.10,right=.97,top=.835,bottom=.10,hspace=.38)
+    # Phone-first: ~6.4 in wide so text stays readable when shown ~330 px wide.
+    fig,axes=plt.subplots(3,1,figsize=(6.4,9.6),sharex=True,gridspec_kw={'height_ratios':[2.4,2.4,1.1]})
+    fig.subplots_adjust(left=.14,right=.97,top=.83,bottom=.08,hspace=.34)
     colors=["#5aa9ff","#19dcf6","#ffbf2e","#a78bfa","#ff7a59"]
     for axis in axes:
         axis.set_facecolor("#071b2c")
@@ -66,8 +67,8 @@ def main():
     axes[2].axhline(0,color="#5f7f96",linewidth=1.1,linestyle="--")
     axes[2].fill_between(delta_times,delta,0,where=[v>=0 for v in delta],color="#ffbf2e",alpha=.12)
     axes[2].fill_between(delta_times,delta,0,where=[v<0 for v in delta],color="#5aa9ff",alpha=.12)
-    axes[2].set_title("Moraga − Oakland temperature gap",loc="left",weight="bold",fontsize=14,pad=8)
-    axes[2].set_ylabel("ΔT (°F)")
+    axes[2].set_title("Moraga − Oakland gap",loc="left",weight="bold",fontsize=16,pad=8)
+    axes[2].set_ylabel("ΔT °F")
     # Consistent midnight separators across all three panels, with day labels
     # above the temperature panel. The bottom axis retains 12-hour time ticks.
     midnight=mdates.HourLocator(byhour=[0],tz=TZ)
@@ -79,27 +80,27 @@ def main():
     start=delta_times[0].replace(hour=0,minute=0,second=0,microsecond=0)+timedelta(days=1)
     end=delta_times[-1]
     cursor=start
-    while cursor<=end:
-        axes[0].annotate(cursor.strftime("%a %b %-d"),xy=(cursor,1),xycoords=("data","axes fraction"),xytext=(4,3),textcoords="offset points",fontsize=9,color="#5f7f96",weight="bold",ha="left",va="bottom")
-        cursor+=timedelta(days=1)
-    axes[0].set_title("Temperature",loc="left",weight="bold",fontsize=16,pad=20)
-    axes[0].set_ylabel("Temperature (°F)")
-    axes[1].set_ylabel("Dew point (°F)")
-    axes[1].set_title("Dew point",loc="left",weight="bold",fontsize=16,pad=8)
+    # (Day names are on the bottom axis; no extra labels above the top panel.)
+    axes[0].set_title("Temperature",loc="left",weight="bold",fontsize=17,pad=8)
+    axes[0].set_ylabel("°F")
+    axes[1].set_ylabel("°F")
+    axes[1].set_title("Dew point",loc="left",weight="bold",fontsize=17,pad=8)
     for ax in axes:
         ax.grid(axis="y",color="#5f7f96",alpha=.485);ax.grid(axis="x",which="major",color="#5f7f96",linestyle=":",linewidth=1.1,alpha=.48)
         ax.tick_params(labelsize=15)
         for tick in ax.get_xticklabels()+ax.get_yticklabels(): tick.set_fontweight("semibold")
         ax.spines["top"].set_visible(False);ax.spines["right"].set_visible(False)
         ax.grid(axis="x",color="#5f7f96",linestyle=":",alpha=.48)
-        ax.tick_params(axis="both",labelsize=14,length=0,pad=6)
-    axes[1].xaxis.set_major_locator(mdates.HourLocator(byhour=[0,12],tz=TZ))
-    axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%a\n%-I %p",tz=TZ))
+        ax.tick_params(axis="both",labelsize=15,length=0,pad=6)
+        ax.yaxis.set_major_locator(plt.MaxNLocator(5))
+    # One label per day, centred on noon, between the midnight separators.
+    axes[2].xaxis.set_major_locator(mdates.HourLocator(byhour=[12],tz=TZ))
+    axes[2].xaxis.set_major_formatter(mdates.DateFormatter("%a",tz=TZ))
     handles,labels=axes[0].get_legend_handles_labels()
-    fig.legend(handles,labels,loc="upper center",bbox_to_anchor=(.52,.965),ncol=3,frameon=False,fontsize=14)
-    fig.text(.075,.982,"BAY → VALLEY  |  96-HOUR MODEL FORECAST",fontsize=12,weight="bold",color="#19dcf6",va="top")
-    fig.text(.075,.035,"Model guidance · Open-Meteo best match · Not live observations",fontsize=10,color="#9fb6c8")
-    fig.savefig("moraga_marine_transect.png",dpi=155,bbox_inches="tight");plt.close(fig)
+    fig.legend(handles,labels,loc="upper left",bbox_to_anchor=(.11,.955),ncol=3,frameon=False,fontsize=14,handlelength=1.5,columnspacing=1.0)
+    fig.text(.12,.995,"Bay → Valley · 96-hour model forecast",fontsize=17,weight="bold",color="#f2f8ff",va="top")
+    fig.text(.12,.02,"Model guidance (Open-Meteo best match), not live observations",fontsize=11.5,color="#9fb6c8")
+    fig.savefig("moraga_marine_transect.png",dpi=200,bbox_inches="tight",pad_inches=.25);plt.close(fig)
     # Compare actual independently requested model grids, not station measurements.
     models={"ECMWF":"ecmwf_ifs025","GFS":"ncep_gfs_seamless"}
     forecasts={};errors={}
