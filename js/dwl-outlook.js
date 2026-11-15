@@ -471,7 +471,7 @@
         'The bigger player arrives ' + when + ', with ' + amt + ' possible',
         'Then comes the main event: ' + label + ' ' + when + ' that could deliver ' + amt,
         'The heavyweight of the week follows ' + when + ', packing ' + amt,
-        'Next up, the models bring ' + label + ' in ' + when + ', with ' + amt + ' in the cards',
+        'Next up, the models roll ' + label + ' through ' + when + ', with ' + amt + ' in the cards',
       ], 5) : 'Then the models bring ' + label + ' ' + when + ' with ' + amt;
       return line + (hz.frost ? ', plus some frosty mornings' : '') + total;
     }
