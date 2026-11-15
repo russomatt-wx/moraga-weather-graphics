@@ -85,7 +85,8 @@ pressure_f=_zoom(pressure,((lat_f.size)/pressure.shape[0],(lon_f.size)/pressure.
 thickness_f=_zoom(thickness,((lat_f.size)/thickness.shape[0],(lon_f.size)/thickness.shape[1]),order=3,grid_mode=False)
 fig=plt.figure(figsize=(11,10),facecolor="#071b2c")
 ax=plt.axes(projection=ccrs.PlateCarree())
-ax.set_extent([-175,-105,20,65],crs=ccrs.PlateCarree())
+# Slightly cropped from the full model grid (175W-105W, 20N-65N) so the map reads larger on phones.
+ax.set_extent([-169,-108,22,62],crs=ccrs.PlateCarree())
 ax.set_facecolor("white")
 ax.add_feature(cfeature.LAND,facecolor="#fafafa",zorder=0)
 ax.add_feature(cfeature.COASTLINE,edgecolor="#777777",linewidth=.65)
