@@ -768,7 +768,7 @@ function nwsWeatherOutlook(afd,d,h){
 <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin:8px 0 2px;font-size:13px"><strong style="color:#8fd4f5">Hourly rainfall · in</strong><span id="rrfs-compact-rain" style="color:#8fd4f5">48h: —</span></div>
 <svg id="rrfs-compact-rain-chart" viewBox="0 0 600 112" role="img" aria-label="48-hour hourly rainfall forecast" style="width:100%;height:auto;display:block;min-height:75px"></svg>
 </article><article class="card"><h3>Temperature guidance</h3><a href="moraga_model_temperatures.png?v=20261110-republish-all"><div class="chart-viewport" role="region" aria-label="Weather chart"><img loading="lazy" id="temperature-guidance-image" src="moraga_model_temperatures.png?v=20261110-republish-all" alt="Individual temperature model comparison" onerror="this.style.visibility='hidden';this.closest('.chart-viewport').style.minHeight='280px'"></div></a></article>
-<article class="card"><h3>Ensemble spread</h3><a href="moraga_ensemble_spread.png?v=20261110-republish-all"><div class="chart-viewport" role="region" aria-label="Weather chart"><img loading="lazy" id="ensemble-guidance-image" src="moraga_ensemble_spread.png?v=20261110-republish-all" alt="GEFS and EPS ensemble temperature spread" onerror="this.style.visibility='hidden';this.closest('.chart-viewport').style.minHeight='280px'"></div></a></article>
+<article class="card"><h3>Ensemble spread</h3><a href="moraga_ensemble_range.png"><div class="chart-viewport" role="region" aria-label="Weather chart"><img loading="lazy" id="ensemble-guidance-image" src="moraga_ensemble_range.png" alt="GEFS and EPS ensemble temperature spread" onerror="this.style.visibility='hidden';this.closest('.chart-viewport').style.minHeight='280px'"></div></a></article>
 </div></section>
  <section id="marine"><div class="intro"><div class="kicker">03 / Regional drivers</div><h2>Marine intrusion & East Bay gradients</h2><p>Track marine air moving inland.</p></div><div class="grid"><article class="card"><h3>96-hour Bay-to-Valley marine intrusion tracker</h3><p>96-hour coastal-to-inland temperature and dew point.</p><div class="chart-viewport" role="region" aria-label="Weather chart"><img loading="lazy" src="moraga_marine_transect.png?v=20261110-republish-all" alt="East Bay temperature and dew point forecast" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<p></div>Awaiting first successful model chart run.</p>')"><span class="pill">Model forecast</span></article>
 <article class="card"><h3>SFO–Sacramento pressure gradient</h3><p>Coastal pressure relative to Sacramento.</p><div class="chart-viewport" role="region" aria-label="Weather chart"><img loading="lazy" src="moraga_pressure_gradient_96h.png?v=20261110-reference-lines-v2" alt="Pressure gradient model chart"></div></article>
@@ -1860,8 +1860,8 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  // that path can fail on mobile and replace a valid PNG with a false warning.
  const ensembleImg=document.getElementById('ensemble-guidance-image');
  if(ensembleImg){
-   const chart='moraga_ensemble_spread.png?v=20261110-republish-all';
-   const url=chart+'?v='+Math.floor(Date.now()/1800000);
+   // Published by this repo's ensemble_spread workflow every 6 hours.
+   const url='moraga_ensemble_range.png?v='+Math.floor(Date.now()/1800000);
    ensembleImg.src=url;
    const anchor=ensembleImg.closest('a');
    if(anchor)anchor.href=url;

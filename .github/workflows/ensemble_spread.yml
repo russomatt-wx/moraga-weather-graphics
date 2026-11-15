@@ -1,0 +1,45 @@
+name: Moraga ensemble spread chart
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/ensemble_spread.py'
+      - 'scripts/dwl_chart_style.py'
+      - '.github/workflows/ensemble_spread.yml'
+  schedule:
+    # Shortly after each GEFS / ECMWF ensemble run reaches Open-Meteo.
+    - cron: '25 1,7,13,19 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: ensemble-spread
+  cancel-in-progress: false
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -m pip install matplotlib numpy
+      - run: python scripts/ensemble_spread.py
+      - name: Publish chart
+        run: |
+          mkdir -p /tmp/ensemble
+          cp moraga_ensemble_range.png moraga_ensemble_range.json /tmp/ensemble/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/ensemble/* .
+            git add moraga_ensemble_range.png moraga_ensemble_range.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "Update Moraga ensemble spread chart"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
