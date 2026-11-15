@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=19"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=19"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=19">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261115b">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261115c">
 
 
 
@@ -1814,7 +1814,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  const axisEnd=start+11*86400000;
  // Phone-first: a narrower canvas keeps the same font sizes ~1.7x larger on screen.
  const narrow=window.innerWidth<640;
- const W=narrow?470:800,H=narrow?560:900,L=narrow?50:75,R=narrow?18:65,T=narrow?125:155,B=narrow?62:105;
+ const W=narrow?470:800,H=narrow?580:900,L=narrow?50:75,R=narrow?18:65,T=narrow?125:155,B=narrow?66:105;
  const dayFmt=new Intl.DateTimeFormat('en-US',narrow?{weekday:'short',day:'numeric',timeZone:tz}:{weekday:'short',month:'short',day:'numeric',timeZone:tz});
  const renderChart=(plotSeries,title,showBands=false)=>{
   const vals=plotSeries.flatMap(m=>m.temp.filter((v,i)=>Number.isFinite(v)&&Date.parse(m.time[i])<=axisEnd));
@@ -1824,7 +1824,15 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
   const py=v=>T+(max-v)/(max-min)*(H-T-B);
   let svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'"><rect width="'+W+'" height="'+H+'" rx="15" fill="#071b2c"/><text x="'+L+'" y="43" font-family="Outfit,Helvetica,Arial,sans-serif" font-size="25" font-weight="800" fill="#f2f8ff">'+title+'</text>';
   for(let v=min;v<=max;v+=10){const yy=py(v);svg+='<path d="M'+L+' '+yy+'H'+(W-R)+'" stroke="#1e3a50"/>';for(const side of (narrow?[L-10]:[L-13,W-R+13]))svg+='<text x="'+side+'" y="'+(yy+4)+'" text-anchor="'+(side<L?'end':'start')+'" font-family="Outfit,Helvetica,Arial,sans-serif" font-size="22" font-weight="700" fill="#9fb6c8">'+v+'</text>'}
-  for(let ms=start;ms<=axisEnd;ms+=3*86400000){const xx=px(ms);svg+='<path d="M'+xx+' '+T+'V'+(H-B)+'" stroke="#5f7f96" stroke-dasharray="3 6" stroke-opacity=".65"/><text x="'+xx+'" y="'+(H-B+(narrow?28:35))+'" text-anchor="middle" font-family="Outfit,Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#9fb6c8">'+(narrow?new Intl.DateTimeFormat('en-US',{weekday:'short',timeZone:tz}).format(new Date(ms))+' '+new Intl.DateTimeFormat('en-US',{day:'numeric',timeZone:tz}).format(new Date(ms)):dayFmt.format(new Date(ms)))+'</text>'}
+  // One label per day (weekday over date), centred on local noon, with a separator at each midnight.
+  {const hourIn=ms=>Number(new Intl.DateTimeFormat('en-US',{timeZone:tz,hour:'numeric',hourCycle:'h23'}).format(new Date(ms)));
+   const ymd=ms=>new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(ms));
+   const midnight=ds=>{for(const h of [7,8]){const ms=Date.parse(ds+'T0'+h+':00:00Z');if(hourIn(ms)===0)return ms}return Date.parse(ds+'T08:00:00Z')};
+   const fs=narrow?18:20,wk=new Intl.DateTimeFormat('en-US',{weekday:narrow?'narrow':'short',timeZone:tz}),dn=new Intl.DateTimeFormat('en-US',{day:'numeric',timeZone:tz});
+   for(let k=0;k<=12;k++){const m=midnight(ymd(start+k*86400000));
+    if(m>start&&m<axisEnd)svg+='<path d="M'+px(m)+' '+T+'V'+(H-B)+'" stroke="#5f7f96" stroke-dasharray="3 6" stroke-opacity=".65"/>';
+    const noon=m+12*3600000;if(noon<start||noon>axisEnd)continue;const xx=px(noon);
+    svg+='<text x="'+xx+'" y="'+(H-B+fs+8)+'" text-anchor="middle" font-family="Outfit,Helvetica,Arial,sans-serif" font-size="'+fs+'" font-weight="700" fill="#c3d6e4">'+wk.format(new Date(noon))+'</text><text x="'+xx+'" y="'+(H-B+2*fs+12)+'" text-anchor="middle" font-family="Outfit,Helvetica,Arial,sans-serif" font-size="'+(fs-2)+'" font-weight="600" fill="#9fb6c8">'+dn.format(new Date(noon))+'</text>';}}
   for(const m of plotSeries){
    const points=m.time.map((t,i)=>({ms:Date.parse(t),v:m.temp[i],low:m.low?.[i],high:m.high?.[i]})).filter(p=>Number.isFinite(p.v)&&p.ms>=start&&p.ms<=axisEnd);
    if(!points.length)continue;

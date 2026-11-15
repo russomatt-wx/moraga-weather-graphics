@@ -75,9 +75,11 @@ for key in ("pressure_msl","geopotential_height_500hPa","geopotential_height_100
 pressure=fields["pressure_msl"]
 thickness=(fields["geopotential_height_500hPa"]-fields["geopotential_height_1000hPa"])/10
 if not (940<np.nanmin(pressure)<1080 and 460<np.nanmean(thickness)<610):raise RuntimeError("Unexpected field units")
-fig=plt.figure(figsize=(11,10),facecolor="#071b2c")
+# Phone-first: a 6.6 in figure keeps labels readable when the map is shown ~350 px wide,
+# and the view is centred on the NE Pacific / West Coast (where our weather comes from).
+fig=plt.figure(figsize=(6.6,6.2),facecolor="#071b2c")
 ax=plt.axes(projection=ccrs.PlateCarree())
-ax.set_extent([-175,-105,20,65],crs=ccrs.PlateCarree())
+ax.set_extent([-165,-110,22,62],crs=ccrs.PlateCarree())
 ax.set_facecolor("white")
 ax.add_feature(cfeature.LAND,facecolor="#fafafa",zorder=0)
 ax.add_feature(cfeature.COASTLINE,edgecolor="#777777",linewidth=.65)
@@ -102,7 +104,7 @@ ax.contourf(lon2,lat2,thickness,levels=shade_levels,cmap=cmap,norm=norm,
 # Eight-hPa isobars and selective labels reduce visual clutter on mobile.
 p=ax.contour(lon2,lat2,pressure,levels=np.arange(960,1050,8),colors="#667580",
              linewidths=.65,alpha=.62,transform=ccrs.PlateCarree(),zorder=3)
-ax.clabel(p,levels=np.arange(968,1049,16),fmt="%d",fontsize=10,
+ax.clabel(p,levels=np.arange(968,1049,16),fmt="%d",fontsize=11.5,
           inline=True,inline_spacing=12,colors="#52616b")
 # Strong, contrasting dashed thickness isolines on top of the shaded field.
 # Dark underlay prevents the colored contours from disappearing into matching fills.
@@ -112,14 +114,14 @@ ax.contour(lon2,lat2,thickness,levels=levels,colors="#253746",
            transform=ccrs.PlateCarree(),zorder=4)
 t=ax.contour(lon2,lat2,thickness,levels=levels,colors=colors,
              linewidths=.85,linestyles="dashed",transform=ccrs.PlateCarree(),zorder=4.1)
-ax.clabel(t,levels=np.arange(480,611,3),fmt="%d",fontsize=11,inline=True,inline_spacing=10,
+ax.clabel(t,levels=np.arange(480,611,6),fmt="%d",fontsize=12,inline=True,inline_spacing=8,
           colors="#182e40")
 # Keep 540 dam prominent, but avoid overwhelming nearby contours.
 line540=ax.contour(lon2,lat2,thickness,levels=[540],colors="#0069c9",
                    linewidths=2.7,linestyles="solid",
                    transform=ccrs.PlateCarree(),zorder=5)
 if len(line540.allsegs[0]):
-    ax.clabel(line540,fmt={540:"540"},fontsize=14,inline=True,
+    ax.clabel(line540,fmt={540:"540"},fontsize=15,inline=True,
               inline_spacing=8,colors="#0069c9",use_clabeltext=True)
 # Identify pressure centers across the domain, including near the map edges.
 # The coarse GFS sampling can suppress weaker lows when smoothed heavily.
@@ -143,30 +145,32 @@ for _,kind,iy,ix in sorted(candidates,reverse=True):
     if len(chosen)>=9: break
 for kind,iy,ix in chosen:
     lon,lat=float(lon2[iy,ix]),float(lat2[iy,ix])
-    ax.text(lon,lat,kind,ha="center",va="center",fontsize=22,fontweight="black",
+    ax.text(lon,lat,kind,ha="center",va="center",fontsize=24,fontweight="black",
             color="#c02637" if kind=="L" else "#1954bc",
             path_effects=[pe.withStroke(linewidth=2.4,foreground="white")],
             transform=ccrs.PlateCarree(),zorder=10)
     ax.text(lon,lat-1.7,f"{pressure[iy,ix]:.0f}",ha="center",va="top",
-            fontsize=10,fontweight="bold",color="#1b2b3a",
+            fontsize=12,fontweight="bold",color="#1b2b3a",
             path_effects=[pe.withStroke(linewidth=1.7,foreground="white")],
             transform=ccrs.PlateCarree(),zorder=10)
-ax.plot(-122.13,37.83,"o",ms=5,color="#222222",transform=ccrs.PlateCarree(),zorder=8)
-ax.text(-121.5,38.4,"MORAGA",color="#222222",fontsize=9,transform=ccrs.PlateCarree())
-fig.text(.06,.96,"PACIFIC SYNOPTIC • SURFACE + 1000–500 mb THICKNESS",
-         color="#f2f8ff",fontsize=18,weight="bold")
-fig.text(.06,.924,"GFS sea-level pressure (gray, 8 hPa)  •  1000–500 mb thickness (shaded + dashed, dam)  •  540 dam (blue solid)",
-         color="#9fb6c8",fontsize=10)
-fig.text(.06,.025,f"GFS valid {valid:%d %b %Y %HZ}  |  Source: Open-Meteo / GFS",
-         color="#9fb6c8",fontsize=12)
-fig.subplots_adjust(left=.04,right=.98,bottom=.13,top=.895)
-bar_ax=fig.add_axes([.095,.085,.77,.018])
+ax.plot(-122.13,37.83,"o",ms=6,color="#111111",transform=ccrs.PlateCarree(),zorder=8)
+ax.text(-121.4,38.3,"Moraga",color="#111111",fontsize=11.5,fontweight="bold",transform=ccrs.PlateCarree(),
+        path_effects=[pe.withStroke(linewidth=2,foreground="white")],zorder=8)
+from zoneinfo import ZoneInfo
+valid_pt=valid.astimezone(ZoneInfo("America/Los_Angeles"))
+fig.text(.04,.98,"Pacific surface + 1000–500 mb thickness",color="#f2f8ff",fontsize=17,weight="bold",va="top")
+fig.text(.04,.936,"Sea-level pressure (gray, hPa) · thickness (shaded + dashed, dam) · 540 dam line (blue)",
+         color="#9fb6c8",fontsize=10.5,va="top",wrap=True)
+fig.text(.04,.02,f"GFS forecast valid {valid_pt:%a %b %-d, %-I %p} PT ({valid:%HZ}) · Open-Meteo",
+         color="#9fb6c8",fontsize=11.5)
+fig.subplots_adjust(left=.03,right=.97,bottom=.15,top=.885)
+bar_ax=fig.add_axes([.07,.095,.78,.025])
 sm=ScalarMappable(norm=norm,cmap=cmap)
-cb=fig.colorbar(sm,cax=bar_ax,orientation="horizontal",ticks=np.arange(480,595,6))
-cb.ax.tick_params(labelsize=10,colors="#f2f8ff",pad=4)
+cb=fig.colorbar(sm,cax=bar_ax,orientation="horizontal",ticks=np.arange(486,595,12))
+cb.ax.tick_params(labelsize=12,colors="#f2f8ff",pad=3)
 cb.outline.set_edgecolor("#9fb6c8")
-fig.text(.875,.086,"dam",fontsize=10,color="#f2f8ff")
-fig.savefig(OUT,dpi=175,facecolor="#071b2c")
+fig.text(.87,.097,"dam",fontsize=12,color="#f2f8ff")
+fig.savefig(OUT,dpi=220,facecolor="#071b2c")
 META.write_text(json.dumps({"gfs_valid_utc":valid.isoformat(),
  "fields":["sea-level pressure","1000-500 mb thickness"],"fronts":False,
  "thickness_color_range_dam":[480,594],"highlight_dam":540}))
