@@ -204,14 +204,14 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 #ten-day { border: 0; background: none; box-shadow: none; padding: 0; }
 
 /* ---------- Forecast day cards (shared by both views; markup from js/dwl-components.js) ---------- */
-.dwl-days { display: flex; flex-direction: column; gap: 8px; margin: 0 0 16px; }
+.dwl-days { display: flex; flex-direction: column; gap: 7px; margin: 0 0 16px; }
 .dwl-day {
   --hi: #37b95a; --lo: #1cb5b8;
   position: relative;
   display: grid;
   grid-template-columns: minmax(66px, 21%) minmax(64px, 19%) minmax(0, 1fr) minmax(60px, 18%);
   align-items: center;
-  height: 96px; box-sizing: border-box; padding: 8px 12px 8px 14px;
+  height: 80px; box-sizing: border-box; padding: 6px 12px 6px 14px;
   border: 2px solid transparent; border-radius: 15px;
   /* Soft temperature tint inside the card (high colour → low colour), over the dark base. */
   background:
@@ -234,7 +234,7 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .dwl-pill {
   display: inline-block; margin-bottom: 2px; padding: 2px 7px; border-radius: 999px;
   background: var(--accent); color: #032233 !important;
-  font: 800 9.5px/1.2 var(--font-ui) !important; letter-spacing: .1em; text-transform: uppercase;
+  font: 800 9px/1.15 var(--font-ui) !important; letter-spacing: .1em; text-transform: uppercase;
 }
 
 .dwl-day-hi, .dwl-day-lo {
@@ -248,12 +248,12 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 }
 
 .dwl-day-sky { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 0; padding: 0 4px; }
-.dwl-icon { display: block; width: 56px; height: 40px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .35)); }
+.dwl-icon { display: block; width: 50px; height: 34px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .35)); }
 .dwl-day-cond {
-  margin-top: 2px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-top: 1px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   font: 600 clamp(10px, 2.8vw, 12px)/1.2 var(--font-ui); letter-spacing: .03em; text-transform: uppercase; color: #eef6fc;
 }
-.dwl-day-rain { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 2px; font: 500 clamp(12px, 3.3vw, 14px)/1.2 var(--font-ui); color: var(--rain); }
+.dwl-day-rain { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 1px; font: 500 clamp(12px, 3.3vw, 14px)/1.15 var(--font-ui); color: var(--rain); }
 .dwl-day-amount { display: inline-flex; align-items: center; gap: 6px; }
 .dwl-day-amount i {
   width: 9px; height: 12px; background: #2bc4ff;
@@ -264,12 +264,12 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .dwl-day > details { display: none; }
 
 @media (max-width: 360px) {
-  .dwl-day { grid-template-columns: minmax(58px, 21%) minmax(54px, 19%) minmax(0, 1fr) minmax(52px, 18%); padding: 10px 10px 10px 12px; }
-  .dwl-icon { width: 48px; height: 34px; }
+  .dwl-day { grid-template-columns: minmax(58px, 21%) minmax(54px, 19%) minmax(0, 1fr) minmax(52px, 18%); padding: 6px 10px 6px 12px; }
+  .dwl-icon { width: 44px; height: 30px; }
 }
 @media (min-width: 700px) {
-  .dwl-day { height: 104px; padding: 10px 20px; }
-  .dwl-icon { width: 66px; height: 46px; }
+  .dwl-day { height: 88px; padding: 8px 20px; }
+  .dwl-icon { width: 60px; height: 40px; }
 }
 
 /* Icons used outside day cards (hourly strip, current conditions) */
