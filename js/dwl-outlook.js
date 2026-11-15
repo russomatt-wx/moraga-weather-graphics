@@ -43,8 +43,34 @@
       if (m) {
         var adj = (m[1] || '').toLowerCase(), kind = m[2].toLowerCase().replace(/upper level/, 'upper-level');
         var phrase = (adj ? adj + ' ' : '') + kind;
+        if (adj === 'next') return 'the ' + phrase;
         return (/^[aeiou]/.test(phrase) ? 'an ' : 'a ') + phrase;
       }
+    }
+    return '';
+  }
+
+  // NWS arrival window for the Bay Area on a given day, e.g. "between noon and 8 PM Sunday".
+  var TIME = '(?:noon|midnight|\\d{1,2}(?::\\d\\d)?\\s*[AP]M)';
+  function arrivalWindow(afd, dayName) {
+    if (!afd || !dayName) return '';
+    var pool = sentences(afd.short + ' ' + afd.long);
+    for (var i = 0; i < pool.length; i++) {
+      var s = pool[i];
+      if (s.indexOf(dayName) === -1 || !/front|system|rain/i.test(s)) continue;
+      var m = s.match(new RegExp('(?:the )?(?:SF )?Bay Area[^,;]*?between (' + TIME + ') and (' + TIME + ')', 'i'));
+      if (m) return 'between ' + m[1].replace(/\s+/g, ' ') + ' and ' + m[2].replace(/\s+/g, ' ') + ' ' + dayName;
+    }
+    return '';
+  }
+  // The day/time the NWS ties to a topic (frost, freeze...), e.g. "Tuesday morning".
+  function whenFor(afd, re) {
+    if (!afd) return '';
+    var pool = sentences(afd.key.join('. ') + '. ' + afd.short + ' ' + afd.long);
+    for (var i = 0; i < pool.length; i++) {
+      if (!re.test(pool[i])) continue;
+      var m = pool[i].match(/\b(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)(?: (morning|night|evening|afternoon))?/);
+      if (m) return m[0];
     }
     return '';
   }
@@ -394,18 +420,25 @@
     var dn = before && !before.wet ? dryName(before) : '';
     var pre = /day$/.test(dn) ? 'After a dry ' + dn + ', ' : '';
     var what = round ? round + ' rolls in ' : (main.thunder ? 'storms roll in ' : 'rain moves in ');
-    var how = cause && cause !== 'post-frontal' ? ' as ' + cause + ' brings ' + amt + windBit : ' with ' + amt + windBit;
-    var body = pre + what + main.span + how + (t ? ' — ' + t : '');
+    var win = cause && cause !== 'post-frontal' ? arrivalWindow(afd, main.start.dayName) : '';
+    if (win && /^this|^overnight|^early/.test(main.start.label)) win = win.replace(new RegExp(' ' + main.start.dayName + '$'), ' today');
+    var how = cause && cause !== 'post-frontal'
+      ? (win ? ' as ' + cause + ' sweeps through ' + win + ', bringing ' + amt + windBit : ' as ' + cause + ' brings ' + amt + windBit)
+      : ' with ' + amt + windBit;
+    var breakAfter = after && !after.wet ? '. Look for a break ' + after.span : '';
+    var body = pre + what + main.span + how + (t ? ' — ' + t : '') + breakAfter;
     return cap(body);
   }
-  function farConcise(hz, daily, nowParts) {
+  function farConcise(hz, daily, nowParts, afd) {
     if (!daily || !daily.time) return '';
     var i0 = dayIdx(daily, nowParts), big = hz.bigLater;
     var range = function (r) { return r.a === r.b ? dayName(daily, r.a, i0) : dayName(daily, r.a, i0) + ' into ' + weekday(daily.time[r.b]); };
-    var total = hz.total10 >= 1 ? ', pushing 10-day totals to ' + amountWords(hz.total10).replace(/^around /, 'about ') : '';
+    // ~1 inch is a typical 10-day November total around Lamorinda and the Tri-Valley.
+    var above = hz.total10 >= 1.5 || (hz.total10 >= 1 && afd && /above (?:the )?(?:seasonal )?(?:average|normal)|pattern remains active/i.test(afd.long));
+    var total = above ? '. Above-average rainfall is expected through the week as an active storm track barrels into Northern California' : '';
     if (big) {
       var label = big.total >= 2 ? 'a potent storm' : big.total >= 1 ? 'a stronger storm' : big.total >= 0.5 ? 'another solid soaking' : 'a few more showers';
-      return 'Then the models line up ' + label + ' for ' + range(big) + ' with ' + amountWords(big.total) + total + (hz.frost ? ', plus some frosty mornings' : '');
+      return 'Then the models line up ' + label + ' for ' + range(big) + ' with ' + amountWords(big.total) + (hz.frost ? ', plus some frosty mornings' : '') + total;
     }
     var n = Math.min(daily.time.length, i0 + 10);
     return 'Beyond that, the models keep things mostly dry through ' + dayName(daily, n - 1, i0) + (hz.frost ? ', with frosty mornings in the mix' : '');
@@ -424,7 +457,11 @@
   function nwsNugget(afd) {
     if (!afd) return '';
     var text = afd.key.join(' . ') + ' ' + afd.short + ' ' + afd.long;
-    for (var i = 0; i < NUGGETS.length; i++) if (NUGGETS[i][0].test(text)) return NUGGETS[i][1];
+    for (var i = 0; i < NUGGETS.length; i++) if (NUGGETS[i][0].test(text)) {
+      var n = NUGGETS[i][1];
+      if (/frost/.test(n)) { var w = whenFor(afd, /frost|freez|cold weather/i); if (w) n = n.replace('in the colder valleys', 'in the colder valleys ' + w); }
+      return n;
+    }
     return '';
   }
   // Only mention temperatures when they matter (frost, freeze, heat, a real chill).
@@ -460,9 +497,11 @@
     var nearTerm = st.sentences.concat([tempSentence(opts.daily, nowParts, st.closing)]).filter(Boolean).map(dot);
     var farTerm = [hz.text, nwsInsight(afd, /mudslide|frost/.test(hz.text) ? /frost/ : null) || nwsHighlight(afd)].filter(Boolean).map(dot);
     var issued = opts.issued ? new Date(opts.issued).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', minute: '2-digit' }) : '';
-    var near = nearConcise(rs, afd, place), far = farConcise(hz, opts.daily, nowParts);
+    var near = nearConcise(rs, afd, place), far = farConcise(hz, opts.daily, nowParts, afd);
     if (/^Beyond that/.test(far) && /dry weather through/.test(near) && far.slice(-12) === near.slice(-12)) far = '';
-    var para = [near, tempNote(opts.daily, nowParts), far, nwsNugget(afd)]
+    var nug = nwsNugget(afd);
+    if (/Above-average rainfall/.test(far) && /above normal/.test(nug)) nug = '';
+    var para = [near, tempNote(opts.daily, nowParts), far, nug]
       .filter(Boolean).map(dot);
     return {
       headline: headline(rs, hz, opts.daily, nowParts, region, afd),
