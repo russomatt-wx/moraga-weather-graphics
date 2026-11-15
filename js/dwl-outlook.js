@@ -408,7 +408,13 @@
       var day = rs.reduce(function (a, r) { return a.concat(r.blocks); }, []).filter(function (b) { return b.part === 1 || b.part === 2; });
       var sk = sky(day);
       var lastBlocks = rs[rs.length - 1].blocks, lastDay = weekday(lastBlocks[lastBlocks.length - 1].labelDate);
-      return 'Expect ' + (sk ? sk + ' and dry weather' : 'dry weather') + ' through ' + lastDay + (windy ? ', though gusts could reach ' + g + ' mph' : '');
+      var dryTxt = (sk ? sk + ' and dry weather' : 'dry weather') + ' through ' + lastDay;
+      return say([
+        'Expect ' + dryTxt,
+        'Leave the umbrella in the closet: look for ' + dryTxt,
+        'The weather is on its best behavior, with ' + dryTxt,
+        'Easy-breezy forecast: ' + dryTxt,
+      ], 7) + (windy ? ', though gusts could reach ' + g + ' mph' : '');
     }
     var cause = causeFor(afd, main.start.dayName, main.start.isNow), t = tip(main, peak.gust), amt = amountWords(main.rain);
     var i = rs.indexOf(main), before = rs[i - 1], after = rs[i + 1];
@@ -427,6 +433,9 @@
       'Skies catch a break ' + after.span,
       'Enjoy the dry window ' + after.span + ' while it lasts',
       'Things quiet down ' + after.span,
+      'Mother Nature hits pause ' + after.span + ' — perfect timing to clean the gutters',
+      'Sneak in a dog walk ' + after.span + ', when the clouds take five',
+      'The sun pokes back out ' + after.span + ', so get those errands done',
     ], 3) : '';
     if (cause && cause !== 'post-frontal' && win) {
       var front = cap(cause.replace(/^(a|an|the) /, ''));
@@ -435,6 +444,10 @@
         'Timing it out: ' + cause + ' arrives ' + win + ', with rain from ' + main.span + ' adding up to ' + amt + windBit,
         'Keep an eye on the sky ' + win + ' as ' + cause + ' pushes through, with rain ' + main.span + ' adding up to ' + amt + windBit,
         cap(what) + main.span + ' as ' + cause + ' sweeps through ' + win + ', bringing ' + amt + windBit,
+        'Mark your calendar: ' + cause + ' makes its grand entrance ' + win + ', and the rain sticks around ' + main.span + ' for ' + amt + windBit,
+        'Wipers on! ' + cap(cause) + ' barrels through ' + win + ', with rain ' + main.span + ' good for ' + amt + windBit,
+        'Our next visitor, ' + cause + ', shows up ' + win + ' and brings ' + amt + ' of rain ' + main.span + windBit,
+        'The rain clock starts ticking ' + win + ' when ' + cause + ' rolls in, with ' + amt + ' falling ' + main.span + windBit,
       ], 1);
       return pre + (pre ? lead.charAt(0).toLowerCase() + lead.slice(1) : lead) + (t ? ' — ' + t : '') + breakAfter;
     }
@@ -453,16 +466,22 @@
     var total = !above ? '' : '. ' + say(ar ? [
       'An atmospheric river is part of the mix, so rainfall will run well above normal for mid-November',
       'With an atmospheric river feeding moisture in from the tropics, this week will run far wetter than normal',
+      'A firehose of Pacific moisture, an atmospheric river, is pointed our way, so rain totals will soar above normal',
     ] : [
       'The Pacific storm machine is cranked up, and rain totals will run well above normal this week',
       'The jet stream is aimed right at Northern California, keeping us on the wet side of normal all week',
       'Storm after storm is lining up offshore, so this week will run wetter than we typically see in mid-November',
       'It\'s shaping up to be a soggy week, with rainfall running well ahead of the seasonal pace',
       'An active storm track will keep the umbrellas busy, with rain totals running above average through the week',
+      'The Pacific conveyor belt is running full speed, delivering storm after storm straight to our doorstep',
+      'Consider this your official notice: rain boots are in season, and this week\'s totals will run well above normal',
+      'The jet stream has Northern California on speed dial, so expect a wetter-than-normal week',
+      'If you\'ve been waiting for the rainy season to really show up, it just RSVP\'d yes',
     ], 2) + (soaked ? say([
       '. With the ground already soaked, creeks and storm drains will rise faster with each round',
       '. With soils already saturated, runoff will come quicker each time',
       '. With saturated ground, watch for ponding, rising creeks and the odd mudslide on steep hillsides',
+      '. The hills are already soaked like a sponge, so expect creeks to run high and fast',
     ], 4) : '');
     if (big) {
       var label = big.total >= 2 ? 'a potent storm' : big.total >= 1 ? 'a stronger storm' : big.total >= 0.5 ? 'another solid soaking' : 'a few more showers';
@@ -472,6 +491,10 @@
         'Then comes the main event: ' + label + ' ' + when + ' that could deliver ' + amt,
         'The heavyweight of the week follows ' + when + ', packing ' + amt,
         'Next up, the models roll ' + label + ' through ' + when + ', with ' + amt + ' in the cards',
+        'But save your energy for ' + when + ': that\'s when the headliner takes the stage with ' + amt,
+        'And the big one? It\'s penciled in for ' + when + ', with ' + amt + ' — the kind of storm that fills rain gauges and makes ducks happy',
+        'Then the main course: ' + label + ' ' + when + ', dishing out ' + amt,
+        'Everything before it is just the opening act. The real show comes ' + when + ', with ' + amt + ' possible',
       ], 5) : 'Then the models bring ' + label + ' ' + when + ' with ' + amt;
       return line + (hz.frost ? ', plus some frosty mornings' : '') + total;
     }
@@ -500,6 +523,9 @@
           'Clearing skies between storms could bring frost to the colder valleys' + at + ', so cover tender plants',
           'Bundle up' + (w ? ' ' + w : ' on the clear mornings') + ': forecasters say frost is possible in the colder valleys, so protect sensitive plants',
           'Forecasters also flag frost in the colder valleys' + at + ', so bring in or cover tender plants',
+          'Jack Frost may sneak into the colder valleys' + at + ', so tuck in the tender plants',
+          'Between storms, it gets nippy: frost is possible in the colder valleys' + at + ', so give your succulents a blanket',
+          'Scrape-the-windshield alert' + at + ': frost is possible in the colder valleys',
         ], 6);
       }
       return n;
@@ -522,9 +548,9 @@
 
   // Friendly opener for the local time of day.
   function greeting(hour, place) {
-    if (hour >= 5 && hour < 12) return 'Good morning, ' + place + '!';
-    if (hour >= 12 && hour < 17) return 'Good afternoon, ' + place + '!';
-    if (hour >= 17 && hour < 22) return 'Good evening, ' + place + '!';
+    if (hour >= 5 && hour < 12) return say(['Good morning, ' + place + '!', 'Rise and shine, ' + place + '!', 'Morning, ' + place + '! Grab your coffee.'], 8);
+    if (hour >= 12 && hour < 17) return say(['Good afternoon, ' + place + '!', 'Hey there, ' + place + '!', 'Afternoon, ' + place + '! Here\'s what\'s brewing.'], 8);
+    if (hour >= 17 && hour < 22) return say(['Good evening, ' + place + '!', 'Evening, ' + place + '! Here\'s the scoop.', 'Hi, ' + place + '! Let\'s look ahead.'], 8);
     return 'Hello, ' + place + ' night owls!';
   }
 
