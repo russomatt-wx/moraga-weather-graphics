@@ -1,22 +1,22 @@
 {
-  "generated_utc": "2026-11-14T15:54:37.520050+00:00",
-  "target_local_date": "2026-11-13",
+  "generated_utc": "2026-11-15T16:29:16.183282+00:00",
+  "target_local_date": "2026-11-14",
   "timezone": "America/Los_Angeles",
   "rows": [
     {
       "label": "ECMWF",
       "kind": "model",
-      "high_f": 56.3,
-      "low_f": 47.12,
-      "issued_utc": "2026-11-12T19:52:10.834619+00:00",
+      "high_f": 62.24,
+      "low_f": 45.14,
+      "issued_utc": "2026-11-13T19:37:32.490074+00:00",
       "status": "full_day_archived_snapshot"
     },
     {
       "label": "GFS",
       "kind": "model",
-      "high_f": 58.28,
-      "low_f": 48.92,
-      "issued_utc": "2026-11-12T19:52:10.706832+00:00",
+      "high_f": 58.64,
+      "low_f": 48.02,
+      "issued_utc": "2026-11-13T19:37:32.432503+00:00",
       "status": "full_day_archived_snapshot"
     },
     {
@@ -29,25 +29,25 @@
     {
       "label": "ICON",
       "kind": "model",
-      "high_f": 58.28,
-      "low_f": 51.26,
-      "issued_utc": "2026-11-12T19:52:12.145793+00:00",
+      "high_f": 61.34,
+      "low_f": 48.38,
+      "issued_utc": "2026-11-13T19:37:32.874098+00:00",
       "status": "full_day_archived_snapshot"
     },
     {
       "label": "GEM",
       "kind": "model",
-      "high_f": 57.74,
-      "low_f": 52.16,
-      "issued_utc": "2026-11-12T19:52:12.633559+00:00",
+      "high_f": 57.02,
+      "low_f": 45.5,
+      "issued_utc": "2026-11-13T19:37:33.053647+00:00",
       "status": "full_day_archived_snapshot"
     },
     {
       "label": "Assistant \u00b7 6 AM",
       "kind": "assistant",
-      "high_f": 60.0,
-      "low_f": 49.0,
-      "issued_utc": "2026-11-13T14:03:49.634000+00:00",
+      "high_f": 62.0,
+      "low_f": 46.0,
+      "issued_utc": "2026-11-14T14:00:17.448000+00:00",
       "status": "live_issued"
     },
     {
@@ -60,9 +60,9 @@
     {
       "label": "Assistant \u00b7 4 PM",
       "kind": "assistant",
-      "high_f": 62.0,
-      "low_f": 51.0,
-      "issued_utc": "2026-11-12T23:58:39.903000+00:00",
+      "high_f": 60.0,
+      "low_f": 46.0,
+      "issued_utc": "2026-11-14T00:00:41.251000+00:00",
       "status": "live_issued"
     },
     {
@@ -75,9 +75,9 @@
     {
       "label": "Observed \u00b7 KCAMORAG71",
       "kind": "observed",
-      "high_f": 61.0,
-      "low_f": 50.0,
-      "samples": 1414,
+      "high_f": 67.0,
+      "low_f": 46.0,
+      "samples": 1411,
       "status": "completed_day_sampled_extrema"
     }
   ],
