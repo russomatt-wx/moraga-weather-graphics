@@ -428,78 +428,37 @@
     var what = round ? round + ' rolls in ' : (main.thunder ? 'storms roll in ' : 'rain moves in ');
     var win = cause && cause !== 'post-frontal' ? arrivalWindow(afd, main.start.dayName) : '';
     if (win && /^this|^overnight|^early/.test(main.start.label)) win = win.replace(new RegExp(' ' + main.start.dayName + '$'), ' today');
-    var breakAfter = after && !after.wet ? '. ' + say([
-      'We get a breather ' + after.span,
-      'Skies catch a break ' + after.span,
-      'Enjoy the dry window ' + after.span + ' while it lasts',
-      'Things quiet down ' + after.span,
-      'Mother Nature hits pause ' + after.span + ' — perfect timing to clean the gutters',
-      'Sneak in a dog walk ' + after.span + ', when the clouds take five',
-      'The sun pokes back out ' + after.span + ', so get those errands done',
-    ], 3) : '';
+    var t2 = main.thunder || main.rain >= 0.75 || peak.gust >= 35 ? t : '';
     if (cause && cause !== 'post-frontal' && win) {
-      var front = cap(cause.replace(/^(a|an|the) /, ''));
       var lead = say([
-        cap(cause) + ' sweeps through ' + win + ', and rain follows ' + main.span + ' with ' + amt + windBit,
-        'Timing it out: ' + cause + ' arrives ' + win + ', with rain from ' + main.span + ' adding up to ' + amt + windBit,
-        'Keep an eye on the sky ' + win + ' as ' + cause + ' pushes through, with rain ' + main.span + ' adding up to ' + amt + windBit,
-        cap(what) + main.span + ' as ' + cause + ' sweeps through ' + win + ', bringing ' + amt + windBit,
-        'Mark your calendar: ' + cause + ' makes its grand entrance ' + win + ', and the rain sticks around ' + main.span + ' for ' + amt + windBit,
-        'Wipers on! ' + cap(cause) + ' barrels through ' + win + ', with rain ' + main.span + ' good for ' + amt + windBit,
-        'Our next visitor, ' + cause + ', shows up ' + win + ' and brings ' + amt + ' of rain ' + main.span + windBit,
-        'The rain clock starts ticking ' + win + ' when ' + cause + ' rolls in, with ' + amt + ' falling ' + main.span + windBit,
+        cap(cause) + ' sweeps through ' + win + ', with rain ' + main.span + ' adding up to ' + amt + windBit,
+        cap(cause) + ' arrives ' + win + ', bringing ' + amt + ' of rain ' + main.span + windBit,
       ], 1);
-      return pre + (pre ? lead.charAt(0).toLowerCase() + lead.slice(1) : lead) + (t ? ' — ' + t : '') + breakAfter;
+      return pre + (pre ? lead.charAt(0).toLowerCase() + lead.slice(1) : lead) + (t2 ? ' — ' + t2 : '');
     }
     var how = cause && cause !== 'post-frontal' ? ' as ' + cause + ' brings ' + amt + windBit : ' with ' + amt + windBit;
-    var body = pre + what + main.span + how + (t ? ' — ' + t : '') + breakAfter;
+    var body = pre + what + main.span + how + (t2 ? ' — ' + t2 : '');
     return cap(body);
   }
-  function farConcise(hz, daily, nowParts, afd) {
+  function farConcise(hz, daily, nowParts, afd, breakSpan) {
     if (!daily || !daily.time) return '';
     var i0 = dayIdx(daily, nowParts), big = hz.bigLater;
     var range = function (r) { return r.a === r.b ? dayName(daily, r.a, i0) : dayName(daily, r.a, i0) + ' into ' + weekday(daily.time[r.b]); };
-    // ~1 inch is a typical 10-day November total around Lamorinda and the Tri-Valley.
     var afdAll = afd ? afd.key.join(' ') + ' ' + afd.short + ' ' + afd.long : '';
+    // ~1 inch is a typical 10-day November total around Lamorinda and the Tri-Valley.
     var above = hz.total10 >= 1.5 || (hz.total10 >= 1 && /above (?:the )?(?:seasonal )?(?:average|normal)|pattern remains active/i.test(afdAll));
-    var soaked = /saturat|bankfull|flood/i.test(afdAll), ar = /atmospheric river/i.test(afdAll);
-    var total = !above ? '' : '. ' + say(ar ? [
-      'An atmospheric river is part of the mix, so rainfall will run well above normal for mid-November',
-      'With an atmospheric river feeding moisture in from the tropics, this week will run far wetter than normal',
-      'A firehose of Pacific moisture, an atmospheric river, is pointed our way, so rain totals will soar above normal',
-    ] : [
-      'The Pacific storm machine is cranked up, and rain totals will run well above normal this week',
-      'The jet stream is aimed right at Northern California, keeping us on the wet side of normal all week',
-      'Storm after storm is lining up offshore, so this week will run wetter than we typically see in mid-November',
-      'It\'s shaping up to be a soggy week, with rainfall running well ahead of the seasonal pace',
-      'An active storm track will keep the umbrellas busy, with rain totals running above average through the week',
-      'The Pacific conveyor belt is running full speed, delivering storm after storm straight to our doorstep',
-      'Consider this your official notice: rain boots are in season, and this week\'s totals will run well above normal',
-      'The jet stream has Northern California on speed dial, so expect a wetter-than-normal week',
-      'If you\'ve been waiting for the rainy season to really show up, it just RSVP\'d yes',
-    ], 2) + (soaked ? say([
-      '. With the ground already soaked, creeks and storm drains will rise faster with each round',
-      '. With soils already saturated, runoff will come quicker each time',
-      '. With saturated ground, watch for ponding, rising creeks and the odd mudslide on steep hillsides',
-      '. The hills are already soaked like a sponge, so expect creeks to run high and fast',
-    ], 4) : '');
     if (big) {
-      var label = big.total >= 2 ? 'a potent storm' : big.total >= 1 ? 'a stronger storm' : big.total >= 0.5 ? 'another solid soaking' : 'a few more showers';
-      var when = range(big), amt = amountWords(big.total);
-      var line = big.total >= 1 ? say([
-        'The bigger player arrives ' + when + ', with ' + amt + ' possible',
-        'Then comes the main event: ' + label + ' ' + when + ' that could deliver ' + amt,
-        'The heavyweight of the week follows ' + when + ', packing ' + amt,
-        'Next up, the models roll ' + label + ' through ' + when + ', with ' + amt + ' in the cards',
-        'But save your energy for ' + when + ': that\'s when the headliner takes the stage with ' + amt,
-        'And the big one? It\'s penciled in for ' + when + ', with ' + amt + ' — the kind of storm that fills rain gauges and makes ducks happy',
-        'Then the main course: ' + label + ' ' + when + ', dishing out ' + amt,
-        'Everything before it is just the opening act. The real show comes ' + when + ', with ' + amt + ' possible',
-      ], 5) : 'Then the models bring ' + label + ' ' + when + ' with ' + amt;
-      return line + (hz.frost ? ', plus some frosty mornings' : '') + total;
+      var label = big.total >= 2 ? 'a potent storm' : big.total >= 1 ? 'a stronger storm' : big.total >= 0.5 ? 'another round of rain' : 'a few more showers';
+      var pre = breakSpan ? 'After a break ' + breakSpan + ', ' : 'Then ';
+      var pattern = !above ? '' : /atmospheric river/i.test(afdAll) ? ', with an atmospheric river in the mix' : say([
+        ', as an active storm track keeps the week wetter than normal',
+        ' as the Pacific storm train stays on schedule',
+        ', capping a week of above-normal rain',
+      ], 2);
+      return pre + label + ' moves in ' + range(big) + ' with ' + amountWords(big.total) + pattern;
     }
     var n = Math.min(daily.time.length, i0 + 10);
-    return 'Beyond that, the models keep things mostly dry through ' + dayName(daily, n - 1, i0) + (hz.frost ? ', with frosty mornings in the mix' : '');
+    return 'Beyond that, the models keep things mostly dry through ' + dayName(daily, n - 1, i0);
   }
   var NUGGETS = [
     [/landslide|mudslide|debris flow/i, 'Forecasters are also keeping an eye on soggy hillsides for mudslides'],
@@ -508,26 +467,18 @@
     [/red flag|critical fire weather/i, 'Forecasters are flagging critical fire weather, so be careful with anything that sparks'],
     [/snowpack|sierra/i, 'Good news for the Sierra, too: the snowpack is getting a boost'],
     [/fire weather threat|reducing our fire/i, 'Good news, too: the rain is knocking down the fire threat'],
-    [/freez|frost|cold weather (?:products|advisory)/i, 'Forecasters also mention frost in the colder valleys, so cover tender plants'],
+    [/freez|frost|cold weather (?:products|advisory)/i, 'Frost is possible in the colder valleys, so cover tender plants'],
     [/heat advisory|excessive heat|record (?:high|heat)/i, 'Forecasters say the heat could flirt with records'],
     [/above (?:the )?(?:seasonal )?(?:average|normal)|pattern remains active/i, 'Forecasters expect the active pattern to keep rain totals above normal'],
   ];
-  function nwsNugget(afd) {
+  function nwsNugget(afd, wetWeek) {
     if (!afd) return '';
     var text = afd.key.join(' . ') + ' ' + afd.short + ' ' + afd.long;
+    if (wetWeek && /saturat|bankfull/i.test(text)) return say(['With soils already saturated, creeks will rise quickly with each storm', 'Soils are already soaked, so expect quick runoff and rising creeks'], 4);
     for (var i = 0; i < NUGGETS.length; i++) if (NUGGETS[i][0].test(text)) {
       var n = NUGGETS[i][1];
-      if (/frost/.test(n)) {
-        var w = whenFor(afd, /frost|freez|cold weather/i), at = w ? ' ' + w : '';
-        n = say([
-          'Clearing skies between storms could bring frost to the colder valleys' + at + ', so cover tender plants',
-          'Bundle up' + (w ? ' ' + w : ' on the clear mornings') + ': forecasters say frost is possible in the colder valleys, so protect sensitive plants',
-          'Forecasters also flag frost in the colder valleys' + at + ', so bring in or cover tender plants',
-          'Jack Frost may sneak into the colder valleys' + at + ', so tuck in the tender plants',
-          'Between storms, it gets nippy: frost is possible in the colder valleys' + at + ', so give your succulents a blanket',
-          'Scrape-the-windshield alert' + at + ': frost is possible in the colder valleys',
-        ], 6);
-      }
+      if (/^Frost/.test(n)) { var w = whenFor(afd, /frost|freez|cold weather/i); if (w) n = 'Frost is possible in the colder valleys ' + w + ', so cover tender plants'; }
+      if (/above normal/.test(n)) return '';
       return n;
     }
     return '';
@@ -548,9 +499,9 @@
 
   // Friendly opener for the local time of day.
   function greeting(hour, place) {
-    if (hour >= 5 && hour < 12) return say(['Good morning, ' + place + '!', 'Rise and shine, ' + place + '!', 'Morning, ' + place + '! Grab your coffee.'], 8);
-    if (hour >= 12 && hour < 17) return say(['Good afternoon, ' + place + '!', 'Hey there, ' + place + '!', 'Afternoon, ' + place + '! Here\'s what\'s brewing.'], 8);
-    if (hour >= 17 && hour < 22) return say(['Good evening, ' + place + '!', 'Evening, ' + place + '! Here\'s the scoop.', 'Hi, ' + place + '! Let\'s look ahead.'], 8);
+    if (hour >= 5 && hour < 12) return 'Good morning, ' + place + '!';
+    if (hour >= 12 && hour < 17) return 'Good afternoon, ' + place + '!';
+    if (hour >= 17 && hour < 22) return 'Good evening, ' + place + '!';
     return 'Hello, ' + place + ' night owls!';
   }
 
@@ -569,10 +520,12 @@
     var nearTerm = st.sentences.concat([tempSentence(opts.daily, nowParts, st.closing)]).filter(Boolean).map(dot);
     var farTerm = [hz.text, nwsInsight(afd, /mudslide|frost/.test(hz.text) ? /frost/ : null) || nwsHighlight(afd)].filter(Boolean).map(dot);
     var issued = opts.issued ? new Date(opts.issued).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', minute: '2-digit' }) : '';
-    var near = nearConcise(rs, afd, place), far = farConcise(hz, opts.daily, nowParts, afd);
+    var near = nearConcise(rs, afd, place);
+    var wetRuns = rs.filter(function (r) { return r.wet; }), mainRun = wetRuns.reduce(function (a, r) { return !a || r.rain > a.rain ? r : a; }, null);
+    var afterRun = mainRun && !mainRun.start.isNow ? rs[rs.indexOf(mainRun) + 1] : null;
+    var far = farConcise(hz, opts.daily, nowParts, afd, afterRun && !afterRun.wet ? afterRun.span : '');
     if (/^Beyond that/.test(far) && /dry weather through/.test(near) && far.slice(-12) === near.slice(-12)) far = '';
-    var nug = nwsNugget(afd);
-    if (/Above-average rainfall/.test(far) && /above normal/.test(nug)) nug = '';
+    var nug = nwsNugget(afd, !!hz.bigLater);
     var para = [near, tempNote(opts.daily, nowParts), far, nug]
       .filter(Boolean).map(dot);
     return {
