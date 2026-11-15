@@ -422,10 +422,23 @@
     var what = round ? round + ' rolls in ' : (main.thunder ? 'storms roll in ' : 'rain moves in ');
     var win = cause && cause !== 'post-frontal' ? arrivalWindow(afd, main.start.dayName) : '';
     if (win && /^this|^overnight|^early/.test(main.start.label)) win = win.replace(new RegExp(' ' + main.start.dayName + '$'), ' today');
-    var how = cause && cause !== 'post-frontal'
-      ? (win ? ' as ' + cause + ' sweeps through ' + win + ', bringing ' + amt + windBit : ' as ' + cause + ' brings ' + amt + windBit)
-      : ' with ' + amt + windBit;
-    var breakAfter = after && !after.wet ? '. Look for a break ' + after.span : '';
+    var breakAfter = after && !after.wet ? '. ' + say([
+      'We get a breather ' + after.span,
+      'Skies catch a break ' + after.span,
+      'Enjoy the dry window ' + after.span + ' while it lasts',
+      'Things quiet down ' + after.span,
+    ], 3) : '';
+    if (cause && cause !== 'post-frontal' && win) {
+      var front = cap(cause.replace(/^(a|an|the) /, ''));
+      var lead = say([
+        cap(cause) + ' sweeps through ' + win + ', and rain follows ' + main.span + ' with ' + amt + windBit,
+        'Timing it out: ' + cause + ' arrives ' + win + ', with rain from ' + main.span + ' adding up to ' + amt + windBit,
+        'Keep an eye on the sky ' + win + ' as ' + cause + ' pushes through, with rain ' + main.span + ' adding up to ' + amt + windBit,
+        cap(what) + main.span + ' as ' + cause + ' sweeps through ' + win + ', bringing ' + amt + windBit,
+      ], 1);
+      return pre + (pre ? lead.charAt(0).toLowerCase() + lead.slice(1) : lead) + (t ? ' — ' + t : '') + breakAfter;
+    }
+    var how = cause && cause !== 'post-frontal' ? ' as ' + cause + ' brings ' + amt + windBit : ' with ' + amt + windBit;
     var body = pre + what + main.span + how + (t ? ' — ' + t : '') + breakAfter;
     return cap(body);
   }
@@ -434,11 +447,33 @@
     var i0 = dayIdx(daily, nowParts), big = hz.bigLater;
     var range = function (r) { return r.a === r.b ? dayName(daily, r.a, i0) : dayName(daily, r.a, i0) + ' into ' + weekday(daily.time[r.b]); };
     // ~1 inch is a typical 10-day November total around Lamorinda and the Tri-Valley.
-    var above = hz.total10 >= 1.5 || (hz.total10 >= 1 && afd && /above (?:the )?(?:seasonal )?(?:average|normal)|pattern remains active/i.test(afd.long));
-    var total = above ? '. Above-average rainfall is expected through the week as an active storm track barrels into Northern California' : '';
+    var afdAll = afd ? afd.key.join(' ') + ' ' + afd.short + ' ' + afd.long : '';
+    var above = hz.total10 >= 1.5 || (hz.total10 >= 1 && /above (?:the )?(?:seasonal )?(?:average|normal)|pattern remains active/i.test(afdAll));
+    var soaked = /saturat|bankfull|flood/i.test(afdAll), ar = /atmospheric river/i.test(afdAll);
+    var total = !above ? '' : '. ' + say(ar ? [
+      'An atmospheric river is part of the mix, so rainfall will run well above normal for mid-November',
+      'With an atmospheric river feeding moisture in from the tropics, this week will run far wetter than normal',
+    ] : [
+      'The Pacific storm machine is cranked up, and rain totals will run well above normal this week',
+      'The jet stream is aimed right at Northern California, keeping us on the wet side of normal all week',
+      'Storm after storm is lining up offshore, so this week will run wetter than we typically see in mid-November',
+      'It\'s shaping up to be a soggy week, with rainfall running well ahead of the seasonal pace',
+      'An active storm track will keep the umbrellas busy, with rain totals running above average through the week',
+    ], 2) + (soaked ? say([
+      '. With the ground already soaked, creeks and storm drains will rise faster with each round',
+      '. With soils already saturated, runoff will come quicker each time',
+      '. With saturated ground, watch for ponding, rising creeks and the odd mudslide on steep hillsides',
+    ], 4) : '');
     if (big) {
       var label = big.total >= 2 ? 'a potent storm' : big.total >= 1 ? 'a stronger storm' : big.total >= 0.5 ? 'another solid soaking' : 'a few more showers';
-      return 'Then the models line up ' + label + ' for ' + range(big) + ' with ' + amountWords(big.total) + (hz.frost ? ', plus some frosty mornings' : '') + total;
+      var when = range(big), amt = amountWords(big.total);
+      var line = big.total >= 1 ? say([
+        'The bigger player arrives ' + when + ', with ' + amt + ' possible',
+        'Then comes the main event: ' + label + ' ' + when + ' that could deliver ' + amt,
+        'The heavyweight of the week follows ' + when + ', packing ' + amt,
+        'Next up, the models bring ' + label + ' in ' + when + ', with ' + amt + ' in the cards',
+      ], 5) : 'Then the models bring ' + label + ' ' + when + ' with ' + amt;
+      return line + (hz.frost ? ', plus some frosty mornings' : '') + total;
     }
     var n = Math.min(daily.time.length, i0 + 10);
     return 'Beyond that, the models keep things mostly dry through ' + dayName(daily, n - 1, i0) + (hz.frost ? ', with frosty mornings in the mix' : '');
@@ -459,7 +494,14 @@
     var text = afd.key.join(' . ') + ' ' + afd.short + ' ' + afd.long;
     for (var i = 0; i < NUGGETS.length; i++) if (NUGGETS[i][0].test(text)) {
       var n = NUGGETS[i][1];
-      if (/frost/.test(n)) { var w = whenFor(afd, /frost|freez|cold weather/i); if (w) n = n.replace('in the colder valleys', 'in the colder valleys ' + w); }
+      if (/frost/.test(n)) {
+        var w = whenFor(afd, /frost|freez|cold weather/i), at = w ? ' ' + w : '';
+        n = say([
+          'Clearing skies between storms could bring frost to the colder valleys' + at + ', so cover tender plants',
+          'Bundle up' + (w ? ' ' + w : ' on the clear mornings') + ': forecasters say frost is possible in the colder valleys, so protect sensitive plants',
+          'Forecasters also flag frost in the colder valleys' + at + ', so bring in or cover tender plants',
+        ], 6);
+      }
       return n;
     }
     return '';
@@ -470,10 +512,13 @@
     return /freeze|frost|hot/i.test(t) ? t : '';
   }
   // Rotate headline wording by date so it stays fresh day to day.
-  function pick(list, nowParts) {
+  function pick(list, nowParts, salt) {
     var d = Number(nowParts.date.replace(/-/g, '')) || 0;
-    return list[d % list.length];
+    return list[(d + (salt || 0)) % list.length];
   }
+  // Day-of-week + place keyed variety for the paragraph's phrasing (stable through the day).
+  var VOICE = { now: null };
+  function say(list, salt) { return pick(list, VOICE.now || { date: '2000-01-01' }, salt || 0); }
 
   // Friendly opener for the local time of day.
   function greeting(hour, place) {
@@ -487,6 +532,7 @@
   function build(opts) {
     var now = opts.now || new Date();
     var nowParts = localNowParts(now);
+    VOICE.now = { date: nowParts.date.slice(0, 8) + String((Number(nowParts.date.slice(8)) + String(opts.place || '').length) % 100).padStart(2, '0') };
     var afd = opts.afdText ? parseAfd(opts.afdText) : null;
     if (afd && !afd.short && !afd.long && !afd.key.length) afd = null;
     var rs = runs(blocks(opts.hourly, nowParts));
