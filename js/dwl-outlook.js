@@ -369,33 +369,24 @@
     return 'The National Weather Service notes that ' + list;
   }
 
-  // Headline in a forecaster's voice: the single most interesting thing about the next 10 days.
+  // Headline: the main story in plain words, with days (e.g. "Rain Sunday, stronger storm Wednesday").
   function headline(rs, hz, daily, nowParts, region, afd) {
-    var wet72 = rs.filter(function (r) { return r.wet; }).reduce(function (s, r) { return s + r.rain; }, 0);
+    var wet = rs.filter(function (r) { return r.wet; });
+    var main = wet.reduce(function (a, r) { return !a || r.rain > a.rain ? r : a; }, null);
     var thunder = rs.some(function (r) { return r.thunder; });
     var i0 = daily && daily.time ? dayIdx(daily, nowParts) : 0, n = daily && daily.time ? Math.min(daily.time.length, i0 + 10) : 0;
-    var hiMax = -99, events = 0, inRain = false;
-    for (var i = i0; i < n; i++) {
-      hiMax = Math.max(hiMax, Number(daily.temperature_2m_max[i]) || -99);
-      var wet = Number(daily.precipitation_probability_max && daily.precipitation_probability_max[i]) >= 50 && Number(daily.precipitation_sum && daily.precipitation_sum[i]) >= 0.15;
-      if (wet && !inRain) events++;
-      inRain = wet;
-    }
-    var nws = afd ? afd.key.join(' ') + ' ' + afd.short + ' ' + afd.long : '';
-    if (thunder) return pick(['Thunderstorms could rumble through ' + region, 'Thunder is in the forecast'], nowParts);
-    if (/atmospheric river/i.test(nws) && hz.total10 >= 1) return 'An atmospheric river is taking aim at the Bay Area';
-    if (events >= 3) return pick(['The Pacific storm train is here', 'All aboard the Pacific storm train', 'The storm door is wide open'], nowParts);
-    if (hz.bigLater && hz.bigLater.total >= 1 && hz.bigLater.total > wet72) return pick(['The biggest storm is still to come', 'Save your umbrella: the big one is coming'], nowParts);
-    if (events === 2) return 'Two storms are lined up for ' + region;
-    if (hz.total10 >= 2) return 'A soggy stretch is setting up for ' + region;
-    if (wet72 >= 0.5) return 'A wet few days ahead for ' + region;
-    if (hiMax >= 100) return 'A heat wave is on the way';
-    if (hiMax >= 95) return 'Heat is building in ' + region;
-    if (/red flag|critical fire weather|offshore wind/i.test(nws)) return 'Fire weather is back on the radar';
-    if (hz.frost) return 'Jack Frost is knocking';
-    if (/marine layer|low clouds and fog|stratus/i.test(nws) && hz.total10 < 0.05) return 'The marine layer is in charge';
-    if (hz.total10 < 0.05) return pick(['High pressure takes charge: dry days ahead', 'Sunglasses weather is here', 'A dry stretch settles in'], nowParts);
-    return 'A quiet stretch of weather for ' + region;
+    var hiMax = -99; for (var i = i0; i < n; i++) hiMax = Math.max(hiMax, Number(daily.temperature_2m_max[i]) || -99);
+    var nearDay = main && main.rain >= 0.05 ? (main.start.isNow ? 'Rain continues' : 'Rain ' + (/^this|^overnight|^early/.test(main.start.label) ? 'today' : main.start.dayName)) : '';
+    var big = hz.bigLater, bigDay = big ? weekday(daily.time[big.a]) : '';
+    if (thunder && nearDay) return nearDay + ' with a chance of thunderstorms';
+    if (nearDay && big && big.total >= 1) return nearDay + ', stronger storm ' + bigDay;
+    if (nearDay && big) return nearDay + ', more rain ' + bigDay;
+    if (nearDay) return nearDay + ', then drying out';
+    if (big) return 'Dry for now, rain returns ' + bigDay;
+    if (hiMax >= 95) return 'Hot days ahead, highs up to ' + Math.round(hiMax) + '°';
+    if (hz.frost) return 'Dry with cold, frosty mornings';
+    if (hz.total10 < 0.05) return 'Dry weather continues';
+    return 'Mostly dry with a few showers';
   }
 
   /* ---------- Concise one-paragraph version (what the page shows) ---------- */
@@ -448,13 +439,9 @@
     // ~1 inch is a typical 10-day November total around Lamorinda and the Tri-Valley.
     var above = hz.total10 >= 1.5 || (hz.total10 >= 1 && /above (?:the )?(?:seasonal )?(?:average|normal)|pattern remains active/i.test(afdAll));
     if (big) {
-      var label = big.total >= 2 ? 'a potent storm' : big.total >= 1 ? 'a stronger storm' : big.total >= 0.5 ? 'another round of rain' : 'a few more showers';
+      var label = big.total >= 1 ? 'a stronger storm' : big.total >= 0.5 ? 'another round of rain' : 'a few more showers';
       var pre = breakSpan ? 'After a break ' + breakSpan + ', ' : 'Then ';
-      var pattern = !above ? '' : /atmospheric river/i.test(afdAll) ? ', with an atmospheric river in the mix' : say([
-        ', as an active storm track keeps the week wetter than normal',
-        ' as the Pacific storm train stays on schedule',
-        ', capping a week of above-normal rain',
-      ], 2);
+      var pattern = !above ? '' : /atmospheric river/i.test(afdAll) ? ', fueled by an atmospheric river' : '. Rainfall for the week will run well above normal';
       return pre + label + ' moves in ' + range(big) + ' with ' + amountWords(big.total) + pattern;
     }
     var n = Math.min(daily.time.length, i0 + 10);
@@ -474,7 +461,7 @@
   function nwsNugget(afd, wetWeek) {
     if (!afd) return '';
     var text = afd.key.join(' . ') + ' ' + afd.short + ' ' + afd.long;
-    if (wetWeek && /saturat|bankfull/i.test(text)) return say(['With soils already saturated, creeks will rise quickly with each storm', 'Soils are already soaked, so expect quick runoff and rising creeks'], 4);
+    if (wetWeek && /saturat|bankfull/i.test(text)) return say(['With soils already saturated, creeks and streams will rise quickly', 'With soils already saturated, creeks and streams will rise quickly'], 4);
     for (var i = 0; i < NUGGETS.length; i++) if (NUGGETS[i][0].test(text)) {
       var n = NUGGETS[i][1];
       if (/^Frost/.test(n)) { var w = whenFor(afd, /frost|freez|cold weather/i); if (w) n = 'Frost is possible in the colder valleys ' + w + ', so cover tender plants'; }
