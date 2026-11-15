@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-15T07:13:20.247905+00:00",
+  "generated_utc": "2026-11-15T16:36:32.587495+00:00",
   "station": "KCAMORAG71",
   "status": "verified",
   "method": "Earliest complete pre-day Open-Meteo hourly precipitation snapshot, summed in mm and converted to inches; complete finalized KCAMORAG71 Xweather daily summaries only; 0.01 inch wet threshold.",
@@ -11,102 +11,102 @@
           "model": "gfs",
           "days": 1,
           "wet_days": 1,
-          "mae_in": 1.35,
-          "wet_day_mae_in": 1.35,
-          "bias_in": -1.35,
-          "hits": 0,
-          "misses": 1,
+          "mae_in": 0.002,
+          "wet_day_mae_in": 0.002,
+          "bias_in": 0.002,
+          "hits": 1,
+          "misses": 0,
           "false_alarms": 0
         },
         {
           "model": "ecmwf",
           "days": 1,
           "wet_days": 1,
-          "mae_in": 1.35,
-          "wet_day_mae_in": 1.35,
-          "bias_in": -1.35,
-          "hits": 0,
-          "misses": 1,
+          "mae_in": 0.018,
+          "wet_day_mae_in": 0.018,
+          "bias_in": 0.018,
+          "hits": 1,
+          "misses": 0,
           "false_alarms": 0
         }
       ]
     },
     "7d": {
-      "days": 6,
+      "days": 7,
       "models": [
         {
           "model": "gfs",
-          "days": 6,
-          "wet_days": 2,
-          "mae_in": 0.227,
-          "wet_day_mae_in": 0.68,
-          "bias_in": -0.227,
-          "hits": 0,
+          "days": 7,
+          "wet_days": 3,
+          "mae_in": 0.195,
+          "wet_day_mae_in": 0.454,
+          "bias_in": -0.194,
+          "hits": 1,
           "misses": 2,
           "false_alarms": 0
         },
         {
           "model": "ecmwf",
-          "days": 6,
-          "wet_days": 2,
-          "mae_in": 0.227,
-          "wet_day_mae_in": 0.68,
-          "bias_in": -0.227,
-          "hits": 0,
+          "days": 7,
+          "wet_days": 3,
+          "mae_in": 0.197,
+          "wet_day_mae_in": 0.459,
+          "bias_in": -0.192,
+          "hits": 1,
           "misses": 2,
           "false_alarms": 0
         }
       ]
     },
     "30d": {
-      "days": 6,
+      "days": 7,
       "models": [
         {
           "model": "gfs",
-          "days": 6,
-          "wet_days": 2,
-          "mae_in": 0.227,
-          "wet_day_mae_in": 0.68,
-          "bias_in": -0.227,
-          "hits": 0,
+          "days": 7,
+          "wet_days": 3,
+          "mae_in": 0.195,
+          "wet_day_mae_in": 0.454,
+          "bias_in": -0.194,
+          "hits": 1,
           "misses": 2,
           "false_alarms": 0
         },
         {
           "model": "ecmwf",
-          "days": 6,
-          "wet_days": 2,
-          "mae_in": 0.227,
-          "wet_day_mae_in": 0.68,
-          "bias_in": -0.227,
-          "hits": 0,
+          "days": 7,
+          "wet_days": 3,
+          "mae_in": 0.197,
+          "wet_day_mae_in": 0.459,
+          "bias_in": -0.192,
+          "hits": 1,
           "misses": 2,
           "false_alarms": 0
         }
       ]
     },
     "90d": {
-      "days": 6,
+      "days": 7,
       "models": [
         {
           "model": "gfs",
-          "days": 6,
-          "wet_days": 2,
-          "mae_in": 0.227,
-          "wet_day_mae_in": 0.68,
-          "bias_in": -0.227,
-          "hits": 0,
+          "days": 7,
+          "wet_days": 3,
+          "mae_in": 0.195,
+          "wet_day_mae_in": 0.454,
+          "bias_in": -0.194,
+          "hits": 1,
           "misses": 2,
           "false_alarms": 0
         },
         {
           "model": "ecmwf",
-          "days": 6,
-          "wet_days": 2,
-          "mae_in": 0.227,
-          "wet_day_mae_in": 0.68,
-          "bias_in": -0.227,
-          "hits": 0,
+          "days": 7,
+          "wet_days": 3,
+          "mae_in": 0.197,
+          "wet_day_mae_in": 0.459,
+          "bias_in": -0.192,
+          "hits": 1,
           "misses": 2,
           "false_alarms": 0
         }
