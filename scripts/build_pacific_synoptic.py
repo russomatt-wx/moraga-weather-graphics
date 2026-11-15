@@ -83,7 +83,7 @@ lon_f=np.linspace(lons[0],lons[-1],(len(lons)-1)*FINE+1);lat_f=np.linspace(lats[
 lon2f,lat2f=np.meshgrid(lon_f,lat_f)
 pressure_f=_zoom(pressure,((lat_f.size)/pressure.shape[0],(lon_f.size)/pressure.shape[1]),order=3,grid_mode=False)
 thickness_f=_zoom(thickness,((lat_f.size)/thickness.shape[0],(lon_f.size)/thickness.shape[1]),order=3,grid_mode=False)
-fig=plt.figure(figsize=(11,10),facecolor="#071b2c")
+fig=plt.figure(figsize=(11,9.1),facecolor="#071b2c")  # height fits the cropped map, no empty band
 ax=plt.axes(projection=ccrs.PlateCarree())
 # Slightly cropped from the full model grid (175W-105W, 20N-65N) so the map reads larger on phones.
 ax.set_extent([-169,-108,22,62],crs=ccrs.PlateCarree())
@@ -162,19 +162,19 @@ for kind,iy,ix in chosen:
             transform=ccrs.PlateCarree(),zorder=10)
 ax.plot(-122.13,37.83,"o",ms=5,color="#222222",transform=ccrs.PlateCarree(),zorder=8)
 ax.text(-121.5,38.4,"MORAGA",color="#222222",fontsize=11,fontweight="bold",transform=ccrs.PlateCarree())
-fig.text(.06,.96,"PACIFIC SYNOPTIC • SURFACE + 1000–500 mb THICKNESS",
+fig.text(.06,.956,"PACIFIC SYNOPTIC • SURFACE + 1000–500 mb THICKNESS",
          color="#f2f8ff",fontsize=18,weight="bold")
-fig.text(.06,.924,"GFS sea-level pressure (gray, 8 hPa)  •  1000–500 mb thickness (shaded + dashed, dam)  •  540 dam (blue solid)",
+fig.text(.06,.916,"GFS sea-level pressure (gray, 8 hPa)  •  1000–500 mb thickness (shaded + dashed, dam)  •  540 dam (blue solid)",
          color="#9fb6c8",fontsize=10)
-fig.text(.06,.025,f"GFS valid {valid:%d %b %Y %HZ}  |  Source: Open-Meteo / GFS",
+fig.text(.06,.027,f"GFS valid {valid:%d %b %Y %HZ}  |  Source: Open-Meteo / GFS",
          color="#9fb6c8",fontsize=12)
-fig.subplots_adjust(left=.04,right=.98,bottom=.13,top=.895)
-bar_ax=fig.add_axes([.095,.085,.77,.018])
+fig.subplots_adjust(left=.04,right=.98,bottom=.143,top=.885)
+bar_ax=fig.add_axes([.095,.093,.77,.0198])
 sm=ScalarMappable(norm=norm,cmap=cmap)
 cb=fig.colorbar(sm,cax=bar_ax,orientation="horizontal",ticks=np.arange(480,595,6))
 cb.ax.tick_params(labelsize=10,colors="#f2f8ff",pad=4)
 cb.outline.set_edgecolor("#9fb6c8")
-fig.text(.875,.086,"dam",fontsize=10,color="#f2f8ff")
+fig.text(.875,.095,"dam",fontsize=10,color="#f2f8ff")
 fig.savefig(OUT,dpi=250,facecolor="#071b2c")  # ~2750 px wide: crisp when zoomed on phones
 META.write_text(json.dumps({"gfs_valid_utc":valid.isoformat(),
  "fields":["sea-level pressure","1000-500 mb thickness"],"fronts":False,
