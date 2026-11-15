@@ -450,4 +450,6 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
   }
   main .card > .chart-viewport, main .card > a > .chart-viewport, main .card > img, main .card > a > img { border-radius: 8px; }
   #pattern .grid { margin-left: 0; margin-right: 0; }
+  /* Collapsible Pacific groups add their own padding; drop it so their cards match the others. */
+  main .pacific-group-grid { padding-left: 0 !important; padding-right: 0 !important; }
 }
