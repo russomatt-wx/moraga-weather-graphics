@@ -97,7 +97,7 @@
       '<div class="dwl-day-when">' + (o.today ? '<span class="dwl-pill">Today</span>' : '') +
         '<strong>' + esc(o.day) + '</strong><span>' + esc(o.date) + '</span></div>' +
       '<div class="dwl-day-hi" aria-label="High">' + esc(o.highText) + '</div>' +
-      '<div class="dwl-day-sky">' + icon(o.iconCode) +
+      '<div class="dwl-day-sky">' + icon(o.iconCode, '', o.night) +
         '<div class="dwl-day-cond">' + esc(String(o.condition).replace(/^slight chance of (rain|showers)$/i, 'Slight Chance')) + '</div>' + rainLine + '</div>' +
       '<div class="dwl-day-lo" aria-label="Low">' + esc(o.lowText) + '</div>' +
       (o.extra || '') +
@@ -226,7 +226,7 @@
   function laHour() { return Number(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour: '2-digit', hourCycle: 'h23' }).format(new Date())); }
   function restOfToday(hc, date) {
     var now = laHour();
-    if (!hc || now < 6 || now > 20) return null;
+    if (!hc || now < 6) return null; // before 6 AM the whole-day forecast is still the right story
     var models = [];
     Object.keys(hc).forEach(function (name) {
       var sr = hc[name]; if (!sr || !sr.time) return;
@@ -238,14 +238,15 @@
         if (Number.isFinite(v)) { rain += Math.max(0, v); hours++; per[h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening'] += Math.max(0, v); }
         if (Number.isFinite(c)) cloud.push(c);
       });
-      if (hours >= Math.max(3, (24 - now) * 0.75)) models.push({ rain: rain, per: per, cloud: cloud.length ? cloud.reduce(function (a, b) { return a + b; }, 0) / cloud.length : null });
+      if (hours >= Math.max(1, Math.floor((24 - now) * 0.75))) models.push({ rain: rain, per: per, cloud: cloud.length ? cloud.reduce(function (a, b) { return a + b; }, 0) / cloud.length : null });
     });
     if (!models.length) return null;
     var avg = function (f) { var v = models.map(f).filter(function (x) { return x !== null; }); return v.length ? v.reduce(function (a, b) { return a + b; }, 0) / v.length : null; };
     var per = { overnight: 0, morning: avg(function (m) { return m.per.morning; }), afternoon: avg(function (m) { return m.per.afternoon; }), evening: avg(function (m) { return m.per.evening; }) };
     return {
-      chance: Math.round(100 * models.filter(function (m) { return m.rain >= 0.25; }).length / models.length / 10) * 10,
-      amount: avg(function (m) { return m.rain; }) / 25.4,
+      chance: Math.round(100 * models.filter(function (m) { return m.rain >= 0.01; }).length / models.length / 10) * 10,
+      amount: avg(function (m) { return m.rain; }),
+      night: now >= 18,
       cloud: avg(function (m) { return m.cloud; }),
       periods: per
     };
@@ -258,7 +259,8 @@
       var c = r.cloud === null ? 50 : r.cloud;
       o.pop = ''; o.amount = '';
       o.iconCode = c < 30 ? 1 : c < 70 ? 2 : 3;
-      o.condition = c < 30 ? 'Mostly sunny' : c < 70 ? 'Partly cloudy' : 'Cloudy';
+      o.night = r.night;
+      o.condition = r.night ? (c < 30 ? 'Clear' : c < 70 ? 'Partly cloudy' : 'Cloudy') : (c < 30 ? 'Mostly sunny' : c < 70 ? 'Partly cloudy' : 'Cloudy');
     } else {
       o.pop = Math.max(20, r.chance) + '%';
       o.amount = r.amount < 0.025 ? '<0.05″' : (Math.round(r.amount / 0.05) * 0.05).toFixed(2) + '″';
