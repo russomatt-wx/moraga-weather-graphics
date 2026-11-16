@@ -1,0 +1,48 @@
+name: Town forecast verification
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/town_verification.py'
+      - '.github/workflows/town_verification.yml'
+  schedule:
+    # Shortly after midnight Pacific (both PST and PDT), when yesterday's station day is complete.
+    - cron: '35 9 * * *'
+    # Midday pass picks up the morning forecast snapshot.
+    - cron: '35 21 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: town-verification
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # Past forecast snapshots come from git history; blobs are fetched only as needed.
+          fetch-depth: 0
+          filter: blob:none
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python scripts/town_verification.py
+      - name: Publish verification
+        run: |
+          mkdir -p /tmp/verif && cp verification/*.json /tmp/verif/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p verification && cp /tmp/verif/*.json verification/
+            git add verification/*.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "Update town forecast verification"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1
