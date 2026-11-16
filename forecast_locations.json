@@ -14,18 +14,18 @@
     "lafayette": {
       "latitude": 37.89,
       "longitude": -122.115,
-      "display_name": "Lafayette — Reliez Valley",
+      "display_name": "Lafayette \u2014 Reliez Valley",
       "forecast_file": "lafayette_forecast_10day.json",
-      "calibration_station": null,
-      "status": "collector_pending"
+      "calibration_station": "KCAWALNU6",
+      "status": "operational"
     },
     "danville": {
       "latitude": 37.813,
       "longitude": -121.974,
-      "display_name": "Danville — Camino Tassajara",
+      "display_name": "Danville \u2014 Camino Tassajara",
       "forecast_file": "danville_forecast_10day.json",
-      "calibration_station": null,
-      "status": "collector_pending"
+      "calibration_station": "KCADANVI207",
+      "status": "operational"
     }
   },
   "forecast_policy": {
@@ -47,7 +47,7 @@
       "days_8_10": 0.65
     },
     "rain_probability_method": "EPS/GEFS member threshold probability",
-    "calibration": "independent per location; no Moraga correction transferred",
+    "calibration": "independent per location: Moraga vs KCAMORAG71; other towns vs their own WU station (verification/{town}_model_daily_verification.json); no Moraga correction transferred",
     "staleness_limit_hours": 18,
     "require_explicit_source_status": true
   }

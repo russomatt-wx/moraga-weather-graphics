@@ -144,7 +144,40 @@
   card.style.setProperty('--public-current-temperature',String(temperature));
  }
  /* Same model blend for every path (live Open-Meteo or published-feed fallback). */
- function feedBlend(f,day,i,field,skillRows,isMoraga){
+ // Per-town verification (verification/{town}_model_daily_verification.json): each town is scored
+ // against its own Weather Underground station, never against Moraga.
+ const TOWN_KEY={Lafayette:'lafayette',Danville:'danville',Greenbrook:'greenbrook'};
+ const townSkillCache={};
+ async function loadTownSkill(chosen){
+  const k=TOWN_KEY[chosen];if(!k)return null;
+  const c=townSkillCache[k];if(c&&Date.now()-c.at<30*60000)return c.data;
+  try{const r=await fetch('verification/'+k+'_model_daily_verification.json?t='+Math.floor(Date.now()/600000));if(!r.ok)throw Error(r.status);
+   const j=await r.json();townSkillCache[k]={at:Date.now(),data:j};return j;}catch(e){return c?.data||null;}
+ }
+ // Town blend: equal weights nudged (up to 35%) toward the models that verify best at that station,
+ // plus each model's bias correction, only where walk-forward testing proved it helps; fades with lead.
+ function townBlend(entries,i,phase,skill){
+  const names=entries.map(([n])=>n),scores=skill?.model_scores||{},cal=skill?.calibration||{};
+  const maeKey=phase==='high'?'high_mae_f':'low_mae_f',biasKey=phase==='high'?'high_bias_f':'low_bias_f';
+  const weights=Object.fromEntries(names.map(n=>[n,1/names.length]));
+  const scored=names.filter(n=>Number.isFinite(scores[n.toLowerCase()]?.[maeKey])&&scores[n.toLowerCase()].verified_days>=10);
+  if(scored.length>=2){
+   const minDays=Math.min(...scored.map(n=>scores[n.toLowerCase()].verified_days));
+   const share=Math.min(.35,.35*Math.max(0,(minDays-9)/5));
+   const raw=Object.fromEntries(scored.map(n=>[n,1/Math.max(.75,scores[n.toLowerCase()][maeKey])]));
+   const tot=Object.values(raw).reduce((a,b)=>a+b,0);
+   for(const n of names)weights[n]=(1-share)*weights[n]+share*(raw[n]===undefined?1/names.length:raw[n]/tot);
+  }
+  const corrections={};
+  for(const n of names){
+   const s=scores[n.toLowerCase()],c=cal[n.toLowerCase()]?.[phase];
+   corrections[n]=s&&c&&c.holdout_days>=8&&Number(c.factor)>0&&Number.isFinite(s[biasKey])?-s[biasKey]*Number(c.factor)*Math.max(0,1-i/10):0;
+  }
+  const good=entries.filter(([,v])=>Number.isFinite(v));
+  const tot=good.reduce((a,[n])=>a+weights[n],0);
+  return tot?good.reduce((a,[n,v])=>a+(v+corrections[n])*weights[n],0)/tot:null;
+ }
+ function feedBlend(f,day,i,field,skillRows,isMoraga,townSkill){
   const phase=field==='high_f'?'high':'low';
   const shared=window.DiabloForecastLogic;
   const entries=Object.entries(f.temperature_models||{}).map(([name,m])=>{
@@ -153,6 +186,7 @@
   }).filter(([name,v])=>Number.isFinite(v));
   if(!entries.length)return null;
   const names=entries.map(([name])=>name);
+  if(!isMoraga&&townSkill)return townBlend(entries,i,phase,townSkill);
   if(shared?.hybridWeights){
    const weights=shared.hybridWeights(shared.skillWeights(skillRows,i,phase,names),entries,i);
    const bias=isMoraga?shared.localBias(skillRows,i,phase,names):{corrections:{}};
@@ -554,6 +588,7 @@ function nwsWeatherOutlook(afd,d,h){
  // empty while the live Open-Meteo request is slow, and kept as the fallback if it fails.
  let liveRendered=0;
  async function renderPublished(chosen,request,lat,lon,prefill){
+  const townSkill=await loadTownSkill(chosen);
   const stale=()=>request!==revision||(prefill&&liveRendered===request);
   const feedName=({Moraga:'moraga',Lafayette:'lafayette',Danville:'danville',Greenbrook:'greenbrook'})[chosen];
   try{
@@ -580,8 +615,8 @@ function nwsWeatherOutlook(afd,d,h){
     };
     const daily={
      time:feed.dates,
-     temperature_2m_max:feed.dates.map((date,i)=>feedBlend(feed,date,i,'high_f',[],chosen==='Moraga')??temperatures(date,'high_f')),
-     temperature_2m_min:feed.dates.map((date,i)=>feedBlend(feed,date,i,'low_f',[],chosen==='Moraga')??temperatures(date,'low_f')),
+     temperature_2m_max:feed.dates.map((date,i)=>feedBlend(feed,date,i,'high_f',[],chosen==='Moraga',townSkill)??temperatures(date,'high_f')),
+     temperature_2m_min:feed.dates.map((date,i)=>feedBlend(feed,date,i,'low_f',[],chosen==='Moraga',townSkill)??temperatures(date,'low_f')),
      precipitation_sum:feed.dates.map(date=>Number(feed.rain_guidance?.[date]?.expected_inches)||0),
      precipitation_probability_max:feed.dates.map(date=>Number(feed.ensemble_rain_probability_pct?.[date])||0),
      weather_code:feed.dates.map(codeFor)
@@ -678,7 +713,8 @@ function nwsWeatherOutlook(afd,d,h){
         await shared.loadDailyModelSkill();
        }catch(e){console.warn('Moraga skill unavailable',e)}
       }
-      const blend=(field,i)=>feedBlend(f,d.time[i],i,field,skillRows,chosen==='Moraga');
+      const townSkill=chosen==='Moraga'?null:await loadTownSkill(chosen);
+      const blend=(field,i)=>feedBlend(f,d.time[i],i,field,skillRows,chosen==='Moraga',townSkill);
       for(let i=0;i<10;i++){
        const hi=blend('high_f',i),lo=blend('low_f',i);
        if(Number.isFinite(hi)&&Number.isFinite(lo)&&hi>=lo){d.temperature_2m_max[i]=hi;d.temperature_2m_min[i]=lo}
