@@ -138,6 +138,12 @@ export default {
             }
           }
         } catch(_) { /* rainfall is optional */ }
+        // The station's own running daily total on Weather Underground matches the owner's app exactly.
+        const wuMoraga = await wuCurrent(WU_STATIONS.moraga, env, wuLog);
+        if (wuMoraga && Number.isFinite(wuMoraga.precip_today_in)) {
+          const day = new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+          dailyRain = {date: day, inches: Math.round(wuMoraga.precip_today_in*100)/100, source: 'weather_underground'};
+        }
       }
       const solarRecent = []; // sunlight samples from the last 30 minutes (Moraga archive)
       try {
@@ -208,6 +214,7 @@ export default {
         solar_radiation_wm2:pick('solradWM2'),
         daily_precipitation_in:dailyRain?.inches ?? null,
         daily_precipitation_date:dailyRain?.date ?? null,
+        daily_precipitation_source:dailyRain?.source ?? (dailyRain ? 'xweather_summary' : null),
         // Sunlight only from vetted stations; an auto-discovered station's sensor may be shaded.
         sky:await sky(discovery ? null : [...solarRecent, pick('solradWM2')]),
         diagnostics:wuLog.length?wuLog:undefined,
