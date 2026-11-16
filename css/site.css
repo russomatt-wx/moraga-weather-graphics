@@ -453,3 +453,9 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
   /* Collapsible Pacific groups add their own padding; drop it so their cards match the others. */
   main .pacific-group-grid { padding-left: 0 !important; padding-right: 0 !important; }
 }
+
+/* 10-day icons: drawn larger, with negative margins eating the artwork's own transparent padding,
+   so the icon reads big without making the compact cards taller. */
+.dwl-day .dwl-icon { width: 70px; height: 48px; margin: -8px 0 -6px; }
+@media (max-width: 360px) { .dwl-day .dwl-icon { width: 62px; height: 42px; margin: -7px 0 -5px; } }
+@media (min-width: 700px) { .dwl-day .dwl-icon { width: 80px; height: 54px; margin: -8px 0 -6px; } }
