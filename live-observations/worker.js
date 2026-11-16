@@ -1,6 +1,6 @@
 // Moraga Observatory live station proxy and push alerts. Deploy as a Cloudflare Worker.
 import { AlertPush, handlePush, runAlertCheck } from './push.js';
-import { WU_STATIONS, WU_PRIMARY, wuCurrent, skyFor, wuKeyShape } from './wu.js';
+import { WU_STATIONS, WU_PRIMARY, wuCurrent, wuToday, skyFor, wuKeyShape } from './wu.js';
 export { AlertPush };
 // Configure secrets XWEATHER_CLIENT_ID, XWEATHER_CLIENT_SECRET and ALLOWED_ORIGIN.
 // Never place credentials in the public website or source repository.
@@ -86,11 +86,25 @@ export default {
     const city = (url.searchParams.get('city') || 'moraga').toLowerCase();
     if (!['moraga','lafayette','danville','greenbrook'].includes(city)) return Response.json({error:'Unknown location'},{status:400,headers:cors});
     const wuLog = [];
+    // Observed today-so-far (high/low/rain) for every town, and one pressure for all of them:
+    // the owner's Moraga station (KCAMORAG71), so the towns never disagree on pressure.
+    const extras = async (base) => {
+      const out = {};
+      const today = await wuToday(WU_STATIONS[city], env, wuLog);
+      if (today) Object.assign(out, { daily_high_f: today.high_f, daily_low_f: today.low_f, daily_date: today.date });
+      const rain = base.daily_precipitation_in ?? base.precip_today_in;
+      if (Number.isFinite(rain)) out.daily_precipitation_in = rain;
+      if (city !== 'moraga') {
+        const m = await wuCurrent(WU_STATIONS.moraga, env, wuLog);
+        if (m && Number.isFinite(m.pressure_inhg)) Object.assign(out, { pressure_inhg: m.pressure_inhg, pressure_station: WU_STATIONS.moraga, local_pressure_inhg: base.pressure_inhg ?? null });
+      }
+      return out;
+    };
     const sky = async solar => { try { return await skyFor(city, env, solar, wuLog); } catch (_) { wuLog.push('sky: error'); return null; } finally { if (wuLog.some(x => / 401$/.test(x)) && !wuLog.some(x => x.startsWith('key format'))) wuLog.push(wuKeyShape(env)); } };
     // Hand-picked Weather Underground station first (needs WU_API_KEY); Xweather below is the fallback.
     if (WU_PRIMARY.has(city) && String(env.WU_API_KEY || '').trim()) {
       const wu = await wuCurrent(WU_STATIONS[city], env, wuLog);
-      if (wu) return Response.json({...wu, city, station_selection:'weather_underground', sky: await sky(wu.solar_radiation_wm2), source:'Weather Underground', diagnostics: wuLog.length ? wuLog : undefined}, {headers:cors});
+      if (wu) { const body = {...wu, city, station_selection:'weather_underground', sky: await sky(wu.solar_radiation_wm2), source:'Weather Underground'}; Object.assign(body, await extras(body)); return Response.json({...body, diagnostics: wuLog.length ? wuLog : undefined}, {headers:cors}); }
     }
     if (!env.XWEATHER_CLIENT_ID || !env.XWEATHER_CLIENT_SECRET) return Response.json({error:'Live service not configured'},{status:503,headers:cors});
     let station = city === 'moraga' ? STATION : (city === 'lafayette' ? env.LAFAYETTE_STATION_ID : city === 'greenbrook' ? env.GREENBROOK_STATION_ID : env.DANVILLE_STATION_ID);
@@ -192,7 +206,7 @@ export default {
         }
         }
       }catch(_err){/* Keep current observations available when archive is delayed. */}
-      return Response.json({
+      const xbody = {
         station:station.replace(/^PWS_/,''),
         city,
         station_selection:preferred?'preferred_neighborhood_pws':discovery?'automatic_nearest_fresh_pws':'configured',
@@ -219,7 +233,11 @@ export default {
         sky:await sky(discovery ? null : [...solarRecent, pick('solradWM2')]),
         diagnostics:wuLog.length?wuLog:undefined,
         source:'Xweather'
-      },{headers:cors});
+      };
+      if (!xbody.daily_extrema || xbody.daily_extrema.date) Object.assign(xbody, await extras(xbody));
+      if (!Number.isFinite(xbody.daily_high_f) && xbody.daily_extrema?.complete) Object.assign(xbody, { daily_high_f: xbody.daily_extrema.high_f, daily_low_f: xbody.daily_extrema.low_f, daily_date: xbody.daily_extrema.date });
+      xbody.diagnostics = wuLog.length ? wuLog : undefined;
+      return Response.json(xbody,{headers:cors});
     } catch(e) {
       return Response.json({error:'Latest observation unavailable'},{status:502,headers:{...cors,'Cache-Control':'no-store'}});
     }

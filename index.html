@@ -177,9 +177,25 @@
   if(city!=='Moraga'||!window.DWL)return;
   d.time.forEach((t,i)=>{const b=DWL.moragaBlend(t);if(b){d.temperature_2m_max[i]=b.high;d.temperature_2m_min[i]=b.low;}});
  }
+ // The panel under current conditions shows what has happened today (station high/low/rain so far);
+ // the forecast for today is in the Today card below. The forecast fills it only until the station reports.
+ const ptDate=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+ let observedToday=null;
+ const forecastTodayAllowed=()=>!(observedToday&&observedToday.city===city&&observedToday.date===ptDate());
+ function showObservedToday(chosen,ob){
+  const date=ob.daily_date||ob.daily_extrema?.date;
+  const hi=Number(ob.daily_high_f??(ob.daily_extrema?.complete?ob.daily_extrema.high_f:NaN)),lo=Number(ob.daily_low_f??(ob.daily_extrema?.complete?ob.daily_extrema.low_f:NaN));
+  if(date!==ptDate()||!Number.isFinite(hi)||!Number.isFinite(lo))return;
+  const rain=Number(ob.daily_precipitation_in??ob.precip_today_in);
+  observedToday={city:chosen,date};
+  set('public-today-title','TODAY SO FAR');
+  set('public-today-high',fmt(hi));set('public-today-low',fmt(lo));
+  el('public-today-high').title='Observed high so far';el('public-today-low').title='Observed low so far';
+  set('public-rain',Number.isFinite(rain)?rain.toFixed(2)+'″':'—');
+ }
  function showToday(d){
   set('public-high-low',fmt(d.temperature_2m_max[0])+' / '+fmt(d.temperature_2m_min[0]));
-  set('public-today-high',fmt(d.temperature_2m_max[0]));set('public-today-low',fmt(d.temperature_2m_min[0]));
+  if(forecastTodayAllowed()){set('public-today-high',fmt(d.temperature_2m_max[0]));set('public-today-low',fmt(d.temperature_2m_min[0]));}
  }
  window.addEventListener('dwl:blend',()=>{
   if(!lastDaily||lastDaily.city!=='Moraga'||city!=='Moraga')return;
@@ -355,6 +371,7 @@
    if(Number.isFinite(modelTemp)&&Math.abs(ob.temperature_f-modelTemp)>12)throw Error('Nearby station differs excessively from regional guidance');
    if(chosen==='Greenbrook'&&Number.isFinite(ob.station_distance_mi)&&ob.station_distance_mi>3)throw Error('Station too far from Greenbrook');
    lastObs={temp:ob.temperature_f,at:stamp,city:chosen};
+   showObservedToday(chosen,ob);
    // Sky from the station's measured sunlight / The Weather Company (worker), preferred over airport reports.
    if(ob.sky&&ob.sky.text&&Number.isFinite(ob.sky.code)){
     lastSky={code:ob.sky.code,text:ob.sky.text,isDay:ob.sky.is_day===false?0:1,at:Date.now(),city:chosen,observed:'station'};
@@ -384,10 +401,7 @@
        // location. Station extrema are observations so far, not the forecast.
        // Keep these values available to the Observatory, but never overwrite
        // the public forecast high/low or its forecast rainfall.
-       if(Number.isFinite(hi)&&Number.isFinite(lo)){
-        el('public-today-high').title='Forecast high; observed so far: '+fmt(hi);
-        el('public-today-low').title='Forecast low; observed so far: '+fmt(lo);
-       }
+       // (The live station reading now fills the Today So Far panel directly.)
       }
      }
     }catch(error){console.warn('Observed daily extrema unavailable',error)}
@@ -582,11 +596,11 @@ function nwsWeatherOutlook(afd,d,h){
     applyMoragaBlend(daily);
     renderDays(daily,feed);
     if(!prefill)updateStation(chosen,request,NaN,false);
-    set('public-today-title',"TODAY'S FORECAST");
+    if(forecastTodayAllowed()){set('public-today-title',"TODAY'S FORECAST");
     set('public-today-high',fmt(daily.temperature_2m_max[0]));
-    set('public-today-low',fmt(daily.temperature_2m_min[0]));
+    set('public-today-low',fmt(daily.temperature_2m_min[0]));}
     set('public-high-low',fmt(daily.temperature_2m_max[0])+' / '+fmt(daily.temperature_2m_min[0]));
-    set('public-rain',todayRain(daily.precipitation_sum[0],feed,daily.time[0]));
+    if(forecastTodayAllowed())set('public-rain',todayRain(daily.precipitation_sum[0],feed,daily.time[0]));
     if(!prefill){set('public-current-temp','—°');set('public-current-condition','Live observation unavailable');set('public-summary','Published forecast available; live observations temporarily unavailable.');}
     else set('public-current-condition','Loading current conditions…');
     {
@@ -694,11 +708,11 @@ function nwsWeatherOutlook(afd,d,h){
    updatePublicCurrentAccent(modeledConflict?NaN:modeledNow);
    const obsSky=lastSky&&lastSky.observed&&lastSky.city===chosen&&Date.now()-lastSky.at<90*60000?lastSky:null;
    set('public-current-condition',obsSky?skyWords(obsSky):modeledConflict?'Awaiting verified observation':description(data.current?.weather_code??d.weather_code[0],data.current?.is_day===0));el('public-hero-icon').innerHTML=obsSky?DWL.icon(obsSky.code,'',obsSky.isDay===0):iconMarkup(data.current?.weather_code??d.weather_code[0]);
-   set('public-today-title',"TODAY'S FORECAST");
+   if(forecastTodayAllowed())set('public-today-title',"TODAY'S FORECAST");
    set('public-high-low',fmt(d.temperature_2m_max[0])+' / '+fmt(d.temperature_2m_min[0]));
-   set('public-today-high',fmt(d.temperature_2m_max[0]));set('public-today-low',fmt(d.temperature_2m_min[0]));
+   if(forecastTodayAllowed()){set('public-today-high',fmt(d.temperature_2m_max[0]));set('public-today-low',fmt(d.temperature_2m_min[0]));}
    set('public-current-time',new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'America/Los_Angeles'}).toUpperCase()+String.fromCharCode(10)+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'})+' PT');
-   set('public-rain',todayRain(d.precipitation_sum[0],publicForecastFeed,d.time[0]));
+   if(forecastTodayAllowed())set('public-rain',todayRain(d.precipitation_sum[0],publicForecastFeed,d.time[0]));
    const mc=data.current||{};
    set('public-humidity',Number.isFinite(mc.relative_humidity_2m)?Math.round(mc.relative_humidity_2m)+'%':'—');
    set('public-dew',Number.isFinite(mc.dew_point_2m)?fmt(mc.dew_point_2m):'—');

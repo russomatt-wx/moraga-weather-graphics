@@ -54,6 +54,27 @@ export async function wuCurrent(station, env, log) {
   } catch (_) { log.push(station + ': error'); return null; }
 }
 
+// Today's observed high/low (local calendar day) from the station's 5-minute history.
+export async function wuToday(station, env, log) {
+  if (!wuKey(env) || !station) return null;
+  try {
+    const data = await getJson(pwsUrl('observations/all/1day', station, wuKey(env)), 240, log, station + ' 1day');
+    const day = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+    let hi = -Infinity, lo = Infinity, n = 0;
+    for (const ob of data?.observations || []) {
+      const t = Date.parse(ob.obsTimeUtc || '');
+      if (!Number.isFinite(t)) continue;
+      const d = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(t));
+      if (d !== day) continue;
+      const h = num(ob.imperial?.tempHigh), l = num(ob.imperial?.tempLow);
+      if (h !== null) hi = Math.max(hi, h);
+      if (l !== null) lo = Math.min(lo, l);
+      n++;
+    }
+    return n >= 3 && Number.isFinite(hi) && Number.isFinite(lo) ? { date: day, high_f: hi, low_f: lo, samples: n } : null;
+  } catch (_) { log.push(station + ' today: error'); return null; }
+}
+
 // Mean of the last 30 minutes of sunlight (5-minute highs) plus the current reading.
 async function wuSolarAverage(station, env, current, log) {
   const values = Number.isFinite(current) ? [current] : [];
