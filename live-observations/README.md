@@ -26,6 +26,6 @@ Storage is the SQLite-backed Durable Object `AlertPush` (free plan); `wrangler d
 
 `wu.js` uses a Weather Underground PWS owner API key, added as the encrypted Worker secret `WU_API_KEY`:
 
-- Danville (Sycamore Valley) and Greenbrook readings come from the hand-picked stations in `WU_STATIONS`, with Xweather as the fallback.
+- Lafayette (Reliez Valley, KCAWALNU6), Danville (Sycamore Valley) and Greenbrook readings come from the hand-picked stations in `WU_STATIONS`, with Xweather as the fallback.
 - Every `/observations` response gets a `sky` object: rain/fog/thunder from The Weather Company's current conditions; in daytime (sun ≥ 15°), the station's 30-minute sunlight average compared with the clear-sky amount; otherwise The Weather Company's sky phrase. The site falls back to nearby airport (METAR) reports when `sky` is missing.
 - `diagnostics` lists any Weather Underground calls that failed.

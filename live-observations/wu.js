@@ -9,9 +9,9 @@
 //   (the site falls back to the nearest airport report when this returns nothing)
 
 // Hand-picked Weather Underground stations per town (temperature and sunlight).
-export const WU_STATIONS = { moraga: 'KCAMORAG71', danville: 'KCADANVI231', greenbrook: 'KCADANVI128' };
+export const WU_STATIONS = { moraga: 'KCAMORAG71', lafayette: 'KCAWALNU6', danville: 'KCADANVI231', greenbrook: 'KCADANVI128' };
 // Towns whose temperature/humidity/wind come from Weather Underground (Moraga keeps Xweather + its archive).
-export const WU_PRIMARY = new Set(['danville', 'greenbrook']);
+export const WU_PRIMARY = new Set(['lafayette', 'danville', 'greenbrook']);
 export const TOWN_COORDS = { moraga: [37.8202, -122.1194], lafayette: [37.890, -122.115], danville: [37.813, -121.974], greenbrook: [37.799, -121.970] };
 const MAX_AGE_MS = 45 * 60 * 1000;
 // The secret as pasted, minus stray whitespace/quotes.
