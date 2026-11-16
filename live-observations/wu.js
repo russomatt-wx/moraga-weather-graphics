@@ -114,7 +114,9 @@ export async function skyFor(city, env, solarNow, log) {
   if (!coords) return null;
   const elev = sunElevation(coords[0], coords[1]);
   let twc = null;
-  if (wuKey(env)) {
+  // The Weather Company's current-conditions feed needs a commercial key (a PWS owner key gets 401).
+  // Set the Worker variable TWC_CURRENT=1 only if the key is upgraded.
+  if (wuKey(env) && env.TWC_CURRENT === '1') {
     try {
       const u = new URL('https://api.weather.com/v3/wx/observations/current');
       u.searchParams.set('geocode', coords[0] + ',' + coords[1]); u.searchParams.set('units', 'e');
