@@ -454,8 +454,8 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
   main .pacific-group-grid { padding-left: 0 !important; padding-right: 0 !important; }
 }
 
-/* 10-day icons: drawn larger, with negative margins eating the artwork's own transparent padding,
-   so the icon reads big without making the compact cards taller. */
-.dwl-day .dwl-icon { width: 70px; height: 48px; margin: -8px 0 -6px; }
-@media (max-width: 360px) { .dwl-day .dwl-icon { width: 62px; height: 42px; margin: -7px 0 -5px; } }
-@media (min-width: 700px) { .dwl-day .dwl-icon { width: 80px; height: 54px; margin: -8px 0 -6px; } }
+/* 10-day icons: every icon shares one normalized canvas (scripts/normalize_icons.py), so one box size
+   gives the same visual size for every condition; small negative margins trim the canvas's edge padding. */
+.dwl-day .dwl-icon { width: 66px; height: 46px; margin: -5px 0 -3px; }
+@media (max-width: 360px) { .dwl-day .dwl-icon { width: 58px; height: 40px; margin: -4px 0 -3px; } }
+@media (min-width: 700px) { .dwl-day .dwl-icon { width: 74px; height: 52px; margin: -5px 0 -3px; } }
