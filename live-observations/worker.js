@@ -1,6 +1,6 @@
 // Moraga Observatory live station proxy and push alerts. Deploy as a Cloudflare Worker.
 import { AlertPush, handlePush, runAlertCheck } from './push.js';
-import { WU_STATIONS, WU_PRIMARY, wuCurrent, wuToday, skyFor, wuKeyShape } from './wu.js';
+import { WU_STATIONS, WU_PRIMARY, wuCurrent, wuToday, wuDay, skyFor, wuKeyShape } from './wu.js';
 export { AlertPush };
 // Configure secrets XWEATHER_CLIENT_ID, XWEATHER_CLIENT_SECRET and ALLOWED_ORIGIN.
 // Never place credentials in the public website or source repository.
@@ -81,6 +81,13 @@ export default {
     const cors = {'Access-Control-Allow-Origin': origin, 'Vary': 'Origin', 'Cache-Control': 'public, max-age=120'};
     const url = new URL(request.url);
     if (url.pathname.startsWith('/push/')) return handlePush(request, env, {'Access-Control-Allow-Origin': origin, 'Vary': 'Origin'});
+    // GET /daily?city=lafayette&date=YYYY-MM-DD : that town's observed high/low/rain (verification input).
+    if (url.pathname === '/daily') {
+      const c = (url.searchParams.get('city') || '').toLowerCase(), date = url.searchParams.get('date') || '';
+      if (!WU_STATIONS[c]) return Response.json({error:'Unknown location'},{status:400,headers:cors});
+      const log = [], day = await wuDay(WU_STATIONS[c], date, env, log);
+      return Response.json(day ? {...day, city:c} : {error:'No observations', city:c, date, diagnostics: log}, {status: day ? 200 : 404, headers:{...cors,'Cache-Control':'public, max-age=3600'}});
+    }
     if (request.method === 'OPTIONS') return new Response(null, {status:204, headers:{...cors,'Access-Control-Allow-Methods':'GET, OPTIONS','Access-Control-Allow-Headers':'Content-Type'}});
     if (request.method !== 'GET' || url.pathname !== '/observations') return new Response('Not found',{status:404,headers:cors});
     const city = (url.searchParams.get('city') || 'moraga').toLowerCase();

@@ -75,6 +75,32 @@ export async function wuToday(station, env, log) {
   } catch (_) { log.push(station + ' today: error'); return null; }
 }
 
+// A past local day's observed high/low/rain from a station's full history (for forecast verification).
+export async function wuDay(station, date, env, log) {
+  if (!wuKey(env) || !station || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
+  const u = new URL('https://api.weather.com/v2/pws/history/all');
+  u.searchParams.set('stationId', station); u.searchParams.set('format', 'json'); u.searchParams.set('units', 'e');
+  u.searchParams.set('numericPrecision', 'decimal'); u.searchParams.set('date', date.replace(/-/g, '')); u.searchParams.set('apiKey', wuKey(env));
+  try {
+    const data = await getJson(u.toString(), 3600, log, station + ' history');
+    let hi = -Infinity, lo = Infinity, rain = null, n = 0, first = null, last = null;
+    for (const ob of data?.observations || []) {
+      const t = Date.parse(ob.obsTimeUtc || '');
+      if (!Number.isFinite(t)) continue;
+      const d = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(t));
+      if (d !== date) continue;
+      const h = num(ob.imperial?.tempHigh), l = num(ob.imperial?.tempLow), p = num(ob.imperial?.precipTotal);
+      if (h !== null) hi = Math.max(hi, h);
+      if (l !== null) lo = Math.min(lo, l);
+      if (p !== null) rain = Math.max(rain ?? 0, p);
+      n++; first = first === null ? t : Math.min(first, t); last = last === null ? t : Math.max(last, t);
+    }
+    if (!n || !Number.isFinite(hi) || !Number.isFinite(lo)) return null;
+    return { station, date, high_f: hi, low_f: lo, precip_in: rain, samples: n,
+             first_utc: new Date(first).toISOString(), last_utc: new Date(last).toISOString() };
+  } catch (_) { log.push(station + ' history: error'); return null; }
+}
+
 // Mean of the last 30 minutes of sunlight (5-minute highs) plus the current reading.
 async function wuSolarAverage(station, env, current, log) {
   const values = Number.isFinite(current) ? [current] : [];
