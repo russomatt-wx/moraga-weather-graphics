@@ -10,7 +10,7 @@ const STATION = 'PWS_KCAMORAG71';
 const CITY_COORDS = {lafayette:'37.890,-122.115',danville:'37.813,-121.974',greenbrook:'37.799,-121.970'};
 const MAX_AGE_MS = 45 * 60 * 1000;
 // Hand-picked neighborhood stations (Xweather IDs), tried before automatic discovery.
-// Weather Underground IDs such as KCADANVI231 / KCADANVI128 are not in Xweather (invalid_location),
+// Weather Underground IDs (e.g. KCADANVI207) are not in Xweather (invalid_location),
 // so none are listed yet.
 const PREFERRED = {};
 async function preferredStation(city, env, log) {
