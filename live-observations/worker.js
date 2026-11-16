@@ -117,7 +117,28 @@ export default {
       const pick = key => Number.isFinite(Number(ob[key])) && ob[key] !== null && ob[key] !== '' ? Number(ob[key]) : null;
       // Recover today's full Pacific-day temperature range from archived station samples.
       // This does not depend on GitHub Actions or an open browser tab.
-      let dailyExtrema = null;
+      let dailyExtrema = null, dailyRain = null;
+      // Today's rain total from Xweather's daily summary (the station's own running total).
+      // ob.precipIN is a rolling reading, not a daily total, so it is never used for this.
+      if(city === 'moraga') {
+        try {
+          const day = new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+          const s = new URL('https://api.aerisapi.com/observations/summary/'+station);
+          s.searchParams.set('from',day); s.searchParams.set('to',day);
+          s.searchParams.set('client_id',env.XWEATHER_CLIENT_ID); s.searchParams.set('client_secret',env.XWEATHER_CLIENT_SECRET);
+          const sr = await fetch(s.toString(),{cf:{cacheTtl:300,cacheEverything:true}});
+          if(sr.ok){
+            const sj = await sr.json();
+            const rec = Array.isArray(sj.response) ? sj.response[0] : sj.response;
+            for(const period of rec?.periods || []){
+              const sum = period?.summary || {};
+              if(String(sum.ymd || '').replace(/-/g,'') !== day.replace(/-/g,'')) continue;
+              const total = Number(sum.precip?.totalIN);
+              if(Number.isFinite(total) && total >= 0 && total < 30) dailyRain = {date: day, inches: Math.round(total*100)/100, count: sum.precip?.count ?? null};
+            }
+          }
+        } catch(_) { /* rainfall is optional */ }
+      }
       const solarRecent = []; // sunlight samples from the last 30 minutes (Moraga archive)
       try {
         if(city === 'moraga') {
@@ -185,6 +206,8 @@ export default {
         wind_gust_direction:typeof ob.windGustDir==='string'?ob.windGustDir:null,
         pressure_inhg:pick('pressureIN'),
         solar_radiation_wm2:pick('solradWM2'),
+        daily_precipitation_in:dailyRain?.inches ?? null,
+        daily_precipitation_date:dailyRain?.date ?? null,
         // Sunlight only from vetted stations; an auto-discovered station's sensor may be shaded.
         sky:await sky(discovery ? null : [...solarRecent, pick('solradWM2')]),
         diagnostics:wuLog.length?wuLog:undefined,
