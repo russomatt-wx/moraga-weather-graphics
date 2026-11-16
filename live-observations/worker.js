@@ -94,7 +94,7 @@ export default {
       if (today) Object.assign(out, { daily_high_f: today.high_f, daily_low_f: today.low_f, daily_date: today.date });
       const rain = base.daily_precipitation_in ?? base.precip_today_in;
       if (Number.isFinite(rain)) out.daily_precipitation_in = rain;
-      if (city !== 'moraga') {
+      {
         const m = await wuCurrent(WU_STATIONS.moraga, env, wuLog);
         if (m && Number.isFinite(m.pressure_inhg)) Object.assign(out, { pressure_inhg: m.pressure_inhg, pressure_station: WU_STATIONS.moraga, local_pressure_inhg: base.pressure_inhg ?? null });
       }
