@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-16T02:41:39.829833+00:00",
+  "generated_utc": "2026-11-16T11:01:02.780981+00:00",
   "station": "KCAMORAG71",
   "days": {
     "2026-10-07": {
@@ -326,12 +326,22 @@
     "2026-11-15": {
       "sampled_low_f": 47.0,
       "sampled_high_f": 64.0,
-      "samples": 1099,
+      "samples": 1411,
       "first_utc": "2026-11-15T08:00:00+00:00",
-      "last_utc": "2026-11-16T02:39:00+00:00",
-      "daily_precipitation_in": 0.34,
+      "last_utc": "2026-11-16T07:59:00+00:00",
+      "daily_precipitation_in": 0.79,
       "precipitation_source": "xweather_observations_summary",
-      "precipitation_as_of_utc": "2026-11-16T02:41:34.446340+00:00"
+      "precipitation_as_of_utc": "2026-11-16T11:00:58.005359+00:00"
+    },
+    "2026-11-16": {
+      "sampled_low_f": 49.0,
+      "sampled_high_f": 50.0,
+      "samples": 177,
+      "first_utc": "2026-11-16T08:00:00+00:00",
+      "last_utc": "2026-11-16T10:59:00+00:00",
+      "daily_precipitation_in": 0.13,
+      "precipitation_source": "xweather_observations_summary",
+      "precipitation_as_of_utc": "2026-11-16T11:00:58.005359+00:00"
     }
   },
   "months": {
@@ -346,17 +356,17 @@
       "precipitation_status": "daily_observed_or_confirmed_minimum"
     },
     "2026-11": {
-      "sample_count": 20956,
-      "days_with_samples": 14,
-      "mean_sample_temperature_f": 56.05,
-      "mean_sampled_daily_high_f": 72.07,
-      "mean_sampled_daily_low_f": 44.64,
-      "monthly_precipitation_in": 1.76,
+      "sample_count": 21445,
+      "days_with_samples": 15,
+      "mean_sample_temperature_f": 55.9,
+      "mean_sampled_daily_high_f": 71.53,
+      "mean_sampled_daily_low_f": 44.8,
+      "monthly_precipitation_in": 2.55,
       "annual_precipitation_in": null,
       "precipitation_status": "daily_observed_or_confirmed_minimum"
     }
   },
-  "observations": 42619,
+  "observations": 43108,
   "status": "partial_observed_climate_ledger",
   "caveat": "Uneven station sampling; monthly averages are not official daily-mean climate normals. Rainfall is source-reported month-to-date or a dated owner confirmation; cumulative readings are never summed.",
   "chart_status": "matplotlib_unavailable"
