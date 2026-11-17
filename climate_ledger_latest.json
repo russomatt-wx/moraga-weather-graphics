@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-17T04:08:07.331192+00:00",
+  "generated_utc": "2026-11-17T13:13:00.602625+00:00",
   "station": "KCAMORAG71",
   "days": {
     "2026-10-07": {
@@ -334,14 +334,24 @@
       "precipitation_as_of_utc": "2026-11-17T04:08:02.797889+00:00"
     },
     "2026-11-16": {
-      "sampled_low_f": 44.0,
+      "sampled_low_f": 40.0,
       "sampled_high_f": 59.0,
-      "samples": 1187,
+      "samples": 1416,
       "first_utc": "2026-11-16T08:00:00+00:00",
-      "last_utc": "2026-11-17T04:06:00+00:00",
-      "daily_precipitation_in": 0.15,
+      "last_utc": "2026-11-17T07:59:00+00:00",
+      "daily_precipitation_in": 0.16,
       "precipitation_source": "xweather_observations_summary",
-      "precipitation_as_of_utc": "2026-11-17T04:08:02.797889+00:00"
+      "precipitation_as_of_utc": "2026-11-17T13:12:55.694324+00:00"
+    },
+    "2026-11-17": {
+      "sampled_low_f": 35.0,
+      "sampled_high_f": 40.0,
+      "samples": 305,
+      "first_utc": "2026-11-17T08:00:00+00:00",
+      "last_utc": "2026-11-17T13:10:00+00:00",
+      "daily_precipitation_in": 0.0,
+      "precipitation_source": "xweather_observations_summary",
+      "precipitation_as_of_utc": "2026-11-17T13:12:55.694324+00:00"
     }
   },
   "months": {
@@ -356,17 +366,17 @@
       "precipitation_status": "daily_observed_or_confirmed_minimum"
     },
     "2026-11": {
-      "sample_count": 22455,
-      "days_with_samples": 15,
-      "mean_sample_temperature_f": 55.68,
-      "mean_sampled_daily_high_f": 71.53,
-      "mean_sampled_daily_low_f": 44.8,
-      "monthly_precipitation_in": 2.55,
+      "sample_count": 22989,
+      "days_with_samples": 16,
+      "mean_sample_temperature_f": 55.3,
+      "mean_sampled_daily_high_f": 70.75,
+      "mean_sampled_daily_low_f": 44.5,
+      "monthly_precipitation_in": 2.71,
       "annual_precipitation_in": null,
       "precipitation_status": "daily_observed_or_confirmed_minimum"
     }
   },
-  "observations": 44118,
+  "observations": 44652,
   "status": "partial_observed_climate_ledger",
   "caveat": "Uneven station sampling; monthly averages are not official daily-mean climate normals. Rainfall is source-reported month-to-date or a dated owner confirmation; cumulative readings are never summed.",
   "chart_status": "matplotlib_unavailable"
