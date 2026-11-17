@@ -304,9 +304,18 @@
     var t = daily && daily.time || [], start = t.indexOf(nowParts.date);
     return start < 0 ? 0 : start;
   }
+  // Within the coming week a weekday is clear; beyond that add the date ("Tuesday, Nov 24"),
+  // because "next Tuesday" is easily confused with this Tuesday.
   function dayName(daily, i, i0) {
     var w = weekday(daily.time[i]);
-    return i - i0 >= 7 ? 'next ' + w : w;
+    if (i - i0 < 6) return w;
+    return w + ', ' + new Date(daily.time[i] + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+  }
+  // "Stronger" only when the later storm really is bigger than the near-term one.
+  function laterLabel(total, nearRain) {
+    if (total >= 1 && (!nearRain || total > nearRain * 1.25)) return 'a stronger storm';
+    if (total >= 0.5) return 'another storm';
+    return 'a few more showers';
   }
   function horizon(daily, nowParts, place) {
     if (!daily || !daily.time) return { text: '', total10: 0, bigLater: null, frost: false };
@@ -377,9 +386,9 @@
     var i0 = daily && daily.time ? dayIdx(daily, nowParts) : 0, n = daily && daily.time ? Math.min(daily.time.length, i0 + 10) : 0;
     var hiMax = -99; for (var i = i0; i < n; i++) hiMax = Math.max(hiMax, Number(daily.temperature_2m_max[i]) || -99);
     var nearDay = main && main.rain >= 0.05 ? (main.start.isNow ? 'Rain continues' : 'Rain ' + (/^this|^overnight|^early/.test(main.start.label) ? 'today' : main.start.dayName)) : '';
-    var big = hz.bigLater, bigDay = big ? weekday(daily.time[big.a]) : '';
+    var big = hz.bigLater, bigDay = big ? dayName(daily, big.a, i0) : '';
     if (thunder && nearDay) return nearDay + ' with a chance of thunderstorms';
-    if (nearDay && big && big.total >= 1) return nearDay + ', stronger storm ' + bigDay;
+    if (nearDay && big && laterLabel(big.total, main.rain) === 'a stronger storm') return nearDay + ', stronger storm ' + bigDay;
     if (nearDay && big) return nearDay + ', more rain ' + bigDay;
     if (nearDay) return nearDay + ', then drying out';
     if (big) return 'Dry for now, rain returns ' + bigDay;
@@ -431,7 +440,7 @@
     var body = pre + what + main.span + how + (t2 ? ' — ' + t2 : '');
     return cap(body);
   }
-  function farConcise(hz, daily, nowParts, afd, breakSpan) {
+  function farConcise(hz, daily, nowParts, afd, breakSpan, nearRain) {
     if (!daily || !daily.time) return '';
     var i0 = dayIdx(daily, nowParts), big = hz.bigLater;
     var range = function (r) { return r.a === r.b ? dayName(daily, r.a, i0) : dayName(daily, r.a, i0) + ' into ' + weekday(daily.time[r.b]); };
@@ -439,7 +448,7 @@
     // ~1 inch is a typical 10-day November total around Lamorinda and the Tri-Valley.
     var above = hz.total10 >= 1.5 || (hz.total10 >= 1 && /above (?:the )?(?:seasonal )?(?:average|normal)|pattern remains active/i.test(afdAll));
     if (big) {
-      var label = big.total >= 1 ? 'a stronger storm' : big.total >= 0.5 ? 'another round of rain' : 'a few more showers';
+      var label = laterLabel(big.total, nearRain);
       var pre = breakSpan ? 'After a break ' + breakSpan + ', ' : 'Then ';
       var pattern = !above ? '' : /atmospheric river/i.test(afdAll) ? ', fueled by an atmospheric river' : '. Rainfall for the week will run well above normal';
       return pre + label + ' moves in ' + range(big) + ' with ' + amountWords(big.total) + pattern;
@@ -510,7 +519,7 @@
     var near = nearConcise(rs, afd, place);
     var wetRuns = rs.filter(function (r) { return r.wet; }), mainRun = wetRuns.reduce(function (a, r) { return !a || r.rain > a.rain ? r : a; }, null);
     var afterRun = mainRun && !mainRun.start.isNow ? rs[rs.indexOf(mainRun) + 1] : null;
-    var far = farConcise(hz, opts.daily, nowParts, afd, afterRun && !afterRun.wet ? afterRun.span : '');
+    var far = farConcise(hz, opts.daily, nowParts, afd, afterRun && !afterRun.wet ? afterRun.span : '', mainRun ? mainRun.rain : 0);
     if (/^Beyond that/.test(far) && /dry weather through/.test(near) && far.slice(-12) === near.slice(-12)) far = '';
     var nug = nwsNugget(afd, !!hz.bigLater);
     var para = [near, tempNote(opts.daily, nowParts), far, nug]
