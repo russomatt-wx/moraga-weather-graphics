@@ -1,5 +1,5 @@
 /* Diablo Weather Lab — 72-hour outlook writer.
-   Builds a headline and a short, lively forecast story (next 72 hours, then the 10-day horizon) from:
+   Builds a headline and a short, lively forecast story (next 72 hours, then out to day 7) from:
      • the latest NWS Bay Area (MTR) Area Forecast Discussion: key messages, short/long term, and
      • that location's hourly model guidance (rain, wind gusts, weather codes) and blended daily temps.
    High-impact weather leads. Local numbers always come from model data; the NWS discussion supplies
@@ -7,7 +7,8 @@
 (function (root) {
   'use strict';
 
-  var DAY_PARTS = ['overnight', 'morning', 'afternoon', 'evening']; // 0-6, 6-12, 12-18, 18-24
+  var DAY_PARTS = ['overnight', 'morning', 'afternoon', 'evening'];
+  var HORIZON = 7; // the outlook looks a week ahead; the 10-day cards cover the rest // 0-6, 6-12, 12-18, 18-24
 
   /* ---------- NWS discussion ---------- */
   function parseAfd(text) {
@@ -317,15 +318,18 @@
     if (total >= 0.5) return 'another storm';
     return 'a few more showers';
   }
-  function horizon(daily, nowParts, place) {
+  function horizon(daily, nowParts, place, afterDate) {
     if (!daily || !daily.time) return { text: '', total10: 0, bigLater: null, frost: false };
-    var i0 = dayIdx(daily, nowParts), n = Math.min(daily.time.length, i0 + 10);
+    var i0 = dayIdx(daily, nowParts), n = Math.min(daily.time.length, i0 + HORIZON);
     var amt = function (i) { var v = Number(daily.precipitation_sum && daily.precipitation_sum[i]); return Number.isFinite(v) ? v : 0; };
     var pop = function (i) { var v = Number(daily.precipitation_probability_max && daily.precipitation_probability_max[i]); return Number.isFinite(v) ? v : 0; };
     var total10 = 0; for (var k = i0; k < n; k++) total10 += amt(k);
     // Wet-day runs after the first 72 hours.
     var runsL = [], cur = null;
-    for (var i = i0 + 3; i < n; i++) {
+    // Later storms start after the near-term storm ends (its tail is not a separate storm).
+    var first = i0 + 3;
+    if (afterDate) while (first < n && daily.time[first] <= afterDate) first++;
+    for (var i = first; i < n; i++) {
       var wet = pop(i) >= 50 && amt(i) >= 0.15;
       if (wet) { if (!cur) { cur = { a: i, b: i, total: 0 }; runsL.push(cur); } cur.b = i; cur.total += amt(i); } else cur = null;
     }
@@ -352,7 +356,7 @@
     var frost = coldest && coldest.v <= 36;
     if (frost) trend = (trend ? trend + ' and ' : '') + 'frosty mornings near ' + Math.round(coldest.v) + '° by ' + dayName(daily, coldest.i, i0);
     var text = 'Looking further out, ' + parts.join(' ') + (trend ? (big ? ', along with ' : ', with ') + trend : '');
-    if (total10 >= 1) text += '. All told, ' + place + ' could pick up ' + amountWords(total10).replace(/^around /, 'about ') + ' over the next 10 days';
+    if (total10 >= 1) text += '. All told, ' + place + ' could pick up ' + amountWords(total10).replace(/^around /, 'about ') + ' over the next week';
     return { text: text, total10: total10, bigLater: big, frost: frost };
   }
 
@@ -383,7 +387,7 @@
     var wet = rs.filter(function (r) { return r.wet; });
     var main = wet.reduce(function (a, r) { return !a || r.rain > a.rain ? r : a; }, null);
     var thunder = rs.some(function (r) { return r.thunder; });
-    var i0 = daily && daily.time ? dayIdx(daily, nowParts) : 0, n = daily && daily.time ? Math.min(daily.time.length, i0 + 10) : 0;
+    var i0 = daily && daily.time ? dayIdx(daily, nowParts) : 0, n = daily && daily.time ? Math.min(daily.time.length, i0 + HORIZON) : 0;
     var hiMax = -99; for (var i = i0; i < n; i++) hiMax = Math.max(hiMax, Number(daily.temperature_2m_max[i]) || -99);
     var nearDay = main && main.rain >= 0.05 ? (main.start.isNow ? 'Rain continues' : 'Rain ' + (/^this|^overnight|^early/.test(main.start.label) ? 'today' : main.start.dayName)) : '';
     var big = hz.bigLater, bigDay = big ? dayName(daily, big.a, i0) : '';
@@ -445,15 +449,15 @@
     var i0 = dayIdx(daily, nowParts), big = hz.bigLater;
     var range = function (r) { return r.a === r.b ? dayName(daily, r.a, i0) : dayName(daily, r.a, i0) + ' into ' + weekday(daily.time[r.b]); };
     var afdAll = afd ? afd.key.join(' ') + ' ' + afd.short + ' ' + afd.long : '';
-    // ~1 inch is a typical 10-day November total around Lamorinda and the Tri-Valley.
-    var above = hz.total10 >= 1.5 || (hz.total10 >= 1 && /above (?:the )?(?:seasonal )?(?:average|normal)|pattern remains active/i.test(afdAll));
+    // ~0.7 inch is a typical November week around Lamorinda and the Tri-Valley.
+    var above = hz.total10 >= 1.2 || (hz.total10 >= .8 && /above (?:the )?(?:seasonal )?(?:average|normal)|pattern remains active/i.test(afdAll));
     if (big) {
       var label = laterLabel(big.total, nearRain);
       var pre = breakSpan ? 'After a break ' + breakSpan + ', ' : 'Then ';
       var pattern = !above ? '' : /atmospheric river/i.test(afdAll) ? ', fueled by an atmospheric river' : '. Rainfall for the week will run well above normal';
       return pre + label + ' moves in ' + range(big) + ' with ' + amountWords(big.total) + pattern;
     }
-    var n = Math.min(daily.time.length, i0 + 10);
+    var n = Math.min(daily.time.length, i0 + HORIZON);
     return 'Beyond that, the models keep things mostly dry through ' + dayName(daily, n - 1, i0);
   }
   var NUGGETS = [
@@ -511,7 +515,10 @@
     var rs = runs(blocks(opts.hourly, nowParts));
     var place = opts.place || 'Moraga', region = opts.region || place;
     var st = story(rs, afd, place);
-    var hz = horizon(opts.daily, nowParts, place);
+    var nearWet = rs.filter(function (r) { return r.wet; });
+    var nearMain = nearWet.reduce(function (a, r) { return !a || r.rain > a.rain ? r : a; }, null);
+    var nearEnd = nearMain ? nearMain.blocks[nearMain.blocks.length - 1].date : '';
+    var hz = horizon(opts.daily, nowParts, place, nearEnd);
     var dot = function (x) { return /[.!?]$/.test(x) ? x : x + '.'; };
     var nearTerm = st.sentences.concat([tempSentence(opts.daily, nowParts, st.closing)]).filter(Boolean).map(dot);
     var farTerm = [hz.text, nwsInsight(afd, /mudslide|frost/.test(hz.text) ? /frost/ : null) || nwsHighlight(afd)].filter(Boolean).map(dot);
