@@ -371,6 +371,12 @@
    "low_f": 39.2,
    "precip_in": 0.15,
    "samples": 288
+  },
+  "2026-11-17": {
+   "high_f": 60.6,
+   "low_f": 36,
+   "precip_in": 0.01,
+   "samples": 288
   }
  },
  "greenbrook": {
@@ -745,6 +751,12 @@
    "low_f": 38.8,
    "precip_in": 0.16,
    "samples": 288
+  },
+  "2026-11-17": {
+   "high_f": 62.8,
+   "low_f": 35.6,
+   "precip_in": 0,
+   "samples": 288
   }
  },
  "lafayette": {
@@ -1106,6 +1118,12 @@
    "high_f": 61.9,
    "low_f": 41,
    "precip_in": 0.1,
+   "samples": 288
+  },
+  "2026-11-17": {
+   "high_f": 63,
+   "low_f": 37.2,
+   "precip_in": 0,
    "samples": 288
   }
  }

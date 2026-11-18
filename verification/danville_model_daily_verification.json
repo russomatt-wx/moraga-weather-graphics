@@ -1,197 +1,137 @@
 {
- "generated_utc": "2026-11-18T03:06:45.474580+00:00",
+ "generated_utc": "2026-11-18T18:22:38.257106+00:00",
  "status": "verified_daily_extremes",
  "town": "danville",
  "station": "KCADANVI207",
  "model_scores": {
   "ecmwf": {
-   "verified_days": 62,
+   "verified_days": 63,
    "high_mae_f": 3.2,
-   "low_mae_f": 4.06,
-   "high_bias_f": -2.56,
-   "low_bias_f": 3.98
+   "low_mae_f": 4.03,
+   "high_bias_f": -2.57,
+   "low_bias_f": 3.88
   },
   "eps": {
-   "verified_days": 5,
-   "high_mae_f": 2.66,
-   "low_mae_f": 3.32,
-   "high_bias_f": -2.66,
-   "low_bias_f": 3.32
+   "verified_days": 6,
+   "high_mae_f": 2.77,
+   "low_mae_f": 2.88,
+   "high_bias_f": -2.77,
+   "low_bias_f": 2.88
   },
   "gefs": {
-   "verified_days": 5,
-   "high_mae_f": 1.16,
-   "low_mae_f": 8.24,
-   "high_bias_f": -0.96,
-   "low_bias_f": 8.24
+   "verified_days": 6,
+   "high_mae_f": 1.33,
+   "low_mae_f": 8.5,
+   "high_bias_f": -1.17,
+   "low_bias_f": 8.5
   },
   "gem": {
-   "verified_days": 62,
-   "high_mae_f": 3.94,
-   "low_mae_f": 4.83,
-   "high_bias_f": -2.94,
-   "low_bias_f": 4.75
+   "verified_days": 63,
+   "high_mae_f": 3.95,
+   "low_mae_f": 4.8,
+   "high_bias_f": -2.97,
+   "low_bias_f": 4.72
   },
   "gfs": {
-   "verified_days": 62,
+   "verified_days": 63,
    "high_mae_f": 2.97,
-   "low_mae_f": 4.46,
-   "high_bias_f": -2.41,
-   "low_bias_f": 4.13
+   "low_mae_f": 4.48,
+   "high_bias_f": -2.43,
+   "low_bias_f": 4.15
   },
   "icon": {
-   "verified_days": 62,
+   "verified_days": 63,
    "high_mae_f": 3.22,
-   "low_mae_f": 4.74,
-   "high_bias_f": -2.45,
-   "low_bias_f": 4.65
+   "low_mae_f": 4.77,
+   "high_bias_f": -2.47,
+   "low_bias_f": 4.69
   }
  },
  "calibration": {
   "ecmwf": {
    "high": {
     "factor": 0.75,
-    "holdout_days": 57,
-    "raw_holdout_mae_f": 3.095,
-    "selected_holdout_mae_f": 2.08,
+    "holdout_days": 58,
+    "raw_holdout_mae_f": 3.097,
+    "selected_holdout_mae_f": 2.066,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 62
+    "verified_days": 63
    },
    "low": {
     "factor": 1.0,
-    "holdout_days": 57,
-    "raw_holdout_mae_f": 4.279,
-    "selected_holdout_mae_f": 2.593,
+    "holdout_days": 58,
+    "raw_holdout_mae_f": 4.238,
+    "selected_holdout_mae_f": 2.65,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 62
+    "verified_days": 63
    }
   },
   "gem": {
    "high": {
     "factor": 1.0,
-    "holdout_days": 57,
-    "raw_holdout_mae_f": 4.067,
-    "selected_holdout_mae_f": 3.098,
+    "holdout_days": 58,
+    "raw_holdout_mae_f": 4.084,
+    "selected_holdout_mae_f": 3.082,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 62
+    "verified_days": 63
    },
    "low": {
     "factor": 1.0,
-    "holdout_days": 57,
-    "raw_holdout_mae_f": 5.125,
-    "selected_holdout_mae_f": 2.884,
+    "holdout_days": 58,
+    "raw_holdout_mae_f": 5.086,
+    "selected_holdout_mae_f": 2.866,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 62
+    "verified_days": 63
    }
   },
   "gfs": {
    "high": {
     "factor": 1.0,
-    "holdout_days": 57,
-    "raw_holdout_mae_f": 2.968,
-    "selected_holdout_mae_f": 1.847,
+    "holdout_days": 58,
+    "raw_holdout_mae_f": 2.976,
+    "selected_holdout_mae_f": 1.832,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 62
+    "verified_days": 63
    },
    "low": {
     "factor": 1.0,
-    "holdout_days": 57,
-    "raw_holdout_mae_f": 4.733,
-    "selected_holdout_mae_f": 3.006,
+    "holdout_days": 58,
+    "raw_holdout_mae_f": 4.75,
+    "selected_holdout_mae_f": 2.981,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 62
+    "verified_days": 63
    }
   },
   "icon": {
    "high": {
     "factor": 1.0,
-    "holdout_days": 57,
+    "holdout_days": 58,
     "raw_holdout_mae_f": 3.3,
-    "selected_holdout_mae_f": 2.275,
+    "selected_holdout_mae_f": 2.251,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 62
+    "verified_days": 63
    },
    "low": {
     "factor": 1.0,
-    "holdout_days": 57,
-    "raw_holdout_mae_f": 4.967,
-    "selected_holdout_mae_f": 2.601,
+    "holdout_days": 58,
+    "raw_holdout_mae_f": 5.0,
+    "selected_holdout_mae_f": 2.595,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 62
+    "verified_days": 63
    }
   }
  },
  "method": "Earliest archived day-ahead model forecast per target local date (from the published town feed); observed daily high/low from the town's Weather Underground station (KCADANVI207) with >= 200 five-minute observations",
  "note": "Each town is verified against its own station; Moraga corrections are never transferred.",
  "matches": [
-  {
-   "model": "ecmwf",
-   "valid_local_date": "2026-10-28",
-   "issued_utc": "previous_runs_day1",
-   "observed_high_f": 70.5,
-   "observed_low_f": 40.6,
-   "high_error_f": -0.8,
-   "low_error_f": 6.3,
-   "observation_count": 288
-  },
-  {
-   "model": "gem",
-   "valid_local_date": "2026-10-28",
-   "issued_utc": "previous_runs_day1",
-   "observed_high_f": 70.5,
-   "observed_low_f": 40.6,
-   "high_error_f": -2.7,
-   "low_error_f": 4.5,
-   "observation_count": 288
-  },
-  {
-   "model": "gfs",
-   "valid_local_date": "2026-10-28",
-   "issued_utc": "previous_runs_day1",
-   "observed_high_f": 70.5,
-   "observed_low_f": 40.6,
-   "high_error_f": -3.1,
-   "low_error_f": 3.3,
-   "observation_count": 288
-  },
-  {
-   "model": "icon",
-   "valid_local_date": "2026-10-28",
-   "issued_utc": "previous_runs_day1",
-   "observed_high_f": 70.5,
-   "observed_low_f": 40.6,
-   "high_error_f": -3.8,
-   "low_error_f": 7.2,
-   "observation_count": 288
-  },
-  {
-   "model": "ecmwf",
-   "valid_local_date": "2026-10-29",
-   "issued_utc": "previous_runs_day1",
-   "observed_high_f": 70.2,
-   "observed_low_f": 43.5,
-   "high_error_f": 0.7,
-   "low_error_f": 3.1,
-   "observation_count": 288
-  },
-  {
-   "model": "gem",
-   "valid_local_date": "2026-10-29",
-   "issued_utc": "previous_runs_day1",
-   "observed_high_f": 70.2,
-   "observed_low_f": 43.5,
-   "high_error_f": -1.7,
-   "low_error_f": 6.0,
-   "observation_count": 288
-  },
   {
    "model": "gfs",
    "valid_local_date": "2026-10-29",
@@ -1030,6 +970,66 @@
    "observed_low_f": 39.2,
    "high_error_f": -2.4,
    "low_error_f": 6.7,
+   "observation_count": 288
+  },
+  {
+   "model": "ecmwf",
+   "valid_local_date": "2026-11-17",
+   "issued_utc": "2026-11-16T10:08:52.065895+00:00",
+   "observed_high_f": 60.6,
+   "observed_low_f": 36,
+   "high_error_f": -3.2,
+   "low_error_f": -1.9,
+   "observation_count": 288
+  },
+  {
+   "model": "eps",
+   "valid_local_date": "2026-11-17",
+   "issued_utc": "2026-11-16T10:08:52.065895+00:00",
+   "observed_high_f": 60.6,
+   "observed_low_f": 36,
+   "high_error_f": -3.3,
+   "low_error_f": 0.7,
+   "observation_count": 288
+  },
+  {
+   "model": "gefs",
+   "valid_local_date": "2026-11-17",
+   "issued_utc": "2026-11-16T10:08:52.065895+00:00",
+   "observed_high_f": 60.6,
+   "observed_low_f": 36,
+   "high_error_f": -2.2,
+   "low_error_f": 9.8,
+   "observation_count": 288
+  },
+  {
+   "model": "gem",
+   "valid_local_date": "2026-11-17",
+   "issued_utc": "2026-11-16T10:08:52.065895+00:00",
+   "observed_high_f": 60.6,
+   "observed_low_f": 36,
+   "high_error_f": -5.1,
+   "low_error_f": 2.9,
+   "observation_count": 288
+  },
+  {
+   "model": "gfs",
+   "valid_local_date": "2026-11-17",
+   "issued_utc": "2026-11-16T10:08:52.065895+00:00",
+   "observed_high_f": 60.6,
+   "observed_low_f": 36,
+   "high_error_f": -3.4,
+   "low_error_f": 5.7,
+   "observation_count": 288
+  },
+  {
+   "model": "icon",
+   "valid_local_date": "2026-11-17",
+   "issued_utc": "2026-11-16T10:08:52.065895+00:00",
+   "observed_high_f": 60.6,
+   "observed_low_f": 36,
+   "high_error_f": -3.3,
+   "low_error_f": 6.9,
    "observation_count": 288
   }
  ]
