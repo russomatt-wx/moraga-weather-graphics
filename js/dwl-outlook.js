@@ -337,7 +337,7 @@
     // Lighter rain after the near-term storm (what the day cards show as 30-70% with a tenth or so),
     // so the outlook never calls a showery stretch "dry".
     var light = null, lc = null;
-    if (!big) for (var j = first; j < n; j++) {
+    for (var j = first; j < n; j++) {
       if (pop(j) >= 30 && amt(j) >= 0.05) { if (!lc) { lc = { a: j, b: j, total: 0 }; if (!light) light = lc; } lc.b = j; lc.total += amt(j); }
       else lc = null;
     }
@@ -398,10 +398,18 @@
     var hiMax = -99; for (var i = i0; i < n; i++) hiMax = Math.max(hiMax, Number(daily.temperature_2m_max[i]) || -99);
     var nearDay = main && main.rain >= 0.05 ? (main.start.isNow ? 'Rain continues' : 'Rain ' + (/^overnight/.test(main.start.label) || (main.start.part === 3 && /^this/.test(main.start.label)) ? 'tonight' : /^this|^early/.test(main.start.label) ? 'today' : main.start.dayName)) : '';
     var big = hz.bigLater, bigDay = big ? dayName(daily, big.a, i0) : '';
+    var sigH = main && main.rain >= 0.05 ? significance(main, maxGust(rs)) : { storm: false };
+    if (sigH.storm) {
+      var w = whenWord(main), tail = w === 'now' ? '' : ' ' + w;
+      if (sigH.heavy && sigH.windy) return (w === 'now' ? 'Storm underway' : 'Strong storm' + tail) + ': heavy rain and gusty winds';
+      if (sigH.heavy) return 'Heavy rain' + tail + (w === 'now' ? ' continues' : '');
+      if (thunder) return 'Thunderstorms' + tail;
+      return 'Rain and strong winds' + tail;
+    }
     if (thunder && nearDay) return nearDay + ' with a chance of thunderstorms';
     if (nearDay && big && laterLabel(big.total, main.rain) === 'a stronger storm') return nearDay + ', stronger storm ' + bigDay;
     if (nearDay && big) return nearDay + ', more rain ' + bigDay;
-    if (nearDay && hz.lightLater) return nearDay + ', lighter showers ' + dayName(daily, hz.lightLater.a, i0);
+    if (nearDay && hz.lightLater && (!big || (big.total < .5 && hz.lightLater.a < big.a))) return nearDay + ', lighter showers ' + dayName(daily, hz.lightLater.a, i0);
     if (nearDay) return nearDay + ', then drying out';
     if (big) return 'Dry for now, rain returns ' + bigDay;
     if (hiMax >= 95) return 'Hot days ahead, highs up to ' + Math.round(hiMax) + '°';
@@ -430,6 +438,13 @@
     }
     var cause = causeFor(afd, main.start.dayName, main.start.isNow), t = tip(main, peak.gust), amt = amountWords(main.rain);
     var i = rs.indexOf(main), before = rs[i - 1], after = rs[i + 1];
+    if (main.start.isNow && significance(main, peak).storm) {
+      var sn = significance(main, peak);
+      var kindNow = sn.heavy && sn.windy ? 'Heavy rain and strong winds continue' : sn.heavy ? 'Heavy rain continues' : main.thunder ? 'Thunderstorms continue' : 'Strong winds and rain continue';
+      var alertNow = sn.alerts.length ? '. The National Weather Service has ' + alertList(sn.alerts) : '';
+      return 'The storm is here. ' + kindNow + ' ' + until(main) + ', with about ' + amt.replace(/^(about|around) /, '') + ' more' + (peak.gust >= 30 ? ' and gusts up to ' + g + ' mph' : '') +
+        (after && !after.wet ? ', then we dry out ' + startDay(after) : '') + (t ? ' — ' + t : '') + alertNow;
+    }
     if (main.start.isNow) {
       var verb = main.thunder ? 'Storms keep rolling in' : main.rain >= 0.3 ? 'The rain keeps coming' : 'Showers hang around';
       return verb + ' ' + until(main) + ' with ' + amt + ' more' + windBit + (after && !after.wet ? ', then we dry out ' + startDay(after) : '') + (t ? ' — ' + t : '');
@@ -441,6 +456,16 @@
     var win = cause && cause !== 'post-frontal' ? arrivalWindow(afd, main.start.dayName) : '';
     if (win && /^this|^overnight|^early/.test(main.start.label)) win = win.replace(new RegExp(' ' + main.start.dayName + '$'), ' today');
     var t2 = main.thunder || main.rain >= 0.75 || peak.gust >= 35 ? t : '';
+    var sig = significance(main, peak);
+    if (sig.storm) {
+      // Lead with the storm itself: what it brings, when, how much, how windy.
+      var kind = sig.heavy && sig.windy ? 'heavy rain and strong winds' : sig.heavy ? 'heavy rain' : main.thunder ? 'thunderstorms' : 'strong, gusty winds';
+      var front = cause && cause !== 'post-frontal' ? ' ' + cause.replace(/^(a|an|the) /, 'The ') : '';
+      var lead2 = 'A strong storm brings ' + kind + ' ' + main.span + (win ? ', with the front arriving ' + win : '') +
+        ': about ' + amt.replace(/^(about|around) /, '') + ' of rain' + (peak.gust >= 30 ? ' and gusts up to ' + g + ' mph' : '');
+      var alertTxt = sig.alerts.length ? '. The National Weather Service has ' + alertList(sig.alerts) : '';
+      return lead2 + (t ? ' — ' + t : '') + alertTxt;
+    }
     if (cause && cause !== 'post-frontal' && win) {
       var lead = say([
         cap(cause) + ' sweeps through ' + win + ', with rain ' + main.span + ' adding up to ' + amt + windBit,
@@ -459,11 +484,13 @@
     var afdAll = afd ? afd.key.join(' ') + ' ' + afd.short + ' ' + afd.long : '';
     // ~0.7 inch is a typical November week around Lamorinda and the Tri-Valley.
     var above = hz.total10 >= 1.2 || (hz.total10 >= .8 && /above (?:the )?(?:seasonal )?(?:average|normal)|pattern remains active/i.test(afdAll));
+    // A small later event shouldn't hide earlier showers: describe the first rain after the storm.
+    if (big && big.total < .5 && hz.lightLater && hz.lightLater.a < big.a) big = null;
     if (big) {
       var label = laterLabel(big.total, nearRain);
       var pre = breakSpan ? 'After a break ' + breakSpan + ', ' : 'Then ';
       var pattern = !above ? '' : /atmospheric river/i.test(afdAll) ? ', fueled by an atmospheric river' : '. Rainfall for the week will run well above normal';
-      return pre + label + ' moves in ' + range(big) + ' with ' + amountWords(big.total) + pattern;
+      return pre + label + (/showers/.test(label) ? ' move in ' : ' moves in ') + range(big) + ' with ' + amountWords(big.total) + pattern;
     }
     var n = Math.min(daily.time.length, i0 + HORIZON);
     var lt = hz.lightLater;
@@ -508,6 +535,32 @@
   }
   // Day-of-week + place keyed variety for the paragraph's phrasing (stable through the day).
   var VOICE = { now: null };
+  // Active NWS alerts for the town (set per build); coastal/marine products are not relevant inland.
+  var ALERTS = [];
+  function inlandAlerts() {
+    var seen = {};
+    return ALERTS.filter(function (e) { return e && !/coastal|surf|beach|marine|small craft|gale|rip current|tsunami/i.test(e) && !seen[e] && (seen[e] = 1); });
+  }
+  // A storm worth leading with: heavy rain, strong gusts, thunder, or an NWS wind/flood/storm alert.
+  function significance(main, peak) {
+    var alerts = inlandAlerts();
+    var heavy = !!main && (main.rain >= 1 || alerts.some(function (e) { return /flood/i.test(e); }) && main.rain >= .5);
+    var windy = peak.gust >= 40 || alerts.some(function (e) { return /wind/i.test(e) && !/ \(nearby\)$/.test(e); });
+    return { heavy: heavy, windy: windy, storm: heavy || windy || (!!main && main.thunder), alerts: alerts };
+  }
+  function alertList(a) {
+    var join = function (l) { var x = l.map(function (e) { return (/^[aeiou]/i.test(e) ? 'an ' : 'a ') + e; }); return x.length === 1 ? x[0] : x.slice(0, -1).join(', ') + ' and ' + x[x.length - 1]; };
+    var here = a.filter(function (e) { return !/ \(nearby\)$/.test(e); }), near = a.filter(function (e) { return / \(nearby\)$/.test(e); }).map(function (e) { return e.replace(/ \(nearby\)$/, ''); });
+    if (!here.length) return join(near) + ' in effect for nearby areas';
+    return join(here) + ' in effect' + (near.length ? ', with ' + join(near) + ' for nearby areas' : '');
+  }
+  function whenWord(main) {
+    if (!main) return '';
+    if (main.start.isNow) return 'now';
+    if (/^overnight/.test(main.start.label) || (main.start.part === 3 && /^this/.test(main.start.label))) return 'tonight';
+    if (/^this|^early/.test(main.start.label)) return 'today';
+    return main.start.dayName;
+  }
   function say(list, salt) { return pick(list, VOICE.now || { date: '2000-01-01' }, salt || 0); }
 
   // Friendly opener for the local time of day.
@@ -522,6 +575,7 @@
   function build(opts) {
     var now = opts.now || new Date();
     var nowParts = localNowParts(now);
+    ALERTS = Array.isArray(opts.alerts) ? opts.alerts.slice() : [];
     VOICE.now = { date: nowParts.date.slice(0, 8) + String((Number(nowParts.date.slice(8)) + String(opts.place || '').length) % 100).padStart(2, '0') };
     var afd = opts.afdText ? parseAfd(opts.afdText) : null;
     if (afd && !afd.short && !afd.long && !afd.key.length) afd = null;
