@@ -309,7 +309,7 @@
   // because "next Tuesday" is easily confused with this Tuesday.
   function dayName(daily, i, i0) {
     var w = weekday(daily.time[i]);
-    if (i - i0 < 6) return w;
+    if (i - i0 < 7) return w;
     return w + ', ' + new Date(daily.time[i] + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
   }
   // "Stronger" only when the later storm really is bigger than the near-term one.
@@ -334,6 +334,13 @@
       if (wet) { if (!cur) { cur = { a: i, b: i, total: 0 }; runsL.push(cur); } cur.b = i; cur.total += amt(i); } else cur = null;
     }
     var big = runsL.reduce(function (x, r) { return !x || r.total > x.total ? r : x; }, null);
+    // Lighter rain after the near-term storm (what the day cards show as 30-70% with a tenth or so),
+    // so the outlook never calls a showery stretch "dry".
+    var light = null, lc = null;
+    if (!big) for (var j = first; j < n; j++) {
+      if (pop(j) >= 30 && amt(j) >= 0.05) { if (!lc) { lc = { a: j, b: j, total: 0 }; if (!light) light = lc; } lc.b = j; lc.total += amt(j); }
+      else lc = null;
+    }
     var parts = [];
     var range = function (r) { return r.a === r.b ? dayName(daily, r.a, i0) : dayName(daily, r.a, i0) + ' into ' + weekday(daily.time[r.b]); };
     if (big) {
@@ -357,7 +364,7 @@
     if (frost) trend = (trend ? trend + ' and ' : '') + 'frosty mornings near ' + Math.round(coldest.v) + '° by ' + dayName(daily, coldest.i, i0);
     var text = 'Looking further out, ' + parts.join(' ') + (trend ? (big ? ', along with ' : ', with ') + trend : '');
     if (total10 >= 1) text += '. All told, ' + place + ' could pick up ' + amountWords(total10).replace(/^around /, 'about ') + ' over the next week';
-    return { text: text, total10: total10, bigLater: big, frost: frost };
+    return { text: text, total10: total10, bigLater: big, lightLater: light, frost: frost };
   }
 
   /* ---------- What the NWS forecasters are talking about, in plain English ---------- */
@@ -389,11 +396,12 @@
     var thunder = rs.some(function (r) { return r.thunder; });
     var i0 = daily && daily.time ? dayIdx(daily, nowParts) : 0, n = daily && daily.time ? Math.min(daily.time.length, i0 + HORIZON) : 0;
     var hiMax = -99; for (var i = i0; i < n; i++) hiMax = Math.max(hiMax, Number(daily.temperature_2m_max[i]) || -99);
-    var nearDay = main && main.rain >= 0.05 ? (main.start.isNow ? 'Rain continues' : 'Rain ' + (/^this|^overnight|^early/.test(main.start.label) ? 'today' : main.start.dayName)) : '';
+    var nearDay = main && main.rain >= 0.05 ? (main.start.isNow ? 'Rain continues' : 'Rain ' + (/^overnight/.test(main.start.label) || (main.start.part === 3 && /^this/.test(main.start.label)) ? 'tonight' : /^this|^early/.test(main.start.label) ? 'today' : main.start.dayName)) : '';
     var big = hz.bigLater, bigDay = big ? dayName(daily, big.a, i0) : '';
     if (thunder && nearDay) return nearDay + ' with a chance of thunderstorms';
     if (nearDay && big && laterLabel(big.total, main.rain) === 'a stronger storm') return nearDay + ', stronger storm ' + bigDay;
     if (nearDay && big) return nearDay + ', more rain ' + bigDay;
+    if (nearDay && hz.lightLater) return nearDay + ', lighter showers ' + dayName(daily, hz.lightLater.a, i0);
     if (nearDay) return nearDay + ', then drying out';
     if (big) return 'Dry for now, rain returns ' + bigDay;
     if (hiMax >= 95) return 'Hot days ahead, highs up to ' + Math.round(hiMax) + '°';
@@ -458,6 +466,11 @@
       return pre + label + ' moves in ' + range(big) + ' with ' + amountWords(big.total) + pattern;
     }
     var n = Math.min(daily.time.length, i0 + HORIZON);
+    var lt = hz.lightLater;
+    if (lt) {
+      var when = lt.a === lt.b ? dayName(daily, lt.a, i0) : dayName(daily, lt.a, i0) + ' into ' + weekday(daily.time[lt.b]);
+      return 'Lighter showers return ' + when + ', adding ' + (lt.total < .15 ? 'a tenth of an inch or so' : amountWords(lt.total));
+    }
     return 'Beyond that, the models keep things mostly dry through ' + dayName(daily, n - 1, i0);
   }
   var NUGGETS = [
