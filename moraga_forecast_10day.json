@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-19T02:34:30.963104+00:00",
+  "generated_utc": "2026-11-19T03:53:18.589056+00:00",
   "timezone": "America/Los_Angeles",
   "latitude": 37.8201932,
   "longitude": -122.1193876,
@@ -17,7 +17,7 @@
   ],
   "rain_guidance": {
     "2026-11-18": {
-      "expected_inches": 2.356,
+      "expected_inches": 2.37,
       "ensemble_share": 0.25,
       "ensemble_threshold_pct": {
         "0.01": 100,
@@ -35,13 +35,13 @@
       "pop_status": "available"
     },
     "2026-11-19": {
-      "expected_inches": 0.618,
+      "expected_inches": 0.61,
       "ensemble_share": 0.25,
       "ensemble_threshold_pct": {
         "0.01": 100,
         "0.1": 100,
         "0.25": 93,
-        "0.5": 83
+        "0.5": 82
       },
       "ensemble_models": [
         "EPS",
@@ -53,30 +53,30 @@
       "pop_status": "available"
     },
     "2026-11-20": {
-      "expected_inches": 0.037,
+      "expected_inches": 0.043,
       "ensemble_share": 0.25,
       "ensemble_threshold_pct": {
-        "0.01": 39,
-        "0.1": 7,
-        "0.25": 2,
+        "0.01": 53,
+        "0.1": 18,
+        "0.25": 3,
         "0.5": 0
       },
       "ensemble_models": [
         "EPS",
         "GEFS"
       ],
-      "ensemble_members": 80,
-      "derived_pop_pct": 39,
+      "ensemble_members": 78,
+      "derived_pop_pct": 53,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
       "pop_status": "available"
     },
     "2026-11-21": {
-      "expected_inches": 0.094,
+      "expected_inches": 0.086,
       "ensemble_share": 0.6,
       "ensemble_threshold_pct": {
-        "0.01": 70,
-        "0.1": 43,
-        "0.25": 10,
+        "0.01": 69,
+        "0.1": 39,
+        "0.25": 9,
         "0.5": 0
       },
       "ensemble_models": [
@@ -84,35 +84,17 @@
         "GEFS"
       ],
       "ensemble_members": 80,
-      "derived_pop_pct": 70,
+      "derived_pop_pct": 69,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
       "pop_status": "available"
     },
     "2026-11-22": {
-      "expected_inches": 0.02,
+      "expected_inches": 0.023,
       "ensemble_share": 0.6,
       "ensemble_threshold_pct": {
-        "0.01": 61,
-        "0.1": 9,
-        "0.25": 0,
-        "0.5": 0
-      },
-      "ensemble_models": [
-        "EPS",
-        "GEFS"
-      ],
-      "ensemble_members": 79,
-      "derived_pop_pct": 61,
-      "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
-      "pop_status": "available"
-    },
-    "2026-11-23": {
-      "expected_inches": 0.009,
-      "ensemble_share": 0.6,
-      "ensemble_threshold_pct": {
-        "0.01": 9,
-        "0.1": 5,
-        "0.25": 3,
+        "0.01": 53,
+        "0.1": 11,
+        "0.25": 4,
         "0.5": 1
       },
       "ensemble_models": [
@@ -120,25 +102,43 @@
         "GEFS"
       ],
       "ensemble_members": 79,
-      "derived_pop_pct": 9,
+      "derived_pop_pct": 53,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
       "pop_status": "available"
     },
-    "2026-11-24": {
-      "expected_inches": 0.649,
+    "2026-11-23": {
+      "expected_inches": 0.005,
       "ensemble_share": 0.6,
       "ensemble_threshold_pct": {
-        "0.01": 82,
-        "0.1": 73,
-        "0.25": 54,
-        "0.5": 43
+        "0.01": 8,
+        "0.1": 2,
+        "0.25": 1,
+        "0.5": 0
       },
       "ensemble_models": [
         "EPS",
         "GEFS"
       ],
-      "ensemble_members": 80,
-      "derived_pop_pct": 82,
+      "ensemble_members": 78,
+      "derived_pop_pct": 8,
+      "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
+      "pop_status": "available"
+    },
+    "2026-11-24": {
+      "expected_inches": 0.645,
+      "ensemble_share": 0.6,
+      "ensemble_threshold_pct": {
+        "0.01": 85,
+        "0.1": 74,
+        "0.25": 55,
+        "0.5": 42
+      },
+      "ensemble_models": [
+        "EPS",
+        "GEFS"
+      ],
+      "ensemble_members": 79,
+      "derived_pop_pct": 85,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
       "pop_status": "available"
     },
@@ -212,25 +212,25 @@
         "2026-11-27"
       ],
       "high_f": [
-        52.2,
-        53.3,
-        55.9,
-        54.2,
-        54.0,
+        51.1,
+        53.1,
+        54.8,
+        55.0,
+        54.7,
         56.4,
-        54.9,
+        55.9,
         57.1,
         59.0,
         59.3
       ],
       "low_f": [
-        46.8,
-        44.2,
-        37.2,
-        35.2,
-        39.0,
-        35.8,
-        42.8,
+        46.1,
+        43.8,
+        36.9,
+        34.7,
+        38.9,
+        36.2,
+        42.4,
         44.7,
         42.4,
         43.3
@@ -477,13 +477,13 @@
       0.106
     ],
     "EPS mean": [
-      1.87,
-      0.87,
-      0.024,
-      0.098,
+      1.976,
+      0.803,
       0.055,
-      0.024,
-      0.508,
+      0.071,
+      0.067,
+      0.02,
+      0.472,
       0.874,
       0.11,
       0.193
@@ -504,11 +504,11 @@
   "ensemble_rain_probability_pct": {
     "2026-11-18": 100,
     "2026-11-19": 100,
-    "2026-11-20": 39,
-    "2026-11-21": 70,
-    "2026-11-22": 61,
-    "2026-11-23": 9,
-    "2026-11-24": 82,
+    "2026-11-20": 53,
+    "2026-11-21": 69,
+    "2026-11-22": 53,
+    "2026-11-23": 8,
+    "2026-11-24": 85,
     "2026-11-25": 75,
     "2026-11-26": 11,
     "2026-11-27": 41
@@ -517,12 +517,12 @@
     "2026-11-18": 100,
     "2026-11-19": 88,
     "2026-11-20": 28,
-    "2026-11-21": 67,
-    "2026-11-22": 39,
-    "2026-11-23": 19,
-    "2026-11-24": 78,
-    "2026-11-25": 58,
-    "2026-11-26": 17,
+    "2026-11-21": 64,
+    "2026-11-22": 14,
+    "2026-11-23": 11,
+    "2026-11-24": 74,
+    "2026-11-25": 70,
+    "2026-11-26": 8,
     "2026-11-27": 23
   },
   "rain_probability_method": "EPS/GEFS equal-family daily member fraction >=0.01 in",
