@@ -142,6 +142,16 @@ def observed_day(town, day):
     return None
 
 
+def full_day(ob):
+    """A usable station day: readings spanning nearly the whole day, at any reporting interval
+    (5-minute stations give ~288 readings, 15-minute stations ~96)."""
+    try:
+        span = (datetime.fromisoformat(ob["last_utc"].replace("Z", "+00:00")) - datetime.fromisoformat(ob["first_utc"].replace("Z", "+00:00"))).total_seconds() / 3600
+    except (KeyError, ValueError, AttributeError):
+        return ob.get("samples", 0) >= MIN_SAMPLES
+    return span >= 22.5 and ob.get("samples", 0) >= 80
+
+
 def walk_forward(errors):
     """Pick the bias-correction strength that would have helped most on unseen days."""
     tests = []
@@ -183,7 +193,7 @@ def score(town, archive, observed):
     return {"generated_utc": datetime.now(timezone.utc).isoformat(), "status": "verified_daily_extremes" if rows else "collecting",
             "town": town, "station": TOWNS[town], "model_scores": scores, "calibration": calibration,
             "method": "Earliest archived day-ahead model forecast per target local date (from the published town feed); observed daily high/low from the town's "
-                      f"Weather Underground station ({TOWNS[town]}) with >= {MIN_SAMPLES} five-minute observations",
+                      f"Weather Underground station ({TOWNS[town]}) covering at least 22.5 hours of the day",
             "note": "Each town is verified against its own station; Moraga corrections are never transferred.",
             "matches": rows[-90:]}
 
@@ -205,7 +215,7 @@ def main():
         got = 0
         for day in sorted(want):
             ob = observed_day(town, day)
-            if ob and ob.get("samples", 0) >= MIN_SAMPLES and ob.get("station") == TOWNS[town]:
+            if ob and full_day(ob) and ob.get("station") == TOWNS[town]:
                 observed.setdefault(town, {})[day] = {k: ob.get(k) for k in ("high_f", "low_f", "precip_in", "samples")}
                 got += 1
         # Keep 120 days.
