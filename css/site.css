@@ -819,3 +819,28 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .dwl-days > .dwl-day { grid-template-columns: 58px 42px minmax(4px, 1fr) 48px 112px minmax(4px, 1fr) 40px !important; }
 @media (max-width: 360px) { .dwl-days > .dwl-day { grid-template-columns: 46px 34px minmax(2px, 1fr) 38px 96px minmax(2px, 1fr) 32px !important; } }
 @media (min-width: 700px) { .dwl-days > .dwl-day { grid-template-columns: 76px 56px minmax(8px, 1fr) 62px 200px minmax(8px, 1fr) 54px !important; } }
+
+/* ---------- Compact current conditions (less scrolling to the 10-day) ---------- */
+#public-shell .public-obs-card { padding: 10px !important; }
+#public-shell .dwl-cc { padding: 11px 14px 11px; }
+#public-shell .dwl-cc-main { margin-top: 4px; gap: 18px; }
+#public-shell .dwl-cc-temp { font-size: clamp(38px, 7.5vw, 54px); }
+#public-shell .dwl-cc-details { gap: 3px; font-size: clamp(13px, 3.4vw, 15px); }
+#public-shell .dwl-cc-metrics { margin-top: 8px; padding-top: 7px; gap: 6px; }
+#public-shell .dwl-cc-metrics > div { gap: 2px; }
+#public-shell .dwl-cc-metrics strong { font-size: clamp(13px, 3.3vw, 15px); }
+/* "Today so far" as one row: label then high / low / rain */
+#public-shell .dwl-cc-today-title { float: left; margin: 12px 0 0 4px; width: 64px; font-size: 10.5px; line-height: 1.25; letter-spacing: .12em; }
+#public-shell .dwl-cc-today { margin: 8px 0 2px 72px; gap: 4px; }
+#public-shell .dwl-cc-today > div { flex-direction: row; justify-content: center; align-items: baseline; gap: 6px; }
+#public-shell .dwl-cc-today span { font-size: 13px; }
+#public-shell .dwl-cc-today strong { font-size: clamp(19px, 5vw, 24px); }
+
+/* ---------- Weather outlook: headline + a few lines, tap to read more ---------- */
+.public-outlook { padding-top: 16px !important; padding-bottom: 14px !important; }
+.public-outlook-title { margin-bottom: 8px; }
+.public-outlook-headline { margin-bottom: 8px; font-size: clamp(19px, 4.6vw, 24px); }
+.public-outlook.is-clamped p#public-discussion { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.public-outlook.is-clamped .public-outlook-source { display: none; }
+.public-outlook-more { appearance: none; border: 0; background: none; padding: 8px 0 0; cursor: pointer; font: 600 14.5px/1.2 var(--font-ui); color: var(--accent); }
+#public-shell button.public-outlook-more { border: 0 !important; background: none !important; box-shadow: none !important; padding: 6px 0 0 !important; min-height: 0 !important; width: auto !important; font: 600 14.5px/1.2 var(--font-ui) !important; color: var(--accent) !important; }
