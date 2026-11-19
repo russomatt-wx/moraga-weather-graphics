@@ -9,6 +9,8 @@ export const TOWNS = {
   Lafayette: [37.8900, -122.1150],
   Danville: [37.8130, -121.9740],
   Greenbrook: [37.7990, -121.9700],
+  Brentwood: [37.957, -121.701],
+  Sacramento: [38.575, -121.446],
   Sausalito: [37.875, -122.516],
 };
 const SITE = 'https://russomatt-wx.github.io/moraga-weather-graphics/';

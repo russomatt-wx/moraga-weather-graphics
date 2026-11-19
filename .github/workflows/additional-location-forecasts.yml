@@ -23,12 +23,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for location in lafayette danville greenbrook sausalito; do
+          for location in lafayette danville greenbrook sausalito brentwood sacramento; do
             case "$location" in
               lafayette) lat=37.890; lon=-122.115 ;;
               danville) lat=37.813; lon=-121.974 ;;
               greenbrook) lat=37.799; lon=-121.970 ;;
               sausalito) lat=37.875; lon=-122.516 ;;
+              brentwood) lat=37.957; lon=-121.701 ;;
+              sacramento) lat=38.575; lon=-121.446 ;;
             esac
             mkdir -p "/tmp/wx-$location"
             # Let the script compare against the current feed (it keeps it if a new run lost models).
@@ -43,7 +45,7 @@ jobs:
           from zoneinfo import ZoneInfo
           today=datetime.datetime.now(ZoneInfo('America/Los_Angeles')).date()
           dates=[(today+datetime.timedelta(days=i)).isoformat() for i in range(10)]
-          for name,lat,lon in [('lafayette',37.890,-122.115),('danville',37.813,-121.974),('greenbrook',37.799,-121.970),('sausalito',37.875,-122.516)]:
+          for name,lat,lon in [('lafayette',37.890,-122.115),('danville',37.813,-121.974),('greenbrook',37.799,-121.970),('sausalito',37.875,-122.516),('brentwood',37.957,-121.701),('sacramento',38.575,-121.446)]:
               data=json.loads(pathlib.Path(f'{name}_forecast_10day.json').read_text())
               assert data['dates']==dates, f'{name}: wrong dates'
               assert abs(data['latitude']-lat)<0.002 and abs(data['longitude']-lon)<0.002, f'{name}: wrong coordinates'
@@ -56,14 +58,14 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p /tmp/additional-location-publish
-          cp lafayette_forecast_10day.json danville_forecast_10day.json greenbrook_forecast_10day.json sausalito_forecast_10day.json /tmp/additional-location-publish/
+          cp lafayette_forecast_10day.json danville_forecast_10day.json greenbrook_forecast_10day.json sausalito_forecast_10day.json brentwood_forecast_10day.json sacramento_forecast_10day.json /tmp/additional-location-publish/
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             git reset --hard origin/main
             cp /tmp/additional-location-publish/* ./
-            git add lafayette_forecast_10day.json danville_forecast_10day.json greenbrook_forecast_10day.json sausalito_forecast_10day.json
+            git add lafayette_forecast_10day.json danville_forecast_10day.json greenbrook_forecast_10day.json sausalito_forecast_10day.json brentwood_forecast_10day.json sacramento_forecast_10day.json
             if git diff --cached --quiet; then exit 0; fi
             git commit -m 'Refresh twice-daily additional location forecasts'
             if git push origin HEAD:main; then exit 0; fi

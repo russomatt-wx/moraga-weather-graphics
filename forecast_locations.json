@@ -34,6 +34,22 @@
       "forecast_file": "sausalito_forecast_10day.json",
       "calibration_station": "KCASAUSA88",
       "status": "operational"
+    },
+    "brentwood": {
+      "latitude": 37.957,
+      "longitude": -121.701,
+      "display_name": "Brentwood \u2014 East County",
+      "forecast_file": "brentwood_forecast_10day.json",
+      "calibration_station": "KCABRENT202",
+      "status": "operational"
+    },
+    "sacramento": {
+      "latitude": 38.575,
+      "longitude": -121.446,
+      "display_name": "East Sacramento \u2014 Sacramento",
+      "forecast_file": "sacramento_forecast_10day.json",
+      "calibration_station": "KCASACRA200",
+      "status": "operational"
     }
   },
   "forecast_policy": {

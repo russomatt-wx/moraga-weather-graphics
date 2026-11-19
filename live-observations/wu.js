@@ -9,10 +9,10 @@
 //   (the site falls back to the nearest airport report when this returns nothing)
 
 // Hand-picked Weather Underground stations per town (temperature and sunlight).
-export const WU_STATIONS = { moraga: 'KCAMORAG71', lafayette: 'KCAWALNU6', danville: 'KCADANVI207', greenbrook: 'KCADANVI224', sausalito: 'KCASAUSA88' };
+export const WU_STATIONS = { moraga: 'KCAMORAG71', lafayette: 'KCAWALNU6', danville: 'KCADANVI207', greenbrook: 'KCADANVI224', brentwood: 'KCABRENT202', sacramento: 'KCASACRA200', sausalito: 'KCASAUSA88' };
 // Towns whose temperature/humidity/wind come from Weather Underground (Moraga keeps Xweather + its archive).
-export const WU_PRIMARY = new Set(['lafayette', 'danville', 'greenbrook', 'sausalito']);
-export const TOWN_COORDS = { moraga: [37.8202, -122.1194], lafayette: [37.890, -122.115], danville: [37.813, -121.974], greenbrook: [37.799, -121.970] , sausalito: [37.875, -122.516] };
+export const WU_PRIMARY = new Set(['lafayette', 'danville', 'greenbrook', 'brentwood', 'sacramento', 'sausalito']);
+export const TOWN_COORDS = { moraga: [37.8202, -122.1194], lafayette: [37.890, -122.115], danville: [37.813, -121.974], greenbrook: [37.799, -121.970] , sausalito: [37.875, -122.516] , brentwood: [37.957, -121.701] , sacramento: [38.575, -121.446] };
 const MAX_AGE_MS = 45 * 60 * 1000;
 // The secret as pasted, minus stray whitespace/quotes.
 const wuKey = (env) => String(env.WU_API_KEY || '').trim().replace(/^["']+|["']+$/g, '');

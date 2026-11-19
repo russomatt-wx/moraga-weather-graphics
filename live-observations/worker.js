@@ -7,7 +7,7 @@ export { AlertPush };
 const STATION = 'PWS_KCAMORAG71';
 // Optional validated station IDs, supplied as Worker environment variables.
 // Do not select a station based on proximity alone without checking its exposure and freshness.
-const CITY_COORDS = {lafayette:'37.890,-122.115',danville:'37.813,-121.974',greenbrook:'37.799,-121.970',sausalito:'37.875,-122.516'};
+const CITY_COORDS = {lafayette:'37.890,-122.115',danville:'37.813,-121.974',greenbrook:'37.799,-121.970',brentwood:'37.957,-121.701',sausalito:'37.875,-122.516',sacramento:'38.575,-121.446'};
 const MAX_AGE_MS = 45 * 60 * 1000;
 // Hand-picked neighborhood stations (Xweather IDs), tried before automatic discovery.
 // Weather Underground IDs (e.g. KCADANVI207) are not in Xweather (invalid_location),
@@ -104,7 +104,7 @@ export default {
     if (request.method === 'OPTIONS') return new Response(null, {status:204, headers:{...cors,'Access-Control-Allow-Methods':'GET, OPTIONS','Access-Control-Allow-Headers':'Content-Type'}});
     if (request.method !== 'GET' || url.pathname !== '/observations') return new Response('Not found',{status:404,headers:cors});
     const city = (url.searchParams.get('city') || 'moraga').toLowerCase();
-    if (!['moraga','lafayette','danville','greenbrook','sausalito'].includes(city)) return Response.json({error:'Unknown location'},{status:400,headers:cors});
+    if (!['moraga','lafayette','danville','greenbrook','brentwood','sacramento','sausalito'].includes(city)) return Response.json({error:'Unknown location'},{status:400,headers:cors});
     const wuLog = [];
     // Observed today-so-far (high/low/rain) for every town, and one pressure for all of them:
     // the owner's Moraga station (KCAMORAG71), so the towns never disagree on pressure.
