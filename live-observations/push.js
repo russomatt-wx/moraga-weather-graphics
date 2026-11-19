@@ -9,6 +9,7 @@ export const TOWNS = {
   Lafayette: [37.8900, -122.1150],
   Danville: [37.8130, -121.9740],
   Greenbrook: [37.7990, -121.9700],
+  Sausalito: [37.862, -122.488],
 };
 const SITE = 'https://russomatt-wx.github.io/moraga-weather-graphics/';
 const NWS_HEADERS = { 'User-Agent': 'DiabloWeatherLab-alerts/1.0', Accept: 'application/geo+json' };

@@ -26,6 +26,14 @@
       "forecast_file": "danville_forecast_10day.json",
       "calibration_station": "KCADANVI207",
       "status": "operational"
+    },
+    "sausalito": {
+      "latitude": 37.862,
+      "longitude": -122.488,
+      "display_name": "Sausalito \u2014 Waterfront",
+      "forecast_file": "sausalito_forecast_10day.json",
+      "calibration_station": "KCASAUSA92",
+      "status": "operational"
     }
   },
   "forecast_policy": {

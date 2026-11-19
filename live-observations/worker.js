@@ -7,7 +7,7 @@ export { AlertPush };
 const STATION = 'PWS_KCAMORAG71';
 // Optional validated station IDs, supplied as Worker environment variables.
 // Do not select a station based on proximity alone without checking its exposure and freshness.
-const CITY_COORDS = {lafayette:'37.890,-122.115',danville:'37.813,-121.974',greenbrook:'37.799,-121.970'};
+const CITY_COORDS = {lafayette:'37.890,-122.115',danville:'37.813,-121.974',greenbrook:'37.799,-121.970',sausalito:'37.862,-122.488'};
 const MAX_AGE_MS = 45 * 60 * 1000;
 // Hand-picked neighborhood stations (Xweather IDs), tried before automatic discovery.
 // Weather Underground IDs (e.g. KCADANVI207) are not in Xweather (invalid_location),
@@ -104,7 +104,7 @@ export default {
     if (request.method === 'OPTIONS') return new Response(null, {status:204, headers:{...cors,'Access-Control-Allow-Methods':'GET, OPTIONS','Access-Control-Allow-Headers':'Content-Type'}});
     if (request.method !== 'GET' || url.pathname !== '/observations') return new Response('Not found',{status:404,headers:cors});
     const city = (url.searchParams.get('city') || 'moraga').toLowerCase();
-    if (!['moraga','lafayette','danville','greenbrook'].includes(city)) return Response.json({error:'Unknown location'},{status:400,headers:cors});
+    if (!['moraga','lafayette','danville','greenbrook','sausalito'].includes(city)) return Response.json({error:'Unknown location'},{status:400,headers:cors});
     const wuLog = [];
     // Observed today-so-far (high/low/rain) for every town, and one pressure for all of them:
     // the owner's Moraga station (KCAMORAG71), so the towns never disagree on pressure.
@@ -127,7 +127,7 @@ export default {
       if (wu) { const body = {...wu, city, station_selection:'weather_underground', sky: await sky(wu.solar_radiation_wm2), source:'Weather Underground'}; Object.assign(body, await extras(body)); return Response.json({...body, diagnostics: wuLog.length ? wuLog : undefined}, {headers:cors}); }
     }
     if (!env.XWEATHER_CLIENT_ID || !env.XWEATHER_CLIENT_SECRET) return Response.json({error:'Live service not configured'},{status:503,headers:cors});
-    let station = city === 'moraga' ? STATION : (city === 'lafayette' ? env.LAFAYETTE_STATION_ID : city === 'greenbrook' ? env.GREENBROOK_STATION_ID : env.DANVILLE_STATION_ID);
+    let station = city === 'moraga' ? STATION : (city === 'lafayette' ? env.LAFAYETTE_STATION_ID : city === 'greenbrook' ? env.GREENBROOK_STATION_ID : city === 'danville' ? env.DANVILLE_STATION_ID : null);
     // Never serve the known-problematic Greenbrook station, even if pinned in settings.
     if(city === 'greenbrook' && GREENBROOK_EXCLUDED.has(station)) station = null;
     let discovery = null, preferred = false; const preferredLog = [];
