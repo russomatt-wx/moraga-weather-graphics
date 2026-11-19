@@ -1,6 +1,15 @@
 // Moraga Observatory live station proxy and push alerts. Deploy as a Cloudflare Worker.
 import { AlertPush, handlePush, runAlertCheck } from './push.js';
-import { WU_STATIONS, WU_PRIMARY, wuCurrent, wuToday, wuDay, skyFor, wuKeyShape } from './wu.js';
+import { WU_STATIONS, WU_PRIMARY, TOWN_COORDS, wuCurrent, wuToday, wuDay, skyFor, wuKeyShape, sunElevation } from './wu.js';
+// Rain the station is measuring right now beats any sky estimate (airport reports lag passing bands).
+function rainingSky(rate, sky, city) {
+  if (!(Number(rate) > 0)) return sky;
+  const c = TOWN_COORDS[city], day = c ? sunElevation(c[0], c[1]) > 0 : true;
+  const r = Number(rate);
+  return r >= 0.3 ? { text: 'Heavy rain', code: 65, is_day: day, source: 'station_rain_rate', rate_in_hr: r }
+       : r >= 0.05 ? { text: 'Rain', code: 63, is_day: day, source: 'station_rain_rate', rate_in_hr: r }
+       : { text: 'Light rain', code: 61, is_day: day, source: 'station_rain_rate', rate_in_hr: r };
+}
 export { AlertPush };
 // Configure secrets XWEATHER_CLIENT_ID, XWEATHER_CLIENT_SECRET and ALLOWED_ORIGIN.
 // Never place credentials in the public website or source repository.
@@ -124,7 +133,7 @@ export default {
     // Hand-picked Weather Underground station first (needs WU_API_KEY); Xweather below is the fallback.
     if (WU_PRIMARY.has(city) && String(env.WU_API_KEY || '').trim()) {
       const wu = await wuCurrent(WU_STATIONS[city], env, wuLog);
-      if (wu) { const body = {...wu, city, station_selection:'weather_underground', sky: await sky(wu.solar_radiation_wm2), source:'Weather Underground'}; Object.assign(body, await extras(body)); return Response.json({...body, diagnostics: wuLog.length ? wuLog : undefined}, {headers:cors}); }
+      if (wu) { const body = {...wu, city, station_selection:'weather_underground', sky: rainingSky(wu.precip_rate_in_hr, await sky(wu.solar_radiation_wm2), city), source:'Weather Underground'}; Object.assign(body, await extras(body)); return Response.json({...body, diagnostics: wuLog.length ? wuLog : undefined}, {headers:cors}); }
     }
     if (!env.XWEATHER_CLIENT_ID || !env.XWEATHER_CLIENT_SECRET) return Response.json({error:'Live service not configured'},{status:503,headers:cors});
     let station = city === 'moraga' ? STATION : (city === 'lafayette' ? env.LAFAYETTE_STATION_ID : city === 'greenbrook' ? env.GREENBROOK_STATION_ID : city === 'danville' ? env.DANVILLE_STATION_ID : null);
@@ -250,7 +259,7 @@ export default {
         daily_precipitation_date:dailyRain?.date ?? null,
         daily_precipitation_source:dailyRain?.source ?? (dailyRain ? 'xweather_summary' : null),
         // Sunlight only from vetted stations; an auto-discovered station's sensor may be shaded.
-        sky:await sky(discovery ? null : [...solarRecent, pick('solradWM2')]),
+        sky:rainingSky(pick('precipRateIN'), await sky(discovery ? null : [...solarRecent, pick('solradWM2')]), city),
         diagnostics:wuLog.length?wuLog:undefined,
         source:'Xweather'
       };
