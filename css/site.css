@@ -760,3 +760,9 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 @media (max-width: 360px) { .dwl-days > .dwl-day { grid-template-columns: 46px 38px 34px minmax(0, 1fr) 32px !important; } }
 @media (min-width: 700px) { .dwl-days > .dwl-day { grid-template-columns: 76px 62px 56px minmax(0, 1fr) 54px !important; } }
 .pad-rain { white-space: nowrap; margin-left: 4px; color: var(--rain); font-weight: 600; }
+/* Bigger 3-hour tiles: easier to tap (about 40px tall). */
+.pad-days { gap: 8px; }
+.pad-day { grid-template-columns: 66px 1fr; gap: 6px; }
+.pad-cells { gap: 4px; }
+.pad-cell { height: 40px; border-radius: 8px; font-size: 12.5px; line-height: 40px; }
+.pad-filter button { padding: 10px 15px; font-size: 14.5px; }
