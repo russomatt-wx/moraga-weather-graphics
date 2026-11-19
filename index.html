@@ -781,7 +781,7 @@ function nwsWeatherOutlook(afd,d,h){
    set('public-days-updated',updatedAt(publicForecastFeed?Date.parse(publicForecastFeed.generated_utc):Date.now()));
    renderDays(d,publicForecastFeed,data.hourly);
    set('public-discussion','Retrieving the latest NWS Bay Area forecast discussion and local hourly guidance…');
-   liveOutlook=request;getNwsDiscussion().then(afd=>{if(request===revision)set('public-discussion',nwsWeatherOutlook(afd,d,data.hourly,data.current));}).catch(()=>{if(request===revision)set('public-discussion',nwsWeatherOutlook(null,d,data.hourly,data.current));});
+   liveOutlook=request;getNwsDiscussion().then(async afd=>{await loadChatGPTOutlooks();if(request===revision)set('public-discussion',nwsWeatherOutlook(afd,d,data.hourly,data.current));}).catch(async()=>{await loadChatGPTOutlooks();if(request===revision)set('public-discussion',nwsWeatherOutlook(null,d,data.hourly,data.current));});
    let hourlyForecast=data.hourly,shortRangeSources='',shortUpdated=null;
    try{
     const shortResponse=await fetch(feedName+'_short_range_24h.json?t='+Date.now(),{cache:'no-store'});
