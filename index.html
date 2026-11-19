@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=19"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=19"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=19">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261116b">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261119a">
 
 
 
@@ -326,8 +326,13 @@
    const chance=Number(hourly.precipitation_probability?.[i]??NaN);
    const icon=DWL.icon(hourIconCode(i===start&&skyOk?lastSky.code:hourly.weather_code[i],chance),'',(i===start&&skyOk?lastSky.isDay===0:hourly.is_day?.[i]===0));
    cards.push({key:hourly.time[i],hour:new Date(hourly.time[i]).toLocaleTimeString('en-US',{hour:'numeric'}),color:tempColor(tempAt(i)),temp:fmt(tempAt(i)),
+     qpf:[i,i+1].reduce((a,k)=>{const v=Number(hourly.precipitation?.[k]);return a+(Number.isFinite(v)&&v>0?v:0);},0),
      src:icon.match(/src="([^"]+)"/)[1],alt:(icon.match(/alt="([^"]*)"/)||[])[1]||'',icon,rain:'<div class="public-hour-rain">'+(Number.isFinite(chance)&&Math.round(chance/10)*10>=20?Math.min(100,Math.round(chance/10)*10)+'%':'&nbsp;')+'</div>'});
   }
+  // Rain-amount trend under the cards (each bar = that card's 2 hours); scale never below 0.10" so drizzle stays small.
+  const qpfMax=Math.max(...cards.map(d=>d.qpf),0),qpfScale=Math.max(qpfMax,0.10);
+  host.classList.toggle('has-qpf',qpfMax>=0.01);
+  const qpfBar=d=>'<i style="height:'+(d.qpf>=0.005?Math.max(2,Math.round(18*d.qpf/qpfScale)):0)+'px"></i><span>'+(d.qpf>=0.01?d.qpf.toFixed(2)+'″':'')+'</span>';
   // Same hours already on screen (e.g. the station reading just arrived): update in place rather than
   // rebuilding, so images are never re-created (Safari could leave a re-inserted icon blank).
   const existing=[...host.querySelectorAll('.public-hour')];
@@ -335,11 +340,13 @@
    existing.forEach((c,j)=>{const d=cards[j];c.style.setProperty('--hour-color',d.color);
     c.querySelector('.public-hour-temp').textContent=d.temp;
     const im=c.querySelector('img');if(im&&im.getAttribute('src')!==d.src){im.setAttribute('src',d.src);im.alt=d.alt;}
-    const r=c.querySelector('.public-hour-rain');if(r)r.outerHTML=d.rain;});
+    const r=c.querySelector('.public-hour-rain');if(r)r.outerHTML=d.rain;
+    const q=c.nextElementSibling;if(q&&q.classList.contains('public-hour-qpf'))q.innerHTML=qpfBar(d);});
   }else{
    host.replaceChildren();
    cards.forEach(d=>{const card=document.createElement('div');card.className='public-hour';card.dataset.key=d.key;card.style.setProperty('--hour-color',d.color);
-    card.innerHTML='<strong>'+d.hour+'</strong><div class="public-hour-icon">'+d.icon+'</div><strong class="public-hour-temp">'+d.temp+'</strong>'+d.rain;host.appendChild(card);});
+    card.innerHTML='<strong>'+d.hour+'</strong><div class="public-hour-icon">'+d.icon+'</div><strong class="public-hour-temp">'+d.temp+'</strong>'+d.rain;host.appendChild(card);
+    const q=document.createElement('div');q.className='public-hour-qpf';q.setAttribute('aria-hidden','true');q.innerHTML=qpfBar(d);host.appendChild(q);});
   }
   if(!(el('public-current-condition')?.textContent||'').trim()||/Loading current/.test(el('public-current-condition')?.textContent||'')){const w=lastSky&&lastSky.city===city?skyWords(lastSky):publishedSky(city);if(w)set('public-current-condition',w);}
  }
@@ -433,7 +440,7 @@
      }
     }catch(error){console.warn('Observed daily extrema unavailable',error)}
    }
-   set('public-station-status','Observed at '+ob.station+' · '+new Date(stamp).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+' · Xweather.');
+   set('public-station-status','Station '+ob.station+' · observed '+new Date(stamp).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'})+' PT · '+(ob.source||'Xweather'));
   }catch(e){
    if(request===revision){
     const note=chosen==='Moraga'?'Moraga station unavailable.':'No verified local station available for '+chosen+'.';

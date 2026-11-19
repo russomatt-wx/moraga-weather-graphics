@@ -459,3 +459,31 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .dwl-day .dwl-icon { width: 66px; height: 46px; margin: -5px 0 -3px; }
 @media (max-width: 360px) { .dwl-day .dwl-icon { width: 58px; height: 40px; margin: -4px 0 -3px; } }
 @media (min-width: 700px) { .dwl-day .dwl-icon { width: 74px; height: 52px; margin: -5px 0 -3px; } }
+
+/* ---------- Next 24 hours: five cards across, rain-amount trend underneath ---------- */
+#public-shell .public-hourly {
+  display: grid !important; grid-auto-flow: column; grid-template-rows: auto auto;
+  grid-auto-columns: calc((100% - 4 * 6px) / 5); column-gap: 6px; row-gap: 0;
+  overflow-x: auto; padding: 4px 0 2px !important; scroll-snap-type: x proximity; scrollbar-width: none;
+}
+#public-shell .public-hourly::-webkit-scrollbar { display: none; }
+#public-shell .public-hour { padding: 9px 3px !important; border-radius: 12px !important; min-width: 0; }
+#public-shell .public-hour > strong:first-child { font-size: 13px; white-space: nowrap; }
+#public-shell .public-hour .public-hour-icon { height: 40px !important; margin: 3px 0 !important; }
+#public-shell .public-hour .public-hour-icon img, #public-shell .public-hour .dwl-icon { width: 54px !important; height: 38px !important; }
+#public-shell .public-hour-temp { font-size: 17px !important; }
+#public-shell .public-hour div { margin: 3px 0; }
+#public-shell .public-hour-rain { font-size: 11.5px; min-height: 1.15em; }
+/* Thin bar row; only shown when rain is forecast in the next 24 hours. */
+#public-shell .public-hour-qpf { height: 0; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+#public-shell .public-hourly.has-qpf { row-gap: 4px; }
+#public-shell .public-hourly.has-qpf .public-hour-qpf { height: 32px; }
+#public-shell .public-hour-qpf i {
+  display: block; width: 40%; max-height: 18px; flex: none; border-radius: 3px 3px 1px 1px;
+  background: linear-gradient(180deg, #7fd9ff, var(--rain)); box-shadow: 0 0 6px -1px var(--rain);
+}
+#public-shell .public-hour-qpf i[style*="height:0px"] { box-shadow: none; }
+#public-shell .public-hour-qpf { border-bottom: 1px solid var(--line-soft); }
+#public-shell .public-hour-qpf span { font-size: 10px; line-height: 12px; height: 12px; color: var(--rain); margin-top: 1px; }
+/* Station line: small and quiet, close under the strip. */
+#public-shell #public-station-status { margin: 6px 2px 0 !important; font-size: 11px !important; letter-spacing: .02em; color: var(--muted) !important; opacity: .8; }
