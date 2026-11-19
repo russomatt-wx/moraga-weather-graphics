@@ -1,4 +1,4 @@
-// Diablo Weather Lab push alerts.
+// Diablo Weather Labs push alerts.
 // A single Durable Object (AlertPush) keeps the push subscriptions and the alerts already sent.
 // Every 2 minutes (cron) it checks NWS active alerts for each town and sends a Web Push
 // notification to the phones subscribed to that town. No third-party push service or secrets:
@@ -99,7 +99,7 @@ export class AlertPush {
     const added = towns.filter((t) => !(before ? JSON.parse(before.towns) : []).includes(t));
     let status = null;
     if (added.length) status = await this.send({ endpoint: sub.endpoint, p256dh: sub.keys.p256dh, auth: sub.keys.auth }, {
-      title: 'Diablo Weather Lab', body: 'Push alerts are on for ' + added.join(', ') + '. You will be notified when the National Weather Service issues an alert there.', url: SITE, tag: 'dwl-welcome',
+      title: 'Diablo Weather Labs', body: 'Push alerts are on for ' + added.join(', ') + '. You will be notified when the National Weather Service issues an alert there.', url: SITE, tag: 'dwl-welcome',
     });
     return Response.json({ ok: true, towns, welcome: status });
   }

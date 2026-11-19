@@ -1,4 +1,4 @@
-/* Diablo Weather Lab — 72-hour outlook writer.
+/* Diablo Weather Labs — 72-hour outlook writer.
    Builds a headline and a short, lively forecast story (next 72 hours, then out to day 7) from:
      • the latest NWS Bay Area (MTR) Area Forecast Discussion: key messages, short/long term, and
      • that location's hourly model guidance (rain, wind gusts, weather codes) and blended daily temps.
