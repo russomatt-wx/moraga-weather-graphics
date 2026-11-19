@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=24"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=24"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=24">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261119j">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261119k">
 
 
 
@@ -79,7 +79,7 @@
   try{
    if(!on&&(await Notification.requestPermission())!=='granted'){pushNote='Notifications are turned off for this app. You can allow them in Settings → Notifications.';return;}
    await sendPushTowns(on?towns.filter(t=>t!==city):[...towns,city]);
-   pushNote=on?'Push alerts are off for '+city+'.':'You’re set. We’ll notify you when NWS issues an alert for '+city+'.';
+   pushNote=on?'Push alerts are off for '+(({Sausalito:'Marin City',Sacramento:'East Sacramento',Danville:'Sycamore Valley'})[city]||city)+'.':'You’re set. We’ll notify you when NWS issues an alert for '+(({Sausalito:'Marin City',Sacramento:'East Sacramento',Danville:'Sycamore Valley'})[city]||city)+'.';
   }catch(e){pushNote='Couldn’t update push alerts. Please try again.';}
   finally{pushBusy=false;renderPush();}
  }
@@ -90,7 +90,8 @@
   const on=pushSupported()&&Notification.permission!=='denied'&&pushTowns().includes(city);
   const btn=document.createElement('button');btn.type='button';btn.className='dwl-push-btn'+(on?' is-on':'');btn.setAttribute('aria-pressed',String(on));btn.disabled=pushBusy;
   btn.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z" fill="'+(on?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 20.5a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
-  btn.append(pushBusy?'Updating…':on?'Push alerts on · '+city:'Get push alerts for '+city);btn.onclick=togglePush;
+  const shown=({Sausalito:'Marin City',Sacramento:'East Sacramento',Danville:'Sycamore Valley'})[city]||city;
+  btn.append(pushBusy?'Updating…':on?'Push alerts on · '+shown:'Get push alerts for '+shown);btn.onclick=togglePush;
   const nodes=[btn];if(pushNote){const n=document.createElement('p');n.className='dwl-push-note';n.textContent=pushNote;nodes.push(n);}
   host.replaceChildren(...nodes);
  }
@@ -614,12 +615,19 @@ function nwsWeatherOutlook(afd,d,h){
   const level=e=>/warning|emergency/i.test(e)?'warning':/watch/i.test(e)?'watch':/advisory/i.test(e)?'advisory':'statement';
   try{
    const features=await DWL.fetchAlerts(lat,lon);if(request!==revision)return;
-   const items=features.filter(x=>x.properties?.event).slice(0,5);
+   const items=features.filter(x=>x.properties?.event);
+   // Cards only for alerts covering this town (plus nearby warnings); other county alerts go on one quiet line.
+   // Repeats of the same alert type (e.g. two nights of Cold Weather Advisory) are merged.
+   const seenEv=new Set(),cards=[];
+   for(const x of items){const e=x.properties.event;if((!x._nearby||/warning|emergency/i.test(e))&&!seenEv.has(e)){seenEv.add(e);cards.push(x);}}
+   const nearbyNames=[...new Set(items.filter(x=>x._nearby&&!seenEv.has(x.properties.event)).map(x=>x.properties.event))];
    // Let the outlook mention alerts that cover this town (not just nearby county alerts).
    outlookAlerts={city:chosen,events:items.filter(x=>!x._nearby||/warning/i.test(x.properties.event)).map(x=>x.properties.event+(x._nearby?' (nearby)':''))};
    if(lastOutlook&&chosen===city)set('public-discussion',nwsWeatherOutlook(lastOutlook.afd,lastOutlook.d,lastOutlook.h));
-   if(!items.length){status('No active NWS alerts','is-clear');return;}
-   for(const item of items){
+   const nearbyLine=()=>{if(!nearbyNames.length)return;const n=document.createElement('a');n.className='dwl-alert-nearby';n.href='https://forecast.weather.gov/MapClick.php?lat='+lat+'&lon='+lon;n.target='_blank';n.rel='noopener noreferrer';
+     n.textContent='Also in effect elsewhere in the county: '+nearbyNames.join(', ');host.appendChild(n);};
+   if(!cards.length){status('No active NWS alerts for this location','is-clear');nearbyLine();return;}
+   for(const item of cards.slice(0,5)){
     const p=item.properties,card=document.createElement('details');card.className='dwl-alert is-'+level(p.event);if(opened.has(p.event))card.open=true;
     const sum=document.createElement('summary');
     const badge=document.createElement('span');badge.className='dwl-alert-badge';badge.setAttribute('aria-hidden','true');
@@ -640,6 +648,7 @@ function nwsWeatherOutlook(afd,d,h){
     const link=document.createElement('a');link.href=p.web&&/^https?:/.test(p.web)?p.web:'https://forecast.weather.gov/MapClick.php?lat='+lat+'&lon='+lon;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Full NWS alert ›';body.appendChild(link);
     card.appendChild(body);host.appendChild(card);
    }
+   nearbyLine();
   }catch(e){if(request!==revision)return;status('NWS alerts could not be checked. See weather.gov for official warnings.','is-error');}
  }
  // Published (same-origin) forecast: shown immediately on every refresh so the page never sits
