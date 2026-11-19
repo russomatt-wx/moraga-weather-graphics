@@ -887,3 +887,5 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 /* High temperature a little further right (away from the date divider) */
 .dwl-days > .dwl-day { grid-template-columns: 52px 50px minmax(0, 1fr) 56px 124px minmax(0, 1fr) 42px !important; }
 .dwl-days > .dwl-day > .dwl-day-hi { justify-content: flex-end !important; text-align: right !important; padding-right: 2px !important; }
+/* No divider line after the date */
+.dwl-day-when { border-right: 0 !important; }
