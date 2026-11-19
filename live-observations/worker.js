@@ -103,6 +103,26 @@ export default {
       return Response.json({station:id, neighborhood:ob.neighborhood ?? null, lat:ob.lat ?? null, lon:ob.lon ?? null, elevation_ft:ob.imperial?.elev ?? null,
         observed_utc:ob.obsTimeUtc ?? null, temperature_f:ob.imperial?.temp ?? null, solar_radiation_wm2:ob.solarRadiation ?? null}, {headers:{...cors,'Cache-Control':'no-store'}});
     }
+    // GET /forecast?<Open-Meteo forecast query> : shared, edge-cached copy of the Open-Meteo forecast.
+    // Every phone asking for the same location within 10 minutes gets one upstream request, which keeps
+    // the site clear of Open-Meteo's per-IP rate limit (HTTP 429) that was blanking wind and hourly data.
+    if (url.pathname === '/forecast') {
+      const q = new URLSearchParams(url.search);
+      const lat = Number(q.get('latitude')), lon = Number(q.get('longitude'));
+      if (!Number.isFinite(lat) || !Number.isFinite(lon) || [...q.keys()].length > 20) return Response.json({error:'Bad request'},{status:400,headers:cors});
+      q.set('latitude', lat.toFixed(4)); q.set('longitude', lon.toFixed(4)); q.sort();
+      const upstream = 'https://api.open-meteo.com/v1/forecast?' + q.toString();
+      const cache = caches.default, key = new Request('https://cache.local/forecast?' + q.toString());
+      let hit = await cache.match(key);
+      if (!hit) {
+        let r = null;
+        for (let k = 0; k < 2 && !(r && r.ok); k++) { try { r = await fetch(upstream, {headers:{'User-Agent':'DiabloWeatherLab/1.0'}}); } catch (_) { r = null; } }
+        if (!r || !r.ok) return Response.json({error:'Forecast upstream failed', status:r ? r.status : null},{status:502,headers:{...cors,'Cache-Control':'no-store'}});
+        hit = new Response(await r.text(), {headers:{'Content-Type':'application/json','Cache-Control':'public, max-age=600'}});
+        await cache.put(key, hit.clone());
+      }
+      return new Response(hit.body, {headers:{...cors,'Content-Type':'application/json','Cache-Control':'public, max-age=300'}});
+    }
     // GET /daily?city=lafayette&date=YYYY-MM-DD : that town's observed high/low/rain (verification input).
     if (url.pathname === '/daily') {
       const c = (url.searchParams.get('city') || '').toLowerCase(), date = url.searchParams.get('date') || '';
