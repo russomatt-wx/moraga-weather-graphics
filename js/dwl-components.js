@@ -53,11 +53,11 @@
     return 'rgb(' + STOPS[STOPS.length - 1][1].join(',') + ')';
   }
 
-  // WMO weather code -> transparent illustrated icon (weather-icons/clear/*.png).
+  // WMO weather code -> transparent illustrated icon (weather-icons/v5/*.png).
   var ICON_LABEL = {
     sun: 'Sunny', mostlySun: 'Mostly sunny', partly: 'Partly cloudy', overcast: 'Cloudy', fog: 'Fog',
     storm: 'Thunderstorms', showersSun: 'Showers', showers: 'Showers', rain: 'Rain', heavyRain: 'Heavy rain',
-    drizzle: 'Drizzle', cloudy: 'Cloudy', slightRain: 'Light rain'
+    drizzle: 'Drizzle', cloudy: 'Mostly cloudy', slightRain: 'Light rain', chance: 'Chance of rain', clearing: 'Clearing', snow: 'Snow'
   };
   function iconName(code) {
     if (code === 0) return 'sun';
@@ -70,16 +70,16 @@
     if (code === 65 || code === 67) return 'heavyRain';
     if (code >= 61 && code <= 67) return 'rain';
     if (code >= 51 && code <= 57) return 'drizzle';
-    if (code >= 71 && code <= 77) return 'overcast';
+    if ((code >= 71 && code <= 77) || code === 85 || code === 86) return 'snow';
     return 'mostlySun';
   }
-  // Icons containing a sun have night versions (moon) in weather-icons/clear/night/.
-  var NIGHT = { sun: 1, mostlySun: 1, partly: 1, clearing: 1, showersSun: 1, slightRain: 1 };
-  var NIGHT_LABEL = { sun: 'Clear', mostlySun: 'Mostly clear', partly: 'Partly cloudy', clearing: 'Clearing', showersSun: 'Showers', slightRain: 'Light rain' };
+  // Icons containing a sun have night versions (moon) in weather-icons/v5/night/.
+  var NIGHT = { sun: 1, mostlySun: 1, partly: 1, clearing: 1, cloudy: 1, showersSun: 1, slightRain: 1, chance: 1, showers: 1, storm: 1, snow: 1 };
+  var NIGHT_LABEL = { sun: 'Clear', mostlySun: 'Mostly clear', partly: 'Partly cloudy', clearing: 'Clearing', showersSun: 'Showers', slightRain: 'Showers', cloudy: 'Mostly cloudy', chance: 'Chance of rain', showers: 'Showers', storm: 'Thunderstorms', snow: 'Snow' };
   function icon(code, extraClass, night) {
     var name = iconName(code), isNight = !!night && NIGHT[name];
-    return '<img class="dwl-icon' + (extraClass ? ' ' + extraClass : '') + '" src="weather-icons/clear/' + (isNight ? 'night/' : '') + name +
-      '.png?v=4" alt="' + (isNight ? NIGHT_LABEL[name] : ICON_LABEL[name]) + '" width="72" height="54"' +
+    return '<img class="dwl-icon' + (extraClass ? ' ' + extraClass : '') + '" src="weather-icons/v5/' + (isNight ? 'night/' : '') + name +
+      '.png?v=5" alt="' + (isNight ? NIGHT_LABEL[name] : ICON_LABEL[name]) + '" width="72" height="54"' +
       (isNight ? ' onerror="this.onerror=null;this.src=this.src.replace(\'/night/\',\'/\')"' : '') + '>';
   }
 
