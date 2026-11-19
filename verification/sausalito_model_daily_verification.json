@@ -1,0 +1,11 @@
+{
+ "generated_utc": "2026-11-19T05:40:48.068192+00:00",
+ "status": "collecting",
+ "town": "sausalito",
+ "station": "KCASAUSA92",
+ "model_scores": {},
+ "calibration": {},
+ "method": "Earliest archived day-ahead model forecast per target local date (from the published town feed); observed daily high/low from the town's Weather Underground station (KCASAUSA92) with >= 200 five-minute observations",
+ "note": "Each town is verified against its own station; Moraga corrections are never transferred.",
+ "matches": []
+}
