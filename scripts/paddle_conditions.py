@@ -27,12 +27,12 @@ SPOTS = [
     ("stinson", "Stinson Beach", "Stinson Beach", "Marin", "coast", 37.900, -122.645, "9414958"),
     ("linda-mar", "Linda Mar Beach", "Pacifica", "Peninsula Coast", "coast", 37.594, -122.503, "9414131"),
     ("pillar-point", "Pillar Point Harbor", "Half Moon Bay", "Peninsula Coast", "bay", 37.497, -122.488, "9414131"),
-    ("richardson-bay", "Richardson Bay Marina", "Sausalito", "Inside the Bay", "bay", 37.866, -122.495, "9414806"),
-    ("crissy-field", "Crissy Field", "San Francisco", "Inside the Bay", "bay", 37.806, -122.464, "9414290"),
-    ("aquatic-park", "Aquatic Park", "San Francisco", "Inside the Bay", "bay", 37.807, -122.424, "9414290"),
-    ("clipper-cove", "Clipper Cove", "Treasure Island, San Francisco", "Inside the Bay", "bay", 37.814, -122.367, "9414750"),
-    ("berkeley-marina", "Berkeley Marina", "Berkeley", "Inside the Bay", "bay", 37.866, -122.317, "9414816"),
-    ("crown-beach", "Crown Beach", "Alameda", "Inside the Bay", "bay", 37.763, -122.270, "9414750"),
+    ("richardson-bay", "Richardson Bay Marina", "Sausalito", "SF Bay", "bay", 37.866, -122.495, "9414806"),
+    ("crissy-field", "Crissy Field", "San Francisco", "SF Bay", "bay", 37.806, -122.464, "9414290"),
+    ("aquatic-park", "Aquatic Park", "San Francisco", "SF Bay", "bay", 37.807, -122.424, "9414290"),
+    ("clipper-cove", "Clipper Cove", "Treasure Island, San Francisco", "SF Bay", "bay", 37.814, -122.367, "9414750"),
+    ("berkeley-marina", "Berkeley Marina", "Berkeley", "SF Bay", "bay", 37.866, -122.317, "9414816"),
+    ("crown-beach", "Crown Beach", "Alameda", "SF Bay", "bay", 37.763, -122.270, "9414750"),
 ]
 
 

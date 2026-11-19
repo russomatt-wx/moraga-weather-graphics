@@ -1,7 +1,7 @@
 /* Diablo Weather Lab — Paddle conditions page. Renders paddle_conditions.json (hourly workflow). */
 (function () {
   'use strict';
-  const AREAS = ['SF Coast', 'Marin', 'Peninsula Coast', 'Inside the Bay'];
+  const AREAS = ['SF Coast', 'Marin', 'Peninsula Coast', 'SF Bay'];
   const LABEL = ['Go', 'Caution', 'No-go'];
   // Alerts that matter on the water (a Flood Advisory for creeks does not).
   const MARINE = /craft|gale|storm|seas|surf|beach|rip current|coastal|tsunami|wind|marine|fog|sneaker/i;
@@ -151,10 +151,11 @@
     try {
       const r = await fetch('paddle_conditions.json?t=' + Date.now(), { cache: 'no-store' });
       if (r.ok) data = await r.json();
+      if (data && data.spots) data.spots.forEach((s) => { if (s.area === 'Inside the Bay') s.area = 'SF Bay'; });
     } catch (_) {}
     render();
   }
-  try { area = sessionStorage.getItem('pad-area') || ''; } catch (_) {}
+  try { area = (sessionStorage.getItem('pad-area') || '').replace('Inside the Bay', 'SF Bay'); } catch (_) {}
   document.querySelectorAll('.pad-filter button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.area === area)));
   load();
   setInterval(load, 15 * 60 * 1000);
