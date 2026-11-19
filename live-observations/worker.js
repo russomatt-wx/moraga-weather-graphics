@@ -81,6 +81,19 @@ export default {
     const cors = {'Access-Control-Allow-Origin': origin, 'Vary': 'Origin', 'Cache-Control': 'public, max-age=120'};
     const url = new URL(request.url);
     if (url.pathname.startsWith('/push/')) return handlePush(request, env, {'Access-Control-Allow-Origin': origin, 'Vary': 'Origin'});
+    // GET /station?id=KCAXXXX : a Weather Underground station's location and latest reading (for adding towns).
+    if (url.pathname === '/station') {
+      const id = (url.searchParams.get('id') || '').toUpperCase();
+      if (!/^[A-Z0-9]{4,15}$/.test(id) || !String(env.WU_API_KEY || '').trim()) return Response.json({error:'Bad station id'},{status:400,headers:cors});
+      const u = new URL('https://api.weather.com/v2/pws/observations/current');
+      u.searchParams.set('stationId', id); u.searchParams.set('format','json'); u.searchParams.set('units','e'); u.searchParams.set('numericPrecision','decimal');
+      u.searchParams.set('apiKey', String(env.WU_API_KEY).trim().replace(/^["']+|["']+$/g,''));
+      const r = await fetch(u.toString());
+      if (!r.ok) return Response.json({error:'Station lookup failed', status:r.status},{status:502,headers:cors});
+      const ob = (await r.json())?.observations?.[0] || {};
+      return Response.json({station:id, neighborhood:ob.neighborhood ?? null, lat:ob.lat ?? null, lon:ob.lon ?? null, elevation_ft:ob.imperial?.elev ?? null,
+        observed_utc:ob.obsTimeUtc ?? null, temperature_f:ob.imperial?.temp ?? null, solar_radiation_wm2:ob.solarRadiation ?? null}, {headers:{...cors,'Cache-Control':'no-store'}});
+    }
     // GET /daily?city=lafayette&date=YYYY-MM-DD : that town's observed high/low/rain (verification input).
     if (url.pathname === '/daily') {
       const c = (url.searchParams.get('city') || '').toLowerCase(), date = url.searchParams.get('date') || '';
