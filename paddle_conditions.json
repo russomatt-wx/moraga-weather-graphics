@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-19T15:10:38.934086+00:00",
+ "generated_utc": "2026-11-19T15:19:00.397029+00:00",
  "spots": [
   {
    "id": "ocean-beach",
@@ -19,6 +19,8 @@
     "swell_dir": "W",
     "sst_f": 63,
     "air_f": 51,
+    "rain_pct": 69,
+    "thunder": false,
     "rating": 2,
     "why": "Large surf"
    },
@@ -33,6 +35,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 51,
+     "rain_pct": 69,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -46,6 +50,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 52,
+     "rain_pct": 24,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -59,6 +65,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 52,
+     "rain_pct": 32,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -72,6 +80,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 54,
+     "rain_pct": 13,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -85,6 +95,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 51,
+     "rain_pct": 9,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -98,6 +110,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 51,
+     "rain_pct": 13,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -111,6 +125,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 50,
+     "rain_pct": 29,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -124,6 +140,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 50,
+     "rain_pct": 64,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -137,6 +155,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 49,
+     "rain_pct": 46,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -150,6 +170,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 53,
+     "rain_pct": 15,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -163,6 +185,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 56,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -176,6 +200,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 53,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -189,6 +215,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 48,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -202,6 +230,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 47,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -215,6 +245,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 46,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -228,6 +260,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 47,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -241,6 +275,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 48,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Small surf, light wind"
     },
@@ -254,8 +290,10 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 51,
-     "rating": 0,
-     "why": "Small surf, light wind"
+     "rain_pct": 54,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T13:00",
@@ -267,8 +305,10 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 56,
-     "rating": 0,
-     "why": "Small surf, light wind"
+     "rain_pct": 54,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T16:00",
@@ -280,6 +320,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 55,
+     "rain_pct": 86,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -293,6 +335,8 @@
      "swell_dir": "NW",
      "sst_f": 62,
      "air_f": 54,
+     "rain_pct": 86,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -306,16 +350,13 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 53,
+     "rain_pct": 86,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     }
    ],
    "tides": [
-    {
-     "t": "2026-11-19 07:15",
-     "type": "High",
-     "ft": 5.3
-    },
     {
      "t": "2026-11-19 13:32",
      "type": "Low",
@@ -330,6 +371,11 @@
      "t": "2026-11-20 00:57",
      "type": "Low",
      "ft": 1.3
+    },
+    {
+     "t": "2026-11-20 07:45",
+     "type": "High",
+     "ft": 5.6
     }
    ],
    "tide_station": "9414290",
@@ -366,6 +412,8 @@
     "swell_dir": "W",
     "sst_f": 63,
     "air_f": 50,
+    "rain_pct": 73,
+    "thunder": false,
     "rating": 2,
     "why": "High surf advisory"
    },
@@ -380,6 +428,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 50,
+     "rain_pct": 73,
+     "thunder": false,
      "rating": 2,
      "why": "High surf advisory"
     },
@@ -393,6 +443,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 53,
+     "rain_pct": 22,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -406,6 +458,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 52,
+     "rain_pct": 20,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -419,6 +473,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 54,
+     "rain_pct": 11,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -432,6 +488,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 50,
+     "rain_pct": 6,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -445,6 +503,8 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 50,
+     "rain_pct": 8,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -458,6 +518,8 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 50,
+     "rain_pct": 31,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -471,6 +533,8 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 49,
+     "rain_pct": 58,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -484,6 +548,8 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 48,
+     "rain_pct": 29,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -497,6 +563,8 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 54,
+     "rain_pct": 6,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -510,6 +578,8 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 57,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -523,6 +593,8 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 53,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -536,6 +608,8 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 48,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -549,6 +623,8 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 47,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -562,6 +638,8 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 46,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -575,6 +653,8 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 46,
+     "rain_pct": 2,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -588,6 +668,8 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 46,
+     "rain_pct": 2,
+     "thunder": false,
      "rating": 0,
      "why": "Small surf, light wind"
     },
@@ -601,8 +683,10 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 51,
-     "rating": 0,
-     "why": "Small surf, light wind"
+     "rain_pct": 66,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T13:00",
@@ -614,6 +698,8 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 54,
+     "rain_pct": 66,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy"
     },
@@ -627,6 +713,8 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 53,
+     "rain_pct": 80,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -640,6 +728,8 @@
      "swell_dir": "NW",
      "sst_f": 62,
      "air_f": 52,
+     "rain_pct": 80,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -653,16 +743,13 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 51,
+     "rain_pct": 80,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     }
    ],
    "tides": [
-    {
-     "t": "2026-11-19 07:15",
-     "type": "High",
-     "ft": 5.3
-    },
     {
      "t": "2026-11-19 13:32",
      "type": "Low",
@@ -677,6 +764,11 @@
      "t": "2026-11-20 00:57",
      "type": "Low",
      "ft": 1.3
+    },
+    {
+     "t": "2026-11-20 07:45",
+     "type": "High",
+     "ft": 5.6
     }
    ],
    "tide_station": "9414290",
@@ -713,6 +805,8 @@
     "swell_dir": "W",
     "sst_f": 64,
     "air_f": 49,
+    "rain_pct": 80,
+    "thunder": false,
     "rating": 2,
     "why": "High surf advisory"
    },
@@ -727,6 +821,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 49,
+     "rain_pct": 80,
+     "thunder": false,
      "rating": 2,
      "why": "High surf advisory"
     },
@@ -740,6 +836,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 53,
+     "rain_pct": 23,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -753,6 +851,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 53,
+     "rain_pct": 17,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -766,6 +866,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 54,
+     "rain_pct": 10,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -779,6 +881,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 50,
+     "rain_pct": 5,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -792,6 +896,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 49,
+     "rain_pct": 7,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -805,6 +911,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 49,
+     "rain_pct": 23,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -818,6 +926,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 48,
+     "rain_pct": 57,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -831,6 +941,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 50,
+     "rain_pct": 28,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -844,6 +956,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 55,
+     "rain_pct": 5,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -857,6 +971,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 58,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -870,6 +986,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 54,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -883,6 +1001,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 49,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -896,6 +1016,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 48,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -909,6 +1031,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 47,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -922,6 +1046,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 46,
+     "rain_pct": 3,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -935,6 +1061,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 46,
+     "rain_pct": 3,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -948,6 +1076,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 51,
+     "rain_pct": 66,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -961,6 +1091,8 @@
      "swell_dir": "NW",
      "sst_f": 63,
      "air_f": 54,
+     "rain_pct": 66,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -974,6 +1106,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 53,
+     "rain_pct": 77,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -987,6 +1121,8 @@
      "swell_dir": "W",
      "sst_f": 63,
      "air_f": 52,
+     "rain_pct": 77,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -1000,6 +1136,8 @@
      "swell_dir": "W",
      "sst_f": 62,
      "air_f": 51,
+     "rain_pct": 77,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     }
@@ -1060,6 +1198,8 @@
     "swell_dir": "W",
     "sst_f": 64,
     "air_f": 51,
+    "rain_pct": 73,
+    "thunder": false,
     "rating": 2,
     "why": "High surf advisory"
    },
@@ -1074,6 +1214,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 51,
+     "rain_pct": 73,
+     "thunder": false,
      "rating": 2,
      "why": "High surf advisory"
     },
@@ -1087,6 +1229,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 53,
+     "rain_pct": 33,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -1100,6 +1244,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 52,
+     "rain_pct": 38,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -1113,6 +1259,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 54,
+     "rain_pct": 16,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -1126,6 +1274,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 53,
+     "rain_pct": 12,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -1139,6 +1289,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 53,
+     "rain_pct": 15,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -1152,6 +1304,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 50,
+     "rain_pct": 21,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -1165,6 +1319,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 50,
+     "rain_pct": 78,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -1178,6 +1334,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 50,
+     "rain_pct": 54,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -1191,6 +1349,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 53,
+     "rain_pct": 27,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -1204,6 +1364,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 56,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 2,
      "why": "Large surf"
     },
@@ -1217,6 +1379,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 54,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -1230,6 +1394,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 49,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -1243,6 +1409,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 48,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -1256,6 +1424,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 47,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -1269,6 +1439,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 45,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -1282,6 +1454,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 45,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -1295,6 +1469,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 53,
+     "rain_pct": 46,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -1308,6 +1484,8 @@
      "swell_dir": "NW",
      "sst_f": 64,
      "air_f": 55,
+     "rain_pct": 46,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -1321,6 +1499,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 54,
+     "rain_pct": 88,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -1334,6 +1514,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 53,
+     "rain_pct": 88,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     },
@@ -1347,6 +1529,8 @@
      "swell_dir": "W",
      "sst_f": 64,
      "air_f": 52,
+     "rain_pct": 88,
+     "thunder": false,
      "rating": 1,
      "why": "Moderate surf"
     }
@@ -1407,6 +1591,8 @@
     "swell_dir": null,
     "sst_f": 65,
     "air_f": 51,
+    "rain_pct": 66,
+    "thunder": false,
     "rating": 2,
     "why": "Strong wind"
    },
@@ -1421,6 +1607,8 @@
      "swell_dir": null,
      "sst_f": 65,
      "air_f": 51,
+     "rain_pct": 66,
+     "thunder": false,
      "rating": 2,
      "why": "Strong wind"
     },
@@ -1434,6 +1622,8 @@
      "swell_dir": null,
      "sst_f": 65,
      "air_f": 54,
+     "rain_pct": 43,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -1447,6 +1637,8 @@
      "swell_dir": null,
      "sst_f": 65,
      "air_f": 51,
+     "rain_pct": 34,
+     "thunder": false,
      "rating": 2,
      "why": "Strong wind"
     },
@@ -1460,6 +1652,8 @@
      "swell_dir": null,
      "sst_f": 65,
      "air_f": 54,
+     "rain_pct": 15,
+     "thunder": false,
      "rating": 2,
      "why": "Strong wind"
     },
@@ -1473,6 +1667,8 @@
      "swell_dir": null,
      "sst_f": 65,
      "air_f": 53,
+     "rain_pct": 14,
+     "thunder": false,
      "rating": 2,
      "why": "Strong wind"
     },
@@ -1486,6 +1682,8 @@
      "swell_dir": null,
      "sst_f": 65,
      "air_f": 53,
+     "rain_pct": 22,
+     "thunder": false,
      "rating": 2,
      "why": "Strong wind"
     },
@@ -1499,6 +1697,8 @@
      "swell_dir": null,
      "sst_f": 65,
      "air_f": 51,
+     "rain_pct": 28,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -1512,6 +1712,8 @@
      "swell_dir": null,
      "sst_f": 65,
      "air_f": 50,
+     "rain_pct": 84,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -1525,8 +1727,10 @@
      "swell_dir": null,
      "sst_f": 65,
      "air_f": 50,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 54,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-20T10:00",
@@ -1538,6 +1742,8 @@
      "swell_dir": null,
      "sst_f": 65,
      "air_f": 52,
+     "rain_pct": 30,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1551,6 +1757,8 @@
      "swell_dir": null,
      "sst_f": 65,
      "air_f": 57,
+     "rain_pct": 2,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1564,6 +1772,8 @@
      "swell_dir": null,
      "sst_f": 65,
      "air_f": 55,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1577,6 +1787,8 @@
      "swell_dir": null,
      "sst_f": 65,
      "air_f": 50,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1590,6 +1802,8 @@
      "swell_dir": null,
      "sst_f": 64,
      "air_f": 48,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1603,6 +1817,8 @@
      "swell_dir": null,
      "sst_f": 64,
      "air_f": 47,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1616,6 +1832,8 @@
      "swell_dir": null,
      "sst_f": 64,
      "air_f": 45,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1629,6 +1847,8 @@
      "swell_dir": null,
      "sst_f": 64,
      "air_f": 45,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1642,6 +1862,8 @@
      "swell_dir": null,
      "sst_f": 64,
      "air_f": 53,
+     "rain_pct": 38,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1655,6 +1877,8 @@
      "swell_dir": null,
      "sst_f": 64,
      "air_f": 55,
+     "rain_pct": 38,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1668,8 +1892,10 @@
      "swell_dir": null,
      "sst_f": 64,
      "air_f": 54,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 87,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T19:00",
@@ -1681,8 +1907,10 @@
      "swell_dir": null,
      "sst_f": 64,
      "air_f": 53,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 87,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T22:00",
@@ -1694,8 +1922,10 @@
      "swell_dir": null,
      "sst_f": 64,
      "air_f": 53,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 87,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     }
    ],
    "tides": [
@@ -1734,7 +1964,7 @@
      "description": "* WHAT...West winds 15 to 25 kt with gusts up to 30 kt and seas\n8 to 13 ft.\n\n* WHERE...Coastal Waters from Point Reyes to Pigeon Point\nCalifornia out to 10 NM.\n\n* WHEN...Until 3 PM PST this afternoon.\n\n* IMPACTS...Conditions will be hazardous to small craft."
     }
    ],
-   "best": "2026-11-20T07:00"
+   "best": "2026-11-20T10:00"
   },
   {
    "id": "richardson-bay",
@@ -1754,6 +1984,8 @@
     "swell_dir": null,
     "sst_f": 63,
     "air_f": 49,
+    "rain_pct": 68,
+    "thunder": false,
     "rating": 1,
     "why": "Small craft advisory"
    },
@@ -1768,6 +2000,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 49,
+     "rain_pct": 68,
+     "thunder": false,
      "rating": 1,
      "why": "Small craft advisory"
     },
@@ -1781,6 +2015,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 52,
+     "rain_pct": 23,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1794,6 +2030,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 53,
+     "rain_pct": 15,
+     "thunder": false,
      "rating": 2,
      "why": "Strong wind"
     },
@@ -1807,6 +2045,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 54,
+     "rain_pct": 6,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -1820,6 +2060,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 49,
+     "rain_pct": 3,
+     "thunder": false,
      "rating": 2,
      "why": "Strong wind"
     },
@@ -1833,6 +2075,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 48,
+     "rain_pct": 8,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -1846,6 +2090,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 48,
+     "rain_pct": 23,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -1859,8 +2105,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 47,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 57,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-20T07:00",
@@ -1872,6 +2120,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 48,
+     "rain_pct": 27,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1885,6 +2135,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 53,
+     "rain_pct": 6,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1898,6 +2150,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 56,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1911,6 +2165,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 52,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1924,6 +2180,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 48,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1937,6 +2195,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 46,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1950,6 +2210,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 45,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1963,6 +2225,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 45,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1976,6 +2240,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 46,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1989,8 +2255,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 51,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 59,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T13:00",
@@ -2002,8 +2270,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 54,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 59,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T16:00",
@@ -2015,8 +2285,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 53,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 82,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T19:00",
@@ -2028,8 +2300,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 52,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 82,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T22:00",
@@ -2041,8 +2315,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 51,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 82,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     }
    ],
    "tides": [
@@ -2101,6 +2377,8 @@
     "swell_dir": null,
     "sst_f": 63,
     "air_f": 51,
+    "rain_pct": 67,
+    "thunder": false,
     "rating": 1,
     "why": "Small craft advisory"
    },
@@ -2115,6 +2393,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 51,
+     "rain_pct": 67,
+     "thunder": false,
      "rating": 1,
      "why": "Small craft advisory"
     },
@@ -2128,6 +2408,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 52,
+     "rain_pct": 22,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2141,6 +2423,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 54,
+     "rain_pct": 23,
+     "thunder": false,
      "rating": 2,
      "why": "Strong wind"
     },
@@ -2154,6 +2438,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 54,
+     "rain_pct": 9,
+     "thunder": false,
      "rating": 2,
      "why": "Strong wind"
     },
@@ -2167,6 +2453,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 51,
+     "rain_pct": 5,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -2180,6 +2468,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 50,
+     "rain_pct": 13,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -2193,6 +2483,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 50,
+     "rain_pct": 31,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2206,8 +2498,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 49,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 57,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-20T07:00",
@@ -2219,6 +2513,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 49,
+     "rain_pct": 33,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2232,6 +2528,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 53,
+     "rain_pct": 7,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2245,6 +2543,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 56,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2258,6 +2558,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 53,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2271,6 +2573,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 49,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2284,6 +2588,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 47,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2297,6 +2603,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 45,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2310,6 +2618,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 47,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2323,6 +2633,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 48,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2336,8 +2648,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 51,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 57,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T13:00",
@@ -2349,8 +2663,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 56,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 57,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T16:00",
@@ -2362,8 +2678,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 55,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 84,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T19:00",
@@ -2375,8 +2693,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 54,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 84,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T22:00",
@@ -2388,16 +2708,13 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 53,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 84,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     }
    ],
    "tides": [
-    {
-     "t": "2026-11-19 07:15",
-     "type": "High",
-     "ft": 5.3
-    },
     {
      "t": "2026-11-19 13:32",
      "type": "Low",
@@ -2412,6 +2729,11 @@
      "t": "2026-11-20 00:57",
      "type": "Low",
      "ft": 1.3
+    },
+    {
+     "t": "2026-11-20 07:45",
+     "type": "High",
+     "ft": 5.6
     }
    ],
    "tide_station": "9414290",
@@ -2448,6 +2770,8 @@
     "swell_dir": null,
     "sst_f": 63,
     "air_f": 50,
+    "rain_pct": 71,
+    "thunder": false,
     "rating": 1,
     "why": "Breezy, choppy"
    },
@@ -2462,6 +2786,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 50,
+     "rain_pct": 71,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -2475,6 +2801,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 52,
+     "rain_pct": 22,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2488,6 +2816,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 54,
+     "rain_pct": 25,
+     "thunder": false,
      "rating": 2,
      "why": "Strong wind"
     },
@@ -2501,6 +2831,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 53,
+     "rain_pct": 7,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -2514,6 +2846,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 50,
+     "rain_pct": 5,
+     "thunder": false,
      "rating": 2,
      "why": "Strong wind"
     },
@@ -2527,6 +2861,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 50,
+     "rain_pct": 13,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -2540,6 +2876,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 49,
+     "rain_pct": 30,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2553,8 +2891,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 49,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 59,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-20T07:00",
@@ -2566,6 +2906,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 48,
+     "rain_pct": 43,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2579,6 +2921,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 53,
+     "rain_pct": 10,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2592,6 +2936,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 56,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2605,6 +2951,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 52,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2618,6 +2966,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 49,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2631,6 +2981,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 47,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2644,6 +2996,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 46,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2657,6 +3011,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 47,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2670,6 +3026,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 48,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2683,6 +3041,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 51,
+     "rain_pct": 48,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2696,6 +3056,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 56,
+     "rain_pct": 48,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2709,8 +3071,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 55,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 85,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T19:00",
@@ -2722,8 +3086,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 54,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 85,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T22:00",
@@ -2735,16 +3101,13 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 53,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 85,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     }
    ],
    "tides": [
-    {
-     "t": "2026-11-19 07:15",
-     "type": "High",
-     "ft": 5.3
-    },
     {
      "t": "2026-11-19 13:32",
      "type": "Low",
@@ -2759,6 +3122,11 @@
      "t": "2026-11-20 00:57",
      "type": "Low",
      "ft": 1.3
+    },
+    {
+     "t": "2026-11-20 07:45",
+     "type": "High",
+     "ft": 5.6
     }
    ],
    "tide_station": "9414290",
@@ -2795,6 +3163,8 @@
     "swell_dir": null,
     "sst_f": 62,
     "air_f": 52,
+    "rain_pct": 72,
+    "thunder": false,
     "rating": 1,
     "why": "Small craft advisory"
    },
@@ -2809,6 +3179,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 52,
+     "rain_pct": 72,
+     "thunder": false,
      "rating": 1,
      "why": "Small craft advisory"
     },
@@ -2822,6 +3194,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 52,
+     "rain_pct": 26,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2835,6 +3209,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 54,
+     "rain_pct": 18,
+     "thunder": false,
      "rating": 2,
      "why": "Strong wind"
     },
@@ -2848,6 +3224,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 54,
+     "rain_pct": 6,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -2861,6 +3239,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 51,
+     "rain_pct": 3,
+     "thunder": false,
      "rating": 2,
      "why": "Strong wind"
     },
@@ -2874,6 +3254,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 50,
+     "rain_pct": 7,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -2887,6 +3269,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 50,
+     "rain_pct": 25,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2900,8 +3284,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 49,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 59,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-20T07:00",
@@ -2913,6 +3299,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 48,
+     "rain_pct": 38,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2926,6 +3314,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 54,
+     "rain_pct": 9,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2939,6 +3329,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 56,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2952,6 +3344,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 53,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2965,6 +3359,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 47,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2978,6 +3374,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 45,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2991,6 +3389,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 43,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3004,6 +3404,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 42,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3017,6 +3419,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 42,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3030,6 +3434,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 51,
+     "rain_pct": 47,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3043,6 +3449,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 55,
+     "rain_pct": 47,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3056,8 +3464,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 54,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 84,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T19:00",
@@ -3069,8 +3479,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 50,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 84,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T22:00",
@@ -3082,8 +3494,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 50,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 84,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     }
    ],
    "tides": [
@@ -3142,6 +3556,8 @@
     "swell_dir": null,
     "sst_f": 62,
     "air_f": 50,
+    "rain_pct": 75,
+    "thunder": false,
     "rating": 1,
     "why": "Breezy, choppy"
    },
@@ -3156,6 +3572,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 50,
+     "rain_pct": 75,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -3169,6 +3587,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 52,
+     "rain_pct": 28,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3182,6 +3602,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 54,
+     "rain_pct": 10,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3195,6 +3617,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 53,
+     "rain_pct": 3,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -3208,6 +3632,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 50,
+     "rain_pct": 2,
+     "thunder": false,
      "rating": 2,
      "why": "Strong wind"
     },
@@ -3221,6 +3647,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 48,
+     "rain_pct": 4,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3234,6 +3662,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 49,
+     "rain_pct": 19,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3247,8 +3677,10 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 47,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 56,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-20T07:00",
@@ -3260,6 +3692,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 48,
+     "rain_pct": 33,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3273,6 +3707,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 53,
+     "rain_pct": 7,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3286,6 +3722,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 56,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3299,6 +3737,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 52,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3312,6 +3752,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 47,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3325,6 +3767,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 45,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3338,6 +3782,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 44,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3351,6 +3797,8 @@
      "swell_dir": null,
      "sst_f": 60,
      "air_f": 45,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3364,6 +3812,8 @@
      "swell_dir": null,
      "sst_f": 60,
      "air_f": 45,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3377,6 +3827,8 @@
      "swell_dir": null,
      "sst_f": 60,
      "air_f": 51,
+     "rain_pct": 41,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3390,6 +3842,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 55,
+     "rain_pct": 41,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3403,8 +3857,10 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 54,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 82,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T19:00",
@@ -3416,8 +3872,10 @@
      "swell_dir": null,
      "sst_f": 60,
      "air_f": 51,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 82,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T22:00",
@@ -3429,8 +3887,10 @@
      "swell_dir": null,
      "sst_f": 60,
      "air_f": 51,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 82,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     }
    ],
    "tides": [
@@ -3489,8 +3949,10 @@
     "swell_dir": null,
     "sst_f": 62,
     "air_f": 51,
-    "rating": 0,
-    "why": "Light wind"
+    "rain_pct": 71,
+    "thunder": false,
+    "rating": 1,
+    "why": "Rain likely"
    },
    "blocks": [
     {
@@ -3503,8 +3965,10 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 51,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 71,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-19T10:00",
@@ -3516,6 +3980,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 52,
+     "rain_pct": 27,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3529,6 +3995,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 54,
+     "rain_pct": 19,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -3542,6 +4010,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 53,
+     "rain_pct": 5,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -3555,6 +4025,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 50,
+     "rain_pct": 3,
+     "thunder": false,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -3568,6 +4040,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 48,
+     "rain_pct": 5,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3581,6 +4055,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 48,
+     "rain_pct": 28,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3594,8 +4070,10 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 48,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 59,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-20T07:00",
@@ -3607,8 +4085,10 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 48,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 55,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-20T10:00",
@@ -3620,6 +4100,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 53,
+     "rain_pct": 10,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3633,6 +4115,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 56,
+     "rain_pct": 1,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3646,6 +4130,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 53,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3659,6 +4145,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 47,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3672,6 +4160,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 44,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3685,6 +4175,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 43,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3698,6 +4190,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 42,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3711,6 +4205,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 42,
+     "rain_pct": 0,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3724,6 +4220,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 51,
+     "rain_pct": 29,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3737,6 +4235,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 55,
+     "rain_pct": 29,
+     "thunder": false,
      "rating": 0,
      "why": "Light wind"
     },
@@ -3750,8 +4250,10 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 53,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 83,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T19:00",
@@ -3763,8 +4265,10 @@
      "swell_dir": null,
      "sst_f": 60,
      "air_f": 50,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 83,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     },
     {
      "time": "2026-11-21T22:00",
@@ -3776,8 +4280,10 @@
      "swell_dir": null,
      "sst_f": 60,
      "air_f": 50,
-     "rating": 0,
-     "why": "Light wind"
+     "rain_pct": 83,
+     "thunder": false,
+     "rating": 1,
+     "why": "Rain likely"
     }
    ],
    "tides": [
@@ -3816,7 +4322,7 @@
      "description": "* WHAT...For the Coastal Flood Advisory, up to 1.2 ft of\ninundation above ground level is likely in low-lying areas near\nshorelines and tidal waterways.\n\n* WHERE...North Bay Interior Valleys and San Francisco Bay\nShoreline Counties.\n\n* WHEN...For the first Coastal Flood Advisory, until 10 AM PST\nFriday.\n\n* IMPACTS...High tides will result in flooding of low-lying\ninfrastructure, isolated road closures, and coastal erosion.\nRising tides will bring water and waves farther up the beach\nthan normal, restricting escape from beaches and coastal areas.\n\n* ADDITIONAL DETAILS...At the San Francisco tidal gauge, high\ntide is expected to be 1.2 ft above normal (7.0 ft MLLW) at\n7:15 AM Thursday and 1.1 ft above normal (6.9 ft MLLW) at 7:45\nAM Friday. These predictions include up to 1.8 ft of surge\nthat will enhance the astronomical tide and flooding threat.\nHigh tide varies up to 90 minutes earlier or later along the\nPacific Coast and through the San Francisco Bay, respectively."
     }
    ],
-   "best": "2026-11-19T07:00"
+   "best": "2026-11-19T10:00"
   }
  ],
  "sources": "Open-Meteo forecast + marine, NOAA CO-OPS tides and water temperature, NWS alerts"
