@@ -1,4 +1,4 @@
-/* Diablo Weather Lab — 72-hour outlook writer.
+/* Diablo Weather Lab — 5–7 day outlook writer.
    Builds a headline and a short, lively forecast story (next 72 hours, then out to day 7) from:
      • the latest NWS Bay Area (MTR) Area Forecast Discussion: key messages, short/long term, and
      • that location's hourly model guidance (rain, wind gusts, weather codes) and blended daily temps.
@@ -429,12 +429,7 @@
       var sk = sky(day);
       var lastBlocks = rs[rs.length - 1].blocks, lastDay = weekday(lastBlocks[lastBlocks.length - 1].labelDate);
       var dryTxt = (sk ? sk + ' and dry weather' : 'dry weather') + ' through ' + lastDay;
-      return say([
-        'Expect ' + dryTxt,
-        'Leave the umbrella in the closet: look for ' + dryTxt,
-        'The weather is on its best behavior, with ' + dryTxt,
-        'Easy-breezy forecast: ' + dryTxt,
-      ], 7) + (windy ? ', though gusts could reach ' + g + ' mph' : '');
+      return 'Expect ' + dryTxt + (windy ? ', though gusts could reach ' + g + ' mph' : '');
     }
     var cause = causeFor(afd, main.start.dayName, main.start.isNow), t = tip(main, peak.gust), amt = amountWords(main.rain);
     var i = rs.indexOf(main), before = rs[i - 1], after = rs[i + 1];
@@ -455,7 +450,7 @@
     var what = round ? round + ' rolls in ' : (main.thunder ? 'storms roll in ' : 'rain moves in ');
     var win = cause && cause !== 'post-frontal' ? arrivalWindow(afd, main.start.dayName) : '';
     if (win && /^this|^overnight|^early/.test(main.start.label)) win = win.replace(new RegExp(' ' + main.start.dayName + '$'), ' today');
-    var t2 = main.thunder || main.rain >= 0.75 || peak.gust >= 35 ? t : '';
+    var t2 = '';
     var sig = significance(main, peak);
     if (sig.storm) {
       // Lead with the storm itself: what it brings, when, how much, how windy.
@@ -595,13 +590,13 @@
     var afterRun = mainRun && !mainRun.start.isNow ? rs[rs.indexOf(mainRun) + 1] : null;
     var far = farConcise(hz, opts.daily, nowParts, afd, afterRun && !afterRun.wet ? afterRun.span : '', mainRun ? mainRun.rain : 0);
     if (/^Beyond that/.test(far) && /dry weather through/.test(near) && far.slice(-12) === near.slice(-12)) far = '';
-    var nug = nwsNugget(afd, !!hz.bigLater);
+    var nug = ''; // Avoid un-timed AFD hazards being presented as future local impacts.
     var para = [near, tempNote(opts.daily, nowParts), far, nug]
       .filter(Boolean).map(dot);
     return {
       headline: headline(rs, hz, opts.daily, nowParts, region, afd),
-      text: greeting(nowParts.hour, place) + ' ' + para.join(' '),
-      long: greeting(nowParts.hour, place) + ' ' + nearTerm.join(' ') + (farTerm.length ? '\n\n' + farTerm.join(' ') : ''),
+      text: para.join(' '),
+      long: nearTerm.join(' ') + (farTerm.length ? '\n\n' + farTerm.join(' ') : ''),
       source: afd ? 'Based on the NWS Bay Area forecast discussion (' + issued + ') and local model guidance' : 'Local model guidance · NWS discussion not available'
     };
   }
