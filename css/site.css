@@ -884,3 +884,6 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .dwl-days > .dwl-day > .dwl-day-sky, .dwl-days > .dwl-day > .dwl-day-wind { padding-left: 12px !important; }
 @media (max-width: 360px) { .dwl-days > .dwl-day { grid-template-columns: 44px 36px minmax(0, 1fr) 44px 110px minmax(0, 1fr) 34px !important; } .dwl-days > .dwl-day .dwl-day-icon .dwl-icon { width: 44px !important; height: 32px !important; } .dwl-days > .dwl-day > .dwl-day-sky, .dwl-days > .dwl-day > .dwl-day-wind { padding-left: 8px !important; } }
 @media (min-width: 700px) { .dwl-days > .dwl-day { grid-template-columns: 76px 64px minmax(8px, 1fr) 70px 212px minmax(8px, 1fr) 60px !important; } .dwl-days > .dwl-day .dwl-day-icon .dwl-icon { width: 70px !important; height: 50px !important; } .dwl-days > .dwl-day > .dwl-day-sky, .dwl-days > .dwl-day > .dwl-day-wind { padding-left: 16px !important; } }
+/* High temperature a little further right (away from the date divider) */
+.dwl-days > .dwl-day { grid-template-columns: 52px 50px minmax(0, 1fr) 56px 124px minmax(0, 1fr) 42px !important; }
+.dwl-days > .dwl-day > .dwl-day-hi { justify-content: flex-end !important; text-align: right !important; padding-right: 2px !important; }
