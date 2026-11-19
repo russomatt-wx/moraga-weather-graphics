@@ -64,6 +64,32 @@ def compass(deg):
     return ["N", "NE", "E", "SE", "S", "SW", "W", "NW"][round((deg % 360) / 45) % 8]
 
 
+# Open water upwind of each protected spot, in km, by the direction the wind blows FROM.
+# Rough distances measured off the map; a short value means land or a breakwater upwind.
+FETCH_KM = {
+    "richardson-bay": {"N": 1.5, "NE": 2.5, "E": 3, "SE": 6, "S": 3, "SW": .4, "W": .3, "NW": .5},
+    "crissy-field": {"N": 5, "NE": 8, "E": 5, "SE": .2, "S": .2, "SW": .2, "W": 6, "NW": 3},
+    "aquatic-park": {"N": 4, "NE": 6, "E": 2, "SE": .2, "S": .2, "SW": .2, "W": 2.5, "NW": 4},
+    "clipper-cove": {"N": .3, "NE": .5, "E": 1.5, "SE": 1.2, "S": .3, "SW": .3, "W": .3, "NW": .3},
+    "berkeley-marina": {"N": 3, "NE": .3, "E": .2, "SE": .3, "S": 6, "SW": 12, "W": 15, "NW": 8},
+    "crown-beach": {"N": .2, "NE": .2, "E": .3, "SE": 8, "S": 15, "SW": 15, "W": 8, "NW": .5},
+    "pillar-point": {"N": .5, "NE": .5, "E": 1, "SE": 1.5, "S": 1.5, "SW": 1, "W": .5, "NW": .5},
+}
+
+
+def chop(spot_id, wind_mph, direction):
+    """Estimated wind-chop height (ft) and period (s) from wind speed and fetch.
+    Fetch-limited JONSWAP growth: Hs = 0.0016 U sqrt(F/g), Tp = 0.286 (gF/U^2)^(1/3) U/g,
+    capped at a fully developed sea. A rough guide for protected water, not a measurement."""
+    fetch = FETCH_KM.get(spot_id, {}).get(direction)
+    if fetch is None or not wind_mph:
+        return None, None
+    u, f, g = wind_mph * 0.447, fetch * 1000, 9.81
+    hs = min(0.0016 * u * (f / g) ** .5, 0.2433 * u * u / g)
+    tp = 0.286 * (g * f / (u * u)) ** (1 / 3) * u / g
+    return round(hs * 3.281, 1), round(tp, 1)
+
+
 def rate(kind, wind, gust, wave, alerts):
     """0 = go, 1 = caution, 2 = no-go, with the reason."""
     ev = " ".join(alerts).lower()
@@ -76,6 +102,11 @@ def rate(kind, wind, gust, wave, alerts):
         if w >= 17 or g >= 25:
             return 2, "Strong wind"
         level, why = (1, "Breezy, choppy") if (w >= 12 or g >= 18) else (0, "Light wind")
+        # Estimated wind chop: about 2.5 ft is too rough for a SUP; 1.5 ft is choppy.
+        if wave is not None and wave >= 2.5:
+            return 2, "Rough chop"
+        if wave is not None and wave >= 1.5 and level < 1:
+            level, why = 1, "Choppy"
         if "small craft" in ev and level < 1:
             level, why = 1, "Small craft advisory"
         return level, why
@@ -164,7 +195,8 @@ def main():
             t = times[i]
             wave = mval("wave_height", t) if kind == "coast" else None
             sst = mval("sea_surface_temperature", t)
-            r, why = rate(kind, wh["wind_speed_10m"][i], wh["wind_gusts_10m"][i], wave, alerts if i == start else [x for x in alerts if "advisory" not in x.lower()])
+            chop_ft, chop_s = chop(sid, wh["wind_speed_10m"][i], compass(wh["wind_direction_10m"][i])) if kind == "bay" else (None, None)
+            r, why = rate(kind, wh["wind_speed_10m"][i], wh["wind_gusts_10m"][i], wave if kind == "coast" else chop_ft, alerts if i == start else [x for x in alerts if "advisory" not in x.lower()])
             # Rain: 3-hour peak chance. Lightning (thunderstorm codes 95-99) is No-go; rain likely is at least Caution.
             pp = [v for v in (wh.get("precipitation_probability") or [])[i:i + 3] if v is not None]
             rain = max(pp) if pp else None
@@ -180,6 +212,7 @@ def main():
                     "swell_dir": None if kind != "coast" else compass(mval("swell_wave_direction", t)),
                     "sst_f": None if sst is None else round(sst * 9 / 5 + 32),
                     "air_f": None if wh.get("temperature_2m") is None else round(wh["temperature_2m"][i]),
+                    "chop_ft": chop_ft, "chop_s": chop_s,
                     "rain_pct": rain, "thunder": thunder, "rating": r, "why": why}
 
         if not times:

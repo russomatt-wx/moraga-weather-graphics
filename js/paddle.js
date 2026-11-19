@@ -21,6 +21,8 @@
   }
   // Rain chance shown at 20%+, rounded to 10% (same rule as the local forecast).
   const rainTxt = (b) => b.thunder ? '⚡ Storms' : (b.rain_pct != null && b.rain_pct >= 20 ? '💧 ' + Math.round(b.rain_pct / 10) * 10 + '%' : null);
+  // Estimated wind chop for protected water (rounded to the half foot).
+  const chopTxt = (b) => b.chop_ft == null ? (b.wind != null ? 'Calm' : '—') : b.chop_ft < .5 ? 'Under ½ ft' : '~' + (Math.round(b.chop_ft * 2) / 2) + ' ft';
   const wind = (b) => (b.dir ? b.dir + ' ' : '') + (b.gust > b.wind + 2 ? b.wind + '–' + b.gust : b.wind) + ' mph';
   const waves = (b) => b.wave_ft == null ? null : b.wave_ft + ' ft' + (b.period_s ? ' @ ' + b.period_s + 's' : '') + (b.swell_dir ? ' ' + b.swell_dir : '');
 
@@ -52,7 +54,7 @@
       '<div class="pad-day"><div class="pad-day-name">' + esc(dayName(g.d, now)) + '</div><div class="pad-cells">' +
       g.items.map((b) => {
         const d = parse(b.time);
-        return '<button type="button" style="grid-column:' + (Math.floor(d.getHours() / 3) + 1) + '" class="pad-cell r' + b.rating + '" data-detail="' + esc(dayName(d, now) + ' ' + clock(d) + ': ' + LABEL[b.rating] + ' · ' + b.why + ' · ' + wind(b) + (waves(b) ? ' · ' + waves(b) : '') + (rainTxt(b) ? ' · ' + rainTxt(b) : '')) + '" aria-label="' + esc(clock(d) + ' ' + LABEL[b.rating]) + '"><span>' + hour(d) + '</span></button>';
+        return '<button type="button" style="grid-column:' + (Math.floor(d.getHours() / 3) + 1) + '" class="pad-cell r' + b.rating + '" data-detail="' + esc(dayName(d, now) + ' ' + clock(d) + ': ' + LABEL[b.rating] + ' · ' + b.why + ' · ' + wind(b) + (waves(b) ? ' · ' + waves(b) : '') + (b.chop_ft != null ? ' · chop ' + chopTxt(b) : '') + (rainTxt(b) ? ' · ' + rainTxt(b) : '')) + '" aria-label="' + esc(clock(d) + ' ' + LABEL[b.rating]) + '"><span>' + hour(d) + '</span></button>';
       }).join('') + '</div></div>').join('') + '</div>';
   }
 
@@ -63,9 +65,9 @@
     const stats = [
       ['Wind mph', (c.dir ? c.dir + ' ' : '') + (c.gust > c.wind + 2 ? c.wind + '–' + c.gust : c.wind)],
       spot.kind === 'coast' ? ['Waves', c.wave_ft == null ? '—' : c.wave_ft + ' ft' + (c.period_s ? ' · ' + c.period_s + 's' : '')] : null,
+      spot.kind === 'coast' ? null : ['Chop (est.)', chopTxt(c)],
       ['Water', spot.water_f != null ? spot.water_f + '°' : '—'],
       ['Rain', c.thunder ? 'Storms' : c.rain_pct != null ? Math.round(c.rain_pct / 10) * 10 + '%' : '—'],
-      spot.kind === 'coast' ? null : ['Tide', (() => { const t = (spot.tides || []).find((x) => parse(x.t) >= now); return t ? (t.type === 'High' ? 'Hi ' : 'Lo ') + hour(parse(t.t)).replace(/(\d+)/, (m) => m + (parse(t.t).getMinutes() ? ':' + String(parse(t.t).getMinutes()).padStart(2, '0') : '')) : '—'; })()],
     ].filter(Boolean).map(([k, v]) => '<div><span>' + k + '</span><b>' + esc(v) + '</b></div>').join('');
     const alerts = (spot.alerts || []).filter((x) => MARINE.test(x)).map((a) => '<span class="pad-alert ' + level(a) + '">⚠ ' + esc(a) + '</span>').join('');
     const nAlerts = (spot.alerts || []).filter((x) => MARINE.test(x));
