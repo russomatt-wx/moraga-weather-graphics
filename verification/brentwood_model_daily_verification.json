@@ -1,0 +1,11 @@
+{
+ "generated_utc": "2026-11-19T05:56:12.864658+00:00",
+ "status": "collecting",
+ "town": "brentwood",
+ "station": "KCABRENT202",
+ "model_scores": {},
+ "calibration": {},
+ "method": "Earliest archived day-ahead model forecast per target local date (from the published town feed); observed daily high/low from the town's Weather Underground station (KCABRENT202) covering at least 22.5 hours of the day",
+ "note": "Each town is verified against its own station; Moraga corrections are never transferred.",
+ "matches": []
+}

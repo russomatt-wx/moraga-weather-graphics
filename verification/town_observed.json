@@ -1,4 +1,12 @@
 {
+ "brentwood": {
+  "2026-11-17": {
+   "high_f": 57.2,
+   "low_f": 38.7,
+   "precip_in": 0.01,
+   "samples": 288
+  }
+ },
  "danville": {
   "2026-09-16": {
    "high_f": 69.6,
@@ -1124,6 +1132,20 @@
    "high_f": 63,
    "low_f": 37.2,
    "precip_in": 0,
+   "samples": 288
+  }
+ },
+ "sacramento": {
+  "2026-11-16": {
+   "high_f": 60.1,
+   "low_f": 44.8,
+   "precip_in": 0.31,
+   "samples": 288
+  },
+  "2026-11-17": {
+   "high_f": 59.4,
+   "low_f": 39.4,
+   "precip_in": 0.01,
    "samples": 288
   }
  },
