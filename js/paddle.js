@@ -65,15 +65,19 @@
       ['Air', c.air_f != null ? c.air_f + '°F' : '—'],
     ].filter(Boolean).map(([k, v]) => '<div><span>' + k + '</span><b>' + esc(v) + '</b></div>').join('');
     const alerts = (spot.alerts || []).filter((x) => MARINE.test(x)).map((a) => '<span class="pad-alert ' + level(a) + '">⚠ ' + esc(a) + '</span>').join('');
-    return '<article class="pad-card r' + c.rating + '" data-area="' + esc(spot.area) + '">' +
-      '<header><div><h3>' + esc(spot.name) + '</h3><p>' + (spot.kind === 'coast' ? 'Open coast' : 'Protected water') + '</p></div>' +
-      '<div class="pad-rate"><span class="pad-badge r' + c.rating + '">' + LABEL[c.rating] + '</span><small>' + esc(c.why) + '</small></div></header>' +
+    const brief = [wind(c), spot.kind === 'coast' && waves(c) ? waves(c) : null].filter(Boolean).join(' · ');
+    const nAlerts = (spot.alerts || []).filter((x) => MARINE.test(x));
+    return '<details class="pad-card r' + c.rating + '" data-id="' + esc(spot.id) + '"' + (openCards.has(spot.id) ? ' open' : '') + '>' +
+      '<summary><header><div><h3>' + esc(spot.name) + '</h3><p class="pad-brief">' + esc(brief) + '</p>' +
+      (nAlerts.length ? '<p class="pad-brief-alert ' + level(nAlerts[0]) + '">⚠ ' + esc(nAlerts.join(' · ')) + '</p>' : '') + '</div>' +
+      '<div class="pad-rate"><span class="pad-badge r' + c.rating + '">' + LABEL[c.rating] + '</span><small>' + esc(c.why) + '</small><span class="pad-chev" aria-hidden="true">⌄</span></div></header></summary>' +
+      '<div class="pad-body"><p class="pad-kind">' + (spot.kind === 'coast' ? 'Open coast' : 'Protected water') + '</p>' +
       (alerts ? '<div class="pad-alerts">' + alerts + '</div>' : '') +
       '<div class="pad-stats">' + stats + '</div>' +
       (tides ? '<div class="pad-tides">' + tides + '</div>' : '') +
       timeline(spot, now) +
       '<p class="pad-detail" aria-live="polite">' + esc(bestText(spot, now)) + '</p>' +
-      '</article>';
+      '</div></details>';
   }
 
   const level = (ev) => /warning/i.test(ev) ? 'warning' : /statement/i.test(ev) ? 'statement' : 'advisory';
@@ -108,6 +112,8 @@
   }
 
   let data = null, area = '';
+  const openCards = new Set();
+  document.addEventListener('toggle', (e) => { const d = e.target; if (d.classList && d.classList.contains('pad-card')) { d.open ? openCards.add(d.dataset.id) : openCards.delete(d.dataset.id); } }, true);
   function render() {
     const box = document.getElementById('pad-spots');
     if (!data || !data.spots || !data.spots.length) { box.innerHTML = '<p class="pad-empty">Marine conditions are not available right now.</p>'; return; }

@@ -732,3 +732,14 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .pad-notes p { margin: 0 0 9px; font-size: 14px; line-height: 1.5; color: var(--text-2); }
 .pad-src { color: var(--muted) !important; font-size: 12.5px !important; }
 @media (max-width: 480px) { .pad-stats { grid-template-columns: 1fr 1fr; } }
+.pad-card > summary { list-style: none; cursor: pointer; }
+.pad-card > summary::-webkit-details-marker { display: none; }
+.pad-card { padding: 14px 16px; }
+.pad-brief { margin: 4px 0 0 !important; font-size: 14.5px !important; color: var(--text-2) !important; }
+.pad-brief-alert { margin: 5px 0 0 !important; font-size: 13px !important; font-weight: 700; color: #ffd36b !important; }
+.pad-brief-alert.warning { color: #ff9a9a !important; }
+.pad-chev { display: block; margin-top: 2px; font-size: 20px; line-height: 1; color: var(--muted); transition: transform .2s; }
+.pad-card[open] .pad-chev { transform: rotate(180deg); }
+.pad-card[open] .pad-brief-alert { display: none; }
+.pad-kind { margin: 10px 0 0; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.pad-grid { align-items: start; }
