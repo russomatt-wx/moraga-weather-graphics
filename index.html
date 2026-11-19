@@ -1987,6 +1987,24 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
   note.textContent=dates.length===14?'14 local dates · '+dates[0]+' through '+dates[13]+' · missing model days shown as gaps':'Only '+dates.length+' dates currently published; awaiting the 14-day chart refresh.';
  }catch(e){note.textContent='Rainfall data temporarily unavailable; showing the latest published chart.'}
 })();
+</script><script>
+// Self-update: if a newer version of the site has been published (its stylesheet/script versions differ
+// from this page's), reload once so phones never sit on a stale cached copy.
+(function(){
+ const mine=[...document.querySelectorAll('link[href*="?v="],script[src*="?v="]')].map(e=>(e.getAttribute('href')||e.getAttribute('src'))).join('|');
+ let busy=false;
+ async function check(){
+  if(busy||document.hidden)return;busy=true;
+  try{
+   const r=await fetch(location.pathname+'?v='+Date.now(),{cache:'no-store'});if(!r.ok)return;
+   const t=await r.text(),doc=new DOMParser().parseFromString(t,'text/html');
+   const latest=[...doc.querySelectorAll('link[href*="?v="],script[src*="?v="]')].map(e=>(e.getAttribute('href')||e.getAttribute('src'))).join('|');
+   if(latest&&latest!==mine){try{if(sessionStorage.getItem('dwl-reloaded')===latest)return;sessionStorage.setItem('dwl-reloaded',latest)}catch(e){}location.reload();}
+  }catch(e){}finally{busy=false}
+ }
+ setTimeout(check,4000);setInterval(check,5*60*1000);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)check();});
+})();
 </script><script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(e=>console.warn('App offline support unavailable',e)));}</script><script>
 window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt.workers.dev/observations';
 /* Live station readings are independent of the historical archive and forecast workflows.
