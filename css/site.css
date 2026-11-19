@@ -748,3 +748,14 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .pad-grid { align-items: start; }
 .pad-card p.pad-city { margin: 2px 0 0; font-size: 13.5px; font-weight: 600; color: var(--accent); }
 .pad-temp { margin-right: 8px; font-size: 17px; font-weight: 700; color: var(--text); }
+
+/* 10-day rows: high on the left of the conditions, low on the right; no temperature bar. */
+.dwl-days > .dwl-day { grid-template-columns: 58px 48px 42px minmax(0, 1fr) 40px !important; }
+.dwl-days > .dwl-day > .dwl-day-when { grid-column: 1; grid-row: 1; }
+.dwl-days > .dwl-day > .dwl-day-icon { grid-column: 2; grid-row: 1; }
+.dwl-days > .dwl-day > .dwl-day-hi { grid-column: 3; grid-row: 1; text-align: center; justify-content: center; }
+.dwl-days > .dwl-day > .dwl-day-sky { grid-column: 4; grid-row: 1; padding-left: 6px; }
+.dwl-days > .dwl-day > .dwl-day-lo { grid-column: 5; grid-row: 1; text-align: right; justify-content: flex-end; }
+.dwl-days > .dwl-day > .dwl-day-bar { display: none !important; }
+@media (max-width: 360px) { .dwl-days > .dwl-day { grid-template-columns: 46px 38px 34px minmax(0, 1fr) 32px !important; } }
+@media (min-width: 700px) { .dwl-days > .dwl-day { grid-template-columns: 76px 62px 56px minmax(0, 1fr) 54px !important; } }
