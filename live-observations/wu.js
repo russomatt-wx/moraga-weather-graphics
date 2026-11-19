@@ -9,6 +9,8 @@
 //   (the site falls back to the nearest airport report when this returns nothing)
 
 // Hand-picked Weather Underground stations per town (temperature and sunlight).
+// Stations without a sunlight sensor borrow a nearby station's sunlight for the sky estimate.
+export const SOLAR_STATIONS = { greenbrook: 'KCADANVI207', sausalito: 'KCASAUSA60' };
 export const WU_STATIONS = { moraga: 'KCAMORAG71', lafayette: 'KCAWALNU6', danville: 'KCADANVI207', greenbrook: 'KCADANVI224', brentwood: 'KCABRENT202', sacramento: 'KCASACRA200', sausalito: 'KCASAUSA88' };
 // Towns whose temperature/humidity/wind come from Weather Underground (Moraga keeps Xweather + its archive).
 export const WU_PRIMARY = new Set(['lafayette', 'danville', 'greenbrook', 'brentwood', 'sacramento', 'sausalito']);
@@ -175,7 +177,8 @@ export async function skyFor(city, env, solarNow, log) {
   }
   if (twc && twc.code >= 45) return { ...twc, source: 'twc' };
   // Daytime with the sun high enough for a meaningful reading.
-  const station = WU_STATIONS[city];
+  const station = SOLAR_STATIONS[city] || WU_STATIONS[city];
+  if (SOLAR_STATIONS[city]) solarNow = null; // own station has no sensor
   // solarNow: one reading or an array of recent readings (W/m²).
   const given = (Array.isArray(solarNow) ? solarNow : [solarNow]).filter(Number.isFinite);
   if (elev >= 15 && (station || given.length)) {
@@ -194,5 +197,19 @@ export async function skyFor(city, env, solarNow, log) {
     }
   }
   if (twc) return { ...twc, source: 'twc' };
-  return null;
+  return modelSky(coords, log);
+}
+
+// Last resort (night, or no sunlight reading): the forecast model's current sky, cached 15 minutes.
+const MODEL_TEXT = (c, day) => c >= 95 ? 'Thunderstorms' : c >= 71 && c <= 86 && c !== 80 && c !== 81 && c !== 82 ? 'Snow' : c >= 80 ? 'Showers' : c >= 61 ? 'Rain' : c >= 51 ? 'Drizzle' : c >= 45 ? 'Fog'
+  : c === 3 ? 'Cloudy' : c === 2 ? 'Partly cloudy' : c === 1 ? (day ? 'Mostly sunny' : 'Mostly clear') : (day ? 'Sunny' : 'Clear');
+async function modelSky(coords, log) {
+  try {
+    const u = 'https://api.open-meteo.com/v1/forecast?latitude=' + coords[0].toFixed(3) + '&longitude=' + coords[1].toFixed(3) + '&current=weather_code,is_day,cloud_cover';
+    const d = await getJson(u, 900, log, 'model sky');
+    const c = num(d?.current?.weather_code);
+    if (c === null) return null;
+    const day = d.current.is_day === 1;
+    return { text: MODEL_TEXT(c, day), code: c, is_day: day, source: 'model', cloud_cover_pct: num(d.current.cloud_cover) };
+  } catch (_) { log.push('model sky: error'); return null; }
 }
