@@ -866,3 +866,8 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .dwl-days > .dwl-day { grid-template-columns: 56px 46px minmax(0, 1fr) 44px 122px minmax(0, 1fr) 44px !important; column-gap: 4px !important; }
 @media (max-width: 360px) { .dwl-days > .dwl-day { grid-template-columns: 44px 36px minmax(0, 1fr) 34px 108px minmax(0, 1fr) 34px !important; } .dwl-days > .dwl-day > .dwl-day-sky .dwl-day-cond { font-size: 11.5px; } }
 @media (min-width: 700px) { .dwl-days > .dwl-day { grid-template-columns: 76px 64px minmax(8px, 1fr) 62px 200px minmax(8px, 1fr) 60px !important; column-gap: 10px !important; } .dwl-days > .dwl-day > .dwl-day-sky .dwl-day-cond { font-size: 15px; } }
+/* Current conditions: condition icon to the right of the temperature */
+#public-shell .dwl-cc-temprow { display: flex; align-items: center; gap: 6px; }
+#public-shell .dwl-cc-icon { display: flex; flex: none; }
+#public-shell .dwl-cc-icon:empty { display: none; }
+#public-shell .dwl-cc-icon .dwl-icon { width: 58px; height: 44px; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .35)); }
