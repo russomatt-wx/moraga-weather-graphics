@@ -1,4 +1,4 @@
-"""Diablo Weather Labs chart theme.
+"""Diablo Weather Lab chart theme.
 
 Every chart script calls ``apply()`` once before plotting so all published PNGs
 share the website's look: deep-navy background, cyan accents, Outfit type.

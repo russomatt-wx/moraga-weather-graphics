@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
-  <!-- Diablo Weather Labs app icon: the header mark (cloud and sunrise arc over faceted peaks) on the site's night navy.
+  <!-- Diablo Weather Lab app icon: the header mark (cloud and sunrise arc over faceted peaks) on the site's night navy.
        No filters, so cairosvg (generate-app-icons workflow) renders it the same as browsers. -->
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">

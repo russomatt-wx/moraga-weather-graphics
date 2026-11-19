@@ -1,4 +1,4 @@
-/* Diablo Weather Labs shared UI components.
+/* Diablo Weather Lab shared UI components.
    Both the Local Weather and Observatory views render forecast cards through
    these helpers, so the two views cannot drift apart. Styling lives in css/site.css. */
 (function () {
