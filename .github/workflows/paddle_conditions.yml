@@ -1,0 +1,42 @@
+name: Paddle conditions
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/paddle_conditions.py'
+      - '.github/workflows/paddle_conditions.yml'
+  schedule:
+    - cron: '20 * * * *'
+permissions:
+  contents: write
+concurrency:
+  group: paddle-conditions
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install requests
+      - run: python scripts/paddle_conditions.py
+      - name: Publish
+        run: |
+          cp paddle_conditions.json /tmp/paddle.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/paddle.json paddle_conditions.json
+            git add paddle_conditions.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "Update paddle conditions"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1

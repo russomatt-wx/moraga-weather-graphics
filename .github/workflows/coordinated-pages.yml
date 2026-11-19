@@ -36,6 +36,7 @@ on:
       - 'Additional locations 10-day forecasts'
       - 'Town forecast verification'
       - 'Publish KCAMORAG71 daily summary'
+      - 'Paddle conditions'
     types: [completed]
   schedule:
     # Fallback for observations and other feeds (GitHub may skip some scheduled runs).
