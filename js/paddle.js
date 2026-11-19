@@ -58,8 +58,8 @@
 
   function card(spot, now) {
     const c = current(spot, now);
-    const tides = (spot.tides || []).filter((t) => parse(t.t) >= now).slice(0, 3)
-      .map((t) => '<span class="pad-tide ' + (t.type === 'High' ? 'hi' : 'lo') + '">' + (t.type === 'High' ? '▲' : '▼') + ' ' + t.type + ' ' + clock(parse(t.t)) + ' <b>' + t.ft + ' ft</b></span>').join('');
+    const tides = (spot.tides || []).filter((t) => parse(t.t) >= now).slice(0, 4)
+      .map((t) => { const d = parse(t.t); return '<div class="pad-tide ' + (t.type === 'High' ? 'hi' : 'lo') + '"><span>' + (t.type === 'High' ? '▲ High' : '▼ Low') + '</span><b>' + clock(d) + '</b><small>' + (dayName(d, now) === 'Today' ? '' : d.toLocaleDateString('en-US', { weekday: 'short' }) + ' · ') + t.ft + ' ft</small></div>'; }).join('');
     const stats = [
       ['Wind mph', (c.dir ? c.dir + ' ' : '') + (c.gust > c.wind + 2 ? c.wind + '–' + c.gust : c.wind)],
       spot.kind === 'coast' ? ['Waves', c.wave_ft == null ? '—' : c.wave_ft + ' ft' + (c.period_s ? ' · ' + c.period_s + 's' : '')] : null,
@@ -72,11 +72,11 @@
     return '<details class="pad-card r' + c.rating + '" data-id="' + esc(spot.id) + '"' + (openCards.has(spot.id) ? ' open' : '') + '>' +
       '<summary><header><div><h3>' + esc(spot.city ? spot.name : spot.name.split(' · ').pop()) + '</h3><p class="pad-city">' + esc(spot.city || spot.name.split(' · ')[0]) + (c.air_f != null ? ' <span class="pad-temp-l">· ' + c.air_f + '° air</span>' : '') + '</p>' +
       (nAlerts.length ? '<p class="pad-brief-alert ' + level(nAlerts[0]) + '">⚠ ' + esc(nAlerts.join(' · ')) + '</p>' : '') + '</div>' +
-      '<div class="pad-rate"><span class="pad-badge r' + c.rating + '">' + LABEL[c.rating] + '</span><small>' + esc(c.why) + '</small><span class="pad-chev" aria-hidden="true">⌄</span></div></header><div class="pad-stats">' + stats + '</div></summary>' +
+      '<div class="pad-rate"><span class="pad-badge r' + c.rating + '">' + LABEL[c.rating] + '</span><small>' + esc(c.why) + '</small></div></header><div class="pad-stats">' + stats + '</div><span class="pad-more"><span class="pad-more-open">Tides &amp; 3-day forecast</span><span class="pad-more-close">Hide details</span><i aria-hidden="true">⌄</i></span></summary>' +
       '<div class="pad-body"><p class="pad-kind">' + (spot.kind === 'coast' ? 'Open coast' : 'Protected water') + '</p>' +
       (alerts ? '<div class="pad-alerts">' + alerts + '</div>' : '') +
-      (tides ? '<div class="pad-tides">' + tides + '</div>' : '') +
-      timeline(spot, now) +
+      (tides ? '<h4 class="pad-sub-h">Tides</h4><div class="pad-tides">' + tides + '</div>' : '') +
+      '<h4 class="pad-sub-h">Next 3 days <span>tap a block</span></h4>' + timeline(spot, now) +
       '<p class="pad-detail" aria-live="polite">' + esc(bestText(spot, now)) + '</p>' +
       '</div></details>';
   }
