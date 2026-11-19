@@ -858,3 +858,5 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .dwl-days > .dwl-day { grid-template-columns: 58px 48px minmax(4px, 1fr) 48px 108px minmax(4px, 1fr) 46px !important; }
 @media (max-width: 360px) { .dwl-days > .dwl-day > .dwl-day-hi, .dwl-days > .dwl-day > .dwl-day-lo { font-size: 23px !important; } .dwl-days > .dwl-day { grid-template-columns: 46px 38px minmax(2px, 1fr) 38px 94px minmax(2px, 1fr) 36px !important; } }
 @media (min-width: 700px) { .dwl-days > .dwl-day > .dwl-day-hi, .dwl-days > .dwl-day > .dwl-day-lo { font-size: 32px !important; } .dwl-days > .dwl-day { grid-template-columns: 76px 64px minmax(8px, 1fr) 62px 200px minmax(8px, 1fr) 60px !important; } }
+/* Wind line sits directly under the rain chance (same column, left-aligned) */
+.dwl-days > .dwl-day > .dwl-day-wind { grid-column: 5 / 7 !important; justify-content: flex-start !important; padding-left: 4px; }
