@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2026-11-19T03:48:44.772Z",
+  "source_label": "Diablo Weather Lab \u00b7 ChatGPT editorial outlook \u00b7 NWS Bay Area + local EPS/GEFS and deterministic guidance",
+  "horizon_days": 7,
+  "outlooks": {
+    "Moraga": {
+      "headline": "Showers linger Thursday; another wetter system may arrive Tuesday",
+      "text": "The main storm is winding down, but Thursday still looks wet in Moraga as the upper low moves inland and keeps showers going through the morning, with locally heavy bursts possible before conditions gradually ease. The local blend carries roughly 0.6 inch for Thursday, though amounts remain uncertain. Friday turns quieter with only a slight shower risk, followed by a colder start; model lows span the mid-30s to mid-40s, so cloud cover will matter. A weaker system could bring a few showers Saturday into Sunday, then Monday looks comparatively quiet. Confidence in the next meaningful rain signal rises again Tuesday, when ensembles favor a wetter system."
+    },
+    "Lafayette": {
+      "headline": "Thursday rain tapers, but a stronger rain signal returns Tuesday",
+      "text": "Lafayette should hold onto periods of rain into Thursday morning as the upper low passes inland, with a few heavier showers possible before the pattern becomes more showery and gradually dries. The local ensemble blend is near 0.6 inch Thursday, but the exact placement of heavier bands remains uncertain. Friday looks mostly quieter, although a stray shower cannot be ruled out, and colder air brings a chilly start. Another, weaker disturbance may brush the area Saturday into Sunday with limited rainfall. Monday is the best bet for a relative break. The more substantial signal in the extended guidance shifts to Tuesday, when ensemble probabilities climb sharply and rain becomes likely again."
+    },
+    "Danville": {
+      "headline": "A final wet Thursday gives way to a brief break before Tuesday rain",
+      "text": "Rain should continue into Thursday morning across Sycamore Valley as the upper low moves inland, with occasional heavier downpours still possible before showers become more scattered. The local blend is around three-quarters of an inch for Thursday, although neighborhood totals will depend on where the heavier bands track. Friday trends drier with a much lower shower chance, then a weaker system may bring spotty rain Saturday into Sunday. Temperatures stay cool, with colder overnight readings possible as skies clear. Monday looks like the driest day in this stretch. Attention then turns to Tuesday: EPS and GEFS guidance show a much stronger renewed rain signal, with another wet period increasingly plausible."
+    },
+    "Greenbrook": {
+      "headline": "Showers ease after Thursday morning, with another wet system favored Tuesday",
+      "text": "Greenbrook remains in the path of the departing storm through Thursday morning, so periods of rain and a few heavier showers are still possible before the upper low shifts inland and the activity gradually fades. The neighborhood model blend is close to 0.8 inch Thursday, but localized totals may vary with the rain bands. Friday should be substantially quieter, followed by a colder night. A weaker front may produce a few showers over the weekend, though the signal is modest compared with the current storm. Monday looks relatively quiet. The more notable extended-range development is Tuesday, when ensemble guidance strongly favors renewed rain; confidence is higher in a wetter pattern than in exact amounts this far out."
+    }
+  }
+}\n
