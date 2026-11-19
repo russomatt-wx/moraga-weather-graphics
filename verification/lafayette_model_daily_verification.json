@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-19T05:40:58.737244+00:00",
+ "generated_utc": "2026-11-19T05:45:10.720137+00:00",
  "status": "verified_daily_extremes",
  "town": "lafayette",
  "station": "KCAWALNU6",
@@ -129,7 +129,7 @@
    }
   }
  },
- "method": "Earliest archived day-ahead model forecast per target local date (from the published town feed); observed daily high/low from the town's Weather Underground station (KCAWALNU6) with >= 200 five-minute observations",
+ "method": "Earliest archived day-ahead model forecast per target local date (from the published town feed); observed daily high/low from the town's Weather Underground station (KCAWALNU6) covering at least 22.5 hours of the day",
  "note": "Each town is verified against its own station; Moraga corrections are never transferred.",
  "matches": [
   {
