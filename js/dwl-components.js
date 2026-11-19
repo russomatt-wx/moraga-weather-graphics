@@ -104,6 +104,7 @@
       '<div class="dwl-day-hi" aria-label="High">' + esc(o.highText) + '</div>' +
       '<div class="dwl-day-bar" aria-hidden="true"></div>' +
       '<div class="dwl-day-lo" aria-label="Low">' + esc(o.lowText) + '</div>' +
+      (o.wind ? '<div class="dwl-day-wind"><i aria-hidden="true"></i>' + esc(o.wind) + '</div>' : '') +
       (o.extra || '') +
       '</' + tag + '>';
   }
