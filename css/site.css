@@ -803,3 +803,9 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .pad-tide b { font-size: 16px; font-weight: 700; color: var(--text); white-space: nowrap; }
 .pad-tide small { font-size: 12.5px; color: var(--text-2); }
 .pad-body .pad-days { margin-top: 0; }
+/* 10-day order: day · high · icon · conditions · low */
+.dwl-days > .dwl-day { grid-template-columns: 58px 42px 48px minmax(0, 1fr) 40px !important; }
+.dwl-days > .dwl-day > .dwl-day-hi { grid-column: 2; }
+.dwl-days > .dwl-day > .dwl-day-icon { grid-column: 3; }
+@media (max-width: 360px) { .dwl-days > .dwl-day { grid-template-columns: 46px 34px 38px minmax(0, 1fr) 32px !important; } }
+@media (min-width: 700px) { .dwl-days > .dwl-day { grid-template-columns: 76px 56px 62px minmax(0, 1fr) 54px !important; } }
