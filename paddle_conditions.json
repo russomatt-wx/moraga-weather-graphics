@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-19T07:22:46.829556+00:00",
+ "generated_utc": "2026-11-19T07:33:23.326220+00:00",
  "spots": [
   {
    "id": "ocean-beach",
@@ -1101,11 +1101,6 @@
    ],
    "tides": [
     {
-     "t": "2026-11-18 23:32",
-     "type": "Low",
-     "ft": 1.1
-    },
-    {
      "t": "2026-11-19 06:20",
      "type": "High",
      "ft": 5.0
@@ -1119,6 +1114,11 @@
      "t": "2026-11-19 18:24",
      "type": "High",
      "ft": 3.9
+    },
+    {
+     "t": "2026-11-20 00:13",
+     "type": "Low",
+     "ft": 1.4
     }
    ],
    "tide_station": "9414131",
@@ -1391,11 +1391,6 @@
    ],
    "tides": [
     {
-     "t": "2026-11-18 23:32",
-     "type": "Low",
-     "ft": 1.1
-    },
-    {
      "t": "2026-11-19 06:20",
      "type": "High",
      "ft": 5.0
@@ -1409,6 +1404,11 @@
      "t": "2026-11-19 18:24",
      "type": "High",
      "ft": 3.9
+    },
+    {
+     "t": "2026-11-20 00:13",
+     "type": "Low",
+     "ft": 1.4
     }
    ],
    "tide_station": "9414131",
@@ -1431,7 +1431,7 @@
    "id": "richardson-bay",
    "name": "Richardson Bay Marina",
    "city": "Sausalito",
-   "area": "Inside the Bay",
+   "area": "SF Bay",
    "kind": "bay",
    "lat": 37.866,
    "lon": -122.495,
@@ -1713,7 +1713,7 @@
    "id": "crissy-field",
    "name": "Crissy Field",
    "city": "San Francisco",
-   "area": "Inside the Bay",
+   "area": "SF Bay",
    "kind": "bay",
    "lat": 37.806,
    "lon": -122.464,
@@ -2003,7 +2003,7 @@
    "id": "aquatic-park",
    "name": "Aquatic Park",
    "city": "San Francisco",
-   "area": "Inside the Bay",
+   "area": "SF Bay",
    "kind": "bay",
    "lat": 37.807,
    "lon": -122.424,
@@ -2285,7 +2285,7 @@
    "id": "clipper-cove",
    "name": "Clipper Cove",
    "city": "Treasure Island, San Francisco",
-   "area": "Inside the Bay",
+   "area": "SF Bay",
    "kind": "bay",
    "lat": 37.814,
    "lon": -122.367,
@@ -2567,7 +2567,7 @@
    "id": "berkeley-marina",
    "name": "Berkeley Marina",
    "city": "Berkeley",
-   "area": "Inside the Bay",
+   "area": "SF Bay",
    "kind": "bay",
    "lat": 37.866,
    "lon": -122.317,
@@ -2849,7 +2849,7 @@
    "id": "crown-beach",
    "name": "Crown Beach",
    "city": "Alameda",
-   "area": "Inside the Bay",
+   "area": "SF Bay",
    "kind": "bay",
    "lat": 37.763,
    "lon": -122.27,
