@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-19T07:04:31.125128+00:00",
+ "generated_utc": "2026-11-19T07:18:12.825921+00:00",
  "spots": [
   {
    "id": "ocean-beach",
@@ -70,7 +70,7 @@
      "period_s": 10,
      "swell_dir": "SW",
      "sst_f": 63,
-     "air_f": 49,
+     "air_f": 48,
      "rating": 2,
      "why": "Large surf"
     },
@@ -83,7 +83,7 @@
      "period_s": 12,
      "swell_dir": "W",
      "sst_f": 63,
-     "air_f": 53,
+     "air_f": 54,
      "rating": 2,
      "why": "Large surf"
     },
@@ -298,7 +298,7 @@
     "period_s": 9,
     "swell_dir": "W",
     "sst_f": 63,
-    "air_f": 53,
+    "air_f": 52,
     "rating": 2,
     "why": "High surf advisory"
    },
@@ -312,7 +312,7 @@
      "period_s": 9,
      "swell_dir": "W",
      "sst_f": 63,
-     "air_f": 53,
+     "air_f": 52,
      "rating": 2,
      "why": "High surf advisory"
     },
@@ -325,7 +325,7 @@
      "period_s": 10,
      "swell_dir": "W",
      "sst_f": 63,
-     "air_f": 53,
+     "air_f": 52,
      "rating": 2,
      "why": "Large surf"
     },
@@ -364,7 +364,7 @@
      "period_s": 12,
      "swell_dir": "W",
      "sst_f": 63,
-     "air_f": 53,
+     "air_f": 54,
      "rating": 2,
      "why": "Large surf"
     },
@@ -377,7 +377,7 @@
      "period_s": 12,
      "swell_dir": "W",
      "sst_f": 63,
-     "air_f": 55,
+     "air_f": 54,
      "rating": 2,
      "why": "Large surf"
     },
@@ -587,7 +587,7 @@
     "period_s": 9,
     "swell_dir": "W",
     "sst_f": 63,
-    "air_f": 53,
+    "air_f": 52,
     "rating": 2,
     "why": "High surf advisory"
    },
@@ -601,7 +601,7 @@
      "period_s": 9,
      "swell_dir": "W",
      "sst_f": 63,
-     "air_f": 53,
+     "air_f": 52,
      "rating": 2,
      "why": "High surf advisory"
     },
@@ -627,7 +627,7 @@
      "period_s": 10,
      "swell_dir": "W",
      "sst_f": 63,
-     "air_f": 51,
+     "air_f": 50,
      "rating": 2,
      "why": "Large surf"
     },
@@ -640,7 +640,7 @@
      "period_s": 11,
      "swell_dir": "W",
      "sst_f": 63,
-     "air_f": 48,
+     "air_f": 49,
      "rating": 2,
      "why": "Large surf"
     },
@@ -853,287 +853,6 @@
    "best": null
   },
   {
-   "id": "richardson-bay",
-   "name": "Sausalito \u00b7 Richardson Bay",
-   "area": "Marin",
-   "kind": "bay",
-   "lat": 37.866,
-   "lon": -122.495,
-   "now": {
-    "time": "2026-11-18T23:00",
-    "wind": 1,
-    "gust": 11,
-    "dir": "E",
-    "wave_ft": null,
-    "period_s": null,
-    "swell_dir": null,
-    "sst_f": 63,
-    "air_f": 52,
-    "rating": 1,
-    "why": "Small craft advisory"
-   },
-   "blocks": [
-    {
-     "time": "2026-11-18T23:00",
-     "wind": 1,
-     "gust": 11,
-     "dir": "E",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 63,
-     "air_f": 52,
-     "rating": 1,
-     "why": "Small craft advisory"
-    },
-    {
-     "time": "2026-11-19T02:00",
-     "wind": 6,
-     "gust": 16,
-     "dir": "SW",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 63,
-     "air_f": 50,
-     "rating": 0,
-     "why": "Light wind"
-    },
-    {
-     "time": "2026-11-19T05:00",
-     "wind": 3,
-     "gust": 4,
-     "dir": "SE",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 63,
-     "air_f": 50,
-     "rating": 0,
-     "why": "Light wind"
-    },
-    {
-     "time": "2026-11-19T08:00",
-     "wind": 8,
-     "gust": 12,
-     "dir": "N",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 63,
-     "air_f": 48,
-     "rating": 0,
-     "why": "Light wind"
-    },
-    {
-     "time": "2026-11-19T11:00",
-     "wind": 4,
-     "gust": 13,
-     "dir": "NW",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 63,
-     "air_f": 53,
-     "rating": 0,
-     "why": "Light wind"
-    },
-    {
-     "time": "2026-11-19T14:00",
-     "wind": 4,
-     "gust": 15,
-     "dir": "W",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 63,
-     "air_f": 55,
-     "rating": 0,
-     "why": "Light wind"
-    },
-    {
-     "time": "2026-11-19T17:00",
-     "wind": 6,
-     "gust": 19,
-     "dir": "NW",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 63,
-     "air_f": 50,
-     "rating": 1,
-     "why": "Breezy, choppy"
-    },
-    {
-     "time": "2026-11-19T20:00",
-     "wind": 8,
-     "gust": 13,
-     "dir": "SW",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 62,
-     "air_f": 48,
-     "rating": 0,
-     "why": "Light wind"
-    },
-    {
-     "time": "2026-11-19T23:00",
-     "wind": 5,
-     "gust": 6,
-     "dir": "S",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 62,
-     "air_f": 48,
-     "rating": 0,
-     "why": "Light wind"
-    },
-    {
-     "time": "2026-11-20T02:00",
-     "wind": 7,
-     "gust": 9,
-     "dir": "SE",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 62,
-     "air_f": 49,
-     "rating": 0,
-     "why": "Light wind"
-    },
-    {
-     "time": "2026-11-20T05:00",
-     "wind": 6,
-     "gust": 9,
-     "dir": "S",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 62,
-     "air_f": 49,
-     "rating": 0,
-     "why": "Light wind"
-    },
-    {
-     "time": "2026-11-20T08:00",
-     "wind": 1,
-     "gust": 3,
-     "dir": "NE",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 62,
-     "air_f": 49,
-     "rating": 0,
-     "why": "Light wind"
-    },
-    {
-     "time": "2026-11-20T11:00",
-     "wind": 8,
-     "gust": 10,
-     "dir": "NE",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 62,
-     "air_f": 53,
-     "rating": 0,
-     "why": "Light wind"
-    },
-    {
-     "time": "2026-11-20T14:00",
-     "wind": 10,
-     "gust": 11,
-     "dir": "NE",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 62,
-     "air_f": 53,
-     "rating": 0,
-     "why": "Light wind"
-    },
-    {
-     "time": "2026-11-20T17:00",
-     "wind": 9,
-     "gust": 12,
-     "dir": "NE",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 63,
-     "air_f": 50,
-     "rating": 0,
-     "why": "Light wind"
-    },
-    {
-     "time": "2026-11-20T20:00",
-     "wind": 8,
-     "gust": 5,
-     "dir": "NE",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 62,
-     "air_f": 47,
-     "rating": 0,
-     "why": "Light wind"
-    },
-    {
-     "time": "2026-11-20T23:00",
-     "wind": 7,
-     "gust": 4,
-     "dir": "NE",
-     "wave_ft": null,
-     "period_s": null,
-     "swell_dir": null,
-     "sst_f": 62,
-     "air_f": 46,
-     "rating": 0,
-     "why": "Light wind"
-    }
-   ],
-   "tides": [
-    {
-     "t": "2026-11-19 00:26",
-     "type": "Low",
-     "ft": 1.0
-    },
-    {
-     "t": "2026-11-19 07:25",
-     "type": "High",
-     "ft": 5.1
-    },
-    {
-     "t": "2026-11-19 13:46",
-     "type": "Low",
-     "ft": 1.7
-    },
-    {
-     "t": "2026-11-19 19:30",
-     "type": "High",
-     "ft": 4.0
-    }
-   ],
-   "tide_station": "9414806",
-   "water_f": 60,
-   "alerts": [
-    "Small Craft Advisory"
-   ],
-   "alert_details": [
-    {
-     "event": "Small Craft Advisory",
-     "onset": "2026-11-18T20:35:00-08:00",
-     "ends": "2026-11-19T15:00:00-08:00",
-     "headline": "Small Craft Advisory issued November 18 at 8:35PM PST until November 19 at 3:00PM PST",
-     "description": "* WHAT...Southwest winds 10 to 20 kt with gusts up to 30 kt and\nchoppy waters.\n\n* WHERE...San Pablo Bay, Suisun Bay, the West Delta and the San\nFrancisco Bay north of the Bay Bridge.\n\n* WHEN...Until 3 PM PST Thursday.\n\n* IMPACTS...Conditions will be hazardous to small craft."
-    }
-   ],
-   "best": "2026-11-19T08:00"
-  },
-  {
    "id": "linda-mar",
    "name": "Pacifica \u00b7 Linda Mar",
    "area": "Peninsula Coast",
@@ -1176,7 +895,7 @@
      "period_s": 10,
      "swell_dir": "W",
      "sst_f": 64,
-     "air_f": 52,
+     "air_f": 53,
      "rating": 2,
      "why": "Large surf"
     },
@@ -1189,7 +908,7 @@
      "period_s": 11,
      "swell_dir": "W",
      "sst_f": 64,
-     "air_f": 50,
+     "air_f": 52,
      "rating": 2,
      "why": "Large surf"
     },
@@ -1215,7 +934,7 @@
      "period_s": 12,
      "swell_dir": "W",
      "sst_f": 64,
-     "air_f": 53,
+     "air_f": 51,
      "rating": 2,
      "why": "Large surf"
     },
@@ -1228,7 +947,7 @@
      "period_s": 10,
      "swell_dir": "W",
      "sst_f": 64,
-     "air_f": 54,
+     "air_f": 55,
      "rating": 2,
      "why": "Large surf"
     },
@@ -1478,7 +1197,7 @@
      "period_s": null,
      "swell_dir": null,
      "sst_f": 65,
-     "air_f": 50,
+     "air_f": 52,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1704,6 +1423,287 @@
    "best": "2026-11-20T08:00"
   },
   {
+   "id": "richardson-bay",
+   "name": "Sausalito \u00b7 Richardson Bay Marina",
+   "area": "Inside the Bay",
+   "kind": "bay",
+   "lat": 37.866,
+   "lon": -122.495,
+   "now": {
+    "time": "2026-11-18T23:00",
+    "wind": 1,
+    "gust": 11,
+    "dir": "E",
+    "wave_ft": null,
+    "period_s": null,
+    "swell_dir": null,
+    "sst_f": 63,
+    "air_f": 52,
+    "rating": 1,
+    "why": "Small craft advisory"
+   },
+   "blocks": [
+    {
+     "time": "2026-11-18T23:00",
+     "wind": 1,
+     "gust": 11,
+     "dir": "E",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 63,
+     "air_f": 52,
+     "rating": 1,
+     "why": "Small craft advisory"
+    },
+    {
+     "time": "2026-11-19T02:00",
+     "wind": 6,
+     "gust": 16,
+     "dir": "SW",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 63,
+     "air_f": 51,
+     "rating": 0,
+     "why": "Light wind"
+    },
+    {
+     "time": "2026-11-19T05:00",
+     "wind": 3,
+     "gust": 4,
+     "dir": "SE",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 63,
+     "air_f": 50,
+     "rating": 0,
+     "why": "Light wind"
+    },
+    {
+     "time": "2026-11-19T08:00",
+     "wind": 8,
+     "gust": 12,
+     "dir": "N",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 63,
+     "air_f": 48,
+     "rating": 0,
+     "why": "Light wind"
+    },
+    {
+     "time": "2026-11-19T11:00",
+     "wind": 4,
+     "gust": 13,
+     "dir": "NW",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 63,
+     "air_f": 54,
+     "rating": 0,
+     "why": "Light wind"
+    },
+    {
+     "time": "2026-11-19T14:00",
+     "wind": 4,
+     "gust": 15,
+     "dir": "W",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 63,
+     "air_f": 55,
+     "rating": 0,
+     "why": "Light wind"
+    },
+    {
+     "time": "2026-11-19T17:00",
+     "wind": 6,
+     "gust": 19,
+     "dir": "NW",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 63,
+     "air_f": 50,
+     "rating": 1,
+     "why": "Breezy, choppy"
+    },
+    {
+     "time": "2026-11-19T20:00",
+     "wind": 8,
+     "gust": 13,
+     "dir": "SW",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 62,
+     "air_f": 48,
+     "rating": 0,
+     "why": "Light wind"
+    },
+    {
+     "time": "2026-11-19T23:00",
+     "wind": 5,
+     "gust": 6,
+     "dir": "S",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 62,
+     "air_f": 48,
+     "rating": 0,
+     "why": "Light wind"
+    },
+    {
+     "time": "2026-11-20T02:00",
+     "wind": 7,
+     "gust": 9,
+     "dir": "SE",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 62,
+     "air_f": 49,
+     "rating": 0,
+     "why": "Light wind"
+    },
+    {
+     "time": "2026-11-20T05:00",
+     "wind": 6,
+     "gust": 9,
+     "dir": "S",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 62,
+     "air_f": 49,
+     "rating": 0,
+     "why": "Light wind"
+    },
+    {
+     "time": "2026-11-20T08:00",
+     "wind": 1,
+     "gust": 3,
+     "dir": "NE",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 62,
+     "air_f": 49,
+     "rating": 0,
+     "why": "Light wind"
+    },
+    {
+     "time": "2026-11-20T11:00",
+     "wind": 8,
+     "gust": 10,
+     "dir": "NE",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 62,
+     "air_f": 53,
+     "rating": 0,
+     "why": "Light wind"
+    },
+    {
+     "time": "2026-11-20T14:00",
+     "wind": 10,
+     "gust": 11,
+     "dir": "NE",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 62,
+     "air_f": 53,
+     "rating": 0,
+     "why": "Light wind"
+    },
+    {
+     "time": "2026-11-20T17:00",
+     "wind": 9,
+     "gust": 12,
+     "dir": "NE",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 63,
+     "air_f": 50,
+     "rating": 0,
+     "why": "Light wind"
+    },
+    {
+     "time": "2026-11-20T20:00",
+     "wind": 8,
+     "gust": 5,
+     "dir": "NE",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 62,
+     "air_f": 47,
+     "rating": 0,
+     "why": "Light wind"
+    },
+    {
+     "time": "2026-11-20T23:00",
+     "wind": 7,
+     "gust": 4,
+     "dir": "NE",
+     "wave_ft": null,
+     "period_s": null,
+     "swell_dir": null,
+     "sst_f": 62,
+     "air_f": 46,
+     "rating": 0,
+     "why": "Light wind"
+    }
+   ],
+   "tides": [
+    {
+     "t": "2026-11-19 00:26",
+     "type": "Low",
+     "ft": 1.0
+    },
+    {
+     "t": "2026-11-19 07:25",
+     "type": "High",
+     "ft": 5.1
+    },
+    {
+     "t": "2026-11-19 13:46",
+     "type": "Low",
+     "ft": 1.7
+    },
+    {
+     "t": "2026-11-19 19:30",
+     "type": "High",
+     "ft": 4.0
+    }
+   ],
+   "tide_station": "9414806",
+   "water_f": 60,
+   "alerts": [
+    "Small Craft Advisory"
+   ],
+   "alert_details": [
+    {
+     "event": "Small Craft Advisory",
+     "onset": "2026-11-18T20:35:00-08:00",
+     "ends": "2026-11-19T15:00:00-08:00",
+     "headline": "Small Craft Advisory issued November 18 at 8:35PM PST until November 19 at 3:00PM PST",
+     "description": "* WHAT...Southwest winds 10 to 20 kt with gusts up to 30 kt and\nchoppy waters.\n\n* WHERE...San Pablo Bay, Suisun Bay, the West Delta and the San\nFrancisco Bay north of the Bay Bridge.\n\n* WHEN...Until 3 PM PST Thursday.\n\n* IMPACTS...Conditions will be hazardous to small craft."
+    }
+   ],
+   "best": "2026-11-19T08:00"
+  },
+  {
    "id": "crissy-field",
    "name": "Crissy Field",
    "area": "Inside the Bay",
@@ -1719,7 +1719,7 @@
     "period_s": null,
     "swell_dir": null,
     "sst_f": 63,
-    "air_f": 52,
+    "air_f": 53,
     "rating": 1,
     "why": "Small craft advisory"
    },
@@ -1733,7 +1733,7 @@
      "period_s": null,
      "swell_dir": null,
      "sst_f": 63,
-     "air_f": 52,
+     "air_f": 53,
      "rating": 1,
      "why": "Small craft advisory"
     },
@@ -1746,7 +1746,7 @@
      "period_s": null,
      "swell_dir": null,
      "sst_f": 63,
-     "air_f": 52,
+     "air_f": 51,
      "rating": 0,
      "why": "Light wind"
     },
@@ -1772,7 +1772,7 @@
      "period_s": null,
      "swell_dir": null,
      "sst_f": 63,
-     "air_f": 48,
+     "air_f": 49,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -1785,7 +1785,7 @@
      "period_s": null,
      "swell_dir": null,
      "sst_f": 63,
-     "air_f": 53,
+     "air_f": 54,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2048,7 +2048,7 @@
      "period_s": null,
      "swell_dir": null,
      "sst_f": 63,
-     "air_f": 49,
+     "air_f": 50,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2074,7 +2074,7 @@
      "period_s": null,
      "swell_dir": null,
      "sst_f": 63,
-     "air_f": 52,
+     "air_f": 53,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2289,7 +2289,7 @@
     "period_s": null,
     "swell_dir": null,
     "sst_f": 63,
-    "air_f": 53,
+    "air_f": 52,
     "rating": 1,
     "why": "Small craft advisory"
    },
@@ -2303,7 +2303,7 @@
      "period_s": null,
      "swell_dir": null,
      "sst_f": 63,
-     "air_f": 53,
+     "air_f": 52,
      "rating": 1,
      "why": "Small craft advisory"
     },
@@ -2570,7 +2570,7 @@
     "period_s": null,
     "swell_dir": null,
     "sst_f": 62,
-    "air_f": 53,
+    "air_f": 52,
     "rating": 1,
     "why": "Small craft advisory"
    },
@@ -2584,7 +2584,7 @@
      "period_s": null,
      "swell_dir": null,
      "sst_f": 62,
-     "air_f": 53,
+     "air_f": 52,
      "rating": 1,
      "why": "Small craft advisory"
     },
@@ -2597,7 +2597,7 @@
      "period_s": null,
      "swell_dir": null,
      "sst_f": 62,
-     "air_f": 53,
+     "air_f": 52,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2610,7 +2610,7 @@
      "period_s": null,
      "swell_dir": null,
      "sst_f": 62,
-     "air_f": 49,
+     "air_f": 48,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2623,7 +2623,7 @@
      "period_s": null,
      "swell_dir": null,
      "sst_f": 62,
-     "air_f": 49,
+     "air_f": 48,
      "rating": 1,
      "why": "Breezy, choppy"
     },
@@ -2636,7 +2636,7 @@
      "period_s": null,
      "swell_dir": null,
      "sst_f": 62,
-     "air_f": 51,
+     "air_f": 52,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2891,7 +2891,7 @@
      "period_s": null,
      "swell_dir": null,
      "sst_f": 62,
-     "air_f": 48,
+     "air_f": 49,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2904,7 +2904,7 @@
      "period_s": null,
      "swell_dir": null,
      "sst_f": 62,
-     "air_f": 49,
+     "air_f": 48,
      "rating": 0,
      "why": "Light wind"
     },
@@ -2930,7 +2930,7 @@
      "period_s": null,
      "swell_dir": null,
      "sst_f": 62,
-     "air_f": 53,
+     "air_f": 54,
      "rating": 0,
      "why": "Light wind"
     },
