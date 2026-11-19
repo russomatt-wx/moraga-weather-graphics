@@ -1127,5 +1127,366 @@
    "samples": 288
   }
  },
- "sausalito": {}
+ "sausalito": {
+  "2026-09-19": {
+   "high_f": 69.3,
+   "low_f": 55,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-09-20": {
+   "high_f": 60.3,
+   "low_f": 54.5,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-09-21": {
+   "high_f": 60.6,
+   "low_f": 54.7,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-09-22": {
+   "high_f": 63.1,
+   "low_f": 54.7,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-09-23": {
+   "high_f": 86.2,
+   "low_f": 55.4,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-09-24": {
+   "high_f": 79.5,
+   "low_f": 57.7,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-09-25": {
+   "high_f": 76.8,
+   "low_f": 55.4,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-09-26": {
+   "high_f": 66.4,
+   "low_f": 52.5,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-09-27": {
+   "high_f": 68.4,
+   "low_f": 52.5,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-09-28": {
+   "high_f": 70.9,
+   "low_f": 50.9,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-09-29": {
+   "high_f": 85.6,
+   "low_f": 52.9,
+   "precip_in": 0,
+   "samples": 287
+  },
+  "2026-09-30": {
+   "high_f": 76.6,
+   "low_f": 54,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-01": {
+   "high_f": 73.6,
+   "low_f": 52.2,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-02": {
+   "high_f": 83.7,
+   "low_f": 54,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-03": {
+   "high_f": 102.9,
+   "low_f": 59.7,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-04": {
+   "high_f": 91.6,
+   "low_f": 63.7,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-05": {
+   "high_f": 81.9,
+   "low_f": 56.5,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-06": {
+   "high_f": 82.9,
+   "low_f": 55.2,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-07": {
+   "high_f": 82.9,
+   "low_f": 54.3,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-08": {
+   "high_f": 85.6,
+   "low_f": 54,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-09": {
+   "high_f": 61.7,
+   "low_f": 54.3,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-10": {
+   "high_f": 67.1,
+   "low_f": 50.7,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-11": {
+   "high_f": 63.9,
+   "low_f": 48.9,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-12": {
+   "high_f": 67.6,
+   "low_f": 49.1,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-13": {
+   "high_f": 82,
+   "low_f": 48.4,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-14": {
+   "high_f": 74.7,
+   "low_f": 51.6,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-15": {
+   "high_f": 92.7,
+   "low_f": 54,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-16": {
+   "high_f": 91.4,
+   "low_f": 61,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-17": {
+   "high_f": 93.9,
+   "low_f": 60.3,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-18": {
+   "high_f": 68.5,
+   "low_f": 53.4,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-19": {
+   "high_f": 65.8,
+   "low_f": 54.5,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-20": {
+   "high_f": 76.3,
+   "low_f": 51.4,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-21": {
+   "high_f": 68,
+   "low_f": 56.7,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-22": {
+   "high_f": 61.5,
+   "low_f": 54.5,
+   "precip_in": 0.13,
+   "samples": 288
+  },
+  "2026-10-23": {
+   "high_f": 73,
+   "low_f": 51.4,
+   "precip_in": 0.01,
+   "samples": 288
+  },
+  "2026-10-24": {
+   "high_f": 79.9,
+   "low_f": 50.9,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-25": {
+   "high_f": 79,
+   "low_f": 51.1,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-26": {
+   "high_f": 70.2,
+   "low_f": 50.9,
+   "precip_in": 0,
+   "samples": 265
+  },
+  "2026-10-27": {
+   "high_f": 70.2,
+   "low_f": 50.2,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-28": {
+   "high_f": 72.1,
+   "low_f": 48.9,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-29": {
+   "high_f": 72.7,
+   "low_f": 51.1,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-30": {
+   "high_f": 68.4,
+   "low_f": 52.9,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-10-31": {
+   "high_f": 65.7,
+   "low_f": 51.1,
+   "precip_in": 0.02,
+   "samples": 288
+  },
+  "2026-11-01": {
+   "high_f": 68.7,
+   "low_f": 48.4,
+   "precip_in": 0.02,
+   "samples": 300
+  },
+  "2026-11-02": {
+   "high_f": 66.7,
+   "low_f": 50.2,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-11-03": {
+   "high_f": 63.3,
+   "low_f": 53.2,
+   "precip_in": 0.52,
+   "samples": 288
+  },
+  "2026-11-04": {
+   "high_f": 74.8,
+   "low_f": 50.4,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-11-05": {
+   "high_f": 77.2,
+   "low_f": 50.9,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-11-06": {
+   "high_f": 75.6,
+   "low_f": 50.9,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-11-07": {
+   "high_f": 75,
+   "low_f": 51.6,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-11-08": {
+   "high_f": 75.2,
+   "low_f": 52.3,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-11-09": {
+   "high_f": 76.1,
+   "low_f": 54.7,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-11-10": {
+   "high_f": 80.1,
+   "low_f": 54.7,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-11-11": {
+   "high_f": 78.6,
+   "low_f": 50.2,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-11-12": {
+   "high_f": 73,
+   "low_f": 53.6,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-11-13": {
+   "high_f": 63.5,
+   "low_f": 51.1,
+   "precip_in": 1.04,
+   "samples": 288
+  },
+  "2026-11-14": {
+   "high_f": 65.5,
+   "low_f": 50.2,
+   "precip_in": 0.06,
+   "samples": 288
+  },
+  "2026-11-15": {
+   "high_f": 63.9,
+   "low_f": 50.7,
+   "precip_in": 0.77,
+   "samples": 288
+  },
+  "2026-11-16": {
+   "high_f": 66.2,
+   "low_f": 50,
+   "precip_in": 0.21,
+   "samples": 288
+  },
+  "2026-11-17": {
+   "high_f": 62.8,
+   "low_f": 44.6,
+   "precip_in": 0,
+   "samples": 288
+  }
+ }
 }
