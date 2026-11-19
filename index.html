@@ -539,7 +539,8 @@ let outlookAlerts={city:null,events:[]};
 let lastOutlook=null,liveOutlook=-1; // liveOutlook: request id whose live-model outlook is shown
 function nwsWeatherOutlook(afd,d,h){
  // Prefer a current, explicitly published ChatGPT editorial outlook.
- const published=chatgptOutlooks?.outlooks?.[city];
+ const outlookKey=({Sacramento:'East Sacramento',Sausalito:'Sausalito'})[city]||city;
+ const published=chatgptOutlooks?.outlooks?.[outlookKey];
  if(published&&typeof published.headline==='string'&&typeof published.text==='string'&&published.headline.trim()&&published.text.trim()){
   set('public-outlook-source',chatgptOutlooks.source_label||'Diablo Weather Lab · ChatGPT editorial outlook');
   set('public-outlook-headline',published.headline);
