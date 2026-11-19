@@ -65,18 +65,16 @@
       spot.kind === 'coast' ? ['Waves', waves(c) || '—'] : null,
       ['Water', spot.water_f != null ? spot.water_f + '°F' : '—'],
       ['Rain', c.thunder ? 'Storms' : c.rain_pct != null ? Math.round(c.rain_pct / 10) * 10 + '%' : '—'],
-      spot.kind === 'coast' ? null : ['Air', c.air_f != null ? c.air_f + '°F' : '—'],
+      spot.kind === 'coast' ? null : ['Next tide', (() => { const t = (spot.tides || []).find((x) => parse(x.t) >= now); return t ? t.type + ' ' + clock(parse(t.t)) : '—'; })()],
     ].filter(Boolean).map(([k, v]) => '<div><span>' + k + '</span><b>' + esc(v) + '</b></div>').join('');
     const alerts = (spot.alerts || []).filter((x) => MARINE.test(x)).map((a) => '<span class="pad-alert ' + level(a) + '">⚠ ' + esc(a) + '</span>').join('');
-    const brief = [wind(c), spot.kind === 'coast' && waves(c) ? waves(c) : null].filter(Boolean).join(' · ');
     const nAlerts = (spot.alerts || []).filter((x) => MARINE.test(x));
     return '<details class="pad-card r' + c.rating + '" data-id="' + esc(spot.id) + '"' + (openCards.has(spot.id) ? ' open' : '') + '>' +
-      '<summary><header><div><h3>' + esc(spot.city ? spot.name : spot.name.split(' · ').pop()) + '</h3><p class="pad-city">' + esc(spot.city || spot.name.split(' · ')[0]) + '</p><p class="pad-brief">' + (c.air_f != null ? '<b class="pad-temp">' + c.air_f + '°</b>' : '') + esc(brief) + (rainTxt(c) ? ' <span class="pad-rain">' + esc(rainTxt(c)) + '</span>' : '') + '</p>' +
+      '<summary><header><div><h3>' + esc(spot.city ? spot.name : spot.name.split(' · ').pop()) + '</h3><p class="pad-city">' + esc(spot.city || spot.name.split(' · ')[0]) + '</p><p class="pad-brief">' + (c.air_f != null ? '<b class="pad-temp">' + c.air_f + '°</b>' : '') + '<span class="pad-temp-l">air</span></p>' +
       (nAlerts.length ? '<p class="pad-brief-alert ' + level(nAlerts[0]) + '">⚠ ' + esc(nAlerts.join(' · ')) + '</p>' : '') + '</div>' +
-      '<div class="pad-rate"><span class="pad-badge r' + c.rating + '">' + LABEL[c.rating] + '</span><small>' + esc(c.why) + '</small><span class="pad-chev" aria-hidden="true">⌄</span></div></header></summary>' +
+      '<div class="pad-rate"><span class="pad-badge r' + c.rating + '">' + LABEL[c.rating] + '</span><small>' + esc(c.why) + '</small><span class="pad-chev" aria-hidden="true">⌄</span></div></header><div class="pad-stats">' + stats + '</div></summary>' +
       '<div class="pad-body"><p class="pad-kind">' + (spot.kind === 'coast' ? 'Open coast' : 'Protected water') + '</p>' +
       (alerts ? '<div class="pad-alerts">' + alerts + '</div>' : '') +
-      '<div class="pad-stats">' + stats + '</div>' +
       (tides ? '<div class="pad-tides">' + tides + '</div>' : '') +
       timeline(spot, now) +
       '<p class="pad-detail" aria-live="polite">' + esc(bestText(spot, now)) + '</p>' +
