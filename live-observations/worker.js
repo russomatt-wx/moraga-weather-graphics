@@ -7,7 +7,7 @@ export { AlertPush };
 const STATION = 'PWS_KCAMORAG71';
 // Optional validated station IDs, supplied as Worker environment variables.
 // Do not select a station based on proximity alone without checking its exposure and freshness.
-const CITY_COORDS = {lafayette:'37.890,-122.115',danville:'37.813,-121.974',greenbrook:'37.799,-121.970',sausalito:'37.862,-122.488'};
+const CITY_COORDS = {lafayette:'37.890,-122.115',danville:'37.813,-121.974',greenbrook:'37.799,-121.970',sausalito:'37.875,-122.516'};
 const MAX_AGE_MS = 45 * 60 * 1000;
 // Hand-picked neighborhood stations (Xweather IDs), tried before automatic discovery.
 // Weather Underground IDs (e.g. KCADANVI207) are not in Xweather (invalid_location),

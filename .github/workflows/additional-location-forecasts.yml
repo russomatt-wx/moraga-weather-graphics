@@ -28,7 +28,7 @@ jobs:
               lafayette) lat=37.890; lon=-122.115 ;;
               danville) lat=37.813; lon=-121.974 ;;
               greenbrook) lat=37.799; lon=-121.970 ;;
-              sausalito) lat=37.862; lon=-122.488 ;;
+              sausalito) lat=37.875; lon=-122.516 ;;
             esac
             mkdir -p "/tmp/wx-$location"
             # Let the script compare against the current feed (it keeps it if a new run lost models).
@@ -43,7 +43,7 @@ jobs:
           from zoneinfo import ZoneInfo
           today=datetime.datetime.now(ZoneInfo('America/Los_Angeles')).date()
           dates=[(today+datetime.timedelta(days=i)).isoformat() for i in range(10)]
-          for name,lat,lon in [('lafayette',37.890,-122.115),('danville',37.813,-121.974),('greenbrook',37.799,-121.970),('sausalito',37.862,-122.488)]:
+          for name,lat,lon in [('lafayette',37.890,-122.115),('danville',37.813,-121.974),('greenbrook',37.799,-121.970),('sausalito',37.875,-122.516)]:
               data=json.loads(pathlib.Path(f'{name}_forecast_10day.json').read_text())
               assert data['dates']==dates, f'{name}: wrong dates'
               assert abs(data['latitude']-lat)<0.002 and abs(data['longitude']-lon)<0.002, f'{name}: wrong coordinates'

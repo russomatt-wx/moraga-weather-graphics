@@ -28,11 +28,11 @@
       "status": "operational"
     },
     "sausalito": {
-      "latitude": 37.862,
-      "longitude": -122.488,
-      "display_name": "Sausalito \u2014 Waterfront",
+      "latitude": 37.875,
+      "longitude": -122.516,
+      "display_name": "Marin City \u2014 Sausalito",
       "forecast_file": "sausalito_forecast_10day.json",
-      "calibration_station": "KCASAUSA92",
+      "calibration_station": "KCASAUSA88",
       "status": "operational"
     }
   },
