@@ -110,7 +110,7 @@
   let data = null, area = '';
   function render() {
     const box = document.getElementById('pad-spots');
-    if (!data || !data.spots || !data.spots.length) { box.innerHTML = '<p class="pad-empty">Paddle conditions are not available right now.</p>'; return; }
+    if (!data || !data.spots || !data.spots.length) { box.innerHTML = '<p class="pad-empty">Marine conditions are not available right now.</p>'; return; }
     const now = pacificNow();
     const open = new Set([...document.querySelectorAll('#pad-alerts details[open] .dwl-alert-title')].map((x) => x.textContent));
     document.getElementById('pad-alerts').innerHTML = alertCards(data.spots.filter((s) => !area || s.area === area));
