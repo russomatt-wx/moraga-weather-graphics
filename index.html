@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=24"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=24"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=24">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261120v">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261120w">
 
 
 
@@ -952,7 +952,7 @@ function nwsWeatherOutlook(afd,d,h){
   const rows=lines.map(line=>line.split(',')).map(c=>({name:c[idx.model].toUpperCase(),time:new Date(c[idx.valid_utc]),err:Math.abs(Number(c[idx.error_f]))})).filter(r=>Number.isFinite(r.err)&&!isNaN(r.time.getTime()));
   if(!rows.length)throw new Error('Awaiting verified station matches');
   const latest=new Date(Math.max(...rows.map(r=>r.time.getTime())));
-  const day=d=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
+  const dayFmtPT=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}),day=d=>dayFmtPT.format(d);
   const today=day(latest);
   function section(title,items){
    const by={};
@@ -1030,7 +1030,10 @@ function iconMarkup(code){
   return DWL.icon(code);
 }
 
-const dateKey=d=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
+// One shared formatter + memo: building an Intl.DateTimeFormat per call took ~10 s across the skill tables on load.
+const HOUR_PT_FMT=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',hourCycle:'h23'});
+const DATE_KEY_FMT=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}),DATE_KEY_MEMO=new Map();
+const dateKey=d=>{const t=+d;let k=DATE_KEY_MEMO.get(t);if(k===undefined){k=DATE_KEY_FMT.format(d);if(DATE_KEY_MEMO.size<50000)DATE_KEY_MEMO.set(t,k);}return k;};
 
 /* Compare only paired station hours and similar retrieval lead times.
    Hourly daytime/nighttime skill is a provisional proxy for daily extremes. */
@@ -1046,7 +1049,7 @@ function forecastSkill(csv,now=Date.now()){
   const forecast=Number(c[ix.forecast_f]),observed=Number(c[ix.observed_f]);
   if(![valid,issued,forecast,observed].every(Number.isFinite)||valid>now||valid<now-90*86400000||issued>=valid)continue;
   const lead=(valid-issued)/3600000;
-  const hour=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',hourCycle:'h23'}).format(new Date(valid)));
+  const hour=Number(HOUR_PT_FMT.format(new Date(valid)));
   rows.push({model,valid,issued,lead,bucket:Math.floor(lead/24),phase:hour>=10&&hour<=18?'high':hour<=8?'low':'other',observed,error:Math.abs(forecast-observed),signedError:forecast-observed});
  }
  return rows;
@@ -2402,7 +2405,7 @@ window.MORAGA_LIVE_OBSERVATIONS_URL='https://moraga-live-observations.russo-matt
   if(Number.isFinite(t))document.body.dataset.atmosphere=t<55?'cool':t<72?'mild':t<88?'warm':'hot';
  });
  const fmtDate=d=>new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'long'});
- const dateKey=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+ const DATE_KEY_NOW_FMT=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'});const dateKey=()=>DATE_KEY_NOW_FMT.format(new Date());
  async function updateStory(){
   const root=document.getElementById('ai-model'),title=document.getElementById('ai-story-title'),detail=document.getElementById('ai-model-detail'),tag=document.getElementById('ai-model-level');
   try{
