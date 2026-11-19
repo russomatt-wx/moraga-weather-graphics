@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated_utc": "2026-11-19T03:52:58.229Z",
-  "source_label": "Diablo Weather Lab · ChatGPT editorial outlook · NWS Bay Area + local ensemble guidance",
+  "source_label": "Diablo Weather Lab \u00b7 ChatGPT editorial outlook \u00b7 NWS Bay Area + local ensemble guidance",
   "horizon_days": 7,
   "outlooks": {
     "Moraga": {
