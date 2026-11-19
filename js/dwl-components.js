@@ -100,7 +100,7 @@
       '<div class="dwl-day-when">' + (o.today ? '<span class="dwl-pill">Today</span>' : '') +
         '<strong>' + esc(o.day) + '</strong><span>' + esc(o.date) + '</span></div>' +
       '<div class="dwl-day-icon">' + icon(o.iconCode, '', o.night) + '</div>' +
-      '<div class="dwl-day-sky"><div class="dwl-day-cond">' + esc(String(o.condition).replace(/^slight chance of (rain|showers)$/i, 'Slight Chance')) + '</div>' + rainLine + '</div>' +
+      '<div class="dwl-day-sky"><div class="dwl-day-cond">' + esc(String(o.condition).replace(/^(early am|late am|am|pm|early|late|morning|afternoon|evening|overnight)\s+(?=\S)/i, '').replace(/^slight chance of (rain|showers)$/i, 'Slight Chance').replace(/^./, function (c) { return c.toUpperCase(); })) + '</div>' + rainLine + '</div>' +
       '<div class="dwl-day-hi" aria-label="High">' + esc(o.highText) + '</div>' +
       '<div class="dwl-day-bar" aria-hidden="true"><i></i></div>' +
       '<div class="dwl-day-lo" aria-label="Low">' + esc(o.lowText) + '</div>' +
@@ -288,8 +288,9 @@
     return o;
   }
   // Fold the timing into a rain condition: 'Rain' → 'AM Rain', 'Chance of Rain' → 'PM Showers'.
+  // Timing words (AM/PM/Evening...) are no longer shown on day cards; the condition stays plain.
   function timedCondition(cond, prefix) {
-    if (!prefix) return cond;
+    return cond;
     var c = String(cond);
     if (/slight chance/i.test(c)) return c;
     if (/heavy rain/i.test(c)) return prefix + ' Heavy Rain';
