@@ -597,3 +597,18 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
   #public-shell .public-hour .public-hour-icon img, #public-shell .public-hour .dwl-icon { width: 52px !important; height: 37px !important; }
 }
 @media (max-width: 340px) { .dwl-day-bar { display: none; } .dwl-day { grid-template-columns: 46px 36px minmax(0, 1fr) 30px 0 29px !important; } }
+/* Larger weather icons (phones). */
+@media (max-width: 600px) {
+  .dwl-day { grid-template-columns: 58px 60px minmax(0, 1fr) 40px 12px 38px !important; }
+  .dwl-day .dwl-icon { width: 62px !important; height: 44px !important; margin: 0 -2px !important; }
+  #public-shell .public-hour .public-hour-icon { height: 52px !important; }
+  #public-shell .public-hour .public-hour-icon img, #public-shell .public-hour .dwl-icon { width: 72px !important; height: 52px !important; max-width: none; }
+}
+@media (max-width: 380px) {
+  .dwl-day { grid-template-columns: 50px 50px minmax(0, 1fr) 34px 6px 32px !important; }
+  .dwl-day .dwl-icon { width: 52px !important; height: 37px !important; margin: 0 -1px !important; }
+  #public-shell .public-hour .public-hour-icon img, #public-shell .public-hour .dwl-icon { width: 60px !important; height: 43px !important; }
+  #public-shell .public-hour .public-hour-icon { height: 43px !important; }
+}
+@media (max-width: 340px) { .dwl-day { grid-template-columns: 46px 40px minmax(0, 1fr) 30px 0 29px !important; } .dwl-day .dwl-icon { width: 42px !important; height: 30px !important; } }
+@media (min-width: 700px) { .dwl-day .dwl-icon { width: 66px !important; height: 47px !important; } }
