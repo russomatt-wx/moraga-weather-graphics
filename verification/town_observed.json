@@ -359,6 +359,12 @@
    "low_f": 38.7,
    "precip_in": 0.01,
    "samples": 288
+  },
+  "2026-11-18": {
+   "high_f": 50.2,
+   "low_f": 46.9,
+   "precip_in": 1.66,
+   "samples": 288
   }
  },
  "danville": {
@@ -738,6 +744,12 @@
    "high_f": 60.6,
    "low_f": 36,
    "precip_in": 0.01,
+   "samples": 288
+  },
+  "2026-11-18": {
+   "high_f": 55.8,
+   "low_f": 45.9,
+   "precip_in": 2.03,
    "samples": 288
   }
  },
@@ -1119,6 +1131,12 @@
    "low_f": 35.6,
    "precip_in": 0,
    "samples": 288
+  },
+  "2026-11-18": {
+   "high_f": 55.9,
+   "low_f": 43,
+   "precip_in": 2.18,
+   "samples": 288
   }
  },
  "lafayette": {
@@ -1487,6 +1505,12 @@
    "low_f": 37.2,
    "precip_in": 0,
    "samples": 288
+  },
+  "2026-11-18": {
+   "high_f": 56.5,
+   "low_f": 45.5,
+   "precip_in": 2.03,
+   "samples": 288
   }
  },
  "sacramento": {
@@ -1849,6 +1873,12 @@
    "low_f": 39.4,
    "precip_in": 0.01,
    "samples": 288
+  },
+  "2026-11-18": {
+   "high_f": 52.9,
+   "low_f": 48.6,
+   "precip_in": 2.15,
+   "samples": 288
   }
  },
  "sausalito": {
@@ -2210,6 +2240,12 @@
    "high_f": 62.8,
    "low_f": 44.6,
    "precip_in": 0,
+   "samples": 288
+  },
+  "2026-11-18": {
+   "high_f": 56.1,
+   "low_f": 49.6,
+   "precip_in": 2.81,
    "samples": 288
   }
  }
