@@ -20,19 +20,19 @@ TZ = ZoneInfo("America/Los_Angeles")
 S = requests.Session()
 S.headers["User-Agent"] = "DiabloWeatherLab-paddle/1.0"
 
-# id, name, area, kind (coast = open ocean surf; bay = protected water), lat, lon, NOAA tide station
+# id, name (beach / marina), city, area, kind (coast = open ocean surf; bay = protected water), lat, lon, NOAA tide station
 SPOTS = [
-    ("ocean-beach", "Ocean Beach", "SF Coast", "coast", 37.760, -122.513, "9414290"),
-    ("muir-beach", "Muir Beach", "Marin", "coast", 37.860, -122.576, "9414290"),
-    ("stinson", "Stinson Beach", "Marin", "coast", 37.900, -122.645, "9414958"),
-    ("linda-mar", "Pacifica · Linda Mar", "Peninsula Coast", "coast", 37.594, -122.503, "9414131"),
-    ("pillar-point", "Half Moon Bay · Pillar Point Harbor", "Peninsula Coast", "bay", 37.497, -122.488, "9414131"),
-    ("richardson-bay", "Sausalito · Richardson Bay Marina", "Inside the Bay", "bay", 37.866, -122.495, "9414806"),
-    ("crissy-field", "Crissy Field", "Inside the Bay", "bay", 37.806, -122.464, "9414290"),
-    ("aquatic-park", "Aquatic Park", "Inside the Bay", "bay", 37.807, -122.424, "9414290"),
-    ("clipper-cove", "Clipper Cove · Treasure Island", "Inside the Bay", "bay", 37.814, -122.367, "9414750"),
-    ("berkeley-marina", "Berkeley Marina", "Inside the Bay", "bay", 37.866, -122.317, "9414816"),
-    ("crown-beach", "Alameda · Crown Beach", "Inside the Bay", "bay", 37.763, -122.270, "9414750"),
+    ("ocean-beach", "Ocean Beach", "San Francisco", "SF Coast", "coast", 37.760, -122.513, "9414290"),
+    ("muir-beach", "Muir Beach", "Muir Beach", "Marin", "coast", 37.860, -122.576, "9414290"),
+    ("stinson", "Stinson Beach", "Stinson Beach", "Marin", "coast", 37.900, -122.645, "9414958"),
+    ("linda-mar", "Linda Mar Beach", "Pacifica", "Peninsula Coast", "coast", 37.594, -122.503, "9414131"),
+    ("pillar-point", "Pillar Point Harbor", "Half Moon Bay", "Peninsula Coast", "bay", 37.497, -122.488, "9414131"),
+    ("richardson-bay", "Richardson Bay Marina", "Sausalito", "Inside the Bay", "bay", 37.866, -122.495, "9414806"),
+    ("crissy-field", "Crissy Field", "San Francisco", "Inside the Bay", "bay", 37.806, -122.464, "9414290"),
+    ("aquatic-park", "Aquatic Park", "San Francisco", "Inside the Bay", "bay", 37.807, -122.424, "9414290"),
+    ("clipper-cove", "Clipper Cove", "Treasure Island, San Francisco", "Inside the Bay", "bay", 37.814, -122.367, "9414750"),
+    ("berkeley-marina", "Berkeley Marina", "Berkeley", "Inside the Bay", "bay", 37.866, -122.317, "9414816"),
+    ("crown-beach", "Crown Beach", "Alameda", "Inside the Bay", "bay", 37.763, -122.270, "9414750"),
 ]
 
 
@@ -51,7 +51,7 @@ def get(url, params, tries=4, headers=None):
 
 def multi(url, params):
     """Open-Meteo multi-location call -> list aligned with SPOTS."""
-    p = dict(params, latitude=",".join(str(s[4]) for s in SPOTS), longitude=",".join(str(s[5]) for s in SPOTS))
+    p = dict(params, latitude=",".join(str(s[5]) for s in SPOTS), longitude=",".join(str(s[6]) for s in SPOTS))
     d = get(url, p)
     if d is None:
         return [None] * len(SPOTS)
@@ -102,7 +102,7 @@ def main():
         raise SystemExit("No wind data" + ("; keeping previous file" if prev else ""))
 
     tides = {}
-    for st in sorted({s[6] for s in SPOTS}):
+    for st in sorted({s[7] for s in SPOTS}):
         d = get("https://api.tidesandcurrents.noaa.gov/api/prod/datagetter", {
             "product": "predictions", "interval": "hilo", "datum": "MLLW", "station": st, "time_zone": "lst_ldt",
             "units": "english", "format": "json", "begin_date": now.strftime("%Y%m%d"), "range": "72",
@@ -135,7 +135,7 @@ def main():
     print("water", water, "buoys", buoy)
 
     spots = []
-    for idx, (sid, name, area, kind, lat, lon, tide_st) in enumerate(SPOTS):
+    for idx, (sid, name, city, area, kind, lat, lon, tide_st) in enumerate(SPOTS):
         alerts, details = [], []
         a = get("https://api.weather.gov/alerts/active", {"point": f"{lat},{lon}"}, headers={"Accept": "application/geo+json"})
         for f in (a or {}).get("features", []):
@@ -183,7 +183,7 @@ def main():
             water_f = water.get(tide_st) or water.get("9414750") or water.get("9414290") or buoy.get("46237") or cur["sst_f"]
         # Best upcoming window: first daylight block rated go (7 AM - 5 PM).
         best = next((b for b in blocks if b["rating"] == 0 and 7 <= int(b["time"][11:13]) <= 17), None)
-        spots.append({"id": sid, "name": name, "area": area, "kind": kind, "lat": lat, "lon": lon, "now": cur,
+        spots.append({"id": sid, "name": name, "city": city, "area": area, "kind": kind, "lat": lat, "lon": lon, "now": cur,
                       "blocks": blocks, "tides": next_tides, "tide_station": tide_st, "water_f": water_f,
                       "alerts": alerts, "alert_details": details, "best": best["time"] if best else None})
         print(name, cur["rating"], cur["why"], cur["wind"], cur["gust"], cur["wave_ft"], len(next_tides), alerts)

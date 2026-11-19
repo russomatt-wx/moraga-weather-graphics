@@ -68,7 +68,7 @@
     const brief = [wind(c), spot.kind === 'coast' && waves(c) ? waves(c) : null].filter(Boolean).join(' · ');
     const nAlerts = (spot.alerts || []).filter((x) => MARINE.test(x));
     return '<details class="pad-card r' + c.rating + '" data-id="' + esc(spot.id) + '"' + (openCards.has(spot.id) ? ' open' : '') + '>' +
-      '<summary><header><div><h3>' + esc(spot.name) + '</h3><p class="pad-brief">' + esc(brief) + '</p>' +
+      '<summary><header><div><h3>' + esc(spot.city ? spot.name : spot.name.split(' · ').pop()) + '</h3><p class="pad-city">' + esc(spot.city || spot.name.split(' · ')[0]) + '</p><p class="pad-brief">' + esc(brief) + '</p>' +
       (nAlerts.length ? '<p class="pad-brief-alert ' + level(nAlerts[0]) + '">⚠ ' + esc(nAlerts.join(' · ')) + '</p>' : '') + '</div>' +
       '<div class="pad-rate"><span class="pad-badge r' + c.rating + '">' + LABEL[c.rating] + '</span><small>' + esc(c.why) + '</small><span class="pad-chev" aria-hidden="true">⌄</span></div></header></summary>' +
       '<div class="pad-body"><p class="pad-kind">' + (spot.kind === 'coast' ? 'Open coast' : 'Protected water') + '</p>' +
@@ -92,7 +92,7 @@
         if (!MARINE.test(a.event)) continue;
         const g = byEvent.get(a.event) || { ...a, spots: [] };
         if (a.ends && (!g.ends || a.ends > g.ends)) g.ends = a.ends;
-        g.spots.push(s.name.split(' · ')[0]);
+        g.spots.push(s.city ? s.name : s.name.split(' · ')[0]);
         byEvent.set(a.event, g);
       }
     }
