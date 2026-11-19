@@ -759,3 +759,4 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .dwl-days > .dwl-day > .dwl-day-bar { display: none !important; }
 @media (max-width: 360px) { .dwl-days > .dwl-day { grid-template-columns: 46px 38px 34px minmax(0, 1fr) 32px !important; } }
 @media (min-width: 700px) { .dwl-days > .dwl-day { grid-template-columns: 76px 62px 56px minmax(0, 1fr) 54px !important; } }
+.pad-rain { white-space: nowrap; margin-left: 4px; color: var(--rain); font-weight: 600; }
