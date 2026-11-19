@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Surf &amp; SUP | Diablo Weather Lab</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=24"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=24"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=24">
 <meta name="description" content="Marine and paddle conditions for SF Bay Area coast and bay spots: wind, waves, tides, water temperature and NWS marine alerts.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261119s">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261119t">
 
 
 
@@ -24,20 +24,25 @@
 <section class="pad-intro">
  <h1>Surf &amp; SUP</h1>
  <p class="pad-sub">Wind, waves, tides and marine alerts for Bay Area coast and bay spots. <span id="pad-updated"></span></p>
- <div class="pad-legend"><span class="pad-badge r0">Go</span> light wind, small surf <span class="pad-badge r1">Caution</span> breezy or moderate surf <span class="pad-badge r2">No-go</span> strong wind, big surf or a warning</div>
+ <div class="pad-legend">
+  <div class="pad-key r0"><span class="pad-badge r0">Go</span><p>Wind &lt;12 mph<br>Surf &lt;3½ ft</p></div>
+  <div class="pad-key r1"><span class="pad-badge r1">Caution</span><p>Wind 12–17<br>Surf 3½–6 ft</p></div>
+  <div class="pad-key r2"><span class="pad-badge r2">No-go</span><p>Wind 17+ mph<br>Surf 6+ ft</p></div>
+ </div>
  <div class="pad-filter" role="group" aria-label="Area"><button type="button" data-area="" aria-pressed="true">All</button><button type="button" data-area="SF Coast" aria-pressed="false">SF Coast</button><button type="button" data-area="Marin" aria-pressed="false">Marin</button><button type="button" data-area="Peninsula Coast" aria-pressed="false">Peninsula</button><button type="button" data-area="SF Bay" aria-pressed="false">SF Bay</button></div>
 </section>
 <div id="pad-alerts" aria-live="polite"></div>
 <div id="pad-spots"><p class="pad-empty">Loading surf and SUP conditions…</p></div>
 <section class="pad-notes">
  <h2>How spots are rated</h2>
- <p><b>SF Bay and harbors:</b> Go under 10 mph with gusts under 16. Caution up to 15 mph or gusts to 22, or with a Small Craft Advisory. No-go above that.</p>
- <p><b>Open coast:</b> Go with waves under 3.5 ft and wind under 12 mph. Caution with waves to 6 ft, wind to 18 mph or any beach or rip current advisory. No-go with waves of 6 ft or more, a High Surf Advisory, or wind above 18 mph.</p>
+ <p><b>SF Bay and harbors:</b> Go under 12 mph (10 kt) with gusts under 18. Caution at 12–17 mph or gusts to 25, or with a Small Craft Advisory. No-go at 17 mph (15 kt) or more. These follow common paddling guidance: novices under about 10 knots, and over 15 knots is too much for a SUP.</p>
+ <p><b>Open coast:</b> Go with waves under 3.5 ft and wind under 12 mph. Caution with waves to 6 ft, wind to 18 mph or any beach or rip current advisory. No-go with waves of 6 ft or more, a High Surf Advisory, or wind above 18 mph. Offshore wind on the coast pushes you away from the beach: treat it with extra care.</p>
+ <p><b>Water temperature:</b> dress for the water, not the air. Bay Area water is usually below 60°F, where a wetsuit or drysuit is recommended.</p>
  <p>A Gale, Storm or Hazardous Seas warning is No-go everywhere. Ratings are a starting point, not a safety call: check conditions on the water, know the currents at your launch (ebb tides through the Golden Gate run fast), wear a PFD and dress for the water temperature.</p>
  <p class="pad-src">Data: Open-Meteo wind and marine forecasts, NOAA CO-OPS tide predictions and water temperature, National Weather Service alerts. Updated hourly.</p>
 </section>
 </div>
-<script src="js/paddle.js?v=20261119h" defer></script>
+<script src="js/paddle.js?v=20261119i" defer></script>
 <script>
 // Self-update: if a newer version of the site has been published (its stylesheet/script versions differ
 // from this page's), reload once so phones never sit on a stale cached copy.

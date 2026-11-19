@@ -71,9 +71,11 @@ def rate(kind, wind, gust, wave, alerts):
         return 2, "Gale or storm warning"
     w, g = wind or 0, gust or 0
     if kind == "bay":
-        if w >= 15 or g >= 22:
+        # Wind limits follow common paddling guidance: novices under ~10 kt (12 mph),
+        # 10-15 kt for experienced paddlers, over 15 kt (17 mph) too much for SUP.
+        if w >= 17 or g >= 25:
             return 2, "Strong wind"
-        level, why = (1, "Breezy, choppy") if (w >= 10 or g >= 16) else (0, "Light wind")
+        level, why = (1, "Breezy, choppy") if (w >= 12 or g >= 18) else (0, "Light wind")
         if "small craft" in ev and level < 1:
             level, why = 1, "Small craft advisory"
         return level, why

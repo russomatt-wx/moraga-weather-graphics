@@ -685,8 +685,11 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 #paddle-shell { box-sizing: border-box; width: 100%; max-width: 900px; margin: 0 auto; padding: 0 var(--gutter) 48px; }
 .pad-intro h1 { margin: 6px 0 4px; font-size: 28px; font-weight: 800; letter-spacing: -.01em; }
 .pad-sub { margin: 0 0 12px; color: var(--text-2); font-size: 15.5px; line-height: 1.45; }
-.pad-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; color: var(--muted); font-size: 13px; margin-bottom: 14px; }
-.pad-legend .pad-badge:not(:first-child) { margin-left: 6px; }
+.pad-legend { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+.pad-key { padding: 10px 10px 9px; border-radius: var(--radius-sm); background: var(--panel-deep); border-top: 3px solid var(--rc); text-align: center; }
+.pad-key.r0 { --rc: #34d399; } .pad-key.r1 { --rc: #ffbf2e; } .pad-key.r2 { --rc: #f85c5c; }
+.pad-key .pad-badge { padding: 3px 10px; font-size: 13px; }
+.pad-key p { margin: 7px 0 0; font-size: 12.5px; line-height: 1.4; color: var(--text-2); }
 .pad-badge { display: inline-block; padding: 4px 11px; border-radius: 999px; font: 700 13px/1.2 var(--font-ui); letter-spacing: .02em; }
 .pad-badge.r0 { background: rgba(52, 211, 153, .18); color: #6ff0b8; box-shadow: inset 0 0 0 1px rgba(52, 211, 153, .55); }
 .pad-badge.r1 { background: rgba(255, 191, 46, .16); color: #ffd36b; box-shadow: inset 0 0 0 1px rgba(255, 191, 46, .55); }
