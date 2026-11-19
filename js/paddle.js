@@ -61,16 +61,16 @@
     const tides = (spot.tides || []).filter((t) => parse(t.t) >= now).slice(0, 3)
       .map((t) => '<span class="pad-tide ' + (t.type === 'High' ? 'hi' : 'lo') + '">' + (t.type === 'High' ? '▲' : '▼') + ' ' + t.type + ' ' + clock(parse(t.t)) + ' <b>' + t.ft + ' ft</b></span>').join('');
     const stats = [
-      ['Wind', wind(c)],
-      spot.kind === 'coast' ? ['Waves', waves(c) || '—'] : null,
-      ['Water', spot.water_f != null ? spot.water_f + '°F' : '—'],
+      ['Wind mph', (c.dir ? c.dir + ' ' : '') + (c.gust > c.wind + 2 ? c.wind + '–' + c.gust : c.wind)],
+      spot.kind === 'coast' ? ['Waves', c.wave_ft == null ? '—' : c.wave_ft + ' ft' + (c.period_s ? ' · ' + c.period_s + 's' : '')] : null,
+      ['Water', spot.water_f != null ? spot.water_f + '°' : '—'],
       ['Rain', c.thunder ? 'Storms' : c.rain_pct != null ? Math.round(c.rain_pct / 10) * 10 + '%' : '—'],
-      spot.kind === 'coast' ? null : ['Next tide', (() => { const t = (spot.tides || []).find((x) => parse(x.t) >= now); return t ? t.type + ' ' + clock(parse(t.t)) : '—'; })()],
+      spot.kind === 'coast' ? null : ['Tide', (() => { const t = (spot.tides || []).find((x) => parse(x.t) >= now); return t ? (t.type === 'High' ? 'Hi ' : 'Lo ') + hour(parse(t.t)).replace(/(\d+)/, (m) => m + (parse(t.t).getMinutes() ? ':' + String(parse(t.t).getMinutes()).padStart(2, '0') : '')) : '—'; })()],
     ].filter(Boolean).map(([k, v]) => '<div><span>' + k + '</span><b>' + esc(v) + '</b></div>').join('');
     const alerts = (spot.alerts || []).filter((x) => MARINE.test(x)).map((a) => '<span class="pad-alert ' + level(a) + '">⚠ ' + esc(a) + '</span>').join('');
     const nAlerts = (spot.alerts || []).filter((x) => MARINE.test(x));
     return '<details class="pad-card r' + c.rating + '" data-id="' + esc(spot.id) + '"' + (openCards.has(spot.id) ? ' open' : '') + '>' +
-      '<summary><header><div><h3>' + esc(spot.city ? spot.name : spot.name.split(' · ').pop()) + '</h3><p class="pad-city">' + esc(spot.city || spot.name.split(' · ')[0]) + '</p><p class="pad-brief">' + (c.air_f != null ? '<b class="pad-temp">' + c.air_f + '°</b>' : '') + '<span class="pad-temp-l">air</span></p>' +
+      '<summary><header><div><h3>' + esc(spot.city ? spot.name : spot.name.split(' · ').pop()) + '</h3><p class="pad-city">' + esc(spot.city || spot.name.split(' · ')[0]) + (c.air_f != null ? ' <span class="pad-temp-l">· ' + c.air_f + '° air</span>' : '') + '</p>' +
       (nAlerts.length ? '<p class="pad-brief-alert ' + level(nAlerts[0]) + '">⚠ ' + esc(nAlerts.join(' · ')) + '</p>' : '') + '</div>' +
       '<div class="pad-rate"><span class="pad-badge r' + c.rating + '">' + LABEL[c.rating] + '</span><small>' + esc(c.why) + '</small><span class="pad-chev" aria-hidden="true">⌄</span></div></header><div class="pad-stats">' + stats + '</div></summary>' +
       '<div class="pad-body"><p class="pad-kind">' + (spot.kind === 'coast' ? 'Open coast' : 'Protected water') + '</p>' +
