@@ -560,3 +560,40 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
   .dwl-day-cond { white-space: normal; line-height: 1.05; font-size: 11px; }
   .dwl-day .dwl-icon { width: 36px !important; height: 26px !important; }
 }
+
+/* ---------- Phones: more room for the 10-day rows and the hourly strip ---------- */
+@media (max-width: 600px) {
+  #public-shell { padding-left: 10px !important; padding-right: 10px !important; }
+  #public-shell .dwl-header { margin-left: -10px !important; margin-right: -10px !important; }
+  /* 10-day: taller rows, bigger type; long conditions may wrap to two lines rather than shrink. */
+  .dwl-day { grid-template-columns: 60px 50px minmax(0, 1fr) 40px 14px 38px !important; column-gap: 6px !important; height: 86px !important; padding: 7px 10px 7px 12px !important; border-radius: 15px; }
+  .dwl-day-when strong { font-size: 21px; }
+  .dwl-day-when span { font-size: 14.5px; }
+  .dwl-pill { font-size: 9.5px !important; padding: 2px 7px; margin-bottom: 2px; }
+  .dwl-day .dwl-icon { width: 52px !important; height: 37px !important; }
+  .dwl-day-cond { font-size: 14px; line-height: 1.1; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .dwl-day-rain { font-size: 15.5px; gap: 7px; margin-top: 3px; }
+  .dwl-day-amount i { width: 10px; height: 13px; }
+  .dwl-day-hi, .dwl-day-lo { font-size: 24px !important; }
+  .dwl-day-bar { height: 4px; }
+  /* Next 24 hours: bigger type and icons in the five cards. */
+  #public-shell .public-hourly { column-gap: 7px; grid-auto-columns: calc((100% - 4 * 7px) / 5); }
+  #public-shell .public-hour { padding: 11px 2px 10px !important; border-radius: 14px !important; }
+  #public-shell .public-hour > strong:first-child { font-size: 16.5px; }
+  #public-shell .public-hour .public-hour-icon { height: 44px !important; margin: 6px 0 4px !important; }
+  #public-shell .public-hour .public-hour-icon img, #public-shell .public-hour .dwl-icon { width: 62px !important; height: 44px !important; }
+  #public-shell .public-hour-temp { font-size: 24px !important; }
+  #public-shell .public-hour-rain { font-size: 16px; margin-top: 2px !important; }
+  #public-shell .public-hourly.has-qpf .public-hour-qpf { height: 38px; }
+  #public-shell .public-hour-qpf span { font-size: 14px; line-height: 16px; height: 16px; }
+}
+@media (max-width: 380px) {
+  .dwl-day { grid-template-columns: 52px 42px minmax(0, 1fr) 34px 8px 32px !important; column-gap: 4px !important; padding: 6px 8px !important; }
+  .dwl-day-when strong { font-size: 18px; } .dwl-day-when span { font-size: 13px; }
+  .dwl-day .dwl-icon { width: 42px !important; height: 30px !important; }
+  .dwl-day-cond { font-size: 12.5px; } .dwl-day-rain { font-size: 14px; }
+  .dwl-day-hi, .dwl-day-lo { font-size: 21px !important; }
+  #public-shell .public-hour > strong:first-child { font-size: 14px; } #public-shell .public-hour-temp { font-size: 20px !important; } #public-shell .public-hour-rain { font-size: 14px; }
+  #public-shell .public-hour .public-hour-icon img, #public-shell .public-hour .dwl-icon { width: 52px !important; height: 37px !important; }
+}
+@media (max-width: 340px) { .dwl-day-bar { display: none; } .dwl-day { grid-template-columns: 46px 36px minmax(0, 1fr) 30px 0 29px !important; } }
