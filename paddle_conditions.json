@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-19T07:33:23.326220+00:00",
+ "generated_utc": "2026-11-19T07:35:17.776620+00:00",
  "spots": [
   {
    "id": "ocean-beach",
@@ -1229,8 +1229,8 @@
      "swell_dir": null,
      "sst_f": 64,
      "air_f": 54,
-     "rating": 1,
-     "why": "Breezy, choppy"
+     "rating": 0,
+     "why": "Light wind"
     },
     {
      "time": "2026-11-19T14:00",
@@ -1242,8 +1242,8 @@
      "swell_dir": null,
      "sst_f": 65,
      "air_f": 54,
-     "rating": 2,
-     "why": "Strong wind"
+     "rating": 1,
+     "why": "Breezy, choppy"
     },
     {
      "time": "2026-11-19T17:00",
@@ -1255,8 +1255,8 @@
      "swell_dir": null,
      "sst_f": 65,
      "air_f": 53,
-     "rating": 2,
-     "why": "Strong wind"
+     "rating": 1,
+     "why": "Breezy, choppy"
     },
     {
      "time": "2026-11-19T20:00",
@@ -1307,8 +1307,8 @@
      "swell_dir": null,
      "sst_f": 65,
      "air_f": 49,
-     "rating": 1,
-     "why": "Breezy, choppy"
+     "rating": 0,
+     "why": "Light wind"
     },
     {
      "time": "2026-11-20T08:00",
@@ -1425,7 +1425,7 @@
      "description": "* WHAT...West winds 15 to 25 kt with gusts up to 30 kt and seas\n8 to 13 ft.\n\n* WHERE...Coastal Waters from Point Reyes to Pigeon Point\nCalifornia out to 10 NM.\n\n* WHEN...Until 3 PM PST Thursday.\n\n* IMPACTS...Conditions will be hazardous to small craft."
     }
    ],
-   "best": "2026-11-20T08:00"
+   "best": "2026-11-19T11:00"
   },
   {
    "id": "richardson-bay",
@@ -1806,8 +1806,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 55,
-     "rating": 1,
-     "why": "Breezy, choppy"
+     "rating": 0,
+     "why": "Light wind"
     },
     {
      "time": "2026-11-19T17:00",
@@ -1832,8 +1832,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 48,
-     "rating": 1,
-     "why": "Breezy, choppy"
+     "rating": 0,
+     "why": "Light wind"
     },
     {
      "time": "2026-11-19T23:00",
@@ -2352,8 +2352,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 49,
-     "rating": 2,
-     "why": "Strong wind"
+     "rating": 1,
+     "why": "Breezy, choppy"
     },
     {
      "time": "2026-11-19T11:00",
@@ -2391,8 +2391,8 @@
      "swell_dir": null,
      "sst_f": 63,
      "air_f": 51,
-     "rating": 1,
-     "why": "Breezy, choppy"
+     "rating": 0,
+     "why": "Light wind"
     },
     {
      "time": "2026-11-19T20:00",
@@ -2404,8 +2404,8 @@
      "swell_dir": null,
      "sst_f": 62,
      "air_f": 49,
-     "rating": 2,
-     "why": "Strong wind"
+     "rating": 1,
+     "why": "Breezy, choppy"
     },
     {
      "time": "2026-11-19T23:00",
@@ -2725,8 +2725,8 @@
      "swell_dir": null,
      "sst_f": 61,
      "air_f": 48,
-     "rating": 1,
-     "why": "Breezy, choppy"
+     "rating": 0,
+     "why": "Light wind"
     },
     {
      "time": "2026-11-20T08:00",
