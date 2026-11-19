@@ -871,3 +871,16 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 #public-shell .dwl-cc-icon { display: flex; flex: none; }
 #public-shell .dwl-cc-icon:empty { display: none; }
 #public-shell .dwl-cc-icon .dwl-icon { width: 58px; height: 44px; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .35)); }
+/* More room between the icon and the condition text */
+.dwl-days > .dwl-day > .dwl-day-sky, .dwl-days > .dwl-day > .dwl-day-wind { padding-left: 16px !important; }
+.dwl-days > .dwl-day { grid-template-columns: 56px 46px minmax(0, 1fr) 44px 132px minmax(0, 1fr) 44px !important; }
+@media (max-width: 360px) { .dwl-days > .dwl-day { grid-template-columns: 44px 36px minmax(0, 1fr) 34px 116px minmax(0, 1fr) 34px !important; } .dwl-days > .dwl-day > .dwl-day-sky, .dwl-days > .dwl-day > .dwl-day-wind { padding-left: 8px !important; } }
+@media (min-width: 700px) { .dwl-days > .dwl-day { grid-template-columns: 76px 64px minmax(8px, 1fr) 62px 212px minmax(8px, 1fr) 60px !important; } }
+/* Days without a rain line keep the condition text in the same spot (empty line holds its place) */
+.dwl-days > .dwl-day > .dwl-day-sky:not(:has(.dwl-day-rain))::after { content: "\00a0"; display: block; margin-top: 3px; font: 500 15.5px/1.15 var(--font-ui); }
+/* Icon fits its own column (no overlap into the text); text starts 16px from the icon */
+.dwl-days > .dwl-day { grid-template-columns: 54px 44px minmax(0, 1fr) 56px 126px minmax(0, 1fr) 42px !important; }
+.dwl-days > .dwl-day .dwl-day-icon .dwl-icon { width: 56px !important; height: 40px !important; margin: 0 !important; }
+.dwl-days > .dwl-day > .dwl-day-sky, .dwl-days > .dwl-day > .dwl-day-wind { padding-left: 12px !important; }
+@media (max-width: 360px) { .dwl-days > .dwl-day { grid-template-columns: 44px 36px minmax(0, 1fr) 44px 110px minmax(0, 1fr) 34px !important; } .dwl-days > .dwl-day .dwl-day-icon .dwl-icon { width: 44px !important; height: 32px !important; } .dwl-days > .dwl-day > .dwl-day-sky, .dwl-days > .dwl-day > .dwl-day-wind { padding-left: 8px !important; } }
+@media (min-width: 700px) { .dwl-days > .dwl-day { grid-template-columns: 76px 64px minmax(8px, 1fr) 70px 212px minmax(8px, 1fr) 60px !important; } .dwl-days > .dwl-day .dwl-day-icon .dwl-icon { width: 70px !important; height: 50px !important; } .dwl-days > .dwl-day > .dwl-day-sky, .dwl-days > .dwl-day > .dwl-day-wind { padding-left: 16px !important; } }
