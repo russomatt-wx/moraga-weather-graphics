@@ -276,9 +276,27 @@
       periods: per
     };
   }
-  function applyRestOfToday(o, hc, date) {
+  // Rest of today from the live hourly forecast (the same data as the Next 24 Hours cards), so the
+  // Today row and the hourly strip never disagree. Amounts are inches (precipitation_unit=inch).
+  function liveRestOfToday(hourly, date) {
+    var t = hourly && hourly.time, now = laHour();
+    if (!t || !hourly.precipitation_probability || now < 6) return null;
+    var pops = [], rain = 0, cloud = [], per = { overnight: 0, morning: 0, afternoon: 0, evening: 0 };
+    t.forEach(function (x, i) {
+      var h = Number(x.slice(11, 13));
+      if (x.slice(0, 10) !== date || h < now) return;
+      var p = Number(hourly.precipitation_probability[i]), v = Number(hourly.precipitation && hourly.precipitation[i]), c = Number(hourly.cloud_cover && hourly.cloud_cover[i]);
+      if (Number.isFinite(p)) pops.push(p);
+      if (Number.isFinite(v)) { rain += Math.max(0, v); per[h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening'] += Math.max(0, v); }
+      if (Number.isFinite(c)) cloud.push(c);
+    });
+    if (!pops.length) return null;
+    return { chance: Math.round(Math.max.apply(null, pops) / 10) * 10, amount: rain, night: now >= 18,
+      cloud: cloud.length ? cloud.reduce(function (a, b) { return a + b; }, 0) / cloud.length : null, periods: per };
+  }
+  function applyRestOfToday(o, hc, date, hourly) {
     if (!o || !o.today) return o;
-    var r = restOfToday(hc, date);
+    var r = liveRestOfToday(hourly, date) || restOfToday(hc, date);
     if (!r) return o;
     if (r.chance < 20 && r.amount < 0.025) {
       var c = r.cloud === null ? 50 : r.cloud;
