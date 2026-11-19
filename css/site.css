@@ -507,12 +507,8 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .dwl-day-hi, .dwl-day-lo { font-size: 18px !important; padding: 0 !important; text-align: right; }
 .dwl-day-hi { text-align: right; }
 .dwl-day-lo { justify-content: flex-start; }
-/* Temperature bar: high colour -> low colour, dot = where the day sits in the 10-day range. */
+/* Temperature bar: plain high colour -> low colour gradient. */
 .dwl-day-bar { position: relative; height: 5px; border-radius: 3px; background: linear-gradient(90deg, var(--hi), var(--lo)); opacity: .9; }
-.dwl-day-bar i {
-  position: absolute; top: 50%; left: calc(var(--pos, .5) * (100% - 9px)); width: 9px; height: 9px; margin-top: -4.5px;
-  border-radius: 50%; background: #fff; box-shadow: 0 0 6px rgba(255, 255, 255, .6);
-}
 @media (max-width: 360px) {
   .dwl-day { grid-template-columns: 46px 38px minmax(0, 1fr) 32px minmax(24px, 12%) 30px !important; padding: 4px 8px !important; column-gap: 4px; }
   .dwl-day .dwl-icon { width: 38px !important; height: 27px !important; }

@@ -87,7 +87,7 @@
      o = { today, day, date, high, low (numbers °F), highText, lowText, iconCode,
            condition, pop ('70%' or ''), amount ('0.25″' or ''), extra (trusted HTML), tag, cls } */
   // One compact row per day: when | icon | condition + rain | high | temperature bar | low.
-  // The bar's dot shows where the day sits in the whole 10-day range (set by rangeBars()).
+  // The bar is a plain high-to-low colour gradient.
   function dayCard(o) {
     var hi = tempColor(o.high), lo = tempColor(o.low);
     var tag = o.tag || 'article';
@@ -102,7 +102,7 @@
       '<div class="dwl-day-icon">' + icon(o.iconCode, '', o.night) + '</div>' +
       '<div class="dwl-day-sky"><div class="dwl-day-cond">' + esc(String(o.condition).replace(/^(early am|late am|am|pm|early|late|morning|afternoon|evening|overnight)\s+(?=\S)/i, '').replace(/^slight chance of (rain|showers)$/i, 'Slight Chance').replace(/^./, function (c) { return c.toUpperCase(); })) + '</div>' + rainLine + '</div>' +
       '<div class="dwl-day-hi" aria-label="High">' + esc(o.highText) + '</div>' +
-      '<div class="dwl-day-bar" aria-hidden="true"><i></i></div>' +
+      '<div class="dwl-day-bar" aria-hidden="true"></div>' +
       '<div class="dwl-day-lo" aria-label="Low">' + esc(o.lowText) + '</div>' +
       (o.extra || '') +
       '</' + tag + '>';
