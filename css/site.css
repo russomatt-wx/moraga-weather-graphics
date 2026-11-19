@@ -460,20 +460,20 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 @media (max-width: 360px) { .dwl-day .dwl-icon { width: 58px; height: 40px; margin: -4px 0 -3px; } }
 @media (min-width: 700px) { .dwl-day .dwl-icon { width: 74px; height: 52px; margin: -5px 0 -3px; } }
 
-/* ---------- Next 24 hours: five cards across, rain-amount trend underneath ---------- */
+/* ---------- Next 24 hours: six compact cards across, rain-amount trend underneath ---------- */
 #public-shell .public-hourly {
   display: grid !important; grid-auto-flow: column; grid-template-rows: auto auto;
-  grid-auto-columns: calc((100% - 4 * 6px) / 5); column-gap: 6px; row-gap: 0;
+  grid-auto-columns: calc((100% - 5 * 5px) / 6); column-gap: 5px; row-gap: 0;
   overflow-x: auto; padding: 4px 0 2px !important; scroll-snap-type: x proximity; scrollbar-width: none;
 }
 #public-shell .public-hourly::-webkit-scrollbar { display: none; }
-#public-shell .public-hour { padding: 9px 3px !important; border-radius: 12px !important; min-width: 0; }
-#public-shell .public-hour > strong:first-child { font-size: 13px; white-space: nowrap; }
-#public-shell .public-hour .public-hour-icon { height: 40px !important; margin: 3px 0 !important; }
-#public-shell .public-hour .public-hour-icon img, #public-shell .public-hour .dwl-icon { width: 54px !important; height: 38px !important; }
-#public-shell .public-hour-temp { font-size: 17px !important; }
-#public-shell .public-hour div { margin: 3px 0; }
-#public-shell .public-hour-rain { font-size: 11.5px; min-height: 1.15em; }
+#public-shell .public-hour { padding: 8px 2px 7px !important; border-radius: 11px !important; min-width: 0; }
+#public-shell .public-hour > strong:first-child { display: block; font-size: 12px; line-height: 1.1; white-space: nowrap; }
+#public-shell .public-hour div { margin: 0; }
+#public-shell .public-hour .public-hour-icon { height: 34px !important; margin: 4px 0 2px !important; }
+#public-shell .public-hour .public-hour-icon img, #public-shell .public-hour .dwl-icon { width: 48px !important; height: 34px !important; }
+#public-shell .public-hour-temp { display: block; font-size: 16px !important; line-height: 1.15; }
+#public-shell .public-hour-rain { font-size: 11px; line-height: 1.1; min-height: 1.1em; margin-top: 1px !important; }
 /* Thin bar row; only shown when rain is forecast in the next 24 hours. */
 #public-shell .public-hour-qpf { height: 0; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
 #public-shell .public-hourly.has-qpf { row-gap: 4px; }
