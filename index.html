@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=24"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=24"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=24">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261120w">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261120x">
 
 
 
@@ -751,13 +751,42 @@ function nwsWeatherOutlook(afd,d,h){
     set('public-data-notice','Forecast service unavailable. No estimated values are shown.');
    }
  }
+ // Instant open: the last screen for each location is saved on the phone and shown right away
+ // (under 3 hours old), then replaced in place as live data arrives.
+ let shownCity=null;
+ const SNAP_IDS=['public-days','public-hourly'];
+ function snapKey(c){return 'dwl-snap-v2-'+c}
+ function saveSnap(){
+  try{if(!shownCity)return;const card=document.querySelector('#public-shell .public-obs-card');if(!card)return;
+   const temp=el('public-current-temp')?.textContent||'';if(!/\d/.test(temp))return;
+   const o={at:Date.now(),card:card.innerHTML,cardStyle:card.getAttribute('style')||'',shell:el('public-shell')?.getAttribute('style')||''};
+   SNAP_IDS.forEach(id=>{o[id]=el(id)?.innerHTML||'';o[id+':class']=el(id)?.className||''});
+   localStorage.setItem(snapKey(shownCity),JSON.stringify(o));}catch(e){}
+ }
+ let snapTimer=null;const queueSnap=()=>{clearTimeout(snapTimer);snapTimer=setTimeout(saveSnap,1500)};
+ function restoreSnap(c){
+  try{const o=JSON.parse(localStorage.getItem(snapKey(c))||'null');if(!o||Date.now()-o.at>3*3600000)return false;
+   const card=document.querySelector('#public-shell .public-obs-card');if(!card||!o.card)return false;
+   card.innerHTML=o.card;if(o.cardStyle)card.setAttribute('style',o.cardStyle);if(o.shell)el('public-shell')?.setAttribute('style',o.shell);
+   SNAP_IDS.forEach(id=>{if(o[id]&&el(id)){el(id).innerHTML=o[id];if(o[id+':class'])el(id).className=o[id+':class'];}});
+   shownCity=c;return true;}catch(e){return false}
+ }
+ document.addEventListener('DOMContentLoaded',()=>{
+  const watch=new MutationObserver(queueSnap);
+  ['public-current-temp','public-today-high','public-days','public-hourly'].forEach(id=>{const n=el(id);if(n)watch.observe(n,{childList:true,subtree:true,characterData:true})});
+ });
+ window.addEventListener('pagehide',saveSnap);
  async function refresh(){
   const request=++revision,chosen=city;
   DWL.resetDays('local'); // every refresh / location switch starts at 5 days
   set('public-city-heading',chosen==='Danville'?'Sycamore Valley, Danville':chosen==='Greenbrook'?'Greenbrook, Danville':chosen==='Sausalito'?'Marin City':chosen==='Sacramento'?'East Sacramento':chosen==='Brentwood'?'Brentwood':chosen);set('public-location-sub',subtitles[chosen]);
   syncLocationButtons();
-  ['public-humidity','public-dew','public-pressure','public-wind'].forEach(id=>set(id,'—'));set('public-discussion','Loading the local outlook…');set('public-outlook-source','');set('public-outlook-headline','');el('public-alerts').replaceChildren();updateAlerts(chosen,request);set('public-station-status','Checking nearby public weather observations…');set('public-current-temp','—°');set('public-current-condition','Loading forecast…');set('public-high-low','— / —');set('public-rain','—');set('public-summary','Retrieving the latest forecast.');
-  el('public-days').replaceChildren();el('public-hourly').replaceChildren();
+  // Same location as on screen (5-minute refresh, or a saved snapshot just restored): keep the values
+  // showing and update them in place instead of blanking to '—' first.
+  const sameCity=chosen===shownCity;shownCity=chosen;
+  if(!sameCity){['public-humidity','public-dew','public-pressure','public-wind'].forEach(id=>set(id,'—'));set('public-current-temp','—°');set('public-current-condition','Loading forecast…');set('public-high-low','— / —');set('public-rain','—');}
+  set('public-discussion',sameCity&&el('public-discussion').textContent.length>80?el('public-discussion').textContent:'Loading the local outlook…');if(!sameCity){set('public-outlook-source','');set('public-outlook-headline','');}el('public-alerts').replaceChildren();updateAlerts(chosen,request);set('public-station-status','Checking nearby public weather observations…');set('public-summary','Retrieving the latest forecast.');
+  if(!sameCity){el('public-days').replaceChildren();el('public-hourly').replaceChildren();}
   const [lat,lon]=coords[chosen];
   renderPublished(chosen,request,lat,lon,true);
   updateStation(chosen,request,NaN,false); // station reading right away, independent of the forecast
@@ -878,6 +907,7 @@ function nwsWeatherOutlook(afd,d,h){
  }
  document.querySelectorAll('[data-public-city]').forEach(b=>b.onclick=()=>{city=b.dataset.publicCity;syncLocationButtons();refresh()});
  document.querySelectorAll('[data-favorite-city]').forEach(b=>b.onclick=()=>{favoriteCity=b.dataset.favoriteCity;try{localStorage.setItem('wx-favorite-city',favoriteCity)}catch(e){}syncLocationButtons()});
+ restoreSnap(city); // show the last saved screen for this location instantly
  try{const hv=location.hash;if(hv==='#lab'||hv==='#local'){hv==='#lab'?showObservatory():showPublic();history.replaceState(null,'',location.pathname+location.search)}else if(sessionStorage.getItem('wx-view')==='observatory'){showObservatory()}else{showPublic()}}catch(e){showPublic()}
  setInterval(()=>{if(body.classList.contains('public-mode'))refresh()},15*60*1000);
  // Alerts can be short-lived (e.g. flood advisories): re-check them every 5 minutes.
