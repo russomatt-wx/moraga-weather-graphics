@@ -906,3 +906,9 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 @media (max-width: 480px) { .dwl-alert-body { padding-left: 14px; } }
 .dwl-alert-nearby { font-size: 12px !important; margin: 0 !important; }
 #public-push button, #public-push .dwl-push-btn { padding-top: 5px !important; padding-bottom: 5px !important; }
+
+/* Larger view toggle: full width, three equal tabs */
+.dwl-toggle { width: 100% !important; max-width: 520px; box-sizing: border-box; padding: 4px !important; margin: 6px auto 16px !important; }
+.dwl-toggle a, .dwl-toggle button, #public-shell .dwl-toggle button {
+  flex: 1 1 0; text-align: center; padding: 11px 6px !important; font-size: 14.5px !important; white-space: nowrap; }
+@media (max-width: 360px) { .dwl-toggle a, .dwl-toggle button, #public-shell .dwl-toggle button { font-size: 12.5px !important; padding: 10px 3px !important; } }
