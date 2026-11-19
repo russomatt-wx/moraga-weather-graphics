@@ -22,6 +22,12 @@
           }
           return hit.p.then(function (r) { return r.clone(); });
         }
+        // Open-Meteo forecasts go through the worker's shared, edge-cached copy first (Open-Meteo
+        // rate-limits busy IPs with HTTP 429); a direct request is the fallback.
+        if (method === 'GET' && url.href.indexOf('https://api.open-meteo.com/v1/forecast?') === 0) {
+          var viaWorker = 'https://moraga-live-observations.russo-matt.workers.dev/forecast' + url.search;
+          return nativeFetch(viaWorker, init).then(function (r) { return r.ok ? r : nativeFetch(input, init); }, function () { return nativeFetch(input, init); });
+        }
       } catch (e) { /* fall through to a normal fetch */ }
       return nativeFetch(input, init);
     };
