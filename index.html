@@ -447,6 +447,21 @@
   }
  }
 
+// ChatGPT-authored local outlooks are published as one versioned JSON document.
+let chatgptOutlooks=null,chatgptOutlooksChecked=0;
+async function loadChatGPTOutlooks(){
+ if(chatgptOutlooks&&Date.now()-chatgptOutlooksChecked<5*60*1000)return chatgptOutlooks;
+ try{
+  const response=await fetch('weather_outlooks.json?t='+Date.now(),{cache:'no-store'});
+  if(!response.ok)throw Error('Published outlook feed unavailable');
+  const data=await response.json();
+  const issued=Date.parse(data.generated_utc||'');
+  if(!Number.isFinite(issued)||issued>Date.now()+5*60*1000||Date.now()-issued>18*60*60*1000)throw Error('Published outlook feed is stale');
+  if(!data.outlooks||typeof data.outlooks!=='object')throw Error('Published outlook schema invalid');
+  chatgptOutlooks=data;chatgptOutlooksChecked=Date.now();
+ }catch(error){chatgptOutlooks=null;chatgptOutlooksChecked=Date.now();console.warn('Using local forecast-generated outlook:',error.message)}
+ return chatgptOutlooks;
+}
 // NWS Bay Area forecast discussion supplies synoptic context; local model totals stay local.
 let nwsDiscussionCache=null;
 async function getNwsDiscussion(){
@@ -473,6 +488,13 @@ async function getNwsDiscussion(){
 let outlookAlerts={city:null,events:[]};
 let lastOutlook=null,liveOutlook=-1; // liveOutlook: request id whose live-model outlook is shown
 function nwsWeatherOutlook(afd,d,h){
+ // Prefer a current, explicitly published ChatGPT editorial outlook.
+ const published=chatgptOutlooks?.outlooks?.[city];
+ if(published&&typeof published.headline==='string'&&typeof published.text==='string'&&published.headline.trim()&&published.text.trim()){
+  set('public-outlook-source',chatgptOutlooks.source_label||'Diablo Weather Lab · ChatGPT editorial outlook');
+  set('public-outlook-headline',published.headline);
+  return published.text;
+ }
  // Refer to each location by its city: Greenbrook and Sycamore Valley are both in Danville.
  const place=({Moraga:'Moraga',Lafayette:'Lafayette',Danville:'Danville',Greenbrook:'Danville'})[city]||city;
  lastOutlook={afd,d,h};
@@ -642,7 +664,7 @@ function nwsWeatherOutlook(afd,d,h){
      const avg=(t,key,scale=1)=>{const v=names.map(n=>Number(hc[n][key]?.[hc[n].time.indexOf(t)])).filter(Number.isFinite);return v.length?v.reduce((a,b)=>a+b,0)/v.length*scale:null;};
      const hourly={time:base,precipitation:base.map(t=>avg(t,'precipitation_mm')),cloud_cover:base.map(t=>avg(t,'cloud_cover_pct'))};
      set('public-discussion','Retrieving the latest NWS Bay Area forecast discussion…');
-     getNwsDiscussion().then(afd=>{if(request===revision&&liveOutlook!==request)set('public-discussion',nwsWeatherOutlook(afd,daily,hourly));}).catch(()=>{if(request===revision&&liveOutlook!==request)set('public-discussion',nwsWeatherOutlook(null,daily,hourly));});
+     getNwsDiscussion().then(async afd=>{await loadChatGPTOutlooks();if(request===revision&&liveOutlook!==request)set('public-discussion',nwsWeatherOutlook(afd,daily,hourly));}).catch(async()=>{await loadChatGPTOutlooks();if(request===revision&&liveOutlook!==request)set('public-discussion',nwsWeatherOutlook(null,daily,hourly));});
     }
     const issued=Date.parse(feed.generated_utc);
     const age=Number.isFinite(issued)?Math.round((Date.now()-issued)/3600000):NaN;
