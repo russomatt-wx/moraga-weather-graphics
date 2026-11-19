@@ -119,7 +119,20 @@ def main():
             water[st] = round(float(d["data"][-1]["v"]))
         except Exception:
             pass
-    print("water", water)
+    # Open-coast water temperature from NDBC buoys (model SST runs warm near shore).
+    buoy = {}
+    for b in ("46026", "46237", "46012"):
+        try:
+            r = S.get(f"https://www.ndbc.noaa.gov/data/realtime2/{b}.txt", timeout=(15, 40))
+            r.raise_for_status()
+            for line in r.text.splitlines()[2:8]:
+                v = line.split()[14]
+                if v != "MM":
+                    buoy[b] = round(float(v) * 9 / 5 + 32)
+                    break
+        except Exception as exc:
+            print("buoy", b, type(exc).__name__)
+    print("water", water, "buoys", buoy)
 
     spots = []
     for idx, (sid, name, area, kind, lat, lon, tide_st) in enumerate(SPOTS):
@@ -161,7 +174,10 @@ def main():
         cur = at(start)
         blocks = [at(i) for i in range(start, min(len(times), start + 72), 3)]
         next_tides = [x for x in tides.get(tide_st, []) if x["t"] >= now.strftime("%Y-%m-%d %H:%M")][:4]
-        water_f = water.get(tide_st) or water.get("9414290" if kind == "bay" else "9414131") or cur["sst_f"]
+        if kind == "coast":
+            water_f = buoy.get("46012" if lat < 37.7 else "46026") or buoy.get("46237") or water.get(tide_st) or cur["sst_f"]
+        else:
+            water_f = water.get(tide_st) or water.get("9414750") or water.get("9414290") or buoy.get("46237") or cur["sst_f"]
         # Best upcoming window: first daylight block rated go (7 AM - 5 PM).
         best = next((b for b in blocks if b["rating"] == 0 and 7 <= int(b["time"][11:13]) <= 17), None)
         spots.append({"id": sid, "name": name, "area": area, "kind": kind, "lat": lat, "lon": lon, "now": cur,
