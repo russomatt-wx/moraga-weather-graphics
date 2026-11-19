@@ -19,6 +19,8 @@
     const n = Math.round((a - b) / 864e5);
     return n === 0 ? 'Today' : n === 1 ? 'Tomorrow' : d.toLocaleDateString('en-US', { weekday: 'long' });
   }
+  // Rain chance shown at 20%+, rounded to 10% (same rule as the local forecast).
+  const rainTxt = (b) => b.thunder ? '⚡ Storms' : (b.rain_pct != null && b.rain_pct >= 20 ? '💧 ' + Math.round(b.rain_pct / 10) * 10 + '%' : null);
   const wind = (b) => (b.dir ? b.dir + ' ' : '') + (b.gust > b.wind + 2 ? b.wind + '–' + b.gust : b.wind) + ' mph';
   const waves = (b) => b.wave_ft == null ? null : b.wave_ft + ' ft' + (b.period_s ? ' @ ' + b.period_s + 's' : '') + (b.swell_dir ? ' ' + b.swell_dir : '');
 
@@ -50,7 +52,7 @@
       '<div class="pad-day"><div class="pad-day-name">' + esc(dayName(g.d, now)) + '</div><div class="pad-cells">' +
       g.items.map((b) => {
         const d = parse(b.time);
-        return '<button type="button" style="grid-column:' + (Math.floor(d.getHours() / 3) + 1) + '" class="pad-cell r' + b.rating + '" data-detail="' + esc(dayName(d, now) + ' ' + clock(d) + ': ' + LABEL[b.rating] + ' · ' + b.why + ' · ' + wind(b) + (waves(b) ? ' · ' + waves(b) : '')) + '" aria-label="' + esc(clock(d) + ' ' + LABEL[b.rating]) + '"><span>' + hour(d) + '</span></button>';
+        return '<button type="button" style="grid-column:' + (Math.floor(d.getHours() / 3) + 1) + '" class="pad-cell r' + b.rating + '" data-detail="' + esc(dayName(d, now) + ' ' + clock(d) + ': ' + LABEL[b.rating] + ' · ' + b.why + ' · ' + wind(b) + (waves(b) ? ' · ' + waves(b) : '') + (rainTxt(b) ? ' · ' + rainTxt(b) : '')) + '" aria-label="' + esc(clock(d) + ' ' + LABEL[b.rating]) + '"><span>' + hour(d) + '</span></button>';
       }).join('') + '</div></div>').join('') + '</div>';
   }
 
@@ -62,10 +64,10 @@
       ['Wind', wind(c)],
       spot.kind === 'coast' ? ['Waves', waves(c) || '—'] : null,
       ['Water', spot.water_f != null ? spot.water_f + '°F' : '—'],
-      ['Air', c.air_f != null ? c.air_f + '°F' : '—'],
+      ['Rain', c.thunder ? 'Storms' : c.rain_pct != null ? Math.round(c.rain_pct / 10) * 10 + '%' : '—'],
     ].filter(Boolean).map(([k, v]) => '<div><span>' + k + '</span><b>' + esc(v) + '</b></div>').join('');
     const alerts = (spot.alerts || []).filter((x) => MARINE.test(x)).map((a) => '<span class="pad-alert ' + level(a) + '">⚠ ' + esc(a) + '</span>').join('');
-    const brief = [wind(c), spot.kind === 'coast' && waves(c) ? waves(c) : null].filter(Boolean).join(' · ');
+    const brief = [wind(c), spot.kind === 'coast' && waves(c) ? waves(c) : null, rainTxt(c)].filter(Boolean).join(' · ');
     const nAlerts = (spot.alerts || []).filter((x) => MARINE.test(x));
     return '<details class="pad-card r' + c.rating + '" data-id="' + esc(spot.id) + '"' + (openCards.has(spot.id) ? ' open' : '') + '>' +
       '<summary><header><div><h3>' + esc(spot.city ? spot.name : spot.name.split(' · ').pop()) + '</h3><p class="pad-city">' + esc(spot.city || spot.name.split(' · ')[0]) + '</p><p class="pad-brief">' + (c.air_f != null ? '<b class="pad-temp">' + c.air_f + '°</b>' : '') + esc(brief) + '</p>' +

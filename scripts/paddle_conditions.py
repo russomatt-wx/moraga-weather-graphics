@@ -94,7 +94,7 @@ def rate(kind, wind, gust, wave, alerts):
 def main():
     now = datetime.now(TZ)
     wind = multi("https://api.open-meteo.com/v1/forecast", {
-        "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m,temperature_2m,precipitation_probability",
+        "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m,temperature_2m,precipitation_probability,weather_code",
         "wind_speed_unit": "mph", "temperature_unit": "fahrenheit", "timezone": "America/Los_Angeles", "forecast_days": 3})
     marine = multi("https://marine-api.open-meteo.com/v1/marine", {
         "hourly": "wave_height,wave_period,wave_direction,swell_wave_height,swell_wave_period,swell_wave_direction,sea_surface_temperature",
@@ -165,6 +165,14 @@ def main():
             wave = mval("wave_height", t) if kind == "coast" else None
             sst = mval("sea_surface_temperature", t)
             r, why = rate(kind, wh["wind_speed_10m"][i], wh["wind_gusts_10m"][i], wave, alerts if i == start else [x for x in alerts if "advisory" not in x.lower()])
+            # Rain: 3-hour peak chance. Lightning (thunderstorm codes 95-99) is No-go; rain likely is at least Caution.
+            pp = [v for v in (wh.get("precipitation_probability") or [])[i:i + 3] if v is not None]
+            rain = max(pp) if pp else None
+            thunder = any((c or 0) >= 95 for c in (wh.get("weather_code") or [])[i:i + 3])
+            if thunder:
+                r, why = 2, "Thunderstorms"
+            elif rain is not None and rain >= 50 and r < 1:
+                r, why = 1, "Rain likely"
             return {"time": t, "wind": round(wh["wind_speed_10m"][i] or 0), "gust": round(wh["wind_gusts_10m"][i] or 0),
                     "dir": compass(wh["wind_direction_10m"][i]),
                     "wave_ft": None if wave is None else round(wave, 1),
@@ -172,7 +180,7 @@ def main():
                     "swell_dir": None if kind != "coast" else compass(mval("swell_wave_direction", t)),
                     "sst_f": None if sst is None else round(sst * 9 / 5 + 32),
                     "air_f": None if wh.get("temperature_2m") is None else round(wh["temperature_2m"][i]),
-                    "rating": r, "why": why}
+                    "rain_pct": rain, "thunder": thunder, "rating": r, "why": why}
 
         if not times:
             continue
