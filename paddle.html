@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Paddle Conditions | Diablo Weather Lab</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=24"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=24"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=24">
 <meta name="description" content="Paddle conditions for SF Bay Area coast and bay spots: wind, waves, tides, water temperature and NWS marine alerts.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261119m">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261119n">
 
 
 
@@ -27,6 +27,7 @@
  <div class="pad-legend"><span class="pad-badge r0">Go</span> light wind, small surf <span class="pad-badge r1">Caution</span> breezy or moderate surf <span class="pad-badge r2">No-go</span> strong wind, big surf or a warning</div>
  <div class="pad-filter" role="group" aria-label="Area"><button type="button" data-area="" aria-pressed="true">All</button><button type="button" data-area="SF Coast" aria-pressed="false">SF Coast</button><button type="button" data-area="Marin" aria-pressed="false">Marin</button><button type="button" data-area="Peninsula Coast" aria-pressed="false">Peninsula</button><button type="button" data-area="Inside the Bay" aria-pressed="false">Inside the Bay</button></div>
 </section>
+<div id="pad-alerts" aria-live="polite"></div>
 <div id="pad-spots"><p class="pad-empty">Loading paddle conditions…</p></div>
 <section class="pad-notes">
  <h2>How spots are rated</h2>
@@ -36,6 +37,6 @@
  <p class="pad-src">Data: Open-Meteo wind and marine forecasts, NOAA CO-OPS tide predictions and water temperature, National Weather Service alerts. Updated hourly.</p>
 </section>
 </div>
-<script src="js/paddle.js?v=20261119b" defer></script>
+<script src="js/paddle.js?v=20261119c" defer></script>
 </body>
 </html>

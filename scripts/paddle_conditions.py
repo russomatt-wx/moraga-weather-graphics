@@ -136,12 +136,15 @@ def main():
 
     spots = []
     for idx, (sid, name, area, kind, lat, lon, tide_st) in enumerate(SPOTS):
-        alerts = []
+        alerts, details = [], []
         a = get("https://api.weather.gov/alerts/active", {"point": f"{lat},{lon}"}, headers={"Accept": "application/geo+json"})
         for f in (a or {}).get("features", []):
             p = f.get("properties", {})
             if p.get("event") and p.get("status") == "Actual" and p["event"] not in alerts:
                 alerts.append(p["event"])
+                details.append({"event": p["event"], "onset": p.get("onset"), "ends": p.get("ends") or p.get("expires"),
+                                "headline": (p.get("headline") or "").split(" by NWS")[0],
+                                "description": (p.get("description") or "")[:1200]})
         w, m = wind[idx] or {}, marine[idx] or {}
         wh, mh = w.get("hourly", {}), m.get("hourly", {})
         times = wh.get("time", [])
@@ -182,7 +185,7 @@ def main():
         best = next((b for b in blocks if b["rating"] == 0 and 7 <= int(b["time"][11:13]) <= 17), None)
         spots.append({"id": sid, "name": name, "area": area, "kind": kind, "lat": lat, "lon": lon, "now": cur,
                       "blocks": blocks, "tides": next_tides, "tide_station": tide_st, "water_f": water_f,
-                      "alerts": alerts, "best": best["time"] if best else None})
+                      "alerts": alerts, "alert_details": details, "best": best["time"] if best else None})
         print(name, cur["rating"], cur["why"], cur["wind"], cur["gust"], cur["wave_ft"], len(next_tides), alerts)
     OUT.write_text(json.dumps({"generated_utc": datetime.now(timezone.utc).isoformat(), "spots": spots,
                                "sources": "Open-Meteo forecast + marine, NOAA CO-OPS tides and water temperature, NWS alerts"}, indent=1) + "\n")

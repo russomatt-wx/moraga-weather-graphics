@@ -64,7 +64,7 @@
       ['Water', spot.water_f != null ? spot.water_f + '°F' : '—'],
       ['Air', c.air_f != null ? c.air_f + '°F' : '—'],
     ].filter(Boolean).map(([k, v]) => '<div><span>' + k + '</span><b>' + esc(v) + '</b></div>').join('');
-    const alerts = (spot.alerts || []).filter((x) => MARINE.test(x)).map((a) => '<span class="pad-alert' + (/warning/i.test(a) ? ' warn' : '') + '">⚠ ' + esc(a) + '</span>').join('');
+    const alerts = (spot.alerts || []).filter((x) => MARINE.test(x)).map((a) => '<span class="pad-alert ' + level(a) + '">⚠ ' + esc(a) + '</span>').join('');
     return '<article class="pad-card r' + c.rating + '" data-area="' + esc(spot.area) + '">' +
       '<header><div><h3>' + esc(spot.name) + '</h3><p>' + (spot.kind === 'coast' ? 'Open coast' : 'Protected water') + '</p></div>' +
       '<div class="pad-rate"><span class="pad-badge r' + c.rating + '">' + LABEL[c.rating] + '</span><small>' + esc(c.why) + '</small></div></header>' +
@@ -76,11 +76,45 @@
       '</article>';
   }
 
+  const level = (ev) => /warning/i.test(ev) ? 'warning' : /statement/i.test(ev) ? 'statement' : 'advisory';
+  const when = (t) => new Date(t).toLocaleString('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', hour: 'numeric', minute: '2-digit' }).replace(':00', '');
+  const ICON = '<svg viewBox="0 0 24 24"><path d="M12 3 22 20H2Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M12 9.5v5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="17.3" r="1.3" fill="currentColor"/></svg>';
+  // One card per active marine alert, naming the spots it covers. Warnings first.
+  function alertCards(spots) {
+    const byEvent = new Map();
+    for (const s of spots) {
+      const list = (s.alert_details && s.alert_details.length) ? s.alert_details : (s.alerts || []).map((event) => ({ event }));
+      for (const a of list) {
+        if (!MARINE.test(a.event)) continue;
+        const g = byEvent.get(a.event) || { ...a, spots: [] };
+        if (a.ends && (!g.ends || a.ends > g.ends)) g.ends = a.ends;
+        g.spots.push(s.name.split(' · ')[0]);
+        byEvent.set(a.event, g);
+      }
+    }
+    const items = [...byEvent.values()].sort((a, b) => (level(a.event) === 'warning' ? 0 : 1) - (level(b.event) === 'warning' ? 0 : 1));
+    if (!items.length) return '<p class="pad-noalerts">✓ No marine or surf alerts in effect for these spots.</p>';
+    const now = Date.now();
+    return items.map((a) => {
+      const upcoming = a.onset && Date.parse(a.onset) > now;
+      const t = upcoming ? 'Starts ' + when(a.onset) + (a.ends ? ' · until ' + when(a.ends) : '') : a.ends ? 'Until ' + when(a.ends) : 'In effect';
+      const text = String(a.description || a.headline || '').replace(/\n(?!\n)/g, ' ').replace(/\n{2,}/g, '\n').replace(/^ *\* ?([A-Z][A-Z ]+?)\.\.\./gm, (m, k) => k[0] + k.slice(1).toLowerCase() + ': ').trim();
+      return '<details class="dwl-alert is-' + level(a.event) + '"><summary><span class="dwl-alert-badge" aria-hidden="true">' + ICON + '</span>' +
+        '<span class="dwl-alert-main"><span class="dwl-alert-eyebrow">NWS ' + level(a.event) + (upcoming ? ' · Upcoming' : '') + '</span>' +
+        '<span class="dwl-alert-title">' + esc(a.event) + '</span><span class="dwl-alert-when">' + esc(t) + '</span>' +
+        '<span class="pad-alert-spots">' + esc(a.spots.join(' · ')) + '</span></span><span class="dwl-alert-chev" aria-hidden="true">⌄</span></summary>' +
+        (text ? '<div class="dwl-alert-body"><p>' + esc(text) + '</p></div>' : '') + '</details>';
+    }).join('');
+  }
+
   let data = null, area = '';
   function render() {
     const box = document.getElementById('pad-spots');
     if (!data || !data.spots || !data.spots.length) { box.innerHTML = '<p class="pad-empty">Paddle conditions are not available right now.</p>'; return; }
     const now = pacificNow();
+    const open = new Set([...document.querySelectorAll('#pad-alerts details[open] .dwl-alert-title')].map((x) => x.textContent));
+    document.getElementById('pad-alerts').innerHTML = alertCards(data.spots.filter((s) => !area || s.area === area));
+    document.querySelectorAll('#pad-alerts details').forEach((d) => { if (open.has(d.querySelector('.dwl-alert-title').textContent)) d.open = true; });
     box.innerHTML = AREAS.filter((a) => !area || a === area).map((a) => {
       const spots = data.spots.filter((s) => s.area === a);
       return spots.length ? '<section class="pad-area"><h2>' + esc(a) + '</h2><div class="pad-grid">' + spots.map((s) => card(s, now)).join('') + '</div></section>' : '';

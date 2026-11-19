@@ -706,8 +706,12 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .pad-rate .pad-badge { font-size: 15px; padding: 5px 13px; }
 .pad-rate small { display: block; margin-top: 5px; color: var(--text-2); font-size: 13px; }
 .pad-alerts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-.pad-alert { padding: 4px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; color: #ffd36b; background: rgba(255, 191, 46, .12); }
-.pad-alert.warn { color: #ff9a9a; background: rgba(248, 92, 92, .14); }
+.pad-alert { padding: 6px 12px; border-radius: 999px; font-size: 13.5px; font-weight: 700; --al: #ffbf2e; color: color-mix(in srgb, var(--al) 70%, #fff); background: color-mix(in srgb, var(--al) 22%, transparent); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--al) 75%, transparent), 0 0 12px -3px color-mix(in srgb, var(--al) 70%, transparent); }
+.pad-alert.warning { --al: #ff5d6c; }
+.pad-alert.statement { --al: var(--accent); }
+#pad-alerts { display: grid; gap: 10px; margin: 16px 0 4px; }
+.pad-alert-spots { margin-top: 3px; font-size: 13px; font-weight: 600; color: var(--text); opacity: .85; }
+.pad-noalerts { margin: 0; padding: 11px 14px; border-radius: var(--radius-sm); background: rgba(52, 211, 153, .1); color: #8ff3c6; font-size: 14px; font-weight: 600; }
 .pad-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
 .pad-stats div { padding: 8px 10px; border-radius: var(--radius-sm); background: var(--panel-deep); }
 .pad-stats span { display: block; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
