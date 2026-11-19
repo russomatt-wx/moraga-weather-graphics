@@ -487,3 +487,39 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 #public-shell .public-hour-qpf span { font-size: 10px; line-height: 12px; height: 12px; color: var(--rain); margin-top: 1px; }
 /* Station line: small and quiet, close under the strip. */
 #public-shell #public-station-status { margin: 6px 2px 0 !important; font-size: 11px !important; letter-spacing: .02em; color: var(--muted) !important; opacity: .8; }
+
+/* ---------- 10-day rows (compact): when | icon | condition + rain | high | bar | low ---------- */
+.dwl-day {
+  grid-template-columns: 50px 40px minmax(0, 1fr) 33px minmax(24px, 11%) 32px !important;
+  column-gap: 5px; height: 62px !important; padding: 4px 10px !important; border-radius: 13px;
+}
+.dwl-day-when { padding-right: 6px; gap: 0; }
+.dwl-day-when strong { font-size: 15px; }
+.dwl-day-when span { font-size: 11px; }
+.dwl-pill { font-size: 7.5px !important; padding: 1px 5px; margin-bottom: 1px; }
+.dwl-day-icon { display: flex; justify-content: center; }
+.dwl-day .dwl-icon { width: 42px !important; height: 29px !important; margin: 0 !important; }
+.dwl-day-sky { align-items: flex-start; text-align: left; padding: 0; }
+.dwl-day-cond { font-size: 10.5px; letter-spacing: .01em; }
+.dwl-day-rain { justify-content: flex-start; gap: 6px; font-size: 12px; }
+.dwl-day-amount { gap: 4px; }
+.dwl-day-amount i { width: 8px; height: 11px; }
+.dwl-day-hi, .dwl-day-lo { font-size: 18px !important; padding: 0 !important; text-align: right; }
+.dwl-day-hi { text-align: right; }
+.dwl-day-lo { justify-content: flex-start; }
+/* Temperature bar: high colour -> low colour, dot = where the day sits in the 10-day range. */
+.dwl-day-bar { position: relative; height: 5px; border-radius: 3px; background: linear-gradient(90deg, var(--hi), var(--lo)); opacity: .9; }
+.dwl-day-bar i {
+  position: absolute; top: 50%; left: calc(var(--pos, .5) * (100% - 9px)); width: 9px; height: 9px; margin-top: -4.5px;
+  border-radius: 50%; background: #fff; box-shadow: 0 0 6px rgba(255, 255, 255, .6);
+}
+@media (max-width: 360px) {
+  .dwl-day { grid-template-columns: 46px 38px minmax(0, 1fr) 32px minmax(24px, 12%) 30px !important; padding: 4px 8px !important; column-gap: 4px; }
+  .dwl-day .dwl-icon { width: 38px !important; height: 27px !important; }
+}
+@media (min-width: 700px) {
+  .dwl-day { grid-template-columns: 70px 60px minmax(0, 1fr) 46px minmax(80px, 22%) 42px !important; height: 70px !important; padding: 5px 18px !important; column-gap: 12px; }
+  .dwl-day .dwl-icon { width: 56px !important; height: 39px !important; }
+  .dwl-day-cond { font-size: 12.5px; } .dwl-day-rain { font-size: 13.5px; }
+  .dwl-day-hi, .dwl-day-lo { font-size: 24px !important; }
+}

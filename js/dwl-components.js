@@ -86,23 +86,40 @@
   /* One forecast day card.
      o = { today, day, date, high, low (numbers °F), highText, lowText, iconCode,
            condition, pop ('70%' or ''), amount ('0.25″' or ''), extra (trusted HTML), tag, cls } */
+  // One compact row per day: when | icon | condition + rain | high | temperature bar | low.
+  // The bar's dot shows where the day sits in the whole 10-day range (set by rangeBars()).
   function dayCard(o) {
     var hi = tempColor(o.high), lo = tempColor(o.low);
     var tag = o.tag || 'article';
     var rainLine = (o.pop || o.amount)
       ? '<div class="dwl-day-rain">' + (o.pop ? '<span>' + esc(o.pop) + '</span>' : '') +
         (o.amount ? '<span class="dwl-day-amount"><i aria-hidden="true"></i>' + esc(o.amount) + '</span>' : '') + '</div>'
-      : '<div class="dwl-day-rain" aria-hidden="true">&nbsp;</div>'; // keep every card the same height
-    return '<' + tag + ' class="dwl-day' + (o.cls ? ' ' + o.cls : '') + (o.today ? ' is-today' : '') + '" style="--hi:' + hi + ';--lo:' + lo + '">' +
+      : '';
+    var dataT = (Number.isFinite(o.high) ? ' data-hi="' + o.high + '"' : '') + (Number.isFinite(o.low) ? ' data-lo="' + o.low + '"' : '');
+    return '<' + tag + ' class="dwl-day' + (o.cls ? ' ' + o.cls : '') + (o.today ? ' is-today' : '') + '" style="--hi:' + hi + ';--lo:' + lo + '"' + dataT + '>' +
       '<div class="dwl-day-when">' + (o.today ? '<span class="dwl-pill">Today</span>' : '') +
         '<strong>' + esc(o.day) + '</strong><span>' + esc(o.date) + '</span></div>' +
+      '<div class="dwl-day-icon">' + icon(o.iconCode, '', o.night) + '</div>' +
+      '<div class="dwl-day-sky"><div class="dwl-day-cond">' + esc(String(o.condition).replace(/^slight chance of (rain|showers)$/i, 'Slight Chance')) + '</div>' + rainLine + '</div>' +
       '<div class="dwl-day-hi" aria-label="High">' + esc(o.highText) + '</div>' +
-      '<div class="dwl-day-sky">' + icon(o.iconCode, '', o.night) +
-        '<div class="dwl-day-cond">' + esc(String(o.condition).replace(/^slight chance of (rain|showers)$/i, 'Slight Chance')) + '</div>' + rainLine + '</div>' +
+      '<div class="dwl-day-bar" aria-hidden="true"><i></i></div>' +
       '<div class="dwl-day-lo" aria-label="Low">' + esc(o.lowText) + '</div>' +
       (o.extra || '') +
       '</' + tag + '>';
   }
+  // Position each day's dot on the coldest-low .. warmest-high range of the whole list.
+  function rangeBars(list) {
+    if (!list) return;
+    var cards = [].slice.call(list.querySelectorAll('.dwl-day[data-hi][data-lo]'));
+    if (!cards.length) return;
+    var lows = cards.map(function (c) { return +c.dataset.lo; }), highs = cards.map(function (c) { return +c.dataset.hi; });
+    var min = Math.min.apply(null, lows), max = Math.max.apply(null, highs), span = Math.max(1, max - min);
+    cards.forEach(function (c) {
+      var mid = (+c.dataset.hi + +c.dataset.lo) / 2;
+      c.style.setProperty('--pos', Math.max(0, Math.min(1, (mid - min) / span)).toFixed(3));
+    });
+  }
+
 
   /* Moraga blended forecast, published by the Observatory renderer so Local Weather
      shows exactly the same skill-weighted, bias-corrected highs and lows. */
@@ -163,6 +180,7 @@
   var expanded = {};
   function collapseDays(list, key) {
     if (!list) return;
+    rangeBars(list);
     var cards = list.querySelectorAll('.dwl-day');
     var btn = list.nextElementSibling && list.nextElementSibling.classList.contains('dwl-more') ? list.nextElementSibling : null;
     if (cards.length <= 5) { list.classList.remove('is-collapsed'); if (btn) btn.remove(); return; }
