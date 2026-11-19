@@ -28,7 +28,7 @@ SPOTS = [
     ("linda-mar", "Linda Mar Beach", "Pacifica", "Peninsula Coast", "coast", 37.594, -122.503, "9414131"),
     ("pillar-point", "Pillar Point Harbor", "Half Moon Bay", "Peninsula Coast", "bay", 37.497, -122.488, "9414131"),
     ("richardson-bay", "Richardson Bay Marina", "Sausalito", "SF Bay", "bay", 37.866, -122.495, "9414806"),
-    ("crissy-field", "Crissy Field", "San Francisco", "SF Bay", "bay", 37.806, -122.464, "9414290"),
+    ("crissy-field", "Crissy Field", "San Francisco", "SF Coast", "bay", 37.806, -122.464, "9414290"),
     ("aquatic-park", "Aquatic Park", "San Francisco", "SF Bay", "bay", 37.807, -122.424, "9414290"),
     ("clipper-cove", "Clipper Cove", "Treasure Island, San Francisco", "SF Bay", "bay", 37.814, -122.367, "9414750"),
     ("berkeley-marina", "Berkeley Marina", "Berkeley", "SF Bay", "bay", 37.866, -122.317, "9414816"),
