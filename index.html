@@ -236,7 +236,7 @@
   return r.chance<20&&r.amount<0.025?'0.00″':r.amount<0.025?'<0.05″':rain(r.amount);
  }
  // Wind for a day from the hourly forecast: dominant direction (speed-weighted), typical daytime
- // range (25th percentile to peak sustained, 7 AM-10 PM) and the day's highest gust.
+ // range (25th percentile of daytime wind up to the day's highest gust).
  const COMPASS=['N','NE','E','SE','S','SW','W','NW'];
  const compassOf=deg=>Number.isFinite(deg)?COMPASS[Math.round(((deg%360)+360)%360/45)%8]:'';
  function windFor(hourly,date){
@@ -249,8 +249,10 @@
   let u=0,v=0;day.forEach(i=>{if(Number.isFinite(dir?.[i])){const r=dir[i]*Math.PI/180;u+=s[i]*Math.sin(r);v+=s[i]*Math.cos(r);}});
   const dom=compassOf(Math.atan2(u,v)*180/Math.PI);
   const gust=Math.round(Math.max(...idx.map(i=>Number(g?.[i])).filter(Number.isFinite),0));
-  if(hi<5)return 'Light winds'+(gust>=15?' · Gusts '+gust:'');
-  return (dom?dom+' ':'')+(hi-lo>=3?lo+'–'+hi:hi)+' mph'+(gust>=Math.max(15,hi+5)?' · Gusts '+gust:'');
+  // Range runs from the quieter daytime wind up to the day's peak gust (no separate gust figure).
+  const top=Math.max(hi,gust);
+  if(top<5)return 'Light winds';
+  return (dom?dom+' ':'')+(top-lo>=3?lo+'–'+top:top)+' mph';
  }
  function renderDays(d,forecastFeed=null,hourly=null){
   lastDaily={d,feed:forecastFeed,city,hourly};
