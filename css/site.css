@@ -892,3 +892,17 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 /* "Discussion" section title above the weather outlook */
 #public-shell .dwl-title-discussion { margin-top: 26px; }
 #public-shell .public-hourly + .dwl-title-discussion + .public-outlook { margin-top: 0; }
+
+/* ---------- Compact alerts: two lines (name, then timing), smaller badge ---------- */
+#public-shell .dwl-alert-bar { gap: 6px; margin: 10px 0; }
+.dwl-alert summary { padding: 8px 12px; gap: 10px; }
+.dwl-alert-badge { width: 30px; height: 30px; }
+.dwl-alert-badge svg { width: 17px; height: 17px; }
+.dwl-alert-eyebrow { display: none; }
+.dwl-alert-title { font-size: 16.5px !important; line-height: 1.2; }
+.dwl-alert-when { font-size: 12.5px; }
+.dwl-alert-chev { font-size: 17px; }
+.dwl-alert-body { padding: 0 14px 12px 52px; font-size: 13.5px; }
+@media (max-width: 480px) { .dwl-alert-body { padding-left: 14px; } }
+.dwl-alert-nearby { font-size: 12px !important; margin: 0 !important; }
+#public-push button, #public-push .dwl-push-btn { padding-top: 5px !important; padding-bottom: 5px !important; }
