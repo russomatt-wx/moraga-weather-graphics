@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-19T07:00:37.212985+00:00",
+ "generated_utc": "2026-11-19T07:04:31.125128+00:00",
  "spots": [
   {
    "id": "ocean-beach",
@@ -270,6 +270,15 @@
    "water_f": 65,
    "alerts": [
     "Small Craft Advisory"
+   ],
+   "alert_details": [
+    {
+     "event": "Small Craft Advisory",
+     "onset": "2026-11-18T20:35:00-08:00",
+     "ends": "2026-11-19T15:00:00-08:00",
+     "headline": "Small Craft Advisory issued November 18 at 8:35PM PST until November 19 at 3:00PM PST",
+     "description": "* WHAT...West winds 15 to 25 kt with gusts up to 30 kt and seas\n8 to 13 ft.\n\n* WHERE...Coastal Waters from Point Reyes to Pigeon Point\nCalifornia out to 10 NM.\n\n* WHEN...Until 3 PM PST Thursday.\n\n* IMPACTS...Conditions will be hazardous to small craft."
+    }
    ],
    "best": null
   },
@@ -544,6 +553,22 @@
     "Flood Advisory",
     "High Surf Advisory"
    ],
+   "alert_details": [
+    {
+     "event": "Flood Advisory",
+     "onset": "2026-11-18T21:13:00-08:00",
+     "ends": "2026-11-19T00:15:00-08:00",
+     "headline": "Flood Advisory issued November 18 at 9:13PM PST until November 19 at 12:15AM PST",
+     "description": "* WHAT...Flooding caused by excessive rainfall is expected.\n\n* WHERE...Southern Marin County in northern California...\n\n* WHEN...Until 1215 AM PST.\n\n* IMPACTS...Minor flooding in low-lying and poor drainage areas.\n\n* ADDITIONAL DETAILS...\n- At 913 PM PST, Doppler radar indicated heavy rain. Overflowing\npoor drainage areas will cause minor flooding in the advisory\narea. Between 1 and 2.5 inches of rain have fallen over the last\n24 hours.\n- Additional rainfall amounts of 1 to 2 inches are expected over\nthe area. This additional rain will result in minor flooding.\n- Some locations that will experience flooding include...\nSan Rafael, Novato, Mill Valley, San Anselmo, Larkspur, Corte\nMadera, Tiburon, Fairfax, Sausalito, San Geronimo, Lucas\nValley-Marinwood, Kentfield, Stinson Beach, Muir Beach,\nTamalpais-Homestead, Tamalpais-Homestead Valley, Strawberry,\nBlack Point-Green Point, Ross and Woodacre.\n- http://www.weather.gov/safety/flood"
+    },
+    {
+     "event": "High Surf Advisory",
+     "onset": "2026-11-18T16:56:00-08:00",
+     "ends": "2026-11-20T04:00:00-08:00",
+     "headline": "High Surf Advisory issued November 18 at 4:56PM PST until November 20 at 4:00AM PST",
+     "description": "* WHAT...Large breaking waves of 18 to 24 ft with up to 30 ft at\nfavored break points.\n\n* WHERE...All Pacific Coast Beaches.\n\n* WHEN...Until 4 AM PST Friday.\n\n* IMPACTS...Large breaking waves can overpower swimmers, pulling\npeople into the sea from beaches, jetties, and rocks resulting\nin significant physical injury and increasing the risk of\ndrowning. Waves can sweep across the shoreline without warning,\npulling people into the sea from beaches, jetties, and rocks."
+    }
+   ],
    "best": null
   },
   {
@@ -816,6 +841,15 @@
    "alerts": [
     "High Surf Advisory"
    ],
+   "alert_details": [
+    {
+     "event": "High Surf Advisory",
+     "onset": "2026-11-18T16:56:00-08:00",
+     "ends": "2026-11-20T04:00:00-08:00",
+     "headline": "High Surf Advisory issued November 18 at 4:56PM PST until November 20 at 4:00AM PST",
+     "description": "* WHAT...Large breaking waves of 18 to 24 ft with up to 30 ft at\nfavored break points.\n\n* WHERE...All Pacific Coast Beaches.\n\n* WHEN...Until 4 AM PST Friday.\n\n* IMPACTS...Large breaking waves can overpower swimmers, pulling\npeople into the sea from beaches, jetties, and rocks resulting\nin significant physical injury and increasing the risk of\ndrowning. Waves can sweep across the shoreline without warning,\npulling people into the sea from beaches, jetties, and rocks."
+    }
+   ],
    "best": null
   },
   {
@@ -1087,6 +1121,15 @@
    "water_f": 60,
    "alerts": [
     "Small Craft Advisory"
+   ],
+   "alert_details": [
+    {
+     "event": "Small Craft Advisory",
+     "onset": "2026-11-18T20:35:00-08:00",
+     "ends": "2026-11-19T15:00:00-08:00",
+     "headline": "Small Craft Advisory issued November 18 at 8:35PM PST until November 19 at 3:00PM PST",
+     "description": "* WHAT...Southwest winds 10 to 20 kt with gusts up to 30 kt and\nchoppy waters.\n\n* WHERE...San Pablo Bay, Suisun Bay, the West Delta and the San\nFrancisco Bay north of the Bay Bridge.\n\n* WHEN...Until 3 PM PST Thursday.\n\n* IMPACTS...Conditions will be hazardous to small craft."
+    }
    ],
    "best": "2026-11-19T08:00"
   },
@@ -1361,6 +1404,22 @@
     "Flood Advisory",
     "High Surf Advisory"
    ],
+   "alert_details": [
+    {
+     "event": "Flood Advisory",
+     "onset": "2026-11-18T21:07:00-08:00",
+     "ends": "2026-11-19T00:00:00-08:00",
+     "headline": "Flood Advisory issued November 18 at 9:07PM PST until November 19 at 12:00AM PST",
+     "description": "* WHAT...Flooding caused by excessive rainfall is expected.\n\n* WHERE...San Francisco County in northern California...\nNorthwestern San Mateo County in northern California...\n\n* WHEN...Until midnight PST tonight.\n\n* IMPACTS...Minor flooding in low-lying and poor drainage areas.\n\n* ADDITIONAL DETAILS...\n- At 906 PM PST, Doppler radar indicated heavy rain. Minor flooding\nis ongoing or expected to begin shortly in the advisory area.\nBetween 1.5 and 2.5 inches of rain have fallen over the last 24\nhours. Flooding concerns with the arriving rain will be\nexacerbated due to lingering flooding from rain earlier in the\nday.\n- Additional rainfall amounts up to 1 inch are expected over the\narea. This additional rain will result in minor flooding.\n- Some locations that will experience flooding include...\nSan Francisco, Daly City, San Mateo, South San Francisco, San\nBruno, Pacifica, Foster City, Burlingame, Millbrae, Half Moon\nBay, Hillsborough, El Granada, Highlands-Baywood Park, Brisbane,\nColma, Broadmoor, Montara, Moss Beach and Highlands.\n- http://www.weather.gov/safety/flood"
+    },
+    {
+     "event": "High Surf Advisory",
+     "onset": "2026-11-18T16:56:00-08:00",
+     "ends": "2026-11-20T04:00:00-08:00",
+     "headline": "High Surf Advisory issued November 18 at 4:56PM PST until November 20 at 4:00AM PST",
+     "description": "* WHAT...Large breaking waves of 18 to 24 ft with up to 30 ft at\nfavored break points.\n\n* WHERE...All Pacific Coast Beaches.\n\n* WHEN...Until 4 AM PST Friday.\n\n* IMPACTS...Large breaking waves can overpower swimmers, pulling\npeople into the sea from beaches, jetties, and rocks resulting\nin significant physical injury and increasing the risk of\ndrowning. Waves can sweep across the shoreline without warning,\npulling people into the sea from beaches, jetties, and rocks."
+    }
+   ],
    "best": null
   },
   {
@@ -1632,6 +1691,15 @@
    "water_f": 60,
    "alerts": [
     "Small Craft Advisory"
+   ],
+   "alert_details": [
+    {
+     "event": "Small Craft Advisory",
+     "onset": "2026-11-18T20:35:00-08:00",
+     "ends": "2026-11-19T15:00:00-08:00",
+     "headline": "Small Craft Advisory issued November 18 at 8:35PM PST until November 19 at 3:00PM PST",
+     "description": "* WHAT...West winds 15 to 25 kt with gusts up to 30 kt and seas\n8 to 13 ft.\n\n* WHERE...Coastal Waters from Point Reyes to Pigeon Point\nCalifornia out to 10 NM.\n\n* WHEN...Until 3 PM PST Thursday.\n\n* IMPACTS...Conditions will be hazardous to small craft."
+    }
    ],
    "best": "2026-11-20T08:00"
   },
@@ -1906,6 +1974,22 @@
     "Flood Advisory",
     "Small Craft Advisory"
    ],
+   "alert_details": [
+    {
+     "event": "Flood Advisory",
+     "onset": "2026-11-18T21:07:00-08:00",
+     "ends": "2026-11-19T00:00:00-08:00",
+     "headline": "Flood Advisory issued November 18 at 9:07PM PST until November 19 at 12:00AM PST",
+     "description": "* WHAT...Flooding caused by excessive rainfall is expected.\n\n* WHERE...San Francisco County in northern California...\nNorthwestern San Mateo County in northern California...\n\n* WHEN...Until midnight PST tonight.\n\n* IMPACTS...Minor flooding in low-lying and poor drainage areas.\n\n* ADDITIONAL DETAILS...\n- At 906 PM PST, Doppler radar indicated heavy rain. Minor flooding\nis ongoing or expected to begin shortly in the advisory area.\nBetween 1.5 and 2.5 inches of rain have fallen over the last 24\nhours. Flooding concerns with the arriving rain will be\nexacerbated due to lingering flooding from rain earlier in the\nday.\n- Additional rainfall amounts up to 1 inch are expected over the\narea. This additional rain will result in minor flooding.\n- Some locations that will experience flooding include...\nSan Francisco, Daly City, San Mateo, South San Francisco, San\nBruno, Pacifica, Foster City, Burlingame, Millbrae, Half Moon\nBay, Hillsborough, El Granada, Highlands-Baywood Park, Brisbane,\nColma, Broadmoor, Montara, Moss Beach and Highlands.\n- http://www.weather.gov/safety/flood"
+    },
+    {
+     "event": "Small Craft Advisory",
+     "onset": "2026-11-18T20:35:00-08:00",
+     "ends": "2026-11-19T15:00:00-08:00",
+     "headline": "Small Craft Advisory issued November 18 at 8:35PM PST until November 19 at 3:00PM PST",
+     "description": "* WHAT...Southwest winds 10 to 20 kt with gusts up to 30 kt and\nchoppy waters.\n\n* WHERE...San Pablo Bay, Suisun Bay, the West Delta and the San\nFrancisco Bay north of the Bay Bridge.\n\n* WHEN...Until 3 PM PST Thursday.\n\n* IMPACTS...Conditions will be hazardous to small craft."
+    }
+   ],
    "best": "2026-11-19T11:00"
   },
   {
@@ -2177,6 +2261,15 @@
    "water_f": 60,
    "alerts": [
     "Small Craft Advisory"
+   ],
+   "alert_details": [
+    {
+     "event": "Small Craft Advisory",
+     "onset": "2026-11-18T20:35:00-08:00",
+     "ends": "2026-11-19T15:00:00-08:00",
+     "headline": "Small Craft Advisory issued November 18 at 8:35PM PST until November 19 at 3:00PM PST",
+     "description": "* WHAT...Southwest winds 10 to 20 kt with gusts up to 30 kt and\nchoppy waters.\n\n* WHERE...San Pablo Bay, Suisun Bay, the West Delta and the San\nFrancisco Bay north of the Bay Bridge.\n\n* WHEN...Until 3 PM PST Thursday.\n\n* IMPACTS...Conditions will be hazardous to small craft."
+    }
    ],
    "best": "2026-11-19T11:00"
   },
@@ -2450,6 +2543,15 @@
    "alerts": [
     "Small Craft Advisory"
    ],
+   "alert_details": [
+    {
+     "event": "Small Craft Advisory",
+     "onset": "2026-11-18T20:35:00-08:00",
+     "ends": "2026-11-19T15:00:00-08:00",
+     "headline": "Small Craft Advisory issued November 18 at 8:35PM PST until November 19 at 3:00PM PST",
+     "description": "* WHAT...Southwest winds 10 to 20 kt with gusts up to 30 kt and\nchoppy waters.\n\n* WHERE...San Pablo Bay, Suisun Bay, the West Delta and the San\nFrancisco Bay north of the Bay Bridge.\n\n* WHEN...Until 3 PM PST Thursday.\n\n* IMPACTS...Conditions will be hazardous to small craft."
+    }
+   ],
    "best": "2026-11-19T11:00"
   },
   {
@@ -2722,6 +2824,15 @@
    "alerts": [
     "Small Craft Advisory"
    ],
+   "alert_details": [
+    {
+     "event": "Small Craft Advisory",
+     "onset": "2026-11-18T20:35:00-08:00",
+     "ends": "2026-11-19T15:00:00-08:00",
+     "headline": "Small Craft Advisory issued November 18 at 8:35PM PST until November 19 at 3:00PM PST",
+     "description": "* WHAT...Southwest winds 10 to 20 kt with gusts up to 30 kt and\nchoppy waters.\n\n* WHERE...San Pablo Bay, Suisun Bay, the West Delta and the San\nFrancisco Bay north of the Bay Bridge.\n\n* WHEN...Until 3 PM PST Thursday.\n\n* IMPACTS...Conditions will be hazardous to small craft."
+    }
+   ],
    "best": "2026-11-19T11:00"
   },
   {
@@ -2993,6 +3104,15 @@
    "water_f": 60,
    "alerts": [
     "Coastal Flood Advisory"
+   ],
+   "alert_details": [
+    {
+     "event": "Coastal Flood Advisory",
+     "onset": "2026-11-18T16:56:00-08:00",
+     "ends": "2026-11-20T10:00:00-08:00",
+     "headline": "Coastal Flood Advisory issued November 18 at 4:56PM PST until November 20 at 10:00AM PST",
+     "description": "* WHAT...Up to 1.2 ft of inundation above ground level is\npossible in low-lying areas near shorelines and tidal\nwaterways.\n\n* WHERE...Bayshore locations along the San Franciso Bay and San\nPablo Bay.\n\n* WHEN...Until 10 AM PST Friday.\n\n* IMPACTS...High tides will result in flooding of low-lying\ninfrastructure, isolated road closures, and coastal erosion.\nRising tides will bring water and waves farther up the beach\nthan normal, restricting escape from beaches and coastal areas.\n\n* ADDITIONAL DETAILS...At the San Francisco tidal gauge, high\ntide is expected to be 1.2 ft above normal (7.0 ft MLLW) at\n7:15 AM Thursday and 1.1 ft above normal (6.9 ft MLLW) at 7:45\nAM Friday. These predictions include up to 1.8 ft of surge\nthat will enhance the astronomical tide and flooding threat.\nHigh tide varies up to 90 minutes earlier or later along the\nPacific Coast and through the San Francisco Bay, respectively."
+    }
    ],
    "best": "2026-11-19T08:00"
   }
