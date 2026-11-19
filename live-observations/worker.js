@@ -259,7 +259,7 @@ export default {
         daily_precipitation_date:dailyRain?.date ?? null,
         daily_precipitation_source:dailyRain?.source ?? (dailyRain ? 'xweather_summary' : null),
         // Sunlight only from vetted stations; an auto-discovered station's sensor may be shaded.
-        sky:rainingSky(pick('precipRateIN'), await sky(discovery ? null : [...solarRecent, pick('solradWM2')]), city),
+        sky:rainingSky(pick('precipRateIN') ?? (WU_STATIONS[city] ? (await wuCurrent(WU_STATIONS[city], env, wuLog))?.precip_rate_in_hr : null), await sky(discovery ? null : [...solarRecent, pick('solradWM2')]), city),
         diagnostics:wuLog.length?wuLog:undefined,
         source:'Xweather'
       };
