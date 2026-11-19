@@ -809,3 +809,13 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .dwl-days > .dwl-day > .dwl-day-icon { grid-column: 3; }
 @media (max-width: 360px) { .dwl-days > .dwl-day { grid-template-columns: 46px 34px 38px minmax(0, 1fr) 32px !important; } }
 @media (min-width: 700px) { .dwl-days > .dwl-day { grid-template-columns: 76px 56px 62px minmax(0, 1fr) 54px !important; } }
+/* Icon + conditions centred as one group between the high and the low */
+.dwl-days > .dwl-day { grid-template-columns: 58px 42px minmax(4px, 1fr) 48px auto minmax(4px, 1fr) 40px !important; }
+.dwl-days > .dwl-day > .dwl-day-icon { grid-column: 4; }
+.dwl-days > .dwl-day > .dwl-day-sky { grid-column: 5; max-width: 150px; padding-left: 4px; }
+.dwl-days > .dwl-day > .dwl-day-lo { grid-column: 7; }
+@media (max-width: 360px) { .dwl-days > .dwl-day { grid-template-columns: 46px 34px minmax(2px, 1fr) 38px auto minmax(2px, 1fr) 32px !important; } .dwl-days > .dwl-day > .dwl-day-sky { max-width: 120px; } }
+@media (min-width: 700px) { .dwl-days > .dwl-day { grid-template-columns: 76px 56px minmax(8px, 1fr) 62px auto minmax(8px, 1fr) 54px !important; } .dwl-days > .dwl-day > .dwl-day-sky { max-width: 220px; } }
+.dwl-days > .dwl-day { grid-template-columns: 58px 42px minmax(4px, 1fr) 48px 112px minmax(4px, 1fr) 40px !important; }
+@media (max-width: 360px) { .dwl-days > .dwl-day { grid-template-columns: 46px 34px minmax(2px, 1fr) 38px 96px minmax(2px, 1fr) 32px !important; } }
+@media (min-width: 700px) { .dwl-days > .dwl-day { grid-template-columns: 76px 56px minmax(8px, 1fr) 62px 200px minmax(8px, 1fr) 54px !important; } }
