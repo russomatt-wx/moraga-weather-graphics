@@ -744,3 +744,4 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .pad-kind { margin: 10px 0 0; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .pad-grid { align-items: start; }
 .pad-card p.pad-city { margin: 2px 0 0; font-size: 13.5px; font-weight: 600; color: var(--accent); }
+.pad-temp { margin-right: 8px; font-size: 17px; font-weight: 700; color: var(--text); }
