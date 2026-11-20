@@ -32,14 +32,15 @@ jobs:
       - run: python scripts/town_verification.py
       - name: Publish verification
         run: |
-          mkdir -p /tmp/verif && cp verification/*.json /tmp/verif/
+          # Only this job's own files (other jobs write to verification/ too).
+          mkdir -p /tmp/verif && cp verification/town_*.json verification/*_model_daily_verification*.json /tmp/verif/
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             git reset --hard origin/main
             mkdir -p verification && cp /tmp/verif/*.json verification/
-            git add verification/*.json
+            git add verification/town_*.json verification/*_model_daily_verification*.json
             if git diff --cached --quiet; then exit 0; fi
             git commit -m "Update town forecast verification"
             if git push origin HEAD:main; then exit 0; fi

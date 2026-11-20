@@ -1,0 +1,49 @@
+name: NOAA daily observations (URMA)
+# Daily high / low per location from NOAA's URMA analysis: the licence-free verification track
+# for the 10-day forecast learning (scripts/noaa_daily_obs.py).
+on:
+  workflow_dispatch:
+    inputs:
+      days_back:
+        description: 'Days to fill (first run: backfill)'
+        default: '4'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/noaa_daily_obs.py'
+      - '.github/workflows/noaa_daily_obs.yml'
+  schedule:
+    # Mid-morning Pacific: the previous day's URMA hours are all published by then.
+    - cron: '25 17 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: noaa-daily-obs
+  cancel-in-progress: false
+jobs:
+  fill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install numpy xarray cfgrib eccodes
+      - run: python scripts/noaa_daily_obs.py "${{ github.event.inputs.days_back || '4' }}"
+      - name: Save
+        run: |
+          cp verification/town_observed_noaa.json /tmp/noaa.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/noaa.json verification/town_observed_noaa.json
+            git add verification/town_observed_noaa.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "Update NOAA daily observations"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1

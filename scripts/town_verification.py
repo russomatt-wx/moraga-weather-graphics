@@ -169,7 +169,7 @@ def walk_forward(errors):
             "selected_holdout_mae_f": round(mae[best], 3), "method": "walk_forward_prior_days_only", "lead_specific": False}
 
 
-def score(town, archive, observed):
+def score(town, archive, observed, source="station"):
     rows = []
     for day, models in sorted(archive.get(town, {}).items()):
         ob = observed.get(town, {}).get(day)
@@ -191,9 +191,10 @@ def score(town, archive, observed):
             if wf:
                 calibration.setdefault(model, {})[phase] = {**wf, "verified_days": len(errs)}
     return {"generated_utc": datetime.now(timezone.utc).isoformat(), "status": "verified_daily_extremes" if rows else "collecting",
-            "town": town, "station": TOWNS[town], "model_scores": scores, "calibration": calibration,
+            "town": town, "station": TOWNS[town] if source == "station" else "NOAA URMA", "verified_against": source, "model_scores": scores, "calibration": calibration,
             "method": "Earliest archived day-ahead model forecast per target local date (from the published town feed); observed daily high/low from the town's "
-                      f"Weather Underground station ({TOWNS[town]}) covering at least 22.5 hours of the day",
+                      + (f"Weather Underground station ({TOWNS[town]}) covering at least 22.5 hours of the day" if source == "station"
+                         else "point in NOAA's URMA 2.5 km analysis (hourly, 22+ hours of the Pacific day; public domain)"),
             "note": "Each town is verified against its own station; Moraga corrections are never transferred.",
             "matches": rows[-90:]}
 
@@ -225,6 +226,12 @@ def main():
         result = score(town, archive, observed)
         (OUT / f"{town}_model_daily_verification.json").write_text(json.dumps(result, indent=1) + "\n")
         print(f"{town}: +{added} forecasts, +{got} observed days, {len(result['matches'])} matches, models {list(result['model_scores'])}")
+        # Second track: the same forecasts verified against NOAA's URMA analysis (licence-free for a paid app).
+        noaa = load(OUT / "town_observed_noaa.json", {})
+        if noaa.get(town):
+            nres = score(town, archive, noaa, source="noaa_urma")
+            (OUT / f"{town}_model_daily_verification_noaa.json").write_text(json.dumps(nres, indent=1) + "\n")
+            print(f"{town} (NOAA track): {len(nres['matches'])} matches")
     archive_path.write_text(json.dumps(archive, indent=1, sort_keys=True) + "\n")
     observed_path.write_text(json.dumps(observed, indent=1, sort_keys=True) + "\n")
 
