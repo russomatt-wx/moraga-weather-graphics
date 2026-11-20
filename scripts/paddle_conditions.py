@@ -78,6 +78,73 @@ def nearest_water(water, lat, lon, exclude=("9415020",)):
     return w["f"], {"name": "NOAA " + name + " gauge", "station": st, "miles": round(d * 0.621, 1), "observed": w["t"]}
 
 
+
+def angle_diff(a, b):
+    d = abs((a - b) % 360)
+    return 360 - d if d > 180 else d
+
+
+def current_stations():
+    """NOAA tidal-current prediction stations in the Bay Area: [(id, bin, name, lat, lon)]."""
+    d = get("https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations.json", {"type": "currentpredictions", "units": "english"}, tries=3)
+    out = []
+    for st in (d or {}).get("stations", []):
+        try:
+            lat, lon = float(st.get("lat")), float(st.get("lng"))
+        except (TypeError, ValueError):
+            continue
+        if 37.4 < lat < 38.1 and -122.7 < lon < -122.1:
+            out.append((str(st.get("id")), st.get("currbin"), st.get("name") or st.get("id"), lat, lon))
+    print("current stations in the Bay:", len(out))
+    return out
+
+
+def current_series(sid, cbin, now):
+    """Hourly predicted current (knots; + flood, - ebb) and the slack / max events for 72 h."""
+    base = {"product": "currents_predictions", "station": sid, "begin_date": now.strftime("%Y%m%d"), "range": "72",
+            "time_zone": "lst_ldt", "units": "english", "format": "json", "application": "DiabloWeatherLab"}
+    if cbin not in (None, ""):
+        base["bin"] = cbin
+    hourly = get("https://api.tidesandcurrents.noaa.gov/api/prod/datagetter", dict(base, interval="h"), tries=2)
+    events = get("https://api.tidesandcurrents.noaa.gov/api/prod/datagetter", dict(base, interval="MAX_SLACK"), tries=2)
+    def rows(d):
+        r = (d or {}).get("current_predictions", {})
+        return r.get("cp", []) if isinstance(r, dict) else []
+    series = {}
+    flood_dir = ebb_dir = None
+    for r in rows(hourly):
+        try:
+            series[r["Time"][:13]] = float(r["Velocity_Major"])
+            flood_dir = flood_dir if flood_dir is not None else float(r.get("meanFloodDir"))
+            ebb_dir = ebb_dir if ebb_dir is not None else float(r.get("meanEbbDir"))
+        except (KeyError, TypeError, ValueError):
+            continue
+    ev = []
+    for r in rows(events):
+        try:
+            ev.append({"t": r["Time"], "type": r.get("Type", ""), "kt": round(float(r["Velocity_Major"]), 1)})
+        except (KeyError, TypeError, ValueError):
+            continue
+    return series, flood_dir, ebb_dir, ev
+
+
+def current_rating(kt, wind, wind_from, flood_dir, ebb_dir):
+    """Caution for strong current or wind against current; No-go for very strong current."""
+    if kt is None:
+        return 0, ""
+    speed = abs(kt)
+    if speed >= 3:
+        return 2, "Very strong current"
+    toward = flood_dir if kt > 0 else ebb_dir
+    if wind is not None and wind >= 12 and speed >= 1 and toward is not None and wind_from is not None:
+        # Wind blowing toward (from + 180) opposite to the current's set: short, steep chop.
+        if angle_diff((wind_from + 180) % 360, toward) >= 120:
+            return 1, "Wind against current"
+    if speed >= 1.5:
+        return 1, "Strong current"
+    return 0, ""
+
+
 def get(url, params, tries=4, headers=None):
     for k in range(tries):
         try:
@@ -216,6 +283,8 @@ def main():
         except Exception as exc:
             print("buoy", b, type(exc).__name__)
     print("water", water, "buoys", buoy)
+    cstations = current_stations()
+    cseries = {}
 
     spots = []
     for idx, (sid, name, city, area, kind, lat, lon, tide_st) in enumerate(SPOTS):
@@ -229,6 +298,17 @@ def main():
                                 "headline": (p.get("headline") or "").split(" by NWS")[0],
                                 "description": (p.get("description") or "")[:1200]})
         w, m = wind[idx] or {}, marine[idx] or {}
+        cinfo = None
+        if kind == "bay" and cstations:
+            dist, cst = min(((km(lat, lon, c[3], c[4]), c) for c in cstations), key=lambda x: x[0])
+            if dist <= 5:
+                if cst[0] not in cseries:
+                    cseries[cst[0]] = current_series(cst[0], cst[1], now)
+                ser, fdir, edir, cev = cseries[cst[0]]
+                if ser:
+                    cinfo = {"series": ser, "flood": fdir, "ebb": edir, "events": cev,
+                             "src": {"name": cst[2], "station": cst[0], "miles": round(dist * 0.621, 1)}}
+            print(name, "current station:", cst[2], cst[0], round(dist, 1), "km", "used" if cinfo else "not used")
         wh, mh = w.get("hourly", {}), m.get("hourly", {})
         times = wh.get("time", [])
         stamp = now.strftime("%Y-%m-%dT%H:00")
@@ -247,6 +327,14 @@ def main():
             sst = mval("sea_surface_temperature", t)
             chop_ft, chop_s = chop(sid, wh["wind_speed_10m"][i], compass(wh["wind_direction_10m"][i])) if kind == "bay" else (None, None)
             r, why = rate(kind, wh["wind_speed_10m"][i], wh["wind_gusts_10m"][i], wave if kind == "coast" else chop_ft, alerts if i == start else [x for x in alerts if "advisory" not in x.lower()])
+            ckt = None
+            if cinfo:
+                vals = [cinfo["series"].get(times[k][:13]) for k in range(i, min(i + 3, len(times)))]
+                vals = [v for v in vals if v is not None]
+                ckt = max(vals, key=abs) if vals else None  # strongest flow in the block
+                cr, cwhy = current_rating(ckt, wh["wind_speed_10m"][i], wh["wind_direction_10m"][i], cinfo["flood"], cinfo["ebb"])
+                if cr > r:
+                    r, why = cr, cwhy
             # Rain: 3-hour peak chance. Lightning (thunderstorm codes 95-99) is No-go; rain likely is at least Caution.
             pp = [v for v in (wh.get("precipitation_probability") or [])[i:i + 3] if v is not None]
             rain = max(pp) if pp else None
@@ -263,6 +351,7 @@ def main():
                     "sst_f": None if sst is None else round(sst * 9 / 5 + 32),
                     "air_f": None if wh.get("temperature_2m") is None else round(wh["temperature_2m"][i]),
                     "chop_ft": chop_ft, "chop_s": chop_s,
+                    "current_kt": None if ckt is None else round(ckt, 1),
                     "rain_pct": rain, "thunder": thunder, "rating": r, "why": why}
 
         if not times:
@@ -287,6 +376,7 @@ def main():
         best = next((b for b in blocks if b["rating"] == 0 and 7 <= int(b["time"][11:13]) <= 17), None)
         spots.append({"id": sid, "name": name, "city": city, "area": area, "kind": kind, "lat": lat, "lon": lon, "now": cur,
                       "blocks": blocks, "tides": next_tides, "tide_station": tide_st, "water_f": water_f, "water_src": water_src,
+                      "current_src": cinfo["src"] if cinfo else None, "current_events": [e for e in (cinfo["events"] if cinfo else []) if e["t"] >= now.strftime("%Y-%m-%d %H:%M")][:4],
                       "alerts": alerts, "alert_details": details, "best": best["time"] if best else None})
         print(name, cur["rating"], cur["why"], cur["wind"], cur["gust"], cur["wave_ft"], len(next_tides), alerts, "| water", water_f, water_src)
     OUT.write_text(json.dumps({"generated_utc": datetime.now(timezone.utc).isoformat(), "spots": spots,
