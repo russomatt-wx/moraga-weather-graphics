@@ -940,3 +940,50 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .pad-key-h b { font-size: 14px; }
 .pad-key .pad-sym { width: 28px; height: 28px; } .pad-key .pad-sym svg { width: 17px; height: 17px; }
 .pad-key.r0 .pad-key-h b { color: #6ff0b8; } .pad-key.r1 .pad-key-h b { color: #ffd36b; } .pad-key.r2 .pad-key-h b { color: #ff9a9a; }
+
+/* ---------- Marine & Surf redesign (mockup) ---------- */
+.pad-intro h1 { display: flex; align-items: center; gap: 12px; font-size: 30px; }
+.pad-h1-icon { color: var(--accent); display: flex; filter: drop-shadow(0 0 6px rgba(25, 220, 246, .55)); }
+.pad-h1-icon svg { width: 44px; height: 22px; }
+.pad-sub { margin-bottom: 2px !important; }
+.pad-updated { margin: 0 0 14px; font-size: 13.5px; color: var(--muted); }
+.pad-legend { gap: 8px; }
+.pad-key { --rc: #34d399; padding: 10px 8px 10px !important; border-top: 0 !important; border: 1.5px solid color-mix(in srgb, var(--rc) 75%, transparent) !important;
+  border-radius: 14px !important; background: linear-gradient(180deg, color-mix(in srgb, var(--rc) 10%, transparent), transparent 70%), var(--panel-deep) !important;
+  box-shadow: 0 0 14px -5px color-mix(in srgb, var(--rc) 80%, transparent); }
+.pad-key.r1 { --rc: #ffbf2e; } .pad-key.r2 { --rc: #f85c5c; }
+.pad-key-h { display: flex; align-items: center; justify-content: center; gap: 6px; color: var(--rc); }
+.pad-key-h svg { width: 22px; height: 22px; flex: none; }
+.pad-key-h b { font-size: 15px !important; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: color-mix(in srgb, var(--rc) 75%, #fff) !important; }
+.pad-key-sub { margin: 4px 0 6px; padding-bottom: 6px; border-bottom: 1px solid var(--line-soft); font-size: 11.5px; color: var(--text-2); }
+.pad-key p { margin: 0 !important; font-size: 12.5px !important; }
+.pad-filter { flex-wrap: nowrap !important; overflow-x: auto; scrollbar-width: none; gap: 6px; }
+.pad-filter::-webkit-scrollbar { display: none; }
+.pad-filter button { flex: 1 0 auto; padding: 9px 11px !important; font-size: 14px !important; }
+.pad-sec-h, .pad-area h2 { display: flex; align-items: center; gap: 12px; margin: 22px 0 10px; font-size: 13px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+.pad-sec-h::after, .pad-area h2::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line-soft), transparent); }
+#pad-alerts { margin-top: 0 !important; }
+.pad-alertbar { --al: #ffbf2e; border: 1.5px solid color-mix(in srgb, var(--al) 75%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--al) 7%, var(--panel-deep));
+  box-shadow: 0 0 16px -6px color-mix(in srgb, var(--al) 80%, transparent); }
+.pad-alertbar.is-warning { --al: #ff5d6c; }
+.pad-alertbar > summary { display: flex; align-items: center; gap: 10px; padding: 11px 14px; cursor: pointer; list-style: none; }
+.pad-alertbar > summary::-webkit-details-marker { display: none; }
+.pad-alertbar-ic { display: flex; color: var(--al); flex: none; } .pad-alertbar-ic svg { width: 24px; height: 24px; }
+.pad-alertbar b { font-size: 16px; white-space: nowrap; }
+.pad-alertbar-list { min-width: 0; flex: 1; padding-left: 10px; border-left: 1px solid var(--line-soft); font-size: 13.5px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pad-alertbar i { font-style: normal; font-size: 20px; color: var(--al); transition: transform .2s; }
+.pad-alertbar[open] i { transform: rotate(180deg); }
+.pad-alertbar-body { display: grid; gap: 8px; padding: 0 10px 10px; }
+@media (max-width: 420px) { .pad-alertbar-list { display: none; } .pad-alertbar b { flex: 1; } }
+.pad-pill { --rc: #34d399; display: inline-block; padding: 4px 12px; border-radius: 999px; font: 800 13.5px/1.2 var(--font-ui); letter-spacing: .05em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--rc) 70%, #fff); background: color-mix(in srgb, var(--rc) 16%, transparent); box-shadow: inset 0 0 0 1.6px color-mix(in srgb, var(--rc) 75%, transparent); }
+.pad-pill.r1 { --rc: #ffbf2e; } .pad-pill.r2 { --rc: #f85c5c; }
+.pad-rate small { margin-top: 5px; font-size: 12.5px !important; color: var(--text-2); }
+.pad-stats span { display: flex !important; align-items: center; gap: 5px; white-space: nowrap; }
+.pad-stats span svg { width: 15px; height: 15px; flex: none; color: var(--accent); }
+.pad-stats span small { font-size: 9px; letter-spacing: 0; text-transform: none; }
+.pad-more svg { width: 20px; height: 20px; flex: none; }
+@media (max-width: 420px) {
+  .pad-alertbar > summary { flex-wrap: wrap; row-gap: 2px; }
+  .pad-alertbar-list { display: block !important; order: 3; flex-basis: 100%; padding: 0 0 0 34px; border-left: 0; white-space: normal; }
+}

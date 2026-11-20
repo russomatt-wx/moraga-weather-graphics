@@ -9,6 +9,14 @@
     '<path d="M12 6.5v7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="17.6" r="1.5" fill="currentColor"/>',
     '<path d="M7.5 7.5l9 9M16.5 7.5l-9 9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>',
   ];
+  const SVG = (p, vb) => '<svg viewBox="' + (vb || '0 0 24 24') + '" aria-hidden="true">' + p + '</svg>';
+  const WAVE_P = '<path d="M2 9c3-3.5 6-3.5 9 0s6 3.5 9 0M2 16c3-3.5 6-3.5 9 0s6 3.5 9 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
+  const STAT_ICON = {
+    'Wind mph': SVG('<path d="M3 8h10a2.6 2.6 0 1 0-2.6-2.6M3 12.5h15a2.6 2.6 0 1 1-2.6 2.6M3 17h7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>'),
+    'Waves': SVG(WAVE_P), 'Chop (est.)': SVG(WAVE_P),
+    'Water': SVG('<path d="M10 4.5a2 2 0 0 1 4 0v9a4 4 0 1 1-4 0Z" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12 9v7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>'),
+    'Rain': SVG('<path d="M12 3.5c3.3 4.2 5.5 7.3 5.5 10a5.5 5.5 0 0 1-11 0c0-2.7 2.2-5.8 5.5-10Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>'),
+  };
   const sym = (r) => '<span class="pad-sym r' + r + '" role="img" aria-label="' + LABEL[r] + '" title="' + LABEL[r] + '"><svg viewBox="0 0 24 24" aria-hidden="true">' + SYM[r] + '</svg></span>';
   // Alerts that matter on the water (a Flood Advisory for creeks does not).
   const MARINE = /craft|gale|storm|seas|surf|beach|rip current|coastal|tsunami|wind|marine|fog|sneaker/i;
@@ -75,13 +83,13 @@
       spot.kind === 'coast' ? null : ['Chop (est.)', chopTxt(c)],
       ['Water', spot.water_f != null ? spot.water_f + '°' : '—'],
       ['Rain', c.thunder ? 'Storms' : c.rain_pct != null ? Math.round(c.rain_pct / 10) * 10 + '%' : '—'],
-    ].filter(Boolean).map(([k, v]) => '<div><span>' + k + '</span><b>' + esc(v) + '</b></div>').join('');
+    ].filter(Boolean).map(([k, v]) => '<div><span>' + (STAT_ICON[k] || '') + k.replace(' mph', ' <small>(mph)</small>').replace(' (est.)', ' <small>(est.)</small>') + '</span><b>' + esc(v) + '</b></div>').join('');
     const alerts = (spot.alerts || []).filter((x) => MARINE.test(x)).map((a) => '<span class="pad-alert ' + level(a) + '">⚠ ' + esc(a) + '</span>').join('');
     const nAlerts = (spot.alerts || []).filter((x) => MARINE.test(x));
     return '<details class="pad-card r' + c.rating + '" data-id="' + esc(spot.id) + '"' + (openCards.has(spot.id) ? ' open' : '') + '>' +
       '<summary><header><div><h3>' + esc(spot.city ? spot.name : spot.name.split(' · ').pop()) + '</h3><p class="pad-city">' + esc(spot.city || spot.name.split(' · ')[0]) + (c.air_f != null ? ' <span class="pad-temp-l">· ' + c.air_f + '° air</span>' : '') + '</p>' +
       (nAlerts.length ? '<p class="pad-brief-alert ' + level(nAlerts[0]) + '">⚠ ' + esc(nAlerts.join(' · ')) + '</p>' : '') + '</div>' +
-      '<div class="pad-rate">' + sym(c.rating) + '<small><b class="r' + c.rating + '">' + LABEL[c.rating] + '</b> · ' + esc(c.why) + '</small></div></header><div class="pad-stats">' + stats + '</div><span class="pad-more"><span class="pad-more-open">Tides &amp; 3-day forecast</span><span class="pad-more-close">Hide details</span><i aria-hidden="true">⌄</i></span></summary>' +
+      '<div class="pad-rate"><span class="pad-pill r' + c.rating + '">' + LABEL[c.rating] + '</span><small>' + esc(c.why) + '</small></div></header><div class="pad-stats">' + stats + '</div><span class="pad-more">' + SVG(WAVE_P) + '<span class="pad-more-open">Tides &amp; 3-day forecast</span><span class="pad-more-close">Hide details</span><i aria-hidden="true">⌄</i></span></summary>' +
       '<div class="pad-body"><p class="pad-kind">' + (spot.kind === 'coast' ? 'Open coast' : 'Protected water') + '</p>' +
       (alerts ? '<div class="pad-alerts">' + alerts + '</div>' : '') +
       (tides ? '<h4 class="pad-sub-h">Tides</h4><div class="pad-tides">' + tides + '</div>' : '') +
@@ -108,8 +116,12 @@
     }
     const items = [...byEvent.values()].sort((a, b) => (level(a.event) === 'warning' ? 0 : 1) - (level(b.event) === 'warning' ? 0 : 1));
     if (!items.length) return '<p class="pad-noalerts">✓ No marine or surf alerts in effect for these spots.</p>';
+    const warn = items.some((a) => level(a.event) === 'warning');
+    const short = (ev) => ev.replace(/ (Advisory|Warning|Statement|Watch)$/i, '');
+    const kind = warn ? 'Warning' : items.every((a) => /advisory/i.test(a.event)) ? 'Advisor' : 'Alert';
+    const head = items.length + ' Active ' + (kind === 'Advisor' ? (items.length === 1 ? 'Advisory' : 'Advisories') : kind + (items.length === 1 ? '' : 's'));
     const now = Date.now();
-    return items.map((a) => {
+    return '<details class="pad-alertbar' + (warn ? ' is-warning' : '') + '"' + (alertsOpen ? ' open' : '') + '><summary><span class="pad-alertbar-ic">' + ICON + '</span><b>' + head + '</b><span class="pad-alertbar-list">' + esc(items.map((a) => short(a.event)).join(' · ')) + '</span><i aria-hidden="true">⌄</i></summary><div class="pad-alertbar-body">' + items.map((a) => {
       const upcoming = a.onset && Date.parse(a.onset) > now;
       const t = upcoming ? 'Starts ' + when(a.onset) + (a.ends ? ' · until ' + when(a.ends) : '') : a.ends ? 'Until ' + when(a.ends) : 'In effect';
       const text = String(a.description || a.headline || '').replace(/\n(?!\n)/g, ' ').replace(/\n{2,}/g, '\n').replace(/^ *\* ?([A-Z][A-Z ]+?)\.\.\./gm, (m, k) => k[0] + k.slice(1).toLowerCase() + ': ').trim();
@@ -118,10 +130,12 @@
         '<span class="dwl-alert-title">' + esc(a.event) + '</span><span class="dwl-alert-when">' + esc(t) + '</span>' +
         '<span class="pad-alert-spots">' + esc(a.spots.join(' · ')) + '</span></span><span class="dwl-alert-chev" aria-hidden="true">⌄</span></summary>' +
         (text ? '<div class="dwl-alert-body"><p>' + esc(text) + '</p></div>' : '') + '</details>';
-    }).join('');
+    }).join('') + '</div></details>';
   }
 
   let data = null, area = '';
+  let alertsOpen = false;
+  document.addEventListener('toggle', (e) => { if (e.target.classList && e.target.classList.contains('pad-alertbar')) alertsOpen = e.target.open; }, true);
   const openCards = new Set();
   document.addEventListener('toggle', (e) => { const d = e.target; if (d.classList && d.classList.contains('pad-card')) { d.open ? openCards.add(d.dataset.id) : openCards.delete(d.dataset.id); } }, true);
   function render() {
@@ -136,7 +150,7 @@
       return spots.length ? '<section class="pad-area"><h2>' + esc(a) + '</h2><div class="pad-grid">' + spots.map((s) => card(s, now)).join('') + '</div></section>' : '';
     }).join('');
     const gen = new Date(data.generated_utc);
-    document.getElementById('pad-updated').textContent = 'Updated ' + gen.toLocaleString('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', hour: 'numeric', minute: '2-digit' }) + '.';
+    document.getElementById('pad-updated').textContent = 'Updated ' + gen.toLocaleString('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', month: 'short', day: 'numeric' }) + ' at ' + gen.toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', minute: '2-digit' }) + ' PT';
   }
 
   document.addEventListener('click', (e) => {
