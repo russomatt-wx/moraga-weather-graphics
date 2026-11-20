@@ -1,0 +1,203 @@
+{
+ "generated_utc": "2026-11-20T05:05:51.657161+00:00",
+ "source": "NOAA RTMA rapid update (2.5 km analysis)",
+ "method": "Estimate at each station's location vs that station's reading within 45 minutes. Corrected = minus the town's mean error in the same regime (day/night, calm/breezy) over the previous 14 days (needs 6+ prior hours).",
+ "towns": {
+  "moraga": {
+   "name": "Moraga",
+   "station": "KCAMORAG71",
+   "hours": 1,
+   "first": "2026-11-20T04:45:00+00:00",
+   "last": "2026-11-20T04:45:00+00:00",
+   "raw": {
+    "all": {
+     "n": 1,
+     "mae_f": 1.7,
+     "bias_f": -1.7,
+     "within_2f_pct": 100
+    },
+    "day": null,
+    "night": {
+     "n": 1,
+     "mae_f": 1.7,
+     "bias_f": -1.7,
+     "within_2f_pct": 100
+    }
+   },
+   "corrected": {
+    "all": null,
+    "day": null,
+    "night": null
+   },
+   "wind_mae_mph": 2.2
+  },
+  "lafayette": {
+   "name": "Lafayette",
+   "station": "KCAWALNU6",
+   "hours": 1,
+   "first": "2026-11-20T04:45:00+00:00",
+   "last": "2026-11-20T04:45:00+00:00",
+   "raw": {
+    "all": {
+     "n": 1,
+     "mae_f": 4.7,
+     "bias_f": 4.7,
+     "within_2f_pct": 0
+    },
+    "day": null,
+    "night": {
+     "n": 1,
+     "mae_f": 4.7,
+     "bias_f": 4.7,
+     "within_2f_pct": 0
+    }
+   },
+   "corrected": {
+    "all": null,
+    "day": null,
+    "night": null
+   },
+   "wind_mae_mph": 6.2
+  },
+  "danville": {
+   "name": "Sycamore Valley",
+   "station": "KCADANVI207",
+   "hours": 1,
+   "first": "2026-11-20T04:45:00+00:00",
+   "last": "2026-11-20T04:45:00+00:00",
+   "raw": {
+    "all": {
+     "n": 1,
+     "mae_f": 4.3,
+     "bias_f": 4.3,
+     "within_2f_pct": 0
+    },
+    "day": null,
+    "night": {
+     "n": 1,
+     "mae_f": 4.3,
+     "bias_f": 4.3,
+     "within_2f_pct": 0
+    }
+   },
+   "corrected": {
+    "all": null,
+    "day": null,
+    "night": null
+   },
+   "wind_mae_mph": 3.8
+  },
+  "greenbrook": {
+   "name": "Greenbrook",
+   "station": "KCADANVI224",
+   "hours": 1,
+   "first": "2026-11-20T04:45:00+00:00",
+   "last": "2026-11-20T04:45:00+00:00",
+   "raw": {
+    "all": {
+     "n": 1,
+     "mae_f": 3.3,
+     "bias_f": 3.3,
+     "within_2f_pct": 0
+    },
+    "day": null,
+    "night": {
+     "n": 1,
+     "mae_f": 3.3,
+     "bias_f": 3.3,
+     "within_2f_pct": 0
+    }
+   },
+   "corrected": {
+    "all": null,
+    "day": null,
+    "night": null
+   },
+   "wind_mae_mph": 1.9
+  },
+  "brentwood": {
+   "name": "Brentwood",
+   "station": "KCABRENT202",
+   "hours": 1,
+   "first": "2026-11-20T04:45:00+00:00",
+   "last": "2026-11-20T04:45:00+00:00",
+   "raw": {
+    "all": {
+     "n": 1,
+     "mae_f": 1.2,
+     "bias_f": -1.2,
+     "within_2f_pct": 100
+    },
+    "day": null,
+    "night": {
+     "n": 1,
+     "mae_f": 1.2,
+     "bias_f": -1.2,
+     "within_2f_pct": 100
+    }
+   },
+   "corrected": {
+    "all": null,
+    "day": null,
+    "night": null
+   },
+   "wind_mae_mph": 4.3
+  },
+  "sacramento": {
+   "name": "East Sacramento",
+   "station": "KCASACRA200",
+   "hours": 1,
+   "first": "2026-11-20T04:45:00+00:00",
+   "last": "2026-11-20T04:45:00+00:00",
+   "raw": {
+    "all": {
+     "n": 1,
+     "mae_f": 0.1,
+     "bias_f": 0.1,
+     "within_2f_pct": 100
+    },
+    "day": null,
+    "night": {
+     "n": 1,
+     "mae_f": 0.1,
+     "bias_f": 0.1,
+     "within_2f_pct": 100
+    }
+   },
+   "corrected": {
+    "all": null,
+    "day": null,
+    "night": null
+   },
+   "wind_mae_mph": 5.6
+  },
+  "sausalito": {
+   "name": "Marin City",
+   "station": "KCASAUSA88",
+   "hours": 1,
+   "first": "2026-11-20T04:45:00+00:00",
+   "last": "2026-11-20T04:45:00+00:00",
+   "raw": {
+    "all": {
+     "n": 1,
+     "mae_f": 0.3,
+     "bias_f": -0.3,
+     "within_2f_pct": 100
+    },
+    "day": null,
+    "night": {
+     "n": 1,
+     "mae_f": 0.3,
+     "bias_f": -0.3,
+     "within_2f_pct": 100
+    }
+   },
+   "corrected": {
+    "all": null,
+    "day": null,
+    "night": null
+   },
+   "wind_mae_mph": 1.8
+  }
+ }
+}
