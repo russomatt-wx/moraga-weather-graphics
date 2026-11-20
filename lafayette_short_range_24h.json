@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-20T19:59:36.273392+00:00",
+  "generated_utc": "2026-11-20T20:00:52.812841+00:00",
   "location": "lafayette",
   "latitude": 37.89,
   "longitude": -122.115,
@@ -12,7 +12,6 @@
   "failed_sources": {},
   "hourly": {
     "time": [
-      "2026-11-20T11:00",
       "2026-11-20T12:00",
       "2026-11-20T13:00",
       "2026-11-20T14:00",
@@ -35,10 +34,10 @@
       "2026-11-21T07:00",
       "2026-11-21T08:00",
       "2026-11-21T09:00",
-      "2026-11-21T10:00"
+      "2026-11-21T10:00",
+      "2026-11-21T11:00"
     ],
     "temperature_2m": [
-      52.235,
       51.995,
       52.005,
       52.16,
@@ -61,12 +60,13 @@
       39.845,
       41.635,
       45.425,
-      48.44
+      48.44,
+      50.31
     ],
     "precipitation": [
-      0.005,
       0.003,
       0.002,
+      0.0,
       0.0,
       0.0,
       0.0,
@@ -90,7 +90,6 @@
       0.0
     ],
     "precipitation_probability": [
-      36.467,
       33.733,
       27.867,
       19.267,
@@ -113,12 +112,12 @@
       0.0,
       0.0,
       0.533,
+      0.533,
       0.533
     ],
     "weather_code": [
       2,
       2,
-      2,
       1,
       1,
       1,
@@ -137,13 +136,13 @@
       2,
       2,
       2,
+      3,
       3,
       3,
       3
     ],
     "cloud_cover": [
-      60.0,
-      58.2,
+      59.2,
       54.8,
       42.7,
       30.4,
@@ -165,7 +164,8 @@
       64.4,
       82.8,
       89.1,
-      97.7
+      98.3,
+      99.1
     ]
   },
   "method": "Weighted HRRR/RRFS/ECMWF/GFS blend. Sky icon from 3-hour smoothed blended cloud cover; rain icon from blended rain chance; thunder/fog only when a weighted majority of models agree."
