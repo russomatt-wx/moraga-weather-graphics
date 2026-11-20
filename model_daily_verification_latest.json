@@ -1,21 +1,21 @@
 {
-  "generated_utc": "2026-11-20T02:37:11.295626+00:00",
+  "generated_utc": "2026-11-20T12:12:38.958136+00:00",
   "status": "verified_daily_extremes",
   "station": "KCAMORAG71",
   "model_scores": {
     "gfs": {
-      "verified_days": 31,
-      "high_mae_f": 4.57,
-      "low_mae_f": 7.24,
-      "high_bias_f": 0.2,
-      "low_bias_f": 6.97
+      "verified_days": 32,
+      "high_mae_f": 4.47,
+      "low_mae_f": 7.11,
+      "high_bias_f": 0.15,
+      "low_bias_f": 6.85
     },
     "ecmwf": {
-      "verified_days": 31,
-      "high_mae_f": 4.49,
-      "low_mae_f": 4.0,
-      "high_bias_f": -2.3,
-      "low_bias_f": 2.44
+      "verified_days": 32,
+      "high_mae_f": 4.4,
+      "low_mae_f": 3.88,
+      "high_bias_f": -2.19,
+      "low_bias_f": 2.36
     },
     "nam": {
       "verified_days": 16,
@@ -25,37 +25,37 @@
       "low_bias_f": 5.98
     },
     "icon": {
-      "verified_days": 31,
-      "high_mae_f": 5.26,
-      "low_mae_f": 4.19,
-      "high_bias_f": -2.23,
-      "low_bias_f": 3.29
+      "verified_days": 32,
+      "high_mae_f": 5.19,
+      "low_mae_f": 4.08,
+      "high_bias_f": -2.26,
+      "low_bias_f": 3.21
     },
     "gem": {
-      "verified_days": 31,
+      "verified_days": 32,
       "high_mae_f": 5.65,
-      "low_mae_f": 3.32,
-      "high_bias_f": -5.2,
-      "low_bias_f": 0.76
+      "low_mae_f": 3.4,
+      "high_bias_f": -5.21,
+      "low_bias_f": 0.56
     }
   },
   "calibration": {
     "gfs": {
       "high": {
         "factor": 0.0,
-        "verified_days": 31,
-        "holdout_days": 24,
-        "raw_holdout_mae_f": 5.24,
-        "selected_holdout_mae_f": 5.24,
+        "verified_days": 32,
+        "holdout_days": 25,
+        "raw_holdout_mae_f": 5.086,
+        "selected_holdout_mae_f": 5.086,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       },
       "low": {
         "factor": 1.25,
-        "verified_days": 31,
-        "holdout_days": 24,
-        "raw_holdout_mae_f": 7.513,
-        "selected_holdout_mae_f": 3.28,
+        "verified_days": 32,
+        "holdout_days": 25,
+        "raw_holdout_mae_f": 7.341,
+        "selected_holdout_mae_f": 3.369,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       }
@@ -63,19 +63,19 @@
     "ecmwf": {
       "high": {
         "factor": 0.75,
-        "verified_days": 31,
-        "holdout_days": 24,
-        "raw_holdout_mae_f": 4.678,
-        "selected_holdout_mae_f": 4.186,
+        "verified_days": 32,
+        "holdout_days": 25,
+        "raw_holdout_mae_f": 4.55,
+        "selected_holdout_mae_f": 4.147,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       },
       "low": {
         "factor": 1.25,
-        "verified_days": 31,
-        "holdout_days": 24,
-        "raw_holdout_mae_f": 4.393,
-        "selected_holdout_mae_f": 3.53,
+        "verified_days": 32,
+        "holdout_days": 25,
+        "raw_holdout_mae_f": 4.226,
+        "selected_holdout_mae_f": 3.52,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       }
@@ -103,19 +103,19 @@
     "icon": {
       "high": {
         "factor": 1.25,
-        "verified_days": 31,
-        "holdout_days": 24,
-        "raw_holdout_mae_f": 5.645,
-        "selected_holdout_mae_f": 4.98,
+        "verified_days": 32,
+        "holdout_days": 25,
+        "raw_holdout_mae_f": 5.54,
+        "selected_holdout_mae_f": 4.789,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       },
       "low": {
         "factor": 1.25,
-        "verified_days": 31,
-        "holdout_days": 24,
-        "raw_holdout_mae_f": 4.487,
-        "selected_holdout_mae_f": 3.382,
+        "verified_days": 32,
+        "holdout_days": 25,
+        "raw_holdout_mae_f": 4.334,
+        "selected_holdout_mae_f": 3.384,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       }
@@ -123,19 +123,19 @@
     "gem": {
       "high": {
         "factor": 1.0,
-        "verified_days": 31,
-        "holdout_days": 24,
-        "raw_holdout_mae_f": 5.941,
-        "selected_holdout_mae_f": 2.915,
+        "verified_days": 32,
+        "holdout_days": 25,
+        "raw_holdout_mae_f": 5.932,
+        "selected_holdout_mae_f": 2.82,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       },
       "low": {
         "factor": 0.0,
-        "verified_days": 31,
-        "holdout_days": 24,
-        "raw_holdout_mae_f": 3.582,
-        "selected_holdout_mae_f": 3.582,
+        "verified_days": 32,
+        "holdout_days": 25,
+        "raw_holdout_mae_f": 3.67,
+        "selected_holdout_mae_f": 3.67,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       }
@@ -1543,6 +1543,46 @@
       "high_error_f": 1.14,
       "low_error_f": -2.5,
       "observation_count": 1388
+    },
+    {
+      "model": "gfs",
+      "valid_local_date": "2026-11-19",
+      "issued_utc": "2026-11-14T10:15:57.499955+00:00",
+      "observed_high_f": 55.0,
+      "observed_low_f": 45.0,
+      "high_error_f": -1.4,
+      "low_error_f": 3.2,
+      "observation_count": 1366
+    },
+    {
+      "model": "ecmwf",
+      "valid_local_date": "2026-11-19",
+      "issued_utc": "2026-11-14T10:15:57.841354+00:00",
+      "observed_high_f": 55.0,
+      "observed_low_f": 45.0,
+      "high_error_f": 1.48,
+      "low_error_f": -0.22,
+      "observation_count": 1366
+    },
+    {
+      "model": "icon",
+      "valid_local_date": "2026-11-19",
+      "issued_utc": "2026-11-14T10:15:58.387887+00:00",
+      "observed_high_f": 55.0,
+      "observed_low_f": 45.0,
+      "high_error_f": -3.02,
+      "low_error_f": 0.68,
+      "observation_count": 1366
+    },
+    {
+      "model": "gem",
+      "valid_local_date": "2026-11-19",
+      "issued_utc": "2026-11-14T10:15:58.482846+00:00",
+      "observed_high_f": 55.0,
+      "observed_low_f": 45.0,
+      "high_error_f": -5.72,
+      "low_error_f": -5.8,
+      "observation_count": 1366
     }
   ]
 }
