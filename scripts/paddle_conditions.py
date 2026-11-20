@@ -131,6 +131,8 @@ def current_series(sid, cbin, now):
             ebb_dir = ebb_dir if ebb_dir is not None else float(r.get("meanEbbDir"))
         except (TypeError, ValueError):
             pass
+    if len(series) < 48:  # subordinate stations answer 'hourly' with just their event times
+        series = {}
     if not series and len(ev) >= 2:
         # Subordinate stations publish only slack / max times: fill each hour with a cosine curve
         # between consecutive events (the standard rule-of-thumb shape of a tidal current).
