@@ -1001,3 +1001,4 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .pad-alert-row .dwl-alert-chev { font-size: 15px; }
 .pad-alert-row .dwl-alert-body { padding: 0 12px 10px 48px; font-size: 13px; }
 @media (max-width: 480px) { .pad-alert-row .dwl-alert-body { padding-left: 12px; } }
+.pad-water-src { margin: 4px 0 0; font-size: 12.5px; color: var(--muted); }

@@ -91,6 +91,7 @@
       (nAlerts.length ? '<p class="pad-brief-alert ' + level(nAlerts[0]) + '">⚠ ' + esc(nAlerts.join(' · ')) + '</p>' : '') + '</div>' +
       '<div class="pad-rate"><span class="pad-pill r' + c.rating + '">' + LABEL[c.rating] + '</span><small>' + esc(c.why) + '</small></div></header><div class="pad-stats">' + stats + '</div><span class="pad-more">' + SVG(WAVE_P) + '<span class="pad-more-open">Tides &amp; 3-day forecast</span><span class="pad-more-close">Hide details</span><i aria-hidden="true">⌄</i></span></summary>' +
       '<div class="pad-body"><p class="pad-kind">' + (spot.kind === 'coast' ? 'Open coast' : 'Protected water') + '</p>' +
+      (spot.water_src ? '<p class="pad-water-src">Water temperature: ' + esc(spot.water_src.name) + (spot.water_src.miles != null ? ', ' + spot.water_src.miles + ' mi away' : '') + (spot.water_src.observed ? ' · read ' + clock(parse(spot.water_src.observed)) : '') + '</p>' : '') +
       (alerts ? '<div class="pad-alerts">' + alerts + '</div>' : '') +
       (tides ? '<h4 class="pad-sub-h">Tides</h4><div class="pad-tides">' + tides + '</div>' : '') +
       '<h4 class="pad-sub-h">Next 3 days <span>tap a block</span></h4>' + timeline(spot, now) +

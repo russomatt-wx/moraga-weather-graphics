@@ -36,6 +36,48 @@ SPOTS = [
 ]
 
 
+# NOAA CO-OPS gauges around the Bay (name, lat, lon). Not all carry a water-temperature sensor and
+# sensors go offline; the job checks them all every hour and uses whichever are reporting.
+WATER_GAUGES = {
+    "9414290": ("San Francisco (Fort Point)", 37.8063, -122.4659),
+    "9414305": ("San Francisco North Point Pier", 37.8104, -122.4126),
+    "9414317": ("San Francisco Pier 22½", 37.7899, -122.3870),
+    "9414806": ("Sausalito", 37.8467, -122.4767),
+    "9414819": ("Sausalito Coast Guard", 37.8603, -122.4817),
+    "9414863": ("Richmond", 37.9283, -122.4000),
+    "9414816": ("Berkeley", 37.8650, -122.3070),
+    "9414764": ("Oakland Inner Harbor", 37.7950, -122.2820),
+    "9414750": ("Alameda", 37.7717, -122.3000),
+    "9414392": ("Oyster Point", 37.6650, -122.3770),
+    "9414688": ("San Leandro Marina", 37.6950, -122.1920),
+    "9414523": ("Redwood City", 37.5067, -122.2117),
+    "9414131": ("Pillar Point Harbor", 37.5025, -122.4822),
+    "9415020": ("Point Reyes", 37.9961, -122.9767),
+}
+
+
+def km(lat1, lon1, lat2, lon2):
+    from math import radians, sin, cos, asin, sqrt
+    p1, p2, dl, dp = radians(lat1), radians(lat2), radians(lon2 - lon1), radians(lat2 - lat1)
+    return 6371 * 2 * asin(sqrt(sin(dp / 2) ** 2 + cos(p1) * cos(p2) * sin(dl / 2) ** 2))
+
+
+def nearest_water(water, lat, lon, exclude=("9415020",)):
+    """Closest reporting bay gauge -> (temp F, source dict) or (None, None)."""
+    best = None
+    for st, w in water.items():
+        if st in exclude:
+            continue
+        name, glat, glon = WATER_GAUGES[st]
+        d = km(lat, lon, glat, glon)
+        if best is None or d < best[0]:
+            best = (d, st, name, w)
+    if not best or best[0] > 16:  # nothing within 10 miles: use a buoy instead
+        return None, None
+    d, st, name, w = best
+    return w["f"], {"name": "NOAA " + name + " gauge", "station": st, "miles": round(d * 0.621, 1), "observed": w["t"]}
+
+
 def get(url, params, tries=4, headers=None):
     for k in range(tries):
         try:
@@ -143,15 +185,23 @@ def main():
         tides[st] = [{"t": p["t"], "type": "High" if p["type"] == "H" else "Low", "ft": round(float(p["v"]), 1)}
                      for p in (d or {}).get("predictions", [])]
         print("tides", st, len(tides[st]))
+    # Bay water temperature: every NOAA gauge around the Bay that may carry a water sensor. Each
+    # bay spot uses the nearest one with a reading from the last 3 hours (see nearest_water below).
     water = {}
-    for st in ("9414290", "9414750", "9414131"):
+    for st, (wname, wlat, wlon) in WATER_GAUGES.items():
         d = get("https://api.tidesandcurrents.noaa.gov/api/prod/datagetter", {
             "product": "water_temperature", "station": st, "date": "latest", "units": "english",
-            "time_zone": "lst_ldt", "format": "json", "application": "DiabloWeatherLab"})
+            "time_zone": "lst_ldt", "format": "json", "application": "DiabloWeatherLab"}, tries=2)
         try:
-            water[st] = round(float(d["data"][-1]["v"]))
+            row = d["data"][-1]
+            when = datetime.strptime(row["t"], "%Y-%m-%d %H:%M").replace(tzinfo=TZ)
+            v = float(row["v"])
+            if now - when <= timedelta(hours=3) and 35 < v < 85:
+                water[st] = {"f": round(v), "t": row["t"]}
         except Exception:
             pass
+    print("water gauges reporting:", {k: (WATER_GAUGES[k][0], v["f"]) for k, v in water.items()},
+          "| silent:", [WATER_GAUGES[k][0] for k in WATER_GAUGES if k not in water])
     # Open-coast water temperature from NDBC buoys (model SST runs warm near shore).
     buoy = {}
     for b in ("46026", "46237", "46012"):
@@ -221,15 +271,24 @@ def main():
         blocks = [at(i) for i in range(start, min(len(times), start + 72), 3)]
         next_tides = [x for x in tides.get(tide_st, []) if x["t"] >= now.strftime("%Y-%m-%d %H:%M")][:4]
         if kind == "coast":
-            water_f = buoy.get("46012" if lat < 37.7 else "46026") or buoy.get("46237") or water.get(tide_st) or cur["sst_f"]
+            bid = "46012" if lat < 37.7 else "46026"
+            if buoy.get(bid):
+                water_f, water_src = buoy[bid], {"name": "NOAA buoy " + bid + " (offshore)", "station": bid}
+            elif buoy.get("46237"):
+                water_f, water_src = buoy["46237"], {"name": "NOAA buoy 46237 (San Francisco Bar)", "station": "46237"}
+            else:
+                water_f, water_src = cur["sst_f"], {"name": "forecast model (no buoy reading)"}
         else:
-            water_f = water.get(tide_st) or water.get("9414750") or water.get("9414290") or buoy.get("46237") or cur["sst_f"]
+            water_f, water_src = nearest_water(water, lat, lon)
+            if water_f is None:
+                bid = "46012" if lat < 37.7 else "46237"
+                water_f, water_src = (buoy[bid], {"name": "NOAA buoy " + bid + (" (Half Moon Bay)" if bid == "46012" else " (San Francisco Bar)"), "station": bid}) if buoy.get(bid) else (cur["sst_f"], {"name": "forecast model (no gauge reading)"})
         # Best upcoming window: first daylight block rated go (7 AM - 5 PM).
         best = next((b for b in blocks if b["rating"] == 0 and 7 <= int(b["time"][11:13]) <= 17), None)
         spots.append({"id": sid, "name": name, "city": city, "area": area, "kind": kind, "lat": lat, "lon": lon, "now": cur,
-                      "blocks": blocks, "tides": next_tides, "tide_station": tide_st, "water_f": water_f,
+                      "blocks": blocks, "tides": next_tides, "tide_station": tide_st, "water_f": water_f, "water_src": water_src,
                       "alerts": alerts, "alert_details": details, "best": best["time"] if best else None})
-        print(name, cur["rating"], cur["why"], cur["wind"], cur["gust"], cur["wave_ft"], len(next_tides), alerts)
+        print(name, cur["rating"], cur["why"], cur["wind"], cur["gust"], cur["wave_ft"], len(next_tides), alerts, "| water", water_f, water_src)
     OUT.write_text(json.dumps({"generated_utc": datetime.now(timezone.utc).isoformat(), "spots": spots,
                                "sources": "Open-Meteo forecast + marine, NOAA CO-OPS tides and water temperature, NWS alerts"}, indent=1) + "\n")
 
