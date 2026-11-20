@@ -987,3 +987,17 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
   .pad-alertbar > summary { flex-wrap: wrap; row-gap: 2px; }
   .pad-alertbar-list { display: block !important; order: 3; flex-basis: 100%; padding: 0 0 0 34px; border-left: 0; white-space: normal; }
 }
+/* Marine alerts: each advisory kept, as a compact two-line row */
+.pad-alertlist { display: grid; gap: 6px; }
+.pad-alert-row { border-radius: 12px; border-width: 1.2px; }
+.pad-alert-row summary { padding: 7px 12px !important; gap: 10px !important; }
+.pad-alert-row .dwl-alert-badge { width: 26px; height: 26px; }
+.pad-alert-row .dwl-alert-badge svg { width: 15px; height: 15px; }
+.pad-alert-row .dwl-alert-main { display: grid; grid-template-columns: auto 1fr; column-gap: 8px; align-items: baseline; }
+.pad-alert-row .dwl-alert-eyebrow { display: none; }
+.pad-alert-row .dwl-alert-title { font-size: 15px !important; white-space: nowrap; }
+.pad-alert-row .dwl-alert-when { font-size: 12px; text-align: right; white-space: nowrap; }
+.pad-alert-row .pad-alert-spots { grid-column: 1 / -1; margin-top: 1px; font-size: 12px; font-weight: 500; color: var(--text-2); opacity: 1; }
+.pad-alert-row .dwl-alert-chev { font-size: 15px; }
+.pad-alert-row .dwl-alert-body { padding: 0 12px 10px 48px; font-size: 13px; }
+@media (max-width: 480px) { .pad-alert-row .dwl-alert-body { padding-left: 12px; } }

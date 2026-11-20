@@ -121,16 +121,16 @@
     const kind = warn ? 'Warning' : items.every((a) => /advisory/i.test(a.event)) ? 'Advisor' : 'Alert';
     const head = items.length + ' Active ' + (kind === 'Advisor' ? (items.length === 1 ? 'Advisory' : 'Advisories') : kind + (items.length === 1 ? '' : 's'));
     const now = Date.now();
-    return '<details class="pad-alertbar' + (warn ? ' is-warning' : '') + '"' + (alertsOpen ? ' open' : '') + '><summary><span class="pad-alertbar-ic">' + ICON + '</span><b>' + head + '</b><span class="pad-alertbar-list">' + esc(items.map((a) => short(a.event)).join(' · ')) + '</span><i aria-hidden="true">⌄</i></summary><div class="pad-alertbar-body">' + items.map((a) => {
+    return '<div class="pad-alertlist">' + items.map((a) => {
       const upcoming = a.onset && Date.parse(a.onset) > now;
       const t = upcoming ? 'Starts ' + when(a.onset) + (a.ends ? ' · until ' + when(a.ends) : '') : a.ends ? 'Until ' + when(a.ends) : 'In effect';
       const text = String(a.description || a.headline || '').replace(/\n(?!\n)/g, ' ').replace(/\n{2,}/g, '\n').replace(/^ *\* ?([A-Z][A-Z ]+?)\.\.\./gm, (m, k) => k[0] + k.slice(1).toLowerCase() + ': ').trim();
-      return '<details class="dwl-alert is-' + level(a.event) + '"><summary><span class="dwl-alert-badge" aria-hidden="true">' + ICON + '</span>' +
+      return '<details class="dwl-alert pad-alert-row is-' + level(a.event) + '"><summary><span class="dwl-alert-badge" aria-hidden="true">' + ICON + '</span>' +
         '<span class="dwl-alert-main"><span class="dwl-alert-eyebrow">NWS ' + level(a.event) + (upcoming ? ' · Upcoming' : '') + '</span>' +
         '<span class="dwl-alert-title">' + esc(a.event) + '</span><span class="dwl-alert-when">' + esc(t) + '</span>' +
         '<span class="pad-alert-spots">' + esc(a.spots.join(' · ')) + '</span></span><span class="dwl-alert-chev" aria-hidden="true">⌄</span></summary>' +
         (text ? '<div class="dwl-alert-body"><p>' + esc(text) + '</p></div>' : '') + '</details>';
-    }).join('') + '</div></details>';
+    }).join('') + '</div>';
   }
 
   let data = null, area = '';
