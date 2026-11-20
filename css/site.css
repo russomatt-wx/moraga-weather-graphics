@@ -923,3 +923,6 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 /* Humidity / Wind lines match the Dew point / Pressure / Wind gust values */
 #public-shell .dwl-cc-details { font-size: clamp(16px, 4.3vw, 19px); gap: 4px; }
 #public-shell .dwl-cc-details b { font-weight: 650; color: #edf7ff; }
+/* Grey "Humidity" / "Wind" words match the grey Dew point / Pressure / Wind gust labels; values stay large */
+#public-shell .dwl-cc-details { font-size: 13px; color: #a6bdcf; }
+#public-shell .dwl-cc-details b { font-size: clamp(16px, 4.3vw, 19px); margin-left: 3px; }
