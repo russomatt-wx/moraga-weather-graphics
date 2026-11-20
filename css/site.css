@@ -920,3 +920,6 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 #public-shell .dwl-cc-today { margin: 0 0 2px; }
 #public-shell .dwl-cc-today span { font-size: 15px; }
 #public-shell .dwl-cc-today strong { font-size: clamp(22px, 6.4vw, 28px); }
+/* Humidity / Wind lines match the Dew point / Pressure / Wind gust values */
+#public-shell .dwl-cc-details { font-size: clamp(16px, 4.3vw, 19px); gap: 4px; }
+#public-shell .dwl-cc-details b { font-weight: 650; color: #edf7ff; }
