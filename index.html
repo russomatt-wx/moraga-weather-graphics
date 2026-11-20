@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=24"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=24"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=24">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261121d">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261121f">
 
 
 
@@ -30,7 +30,7 @@
   <div class="dwl-cc-today"><div><span>High</span><strong id="public-today-high">—</strong></div><div><span>Low</span><strong id="public-today-low">—</strong></div><div><span>Rainfall</span><strong id="public-rain">—</strong></div></div>
   <div class="public-note" id="public-summary" hidden></div>
   <div class="public-heading" id="public-city-heading" hidden>Moraga</div><div class="public-sub" id="public-location-sub" hidden></div><div id="public-high-low" hidden>— / —</div>
- </div><div class="dwl-alert-bar"><div id="public-alerts" aria-live="polite"></div><div id="public-push"></div></div>
+ </div><div id="estimate-test" class="est-test" hidden></div><div class="dwl-alert-bar"><div id="public-alerts" aria-live="polite"></div><div id="public-push"></div></div>
  <div class="dwl-title"><h2>Daily Outlook</h2><p id="public-days-updated"></p></div><div class="public-days" id="public-days" aria-live="polite"></div><div class="dwl-title"><h2>Next 24 Hours</h2><p id="public-short-range-source" aria-live="polite"></p></div><div class="public-hourly" id="public-hourly" aria-live="polite"></div><div class="dwl-title dwl-title-discussion"><h2>Discussion</h2></div><section class="public-outlook" aria-label="Weather outlook"><div class="public-outlook-title">Weather Outlook <span>What's ahead</span></div><div class="public-outlook-headline" id="public-outlook-headline"></div><p id="public-discussion" aria-live="polite">Loading the local outlook…</p><div class="public-outlook-source" id="public-outlook-source"></div></section><div class="public-status" id="public-station-status">Checking nearby public weather observations…</div><div class="public-notice" id="public-data-notice"></div>
  <div style="margin-top:22px"><button id="public-more-details">View full forecast and technical charts ↗</button></div>
  </div><button id="observatory-return">← Simple forecast</button>
@@ -2081,6 +2081,32 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
 (function(){
  const sec=document.querySelector('#public-shell .public-outlook'),btn=document.getElementById('public-outlook-more');if(!sec||!btn)return;
  btn.addEventListener('click',()=>{const open=sec.classList.toggle('is-clamped')===false;btn.setAttribute('aria-expanded',String(open));btn.textContent=open?'Show less ▴':'Read more ▾';});
+})();
+</script><script>
+// Estimate test (opt-in: open the site once with ?estimate=1; ?estimate=0 turns it off).
+// Shows NOAA's bias-corrected current-conditions estimate next to the station reading.
+(function(){
+ try{const q=new URLSearchParams(location.search).get('estimate');if(q==='1')localStorage.setItem('dwl-estimate-test','1');if(q==='0')localStorage.removeItem('dwl-estimate-test');}catch(e){}
+ let on=false;try{on=localStorage.getItem('dwl-estimate-test')==='1'}catch(e){}
+ if(!on)return;
+ const KEY={Moraga:'moraga',Lafayette:'lafayette',Danville:'danville',Greenbrook:'greenbrook',Brentwood:'brentwood',Sacramento:'sacramento',Sausalito:'sausalito'};
+ const box=document.getElementById('estimate-test');let data=null;
+ const deg=v=>Number.isFinite(v)?Math.round(v*10)/10+'°':'—';
+ function cityNow(){const t=(document.getElementById('loc-current')?.textContent||'');for(const [c,k] of Object.entries({Moraga:'Moraga',Lafayette:'Lafayette',Danville:'Sycamore',Greenbrook:'Greenbrook',Brentwood:'Brentwood',Sacramento:'Sacramento',Sausalito:'Marin'}))if(t.includes(k))return c;return 'Moraga'}
+ function render(){
+  if(!data)return;const c=cityNow(),e=data.towns?.[KEY[c]];if(!e){box.hidden=true;return}
+  const st=parseFloat((document.getElementById('public-current-temp')?.textContent||'').replace(/[^\d.\-]/g,''));
+  const est=Number.isFinite(e.corrected_f)?e.corrected_f:e.estimate_f;
+  const diff=Number.isFinite(st)&&Number.isFinite(est)?est-st:NaN;
+  const when=new Date(e.valid_utc).toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'});
+  box.hidden=false;
+  box.innerHTML='<div class="est-h"><b>Estimate test</b><span>NOAA RTMA · '+when+' · '+e.regime+'</span></div>'+
+   '<div class="est-row"><div><span>Station</span><b>'+deg(st)+'</b></div><div><span>Corrected estimate</span><b>'+deg(e.corrected_f)+'</b></div><div><span>Raw estimate</span><b>'+deg(e.estimate_f)+'</b></div><div><span>Difference</span><b class="'+(Math.abs(diff)<=2?'ok':'off')+'">'+(Number.isFinite(diff)?(diff>0?'+':'')+diff.toFixed(1)+'°':'—')+'</b></div></div>'+
+   '<p class="est-note">'+(Number.isFinite(e.corrected_f)?'Learned correction '+(e.correction_f>0?'+':'')+e.correction_f+'° from '+e.training_hours+' past hours in the same situation.':'Still learning ('+e.training_hours+' of 6 hours in this situation).')+' Estimated humidity '+e.humidity_pct+'%, wind '+Math.round(e.wind_mph)+' mph.</p>';
+ }
+ async function load(){try{const r=await fetch('nowcast_current.json?t='+Date.now(),{cache:'no-store'});if(r.ok){data=await r.json();render()}}catch(e){}}
+ load();setInterval(load,10*60000);
+ new MutationObserver(render).observe(document.getElementById('public-current-temp'),{childList:true,characterData:true,subtree:true});
 })();
 </script><script>
 // Self-update: if a newer version of the site has been published (its stylesheet/script versions differ
