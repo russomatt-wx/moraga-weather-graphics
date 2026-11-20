@@ -14,6 +14,7 @@
   const STAT_ICON = {
     'Wind mph': SVG('<path d="M3 8h10a2.6 2.6 0 1 0-2.6-2.6M3 12.5h15a2.6 2.6 0 1 1-2.6 2.6M3 17h7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>'),
     'Waves': SVG(WAVE_P), 'Chop (est.)': SVG(WAVE_P),
+    'Current kt': SVG('<path d="M3 9h13M12 5l4 4-4 4M21 15H8M12 11l-4 4 4 4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>'),
     'Water': SVG('<path d="M10 4.5a2 2 0 0 1 4 0v9a4 4 0 1 1-4 0Z" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12 9v7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>'),
     'Rain': SVG('<path d="M12 3.5c3.3 4.2 5.5 7.3 5.5 10a5.5 5.5 0 0 1-11 0c0-2.7 2.2-5.8 5.5-10Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>'),
   };
@@ -38,6 +39,8 @@
   const rainTxt = (b) => b.thunder ? '⚡ Storms' : (b.rain_pct != null && b.rain_pct >= 20 ? '💧 ' + Math.round(b.rain_pct / 10) * 10 + '%' : null);
   // Estimated wind chop for protected water (rounded to the half foot).
   const chopTxt = (b) => b.chop_ft == null ? (b.wind != null ? 'Calm' : '—') : b.chop_ft < .5 ? 'Under ½ ft' : '~' + (Math.round(b.chop_ft * 2) / 2) + ' ft';
+  // Tidal current: + flood, - ebb (knots). Under 0.3 kt reads as slack.
+  const currentTxt = (b) => b.current_kt == null ? null : Math.abs(b.current_kt) < 0.3 ? 'Slack' : (b.current_kt > 0 ? 'Flood ' : 'Ebb ') + Math.abs(b.current_kt).toFixed(1);
   const wind = (b) => (b.dir ? b.dir + ' ' : '') + (b.gust > b.wind + 2 ? b.wind + '–' + b.gust : b.wind) + ' mph';
   const waves = (b) => b.wave_ft == null ? null : b.wave_ft + ' ft' + (b.period_s ? ' @ ' + b.period_s + 's' : '') + (b.swell_dir ? ' ' + b.swell_dir : '');
 
@@ -69,7 +72,7 @@
       '<div class="pad-day"><div class="pad-day-name">' + esc(dayName(g.d, now)) + '</div><div class="pad-cells">' +
       g.items.map((b) => {
         const d = parse(b.time);
-        return '<button type="button" style="grid-column:' + (Math.floor(d.getHours() / 3) + 1) + '" class="pad-cell r' + b.rating + '" data-detail="' + esc(dayName(d, now) + ' ' + clock(d) + ': ' + LABEL[b.rating] + ' · ' + b.why + ' · ' + wind(b) + (waves(b) ? ' · ' + waves(b) : '') + (b.chop_ft != null ? ' · chop ' + chopTxt(b) : '') + (rainTxt(b) ? ' · ' + rainTxt(b) : '')) + '" aria-label="' + esc(clock(d) + ' ' + LABEL[b.rating]) + '"><span>' + hour(d) + '</span></button>';
+        return '<button type="button" style="grid-column:' + (Math.floor(d.getHours() / 3) + 1) + '" class="pad-cell r' + b.rating + '" data-detail="' + esc(dayName(d, now) + ' ' + clock(d) + ': ' + LABEL[b.rating] + ' · ' + b.why + ' · ' + wind(b) + (waves(b) ? ' · ' + waves(b) : '') + (currentTxt(b) ? ' · current ' + currentTxt(b) + (currentTxt(b) === 'Slack' ? '' : ' kt') : b.chop_ft != null ? ' · chop ' + chopTxt(b) : '') + (rainTxt(b) ? ' · ' + rainTxt(b) : '')) + '" aria-label="' + esc(clock(d) + ' ' + LABEL[b.rating]) + '"><span>' + hour(d) + '</span></button>';
       }).join('') + '</div></div>').join('') + '</div>';
   }
 
@@ -77,13 +80,18 @@
     const c = current(spot, now);
     const tides = (spot.tides || []).filter((t) => parse(t.t) >= now).slice(0, 4)
       .map((t) => { const d = parse(t.t); return '<div class="pad-tide ' + (t.type === 'High' ? 'hi' : 'lo') + '"><span>' + (t.type === 'High' ? '▲ High' : '▼ Low') + '</span><b>' + clock(d) + '</b><small>' + (dayName(d, now) === 'Today' ? '' : d.toLocaleDateString('en-US', { weekday: 'short' }) + ' · ') + t.ft + ' ft</small></div>'; }).join('');
+    const curEv = (spot.current_events || []).filter((e) => parse(e.t) >= now).slice(0, 4).map((e) => {
+      const d = parse(e.t), slack = /slack/i.test(e.type) || Math.abs(e.kt) < 0.2;
+      const label = slack ? '◦ Slack' : (e.kt > 0 ? '→ Flood' : '← Ebb');
+      return '<div class="pad-tide ' + (slack ? 'lo' : 'hi') + '"><span>' + label + '</span><b>' + clock(d) + '</b><small>' + (dayName(d, now) === 'Today' ? '' : d.toLocaleDateString('en-US', { weekday: 'short' }) + ' · ') + (slack ? 'turning' : Math.abs(e.kt).toFixed(1) + ' kt') + '</small></div>';
+    }).join('');
     const stats = [
       ['Wind mph', (c.dir ? c.dir + ' ' : '') + (c.gust > c.wind + 2 ? c.wind + '–' + c.gust : c.wind)],
       spot.kind === 'coast' ? ['Waves', c.wave_ft == null ? '—' : c.wave_ft + ' ft' + (c.period_s ? ' · ' + c.period_s + 's' : '')] : null,
-      spot.kind === 'coast' ? null : ['Chop (est.)', chopTxt(c)],
+      spot.kind === 'coast' ? null : (spot.current_src && c.current_kt != null ? ['Current kt', currentTxt(c)] : ['Chop (est.)', chopTxt(c)]),
       ['Water', spot.water_f != null ? spot.water_f + '°' : '—'],
       ['Rain', c.thunder ? 'Storms' : c.rain_pct != null ? Math.round(c.rain_pct / 10) * 10 + '%' : '—'],
-    ].filter(Boolean).map(([k, v]) => '<div><span>' + (STAT_ICON[k] || '') + k.replace(' mph', ' <small>(mph)</small>').replace(' (est.)', ' <small>(est.)</small>') + '</span><b>' + esc(v) + '</b></div>').join('');
+    ].filter(Boolean).map(([k, v]) => '<div><span>' + (STAT_ICON[k] || '') + k.replace(' mph', ' <small>(mph)</small>').replace(' kt', ' <small>(kt)</small>').replace(' (est.)', ' <small>(est.)</small>') + '</span><b>' + esc(v) + '</b></div>').join('');
     const alerts = (spot.alerts || []).filter((x) => MARINE.test(x)).map((a) => '<span class="pad-alert ' + level(a) + '">⚠ ' + esc(a) + '</span>').join('');
     const nAlerts = (spot.alerts || []).filter((x) => MARINE.test(x));
     return '<details class="pad-card r' + c.rating + '" data-id="' + esc(spot.id) + '"' + (openCards.has(spot.id) ? ' open' : '') + '>' +
@@ -94,6 +102,7 @@
       (spot.water_src ? '<p class="pad-water-src">Water temperature: ' + esc(spot.water_src.name) + (spot.water_src.miles != null ? ', ' + spot.water_src.miles + ' mi away' : '') + (spot.water_src.observed ? ' · read ' + clock(parse(spot.water_src.observed)) : '') + '</p>' : '') +
       (alerts ? '<div class="pad-alerts">' + alerts + '</div>' : '') +
       (tides ? '<h4 class="pad-sub-h">Tides</h4><div class="pad-tides">' + tides + '</div>' : '') +
+      (curEv ? '<h4 class="pad-sub-h">Current <span>' + esc(spot.current_src.name) + ' · NOAA prediction</span></h4><div class="pad-tides pad-currents">' + curEv + '</div>' : '') +
       '<h4 class="pad-sub-h">Next 3 days <span>tap a block</span></h4>' + timeline(spot, now) +
       '<p class="pad-detail" aria-live="polite">' + esc(bestText(spot, now)) + '</p>' +
       '</div></details>';
