@@ -3,6 +3,13 @@
   'use strict';
   const AREAS = ['SF Coast', 'Marin', 'Peninsula Coast', 'SF Bay'];
   const LABEL = ['Go', 'Caution', 'No-go'];
+  // Round status symbol (styled like the alert badges): check = Go, ! = Caution, X = No-go.
+  const SYM = [
+    '<path d="M6.5 12.5l3.6 3.6 7.4-8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>',
+    '<path d="M12 6.5v7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="17.6" r="1.5" fill="currentColor"/>',
+    '<path d="M7.5 7.5l9 9M16.5 7.5l-9 9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>',
+  ];
+  const sym = (r) => '<span class="pad-sym r' + r + '" role="img" aria-label="' + LABEL[r] + '" title="' + LABEL[r] + '"><svg viewBox="0 0 24 24" aria-hidden="true">' + SYM[r] + '</svg></span>';
   // Alerts that matter on the water (a Flood Advisory for creeks does not).
   const MARINE = /craft|gale|storm|seas|surf|beach|rip current|coastal|tsunami|wind|marine|fog|sneaker/i;
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -74,7 +81,7 @@
     return '<details class="pad-card r' + c.rating + '" data-id="' + esc(spot.id) + '"' + (openCards.has(spot.id) ? ' open' : '') + '>' +
       '<summary><header><div><h3>' + esc(spot.city ? spot.name : spot.name.split(' · ').pop()) + '</h3><p class="pad-city">' + esc(spot.city || spot.name.split(' · ')[0]) + (c.air_f != null ? ' <span class="pad-temp-l">· ' + c.air_f + '° air</span>' : '') + '</p>' +
       (nAlerts.length ? '<p class="pad-brief-alert ' + level(nAlerts[0]) + '">⚠ ' + esc(nAlerts.join(' · ')) + '</p>' : '') + '</div>' +
-      '<div class="pad-rate"><span class="pad-badge r' + c.rating + '">' + LABEL[c.rating] + '</span><small>' + esc(c.why) + '</small></div></header><div class="pad-stats">' + stats + '</div><span class="pad-more"><span class="pad-more-open">Tides &amp; 3-day forecast</span><span class="pad-more-close">Hide details</span><i aria-hidden="true">⌄</i></span></summary>' +
+      '<div class="pad-rate">' + sym(c.rating) + '<small><b class="r' + c.rating + '">' + LABEL[c.rating] + '</b> · ' + esc(c.why) + '</small></div></header><div class="pad-stats">' + stats + '</div><span class="pad-more"><span class="pad-more-open">Tides &amp; 3-day forecast</span><span class="pad-more-close">Hide details</span><i aria-hidden="true">⌄</i></span></summary>' +
       '<div class="pad-body"><p class="pad-kind">' + (spot.kind === 'coast' ? 'Open coast' : 'Protected water') + '</p>' +
       (alerts ? '<div class="pad-alerts">' + alerts + '</div>' : '') +
       (tides ? '<h4 class="pad-sub-h">Tides</h4><div class="pad-tides">' + tides + '</div>' : '') +

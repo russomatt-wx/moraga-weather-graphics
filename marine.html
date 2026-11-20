@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Marine &amp; Surf | Diablo Weather Lab</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=24"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=24"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=24">
 <meta name="description" content="Marine and paddle conditions for SF Bay Area coast and bay spots: wind, waves, tides, water temperature and NWS marine alerts.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261120z">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261121a">
 
 
 
@@ -25,9 +25,9 @@
  <h1>Marine &amp; Surf</h1>
  <p class="pad-sub">Wind, waves, tides and marine alerts for Bay Area coast and bay spots. <span id="pad-updated"></span></p>
  <div class="pad-legend">
-  <div class="pad-key r0"><span class="pad-badge r0">Go</span><p>Wind &lt;12 mph<br>Surf &lt;3½ ft<br>Rain &lt;50%</p></div>
-  <div class="pad-key r1"><span class="pad-badge r1">Caution</span><p>Wind 12–17<br>Surf 3½–6 ft<br>Rain 50%+</p></div>
-  <div class="pad-key r2"><span class="pad-badge r2">No-go</span><p>Wind 17+ mph<br>Surf 6+ ft<br>Lightning</p></div>
+  <div class="pad-key r0"><div class="pad-key-h"><span class="pad-sym r0" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6.5 12.5l3.6 3.6 7.4-8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><b>Go</b></div><p>Wind &lt;12 mph<br>Surf &lt;3½ ft<br>Rain &lt;50%</p></div>
+  <div class="pad-key r1"><div class="pad-key-h"><span class="pad-sym r1" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 6.5v7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="17.6" r="1.5" fill="currentColor"/></svg></span><b>Caution</b></div><p>Wind 12–17<br>Surf 3½–6 ft<br>Rain 50%+</p></div>
+  <div class="pad-key r2"><div class="pad-key-h"><span class="pad-sym r2" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7.5 7.5l9 9M16.5 7.5l-9 9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></span><b>No-go</b></div><p>Wind 17+ mph<br>Surf 6+ ft<br>Lightning</p></div>
  </div>
  <div class="pad-filter" role="group" aria-label="Area"><button type="button" data-area="" aria-pressed="true">All</button><button type="button" data-area="SF Coast" aria-pressed="false">SF Coast</button><button type="button" data-area="Marin" aria-pressed="false">Marin</button><button type="button" data-area="Peninsula Coast" aria-pressed="false">Peninsula</button><button type="button" data-area="SF Bay" aria-pressed="false">SF Bay</button></div>
 </section>
@@ -43,7 +43,7 @@
  <p class="pad-src">Data: Open-Meteo wind and marine forecasts, NOAA CO-OPS tide predictions and water temperature, National Weather Service alerts. Updated hourly.</p>
 </section>
 </div>
-<script src="js/paddle.js?v=20261120c" defer></script>
+<script src="js/paddle.js?v=20261120d" defer></script>
 <script>
 // Self-update: if a newer version of the site has been published (its stylesheet/script versions differ
 // from this page's), reload once so phones never sit on a stale cached copy.
