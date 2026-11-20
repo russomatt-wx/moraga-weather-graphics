@@ -1,0 +1,97 @@
+{
+ "generated_utc": "2026-11-20T05:12:04.226748+00:00",
+ "source": "NOAA RTMA rapid update, bias-corrected per location",
+ "towns": {
+  "moraga": {
+   "name": "Moraga",
+   "valid_utc": "2026-11-20T04:45:00+00:00",
+   "estimate_f": 46.3,
+   "corrected_f": null,
+   "correction_f": null,
+   "training_hours": 0,
+   "humidity_pct": 87,
+   "wind_mph": 4.2,
+   "gust_mph": 7.2,
+   "cloud_pct": 12,
+   "regime": "night calm"
+  },
+  "lafayette": {
+   "name": "Lafayette",
+   "valid_utc": "2026-11-20T04:45:00+00:00",
+   "estimate_f": 49.1,
+   "corrected_f": null,
+   "correction_f": null,
+   "training_hours": 0,
+   "humidity_pct": 84,
+   "wind_mph": 6.2,
+   "gust_mph": 6.2,
+   "cloud_pct": 11,
+   "regime": "night breezy"
+  },
+  "danville": {
+   "name": "Sycamore Valley",
+   "valid_utc": "2026-11-20T04:45:00+00:00",
+   "estimate_f": 46.0,
+   "corrected_f": null,
+   "correction_f": null,
+   "training_hours": 0,
+   "humidity_pct": 89,
+   "wind_mph": 3.8,
+   "gust_mph": 3.8,
+   "cloud_pct": 9,
+   "regime": "night calm"
+  },
+  "greenbrook": {
+   "name": "Greenbrook",
+   "valid_utc": "2026-11-20T04:45:00+00:00",
+   "estimate_f": 46.3,
+   "corrected_f": null,
+   "correction_f": null,
+   "training_hours": 0,
+   "humidity_pct": 89,
+   "wind_mph": 1.9,
+   "gust_mph": 1.9,
+   "cloud_pct": 9,
+   "regime": "night calm"
+  },
+  "brentwood": {
+   "name": "Brentwood",
+   "valid_utc": "2026-11-20T04:45:00+00:00",
+   "estimate_f": 49.5,
+   "corrected_f": null,
+   "correction_f": null,
+   "training_hours": 0,
+   "humidity_pct": 84,
+   "wind_mph": 7.2,
+   "gust_mph": 11.1,
+   "cloud_pct": 4,
+   "regime": "night breezy"
+  },
+  "sacramento": {
+   "name": "East Sacramento",
+   "valid_utc": "2026-11-20T04:45:00+00:00",
+   "estimate_f": 47.6,
+   "corrected_f": null,
+   "correction_f": null,
+   "training_hours": 0,
+   "humidity_pct": 90,
+   "wind_mph": 5.6,
+   "gust_mph": 12.8,
+   "cloud_pct": 0,
+   "regime": "night calm"
+  },
+  "sausalito": {
+   "name": "Marin City",
+   "valid_utc": "2026-11-20T04:45:00+00:00",
+   "estimate_f": 50.4,
+   "corrected_f": null,
+   "correction_f": null,
+   "training_hours": 0,
+   "humidity_pct": 83,
+   "wind_mph": 3.8,
+   "gust_mph": 14.6,
+   "cloud_pct": 80,
+   "regime": "night calm"
+  }
+ }
+}
