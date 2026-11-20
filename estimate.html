@@ -32,12 +32,17 @@
 <h2 class="pad-sec-h">By location</h2>
 <div class="pad-filter" id="est-towns" role="group" aria-label="Location"></div>
 <div class="est-detail" id="est-detail"></div>
+<h2 class="pad-sec-h">10-day forecast learning</h2>
+<p class="est-foot est-lead">Day-ahead high and low forecasts after the learned correction, all scored against the local station. <b>Station-trained</b> learns from the station itself (today's method); <b>NOAA-trained</b> learns from NOAA's URMA analysis, which a paid app can use. Average miss in °F, high / low.</p>
+<div class="est-table-wrap"><table class="est-table" id="fc-table"><thead><tr><th>Location</th><th>Days</th><th>No correction</th><th>Station-trained</th><th>NOAA-trained</th></tr></thead><tbody><tr><td colspan="5" class="low">Loading…</td></tr></tbody></table></div>
+<p class="est-foot" id="fc-foot"></p>
 <section class="pad-notes">
  <h2>How the test works</h2>
+ <p><b>10-day forecast learning:</b> each model's day-ahead high and low are compared with what was observed, and a bias correction is kept only where testing on earlier days shows it helps. The NOAA track repeats this using NOAA's quality-controlled URMA analysis (hourly, 2.5 km) at each location instead of the station, so the corrections could be used in a paid app. Both are then scored against the station. NOAA's daily high and low come from hourly values, so they run slightly milder than a station's 5-minute extremes.</p>
  <p>Every hour the job reads NOAA's newest Real-Time Mesoscale Analysis at each station's location and logs it next to the station's reading. The <b>corrected</b> estimate subtracts the average error that location showed in the same situation (day or night, calm or breezy) over the previous 14 days, using only earlier hours, so the score is a fair test of how it would perform live.</p>
  <p>The NOAA estimate is public-domain data. The station readings are used here only to measure and train it.</p>
 </section>
 </div>
-<script src="js/estimate.js?v=20261121a" defer></script>
+<script src="js/estimate.js?v=20261121b" defer></script>
 </body>
 </html>
