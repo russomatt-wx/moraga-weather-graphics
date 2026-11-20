@@ -35,11 +35,18 @@ def cut(y0, y1, cx):
     diff = a - bg
     # Artwork is brighter / more saturated than the navy background: alpha from the largest channel lift.
     lift = np.clip(diff.max(axis=2), 0, None)
-    alpha = np.clip((lift - 10) / 60, 0, 1)
+    alpha = np.clip((lift - 14) / 60, 0, 1)
     # Un-mix the background so edges don't keep a navy fringe.
     al = alpha[..., None]
     rgb = np.where(al > 0.02, (a - bg * (1 - al)) / np.maximum(al, 0.02), 0)
     rgb = np.clip(rgb, 0, 255)
+    # Leftover navy from the sheet (dark glow boxes, shadows under clouds) would show as a dark
+    # square on lighter cards: fade out anything that is still dark after un-mixing.
+    lum = rgb @ np.array([.299, .587, .114])
+    alpha = alpha * np.clip((lum - 55) / 70, 0, 1)
+    # The sheet tints the area around each icon slightly; those faint pixels (under ~18% opacity)
+    # read as a box on the cards, so drop them and re-scale the rest.
+    alpha = np.clip((alpha - .18) / .82, 0, 1)
     img = Image.fromarray(np.dstack([rgb, alpha * 255]).astype('uint8'), 'RGBA')
     # Drop isolated specks (label fragments / noise): keep pixels whose neighbourhood has artwork.
     m = img.split()[3].filter(ImageFilter.MaxFilter(3))
