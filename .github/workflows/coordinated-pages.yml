@@ -37,6 +37,7 @@ on:
       - 'Town forecast verification'
       - 'Publish KCAMORAG71 daily summary'
       - 'Paddle conditions'
+      - 'Current-conditions estimate test'
     types: [completed]
   schedule:
     # Fallback for observations and other feeds (GitHub may skip some scheduled runs).

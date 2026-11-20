@@ -103,6 +103,20 @@ export async function wuDay(station, date, env, log) {
   } catch (_) { log.push(station + ' history: error'); return null; }
 }
 
+// One day of a station's readings (5-minute averages): [utc, temp F, humidity %, wind mph].
+// Used to backfill the current-conditions estimate test.
+export async function wuDayObs(station, date, env, log) {
+  if (!wuKey(env) || !station || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
+  const u = new URL('https://api.weather.com/v2/pws/history/all');
+  u.searchParams.set('stationId', station); u.searchParams.set('format', 'json'); u.searchParams.set('units', 'e');
+  u.searchParams.set('numericPrecision', 'decimal'); u.searchParams.set('date', date.replace(/-/g, '')); u.searchParams.set('apiKey', wuKey(env));
+  try {
+    const data = await getJson(u.toString(), 3600, log, station + ' history obs');
+    return (data?.observations || []).map((ob) => [ob.obsTimeUtc, num(ob.imperial?.tempAvg), num(ob.humidityAvg), num(ob.imperial?.windspeedAvg)])
+      .filter((r) => r[0] && r[1] !== null);
+  } catch (_) { log.push(station + ' history obs: error'); return null; }
+}
+
 // Mean of the last 30 minutes of sunlight (5-minute highs) plus the current reading.
 async function wuSolarAverage(station, env, current, log) {
   const values = Number.isFinite(current) ? [current] : [];

@@ -1,6 +1,6 @@
 // Moraga Observatory live station proxy and push alerts. Deploy as a Cloudflare Worker.
 import { AlertPush, handlePush, runAlertCheck } from './push.js';
-import { WU_STATIONS, WU_PRIMARY, TOWN_COORDS, wuCurrent, wuToday, wuDay, skyFor, wuKeyShape, sunElevation } from './wu.js';
+import { WU_STATIONS, WU_PRIMARY, TOWN_COORDS, wuCurrent, wuToday, wuDay, wuDayObs, skyFor, wuKeyShape, sunElevation } from './wu.js';
 // Rain the station is measuring right now beats any sky estimate (airport reports lag passing bands).
 function rainingSky(rate, sky, city) {
   if (!(Number(rate) > 0)) return sky;
@@ -122,6 +122,13 @@ export default {
         await cache.put(key, hit.clone());
       }
       return new Response(hit.body, {headers:{...cors,'Content-Type':'application/json','Cache-Control':'public, max-age=300'}});
+    }
+    // GET /dayobs?city=lafayette&date=YYYY-MM-DD : that town's station readings through the day (estimate-test backfill).
+    if (url.pathname === '/dayobs') {
+      const c = (url.searchParams.get('city') || '').toLowerCase(), date = url.searchParams.get('date') || '';
+      if (!WU_STATIONS[c]) return Response.json({error:'Unknown location'},{status:400,headers:cors});
+      const log = [], obs = await wuDayObs(WU_STATIONS[c], date, env, log);
+      return Response.json(obs ? {city:c, station:WU_STATIONS[c], date, obs} : {error:'No observations', diagnostics: log}, {status: obs ? 200 : 404, headers:{...cors,'Cache-Control':'public, max-age=3600'}});
     }
     // GET /daily?city=lafayette&date=YYYY-MM-DD : that town's observed high/low/rain (verification input).
     if (url.pathname === '/daily') {

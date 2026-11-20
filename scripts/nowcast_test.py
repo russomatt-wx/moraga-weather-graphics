@@ -143,52 +143,127 @@ def report(rows):
     return out
 
 
+CURRENT = ROOT / "nowcast_current.json"
+
+
+def correction(rows, town, day, calm, at):
+    """Mean error of the estimate for this town in the same regime over the 14 days before `at`."""
+    lo = (at - timedelta(days=14)).isoformat()
+    prior = [r["est_t"] - r["obs_t"] for r in rows if r["town"] == town and r.get("obs_t") is not None
+             and r["day"] == day and (r["est_wind"] < 6) == calm and lo <= r["valid"] < at.isoformat()]
+    return (mean(prior), len(prior)) if len(prior) >= 6 else (None, len(prior))
+
+
+def station_coords(coords, station):
+    if station not in coords:
+        try:
+            s = json.loads(fetch(f"{WORKER}/station?id={station}"))
+            if s.get("lat") is not None:
+                coords[station] = [s["lat"], s["lon"]]
+        except Exception as exc:
+            print(station, "coordinates unavailable", type(exc).__name__)
+    return coords.get(station)
+
+
+def sample(g, lat, lon, la, lo):
+    i = np.unravel_index(np.argmin((lat - la) ** 2 + ((lon - lo) * math.cos(math.radians(la))) ** 2), lat.shape)
+    val = {k: float(v[i]) for k, v in g.items()}
+    t_c, d_c = val.get("2t", np.nan) - 273.15, val.get("2d", np.nan) - 273.15
+    return {"est_t": round(t_c * 9 / 5 + 32, 1), "est_rh": round(rh(t_c, d_c)), "est_wind": round(val.get("10si", 0) * 2.23694, 1),
+            "est_gust": round(val.get("i10fg", 0) * 2.23694, 1) if "i10fg" in val else None,
+            "est_cloud_pct": round(val["tcc"]) if "tcc" in val else None}
+
+
+def key_valid(key):
+    return datetime.strptime(key.split("/")[0].split(".")[1] + key.split("/")[1].split(".t")[1][:4], "%Y%m%d%H%M").replace(tzinfo=timezone.utc)
+
+
+def backfill(rows, coords, days, step):
+    """Past hours: RTMA archive + each station's own history (5-minute readings), matched within 10 minutes."""
+    have = {(r["town"], r["valid"]) for r in rows}
+    hist = {}
+    now = datetime.now(timezone.utc).replace(minute=0, second=0, microsecond=0)
+    t = now - timedelta(days=days)
+    added = 0
+    while t < now - timedelta(hours=1):
+        if all((town, t.isoformat()) in have for town in TOWNS):
+            t += timedelta(hours=step); continue
+        key = f"rtma2p5_ru.{t:%Y%m%d}/rtma2p5_ru.t{t:%H%M}z.2dvaranl_ndfd.grb2"
+        try:
+            path = download_fields(key)
+            g, lat, lon = grids(path)
+            Path(path).unlink(missing_ok=True)
+        except Exception as exc:
+            print("skip", key, type(exc).__name__); t += timedelta(hours=step); continue
+        for town, (name, station) in TOWNS.items():
+            if (town, t.isoformat()) in have:
+                continue
+            c = station_coords(coords, station)
+            if not c:
+                continue
+            obs = []
+            for day in {(t - timedelta(hours=8)).strftime("%Y-%m-%d"), (t - timedelta(hours=7)).strftime("%Y-%m-%d")}:  # Pacific dates
+                if (town, day) not in hist:
+                    try:
+                        hist[(town, day)] = json.loads(fetch(f"{WORKER}/dayobs?city={town}&date={day}")).get("obs", [])
+                    except Exception:
+                        hist[(town, day)] = []
+                obs += hist[(town, day)]
+            near = min(obs, key=lambda o: abs((datetime.fromisoformat(o[0].replace("Z", "+00:00")) - t).total_seconds()), default=None)
+            if not near or abs((datetime.fromisoformat(near[0].replace("Z", "+00:00")) - t).total_seconds()) > 600:
+                continue
+            row = {"town": town, "station": station, "valid": t.isoformat(), "day": sun_up(c[0], c[1], t), **sample(g, lat, lon, *c),
+                   "obs_t": near[1], "obs_rh": near[2], "obs_wind": near[3], "obs_time": near[0], "obs_station": station, "backfill": True}
+            rows.append(row); added += 1
+        print("backfilled", t.isoformat(), "rows", added)
+        t += timedelta(hours=step)
+    return rows
+
+
 def main():
-    key = latest_analysis()
-    valid = datetime.strptime(key.split("/")[0].split(".")[1] + key.split("/")[1].split(".t")[1][:4], "%Y%m%d%H%M").replace(tzinfo=timezone.utc)
-    print("RTMA analysis", key, "valid", valid.isoformat())
-    g, lat, lon = grids(download_fields(key))
+    import sys
     coords = load(ROOT / "verification" / "station_coords.json", {})
     rows = load(LOG, [])
+    if len(sys.argv) > 1 and sys.argv[1] == "--backfill":
+        rows = backfill(rows, coords, int(sys.argv[2]), int(sys.argv[3]))
+    key = latest_analysis()
+    valid = key_valid(key)
+    print("RTMA analysis", key, "valid", valid.isoformat())
+    g, lat, lon = grids(download_fields(key))
     seen = {(r["town"], r["valid"]) for r in rows}
+    current = {}
     for town, (name, station) in TOWNS.items():
-        if (town, valid.isoformat()) in seen:
+        c = station_coords(coords, station)
+        if not c:
             continue
-        if station not in coords:
-            try:
-                s = json.loads(fetch(f"{WORKER}/station?id={station}"))
-                if s.get("lat") is not None:
-                    coords[station] = [s["lat"], s["lon"]]
-            except Exception as exc:
-                print(station, "coordinates unavailable", type(exc).__name__)
-        if station not in coords:
-            continue
-        la, lo = coords[station]
-        i = np.unravel_index(np.argmin((lat - la) ** 2 + ((lon - lo) * math.cos(math.radians(la))) ** 2), lat.shape)
-        val = {k: float(v[i]) for k, v in g.items()}
+        est = sample(g, lat, lon, *c)
         try:
             ob = json.loads(fetch(f"{WORKER}/observations?city={town}"))
         except Exception:
             ob = {}
         obs_time = ob.get("observed_utc")
         fresh = obs_time and abs((datetime.fromisoformat(obs_time.replace("Z", "+00:00")) - valid).total_seconds()) <= 45 * 60
-        t_c, d_c = val.get("2t", np.nan) - 273.15, val.get("2d", np.nan) - 273.15
-        row = {"town": town, "station": station, "valid": valid.isoformat(), "day": sun_up(la, lo, valid),
-               "est_t": round(t_c * 9 / 5 + 32, 1), "est_rh": round(rh(t_c, d_c)), "est_wind": round(val.get("10si", 0) * 2.23694, 1),
-               "est_gust": round(val.get("i10fg", 0) * 2.23694, 1) if "i10fg" in val else None,
-               "est_cloud_pct": round(val["tcc"]) if "tcc" in val else None,
-               "obs_t": ob.get("temperature_f") if fresh else None, "obs_rh": ob.get("humidity_pct") if fresh else None,
-               "obs_wind": ob.get("wind_mph") if fresh else None, "obs_time": obs_time, "obs_station": ob.get("station")}
-        rows.append(row)
-        print(f"{name:16s} est {row['est_t']}°F {row['est_rh']}% {row['est_wind']} mph | station {row['obs_t']}°F {row['obs_rh']}% {row['obs_wind']} mph")
+        day = sun_up(c[0], c[1], valid)
+        if (town, valid.isoformat()) not in seen:
+            rows.append({"town": town, "station": station, "valid": valid.isoformat(), "day": day, **est,
+                         "obs_t": ob.get("temperature_f") if fresh else None, "obs_rh": ob.get("humidity_pct") if fresh else None,
+                         "obs_wind": ob.get("wind_mph") if fresh else None, "obs_time": obs_time, "obs_station": ob.get("station")})
+        bias, n = correction(rows, town, day, est["est_wind"] < 6, valid)
+        current[town] = {"name": name, "valid_utc": valid.isoformat(), "estimate_f": est["est_t"],
+                         "corrected_f": None if bias is None else round(est["est_t"] - bias, 1), "correction_f": None if bias is None else round(-bias, 1),
+                         "training_hours": n, "humidity_pct": est["est_rh"], "wind_mph": est["est_wind"], "gust_mph": est["est_gust"],
+                         "cloud_pct": est["est_cloud_pct"], "regime": ("day" if day else "night") + (" calm" if est["est_wind"] < 6 else " breezy")}
+        print(f"{name:16s} est {est['est_t']}°F corrected {current[town]['corrected_f']} ({n} h) | station {ob.get('temperature_f')}°F")
     cutoff = (datetime.now(timezone.utc) - timedelta(days=60)).isoformat()
-    rows = [r for r in rows if r["valid"] >= cutoff]
+    rows = sorted((r for r in rows if r["valid"] >= cutoff), key=lambda r: (r["valid"], r["town"]))
     (ROOT / "verification" / "station_coords.json").write_text(json.dumps(coords, indent=1) + "\n")
     LOG.write_text(json.dumps(rows) + "\n")
+    CURRENT.write_text(json.dumps({"generated_utc": datetime.now(timezone.utc).isoformat(), "source": "NOAA RTMA rapid update, bias-corrected per location",
+                                   "towns": current}, indent=1) + "\n")
     rep = report(rows)
     REPORT.write_text(json.dumps({"generated_utc": datetime.now(timezone.utc).isoformat(), "source": "NOAA RTMA rapid update (2.5 km analysis)",
-                                  "method": "Estimate at each station's location vs that station's reading within 45 minutes. Corrected = minus the town's mean error "
-                                            "in the same regime (day/night, calm/breezy) over the previous 14 days (needs 6+ prior hours).",
+                                  "method": "Estimate at each station's location vs that station's reading (live: within 45 minutes; backfill: within 10 minutes). "
+                                            "Corrected = minus the town's mean error in the same regime (day/night, calm/breezy) over the previous 14 days (needs 6+ prior hours).",
                                   "towns": rep}, indent=1) + "\n")
     for k, v in rep.items():
         print(v["name"], v["hours"], "h | raw", v["raw"]["all"], "| corrected", v["corrected"]["all"])

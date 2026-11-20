@@ -2,6 +2,13 @@ name: Current-conditions estimate test
 # Hourly: NOAA RTMA estimate vs each Weather Underground station (see scripts/nowcast_test.py).
 on:
   workflow_dispatch:
+    inputs:
+      backfill_days:
+        description: 'Days of past hours to backfill (0 = none)'
+        default: '0'
+      step_hours:
+        description: 'Hours between backfilled samples'
+        default: '1'
   push:
     branches: [main]
     paths:
@@ -17,26 +24,31 @@ concurrency:
 jobs:
   log:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
       - run: pip install numpy xarray cfgrib eccodes
-      - run: python scripts/nowcast_test.py
+      - name: Estimate (and optional backfill)
+        env:
+          DAYS: ${{ github.event.inputs.backfill_days || '0' }}
+          STEP: ${{ github.event.inputs.step_hours || '1' }}
+        run: |
+          if [ "$DAYS" != "0" ]; then python scripts/nowcast_test.py --backfill "$DAYS" "$STEP"; else python scripts/nowcast_test.py; fi
       - name: Save results
         run: |
-          mkdir -p /tmp/nc && cp verification/nowcast_log.json verification/nowcast_report.json verification/station_coords.json /tmp/nc/
+          mkdir -p /tmp/nc && cp verification/nowcast_log.json verification/nowcast_report.json verification/station_coords.json /tmp/nc/ && cp nowcast_current.json /tmp/nowcast_current.json
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             git reset --hard origin/main
-            cp /tmp/nc/* verification/
-            git add verification/nowcast_log.json verification/nowcast_report.json verification/station_coords.json
+            cp /tmp/nc/* verification/ && cp /tmp/nowcast_current.json nowcast_current.json
+            git add verification/nowcast_log.json verification/nowcast_report.json verification/station_coords.json nowcast_current.json
             if git diff --cached --quiet; then exit 0; fi
-            git commit -m "Log current-conditions estimate test [skip ci]"
+            git commit -m "Log current-conditions estimate test"
             if git push origin HEAD:main; then exit 0; fi
             sleep 3
           done
