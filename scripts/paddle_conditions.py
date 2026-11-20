@@ -114,7 +114,7 @@ def current_series(sid, cbin, now):
     flood_dir = ebb_dir = None
     for r in rows(hourly):
         try:
-            series[r["Time"][:13]] = float(r["Velocity_Major"])
+            series[r["Time"][:13].replace(" ", "T")] = float(r["Velocity_Major"])
             flood_dir = flood_dir if flood_dir is not None else float(r.get("meanFloodDir"))
             ebb_dir = ebb_dir if ebb_dir is not None else float(r.get("meanEbbDir"))
         except (KeyError, TypeError, ValueError):
@@ -125,6 +125,25 @@ def current_series(sid, cbin, now):
             ev.append({"t": r["Time"], "type": r.get("Type", ""), "kt": round(float(r["Velocity_Major"]), 1)})
         except (KeyError, TypeError, ValueError):
             continue
+    for r in rows(events):  # directions also come with the event list
+        try:
+            flood_dir = flood_dir if flood_dir is not None else float(r.get("meanFloodDir"))
+            ebb_dir = ebb_dir if ebb_dir is not None else float(r.get("meanEbbDir"))
+        except (TypeError, ValueError):
+            pass
+    if not series and len(ev) >= 2:
+        # Subordinate stations publish only slack / max times: fill each hour with a cosine curve
+        # between consecutive events (the standard rule-of-thumb shape of a tidal current).
+        from math import cos, pi
+        pts = [(datetime.strptime(e["t"], "%Y-%m-%d %H:%M"), e["kt"]) for e in ev]
+        t = pts[0][0].replace(minute=0) + timedelta(hours=1)
+        while t <= pts[-1][0]:
+            k = next(i for i in range(len(pts) - 1) if pts[i][0] <= t <= pts[i + 1][0])
+            (t0, v0), (t1, v1) = pts[k], pts[k + 1]
+            f = (t - t0).total_seconds() / max(1, (t1 - t0).total_seconds())
+            series[t.strftime("%Y-%m-%dT%H")] = v0 + (v1 - v0) * (1 - cos(pi * f)) / 2
+            t += timedelta(hours=1)
+    print("current", sid, "hourly points", len(series), "events", len(ev), "flood/ebb dir", flood_dir, ebb_dir)
     return series, flood_dir, ebb_dir, ev
 
 
@@ -301,7 +320,7 @@ def main():
         cinfo = None
         if kind == "bay" and cstations:
             dist, cst = min(((km(lat, lon, c[3], c[4]), c) for c in cstations), key=lambda x: x[0])
-            if dist <= 5:
+            if dist <= 3:  # Raccoon Strait (3.8 km) is far stronger than inside Richardson Bay
                 if cst[0] not in cseries:
                     cseries[cst[0]] = current_series(cst[0], cst[1], now)
                 ser, fdir, edir, cev = cseries[cst[0]]
