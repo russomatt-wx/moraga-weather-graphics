@@ -1780,3 +1780,7 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday b { font-size: 1
 #public-shell .dwl-now-time .dwl-push-btn.is-on { color: #6ff0b8; border-color: rgba(52, 211, 153, .8); box-shadow: none; background: rgba(4, 30, 26, .5); }
 #public-shell .dwl-push-note { margin: 6px 6px 0; font-size: 12.5px; color: #a9c3d8; }
 #public-shell .dwl-push-note[hidden] { display: none; }
+#public-shell .dwl-now-row small { white-space: nowrap; }
+#public-shell .dwl-now-row:has(.dwl-now-sun:not([hidden])) { grid-template-columns: 1fr 1fr 1.18fr; }
+#public-shell .dwl-now-rain small { font-size: clamp(11px, 3.05vw, 13.5px) !important; }
+#public-shell .dwl-now-row small { font-size: clamp(11.5px, 3.2vw, 14px) !important; }
