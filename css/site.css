@@ -1189,3 +1189,11 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
   #public-shell .dwl-days > .dwl-day > .dwl-day-lo { justify-content: flex-end !important; text-align: right !important; }
   #public-shell .dwl-days > .dwl-day .dwl-day-cond { max-width: none !important; overflow: visible !important; }
 }
+/* Phones: bigger logo and title; tagline goes under them on one line */
+@media (max-width: 520px) {
+  .dwl-header { flex-direction: column; gap: 6px !important; padding-bottom: 26px !important; }
+  .dwl-mark { width: 25vw !important; }
+  .dwl-wordmark { font-size: 6vw !important; }
+  .dwl-tagline { display: block !important; width: auto !important; padding-left: 0 !important; border-left: 0 !important; text-align: center !important;
+    font-size: 9.5px !important; letter-spacing: .32em !important; white-space: nowrap !important; color: var(--text-2); }
+}
