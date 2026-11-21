@@ -1830,3 +1830,8 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday b { font-size: 1
               inset 0 0 22px color-mix(in srgb, var(--public-current-accent, #1cb5b8) 32%, transparent),
               inset 0 0 70px color-mix(in srgb, var(--public-current-accent, #1cb5b8) 16%, transparent),
               0 0 14px -8px var(--public-current-accent, #1cb5b8), 0 0 40px -30px var(--violet) !important; }
+/* Model chips: quiet outline, no fill or glow */
+#public-shell .dwl-panel .dwl-ai-chip, #public-shell .dwl-panel[aria-label="Next 36 hours"] .dwl-ai-chip, #public-shell .dwl-ai-chip-net {
+  background: rgba(255, 255, 255, .03) !important; border: 1px solid rgba(160, 190, 230, .22) !important; box-shadow: none !important;
+  color: #b9c9db !important; font-size: clamp(11.5px, 3.2vw, 13px) !important; font-weight: 500 !important; padding: 3px 11px 3px 9px !important; gap: 6px !important; }
+#public-shell .dwl-ai-chip-net svg { width: 14px !important; height: 14px !important; color: #8fb8ff !important; filter: none !important; }
