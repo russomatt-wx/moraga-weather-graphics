@@ -1243,3 +1243,18 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 /* Wordmark on three lines: DIABLO / WEATHER / LAB */
 .dwl-wordmark { line-height: 1.04; }
 @media (max-width: 520px) { .dwl-wordmark { font-size: 7.4vw !important; } .dwl-mark { width: 27vw !important; } }
+/* Wordmark centred on three lines; LAB white, WEATHER blue; brighter tagline */
+.dwl-wordmark { align-items: center !important; text-align: center !important; transform-origin: center center !important; margin: 0 .85em !important; }
+.dwl-wm-3 { color: #fff !important; text-shadow: none !important; }
+.dwl-wm-1, .dwl-wm-3 { text-shadow: 0 0 10px rgba(255, 255, 255, .18) !important; }
+.dwl-tagline { color: #eef6ff !important; }
+@media (max-width: 520px) {
+  .dwl-wordmark { font-size: 8.2vw !important; }
+  .dwl-mark { width: 30vw !important; }
+  .dwl-tagline { font-size: 11px !important; letter-spacing: .26em !important; }
+}
+@media (max-width: 520px) {
+  .dwl-brand { gap: 2vw !important; }
+  .dwl-mark { width: 37vw !important; }
+  .dwl-wordmark { font-size: 6.9vw !important; margin: 0 .7em 0 .55em !important; }
+}
