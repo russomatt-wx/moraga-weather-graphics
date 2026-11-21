@@ -2856,56 +2856,62 @@
  },
  "sleepyhollow": {
   "2026-11-15": {
-   "high_f": 61.3,
-   "low_f": 49.1,
-   "samples": 2,
+   "high_f": 62.6,
+   "low_f": 48.8,
+   "samples": 3,
    "stations": [
     "PG063",
+    "D1132",
     "PG065"
    ]
   },
   "2026-11-16": {
-   "high_f": 55.8,
-   "low_f": 44.8,
-   "samples": 2,
+   "high_f": 56.5,
+   "low_f": 42.8,
+   "samples": 3,
    "stations": [
     "PG063",
+    "D1132",
     "PG065"
    ]
   },
   "2026-11-17": {
-   "high_f": 57.1,
-   "low_f": 41.2,
-   "samples": 2,
+   "high_f": 58.1,
+   "low_f": 39.1,
+   "samples": 3,
    "stations": [
     "PG063",
+    "D1132",
     "PG065"
    ]
   },
   "2026-11-18": {
    "high_f": 53.2,
-   "low_f": 48.5,
-   "samples": 2,
+   "low_f": 48.7,
+   "samples": 3,
    "stations": [
     "PG063",
+    "D1132",
     "PG065"
    ]
   },
   "2026-11-19": {
-   "high_f": 53.9,
-   "low_f": 46.2,
-   "samples": 2,
+   "high_f": 54.6,
+   "low_f": 44.5,
+   "samples": 3,
    "stations": [
     "PG063",
+    "D1132",
     "PG065"
    ]
   },
   "2026-11-20": {
-   "high_f": 52.7,
-   "low_f": 41.8,
-   "samples": 2,
+   "high_f": 53.8,
+   "low_f": 40.2,
+   "samples": 3,
    "stations": [
     "PG063",
+    "D1132",
     "PG065"
    ]
   }
