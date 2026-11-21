@@ -338,7 +338,7 @@
    const rainLabel=wet?'<span class="public-rain-chance">'+(Number.isFinite(pop)?Math.min(100,Math.round(pop/10)*10)+'%':'')+'</span>'+(Number.isFinite(total)&&total>=0.01?'<span class="public-rain-amount"><span aria-hidden="true">💧</span>'+rain(total)+'</span>':''):'';
    if(wet)condition=DWL.timedCondition(condition,timingFor(d.time[i]));
    host.insertAdjacentHTML('beforeend',DWL.dayCard(DWL.applyRestOfToday({tag:'div',today:i===0,day,date:label,high,low,highText:fmt(high),lowText:fmt(low),iconCode:conditionIcon,condition,
-    pop:Number.isFinite(pop)?Math.min(100,Math.round(pop/10)*10)+'%':'',amount:Number.isFinite(total)?(total<0.005&&!wet?'0.00″':total<0.05?'<0.05″':rain(total)):'',wind:windFor(hourly,d.time[i])},forecastFeed?.hourly_conditions,d.time[i],hourly)));
+    pop:Number.isFinite(pop)?Math.min(100,Math.round(pop/10)*10)+'%':'',amount:Number.isFinite(total)?(total<0.005&&!wet?'0.00″':total<0.05?'<0.05″':rain(total)):''},forecastFeed?.hourly_conditions,d.time[i],hourly)));
   }
   DWL.markHolidays(host);
   DWL.collapseDays(host,'local');
