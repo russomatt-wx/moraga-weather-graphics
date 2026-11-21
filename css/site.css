@@ -1722,3 +1722,26 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday b { font-size: 1
 #public-shell .public-outlook p#public-discussion { line-height: 1.68 !important; color: #e3edf6 !important; }
 #public-shell .public-outlook p#public-discussion { color: #edf3f9 !important; }
 #public-shell .public-outlook .dwl-panel-h { border-bottom-color: rgba(255, 255, 255, .05) !important; }
+
+/* ================= Visual hierarchy: three levels =================
+   Level 1 (current conditions, 10-day): full treatment (neon borders, glow) - styled above.
+   Level 2 (36 hours, today so far): restrained - thin quiet border, flat fill, no glow.
+   Level 3 (weather outlook): editorial - near-flat surface, no glow, maximum readability. */
+#public-shell .dwl-panel[aria-label="Next 36 hours"], #public-shell .dwl-panel.dwl-sofar {
+  background: rgba(10, 28, 44, .6) !important; border: 1px solid rgba(150, 200, 240, .12) !important;
+  box-shadow: 0 10px 28px -22px rgba(0, 0, 0, .9) !important; }
+#public-shell .dwl-panel[aria-label="Next 36 hours"] .dwl-ph-ic, #public-shell .dwl-panel.dwl-sofar .dwl-ph-ic,
+#public-shell .dwl-panel.public-outlook .dwl-ph-ic { filter: none !important; box-shadow: none !important; }
+#public-shell .dwl-panel[aria-label="Next 36 hours"] .dwl-ph-ic svg, #public-shell .dwl-panel.dwl-sofar .dwl-ph-ic svg, #public-shell .dwl-panel.public-outlook .dwl-ph-ic svg { filter: none !important; }
+#public-shell .dwl-panel[aria-label="Next 36 hours"] .dwl-panel-h h2, #public-shell .dwl-panel.dwl-sofar .dwl-panel-h h2 { font-size: clamp(20px, 5.8vw, 25px) !important; }
+#public-shell .dwl-panel[aria-label="Next 36 hours"] .dwl-ai-chip { background: rgba(255, 255, 255, .04) !important; border: 1px solid rgba(150, 190, 255, .22) !important; box-shadow: none !important; color: #c9d9ea !important; }
+#public-shell .dwl-panel[aria-label="Next 36 hours"] .dwl-ai-chip i { animation: none !important; box-shadow: none !important; }
+#public-shell .public-hourly .public-hour:not(.is-sun) {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--hour-color) 14%, #13283a), color-mix(in srgb, var(--hour-color) 5%, #0e1f30)) !important;
+  border: 1px solid color-mix(in srgb, var(--hour-color) 28%, rgba(255, 255, 255, .08)) !important; box-shadow: none !important; }
+#public-shell .dwl-panel.dwl-sofar .dwl-sofar-grid strong { text-shadow: none !important; }
+/* Level 3 */
+#public-shell .dwl-panel.public-outlook { background: rgba(9, 24, 38, .5) !important; border: 1px solid rgba(255, 255, 255, .06) !important; box-shadow: none !important;
+  -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+#public-shell .dwl-panel.public-outlook .dwl-panel-h h2 { font-size: clamp(20px, 5.8vw, 25px) !important; background: none !important; -webkit-background-clip: border-box !important; background-clip: border-box !important; color: #f1f6fb !important; }
+#public-shell .dwl-panel.public-outlook .public-outlook-headline { text-shadow: none !important; }
