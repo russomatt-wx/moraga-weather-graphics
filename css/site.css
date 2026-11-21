@@ -1137,3 +1137,5 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 @media (max-width: 360px) { #public-shell .dwl-days > .dwl-day > .dwl-day-hi, #public-shell .dwl-days > .dwl-day > .dwl-day-lo { font-size: 27px !important; } }
 @media (min-width: 700px) { #public-shell .dwl-days > .dwl-day > .dwl-day-hi, #public-shell .dwl-days > .dwl-day > .dwl-day-lo { font-size: 38px !important; } }
 @media (max-width: 600px) { #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-sky .dwl-day-cond { font-size: 12px !important; letter-spacing: -.01em !important; } }
+/* Header clears the iPhone status bar / Safari top bar (home-screen app draws under it) */
+.dwl-header { padding-top: calc(env(safe-area-inset-top, 0px) + 22px) !important; }
