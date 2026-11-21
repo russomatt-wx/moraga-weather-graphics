@@ -1807,3 +1807,12 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday b { font-size: 1
 #public-shell .dwl-now-alerts #public-alerts { width: 100% !important; max-width: 100% !important; min-width: 0 !important; box-sizing: border-box; }
 #public-shell .dwl-now-alerts #public-alerts > * { min-width: 0; max-width: 100%; }
 #public-shell .dwl-alert .dwl-alert-when { letter-spacing: .05em !important; }
+/* Current conditions: fill shaded by the temperature colour (like the border), brighter condition icon */
+#public-shell .public-obs-card {
+  background: radial-gradient(120% 85% at 85% 8%, color-mix(in srgb, var(--public-current-accent, #1cb5b8) 22%, transparent), transparent 62%),
+              linear-gradient(180deg, color-mix(in srgb, var(--public-current-accent, #1cb5b8) 16%, #123459), color-mix(in srgb, var(--public-current-accent, #1cb5b8) 7%, #091d38)) !important; }
+#public-shell .dwl-now-icon { position: relative; }
+#public-shell .dwl-now-icon::before { content: ""; position: absolute; inset: 8% 4%; border-radius: 50%; z-index: 0;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, .16), rgba(255, 255, 255, 0)); }
+#public-shell .dwl-now-icon .dwl-icon { position: relative; z-index: 1; filter: brightness(1.18) contrast(1.12) saturate(1.1) drop-shadow(0 0 14px rgba(255, 255, 255, .22)) drop-shadow(0 6px 12px rgba(0, 0, 0, .35)) !important; }
+#public-shell .dwl-now-tiles .dwl-now-unit { display: inline; margin-left: 2px; font-size: 10.5px !important; font-weight: 600; color: #a8c4dc; }
