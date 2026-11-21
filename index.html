@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>function dwlZoom(z){var r=document.documentElement,m=document.querySelector('meta[name=viewport]'),touch=window.matchMedia&&matchMedia('(pointer:coarse)').matches; if(touch&&m){var w=Math.round((screen.width||window.innerWidth)/z);m.setAttribute('content',z===1?'width=device-width,initial-scale=1,viewport-fit=cover':'width='+w+',initial-scale='+z+',maximum-scale='+z+',viewport-fit=cover');r.style.zoom='';} else{r.style.zoom=z===1?'':String(z);}}try{var z=parseFloat(localStorage.getItem('dwl-page-zoom'));if(z&&z!==1)dwlZoom(z)}catch(e){}</script>
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=27"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=27"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=27">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261123i">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261123j">
 
 
 
@@ -142,7 +142,22 @@
  const el=id=>document.getElementById(id);
  const updatedAt=ms=>Number.isFinite(ms)?'Updated '+new Date(ms).toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'})+' at '+new Date(ms).toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'})+' PT':'';
  const setHL=(h,l)=>{const n=el('public-high-low');if(n)n.textContent='H: '+h+'\u2002L: '+l;};
+ // Long single-block outlooks read better as 2-3 paragraphs: break at sentence ends near even lengths,
+ // preferring sentences that open a new time period ("Sunday ...", "Tonight ...", "A stronger system ...").
+ function paragraphs(text){
+  const t=String(text||'').trim();if(t.length<280||/\n\s*\n/.test(t))return t;
+  const parts=t.split(/(?<=[.!?])\s+(?=[A-Z0-9"“])/);if(parts.length<4)return t;
+  const n=t.length<620?2:3,total=parts.reduce((a,x)=>a+x.length+1,0);
+  const TIME=/^(Tonight|Tomorrow|Today|This (morning|afternoon|evening|weekend)|Overnight|Later|Looking ahead|Next|Early next|By |Then|After|Beyond|Another|A (stronger|second|new|weaker|drier|wetter)|(Sun|Mon|Tues|Wednes|Thurs|Fri|Satur)day)/;
+  const cuts=[];let pos=0;const ends=parts.map(x=>pos+=x.length+1);
+  for(let k=1;k<n;k++){const target=total*k/n;let best=-1,score=1e9;
+   for(let i=0;i<parts.length-1;i++){if(cuts.includes(i)||(cuts.length&&i<=cuts[cuts.length-1]+1))continue;
+    let d=Math.abs(ends[i]-target);if(TIME.test(parts[i+1]))d*=0.55;if(i<1||i>parts.length-3)d*=1.6;if(d<score){score=d;best=i;}}
+   if(best>=0)cuts.push(best);}
+  return parts.map((x,i)=>x+(cuts.includes(i)?'\n\n':' ')).join('').trim();
+ }
  const set=(id,value)=>{const node=el(id);if(!node)return;
+  if(id==='public-discussion')value=paragraphs(value);
   // Current temperature reads like the Observation Lab card: 64 with a raised °F.
   if(id==='public-current-temp'){const m=String(value).match(/^(-?\d+)°?$/);if(m){node.innerHTML=m[1]+'<span class="dwl-cc-deg">°</span>';return;}value=String(value).replace('°','');}
   node.textContent=value};
