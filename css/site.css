@@ -1784,3 +1784,4 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday b { font-size: 1
 #public-shell .dwl-now-row:has(.dwl-now-sun:not([hidden])) { grid-template-columns: 1fr 1fr 1.18fr; }
 #public-shell .dwl-now-rain small { font-size: clamp(11px, 3.05vw, 13.5px) !important; }
 #public-shell .dwl-now-row small { font-size: clamp(11.5px, 3.2vw, 14px) !important; }
+#public-shell .dwl-now-icon { margin-right: clamp(10px, 4vw, 22px); }
