@@ -1652,3 +1652,8 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { left: calc(11p
   body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { left: calc(24px + 100px + 90px + 80px + 46px) !important; }
 }
 body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { padding-top: 27px !important; }
+/* 10-day: temperature-based colours, in the neon gradient style */
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi { background-image: linear-gradient(180deg, color-mix(in srgb, var(--hi) 55%, #fff), color-mix(in srgb, var(--hi) 92%, #fff)) !important; filter: drop-shadow(0 0 7px color-mix(in srgb, var(--hi) 55%, transparent)) !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { background-image: linear-gradient(180deg, color-mix(in srgb, var(--lo) 55%, #fff), color-mix(in srgb, var(--lo) 92%, #fff)) !important; filter: drop-shadow(0 0 7px color-mix(in srgb, var(--lo) 55%, transparent)) !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi { background-image: linear-gradient(180deg, color-mix(in srgb, var(--hi) 78%, #fff), var(--hi)) !important; filter: saturate(1.35) brightness(1.08) drop-shadow(0 0 8px color-mix(in srgb, var(--hi) 70%, transparent)) !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { background-image: linear-gradient(180deg, color-mix(in srgb, var(--lo) 78%, #fff), var(--lo)) !important; filter: saturate(1.35) brightness(1.08) drop-shadow(0 0 8px color-mix(in srgb, var(--lo) 70%, transparent)) !important; }
