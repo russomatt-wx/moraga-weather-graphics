@@ -31,7 +31,10 @@ OUT = ROOT / "verification"
 OUT.mkdir(exist_ok=True)
 TZ = ZoneInfo("America/Los_Angeles")
 WORKER = "https://moraga-live-observations.russo-matt.workers.dev/daily"
-TOWNS = {"lafayette": "KCAWALNU6", "danville": "KCADANVI207", "greenbrook": "KCADANVI224", "brentwood": "KCABRENT202", "sacramento": "KCASACRA200", "sausalito": "KCASAUSA60"}
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import locations  # noqa: E402
+TOWNS = locations.towns(include_moraga=False)
 MIN_SAMPLES = 200          # of ~288 five-minute observations in a day
 BACKFILL_DAYS = 35
 FACTORS = [0, .25, .5, .75, 1.0]

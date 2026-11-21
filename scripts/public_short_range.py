@@ -8,7 +8,10 @@ except ImportError:
     SESSION=None
 from datetime import datetime, timezone
 from pathlib import Path
-LOCATIONS={"moraga":(37.8201932,-122.1193876),"lafayette":(37.890,-122.115),"danville":(37.813,-121.974),"greenbrook":(37.799,-121.970),"sausalito":(37.852,-122.483),"brentwood":(37.957,-121.701),"sacramento":(38.575,-121.446)}
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parent))
+import locations  # noqa: E402
+LOCATIONS=locations.coords()
 MODELS={"HRRR":("https://api.open-meteo.com/v1/forecast","ncep_hrrr_conus",.40),"RRFS":("https://api.open-meteo.com/v1/forecast","ncep_rrfs_conus",.25),"ECMWF":("https://api.open-meteo.com/v1/forecast","ecmwf_ifs025",.20),"GFS":("https://api.open-meteo.com/v1/forecast","ncep_gfs_global",.15)}
 FIELDS=["temperature_2m","precipitation","precipitation_probability","weather_code","cloud_cover"]
 def fetch(url,params):

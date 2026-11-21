@@ -23,21 +23,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for location in lafayette danville greenbrook sausalito brentwood sacramento; do
-            case "$location" in
-              lafayette) lat=37.890; lon=-122.115 ;;
-              danville) lat=37.813; lon=-121.974 ;;
-              greenbrook) lat=37.799; lon=-121.970 ;;
-              sausalito) lat=37.852; lon=-122.483 ;;
-              brentwood) lat=37.957; lon=-121.701 ;;
-              sacramento) lat=38.575; lon=-121.446 ;;
-            esac
+          # Every location in locations.json except Moraga (which has its own forecast pipeline).
+          python3 -c "import json;[print(l['id'],l['lat'],l['lon']) for l in json.load(open('locations.json'))['locations'] if l['id']!='moraga']" > /tmp/locs.txt
+          while read -r location lat lon; do
             mkdir -p "/tmp/wx-$location"
             # Let the script compare against the current feed (it keeps it if a new run lost models).
             cp "./${location}_forecast_10day.json" "/tmp/wx-$location/" 2>/dev/null || true
-            (cd "/tmp/wx-$location" && WX_FORECAST_LAT="$lat" WX_FORECAST_LON="$lon" WX_FORECAST_OUTPUT="${location}_forecast_10day.json" python "$GITHUB_WORKSPACE/scripts/rainfall_10day.py")
-            cp "/tmp/wx-$location/${location}_forecast_10day.json" "./${location}_forecast_10day.json"
-          done
+            (cd "/tmp/wx-$location" && WX_FORECAST_LAT="$lat" WX_FORECAST_LON="$lon" WX_FORECAST_OUTPUT="${location}_forecast_10day.json" python "$GITHUB_WORKSPACE/scripts/rainfall_10day.py") || echo "::warning::$location forecast failed"
+            cp "/tmp/wx-$location/${location}_forecast_10day.json" "./${location}_forecast_10day.json" 2>/dev/null || true
+          done < /tmp/locs.txt
       - name: Validate independent location forecasts
         run: |
           python - <<'PY'
@@ -45,7 +39,8 @@ jobs:
           from zoneinfo import ZoneInfo
           today=datetime.datetime.now(ZoneInfo('America/Los_Angeles')).date()
           dates=[(today+datetime.timedelta(days=i)).isoformat() for i in range(10)]
-          for name,lat,lon in [('lafayette',37.890,-122.115),('danville',37.813,-121.974),('greenbrook',37.799,-121.970),('sausalito',37.852,-122.483),('brentwood',37.957,-121.701),('sacramento',38.575,-121.446)]:
+          locs=[(l['id'],l['lat'],l['lon']) for l in json.load(open('locations.json'))['locations'] if l['id']!='moraga']
+          for name,lat,lon in locs:
               data=json.loads(pathlib.Path(f'{name}_forecast_10day.json').read_text())
               assert data['dates']==dates, f'{name}: wrong dates'
               assert abs(data['latitude']-lat)<0.002 and abs(data['longitude']-lon)<0.002, f'{name}: wrong coordinates'
@@ -58,14 +53,14 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p /tmp/additional-location-publish
-          cp lafayette_forecast_10day.json danville_forecast_10day.json greenbrook_forecast_10day.json sausalito_forecast_10day.json brentwood_forecast_10day.json sacramento_forecast_10day.json /tmp/additional-location-publish/
+          cp $(python3 -c "import json;print(' '.join(l['id']+'_forecast_10day.json' for l in json.load(open('locations.json'))['locations'] if l['id']!='moraga'))") /tmp/additional-location-publish/
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             git reset --hard origin/main
             cp /tmp/additional-location-publish/* ./
-            git add lafayette_forecast_10day.json danville_forecast_10day.json greenbrook_forecast_10day.json sausalito_forecast_10day.json brentwood_forecast_10day.json sacramento_forecast_10day.json
+            git add *_forecast_10day.json
             if git diff --cached --quiet; then exit 0; fi
             git commit -m 'Refresh twice-daily additional location forecasts'
             if git push origin HEAD:main; then exit 0; fi

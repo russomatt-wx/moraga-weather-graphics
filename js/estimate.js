@@ -1,8 +1,7 @@
 /* Diablo Weather Lab — estimate test results (verification/nowcast_log.json). Whole-degree comparisons. */
 (function () {
   'use strict';
-  const TOWNS = [['moraga', 'Moraga'], ['lafayette', 'Lafayette'], ['danville', 'Sycamore Valley'], ['greenbrook', 'Greenbrook'],
-    ['brentwood', 'Brentwood'], ['sacramento', 'East Sacramento'], ['sausalito', 'Sausalito']];
+  const TOWNS = (window.DWL_LOCATIONS || []).map((l) => [l.id, l.short]);
   const DAYS = 7;
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -106,7 +105,7 @@
     } catch (e) { $('est-updated').textContent = 'Results are not available right now.'; }
   }
   // 10-day forecast learning: station-trained vs NOAA-trained corrections, both scored against the station.
-  const FC = [['lafayette', 'Lafayette'], ['danville', 'Sycamore Valley'], ['greenbrook', 'Greenbrook'], ['brentwood', 'Brentwood'], ['sacramento', 'East Sacramento'], ['sausalito', 'Sausalito']];
+  const FC = TOWNS.filter(([k]) => k !== 'moraga');
   async function getJSON(u) { try { const r = await fetch(u + '?t=' + Date.now(), { cache: 'no-store' }); return r.ok ? r.json() : null; } catch (_) { return null; } }
   function corr(file, model, phase) {
     const c = file?.calibration?.[model]?.[phase], s = file?.model_scores?.[model];

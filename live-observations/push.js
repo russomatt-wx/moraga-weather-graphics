@@ -4,15 +4,9 @@
 // notification to the phones subscribed to that town. No third-party push service or secrets:
 // the VAPID signing key is generated inside the Durable Object on first use and never leaves it.
 
-export const TOWNS = {
-  Moraga: [37.8202, -122.1194],
-  Lafayette: [37.8900, -122.1150],
-  Danville: [37.8130, -121.9740],
-  Greenbrook: [37.7990, -121.9700],
-  Brentwood: [37.957, -121.701],
-  Sacramento: [38.575, -121.446],
-  Sausalito: [37.852, -122.483],
-};
+import LOCATIONS from '../locations.json';
+// Push-alert towns (by site key) from locations.json.
+export const TOWNS = Object.fromEntries(LOCATIONS.locations.map((l) => [l.key, [l.lat, l.lon]]));
 const SITE = 'https://russomatt-wx.github.io/moraga-weather-graphics/';
 const NWS_HEADERS = { 'User-Agent': 'DiabloWeatherLab-alerts/1.0', Accept: 'application/geo+json' };
 

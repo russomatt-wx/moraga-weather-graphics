@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>function dwlZoom(z){var r=document.documentElement,m=document.querySelector('meta[name=viewport]'),touch=window.matchMedia&&matchMedia('(pointer:coarse)').matches; if(touch&&m){var w=Math.round((screen.width||window.innerWidth)/z);m.setAttribute('content',z===1?'width=device-width,initial-scale=1,viewport-fit=cover':'width='+w+',initial-scale='+z+',maximum-scale='+z+',viewport-fit=cover');r.style.zoom='';} else{r.style.zoom=z===1?'':String(z);}}try{var z=parseFloat(localStorage.getItem('dwl-page-zoom'));if(z&&z!==1)dwlZoom(z)}catch(e){}</script>
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=27"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=27"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=27">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261122k">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261122l">
 
 
 
@@ -17,9 +17,9 @@
 
 
 <script src="js/textsize.js?v=20261122d" defer></script></head>
-<body class="public-mode"><script src="js/dwl-components.js?v=20261122d"></script><script src="js/dwl-outlook.js?v=20261118b"></script><div id="public-shell" aria-label="Public local weather forecast">
+<body class="public-mode"><script src="js/locations.js?v=1"></script><script src="js/dwl-components.js?v=20261122d"></script><script src="js/dwl-outlook.js?v=20261118b"></script><div id="public-shell" aria-label="Public local weather forecast">
  <div class="dwl-header" aria-label="Diablo Weather Lab — Hyperlocal Weather Intelligence"><div class="dwl-brand"><svg class="dwl-mark" viewBox="0 -14 160 96" aria-hidden="true"><defs><linearGradient id="lt-dwla" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4feff"/><stop offset="1" stop-color="#8fe6ff"/></linearGradient><linearGradient id="dk-dwla" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5fd6f7"/><stop offset="1" stop-color="#0a9fd6"/></linearGradient><linearGradient id="arc-dwla" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7fe9ff"/><stop offset="1" stop-color="#1ab8ee"/></linearGradient><radialGradient id="cl-dwla" gradientUnits="userSpaceOnUse" cx="52" cy="13" r="36" gradientTransform="translate(52 13) scale(1 .62) translate(-52 -13)"><stop offset="0" stop-color="#3f5064"/><stop offset=".5" stop-color="#617286"/><stop offset=".8" stop-color="#a9b7c7"/><stop offset="1" stop-color="#f2f6fb"/></radialGradient><linearGradient id="hi-dwla" gradientUnits="userSpaceOnUse" x1="60" y1="-12" x2="56" y2="10"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs><path d="M84.75 8.33A37.02 37.02 0 0 1 141 46.77" fill="none" stroke="#19dcf6" stroke-opacity=".14" stroke-width="9" stroke-linecap="round"/><path d="M84.75 8.33A37.02 37.02 0 0 1 141 46.77" fill="none" stroke="url(#arc-dwla)" stroke-width="4" stroke-linecap="round"/><path d="M2 80 58 30 58 50Z" fill="url(#lt-dwla)"/><path d="M58 30 80 47 80 65 58 50Z" fill="#79dcf8"/><path d="M80 47 110 17 108 40 80 65Z" fill="url(#lt-dwla)"/><path d="M110 17 158 80 108 40Z" fill="url(#dk-dwla)"/><path d="M73 23.5A10.9 10.9 0 0 0 70.41 2.01A15 15 0 0 0 40.64 3.27A10.9 10.9 0 0 0 35 23.5Z" fill="none" stroke="#bfefff" stroke-opacity=".10" stroke-width="9" stroke-linejoin="round"/><path d="M73 23.5A10.9 10.9 0 0 0 70.41 2.01A15 15 0 0 0 40.64 3.27A10.9 10.9 0 0 0 35 23.5Z" fill="none" stroke="#dff7ff" stroke-opacity=".22" stroke-width="5.5" stroke-linejoin="round"/><defs><linearGradient id="cf-dwla" gradientUnits="userSpaceOnUse" x1="0" y1="-11" x2="0" y2="24"><stop offset="0" stop-color="#ffffff"/><stop offset=".3" stop-color="#dde6f3"/><stop offset=".7" stop-color="#8ea5c3"/><stop offset="1" stop-color="#4f6f97"/></linearGradient><linearGradient id="bolt-dwla" gradientUnits="userSpaceOnUse" x1="56" y1="23" x2="81" y2="55"><stop offset="0" stop-color="#f4feff"/><stop offset=".55" stop-color="#bff2ff"/><stop offset="1" stop-color="#79dcf8"/></linearGradient></defs><path d="M73 23.5A10.9 10.9 0 0 0 70.41 2.01A15 15 0 0 0 40.64 3.27A10.9 10.9 0 0 0 35 23.5Z" fill="url(#cf-dwla)"/><path d="M73 23.5A10.9 10.9 0 0 0 70.41 2.01A15 15 0 0 0 40.64 3.27A10.9 10.9 0 0 0 35 23.5Z" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"/><path d="M47.4 24.4L54 24.4L50 30.8L53.4 30.8L44.2 41.6L47.6 33.8L44.6 33.8Z" fill="none" stroke="#8ee9ff" stroke-opacity=".45" stroke-width="2.6" stroke-linejoin="round"/><path d="M47.4 24.4L54 24.4L50 30.8L53.4 30.8L44.2 41.6L47.6 33.8L44.6 33.8Z" fill="url(#bolt-dwla)"/></svg><div class="dwl-wordmark"><span class="dwl-wm-1">Diablo</span><span class="dwl-wm-2">Weather</span><span class="dwl-wm-2 dwl-wm-3">Lab</span></div></div><div class="dwl-tagline">Hyperlocal Weather Intelligence</div><svg class="dwl-ridge" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40V30l28-8 22 5 30-14 26 9 34-17 28 12 24-6 30 13 26-9 34 11 28-7 30 9 22-5 38 13V40Z"/></svg></div><div class="dwl-toggle" role="group" aria-label="Weather view"><button type="button" data-weather-view="public" aria-current="page">Local Weather</button><button type="button" id="public-open-observatory" data-weather-view="observatory">Observation Lab</button><a href="marine.html">Marine &amp; Surf</a></div>
- <div class="dwl-locbar"><button type="button" class="dwl-locbar-btn" id="loc-open" aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.6 7-12a7 7 0 1 0-14 0c0 5.4 7 12 7 12Z" fill="currentColor"/><circle cx="12" cy="10" r="2.6" fill="#03182d"/></svg><span class="dwl-locbar-name" id="loc-current">Moraga</span><span class="dwl-locbar-star" id="loc-current-star" aria-hidden="true"></span><span class="dwl-locbar-change">Change <span aria-hidden="true">▾</span></span></button></div><div class="dwl-locsheet" id="loc-sheet" hidden><div class="dwl-locsheet-panel" role="dialog" aria-modal="true" aria-label="Choose a forecast location"><div class="dwl-locsheet-head"><strong>Choose location</strong><span>★ sets your default</span><button type="button" class="dwl-locsheet-close" id="loc-close" aria-label="Close">×</button></div><div class="public-locations" role="group" aria-label="Choose a forecast location"><div class="dwl-loc-group">East Bay</div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Moraga" aria-pressed="true"><span class="local-neighborhood">Larch</span><span class="dwl-loc-now" data-loc-now="Moraga"></span><span class="local-city">Moraga</span></button><button type="button" class="public-location-favorite" data-favorite-city="Moraga" aria-label="Set Moraga station area, Moraga as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Lafayette" aria-pressed="false"><span class="local-neighborhood">Reliez Valley</span><span class="dwl-loc-now" data-loc-now="Lafayette"></span><span class="local-city">Lafayette</span></button><button type="button" class="public-location-favorite" data-favorite-city="Lafayette" aria-label="Set Reliez Valley, Lafayette as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Danville" aria-pressed="false"><span class="local-neighborhood">Sycamore Valley</span><span class="dwl-loc-now" data-loc-now="Danville"></span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Danville" aria-label="Set Sycamore Valley, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Greenbrook" aria-pressed="false"><span class="local-neighborhood">Greenbrook</span><span class="dwl-loc-now" data-loc-now="Greenbrook"></span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Greenbrook" aria-label="Set Greenbrook, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Brentwood" aria-pressed="false"><span class="local-neighborhood">Brentwood</span><span class="dwl-loc-now" data-loc-now="Brentwood"></span><span class="local-city">East County</span></button><button type="button" class="public-location-favorite" data-favorite-city="Brentwood" aria-label="Set Brentwood, East County as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="dwl-loc-group">Marin</div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Sausalito" aria-pressed="false"><span class="local-neighborhood">Sausalito</span><span class="dwl-loc-now" data-loc-now="Sausalito"></span><span class="local-city">Marin</span></button><button type="button" class="public-location-favorite" data-favorite-city="Sausalito" aria-label="Set Sausalito as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="dwl-loc-group">Sacramento</div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Sacramento" aria-pressed="false"><span class="local-neighborhood">East Sacramento</span><span class="dwl-loc-now" data-loc-now="Sacramento"></span><span class="local-city">Sacramento</span></button><button type="button" class="public-location-favorite" data-favorite-city="Sacramento" aria-label="Set East Sacramento, Sacramento as favorite" aria-pressed="false" title="Set as default location">☆</button></div></div></div></div>
+ <div class="dwl-locbar"><button type="button" class="dwl-locbar-btn" id="loc-open" aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.6 7-12a7 7 0 1 0-14 0c0 5.4 7 12 7 12Z" fill="currentColor"/><circle cx="12" cy="10" r="2.6" fill="#03182d"/></svg><span class="dwl-locbar-name" id="loc-current">Moraga</span><span class="dwl-locbar-star" id="loc-current-star" aria-hidden="true"></span><span class="dwl-locbar-change">Change <span aria-hidden="true">▾</span></span></button></div><div class="dwl-locsheet" id="loc-sheet" hidden><div class="dwl-locsheet-panel" role="dialog" aria-modal="true" aria-label="Choose a forecast location"><div class="dwl-locsheet-head"><strong>Choose location</strong><span>★ sets your default</span><button type="button" class="dwl-locsheet-close" id="loc-close" aria-label="Close">×</button></div><div class="public-locations" role="group" aria-label="Choose a forecast location"><!--LOCSHEET:START--><div class="dwl-loc-group">East Bay</div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Moraga" aria-pressed="false"><span class="local-neighborhood">Larch</span><span class="dwl-loc-now" data-loc-now="Moraga"></span><span class="local-city">Moraga</span></button><button type="button" class="public-location-favorite" data-favorite-city="Moraga" aria-label="Set Larch, Moraga as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Lafayette" aria-pressed="false"><span class="local-neighborhood">Reliez Valley</span><span class="dwl-loc-now" data-loc-now="Lafayette"></span><span class="local-city">Lafayette</span></button><button type="button" class="public-location-favorite" data-favorite-city="Lafayette" aria-label="Set Reliez Valley, Lafayette as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Danville" aria-pressed="false"><span class="local-neighborhood">Sycamore Valley</span><span class="dwl-loc-now" data-loc-now="Danville"></span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Danville" aria-label="Set Sycamore Valley, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Greenbrook" aria-pressed="false"><span class="local-neighborhood">Greenbrook</span><span class="dwl-loc-now" data-loc-now="Greenbrook"></span><span class="local-city">Danville</span></button><button type="button" class="public-location-favorite" data-favorite-city="Greenbrook" aria-label="Set Greenbrook, Danville as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Brentwood" aria-pressed="false"><span class="local-neighborhood">Brentwood</span><span class="dwl-loc-now" data-loc-now="Brentwood"></span><span class="local-city">East County</span></button><button type="button" class="public-location-favorite" data-favorite-city="Brentwood" aria-label="Set Brentwood, East County as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="dwl-loc-group">Marin</div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Sausalito" aria-pressed="false"><span class="local-neighborhood">Sausalito</span><span class="dwl-loc-now" data-loc-now="Sausalito"></span><span class="local-city">Marin</span></button><button type="button" class="public-location-favorite" data-favorite-city="Sausalito" aria-label="Set Sausalito, Marin as favorite" aria-pressed="false" title="Set as default location">☆</button></div><div class="dwl-loc-group">Sacramento</div><div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="Sacramento" aria-pressed="false"><span class="local-neighborhood">East Sacramento</span><span class="dwl-loc-now" data-loc-now="Sacramento"></span><span class="local-city">Sacramento</span></button><button type="button" class="public-location-favorite" data-favorite-city="Sacramento" aria-label="Set East Sacramento, Sacramento as favorite" aria-pressed="false" title="Set as default location">☆</button></div><!--LOCSHEET:END--></div></div></div>
  <div class="public-hero public-obs-card">
   <div class="dwl-cc">
    <div class="dwl-cc-top"><span class="dwl-cc-dot"></span><span>CURRENT CONDITIONS</span><span class="dwl-cc-time" id="public-current-time">—</span><span class="dwl-cc-live" id="public-live" hidden>LIVE</span></div>
@@ -38,8 +38,9 @@
  <script>
  (function(){
  const body=document.body;
- const coords={Moraga:[37.8201932,-122.1193876],Lafayette:[37.890,-122.115],Danville:[37.813,-121.974],Greenbrook:[37.799,-121.970],Brentwood:[37.957,-121.701],Sacramento:[38.575,-121.446],Sausalito:[37.852,-122.483]};
- const subtitles={Moraga:'Larch · Moraga',Lafayette:'Reliez Valley · Lafayette',Danville:'Sycamore Valley · Danville',Brentwood:'Brentwood · East County',Sacramento:'East Sacramento · Sacramento',Sausalito:'Sausalito · Marin',Greenbrook:'Greenbrook · Danville'};
+ // Locations come from locations.json (js/locations.js).
+ const coords=Object.fromEntries(DWL_LOCATIONS.map(l=>[l.key,[l.lat,l.lon]]));
+ const subtitles=Object.fromEntries(DWL_LOCATIONS.map(l=>[l.key,l.neighborhood===l.area?l.neighborhood:l.neighborhood+' · '+l.area]));
  let city='Moraga',favoriteCity='Moraga',revision=0;
  try{favoriteCity=localStorage.getItem('wx-favorite-city')||'Moraga'}catch(e){}
  if(!coords[favoriteCity])favoriteCity='Moraga';
@@ -79,7 +80,7 @@
   try{
    if(!on&&(await Notification.requestPermission())!=='granted'){pushNote='Notifications are turned off for this app. You can allow them in Settings → Notifications.';return;}
    await sendPushTowns(on?towns.filter(t=>t!==city):[...towns,city]);
-   pushNote=on?'Push alerts are off for '+(({Sausalito:'Sausalito',Sacramento:'East Sacramento',Danville:'Sycamore Valley'})[city]||city)+'.':'You’re set. We’ll notify you when NWS issues an alert for '+(({Sausalito:'Sausalito',Sacramento:'East Sacramento',Danville:'Sycamore Valley'})[city]||city)+'.';
+   pushNote=on?'Push alerts are off for '+(DWL_LOC[city]?.short||city)+'.':'You’re set. We’ll notify you when NWS issues an alert for '+(DWL_LOC[city]?.short||city)+'.';
   }catch(e){pushNote='Couldn’t update push alerts. Please try again.';}
   finally{pushBusy=false;renderPush();}
  }
@@ -90,7 +91,7 @@
   const on=pushSupported()&&Notification.permission!=='denied'&&pushTowns().includes(city);
   const btn=document.createElement('button');btn.type='button';btn.className='dwl-push-btn'+(on?' is-on':'');btn.setAttribute('aria-pressed',String(on));btn.disabled=pushBusy;
   btn.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z" fill="'+(on?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 20.5a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
-  const shown=({Sausalito:'Sausalito',Sacramento:'East Sacramento',Danville:'Sycamore Valley'})[city]||city;
+  const shown=DWL_LOC[city]?.short||city;
   btn.append(pushBusy?'Updating…':on?'Push alerts on · '+shown:'Get push alerts for '+shown);btn.onclick=togglePush;
   const nodes=[btn];if(pushNote){const n=document.createElement('p');n.className='dwl-push-note';n.textContent=pushNote;nodes.push(n);}
   host.replaceChildren(...nodes);
@@ -166,7 +167,7 @@
  /* Same model blend for every path (live Open-Meteo or published-feed fallback). */
  // Per-town verification (verification/{town}_model_daily_verification.json): each town is scored
  // against its own Weather Underground station, never against Moraga.
- const TOWN_KEY={Lafayette:'lafayette',Danville:'danville',Greenbrook:'greenbrook',Brentwood:'brentwood',Sacramento:'sacramento',Sausalito:'sausalito'};
+ const TOWN_KEY=Object.fromEntries(DWL_LOCATIONS.filter(l=>l.id!=='moraga').map(l=>[l.key,l.id]));
  const townSkillCache={};
  async function loadTownSkill(chosen){
   const k=TOWN_KEY[chosen];if(!k)return null;
@@ -431,7 +432,7 @@
  }
  // Observed sky from the nearest NWS airport stations (METAR), so "current conditions" reflect what is
  // actually overhead rather than a model's estimate. Falls back to the model when no fresh report exists.
- const SKY_STATIONS={Moraga:['KCCR','KOAK'],Lafayette:['KCCR','KOAK'],Danville:['KCCR','KLVK'],Greenbrook:['KCCR','KLVK'],Brentwood:['KCCR', 'KLVK'],Sacramento:['KSAC', 'KSMF'],Sausalito:['KSFO','KOAK']};
+ const SKY_STATIONS=Object.fromEntries(DWL_LOCATIONS.map(l=>[l.key,l.sky_airports||[]]));
  const skyWords=s=>s&&s.text?s.text:description(s.code,s.isDay===0);
  async function updateSky(chosen,request){
   for(const id of SKY_STATIONS[chosen]||[]){
@@ -549,7 +550,7 @@ async function loadChatGPTOutlooks(){
  return chatgptOutlooks;
 }
 // NWS Bay Area forecast discussion supplies synoptic context; local model totals stay local.
-const NWS_OFFICE={Sacramento:'STO'};
+const NWS_OFFICE=Object.fromEntries(DWL_LOCATIONS.map(l=>[l.key,l.nws_office||'MTR']));
 let nwsDiscussionCache={};
 async function getNwsDiscussion(){
  const office=NWS_OFFICE[city]||'MTR';
@@ -578,7 +579,7 @@ let outlookAlerts={city:null,events:[]};
 let lastOutlook=null,liveOutlook=-1; // liveOutlook: request id whose live-model outlook is shown
 function nwsWeatherOutlook(afd,d,h){
  // Prefer a current, explicitly published ChatGPT editorial outlook.
- const outlookKey=({Sacramento:'East Sacramento',Sausalito:'Sausalito'})[city]||city;
+ const outlookKey=DWL_LOC[city]?.outlook_key||city;
  const published=chatgptOutlooks?.outlooks?.[outlookKey];
  if(published&&typeof published.headline==='string'&&typeof published.text==='string'&&published.headline.trim()&&published.text.trim()){
   set('public-outlook-source',chatgptOutlooks.source_label||'Diablo Weather Lab · ChatGPT editorial outlook');
@@ -586,7 +587,7 @@ function nwsWeatherOutlook(afd,d,h){
   return published.text;
  }
  // Refer to each location by its city: Greenbrook and Sycamore Valley are both in Danville.
- const place=({Moraga:'Moraga',Lafayette:'Lafayette',Danville:'Danville',Greenbrook:'Danville',Brentwood:'Brentwood',Sacramento:'East Sacramento',Sausalito:'Sausalito'})[city]||city;
+ const place=DWL_LOC[city]?.place||city;
  lastOutlook={afd,d,h};
  if(!window.DWLOutlook)return 'The outlook is temporarily unavailable.';
  const alerts=outlookAlerts.city===city?outlookAlerts.events:[];
@@ -727,7 +728,7 @@ function nwsWeatherOutlook(afd,d,h){
  async function renderPublished(chosen,request,lat,lon,prefill){
   const townSkill=await loadTownSkill(chosen);
   const stale=()=>request!==revision||(prefill&&liveRendered===request);
-  const feedName=({Moraga:'moraga',Lafayette:'lafayette',Danville:'danville',Greenbrook:'greenbrook',Brentwood:'brentwood',Sacramento:'sacramento',Sausalito:'sausalito'})[chosen];
+  const feedName=DWL_LOC[chosen]?.id;
   try{
     const response=await fetch(feedName+'_forecast_10day.json?t='+Date.now(),{cache:'no-store'});
     if(!response.ok)throw Error('Published forecast HTTP '+response.status);
@@ -834,7 +835,7 @@ function nwsWeatherOutlook(afd,d,h){
  async function refresh(){
   const request=++revision,chosen=city;
   DWL.resetDays('local'); // every refresh / location switch starts at 5 days
-  set('public-city-heading',chosen==='Danville'?'Sycamore Valley, Danville':chosen==='Greenbrook'?'Greenbrook, Danville':chosen==='Sausalito'?'Sausalito':chosen==='Sacramento'?'East Sacramento':chosen==='Brentwood'?'Brentwood':chosen);set('public-location-sub',subtitles[chosen]);
+  set('public-city-heading',DWL_LOC[chosen]?.heading||chosen);set('public-location-sub',subtitles[chosen]);
   syncLocationButtons();updateSunRow(chosen);
   // Same location as on screen (5-minute refresh, or a saved snapshot just restored): keep the values
   // showing and update them in place instead of blanking to '—' first.
@@ -864,7 +865,7 @@ function nwsWeatherOutlook(afd,d,h){
    // Same-location Observatory model families, collected by the existing 3-hour workflow.
    // Never substitute Moraga's bias correction for another location.
    let blended=false,publicForecastFeed=null;
-   const feedName=({Moraga:'moraga',Lafayette:'lafayette',Danville:'danville',Greenbrook:'greenbrook',Brentwood:'brentwood',Sacramento:'sacramento',Sausalito:'sausalito'})[chosen];
+   const feedName=DWL_LOC[chosen]?.id;
    try{
     const fr=await fetch(feedName+'_forecast_10day.json?t='+Date.now(),{cache:'no-store'});
     if(fr.ok){
@@ -2145,10 +2146,10 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  try{const q=new URLSearchParams(location.search).get('estimate');if(q==='1')localStorage.setItem('dwl-estimate-test','1');if(q==='0')localStorage.removeItem('dwl-estimate-test');}catch(e){}
  let on=false;try{on=localStorage.getItem('dwl-estimate-test')==='1'}catch(e){}
  if(!on)return;
- const KEY={Moraga:'moraga',Lafayette:'lafayette',Danville:'danville',Greenbrook:'greenbrook',Brentwood:'brentwood',Sacramento:'sacramento',Sausalito:'sausalito'};
+ const KEY=Object.fromEntries(DWL_LOCATIONS.map(l=>[l.key,l.id]));
  const box=document.getElementById('estimate-test');let data=null;
  const deg=v=>Number.isFinite(v)?Math.round(v)+'°':'—';
- function cityNow(){const t=(document.getElementById('loc-current')?.textContent||'');for(const [c,k] of Object.entries({Moraga:'Moraga',Lafayette:'Lafayette',Danville:'Sycamore',Greenbrook:'Greenbrook',Brentwood:'Brentwood',Sacramento:'Sacramento',Sausalito:'Sausalito'}))if(t.includes(k))return c;return 'Moraga'}
+ function cityNow(){const t=(document.getElementById('loc-current')?.textContent||'');const hit=DWL_LOCATIONS.find(l=>t.includes(l.neighborhood));return hit?hit.key:'Moraga'}
  function render(){
   if(!data)return;const c=cityNow(),e=data.towns?.[KEY[c]];if(!e){box.hidden=true;return}
   const st=parseFloat((document.getElementById('public-current-temp')?.textContent||'').replace(/[^\d.\-]/g,''));

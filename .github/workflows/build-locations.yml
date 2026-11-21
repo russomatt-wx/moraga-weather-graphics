@@ -1,0 +1,30 @@
+name: Build locations
+# Regenerates js/locations.js and the location picker from locations.json whenever the list changes.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'locations.json'
+      - 'scripts/build_locations.py'
+permissions:
+  contents: write
+concurrency:
+  group: build-locations
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - run: python3 scripts/build_locations.py
+      - name: Save
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add js/locations.js index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Rebuild location list from locations.json"
+          for attempt in 1 2 3 4 5; do git pull --rebase origin main && git push origin HEAD:main && exit 0; sleep 3; done
+          exit 1

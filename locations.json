@@ -1,0 +1,20 @@
+{
+ "_about": "The single list of forecast locations. Add a location here, run python scripts/build_locations.py, commit. key = site name, id = file/data name. station = trusted station for the current site (free phase). sky_airports = nearest NWS airport reports for observed sky. nws_office = forecast discussion office (MTR Bay Area, STO Sacramento, EKA Eureka, REV Reno, HNX Hanford).",
+ "regions": ["East Bay", "Marin", "Sacramento"],
+ "locations": [
+  {"key": "Moraga", "id": "moraga", "neighborhood": "Larch", "area": "Moraga", "region": "East Bay", "short": "Moraga", "heading": "Moraga", "place": "Moraga", "outlook_key": "Moraga",
+   "lat": 37.8201932, "lon": -122.1193876, "station": "KCAMORAG71", "sun_station": null, "sky_airports": ["KCCR", "KOAK"], "nws_office": "MTR"},
+  {"key": "Lafayette", "id": "lafayette", "neighborhood": "Reliez Valley", "area": "Lafayette", "region": "East Bay", "short": "Lafayette", "heading": "Lafayette", "place": "Lafayette", "outlook_key": "Lafayette",
+   "lat": 37.890, "lon": -122.115, "station": "KCAWALNU6", "sun_station": null, "sky_airports": ["KCCR", "KOAK"], "nws_office": "MTR"},
+  {"key": "Danville", "id": "danville", "neighborhood": "Sycamore Valley", "area": "Danville", "region": "East Bay", "short": "Sycamore Valley", "heading": "Sycamore Valley, Danville", "place": "Danville", "outlook_key": "Danville",
+   "lat": 37.813, "lon": -121.974, "station": "KCADANVI207", "sun_station": null, "sky_airports": ["KCCR", "KLVK"], "nws_office": "MTR"},
+  {"key": "Greenbrook", "id": "greenbrook", "neighborhood": "Greenbrook", "area": "Danville", "region": "East Bay", "short": "Greenbrook", "heading": "Greenbrook, Danville", "place": "Danville", "outlook_key": "Greenbrook",
+   "lat": 37.799, "lon": -121.970, "station": "KCADANVI224", "sun_station": "KCADANVI207", "sky_airports": ["KCCR", "KLVK"], "nws_office": "MTR"},
+  {"key": "Brentwood", "id": "brentwood", "neighborhood": "Brentwood", "area": "East County", "region": "East Bay", "short": "Brentwood", "heading": "Brentwood", "place": "Brentwood", "outlook_key": "Brentwood",
+   "lat": 37.957, "lon": -121.701, "station": "KCABRENT202", "sun_station": null, "sky_airports": ["KCCR", "KLVK"], "nws_office": "MTR"},
+  {"key": "Sausalito", "id": "sausalito", "neighborhood": "Sausalito", "area": "Marin", "region": "Marin", "short": "Sausalito", "heading": "Sausalito", "place": "Sausalito", "outlook_key": "Sausalito",
+   "lat": 37.852, "lon": -122.483, "station": "KCASAUSA60", "sun_station": null, "sky_airports": ["KSFO", "KOAK"], "nws_office": "MTR"},
+  {"key": "Sacramento", "id": "sacramento", "neighborhood": "East Sacramento", "area": "Sacramento", "region": "Sacramento", "short": "East Sacramento", "heading": "East Sacramento", "place": "East Sacramento", "outlook_key": "East Sacramento",
+   "lat": 38.575, "lon": -121.446, "station": "KCASACRA200", "sun_station": null, "sky_airports": ["KSAC", "KSMF"], "nws_office": "STO"}
+ ]
+}

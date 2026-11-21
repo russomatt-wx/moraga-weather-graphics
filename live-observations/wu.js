@@ -10,11 +10,15 @@
 
 // Hand-picked Weather Underground stations per town (temperature and sunlight).
 // Stations without a sunlight sensor borrow a nearby station's sunlight for the sky estimate.
-export const SOLAR_STATIONS = { greenbrook: 'KCADANVI207' };
-export const WU_STATIONS = { moraga: 'KCAMORAG71', lafayette: 'KCAWALNU6', danville: 'KCADANVI207', greenbrook: 'KCADANVI224', brentwood: 'KCABRENT202', sacramento: 'KCASACRA200', sausalito: 'KCASAUSA60' };
+import LOCATIONS from '../locations.json';
+// Stations and coordinates come from locations.json (one list for the whole system).
+const LOCS = LOCATIONS.locations;
+export const SOLAR_STATIONS = Object.fromEntries(LOCS.filter((l) => l.sun_station).map((l) => [l.id, l.sun_station]));
+export const WU_STATIONS = Object.fromEntries(LOCS.filter((l) => l.station).map((l) => [l.id, l.station]));
 // Towns whose temperature/humidity/wind come from Weather Underground (Moraga keeps Xweather + its archive).
-export const WU_PRIMARY = new Set(['lafayette', 'danville', 'greenbrook', 'brentwood', 'sacramento', 'sausalito']);
-export const TOWN_COORDS = { moraga: [37.8202, -122.1194], lafayette: [37.890, -122.115], danville: [37.813, -121.974], greenbrook: [37.799, -121.970] , sausalito: [37.852, -122.483] , brentwood: [37.957, -121.701] , sacramento: [38.575, -121.446] };
+export const WU_PRIMARY = new Set(LOCS.filter((l) => l.station && l.id !== 'moraga').map((l) => l.id));
+export const TOWN_COORDS = Object.fromEntries(LOCS.map((l) => [l.id, [l.lat, l.lon]]));
+export const LOCATION_IDS = LOCS.map((l) => l.id);
 const MAX_AGE_MS = 45 * 60 * 1000;
 // The secret as pasted, minus stray whitespace/quotes.
 const wuKey = (env) => String(env.WU_API_KEY || '').trim().replace(/^["']+|["']+$/g, '');

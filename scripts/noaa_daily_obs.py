@@ -26,7 +26,9 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "verification" / "town_observed_noaa.json"
 TZ = ZoneInfo("America/Los_Angeles")
 BUCKET = "https://noaa-urma-pds.s3.amazonaws.com"
-TOWNS = ["moraga", "lafayette", "danville", "greenbrook", "brentwood", "sacramento", "sausalito"]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import locations  # noqa: E402
+TOWNS = [l["id"] for l in locations.load()]
 UA = {"User-Agent": "DiabloWeatherLab-urma/1.0"}
 
 
