@@ -7,7 +7,7 @@
       <stop offset=".55" stop-color="#031a30"/>
       <stop offset="1" stop-color="#020b17"/>
     </linearGradient>
-    <radialGradient id="glow" cx="512" cy="760" r="560" gradientUnits="userSpaceOnUse" gradientTransform="translate(0 760) scale(1 .62) translate(0 -760)">
+    <radialGradient id="glow" cx="512" cy="820" r="560" gradientUnits="userSpaceOnUse" gradientTransform="translate(0 760) scale(1 .62) translate(0 -760)">
       <stop offset="0" stop-color="#14b4ec" stop-opacity=".62"/>
       <stop offset=".45" stop-color="#0b78b4" stop-opacity=".25"/>
       <stop offset="1" stop-color="#0b78b4" stop-opacity="0"/>
@@ -27,12 +27,12 @@
   <rect width="1024" height="1024" fill="url(#halo)"/>
 
   <!-- distant ridge with a glowing rim, as in the site header -->
-  <path d="M0 842 L70 812 L128 828 L204 784 L262 806 L352 750 L428 790 L492 770 L574 812 L648 782 L742 822 L812 796 L896 830 L956 812 L1024 838 V1024 H0 Z" fill="#031426"/>
-  <path d="M0 842 L70 812 L128 828 L204 784 L262 806 L352 750 L428 790 L492 770 L574 812 L648 782 L742 822 L812 796 L896 830 L956 812 L1024 838" fill="none" stroke="#19dcf6" stroke-opacity=".14" stroke-width="22" stroke-linejoin="round"/>
-  <path d="M0 842 L70 812 L128 828 L204 784 L262 806 L352 750 L428 790 L492 770 L574 812 L648 782 L742 822 L812 796 L896 830 L956 812 L1024 838" fill="none" stroke="#3fe3ff" stroke-opacity=".85" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M0 950 L70 920 L128 936 L204 892 L262 914 L352 858 L428 898 L492 878 L574 920 L648 890 L742 930 L812 904 L896 938 L956 920 L1024 946 V1024 H0 Z" fill="#031426"/>
+  <path d="M0 950 L70 920 L128 936 L204 892 L262 914 L352 858 L428 898 L492 878 L574 920 L648 890 L742 930 L812 904 L896 938 L956 920 L1024 946" fill="none" stroke="#19dcf6" stroke-opacity=".14" stroke-width="22" stroke-linejoin="round"/>
+  <path d="M0 950 L70 920 L128 936 L204 892 L262 914 L352 858 L428 898 L492 878 L574 920 L648 890 L742 930 L812 904 L896 938 L956 920 L1024 946" fill="none" stroke="#3fe3ff" stroke-opacity=".85" stroke-width="4" stroke-linejoin="round"/>
 
   <!-- the mark (same geometry as the header logo, viewBox 160x90) -->
-  <g transform="translate(152 318) scale(4.5)">
+  <g transform="translate(66 330) scale(5.6)">
 <defs>
 <linearGradient id="lt-ic" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4feff"/><stop offset="1" stop-color="#8fe6ff"/></linearGradient>
 <linearGradient id="dk-ic" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5fd6f7"/><stop offset="1" stop-color="#0a9fd6"/></linearGradient>
