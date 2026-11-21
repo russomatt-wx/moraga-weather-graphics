@@ -22,8 +22,8 @@
   --radius: 18px;
   --radius-sm: 13px;
   --gutter: 16px;
-  --font-ui: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-brand: "Archivo", "Outfit", -apple-system, sans-serif;
+  --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
+  --font-brand: "Archivo", -apple-system, "Inter", sans-serif;
   --glow: 0 0 16px -3px rgba(25, 220, 246, .45);
 }
 
@@ -1460,3 +1460,19 @@ body::after { content: ""; position: fixed; inset: -20%; z-index: -1; pointer-ev
 #public-shell .dwl-sofar-grid div:nth-child(1) strong { color: #ffb066; }
 #public-shell .dwl-sofar-grid div:nth-child(2) strong { color: #7cc4ff; }
 #public-shell .dwl-sofar-grid div:nth-child(3) strong { color: #7ee0e8; }
+
+/* Flat sunrise / sunset / rain icons (match the card mockup) */
+#public-shell .dwl-now-row .dwl-flat-ic { width: clamp(36px, 10.5vw, 48px) !important; height: auto !important; overflow: visible; filter: drop-shadow(0 0 6px rgba(255, 196, 60, .35)); }
+#public-shell .dwl-now-row .dwl-now-rain .dwl-flat-ic { filter: drop-shadow(0 0 6px rgba(90, 180, 255, .4)); }
+#public-shell .dwl-now-row small { font-size: clamp(11.5px, 3.2vw, 14px); }
+#public-shell .dwl-now-row b { font-size: clamp(13.5px, 3.9vw, 18px) !important; letter-spacing: -.01em; }
+#public-shell .dwl-now-row > span, #public-shell .dwl-now-sun > span { column-gap: 4px; padding: 0 2px; }
+#public-shell .dwl-now-row .dwl-flat-ic { width: clamp(32px, 9.4vw, 46px) !important; }
+#public-shell .dwl-now-alerts .dwl-alert-status { font-size: clamp(13px, 3.6vw, 16px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 12px 16px; }
+#public-shell .dwl-now-tiles b { letter-spacing: -.01em; }
+/* System / Inter font is wider than Outfit: keep the 10-day columns clear of each other */
+#public-shell .dwl-day-when span { font-size: 13px; letter-spacing: -.01em; white-space: nowrap; }
+#public-shell .dwl-day-when strong { letter-spacing: -.01em; }
+#public-shell .dwl-day-hi, #public-shell .dwl-day-lo { letter-spacing: -.05em; }
+#public-shell .dwl-day-hi { padding-left: 4px; }
+#public-shell .dwl-day-cond { letter-spacing: -.01em; }
