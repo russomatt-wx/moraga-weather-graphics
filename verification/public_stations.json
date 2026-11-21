@@ -172,35 +172,5 @@
    }
   ]
  },
- "sausalito": {
-  "point": [
-   37.875,
-   -122.516,
-   90
-  ],
-  "stations": [
-   {
-    "id": "D3153",
-    "name": "DW3153 Mill Valley",
-    "miles": 1.95,
-    "elev_ft": 20,
-    "delev_ft": -70
-   },
-   {
-    "id": "G2969",
-    "name": "GW2969 Mill Valley",
-    "miles": 2.5,
-    "elev_ft": 272,
-    "delev_ft": 182
-   },
-   {
-    "id": "G5625",
-    "name": "GW5625 SAUSALITO",
-    "miles": 2.54,
-    "elev_ft": 194,
-    "delev_ft": 104
-   }
-  ]
- },
  "_chosen_utc": "2026-11-21T02:39:22.592312+00:00"
 }

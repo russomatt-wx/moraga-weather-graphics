@@ -11,7 +11,7 @@ export const TOWNS = {
   Greenbrook: [37.7990, -121.9700],
   Brentwood: [37.957, -121.701],
   Sacramento: [38.575, -121.446],
-  Sausalito: [37.875, -122.516],
+  Sausalito: [37.852, -122.483],
 };
 const SITE = 'https://russomatt-wx.github.io/moraga-weather-graphics/';
 const NWS_HEADERS = { 'User-Agent': 'DiabloWeatherLab-alerts/1.0', Accept: 'application/geo+json' };

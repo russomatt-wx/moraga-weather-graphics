@@ -26,7 +26,7 @@ TZ = ZoneInfo("America/Los_Angeles")
 H = {"User-Agent": "DiabloWeatherLab-public-obs/1.0", "Accept": "application/geo+json"}
 WORKER = "https://moraga-live-observations.russo-matt.workers.dev"
 TOWNS = {"moraga": "KCAMORAG71", "lafayette": "KCAWALNU6", "danville": "KCADANVI207", "greenbrook": "KCADANVI224",
-         "brentwood": "KCABRENT202", "sacramento": "KCASACRA200", "sausalito": "KCASAUSA88"}
+         "brentwood": "KCABRENT202", "sacramento": "KCASACRA200", "sausalito": "KCASAUSA60"}
 MAX_MI, MAX_DELEV_FT, PER_TOWN = 3.0, 350, 3
 
 

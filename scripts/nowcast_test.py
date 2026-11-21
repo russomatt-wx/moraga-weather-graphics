@@ -30,7 +30,7 @@ BUCKET = "https://noaa-rtma-pds.s3.amazonaws.com"
 TOWNS = {  # worker city key: (name, WU station)
     "moraga": ("Moraga", "KCAMORAG71"), "lafayette": ("Lafayette", "KCAWALNU6"), "danville": ("Sycamore Valley", "KCADANVI207"),
     "greenbrook": ("Greenbrook", "KCADANVI224"), "brentwood": ("Brentwood", "KCABRENT202"),
-    "sacramento": ("East Sacramento", "KCASACRA200"), "sausalito": ("Marin City", "KCASAUSA88"),
+    "sacramento": ("East Sacramento", "KCASACRA200"), "sausalito": ("Sausalito", "KCASAUSA60"),
 }
 FIELDS = [("TMP:2 m above ground", "2t"), ("DPT:2 m above ground", "2d"), ("WIND:10 m above ground", "10si"),
           ("GUST:10 m above ground", "i10fg"), ("TCDC:entire atmosphere", "tcc")]

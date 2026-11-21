@@ -2,7 +2,7 @@
 (function () {
   'use strict';
   const TOWNS = [['moraga', 'Moraga'], ['lafayette', 'Lafayette'], ['danville', 'Sycamore Valley'], ['greenbrook', 'Greenbrook'],
-    ['brentwood', 'Brentwood'], ['sacramento', 'East Sacramento'], ['sausalito', 'Marin City']];
+    ['brentwood', 'Brentwood'], ['sacramento', 'East Sacramento'], ['sausalito', 'Sausalito']];
   const DAYS = 7;
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -106,7 +106,7 @@
     } catch (e) { $('est-updated').textContent = 'Results are not available right now.'; }
   }
   // 10-day forecast learning: station-trained vs NOAA-trained corrections, both scored against the station.
-  const FC = [['lafayette', 'Lafayette'], ['danville', 'Sycamore Valley'], ['greenbrook', 'Greenbrook'], ['brentwood', 'Brentwood'], ['sacramento', 'East Sacramento'], ['sausalito', 'Marin City']];
+  const FC = [['lafayette', 'Lafayette'], ['danville', 'Sycamore Valley'], ['greenbrook', 'Greenbrook'], ['brentwood', 'Brentwood'], ['sacramento', 'East Sacramento'], ['sausalito', 'Sausalito']];
   async function getJSON(u) { try { const r = await fetch(u + '?t=' + Date.now(), { cache: 'no-store' }); return r.ok ? r.json() : null; } catch (_) { return null; } }
   function corr(file, model, phase) {
     const c = file?.calibration?.[model]?.[phase], s = file?.model_scores?.[model];
