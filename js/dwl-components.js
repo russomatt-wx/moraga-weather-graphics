@@ -98,15 +98,16 @@
     var hi = tempColor(o.high), lo = tempColor(o.low);
     var tag = o.tag || 'article';
     var rainLine = (o.pop || o.amount)
-      ? '<div class="dwl-day-rain">' + (o.pop ? '<span>' + esc(o.pop) + '</span>' : '') +
-        (o.amount ? '<span class="dwl-day-amount"><i aria-hidden="true"></i>' + esc(o.amount) + '</span>' : '') + '</div>'
+      ? '<div class="dwl-day-rain"><i class="dwl-day-drop" aria-hidden="true"></i>' + (o.pop ? '<span>' + esc(o.pop) + '</span>' : '') +
+        (o.pop && o.amount ? '<span class="dwl-day-dot" aria-hidden="true">·</span>' : '') +
+        (o.amount ? '<span class="dwl-day-amount">' + esc(o.amount) + '</span>' : '') + '</div>'
       : '';
     var dataT = (Number.isFinite(o.high) ? ' data-hi="' + o.high + '"' : '') + (Number.isFinite(o.low) ? ' data-lo="' + o.low + '"' : '');
     return '<' + tag + ' class="dwl-day' + (o.cls ? ' ' + o.cls : '') + (o.today ? ' is-today' : '') + '" style="--hi:' + hi + ';--lo:' + lo + '"' + dataT + '>' +
       '<div class="dwl-day-when">' + (o.today ? '<span class="dwl-pill">Today</span>' : '') +
         '<strong>' + esc(o.day) + '</strong><span>' + esc(o.date) + '</span></div>' +
       '<div class="dwl-day-icon">' + icon(o.iconCode, '', o.night) + '</div>' +
-      '<div class="dwl-day-sky"><div class="dwl-day-cond">' + esc(String(o.condition).replace(/^(early am|late am|am|pm|early|late|morning|afternoon|evening|overnight)\s+(?=\S)/i, '').replace(/^slight chance of (rain|showers)$/i, 'Slight Chance').replace(/^./, function (c) { return c.toUpperCase(); })) + '</div>' + rainLine + '</div>' +
+      '<div class="dwl-day-sky"><div class="dwl-day-cond">' + esc(String(o.condition).replace(/^(early am|late am|am|pm|early|late|morning|afternoon|evening|overnight)\s+(?=\S)/i, '').replace(/^slight chance of (rain|showers)$/i, 'Slight Chance').replace(/\b([a-z])([a-z]*)/g, function (w, a, b) { return /^(of|in|at|by|the|and|or|to|after|before|until|then)$/.test(w) ? w : a.toUpperCase() + b; }).replace(/^./, function (c) { return c.toUpperCase(); })) + '</div>' + rainLine + '</div>' +
       '<div class="dwl-day-hi" aria-label="High">' + esc(o.highText) + '</div>' +
       '<div class="dwl-day-bar" aria-hidden="true"></div>' +
       '<div class="dwl-day-lo" aria-label="Low">' + esc(o.lowText) + '</div>' +
@@ -201,7 +202,7 @@
       [new Date(y, 6, 4), 'Independence Day', '🎆', '#e0313f', '#3b6cff'],
       [nth(8, 1, 1), 'Labor Day', '🇺🇸', '#e0313f', '#3b6cff'],
       [new Date(y, 10, 11), 'Veterans Day', '🇺🇸', '#e0313f', '#3b6cff'],
-      [nth(10, 4, 4), 'Thanksgiving', '🦃', '#f59e0b', '#b45309'],
+      [nth(10, 4, 4), 'Thanksgiving', '🍁', '#ffcf33', '#c2410c'],
       [new Date(y, 11, 25), 'Christmas', '🎄', '#e0313f', '#22c55e'],
     ];
     var out = {};
