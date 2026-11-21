@@ -1852,3 +1852,23 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { border-width: 1.
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 16'%3E%3Cpath d='M6 0C9 4.6 12 8 12 10.5a6 6 0 0 1-12 0C0 8 3 4.6 6 0Z'/%3E%3C/svg%3E") center / contain no-repeat; }
 #public-shell .public-hourly .public-hour { display: flex !important; flex-direction: column; align-items: center; }
 #public-shell .public-hourly .public-hour-wind { margin-top: auto !important; align-self: stretch; }
+
+/* ================= Refinement pass ================= */
+/* 1. Current conditions: keep the green-teal palette (no orange/blue shift); border ~12% softer, glow kept */
+#public-shell .public-obs-card { --public-current-accent: #22c7a1 !important;
+  border-color: color-mix(in srgb, #22c7a1 72%, transparent) !important; }
+/* 3. Alerts: slimmer collapsed cards, title most prominent; easier reading when expanded */
+#public-shell .dwl-alert summary { padding: 7px 10px 7px 12px !important; }
+#public-shell .dwl-alert .dwl-alert-title { font-size: clamp(15.5px, 4.3vw, 17px) !important; }
+#public-shell .dwl-alert .dwl-alert-when { color: #b4c6d6 !important; }
+#public-shell .dwl-alert-rich { padding: 2px 14px 14px !important; }
+#public-shell .dwl-ar-sum { padding: 12px 2px 12px !important; }
+#public-shell .dwl-ar-sum b { font-size: 15px !important; line-height: 1.5 !important; font-weight: 600 !important; color: #eef4fa !important; }
+#public-shell .dwl-ar-sum span { font-size: 14px !important; line-height: 1.55 !important; margin-top: 6px !important; color: #c6d4e1 !important; }
+/* 5. Sunrise / sunset / expected rain: a little more vertical room */
+#public-shell .dwl-now-row { margin-top: 14px !important; padding: 4px 0 2px !important; }
+#public-shell .dwl-now-alerts { margin-top: 14px !important; }
+/* 6. Next 36 hours: identical card size and spacing */
+#public-shell .public-hourly { align-items: stretch !important; }
+#public-shell .public-hourly .public-hour { height: 100%; min-height: 0; box-sizing: border-box; }
+#public-shell .public-hourly .public-hour-rain { min-height: 20px; }

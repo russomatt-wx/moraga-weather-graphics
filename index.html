@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>try{localStorage.removeItem('dwl-page-zoom')}catch(e){}</script>
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=27"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=27"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=27">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261124e">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261124f">
 
 
 
@@ -182,10 +182,10 @@
   if(code>=51&&code<=67)return 'rain';if(code>=80&&code<=82)return 'showers';
   if(code>=71&&code<=77)return 'overcast';return 'mostlySun';
  }
- function iconMarkup(code){
+ function iconMarkup(code,night){
   const asset=code===0?'sun':code===1?'mostlySun':code===2?'partly':code===3?'overcast':code===45||code===48?'fog':code>=95?'storm':code>=80&&code<=82?'showersSun':code>=61&&code<=67?'rain':code>=51&&code<=57?'drizzle':code>=71&&code<=77?'overcast':'mostlySun';
   const symbol=({sun:'☀️',mostlySun:'🌤️',partly:'⛅',overcast:'☁️',fog:'🌫️',storm:'⛈️',showersSun:'🌦️',rain:'🌧️',drizzle:'🌦️'})[asset]||'☁️';
-  return DWL.icon(code);
+  return DWL.icon(code,'',night);
  }
  function updatePublicCurrentAccent(temperature){
   const card=el('public-shell')?.querySelector('.public-obs-card');
@@ -742,6 +742,9 @@ function nwsWeatherOutlook(afd,d,h){
    const onShore=!!DWL_LOC[chosen]?.shore;
    const promote=x=>(onShore||!SHORE.test(x.properties.event))&&(!x._nearby||(/warning|emergency/i.test(x.properties.event)&&!SHORE.test(x.properties.event)));
    for(const x of items){const e=x.properties.event;if(promote(x)&&!seenEv.has(e)){seenEv.add(e);cards.push(x);}}
+   // Soonest first, so it's clear which alert takes effect first.
+   const startOf=x=>Date.parse(x.properties.onset||x.properties.effective||x.properties.sent||'')||0;
+   cards.sort((a,b)=>startOf(a)-startOf(b));
    const nearbyNames=[...new Set(items.filter(x=>!seenEv.has(x.properties.event)).map(x=>x.properties.event))];
    // Let the outlook mention alerts that cover this town (not just nearby county alerts).
    outlookAlerts={city:chosen,events:items.filter(promote).map(x=>x.properties.event+(x._nearby?' (nearby)':''))};
@@ -969,7 +972,7 @@ function nwsWeatherOutlook(afd,d,h){
    set('public-current-temp',modeledConflict?'—':fmt(modeledNow));
    updatePublicCurrentAccent(modeledConflict?NaN:modeledNow);
    const obsSky=lastSky&&lastSky.observed&&lastSky.city===chosen&&Date.now()-lastSky.at<90*60000?lastSky:null;
-   set('public-current-condition',obsSky?skyWords(obsSky):modeledConflict?'Awaiting verified observation':description(data.current?.weather_code??d.weather_code[0],data.current?.is_day===0));el('public-hero-icon').innerHTML=obsSky?DWL.icon(obsSky.code,'',obsSky.isDay===0):iconMarkup(data.current?.weather_code??d.weather_code[0]);
+   set('public-current-condition',obsSky?skyWords(obsSky):modeledConflict?'Awaiting verified observation':description(data.current?.weather_code??d.weather_code[0],data.current?.is_day===0));el('public-hero-icon').innerHTML=obsSky?DWL.icon(obsSky.code,'',obsSky.isDay===0):iconMarkup(data.current?.weather_code??d.weather_code[0],data.current?.is_day===0);
    setHL(fmt(d.temperature_2m_max[0]),fmt(d.temperature_2m_min[0]));
    if(forecastTodayAllowed()){set('public-today-high',fmt(d.temperature_2m_max[0]));set('public-today-low',fmt(d.temperature_2m_min[0]));}
    set('public-current-time',new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'America/Los_Angeles'}).toUpperCase()+' \u2022 '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'})+' PT');
