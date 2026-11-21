@@ -87,10 +87,18 @@ async function siteJson(path, ttl) {
 }
 const c2f = (c) => (Number.isFinite(c) ? Math.round((c * 9 / 5 + 32) * 10) / 10 : null);
 const kmh2mph = (k) => (Number.isFinite(k) ? Math.round(k * 0.621371 * 10) / 10 : null);
+// Dew point (°F) from temperature (°F) and relative humidity (%), Magnus formula.
+function dewF(tf, rh) {
+  if (!Number.isFinite(tf) || !Number.isFinite(rh) || rh <= 0) return null;
+  const tc = (tf - 32) * 5 / 9, g = Math.log(rh / 100) + 17.62 * tc / (243.12 + tc);
+  return Math.round((243.12 * g / (17.62 - g) * 9 / 5 + 32) * 10) / 10;
+}
 async function publicObservation(city, log) {
   const [choice, health] = await Promise.all([siteJson('verification/public_stations.json', 3600), siteJson('verification/public_station_health.json', 3600)]);
   const dropped = new Set((health?.stations || []).filter((s) => s.town === city && s.status === 'drop').map((s) => s.station));
   const list = (choice?.[city]?.stations || []).filter((s) => !dropped.has(s.id));
+  const nowcast = async () => { const n = await siteJson('nowcast_current.json', 600), e = n?.towns?.[city]; return e && Number.isFinite(e.estimate_f) && Date.now() - Date.parse(e.valid_utc) < 3 * 3600000 ? e : null; };
+  let out = null;
   for (const s of list) {
     try {
       const r = await fetch('https://api.weather.gov/stations/' + s.id + '/observations/latest', { headers: NWS_HEADERS, cf: { cacheTtl: 300, cacheEverything: true } });
@@ -98,17 +106,29 @@ async function publicObservation(city, log) {
       const p = (await r.json()).properties || {};
       const t = Date.parse(p.timestamp || ''), temp = p.temperature?.value;
       if (!Number.isFinite(t) || Date.now() - t > 80 * 60000 || !Number.isFinite(temp)) { log.push(s.id + ' stale'); continue; }
-      return { station: s.id, station_name: s.name, station_distance_mi: s.miles, station_selection: 'public', source: 'Public station (NWS)', observed_utc: new Date(t).toISOString(),
-        temperature_f: c2f(temp), dew_point_f: c2f(p.dewpoint?.value), humidity_pct: Number.isFinite(p.relativeHumidity?.value) ? Math.round(p.relativeHumidity.value) : null,
+      const rh = Number.isFinite(p.relativeHumidity?.value) ? Math.round(p.relativeHumidity.value) : null;
+      if (out) { // filling humidity only: a nearby station that measures it
+        if (rh != null && s.miles <= 6) { out.humidity_pct = rh; out.humidity_station = s.id; }
+        if (out.humidity_pct != null) break; else continue;
+      }
+      out = { station: s.id, station_name: s.name, station_distance_mi: s.miles, station_selection: 'public', source: 'Public station (NWS)', observed_utc: new Date(t).toISOString(),
+        temperature_f: c2f(temp), dew_point_f: c2f(p.dewpoint?.value), humidity_pct: rh,
         wind_mph: kmh2mph(p.windSpeed?.value) ?? 0, wind_direction_deg: p.windDirection?.value ?? null, wind_gust_mph: kmh2mph(p.windGust?.value),
         pressure_inhg: Number.isFinite(p.barometricPressure?.value) ? Math.round(p.barometricPressure.value / 3386.39 * 100) / 100 : null };
+      if (rh != null) break;
     } catch (_) { log.push(s.id + ' error'); }
   }
+  if (out) {
+    // Some public stations (fire-weather sites) don't report humidity: take it from NOAA's estimate.
+    if (out.humidity_pct == null) { const e = await nowcast(); if (e && Number.isFinite(e.humidity_pct)) { out.humidity_pct = Math.round(e.humidity_pct); out.humidity_station = 'NOAA RTMA'; } }
+    if (!Number.isFinite(out.dew_point_f) || out.humidity_station) out.dew_point_f = dewF(out.temperature_f, out.humidity_pct);
+    return out;
+  }
   // Fallback: NOAA's estimate for this spot (hourly, from the estimate job).
-  const now = await siteJson('nowcast_current.json', 600), e = now?.towns?.[city];
-  if (e && Number.isFinite(e.estimate_f) && Date.now() - Date.parse(e.valid_utc) < 3 * 3600000) {
+  const e = await nowcast();
+  if (e) {
     return { station: 'NOAA RTMA', station_selection: 'estimate', source: 'NOAA estimate', observed_utc: e.valid_utc, temperature_f: e.corrected_f ?? e.estimate_f,
-      humidity_pct: e.humidity_pct, wind_mph: e.wind_mph, wind_gust_mph: e.gust_mph, estimated: true };
+      humidity_pct: e.humidity_pct, dew_point_f: dewF(e.corrected_f ?? e.estimate_f, e.humidity_pct), wind_mph: e.wind_mph, wind_gust_mph: e.gust_mph, estimated: true };
   }
   return null;
 }

@@ -268,7 +268,8 @@
     "KCCR",
     "KOAK"
    ],
-   "nws_office": "MTR"
+   "nws_office": "MTR",
+   "shore": true
   },
   {
    "key": "Danville",
@@ -648,7 +649,8 @@
     "KOAK",
     "KSFO"
    ],
-   "nws_office": "MTR"
+   "nws_office": "MTR",
+   "shore": true
   },
   {
    "key": "Fruitvale",
@@ -748,7 +750,8 @@
     "KOAK",
     "KSFO"
    ],
-   "nws_office": "MTR"
+   "nws_office": "MTR",
+   "shore": true
   },
   {
    "key": "Albany",
@@ -768,7 +771,8 @@
     "KOAK",
     "KSFO"
    ],
-   "nws_office": "MTR"
+   "nws_office": "MTR",
+   "shore": true
   },
   {
    "key": "ElCerrito",
@@ -788,7 +792,8 @@
     "KOAK",
     "KSFO"
    ],
-   "nws_office": "MTR"
+   "nws_office": "MTR",
+   "shore": true
   },
   {
    "key": "Alameda",
@@ -808,7 +813,8 @@
     "KOAK",
     "KSFO"
    ],
-   "nws_office": "MTR"
+   "nws_office": "MTR",
+   "shore": true
   },
   {
    "key": "OuterSunset",
@@ -828,7 +834,8 @@
     "KSFO",
     "KOAK"
    ],
-   "nws_office": "MTR"
+   "nws_office": "MTR",
+   "shore": true
   },
   {
    "key": "InnerSunset",
@@ -868,7 +875,8 @@
     "KSFO",
     "KOAK"
    ],
-   "nws_office": "MTR"
+   "nws_office": "MTR",
+   "shore": true
   },
   {
    "key": "Presidio",
@@ -888,7 +896,8 @@
     "KSFO",
     "KOAK"
    ],
-   "nws_office": "MTR"
+   "nws_office": "MTR",
+   "shore": true
   },
   {
    "key": "Marina",
@@ -908,7 +917,8 @@
     "KSFO",
     "KOAK"
    ],
-   "nws_office": "MTR"
+   "nws_office": "MTR",
+   "shore": true
   },
   {
    "key": "NorthBeach",
@@ -928,7 +938,8 @@
     "KSFO",
     "KOAK"
    ],
-   "nws_office": "MTR"
+   "nws_office": "MTR",
+   "shore": true
   },
   {
    "key": "PacificHeights",
@@ -1048,7 +1059,8 @@
     "KSFO",
     "KOAK"
    ],
-   "nws_office": "MTR"
+   "nws_office": "MTR",
+   "shore": true
   },
   {
    "key": "BernalHeights",
@@ -1128,7 +1140,8 @@
     "KSFO",
     "KOAK"
    ],
-   "nws_office": "MTR"
+   "nws_office": "MTR",
+   "shore": true
   },
   {
    "key": "Sacramento",

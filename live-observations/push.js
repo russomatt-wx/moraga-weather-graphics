@@ -7,6 +7,9 @@
 import LOCATIONS from '../locations.json';
 // Push-alert towns (by site key) from locations.json.
 export const TOWNS = Object.fromEntries(LOCATIONS.locations.map((l) => [l.key, [l.lat, l.lon]]));
+// Shoreline / ocean alerts only notify towns on the water (the SF Bay Shoreline zone also covers inland hills).
+const SHORE_TOWNS = new Set(LOCATIONS.locations.filter((l) => l.shore).map((l) => l.key));
+const SHORE = /coastal|lakeshore|shoreline|surf|rip current|beach|marine|small craft|gale|storm warning|hazardous seas|tsunami/i;
 const SITE = 'https://russomatt-wx.github.io/moraga-weather-graphics/';
 const NWS_HEADERS = { 'User-Agent': 'DiabloWeatherLab-alerts/1.0', Accept: 'application/geo+json' };
 
@@ -106,7 +109,10 @@ export class AlertPush {
     const subs = this.sql.exec('SELECT * FROM subs').toArray().map((s) => ({ ...s, towns: JSON.parse(s.towns) }));
     const now = Date.now(), sent = {};
     this.sql.exec('DELETE FROM seen WHERE ends < ?', now - 24 * 3600 * 1000);
+    // Only towns someone subscribed to (keeps NWS calls under the Worker's per-run limit as towns grow).
+    const wanted = new Set(subs.flatMap((s) => s.towns));
     for (const [town, [lat, lon]] of Object.entries(TOWNS)) {
+      if (!wanted.has(town)) continue;
       let features;
       try {
         const r = await fetch('https://api.weather.gov/alerts/active?point=' + lat + ',' + lon, { headers: NWS_HEADERS });
@@ -116,6 +122,7 @@ export class AlertPush {
       for (const f of features) {
         const p = f.properties || {}, id = p.id || f.id;
         if (!id || p.status !== 'Actual' || p.messageType === 'Cancel' || !p.event) continue;
+        if (SHORE.test(p.event) && !SHORE_TOWNS.has(town)) continue;
         const ends = Date.parse(p.ends || p.expires || '') || now + 6 * 3600 * 1000;
         if (ends <= now) continue;
         if (this.sql.exec('SELECT 1 FROM seen WHERE town = ? AND id = ?', town, id).toArray().length) continue;

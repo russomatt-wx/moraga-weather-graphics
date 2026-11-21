@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 data = json.loads((ROOT / "locations.json").read_text())
 locs = data["locations"]
 
-keep = ("key", "id", "neighborhood", "area", "region", "short", "heading", "place", "outlook_key", "lat", "lon", "sky_airports", "nws_office")
+keep = ("key", "id", "neighborhood", "area", "region", "short", "heading", "place", "outlook_key", "lat", "lon", "sky_airports", "nws_office", "shore")
 js = "/* Generated from locations.json by scripts/build_locations.py - edit locations.json, not this file. */\n"
 js += "window.DWL_LOCATIONS=" + json.dumps([{k: l.get(k) for k in keep} for l in locs], separators=(",", ":")) + ";\n"
 js += "window.DWL_REGIONS=" + json.dumps(data["regions"]) + ";\n"
