@@ -1716,3 +1716,7 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday b { font-size: 1
 /* 36 hours: let the next card peek in at the right edge so it's clearly scrollable */
 #public-shell .public-hourly { grid-auto-columns: calc((100% - 4 * 7px) / 4.45) !important; scroll-padding-left: 0; }
 @media (min-width: 700px) { #public-shell .public-hourly { grid-auto-columns: calc((100% - 7 * 8px) / 7.45) !important; column-gap: 8px !important; } }
+/* Outlook: more air under the heading, lighter divider, easier body text */
+#public-shell .public-outlook .dwl-panel-h { padding-bottom: 12px !important; margin-bottom: 16px !important; border-bottom: 1px solid rgba(255, 255, 255, .07) !important; }
+#public-shell .public-outlook-headline { color: var(--accent) !important; margin-bottom: 10px !important; }
+#public-shell .public-outlook p#public-discussion { line-height: 1.68 !important; color: #e3edf6 !important; }
