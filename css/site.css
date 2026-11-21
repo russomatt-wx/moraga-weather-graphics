@@ -1139,3 +1139,53 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 @media (max-width: 600px) { #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-sky .dwl-day-cond { font-size: 12px !important; letter-spacing: -.01em !important; } }
 /* Header clears the iPhone status bar / Safari top bar (home-screen app draws under it) */
 .dwl-header { padding-top: calc(env(safe-area-inset-top, 0px) + 22px) !important; }
+
+/* ===== Closer to the mockup ===== */
+/* Degree mark sits with the number (45°) */
+#public-shell .dwl-cc-deg { top: -.95em !important; margin-left: 2px !important; font-size: .5em !important; }
+/* "Updated" lines sit quietly on the heading row's right side */
+#public-shell .dwl-panel { position: relative; }
+#public-shell .dwl-panel > .dwl-panel-sub { position: absolute; top: 19px; right: 14px; margin: 0 !important; font-size: 10px; letter-spacing: .1em; text-align: right; max-width: 45%; }
+#public-shell .dwl-panel-h { margin-bottom: 10px; }
+@media (max-width: 420px) { #public-shell .dwl-panel > .dwl-panel-sub { position: static; margin: -6px 9px 8px 41px !important; max-width: none; text-align: left; } }
+
+/* Tablet / desktop: mockup layout */
+@media (min-width: 700px) {
+  /* Current conditions at the mockup's scale */
+  #public-shell .dwl-cc-temp { font-size: 76px !important; }
+  #public-shell .dwl-cc-icon .dwl-icon { width: 84px; height: 62px; }
+  #public-shell .dwl-cc-cond { font-size: 17px; }
+  #public-shell .dwl-cc-details { font-size: 15px; }
+  #public-shell .dwl-cc-details b { font-size: 22px !important; }
+  #public-shell .dwl-cc-metrics span { font-size: 15px; }
+  #public-shell .dwl-cc-metrics strong { font-size: 22px !important; }
+  #public-shell .dwl-cc-today-title { float: left; margin: 14px 0 0 !important; padding-top: 12px; border-top: 0 !important; width: 200px; }
+  #public-shell .dwl-cc-today { margin: 0 !important; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, .14); }
+  #public-shell .dwl-cc-today span { font-size: 17px; }
+  #public-shell .dwl-cc-today strong { font-size: 32px; }
+  /* 10-day: one line per day */
+  #public-shell .dwl-days > .dwl-day { grid-template-columns: 150px 70px 64px minmax(110px, 1fr) 150px 150px 64px !important; grid-template-rows: auto !important;
+    height: 60px !important; min-height: 0 !important; padding: 0 22px !important; column-gap: 10px !important; align-items: center; }
+  #public-shell .dwl-days > .dwl-day > * { grid-row: 1 !important; align-self: center !important; }
+  #public-shell .dwl-days > .dwl-day > .dwl-day-when { grid-column: 1 !important; flex-direction: row; align-items: baseline; gap: 10px; position: relative; }
+  #public-shell .dwl-days > .dwl-day > .dwl-day-when .dwl-pill { position: absolute; top: -15px; left: -4px; }
+  #public-shell .dwl-days > .dwl-day > .dwl-day-hi { grid-column: 2 !important; justify-content: flex-start !important; text-align: left !important; }
+  #public-shell .dwl-days > .dwl-day > .dwl-day-icon { grid-column: 3 !important; }
+  #public-shell .dwl-days > .dwl-day > .dwl-day-sky { display: contents !important; }
+  #public-shell .dwl-days > .dwl-day .dwl-day-cond { grid-column: 4; grid-row: 1; align-self: center; padding-left: 4px; font-size: 15px !important; }
+  #public-shell .dwl-days > .dwl-day .dwl-day-rain { grid-column: 5; grid-row: 1; align-self: center; margin: 0 !important; font-size: 17px; }
+  #public-shell .dwl-days > .dwl-day:not(:has(.dwl-day-rain)) > .dwl-day-sky::after { display: none !important; }
+  #public-shell .dwl-days > .dwl-day > .dwl-day-wind { grid-column: 6 !important; justify-content: flex-start !important; padding: 0 !important; margin: 0 !important; font-size: 15px; }
+  #public-shell .dwl-days > .dwl-day > .dwl-day-lo { grid-column: 7 !important; }
+  #public-shell .dwl-days > .dwl-day > .dwl-day-hi, #public-shell .dwl-days > .dwl-day > .dwl-day-lo { font-size: 34px !important; }
+  #public-shell .dwl-days > .dwl-day .dwl-icon { width: 54px !important; height: 38px !important; }
+  #public-shell .dwl-days { gap: 8px; }
+  /* Hourly: compact cards */
+  #public-shell .public-hour { padding-top: 10px !important; padding-bottom: 10px !important; }
+}
+@media (min-width: 700px) {
+  #public-shell .dwl-days > .dwl-day { grid-template-columns: 128px 62px 58px minmax(120px, 1fr) 128px 140px 56px !important; padding: 0 18px !important; }
+  #public-shell .dwl-days > .dwl-day > .dwl-day-when { justify-self: start; }
+  #public-shell .dwl-days > .dwl-day > .dwl-day-lo { justify-content: flex-end !important; text-align: right !important; }
+  #public-shell .dwl-days > .dwl-day .dwl-day-cond { max-width: none !important; overflow: visible !important; }
+}
