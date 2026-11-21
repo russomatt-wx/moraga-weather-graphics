@@ -1697,3 +1697,7 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-drop { width: 8px !i
   body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { font-size: 20px !important; }
   body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-rain, body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-rain span { font-size: 15px !important; }
 }
+/* Current conditions: bigger condition text, calmer card glow, more air above H/L */
+#public-shell .dwl-now-cond { font-size: clamp(21px, 5.9vw, 27px) !important; }
+#public-shell .dwl-now-hl { margin-top: 8px !important; }
+#public-shell .public-obs-card { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 0 14px -8px var(--public-current-accent, #1cb5b8), 0 0 40px -30px var(--violet) !important; }
