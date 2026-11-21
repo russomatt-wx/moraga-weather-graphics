@@ -1298,3 +1298,18 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 #public-shell .dwl-locbar > button.dwl-size-btn { align-self: stretch; }
 .pad-intro h1 button.dwl-size-btn { height: 38px; margin-left: auto; }
 button.dwl-size-btn .s { font-size: 12px !important; } button.dwl-size-btn .l { font-size: 18px !important; }
+/* Marine / Estimate pages shrink cleanly on narrow layouts (small phones, larger text sizes) */
+.pad-grid > *, .pad-card, .pad-card > summary, .pad-card header > div:first-child { min-width: 0; }
+.pad-card header { min-width: 0; }
+.pad-alert-row .dwl-alert-main { grid-template-columns: minmax(0, 1fr) auto !important; min-width: 0; }
+.pad-alert-row .dwl-alert-title { white-space: normal !important; }
+.pad-alert-row .dwl-alert-when { white-space: normal !important; }
+.pad-alert-row summary { min-width: 0; }
+.pad-stats > div { min-width: 0; }
+@media (max-width: 480px) { #paddle-shell .dwl-header { margin-left: -10px !important; margin-right: -10px !important; } }
+@media (max-width: 360px) {
+  .pad-stats { grid-template-columns: 1fr 1fr !important; }
+  .pad-rate { max-width: 40%; }
+  .est-table th, .est-table td { padding: 7px 3px; font-size: 12.5px; }
+}
+@media (max-width: 360px) { .pad-tides { grid-template-columns: 1fr 1fr !important; } }
