@@ -1713,3 +1713,6 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { top: -2px !imp
   box-shadow: none !important; }
 body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday b { font-size: 10px !important; }
 @media (min-width: 700px) { body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { right: -2px !important; } }
+/* 36 hours: let the next card peek in at the right edge so it's clearly scrollable */
+#public-shell .public-hourly { grid-auto-columns: calc((100% - 4 * 7px) / 4.45) !important; scroll-padding-left: 0; }
+@media (min-width: 700px) { #public-shell .public-hourly { grid-auto-columns: calc((100% - 7 * 8px) / 7.45) !important; column-gap: 8px !important; } }
