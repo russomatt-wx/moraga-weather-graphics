@@ -353,7 +353,8 @@
       o.condition = r.night ? (c < 30 ? 'Clear' : c < 70 ? 'Partly cloudy' : 'Cloudy') : (c < 30 ? 'Mostly sunny' : c < 70 ? 'Partly cloudy' : 'Cloudy');
     } else {
       o.pop = Math.max(20, r.chance) + '%';
-      o.amount = r.amount < 0.025 ? '<0.05″' : (Math.round(r.amount / 0.05) * 0.05).toFixed(2) + '″';
+      // Same precision as the 36-hour rain bars (hundredths), so the two add up.
+      o.amount = r.amount < 0.005 ? '0.00″' : r.amount < 0.01 ? '<0.01″' : r.amount.toFixed(2) + '″';
       o.iconCode = r.chance >= 60 ? 61 : 80;
       o.condition = timedCondition(r.chance >= 60 ? 'Rain' : r.chance >= 30 ? 'Chance of rain' : 'Slight chance of rain', timingPrefix(r.periods));
     }
