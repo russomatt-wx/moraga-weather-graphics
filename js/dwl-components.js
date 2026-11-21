@@ -94,6 +94,10 @@
            condition, pop ('70%' or ''), amount ('0.25″' or ''), extra (trusted HTML), tag, cls } */
   // One compact row per day: when | icon | condition + rain | high | temperature bar | low.
   // The bar is a plain high-to-low colour gradient.
+  // Title Case for condition text ("Chance of Rain", "Mostly Cloudy"); short joining words stay lower case.
+  function titleCase(t) {
+    return String(t == null ? '' : t).replace(/\b([a-z])([a-z]*)/g, function (w, a, b, i) { return i && /^(of|in|at|by|the|and|or|to|after|before|until|then|with)$/.test(w) ? w : a.toUpperCase() + b; });
+  }
   function dayCard(o) {
     var hi = tempColor(o.high), lo = tempColor(o.low);
     var tag = o.tag || 'article';
@@ -107,7 +111,7 @@
       '<div class="dwl-day-when">' + (o.today ? '<span class="dwl-pill">Today</span>' : '') +
         '<strong>' + esc(o.day) + '</strong><span>' + esc(o.date) + '</span></div>' +
       '<div class="dwl-day-icon">' + icon(o.iconCode, '', o.night) + '</div>' +
-      '<div class="dwl-day-sky"><div class="dwl-day-cond">' + esc(String(o.condition).replace(/^(early am|late am|am|pm|early|late|morning|afternoon|evening|overnight)\s+(?=\S)/i, '').replace(/^slight chance of (rain|showers)$/i, 'Slight Chance').replace(/\b([A-Z])([a-z]+)\b/g, function (w) { return w.toLowerCase(); }).replace(/^./, function (c) { return c.toUpperCase(); })) + '</div>' + rainLine + '</div>' +
+      '<div class="dwl-day-sky"><div class="dwl-day-cond">' + esc(titleCase(String(o.condition).replace(/^(early am|late am|am|pm|early|late|morning|afternoon|evening|overnight)\s+(?=\S)/i, '').replace(/^slight chance of (rain|showers)$/i, 'Slight Chance').replace(/^./, function (c) { return c.toUpperCase(); }))) + '</div>' + rainLine + '</div>' +
       '<div class="dwl-day-hi" aria-label="High">' + esc(o.highText) + '</div>' +
       '<div class="dwl-day-bar" aria-hidden="true"></div>' +
       '<div class="dwl-day-lo" aria-label="Low">' + esc(o.lowText) + '</div>' +
@@ -437,7 +441,7 @@
     if (A.actions.length) s += '<div class="dwl-ar-acts"><b>Key actions</b>' + A.actions.map(function (x) { return '<div>' + svgi(x[0]) + '<span>' + esc(x[1]) + '</span></div>'; }).join('') + '</div>';
     return s;
   }
-  window.DWL = { alertParts: alertParts, alertRich: alertRich, markHolidays: markHolidays, holidays: holidays, tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts, collapseDays: collapseDays, resetDays: function (key) { delete expanded[key]; }, timingPrefix: timingPrefix, periodAmounts: periodAmounts, modelPeriodAmounts: modelPeriodAmounts, timedCondition: timedCondition, applyRestOfToday: applyRestOfToday, restOfToday: restOfToday,
+  window.DWL = { titleCase: titleCase, alertParts: alertParts, alertRich: alertRich, markHolidays: markHolidays, holidays: holidays, tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts, collapseDays: collapseDays, resetDays: function (key) { delete expanded[key]; }, timingPrefix: timingPrefix, periodAmounts: periodAmounts, modelPeriodAmounts: modelPeriodAmounts, timedCondition: timedCondition, applyRestOfToday: applyRestOfToday, restOfToday: restOfToday,
     publishBlend: publishBlend, blendReady: blendReady, moragaBlend: moragaBlend };
 
   // Section tabs: highlight the tab for the section currently in view.
