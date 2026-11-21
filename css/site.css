@@ -1258,3 +1258,43 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
   .dwl-mark { width: 37vw !important; }
   .dwl-wordmark { font-size: 6.9vw !important; margin: 0 .7em 0 .55em !important; }
 }
+
+/* Text size control */
+.dwl-size-btn { flex: none; margin-left: 8px; display: flex; align-items: baseline; gap: 1px;
+  padding: 5px 9px; border-radius: 999px; border: 1px solid rgba(25, 220, 246, .45); background: rgba(4, 20, 34, .7); color: #dff7ff; cursor: pointer; font-family: var(--font-ui); font-weight: 700; line-height: 1; }
+.dwl-size-btn .s { font-size: 11px; } .dwl-size-btn .l { font-size: 16px; }
+.dwl-size-pop { position: fixed; z-index: 1000; top: calc(env(safe-area-inset-top, 0px) + 46px); right: 12px; width: 230px; padding: 12px; border-radius: 16px;
+  background: #0b2133; border: 1px solid rgba(25, 220, 246, .5); box-shadow: 0 12px 30px rgba(0, 0, 0, .55), 0 0 18px -6px rgba(25, 220, 246, .7); color: var(--text); font-family: var(--font-ui); }
+.dwl-size-pop[hidden] { display: none; }
+.dwl-size-title { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.dwl-size-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.dwl-size-row button { appearance: none; width: 54px; height: 42px; border-radius: 12px; border: 1px solid var(--line-soft); background: rgba(25, 220, 246, .1); color: #fff; font: 700 15px/1 var(--font-ui); cursor: pointer; }
+.dwl-size-row button .s { font-size: 12px; } .dwl-size-row button .l { font-size: 19px; }
+.dwl-size-row button:disabled { opacity: .35; }
+#dwl-size-label { flex: 1; text-align: center; font-size: 14px; font-weight: 600; }
+.dwl-size-reset { appearance: none; display: block; width: 100%; margin-top: 8px; padding: 7px; border: 0; border-radius: 10px; background: none; color: var(--muted); font: 600 13px var(--font-ui); cursor: pointer; }
+/* Whole-page scaling: the body is zoomed and given a narrower layout width, so it still fills the screen exactly */
+#public-shell .dwl-locbar { display: flex; align-items: center; }
+#public-shell .dwl-locbar > .dwl-locbar-btn { flex: 1; min-width: 0; }
+#public-shell .dwl-locbar > .dwl-size-btn { align-self: stretch; padding: 0 12px; border-radius: 14px; }
+.pad-intro h1 .dwl-size-btn { margin-left: auto; font-size: 15px; }
+.dwl-size-pop { top: 120px; }
+/* 10-day rows adapt to any width (small phones, larger text size): the condition column shrinks first */
+@media (max-width: 600px) {
+  #public-shell .dwl-panel .dwl-days > .dwl-day { grid-template-columns: 48px 46px minmax(0, 1fr) 52px minmax(0, 126px) minmax(0, 1fr) 40px !important; }
+}
+@media (max-width: 370px) {
+  #public-shell .dwl-panel .dwl-days > .dwl-day { grid-template-columns: 42px 40px minmax(0, 1fr) 42px minmax(0, 120px) minmax(0, 1fr) 36px !important; column-gap: 3px !important; padding-left: 8px !important; padding-right: 6px !important; }
+  #public-shell .dwl-days > .dwl-day > .dwl-day-hi, #public-shell .dwl-days > .dwl-day > .dwl-day-lo { font-size: 26px !important; }
+  #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-icon .dwl-icon { width: 42px !important; height: 30px !important; }
+  #public-shell .dwl-days > .dwl-day > .dwl-day-sky, #public-shell .dwl-days > .dwl-day > .dwl-day-wind { padding-left: 6px !important; }
+  #public-shell .dwl-days > .dwl-day > .dwl-day-when strong { font-size: 17px !important; }
+  #public-shell .dwl-days > .dwl-day > .dwl-day-when span { font-size: 12px !important; }
+}
+#public-shell .dwl-locbar > button.dwl-size-btn, .pad-intro h1 button.dwl-size-btn {
+  all: unset; box-sizing: border-box; display: flex !important; align-items: center; justify-content: center; gap: 1px; flex: none;
+  min-width: 50px; margin-left: 8px; padding: 0 12px; border-radius: 14px; cursor: pointer;
+  border: 1px solid rgba(25, 220, 246, .45); background: rgba(4, 20, 34, .7); color: #dff7ff; font: 700 15px/1 var(--font-ui); }
+#public-shell .dwl-locbar > button.dwl-size-btn { align-self: stretch; }
+.pad-intro h1 button.dwl-size-btn { height: 38px; margin-left: auto; }
+button.dwl-size-btn .s { font-size: 12px !important; } button.dwl-size-btn .l { font-size: 18px !important; }
