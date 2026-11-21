@@ -1199,3 +1199,19 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 }
 /* Day of the week above the time on each hourly card */
 #public-shell .public-hour-day { display: block; margin: 0 0 1px; font: 700 10.5px/1.1 var(--font-ui); letter-spacing: .12em; color: var(--muted); }
+
+/* Holidays on the 10-day: themed outline, soft tint and a ribbon */
+.dwl-days > .dwl-day.is-holiday {
+  background:
+    linear-gradient(100deg, color-mix(in srgb, var(--hol1) 22%, transparent), color-mix(in srgb, var(--hol2) 12%, transparent)) padding-box,
+    linear-gradient(180deg, #0b2335, #061827) padding-box,
+    linear-gradient(100deg, var(--hol1), var(--hol2)) border-box !important;
+  box-shadow: 0 0 16px -3px var(--hol1), inset 0 0 22px color-mix(in srgb, var(--hol2) 14%, transparent) !important;
+  overflow: visible !important;
+}
+.dwl-holiday { position: absolute; top: -10px; right: 14px; z-index: 2; display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px 2px 6px; border-radius: 999px;
+  font: 800 10.5px/1.3 var(--font-ui); letter-spacing: .08em; text-transform: uppercase; color: #fff;
+  background: linear-gradient(90deg, var(--hol1), var(--hol2)); box-shadow: 0 0 10px -2px var(--hol1); text-shadow: 0 1px 2px rgba(0, 0, 0, .45); white-space: nowrap; }
+.dwl-holiday b { font-size: 12px; letter-spacing: 0; }
+.dwl-days { padding-top: 4px; }
+.dwl-days > .dwl-day.is-holiday + .dwl-day, .dwl-days > .dwl-day + .dwl-day.is-holiday { margin-top: 6px; }

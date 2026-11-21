@@ -185,6 +185,56 @@
   /* Show the first 5 forecast days, with a button for the rest. State is remembered per list
      (key), so re-rendering the cards keeps the reader's choice. */
   var expanded = {};
+  // Major US holidays: [name, emoji, theme colour 1, theme colour 2] for a given year.
+  function holidays(y) {
+    var nth = function (m, wd, n) { var d = new Date(y, m, 1); var off = (wd - d.getDay() + 7) % 7; return new Date(y, m, 1 + off + 7 * (n - 1)); };
+    var last = function (m, wd) { var d = new Date(y, m + 1, 0); return new Date(y, m, d.getDate() - ((d.getDay() - wd + 7) % 7)); };
+    var easter = (function () { var a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3),
+      h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451);
+      return new Date(y, Math.floor((h + l - 7 * m + 114) / 31) - 1, ((h + l - 7 * m + 114) % 31) + 1); })();
+    var list = [
+      [new Date(y, 0, 1), "New Year's Day", '🎉', '#ffd34d', '#c9d6e8'],
+      [nth(0, 1, 3), 'MLK Day', '✊', '#c9a227', '#7a5cff'],
+      [new Date(y, 1, 14), "Valentine's Day", '❤️', '#ff4d7a', '#ff9ec4'],
+      [nth(1, 1, 3), "Presidents' Day", '🇺🇸', '#e0313f', '#3b6cff'],
+      [new Date(y, 2, 17), "St. Patrick's Day", '☘️', '#2fbf5b', '#9be15d'],
+      [easter, 'Easter', '🐣', '#f9a8d4', '#a5f3fc'],
+      [nth(4, 0, 2), "Mother's Day", '💐', '#f472b6', '#fbcfe8'],
+      [last(4, 1), 'Memorial Day', '🇺🇸', '#e0313f', '#3b6cff'],
+      [nth(5, 0, 3), "Father's Day", '👔', '#38bdf8', '#1e3a8a'],
+      [new Date(y, 5, 19), 'Juneteenth', '✊🏾', '#e0313f', '#2fbf5b'],
+      [new Date(y, 6, 4), 'Independence Day', '🎆', '#e0313f', '#3b6cff'],
+      [nth(8, 1, 1), 'Labor Day', '🇺🇸', '#e0313f', '#3b6cff'],
+      [new Date(y, 9, 31), 'Halloween', '🎃', '#ff7a18', '#8b5cf6'],
+      [new Date(y, 10, 11), 'Veterans Day', '🇺🇸', '#e0313f', '#3b6cff'],
+      [nth(10, 4, 4), 'Thanksgiving', '🦃', '#f59e0b', '#b45309'],
+      [new Date(y, 11, 24), 'Christmas Eve', '🎄', '#e0313f', '#22c55e'],
+      [new Date(y, 11, 25), 'Christmas', '🎄', '#e0313f', '#22c55e'],
+      [new Date(y, 11, 31), "New Year's Eve", '🎆', '#ffd34d', '#c9d6e8'],
+    ];
+    var out = {};
+    list.forEach(function (h) { out[(h[0].getMonth() + 1) + '-' + h[0].getDate()] = h.slice(1); });
+    return out;
+  }
+  var MONTHS = { jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11 };
+  // Tag 10-day cards that fall on a holiday (reads the "Nov 26" date label on each card).
+  function markHolidays(list) {
+    if (!list) return;
+    var now = new Date();
+    list.querySelectorAll('.dwl-day').forEach(function (card) {
+      card.classList.remove('is-holiday'); var old = card.querySelector('.dwl-holiday'); if (old) old.remove();
+      var label = (card.querySelector('.dwl-day-when span:last-child') || {}).textContent || '';
+      var m = label.trim().match(/^([A-Za-z]{3})[a-z]*\.?\s+(\d{1,2})$/);
+      if (!m || MONTHS[m[1].toLowerCase()] === undefined) return;
+      var mon = MONTHS[m[1].toLowerCase()], day = +m[2], y = now.getFullYear();
+      if (mon < now.getMonth() - 6) y++;
+      var h = holidays(y)[(mon + 1) + '-' + day];
+      if (!h) return;
+      card.classList.add('is-holiday');
+      card.style.setProperty('--hol1', h[2]); card.style.setProperty('--hol2', h[3]);
+      card.insertAdjacentHTML('beforeend', '<span class="dwl-holiday"><b aria-hidden="true">' + h[1] + '</b>' + esc(h[0]) + '</span>');
+    });
+  }
   function collapseDays(list, key) {
     if (!list) return;
     rangeBars(list);
@@ -326,7 +376,7 @@
     return c;
   }
 
-  window.DWL = { tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts, collapseDays: collapseDays, resetDays: function (key) { delete expanded[key]; }, timingPrefix: timingPrefix, periodAmounts: periodAmounts, modelPeriodAmounts: modelPeriodAmounts, timedCondition: timedCondition, applyRestOfToday: applyRestOfToday, restOfToday: restOfToday,
+  window.DWL = { markHolidays: markHolidays, holidays: holidays, tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts, collapseDays: collapseDays, resetDays: function (key) { delete expanded[key]; }, timingPrefix: timingPrefix, periodAmounts: periodAmounts, modelPeriodAmounts: modelPeriodAmounts, timedCondition: timedCondition, applyRestOfToday: applyRestOfToday, restOfToday: restOfToday,
     publishBlend: publishBlend, blendReady: blendReady, moragaBlend: moragaBlend };
 
   // Section tabs: highlight the tab for the section currently in view.
