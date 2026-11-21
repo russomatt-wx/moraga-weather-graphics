@@ -1128,3 +1128,12 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
   #public-shell .dwl-panel .dwl-days > .dwl-day { grid-template-columns: 50px 48px minmax(0, 1fr) 52px 118px minmax(0, 1fr) 40px !important; padding-left: 10px !important; padding-right: 8px !important; }
 }
 @media (max-width: 600px) { #public-shell .dwl-panel .dwl-days > .dwl-day { grid-template-columns: 48px 46px minmax(0, 1fr) 52px 126px minmax(0, 1fr) 40px !important; column-gap: 5px !important; } }
+/* Highs and lows: the boldest thing in each 10-day row */
+#public-shell .dwl-days > .dwl-day > .dwl-day-hi, #public-shell .dwl-days > .dwl-day > .dwl-day-lo {
+  font-size: 33px !important; font-weight: 800 !important; letter-spacing: -.03em; }
+#public-shell .dwl-days > .dwl-day > .dwl-day-hi { text-shadow: 0 0 16px color-mix(in srgb, var(--hi) 55%, transparent); }
+#public-shell .dwl-days > .dwl-day > .dwl-day-lo { text-shadow: 0 0 16px color-mix(in srgb, var(--lo) 55%, transparent); }
+@media (max-width: 600px) { #public-shell .dwl-panel .dwl-days > .dwl-day { grid-template-columns: 46px 54px minmax(0, 1fr) 48px 116px minmax(0, 1fr) 50px !important; column-gap: 4px !important; } }
+@media (max-width: 360px) { #public-shell .dwl-days > .dwl-day > .dwl-day-hi, #public-shell .dwl-days > .dwl-day > .dwl-day-lo { font-size: 27px !important; } }
+@media (min-width: 700px) { #public-shell .dwl-days > .dwl-day > .dwl-day-hi, #public-shell .dwl-days > .dwl-day > .dwl-day-lo { font-size: 38px !important; } }
+@media (max-width: 600px) { #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-sky .dwl-day-cond { font-size: 12px !important; letter-spacing: -.01em !important; } }
