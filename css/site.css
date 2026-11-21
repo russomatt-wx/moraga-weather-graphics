@@ -1313,3 +1313,51 @@ button.dwl-size-btn .s { font-size: 12px !important; } button.dwl-size-btn .l { 
   .est-table th, .est-table td { padding: 7px 3px; font-size: 12.5px; }
 }
 @media (max-width: 360px) { .pad-tides { grid-template-columns: 1fr 1fr !important; } }
+
+/* ================= Futuristic / premium pass ================= */
+:root { --violet: #8b5cf6; --glass: rgba(10, 30, 48, .55); --glass-deep: rgba(6, 20, 34, .62); }
+/* Live data grid + drifting cyan/violet light behind everything */
+body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background-image: linear-gradient(rgba(25, 220, 246, .055) 1px, transparent 1px), linear-gradient(90deg, rgba(25, 220, 246, .055) 1px, transparent 1px);
+  background-size: 34px 34px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 20%, transparent 78%); mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 20%, transparent 78%); }
+body::after { content: ""; position: fixed; inset: -20%; z-index: -1; pointer-events: none;
+  background: radial-gradient(circle at 20% 30%, rgba(25, 220, 246, .14), transparent 32%), radial-gradient(circle at 82% 62%, rgba(139, 92, 246, .13), transparent 34%), radial-gradient(circle at 50% 95%, rgba(25, 140, 246, .10), transparent 40%);
+  animation: dwl-drift 28s ease-in-out infinite alternate; }
+@keyframes dwl-drift { to { transform: translate3d(4%, -3%, 0) rotate(4deg); } }
+
+/* Frosted-glass panels with a light top edge */
+#public-shell .dwl-panel, #public-shell .public-obs-card, #public-shell .dwl-locbar-btn, .pad-card, .pad-key, .pad-alertbar, .pad-notes, .est-detail {
+  -webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%); }
+#public-shell .dwl-panel { background: linear-gradient(180deg, rgba(14, 42, 64, .62), rgba(6, 20, 34, .55)) !important;
+  border-color: rgba(120, 200, 255, .16) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07), 0 18px 40px -24px rgba(0, 0, 0, .8), 0 0 0 1px rgba(139, 92, 246, .05) !important; }
+#public-shell .public-obs-card { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1), 0 0 26px -8px var(--public-current-accent, #1cb5b8), 0 0 60px -30px var(--violet) !important; }
+
+/* AI chips on section headings */
+#public-shell .dwl-ai-chip { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; padding: 3px 9px; border-radius: 999px;
+  font: 700 10px/1.2 var(--font-ui); letter-spacing: .12em; text-transform: uppercase; color: #cfe9ff;
+  background: linear-gradient(90deg, rgba(25, 220, 246, .14), rgba(139, 92, 246, .18)); box-shadow: inset 0 0 0 1px rgba(150, 190, 255, .28); white-space: nowrap; }
+#public-shell .dwl-ai-chip i { width: 6px; height: 6px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--violet)); box-shadow: 0 0 6px var(--accent); animation: dwl-pulse 2.4s ease-in-out infinite; }
+@media (max-width: 420px) { #public-shell .dwl-panel-h { row-gap: 4px; } #public-shell .dwl-ai-chip { margin-left: 32px; } }
+
+/* Living signals */
+#public-shell .dwl-cc-dot { animation: dwl-pulse 2s ease-in-out infinite; }
+@keyframes dwl-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(101, 213, 173, .55); } 60% { box-shadow: 0 0 0 7px rgba(101, 213, 173, 0); } }
+#public-shell .dwl-cc-live { box-shadow: inset 0 0 0 1.4px rgba(52, 211, 153, .8), 0 0 12px -3px rgba(52, 211, 153, .9); }
+#public-shell .dwl-cc-temp { background: linear-gradient(180deg, #ffffff 30%, #bfefff); -webkit-background-clip: text; background-clip: text; color: transparent !important;
+  filter: drop-shadow(0 0 14px rgba(25, 220, 246, .35)); }
+#public-shell .dwl-cc-temp .dwl-cc-deg { -webkit-text-fill-color: #dff7ff; }
+
+/* Soft entrance */
+#public-shell .public-obs-card, #public-shell .dwl-alert-bar, #public-shell .dwl-panel { animation: dwl-rise .6s cubic-bezier(.2, .7, .2, 1) both; }
+#public-shell .dwl-alert-bar { animation-delay: .05s; } #public-shell .dwl-panel { animation-delay: .1s; } #public-shell .dwl-panel ~ .dwl-panel { animation-delay: .16s; }
+@keyframes dwl-rise { from { opacity: 0; transform: translateY(10px); } }
+
+/* Section titles with a cyan-to-violet underline glow */
+#public-shell .dwl-panel-h h2 { background: linear-gradient(90deg, #fff 55%, #cfe9ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.pad-sec-h::after, .pad-area h2::after { background: linear-gradient(90deg, rgba(25, 220, 246, .5), rgba(139, 92, 246, .35), transparent) !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  body::after, #public-shell .dwl-cc-dot, #public-shell .dwl-ai-chip i, #public-shell .public-obs-card, #public-shell .dwl-alert-bar, #public-shell .dwl-panel { animation: none !important; }
+}
