@@ -202,7 +202,7 @@
       [new Date(y, 6, 4), 'Independence Day', '🎆', '#e0313f', '#3b6cff'],
       [nth(8, 1, 1), 'Labor Day', '🇺🇸', '#e0313f', '#3b6cff'],
       [new Date(y, 10, 11), 'Veterans Day', '🇺🇸', '#e0313f', '#3b6cff'],
-      [nth(10, 4, 4), 'Thanksgiving', '🍁', '#ffcf33', '#c2410c'],
+      [nth(10, 4, 4), 'Thanksgiving', '🦃', '#f59e0b', '#b45309'],
       [new Date(y, 11, 25), 'Christmas', '🎄', '#e0313f', '#22c55e'],
     ];
     var out = {};

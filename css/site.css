@@ -1657,3 +1657,16 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi { background-im
 body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { background-image: linear-gradient(180deg, color-mix(in srgb, var(--lo) 55%, #fff), color-mix(in srgb, var(--lo) 92%, #fff)) !important; filter: drop-shadow(0 0 7px color-mix(in srgb, var(--lo) 55%, transparent)) !important; }
 body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi { background-image: linear-gradient(180deg, color-mix(in srgb, var(--hi) 78%, #fff), var(--hi)) !important; filter: saturate(1.35) brightness(1.08) drop-shadow(0 0 8px color-mix(in srgb, var(--hi) 70%, transparent)) !important; }
 body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { background-image: linear-gradient(180deg, color-mix(in srgb, var(--lo) 78%, #fff), var(--lo)) !important; filter: saturate(1.35) brightness(1.08) drop-shadow(0 0 8px color-mix(in srgb, var(--lo) 70%, transparent)) !important; }
+/* Holiday: back to the original themed outline + top-right ribbon */
+body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { padding-top: 6px !important; margin-top: 10px !important; border: 2px solid transparent !important;
+  background:
+    linear-gradient(100deg, color-mix(in srgb, var(--hol1) 22%, transparent), color-mix(in srgb, var(--hol2) 12%, transparent)) padding-box,
+    linear-gradient(180deg, #0f3550, #082339) padding-box,
+    linear-gradient(100deg, var(--hol1), var(--hol2)) border-box !important;
+  box-shadow: 0 0 16px -3px var(--hol1), inset 0 0 22px color-mix(in srgb, var(--hol2) 14%, transparent) !important; overflow: visible !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { top: -10px !important; right: 14px !important; left: auto !important;
+  padding: 2px 9px 2px 6px !important; border: 0 !important; font-size: 10.5px !important; letter-spacing: .08em !important; color: #fff !important;
+  background: linear-gradient(90deg, var(--hol1), var(--hol2)) !important; box-shadow: 0 0 10px -2px var(--hol1) !important; text-shadow: 0 1px 2px rgba(0, 0, 0, .45); }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday b { font-size: 12px; }
+@media (min-width: 700px) { body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { left: auto !important; right: 18px !important; } }
+@media (max-width: 360px) { body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { left: auto !important; } }
