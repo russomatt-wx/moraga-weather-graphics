@@ -1785,3 +1785,25 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday b { font-size: 1
 #public-shell .dwl-now-rain small { font-size: clamp(11px, 3.05vw, 13.5px) !important; }
 #public-shell .dwl-now-row small { font-size: clamp(11.5px, 3.2vw, 14px) !important; }
 #public-shell .dwl-now-icon { margin-right: clamp(10px, 4vw, 22px); }
+
+/* ===== Compact alert cards: two lines (title / area · time), slim box; summary text full width ===== */
+#public-shell .dwl-alert { border-radius: 16px !important; }
+#public-shell .dwl-alert summary { padding: 8px 10px 8px 12px !important; gap: 10px !important; min-height: 0 !important; }
+#public-shell .dwl-alert .dwl-alert-badge { width: 24px !important; height: 24px !important; padding: 0 !important; border-right: 0 !important; flex: none; }
+#public-shell .dwl-alert .dwl-alert-badge svg { width: 22px !important; height: 22px !important; }
+#public-shell .dwl-alert .dwl-alert-main { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 1px; }
+#public-shell .dwl-alert .dwl-alert-eyebrow { display: none !important; }
+#public-shell .dwl-alert .dwl-alert-title { font-size: clamp(15px, 4.2vw, 17px) !important; line-height: 1.2 !important; font-weight: 750; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#public-shell .dwl-alert .dwl-alert-when { font-size: 10.5px !important; letter-spacing: .08em !important; line-height: 1.3 !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #a9bccd; }
+#public-shell .dwl-alert .dwl-alert-nws { padding: 2px 8px !important; font-size: 10px !important; }
+#public-shell .dwl-alert .dwl-alert-chev { flex: none; }
+#public-shell .dwl-now-alerts #public-alerts { display: flex; flex-direction: column; gap: 8px; }
+/* Summary: no side label, text runs the full width */
+#public-shell .dwl-ar-sum { display: block !important; }
+#public-shell .dwl-ar-sum .dwl-ar-tag { display: none !important; }
+#public-shell .dwl-ar-sum b { font-size: 15px !important; line-height: 1.4 !important; font-weight: 600 !important; }
+#public-shell .dwl-alert { width: 100%; max-width: 100%; box-sizing: border-box; overflow: hidden; }
+#public-shell .dwl-alert summary { min-width: 0; }
+#public-shell .dwl-now-alerts #public-alerts { width: 100% !important; max-width: 100% !important; min-width: 0 !important; box-sizing: border-box; }
+#public-shell .dwl-now-alerts #public-alerts > * { min-width: 0; max-width: 100%; }
+#public-shell .dwl-alert .dwl-alert-when { letter-spacing: .05em !important; }

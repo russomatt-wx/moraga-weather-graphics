@@ -429,6 +429,12 @@
     var first = what.replace(/\s+expected\.?$/i, '').replace(/\.$/, '');
     first = first.replace(/temperatures? as (low|high) as (-?\d+) to (-?\d+) degrees/i, 'temps $2–$3°').replace(/(-?\d+) to (-?\d+) degrees/i, '$1–$2°')
       .replace(/^(\w+) conditions with /i, function (m, w) { return 'A ' + w.toLowerCase() + ' stretch with '; }).replace(/ miles per hour/gi, ' mph').replace(/(\d+) to (\d+) mph/gi, '$1–$2 mph');
+    // Combined NWS products ("For the Coastal Flood Advisory, ... For the Coastal Flood Warning, ..."): keep only this alert's part.
+    var parts = first.split(/(?=\bFor the [A-Z][\w ]+?(?:Warning|Advisory|Watch|Statement),)/);
+    if (parts.length > 1) {
+      var mine = parts.filter(function (x) { return x.toLowerCase().indexOf('for the ' + String(p.event || '').toLowerCase() + ',') === 0; })[0];
+      if (mine) first = mine.replace(/^For the [^,]+,\s*/, '').replace(/[.\s]+$/, '');
+    }
     first = first.charAt(0).toUpperCase() + first.slice(1);
     var imp = impacts.split(/(?<=\.)\s/)[0] || '';
     imp = imp.replace(/^[A-Z][a-z]+ conditions will be hazardous,?\s*/i, 'Hazardous, ').replace(/\s+/g, ' ');
@@ -437,7 +443,7 @@
     return { where: where, window: win, summary: first + '.', impact: imp, stats: stats.slice(0, 3), actions: acts };
   }
   function alertRich(A) {
-    var s = '<div class="dwl-ar-sum"><span class="dwl-ar-tag">' + svgi('spark') + 'Summary</span><div><b>' + esc(A.summary) + '</b>' + (A.impact ? '<span>' + esc(A.impact) + '</span>' : '') + '</div></div>';
+    var s = '<div class="dwl-ar-sum"><div><b>' + esc(A.summary) + '</b>' + (A.impact ? '<span>' + esc(A.impact) + '</span>' : '') + '</div></div>';
     if (A.stats.length) s += '<div class="dwl-ar-stats">' + A.stats.map(function (x) { return '<div>' + svgi(x[0]) + '<span><small>' + esc(x[1]) + '</small><b>' + esc(x[2]) + '</b></span></div>'; }).join('') + '</div>';
     if (A.actions.length) s += '<div class="dwl-ar-acts"><b>Key actions</b>' + A.actions.map(function (x) { return '<div>' + svgi(x[0]) + '<span>' + esc(x[1]) + '</span></div>'; }).join('') + '</div>';
     return s;
