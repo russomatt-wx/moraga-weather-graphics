@@ -1835,3 +1835,10 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday b { font-size: 1
   background: rgba(255, 255, 255, .03) !important; border: 1px solid rgba(160, 190, 230, .22) !important; box-shadow: none !important;
   color: #b9c9db !important; font-size: clamp(11.5px, 3.2vw, 13px) !important; font-weight: 500 !important; padding: 3px 11px 3px 9px !important; gap: 6px !important; }
 #public-shell .dwl-ai-chip-net svg { width: 14px !important; height: 14px !important; color: #8fb8ff !important; filter: none !important; }
+/* 10-day: lighter row outlines */
+body #public-shell .dwl-panel .dwl-days > .dwl-day:not(.is-holiday) { border-width: 1.25px !important;
+  background: linear-gradient(180deg, rgba(20, 70, 100, .92), rgba(10, 38, 64, .92)) padding-box,
+              linear-gradient(90deg, color-mix(in srgb, var(--hi) 75%, transparent), color-mix(in srgb, var(--lo) 75%, transparent)) border-box !important;
+  box-shadow: -4px 0 12px -9px var(--hi), 4px 0 12px -9px var(--lo), inset 0 0 14px rgba(60, 200, 255, .05) !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { border-width: 1.25px !important; box-shadow: 0 0 10px -4px var(--hol1), inset 0 0 18px color-mix(in srgb, var(--hol2) 12%, transparent) !important; }
+#public-shell .dwl-panel[aria-label="10-day forecast"] { border-width: 1px !important; border-color: rgba(70, 200, 255, .4) !important; box-shadow: 0 0 16px -8px rgba(40, 190, 255, .45) !important; }
