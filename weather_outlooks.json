@@ -1,40 +1,40 @@
 {
   "schema_version": 1,
-  "generated_utc": "2026-11-20T14:02:41.218Z",
-  "source_label": "Diablo Weather Labs \u00b7 Nov 20 6 AM briefing (06:02:37 PST) + NWS Bay Area AFD (4:28 AM PST Nov 20) + NWS Sacramento AFD (1:57 AM PST Nov 19; latest accessible) + NWS Seattle AFD (2:53 AM PST Nov 20) + GFS/ECMWF provider point guidance (3:35 AM PST; cycles unverified) and EPS/GEFS member-spread checks (cycles unverified; HRRR quarantined) + NOAA GOES-West GeoColor (08:41 UTC / 12:41 AM PST; latest indexed frame) + Marin County king-tide notice (Nov 19)",
+  "generated_utc": "2026-11-21T00:58:36.000Z",
+  "source_label": "Diablo Weather Labs · Nov 20 4 PM briefing (4:01 PM PST) + NWS Bay Area AFD (4:07 PM PST Nov 20) + NWS Sacramento AFD (12:55 PM PST Nov 20) + latest available local GFS/ECMWF and GEFS/EPS guidance (provider initialization cycles unverified)",
   "horizon_days": 7,
   "outlooks": {
     "Moraga": {
-      "headline": "Moraga turns drier this afternoon, then watches a weekend shower return",
-      "text": "Moraga starts Friday with a few lingering showers, but the National Weather Service expects the shower coverage to fade through the afternoon and most of the evening to turn dry. The air mass stays chilly, with another cold start Saturday before a weaker front brings light rain late Saturday into Sunday; regional totals look modest, around a tenth to a quarter inch. Monday is the best dry break. A stronger Tuesday\u2013Wednesday system could bring renewed, heavier rain, so keep drainage areas clear while soils remain wet."
+      "headline": "Moraga faces a cold start before light weekend rain returns",
+      "text": "Moraga turns colder overnight, with sheltered spots potentially dipping into the 30s before clouds increase ahead of the next front. Saturday should start mostly quiet, then light rain is expected to arrive late in the day or evening and continue intermittently into Sunday; the broader Bay Area forecast calls for roughly 0.10–0.50 inch, with higher totals in the coastal ranges. Monday looks like the clearest dry break. A stronger Tuesday–Wednesday system could bring more widespread rain and gusty winds, so keep drainage clear while soils remain saturated."
     },
     "Lafayette": {
-      "headline": "Lafayette gets a cool break before the next Pacific front",
-      "text": "Lafayette should see any leftover Friday showers taper by early afternoon, followed by a brighter, chilly afternoon and a mostly dry evening. Saturday looks quieter at first, then a weaker front may bring light rain late in the day and into Sunday; the regional Bay Area estimate is roughly a tenth to a quarter inch through early Monday. Monday offers the clearest pause. A stronger system is expected Tuesday into Wednesday, with another round of rain and gusty winds possible, though exact local totals remain uncertain."
+      "headline": "Lafayette gets a chilly pause before another round of rain",
+      "text": "Lafayette should have a mostly quiet, cold night, with the main question being how quickly clouds arrive and limit valley cooling toward Saturday morning. The next front looks weaker than the storm that just passed, bringing rain mainly late Saturday into Sunday rather than an all-day washout; regional Bay Area totals are forecast around 0.10–0.50 inch, with the higher amounts favored over coastal terrain. Monday offers a welcome dry window. Another, stronger system is expected Tuesday into Wednesday, when renewed rain and gusty winds could affect already-wet ground."
     },
     "Danville": {
-      "headline": "Danville dries out today, but another rain chance arrives Saturday",
-      "text": "Danville may catch a few lingering showers Friday morning, but the NWS expects activity to decrease during the afternoon as the cold upper low moves east. Friday evening should be mostly dry and cool. A weaker front reaches the North Bay late Saturday and spreads across the Bay Area later in the day, bringing light, uneven rain into Sunday; Monday is the best break. A stronger Pacific system is forecast Tuesday\u2013Wednesday, with renewed rain and gusty winds possible. Keep an eye on drainage after this week's soaking."
+      "headline": "Danville turns colder before showers return late Saturday",
+      "text": "Danville is headed for a chilly night, and the NWS Cold Weather Advisory covers the interior East Bay early Saturday; sheltered valley temperatures could reach the 30s, although incoming clouds may keep some locations closer to the low 40s. Saturday starts mostly dry before a weaker front brings light rain late in the day and into Sunday. Monday should provide a useful break. A stronger system is forecast Tuesday–Wednesday, with more widespread rain and gusty winds possible, so watch drainage and low-lying roads after this week's soaking."
     },
     "Greenbrook": {
-      "headline": "Danville's Greenbrook area gets a lull before weekend showers",
-      "text": "Danville's Greenbrook area should see leftover showers fade Friday morning or early afternoon, then turn brighter and chilly for the evening. Saturday begins quieter, but a weaker front may bring light rain late Saturday and into Sunday; totals across the interior Bay Area are expected to be modest, though a heavier passing shower could briefly pond water. Monday looks like the best dry window. A stronger system approaches Tuesday\u2013Wednesday, bringing another chance of widespread rain and gusty winds. Keep storm drains and low spots clear."
+      "headline": "Danville's Greenbrook area braces for a cold morning and late showers",
+      "text": "Danville's Greenbrook area should turn sharply cooler overnight, with the interior East Bay Cold Weather Advisory in effect early Saturday and sheltered locations at risk of dipping into the 30s. Clouds increase ahead of a weaker front, keeping the first part of Saturday relatively quiet before light rain spreads in late Saturday and may linger into Sunday. Monday is the best opportunity for a dry reset. A stronger Pacific system approaches Tuesday–Wednesday, bringing another round of rain and gustier winds that could aggravate runoff in already-wet neighborhoods."
     },
     "Marin City": {
-      "headline": "Marin City sees showers ease, with king-tide concerns next week",
-      "text": "Marin City should see the last Friday showers taper by early afternoon, followed by a cool, mostly dry evening. A weaker front brings another chance of light rain late Saturday into Sunday, while Monday offers a short break before a stronger Tuesday\u2013Wednesday system targets the North Bay and coastal mountains with higher rainfall potential. Marin County is urging residents to avoid nonessential travel from 9 in the morning to 4 in the afternoon Tuesday through Thanksgiving as king tides peak. Watch low-lying approaches and drainage, especially when rain coincides with high water."
+      "headline": "Marin City gets a brief lull before rain and higher bay tides",
+      "text": "Marin City should see a quieter, cool stretch into Saturday, with bay-side temperatures generally less prone to the sharp valley chill expected inland. A weaker front brings rain late Saturday into Sunday, followed by a mainly dry Monday; the more consequential concern arrives Tuesday–Wednesday as another storm overlaps the November king-tide cycle. The NWS says 2–3 feet of coastal inundation is possible at vulnerable Bay shoreline locations during peak tides, with runoff or storm surge potentially worsening impacts. Keep an eye on low-lying access roads and waterfront areas."
     },
     "Sausalito": {
-      "headline": "Sausalito's waterfront gets a lull before king tides and more rain",
-      "text": "Sausalito's NWS point forecast keeps rain mainly before 8 a.m. Friday, then turns brighter with a high near 56\u00b0F. Another weak front brings rain late Saturday and Saturday night, with a 50% shower chance Sunday; Monday should be partly sunny with only a slight early rain chance. The bigger concern arrives Tuesday\u2013Wednesday, when a stronger system may bring rain and wind as king tides peak. Marin County advises avoiding nonessential travel from 9 in the morning to 4 in the afternoon Tuesday through Thanksgiving; low waterfront roads may be especially vulnerable."
+      "headline": "Sausalito's waterfront gets a short break before king tides and rain",
+      "text": "Sausalito should have a mostly quiet, cool start to the weekend, although clouds will increase before a weaker front brings rain late Saturday into Sunday. Monday looks like a brief pause, but the pattern turns more active Tuesday and Wednesday with another round of rain and stronger winds possible near the coast. The larger waterfront concern is the king-tide cycle: the NWS says 2–3 feet of inundation is possible at vulnerable Bay shoreline locations during peak tides, and rain runoff or storm surge could add to the water level. Watch low-lying roads and shoreline access."
     },
     "Brentwood": {
-      "headline": "Brentwood gets a quieter Friday before a wetter holiday week",
-      "text": "Brentwood should see any leftover showers diminish by early afternoon Friday, with a drier and chilly evening behind the departing low. A weaker weekend front may bring light, scattered rain late Saturday into Sunday, but the NWS Sacramento office expects Valley totals to stay near a tenth inch or less. Monday is the best pause. A stronger system is increasingly likely Tuesday\u2013Wednesday, although the amount reaching the Delta remains uncertain. Keep an eye on low-lying roads and official Delta flood advisories as high tides rise next week."
+      "headline": "Brentwood gets a foggy, chilly pause before a wetter holiday week",
+      "text": "Brentwood should turn mostly dry tonight, but cold temperatures and patchy Delta-area fog are possible early Saturday, especially around low-lying routes. The weekend front is weaker than the recent storm and should bring only light, spotty rain late Saturday into Sunday, although exact totals around the Delta remain uncertain. Monday looks like a short break. Rain chances increase again Tuesday into Wednesday as a stronger system moves inland, but current guidance suggests this system should be less potent than the last; keep watching for updates as the holiday period approaches."
     },
     "East Sacramento": {
-      "headline": "East Sacramento dries out Friday, then tracks a stronger midweek system",
-      "text": "East Sacramento may see a few showers linger into early Friday afternoon, but drier weather should return later in the day. Saturday is mostly quiet at first, with a weaker system bringing light Valley rain late Saturday into Sunday; the NWS Sacramento forecast keeps Valley amounts around a tenth inch or less. Monday should be dry. Confidence is increasing in a stronger Tuesday\u2013Wednesday system, with a 50\u201370% chance of at least an inch across the Sacramento Valley. Mountain travel may also be affected by renewed Sierra snow."
+      "headline": "East Sacramento gets a cold, fog-prone morning before rain returns",
+      "text": "East Sacramento should turn mostly dry tonight, then start Saturday cold with areas of fog and patchy frost possible around the Valley. A weaker system brings light rain late Saturday into Sunday, with the Sacramento office expecting around 0.10 inch or less across most Valley locations; showers may persist longer farther north and over the foothills. Monday is forecast to be briefly dry. A stronger system returns Tuesday into Wednesday, and NWS guidance puts the Sacramento Valley chance of at least an inch at 50–70%, though this system should be less potent than the last."
     }
   }
 }
