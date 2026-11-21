@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=24"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=24"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=24">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261121u">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261121v">
 
 
 
@@ -26,6 +26,7 @@
    <div class="dwl-cc-main"><div class="dwl-cc-tempwrap"><div class="dwl-cc-temprow"><strong class="dwl-cc-temp" id="public-current-temp">—</strong><div class="dwl-cc-icon" id="public-hero-icon" aria-hidden="true"></div></div><span class="dwl-cc-cond" id="public-current-condition">Loading…</span></div><div class="dwl-cc-details"><span>Humidity <b id="public-humidity">—</b></span><span>Wind <b id="public-wind">—</b></span></div></div>
    <div class="dwl-cc-metrics"><div><span>Dew point</span><strong><b id="public-dew">—</b></strong></div><div><span>Pressure</span><strong><b id="public-pressure">—</b><small class="dwl-cc-trend" id="public-pressure-trend"></small></strong></div><div><span>Wind gust</span><strong><b id="public-gust">—</b></strong></div></div>
   </div>
+  <div class="dwl-cc-sun" id="public-sun" hidden></div>
   <div class="dwl-cc-today-title" id="public-today-title">TODAY'S FORECAST</div>
   <div class="dwl-cc-today"><div><span>High</span><strong id="public-today-high">—</strong></div><div><span>Low</span><strong id="public-today-low">—</strong></div><div><span>Rainfall</span><strong id="public-rain">—</strong></div></div>
   <div class="public-note" id="public-summary" hidden></div>
@@ -325,6 +326,32 @@
   return code;
  }
  // Is the sun up at a local (America/Los_Angeles) hour string 'YYYY-MM-DDTHH:MM'? NOAA solar position, ±few min.
+ // Sunrise / sunset (NOAA sunrise equation, about a minute of accuracy) for a Pacific calendar date.
+ function sunTimes(y,m,d,lat,lon){
+  const rad=Math.PI/180,jd=Date.UTC(y,m-1,d,12)/864e5+2440587.5,n=Math.round(jd-2451545+0.0008);
+  const Js=n-lon/360,M=(357.5291+0.98560028*Js)%360,C=1.9148*Math.sin(M*rad)+0.02*Math.sin(2*M*rad)+0.0003*Math.sin(3*M*rad);
+  const L=(M+C+180+102.9372)%360,Jt=2451545+Js+0.0053*Math.sin(M*rad)-0.0069*Math.sin(2*L*rad);
+  const dec=Math.asin(Math.sin(L*rad)*Math.sin(23.4397*rad)),cw=(Math.sin(-0.833*rad)-Math.sin(lat*rad)*Math.sin(dec))/(Math.cos(lat*rad)*Math.cos(dec));
+  if(cw<-1||cw>1)return null;
+  const w=Math.acos(cw)/rad,toDate=j=>new Date((j-2440587.5)*864e5);
+  return {rise:toDate(Jt-w/360),set:toDate(Jt+w/360)};
+ }
+ const PT_PARTS=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
+ const ptStamp=dt=>{const p=Object.fromEntries(PT_PARTS.formatToParts(dt).map(x=>[x.type,x.value]));return p.year+'-'+p.month+'-'+p.day+'T'+p.hour+':'+p.minute;};
+ const ptClock=dt=>dt.toLocaleTimeString('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'});
+ const SUN_ICON={
+  rise:'<svg class="dwl-sun-ic" viewBox="0 0 48 34" aria-hidden="true"><defs><linearGradient id="sunrg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe27a"/><stop offset="1" stop-color="#ff9f2e"/></linearGradient></defs><path d="M12 26a12 12 0 0 1 24 0Z" fill="url(#sunrg)"/><g stroke="#ffc34d" stroke-width="2.4" stroke-linecap="round"><path d="M24 7v4M9.5 13l2.8 2.8M38.5 13l-2.8 2.8M4 26h4M40 26h4"/></g><path d="M3 29h42" stroke="#9fd8f0" stroke-width="2.2" stroke-linecap="round"/><path d="M24 4.5l-3.6 3.6M24 4.5l3.6 3.6" stroke="#ffe27a" stroke-width="2.2" stroke-linecap="round"/></svg>',
+  set:'<svg class="dwl-sun-ic" viewBox="0 0 48 34" aria-hidden="true"><defs><linearGradient id="sunsg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb347"/><stop offset="1" stop-color="#ff5e62"/></linearGradient></defs><path d="M12 26a12 12 0 0 1 24 0Z" fill="url(#sunsg)"/><g stroke="#ff9a4d" stroke-width="2.4" stroke-linecap="round"><path d="M9.5 13l2.8 2.8M38.5 13l-2.8 2.8M4 26h4M40 26h4"/></g><path d="M3 29h42" stroke="#9fd8f0" stroke-width="2.2" stroke-linecap="round"/><path d="M24 3v7M24 10l-3.6-3.6M24 10l3.6-3.6" stroke="#ffb347" stroke-width="2.2" stroke-linecap="round"/></svg>'};
+ function updateSunRow(chosen){
+  const box=el('public-sun');if(!box||!coords[chosen])return;
+  const [lat,lon]=coords[chosen],now=new Date(),t=ptStamp(now),today=sunTimes(+t.slice(0,4),+t.slice(5,7),+t.slice(8,10),lat,lon);
+  const tm=new Date(Date.UTC(+t.slice(0,4),+t.slice(5,7)-1,+t.slice(8,10)+1)),tom=sunTimes(tm.getUTCFullYear(),tm.getUTCMonth()+1,tm.getUTCDate(),lat,lon);
+  if(!today||!tom){box.hidden=true;return;}
+  // Always the next sunrise and the next sunset.
+  const s={rise:now<today.rise?today.rise:tom.rise,set:now<today.set?today.set:tom.set};
+  box.hidden=false;
+  box.innerHTML='<span>'+SUN_ICON.rise+'<small>Sunrise</small><b>'+ptClock(s.rise)+'</b></span><span>'+SUN_ICON.set+'<small>Sunset</small><b>'+ptClock(s.set)+'</b></span>';
+ }
  function sunUp(local,lat,lon){
   const probe=new Date(local+':00Z');
   const ptHour=Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'2-digit',hourCycle:'h23'}).format(probe));
@@ -370,6 +397,18 @@
      qpf:[i,i+1].reduce((a,k)=>{const v=Number(hourly.precipitation?.[k]);return a+(Number.isFinite(v)&&v>0?v:0);},0),
      src:icon.match(/src="([^"]+)"/)[1],alt:(icon.match(/alt="([^"]*)"/)||[])[1]||'',icon,rain:'<div class="public-hour-rain">'+(Number.isFinite(chance)&&Math.round(chance/10)*10>=20?Math.min(100,Math.round(chance/10)*10)+'%':'&nbsp;')+'</div>'});
   }
+  // Sunrise / sunset cards slotted in time order between the hours shown.
+  if(cards.length&&coords[city]){
+   const first=hourly.time[start],lastT=cards[cards.length-1].key,[lat,lon]=coords[city];
+   const endStamp=(()=>{const d=new Date(lastT+':00Z');d.setUTCHours(d.getUTCHours()+2);return d.toISOString().slice(0,16);})();
+   const evs=[];
+   for(let k=0;k<3;k++){const d=new Date(first.slice(0,10)+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+k);
+    const s=sunTimes(d.getUTCFullYear(),d.getUTCMonth()+1,d.getUTCDate(),lat,lon);if(!s)continue;
+    for(const [kind,dt] of [['rise',s.rise],['set',s.set]]){const st=ptStamp(dt);if(st>first&&st<endStamp)evs.push({kind,dt,st});}}
+   for(const e of evs){const day=new Date(e.st+':00').toLocaleDateString('en-US',{weekday:'short'}).toUpperCase();
+    const at=cards.findIndex(c=>!c.sun&&c.key>e.st);const card={key:'sun-'+e.kind+'-'+e.st.slice(0,10),sun:e.kind,day,hour:ptClock(e.dt),qpf:0};
+    if(at<0)cards.push(card);else cards.splice(at,0,card);}
+  }
   // Rain-amount trend under the cards (each bar = that card's 2 hours); scale never below 0.10" so drizzle stays small.
   const qpfMax=Math.max(...cards.map(d=>d.qpf),0),qpfScale=Math.max(qpfMax,0.10);
   host.classList.toggle('has-qpf',qpfMax>=0.01);
@@ -378,7 +417,7 @@
   // rebuilding, so images are never re-created (Safari could leave a re-inserted icon blank).
   const existing=[...host.querySelectorAll('.public-hour')];
   if(existing.length===cards.length&&existing.every((c,j)=>c.dataset.key===cards[j].key)){
-   existing.forEach((c,j)=>{const d=cards[j];c.style.setProperty('--hour-color',d.color);
+   existing.forEach((c,j)=>{const d=cards[j];if(d.sun)return;c.style.setProperty('--hour-color',d.color);
     c.querySelector('.public-hour-temp').textContent=d.temp;
     const im=c.querySelector('img');if(im&&im.getAttribute('src')!==d.src){im.setAttribute('src',d.src);im.alt=d.alt;}
     const r=c.querySelector('.public-hour-rain');if(r)r.outerHTML=d.rain;
@@ -386,8 +425,8 @@
     const q=c.nextElementSibling;if(q&&q.classList.contains('public-hour-qpf'))q.innerHTML=qpfBar(d);});
   }else{
    host.replaceChildren();
-   cards.forEach(d=>{const card=document.createElement('div');card.className='public-hour';card.dataset.key=d.key;card.style.setProperty('--hour-color',d.color);
-    card.innerHTML='<span class="public-hour-day">'+d.day+'</span><strong>'+d.hour+'</strong><div class="public-hour-icon">'+d.icon+'</div><strong class="public-hour-temp">'+d.temp+'</strong>'+d.rain+d.wind;host.appendChild(card);
+   cards.forEach(d=>{const card=document.createElement('div');card.className='public-hour'+(d.sun?' is-sun is-sun-'+d.sun:'');card.dataset.key=d.key;if(d.color)card.style.setProperty('--hour-color',d.color);
+    if(d.sun)card.innerHTML='<span class="public-hour-day">'+d.day+'</span><strong>'+d.hour+'</strong><div class="public-hour-icon">'+SUN_ICON[d.sun]+'</div><strong class="public-hour-sunlabel">'+(d.sun==='rise'?'Sunrise':'Sunset')+'</strong>';else card.innerHTML='<span class="public-hour-day">'+d.day+'</span><strong>'+d.hour+'</strong><div class="public-hour-icon">'+d.icon+'</div><strong class="public-hour-temp">'+d.temp+'</strong>'+d.rain+d.wind;host.appendChild(card);
     const q=document.createElement('div');q.className='public-hour-qpf';q.setAttribute('aria-hidden','true');q.innerHTML=qpfBar(d);host.appendChild(q);});
   }
   if(!(el('public-current-condition')?.textContent||'').trim()||/Loading current/.test(el('public-current-condition')?.textContent||'')){const w=lastSky&&lastSky.city===city?skyWords(lastSky):publishedSky(city);if(w)set('public-current-condition',w);}
@@ -786,7 +825,7 @@ function nwsWeatherOutlook(afd,d,h){
   const request=++revision,chosen=city;
   DWL.resetDays('local'); // every refresh / location switch starts at 5 days
   set('public-city-heading',chosen==='Danville'?'Sycamore Valley, Danville':chosen==='Greenbrook'?'Greenbrook, Danville':chosen==='Sausalito'?'Sausalito':chosen==='Sacramento'?'East Sacramento':chosen==='Brentwood'?'Brentwood':chosen);set('public-location-sub',subtitles[chosen]);
-  syncLocationButtons();
+  syncLocationButtons();updateSunRow(chosen);
   // Same location as on screen (5-minute refresh, or a saved snapshot just restored): keep the values
   // showing and update them in place instead of blanking to '—' first.
   const sameCity=chosen===shownCity;shownCity=chosen;

@@ -1215,3 +1215,20 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .dwl-holiday b { font-size: 12px; letter-spacing: 0; }
 .dwl-days { padding-top: 4px; }
 .dwl-days > .dwl-day.is-holiday + .dwl-day, .dwl-days > .dwl-day + .dwl-day.is-holiday { margin-top: 6px; }
+
+/* Sunrise / sunset */
+#public-shell .dwl-cc-sun { display: flex; justify-content: center; gap: 28px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, .14); }
+#public-shell .dwl-cc-sun[hidden] { display: none; }
+#public-shell .dwl-cc-sun > span { display: flex; align-items: center; gap: 7px; }
+#public-shell .dwl-cc-sun .dwl-sun-ic { width: 30px; height: 21px; }
+#public-shell .dwl-cc-sun small { font-size: 13px; color: #a6bdcf; }
+#public-shell .dwl-cc-sun b { font-size: clamp(15px, 4vw, 18px); font-weight: 650; color: #edf7ff; }
+#public-shell .public-hour.is-sun { background: linear-gradient(180deg, rgba(255, 179, 71, .16), rgba(10, 34, 52, .65)) !important; border-color: rgba(255, 179, 71, .55) !important; }
+#public-shell .public-hour.is-sun-set { background: linear-gradient(180deg, rgba(255, 94, 98, .16), rgba(10, 34, 52, .65)) !important; border-color: rgba(255, 120, 98, .55) !important; }
+#public-shell .public-hour.is-sun .public-hour-icon { display: flex; justify-content: center; align-items: center; min-height: 52px; }
+#public-shell .public-hour.is-sun .dwl-sun-ic { width: 46px; height: 33px; }
+#public-shell .public-hour.is-sun strong:not(.public-hour-sunlabel) { font-size: 14px; white-space: nowrap; }
+#public-shell .public-hour-sunlabel { display: block; margin-top: 8px; font-size: 13px; font-weight: 700; color: #ffd36b; }
+#public-shell .public-hour.is-sun-set .public-hour-sunlabel { color: #ffa48a; }
+#public-shell .public-hourly .public-hour.is-sun { background: linear-gradient(180deg, rgba(255, 179, 71, .32), rgba(255, 140, 60, .08) 60%, rgba(10, 34, 52, .6)) !important; }
+#public-shell .public-hourly .public-hour.is-sun-set { background: linear-gradient(180deg, rgba(255, 94, 98, .32), rgba(255, 120, 80, .08) 60%, rgba(10, 34, 52, .6)) !important; }
