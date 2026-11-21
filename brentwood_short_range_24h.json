@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-21T19:51:49.942582+00:00",
+  "generated_utc": "2026-11-21T19:53:38.873935+00:00",
   "location": "brentwood",
   "latitude": 37.957,
   "longitude": -121.701,
@@ -164,8 +164,8 @@
       100.0,
       100.0,
       100.0,
-      99.7,
-      99.6
+      100.0,
+      100.0
     ]
   },
   "method": "Weighted HRRR/RRFS/ECMWF/GFS blend. Sky icon from 3-hour smoothed blended cloud cover; rain icon from blended rain chance; thunder/fog only when a weighted majority of models agree."
