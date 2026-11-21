@@ -58,6 +58,15 @@
     "D9278",
     "453PG"
    ]
+  },
+  "2026-11-20": {
+   "high_f": 55.7,
+   "low_f": 44.8,
+   "samples": 2,
+   "stations": [
+    "D9278",
+    "453PG"
+   ]
   }
  },
  "danville": {
@@ -98,19 +107,31 @@
    ]
   },
   "2026-11-18": {
-   "high_f": 56.0,
-   "low_f": 47.9,
-   "samples": 2,
+   "high_f": 56.2,
+   "low_f": 47.4,
+   "samples": 3,
    "stations": [
+    "SJS61",
     "PG938",
     "PG930"
    ]
   },
   "2026-11-19": {
-   "high_f": 54.2,
-   "low_f": 45.1,
-   "samples": 2,
+   "high_f": 54.5,
+   "low_f": 44.8,
+   "samples": 3,
    "stations": [
+    "SJS61",
+    "PG938",
+    "PG930"
+   ]
+  },
+  "2026-11-20": {
+   "high_f": 55.3,
+   "low_f": 40.8,
+   "samples": 3,
+   "stations": [
+    "SJS61",
     "PG938",
     "PG930"
    ]
@@ -150,18 +171,29 @@
    ]
   },
   "2026-11-18": {
-   "high_f": 57.0,
-   "low_f": 46.8,
-   "samples": 1,
+   "high_f": 56.8,
+   "low_f": 46.6,
+   "samples": 2,
    "stations": [
+    "SJS61",
     "PG938"
    ]
   },
   "2026-11-19": {
-   "high_f": 54.8,
-   "low_f": 43.8,
-   "samples": 1,
+   "high_f": 55.0,
+   "low_f": 44.1,
+   "samples": 2,
    "stations": [
+    "SJS61",
+    "PG938"
+   ]
+  },
+  "2026-11-20": {
+   "high_f": 55.6,
+   "low_f": 39.2,
+   "samples": 2,
+   "stations": [
+    "SJS61",
     "PG938"
    ]
   }
@@ -220,6 +252,16 @@
   "2026-11-19": {
    "high_f": 57.0,
    "low_f": 42.7,
+   "samples": 3,
+   "stations": [
+    "G8052",
+    "E8430",
+    "G7844"
+   ]
+  },
+  "2026-11-20": {
+   "high_f": 55.3,
+   "low_f": 40.3,
    "samples": 3,
    "stations": [
     "G8052",
@@ -287,6 +329,16 @@
     "PG712",
     "394PG"
    ]
+  },
+  "2026-11-20": {
+   "high_f": 52.1,
+   "low_f": 40.9,
+   "samples": 3,
+   "stations": [
+    "334PG",
+    "PG712",
+    "394PG"
+   ]
   }
  },
  "sacramento": {
@@ -343,6 +395,15 @@
     "CF181",
     "G5219"
    ]
+  },
+  "2026-11-20": {
+   "high_f": 58.4,
+   "low_f": 44.9,
+   "samples": 2,
+   "stations": [
+    "CF181",
+    "G5219"
+   ]
   }
  },
  "sausalito": {
@@ -388,6 +449,14 @@
   },
   "2026-11-19": {
    "high_f": 57.0,
+   "low_f": 48.0,
+   "samples": 1,
+   "stations": [
+    "G5625"
+   ]
+  },
+  "2026-11-20": {
+   "high_f": 55.0,
    "low_f": 48.0,
    "samples": 1,
    "stations": [
