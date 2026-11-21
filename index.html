@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=24"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=24"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=24">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261121g">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261121h">
 
 
 
@@ -638,10 +638,14 @@ function nwsWeatherOutlook(afd,d,h){
    // Cards only for alerts covering this town (plus nearby warnings); other county alerts go on one quiet line.
    // Repeats of the same alert type (e.g. two nights of Cold Weather Advisory) are merged.
    const seenEv=new Set(),cards=[];
-   for(const x of items){const e=x.properties.event;if((!x._nearby||/warning|emergency/i.test(e))&&!seenEv.has(e)){seenEv.add(e);cards.push(x);}}
+   // A county-wide warning gets a card only if it can affect this town: shoreline / ocean alerts
+   // (coastal flood, high surf, rip currents, marine) for elsewhere in the county stay on the 'elsewhere' line.
+   const SHORE=/coastal|lakeshore|shoreline|surf|rip current|beach|marine|small craft|gale|storm warning|hazardous seas|tsunami/i;
+   const promote=x=>!x._nearby||(/warning|emergency/i.test(x.properties.event)&&!SHORE.test(x.properties.event));
+   for(const x of items){const e=x.properties.event;if(promote(x)&&!seenEv.has(e)){seenEv.add(e);cards.push(x);}}
    const nearbyNames=[...new Set(items.filter(x=>x._nearby&&!seenEv.has(x.properties.event)).map(x=>x.properties.event))];
    // Let the outlook mention alerts that cover this town (not just nearby county alerts).
-   outlookAlerts={city:chosen,events:items.filter(x=>!x._nearby||/warning/i.test(x.properties.event)).map(x=>x.properties.event+(x._nearby?' (nearby)':''))};
+   outlookAlerts={city:chosen,events:items.filter(promote).map(x=>x.properties.event+(x._nearby?' (nearby)':''))};
    if(lastOutlook&&chosen===city)set('public-discussion',nwsWeatherOutlook(lastOutlook.afd,lastOutlook.d,lastOutlook.h));
    const nearbyLine=()=>{if(!nearbyNames.length)return;const n=document.createElement('a');n.className='dwl-alert-nearby';n.href='https://forecast.weather.gov/MapClick.php?lat='+lat+'&lon='+lon;n.target='_blank';n.rel='noopener noreferrer';
      n.textContent='Also in effect elsewhere in the county: '+nearbyNames.join(', ');host.appendChild(n);};
@@ -655,7 +659,7 @@ function nwsWeatherOutlook(afd,d,h){
     const eye=document.createElement('span');eye.className='dwl-alert-eyebrow';eye.textContent='NWS '+level(p.event)+(item._nearby?' · Nearby':'')+(item._upcoming?' · Upcoming':'');
     const title=document.createElement('span');title.className='dwl-alert-title';title.textContent=p.event;
     const time=document.createElement('span');time.className='dwl-alert-when';
-    const end=p.ends||p.expires;time.textContent=item._upcoming&&p.onset?'Starts '+when(p.onset)+(end?' · until '+when(end):''):end?'Until '+when(end):'In effect';
+    const end=p.ends||p.expires;time.textContent=(item._nearby?'Nearby · ':'')+(item._upcoming&&p.onset?'Starts '+when(p.onset)+(end?' · until '+when(end):''):end?'Until '+when(end):'In effect');
     main.append(eye,title,time);
     const chev=document.createElement('span');chev.className='dwl-alert-chev';chev.setAttribute('aria-hidden','true');chev.textContent='⌄';
     sum.append(badge,main,chev);card.appendChild(sum);
