@@ -3,8 +3,13 @@ import LOCATIONS from '../locations.json';
 import { AlertPush, handlePush, runAlertCheck } from './push.js';
 import { WU_STATIONS, WU_PRIMARY, TOWN_COORDS, LOCATION_IDS, wuCurrent, wuToday, wuDay, wuDayObs, skyFor, wuKeyShape, sunElevation } from './wu.js';
 // Rain the station is measuring right now beats any sky estimate (airport reports lag passing bands).
-function rainingSky(rate, sky, city) {
+// A station's rain rate only overrides the sky when it's believable. One bucket tip (0.01 in/hr) can come
+// from a sprinkler, dew or a stray drop and lingers for an hour, so a trace rate needs support:
+// humid air (85%+) or nearby airports already reporting precipitation.
+function rainingSky(rate, sky, city, humidity) {
   if (!(Number(rate) > 0)) return sky;
+  const airportsWet = sky && Number(sky.code) >= 51 && Number(sky.code) <= 99;
+  if (Number(rate) < 0.03 && !(Number(humidity) >= 85) && !airportsWet) return sky;
   const c = TOWN_COORDS[city], day = c ? sunElevation(c[0], c[1]) > 0 : true;
   const r = Number(rate);
   return r >= 0.3 ? { text: 'Heavy rain', code: 65, is_day: day, source: 'station_rain_rate', rate_in_hr: r }
@@ -250,7 +255,7 @@ export default {
     // Hand-picked Weather Underground station first (needs WU_API_KEY); Xweather below is the fallback.
     if (WU_PRIMARY.has(city) && String(env.WU_API_KEY || '').trim()) {
       const wu = await wuCurrent(WU_STATIONS[city], env, wuLog);
-      if (wu) { const body = {...wu, city, station_selection:'weather_underground', sky: rainingSky(wu.precip_rate_in_hr, await sky(wu.solar_radiation_wm2), city), source:'Weather Underground'}; Object.assign(body, await extras(body)); return Response.json({...body, diagnostics: wuLog.length ? wuLog : undefined}, {headers:cors}); }
+      if (wu) { const body = {...wu, city, station_selection:'weather_underground', sky: rainingSky(wu.precip_rate_in_hr, await sky(wu.solar_radiation_wm2), city, wu.humidity_pct), source:'Weather Underground'}; Object.assign(body, await extras(body)); return Response.json({...body, diagnostics: wuLog.length ? wuLog : undefined}, {headers:cors}); }
     }
     if (!env.XWEATHER_CLIENT_ID || !env.XWEATHER_CLIENT_SECRET) return Response.json({error:'Live service not configured'},{status:503,headers:cors});
     let station = city === 'moraga' ? STATION : (city === 'lafayette' ? env.LAFAYETTE_STATION_ID : city === 'greenbrook' ? env.GREENBROOK_STATION_ID : city === 'danville' ? env.DANVILLE_STATION_ID : null);
