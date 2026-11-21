@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>try{localStorage.removeItem('dwl-page-zoom')}catch(e){}</script>
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=27"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=27"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=27">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261124h">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261124m">
 
 
 
@@ -2796,22 +2796,23 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
  const addScript=src=>new Promise((ok,no)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s);});
  // Leaflet + protomaps-leaflet are served from this site (js/vendor), not a third-party CDN.
  async function loadLeaflet(){if(!window.L){const c=document.createElement('link');c.rel='stylesheet';c.href='js/vendor/leaflet-1.9.4.css';document.head.appendChild(c);await addScript('js/vendor/leaflet-1.9.4.js');}
-  if(!window.protomapsL)await addScript('js/vendor/protomaps-leaflet-5.1.0.js');}
+  if(!window.protomapsL)await addScript('js/vendor/protomaps-leaflet-5.1.0.js?v=navy1');}
  const tile=m=>'https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/nexrad-n0q-900913'+(m?'-m'+String(m).padStart(2,'0')+'m':'')+'/{z}/{x}/{y}.png?_='+stamp;
  function frameTime(m){const t=new Date(Date.now()-m*60000);t.setMinutes(Math.floor(t.getMinutes()/5)*5,0,0);return t.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'});}
- function show(i){layers.forEach((l,j)=>l.setOpacity(j===i?.78:0));idx=i;el('radar-time').textContent=(FRAMES[i]===0?'Now · ':'')+frameTime(FRAMES[i]);}
+ function show(i){layers.forEach((l,j)=>l.setOpacity(j===i?.88:0));idx=i;el('radar-time').textContent=(FRAMES[i]===0?'Now · ':'')+frameTime(FRAMES[i]);}
  function loop(){clearTimeout(timer);if(!playing)return;timer=setTimeout(()=>{show((idx+1)%FRAMES.length);loop();},idx===FRAMES.length-1?1600:550);}
  function buildFrames(){stamp=Math.floor(Date.now()/300000);layers.forEach(l=>map.removeLayer(l));
-  layers=FRAMES.map(m=>L.tileLayer(tile(m),{opacity:0,zIndex:2,maxNativeZoom:10,maxZoom:12,updateWhenIdle:false,keepBuffer:1}).addTo(map));show(FRAMES.length-1);}
+  layers=FRAMES.map(m=>L.tileLayer(tile(m),{opacity:0,zIndex:2,pane:'radar',maxNativeZoom:10,maxZoom:12,updateWhenIdle:false,keepBuffer:1}).addTo(map));show(FRAMES.length-1);}
  async function start(){if(started)return;started=true;
   try{await loadLeaflet();}catch(e){el('radar-map').innerHTML='<div class="dwl-radar-loading">Radar unavailable right now.</div>';return;}
   el('radar-map').innerHTML='';
-  map=L.map('radar-map',{zoomControl:false,attributionControl:false,scrollWheelZoom:false,dragging:!L.Browser.mobile,tap:false,touchZoom:true,doubleClickZoom:true}).setView(want||where(),8);
+  map=L.map('radar-map',{zoomControl:false,attributionControl:false,scrollWheelZoom:false,dragging:!L.Browser.mobile,tap:false,touchZoom:true,doubleClickZoom:true}).setView(want||where(),9);
   // Self-hosted dark basemap: OpenStreetMap data (Protomaps build) in one PMTiles file on this site.
   // Roads/water/land draw under the radar; place names draw on a pane above it so they stay readable.
+  map.createPane('radar');map.getPane('radar').style.zIndex=300;map.getPane('radar').style.pointerEvents='none';
   map.createPane('labels');map.getPane('labels').style.zIndex=450;map.getPane('labels').style.pointerEvents='none';
   const PM='basemap/norcal.pmtiles',theme=protomapsL.leafletLayer({url:PM,flavor:'dark',lang:'en'});
-  protomapsL.leafletLayer({url:PM,paintRules:theme.paintRules,labelRules:[],backgroundColor:theme.backgroundColor,maxZoom:13}).addTo(map);
+  protomapsL.leafletLayer({url:PM,paintRules:theme.paintRules,labelRules:[],backgroundColor:theme.backgroundColor,maxZoom:13,className:'dwl-radar-base'}).addTo(map);
   protomapsL.leafletLayer({url:PM,paintRules:[],labelRules:theme.labelRules,pane:'labels',maxZoom:13}).addTo(map);
   pin=L.marker(want||where(),{icon:L.divIcon({className:'dwl-radar-pin',html:'<i></i>',iconSize:[18,18]}),interactive:false}).addTo(map);
   buildFrames();loop();setInterval(()=>{if(document.visibilityState==='visible')buildFrames();},5*60000);

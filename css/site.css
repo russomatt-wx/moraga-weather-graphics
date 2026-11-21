@@ -1894,3 +1894,6 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { border-width: 1.
 #public-shell .dwl-radar-legend small { font-size: 11px; color: #8fa9c0; }
 #public-shell .dwl-radar-legend i { width: 86px; height: 7px; border-radius: 4px; background: linear-gradient(90deg, #04e9e7, #019ff4, #02fd02, #01c501, #fdf802, #fd9500, #fd0000, #bc0000, #f800fd); }
 #public-shell .dwl-radar-credit { margin: 8px 4px 0; font-size: 10.5px; color: #6f879c; }
+/* Radar basemap: tint the neutral dark map to the app's navy (radar colours untouched) */
+#public-shell .dwl-radar-map, #public-shell .dwl-radar-map.leaflet-container { background: #0c1d33 !important; }
+#public-shell .dwl-radar-map .leaflet-pane[class*="labels"], #public-shell .dwl-radar-map .leaflet-labels-pane { opacity: .9; }
