@@ -7562,5 +7562,1401 @@
     "low_f": 37.8
    }
   }
+ },
+ "sausalito": {
+  "2026-09-21": {
+   "ECMWF": {
+    "high_f": 65.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 56.6
+   },
+   "GEM": {
+    "high_f": 65.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 54.5
+   },
+   "GFS": {
+    "high_f": 62.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.3
+   },
+   "ICON": {
+    "high_f": 64.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 57.6
+   }
+  },
+  "2026-09-22": {
+   "ECMWF": {
+    "high_f": 71.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 56.6
+   },
+   "GEM": {
+    "high_f": 71.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 56.0
+   },
+   "GFS": {
+    "high_f": 74.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.9
+   },
+   "ICON": {
+    "high_f": 66.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 56.4
+   }
+  },
+  "2026-09-23": {
+   "ECMWF": {
+    "high_f": 81.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 55.0
+   },
+   "GEM": {
+    "high_f": 78.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.1
+   },
+   "GFS": {
+    "high_f": 82.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.2
+   },
+   "ICON": {
+    "high_f": 79.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 54.3
+   }
+  },
+  "2026-09-24": {
+   "ECMWF": {
+    "high_f": 77.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 57.1
+   },
+   "GEM": {
+    "high_f": 76.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 56.1
+   },
+   "GFS": {
+    "high_f": 82.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 58.7
+   },
+   "ICON": {
+    "high_f": 70.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.6
+   }
+  },
+  "2026-09-25": {
+   "ECMWF": {
+    "high_f": 75.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 56.9
+   },
+   "GEM": {
+    "high_f": 74.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 56.0
+   },
+   "GFS": {
+    "high_f": 76.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 55.9
+   },
+   "ICON": {
+    "high_f": 74.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.8
+   }
+  },
+  "2026-09-26": {
+   "ECMWF": {
+    "high_f": 67.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.5
+   },
+   "GEM": {
+    "high_f": 66.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.2
+   },
+   "GFS": {
+    "high_f": 70.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.4
+   },
+   "ICON": {
+    "high_f": 66.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.6
+   }
+  },
+  "2026-09-27": {
+   "ECMWF": {
+    "high_f": 70.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 54.5
+   },
+   "GEM": {
+    "high_f": 69.1,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 54.3
+   },
+   "GFS": {
+    "high_f": 67.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.7
+   },
+   "ICON": {
+    "high_f": 69.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.9
+   }
+  },
+  "2026-09-28": {
+   "ECMWF": {
+    "high_f": 74.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.9
+   },
+   "GEM": {
+    "high_f": 74.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.9
+   },
+   "GFS": {
+    "high_f": 79.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.4
+   },
+   "ICON": {
+    "high_f": 71.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.4
+   }
+  },
+  "2026-09-29": {
+   "ECMWF": {
+    "high_f": 83.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.5
+   },
+   "GEM": {
+    "high_f": 79.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 54.5
+   },
+   "GFS": {
+    "high_f": 92.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 56.8
+   },
+   "ICON": {
+    "high_f": 77.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.3
+   }
+  },
+  "2026-09-30": {
+   "ECMWF": {
+    "high_f": 79.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 55.7
+   },
+   "GEM": {
+    "high_f": 76.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 55.9
+   },
+   "GFS": {
+    "high_f": 82.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 56.6
+   },
+   "ICON": {
+    "high_f": 76.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.7
+   }
+  },
+  "2026-10-01": {
+   "ECMWF": {
+    "high_f": 75.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 55.9
+   },
+   "GEM": {
+    "high_f": 75.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 54.5
+   },
+   "GFS": {
+    "high_f": 70.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 54.7
+   },
+   "ICON": {
+    "high_f": 73.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 54.2
+   }
+  },
+  "2026-10-02": {
+   "ECMWF": {
+    "high_f": 80.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 56.2
+   },
+   "GEM": {
+    "high_f": 77.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 54.4
+   },
+   "GFS": {
+    "high_f": 77.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.8
+   },
+   "ICON": {
+    "high_f": 76.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.6
+   }
+  },
+  "2026-10-03": {
+   "ECMWF": {
+    "high_f": 91.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 58.6
+   },
+   "GEM": {
+    "high_f": 83.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 58.4
+   },
+   "GFS": {
+    "high_f": 96.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 58.2
+   },
+   "ICON": {
+    "high_f": 92.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 56.6
+   }
+  },
+  "2026-10-04": {
+   "ECMWF": {
+    "high_f": 91.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 64.4
+   },
+   "GEM": {
+    "high_f": 81.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 61.3
+   },
+   "GFS": {
+    "high_f": 93.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 62.4
+   },
+   "ICON": {
+    "high_f": 88.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 58.3
+   }
+  },
+  "2026-10-05": {
+   "ECMWF": {
+    "high_f": 87.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 61.6
+   },
+   "GEM": {
+    "high_f": 87.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 60.0
+   },
+   "GFS": {
+    "high_f": 84.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 59.9
+   },
+   "ICON": {
+    "high_f": 83.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 56.8
+   }
+  },
+  "2026-10-06": {
+   "ECMWF": {
+    "high_f": 87.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 60.3
+   },
+   "GEM": {
+    "high_f": 84.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 57.7
+   },
+   "GFS": {
+    "high_f": 85.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 60.9
+   },
+   "ICON": {
+    "high_f": 82.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 55.3
+   }
+  },
+  "2026-10-07": {
+   "ECMWF": {
+    "high_f": 85.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 59.3
+   },
+   "GEM": {
+    "high_f": 83.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 56.8
+   },
+   "GFS": {
+    "high_f": 87.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 61.4
+   },
+   "ICON": {
+    "high_f": 78.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.4
+   }
+  },
+  "2026-10-08": {
+   "ECMWF": {
+    "high_f": 84.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 58.1
+   },
+   "GEM": {
+    "high_f": 81.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 55.6
+   },
+   "GFS": {
+    "high_f": 78.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 59.5
+   },
+   "ICON": {
+    "high_f": 75.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.8
+   }
+  },
+  "2026-10-09": {
+   "ECMWF": {
+    "high_f": 70.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 58.0
+   },
+   "GEM": {
+    "high_f": 68.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 56.3
+   },
+   "GFS": {
+    "high_f": 60.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 54.0
+   },
+   "ICON": {
+    "high_f": 65.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 56.5
+   }
+  },
+  "2026-10-10": {
+   "ECMWF": {
+    "high_f": 66.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.0
+   },
+   "GEM": {
+    "high_f": 63.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.8
+   },
+   "GFS": {
+    "high_f": 67.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.7
+   },
+   "ICON": {
+    "high_f": 63.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.4
+   }
+  },
+  "2026-10-11": {
+   "ECMWF": {
+    "high_f": 67.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 47.4
+   },
+   "GEM": {
+    "high_f": 65.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.1
+   },
+   "GFS": {
+    "high_f": 68.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 46.6
+   },
+   "ICON": {
+    "high_f": 66.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.6
+   }
+  },
+  "2026-10-12": {
+   "ECMWF": {
+    "high_f": 66.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.5
+   },
+   "GEM": {
+    "high_f": 65.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.6
+   },
+   "GFS": {
+    "high_f": 66.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 49.2
+   },
+   "ICON": {
+    "high_f": 70.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 46.5
+   }
+  },
+  "2026-10-13": {
+   "ECMWF": {
+    "high_f": 72.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 47.9
+   },
+   "GEM": {
+    "high_f": 70.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 46.0
+   },
+   "GFS": {
+    "high_f": 75.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.2
+   },
+   "ICON": {
+    "high_f": 77.1,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 45.5
+   }
+  },
+  "2026-10-14": {
+   "ECMWF": {
+    "high_f": 74.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.2
+   },
+   "GEM": {
+    "high_f": 71.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.4
+   },
+   "GFS": {
+    "high_f": 69.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.3
+   },
+   "ICON": {
+    "high_f": 70.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 49.9
+   }
+  },
+  "2026-10-15": {
+   "ECMWF": {
+    "high_f": 82.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.4
+   },
+   "GEM": {
+    "high_f": 77.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.4
+   },
+   "GFS": {
+    "high_f": 84.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.2
+   },
+   "ICON": {
+    "high_f": 84.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 49.2
+   }
+  },
+  "2026-10-16": {
+   "ECMWF": {
+    "high_f": 85.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 61.0
+   },
+   "GEM": {
+    "high_f": 79.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 55.1
+   },
+   "GFS": {
+    "high_f": 91.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 61.2
+   },
+   "ICON": {
+    "high_f": 87.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 57.7
+   }
+  },
+  "2026-10-17": {
+   "ECMWF": {
+    "high_f": 84.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 59.4
+   },
+   "GEM": {
+    "high_f": 78.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.2
+   },
+   "GFS": {
+    "high_f": 87.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 55.6
+   },
+   "ICON": {
+    "high_f": 85.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.9
+   }
+  },
+  "2026-10-18": {
+   "ECMWF": {
+    "high_f": 71.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.9
+   },
+   "GEM": {
+    "high_f": 74.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.4
+   },
+   "GFS": {
+    "high_f": 78.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.4
+   },
+   "ICON": {
+    "high_f": 70.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.5
+   }
+  },
+  "2026-10-19": {
+   "ECMWF": {
+    "high_f": 63.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.1
+   },
+   "GEM": {
+    "high_f": 63.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.6
+   },
+   "GFS": {
+    "high_f": 62.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.3
+   },
+   "ICON": {
+    "high_f": 61.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.7
+   }
+  },
+  "2026-10-20": {
+   "ECMWF": {
+    "high_f": 66.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.6
+   },
+   "GEM": {
+    "high_f": 65.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.8
+   },
+   "GFS": {
+    "high_f": 67.1,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 49.2
+   },
+   "ICON": {
+    "high_f": 68.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.1
+   }
+  },
+  "2026-10-21": {
+   "ECMWF": {
+    "high_f": 67.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 57.0
+   },
+   "GEM": {
+    "high_f": 68.1,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 55.0
+   },
+   "GFS": {
+    "high_f": 68.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 54.8
+   },
+   "ICON": {
+    "high_f": 68.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 54.6
+   }
+  },
+  "2026-10-22": {
+   "ECMWF": {
+    "high_f": 65.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 54.1
+   },
+   "GEM": {
+    "high_f": 64.1,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.4
+   },
+   "GFS": {
+    "high_f": 64.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.4
+   },
+   "ICON": {
+    "high_f": 64.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 55.2
+   }
+  },
+  "2026-10-23": {
+   "ECMWF": {
+    "high_f": 66.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.5
+   },
+   "GEM": {
+    "high_f": 67.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.4
+   },
+   "GFS": {
+    "high_f": 68.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.3
+   },
+   "ICON": {
+    "high_f": 69.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.4
+   }
+  },
+  "2026-10-24": {
+   "ECMWF": {
+    "high_f": 69.1,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.8
+   },
+   "GEM": {
+    "high_f": 68.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.5
+   },
+   "GFS": {
+    "high_f": 72.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.7
+   },
+   "ICON": {
+    "high_f": 72.1,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 47.3
+   }
+  },
+  "2026-10-25": {
+   "ECMWF": {
+    "high_f": 68.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 49.7
+   },
+   "GEM": {
+    "high_f": 67.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.0
+   },
+   "GFS": {
+    "high_f": 66.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.3
+   },
+   "ICON": {
+    "high_f": 67.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 46.5
+   }
+  },
+  "2026-10-26": {
+   "ECMWF": {
+    "high_f": 66.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.4
+   },
+   "GEM": {
+    "high_f": 65.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.9
+   },
+   "GFS": {
+    "high_f": 68.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 49.2
+   },
+   "ICON": {
+    "high_f": 66.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.0
+   }
+  },
+  "2026-10-27": {
+   "ECMWF": {
+    "high_f": 64.1,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.0
+   },
+   "GEM": {
+    "high_f": 64.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 49.7
+   },
+   "GFS": {
+    "high_f": 67.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 47.8
+   },
+   "ICON": {
+    "high_f": 65.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.0
+   }
+  },
+  "2026-10-28": {
+   "ECMWF": {
+    "high_f": 67.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 45.4
+   },
+   "GEM": {
+    "high_f": 65.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 45.3
+   },
+   "GFS": {
+    "high_f": 66.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 47.4
+   },
+   "ICON": {
+    "high_f": 69.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 45.6
+   }
+  },
+  "2026-10-29": {
+   "ECMWF": {
+    "high_f": 65.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.7
+   },
+   "GEM": {
+    "high_f": 63.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.3
+   },
+   "GFS": {
+    "high_f": 66.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.4
+   },
+   "ICON": {
+    "high_f": 64.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.7
+   }
+  },
+  "2026-10-30": {
+   "ECMWF": {
+    "high_f": 64.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.9
+   },
+   "GEM": {
+    "high_f": 65.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.3
+   },
+   "GFS": {
+    "high_f": 65.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 47.8
+   },
+   "ICON": {
+    "high_f": 65.1,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 47.3
+   }
+  },
+  "2026-10-31": {
+   "ECMWF": {
+    "high_f": 63.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.7
+   },
+   "GEM": {
+    "high_f": 61.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 49.7
+   },
+   "GFS": {
+    "high_f": 62.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.3
+   },
+   "ICON": {
+    "high_f": 62.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 47.4
+   }
+  },
+  "2026-11-01": {
+   "ECMWF": {
+    "high_f": 62.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.8
+   },
+   "GEM": {
+    "high_f": 60.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 47.8
+   },
+   "GFS": {
+    "high_f": 65.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 49.6
+   },
+   "ICON": {
+    "high_f": 63.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 46.2
+   }
+  },
+  "2026-11-02": {
+   "ECMWF": {
+    "high_f": 63.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.0
+   },
+   "GEM": {
+    "high_f": 61.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.6
+   },
+   "GFS": {
+    "high_f": 66.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 47.3
+   },
+   "ICON": {
+    "high_f": 63.1,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 45.8
+   }
+  },
+  "2026-11-03": {
+   "ECMWF": {
+    "high_f": 60.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 54.2
+   },
+   "GEM": {
+    "high_f": 62.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.4
+   },
+   "GFS": {
+    "high_f": 61.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.3
+   },
+   "ICON": {
+    "high_f": 62.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.2
+   }
+  },
+  "2026-11-04": {
+   "ECMWF": {
+    "high_f": 66.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.1
+   },
+   "GEM": {
+    "high_f": 63.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.7
+   },
+   "GFS": {
+    "high_f": 66.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.5
+   },
+   "ICON": {
+    "high_f": 66.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.9
+   }
+  },
+  "2026-11-05": {
+   "ECMWF": {
+    "high_f": 67.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 49.8
+   },
+   "GEM": {
+    "high_f": 66.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.4
+   },
+   "GFS": {
+    "high_f": 70.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.0
+   },
+   "ICON": {
+    "high_f": 67.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 46.9
+   }
+  },
+  "2026-11-06": {
+   "ECMWF": {
+    "high_f": 69.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.4
+   },
+   "GEM": {
+    "high_f": 66.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 49.1
+   },
+   "GFS": {
+    "high_f": 74.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.1
+   },
+   "ICON": {
+    "high_f": 69.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 47.8
+   }
+  },
+  "2026-11-07": {
+   "ECMWF": {
+    "high_f": 69.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.6
+   },
+   "GEM": {
+    "high_f": 65.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.2
+   },
+   "GFS": {
+    "high_f": 69.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.5
+   },
+   "ICON": {
+    "high_f": 69.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.8
+   }
+  },
+  "2026-11-08": {
+   "ECMWF": {
+    "high_f": 66.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.8
+   },
+   "GEM": {
+    "high_f": 66.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.9
+   },
+   "GFS": {
+    "high_f": 72.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.7
+   },
+   "ICON": {
+    "high_f": 70.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 49.8
+   }
+  },
+  "2026-11-09": {
+   "ECMWF": {
+    "high_f": 68.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.9
+   },
+   "GEM": {
+    "high_f": 70.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.1
+   },
+   "GFS": {
+    "high_f": 72.1,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.4
+   },
+   "ICON": {
+    "high_f": 72.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.0
+   }
+  },
+  "2026-11-10": {
+   "ECMWF": {
+    "high_f": 69.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.3
+   },
+   "GEM": {
+    "high_f": 70.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.4
+   },
+   "GFS": {
+    "high_f": 73.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.0
+   },
+   "ICON": {
+    "high_f": 71.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.0
+   }
+  },
+  "2026-11-11": {
+   "ECMWF": {
+    "high_f": 66.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.2
+   },
+   "GEM": {
+    "high_f": 66.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.2
+   },
+   "GFS": {
+    "high_f": 69.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.8
+   },
+   "ICON": {
+    "high_f": 69.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.1
+   }
+  },
+  "2026-11-12": {
+   "ECMWF": {
+    "high_f": 65.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 54.7
+   },
+   "GEM": {
+    "high_f": 64.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.2
+   },
+   "GFS": {
+    "high_f": 66.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 55.5
+   },
+   "ICON": {
+    "high_f": 64.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 53.6
+   }
+  },
+  "2026-11-13": {
+   "ECMWF": {
+    "high_f": 60.9,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 54.1
+   },
+   "GEM": {
+    "high_f": 60.4,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.5
+   },
+   "GFS": {
+    "high_f": 60.1,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.5
+   },
+   "ICON": {
+    "high_f": 60.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.9
+   }
+  },
+  "2026-11-14": {
+   "ECMWF": {
+    "high_f": 62.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.6
+   },
+   "GEM": {
+    "high_f": 60.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 51.3
+   },
+   "GFS": {
+    "high_f": 60.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 49.0
+   },
+   "ICON": {
+    "high_f": 61.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.9
+   }
+  },
+  "2026-11-15": {
+   "ECMWF": {
+    "high_f": 59.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 55.2
+   },
+   "GEM": {
+    "high_f": 59.1,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 52.4
+   },
+   "GFS": {
+    "high_f": 59.1,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.3
+   },
+   "ICON": {
+    "high_f": 59.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 55.5
+   }
+  },
+  "2026-11-16": {
+   "ECMWF": {
+    "high_f": 59.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 49.0
+   },
+   "GEM": {
+    "high_f": 55.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 47.1
+   },
+   "GFS": {
+    "high_f": 56.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 47.2
+   },
+   "ICON": {
+    "high_f": 57.5,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 46.4
+   }
+  },
+  "2026-11-17": {
+   "ECMWF": {
+    "high_f": 57.7,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 45.1
+   },
+   "GEM": {
+    "high_f": 56.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 44.1
+   },
+   "GFS": {
+    "high_f": 58.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 45.0
+   },
+   "ICON": {
+    "high_f": 58.0,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 41.1
+   }
+  },
+  "2026-11-18": {
+   "ECMWF": {
+    "high_f": 57.6,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.5
+   },
+   "GEM": {
+    "high_f": 56.8,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 49.1
+   },
+   "GFS": {
+    "high_f": 56.2,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 48.2
+   },
+   "ICON": {
+    "high_f": 57.3,
+    "issued_utc": "previous_runs_day1",
+    "low_f": 50.9
+   }
+  },
+  "2026-11-19": {
+   "ECMWF": {
+    "high_f": 58.1,
+    "issued_utc": "2026-11-19T05:40:27.217231+00:00",
+    "low_f": 48.4
+   },
+   "EPS": {
+    "high_f": 57.0,
+    "issued_utc": "2026-11-19T05:40:27.217231+00:00",
+    "low_f": 49.8
+   },
+   "GEFS": {
+    "high_f": 56.8,
+    "issued_utc": "2026-11-19T05:40:27.217231+00:00",
+    "low_f": 50.2
+   },
+   "GEM": {
+    "high_f": 54.1,
+    "issued_utc": "2026-11-19T05:40:27.217231+00:00",
+    "low_f": 49.0
+   },
+   "GFS": {
+    "high_f": 56.1,
+    "issued_utc": "2026-11-19T05:40:27.217231+00:00",
+    "low_f": 47.5
+   },
+   "ICON": {
+    "high_f": 56.3,
+    "issued_utc": "2026-11-19T05:40:27.217231+00:00",
+    "low_f": 51.2
+   }
+  },
+  "2026-11-20": {
+   "ECMWF": {
+    "high_f": 53.6,
+    "issued_utc": "2026-11-19T10:44:47.059585+00:00",
+    "low_f": 46.8
+   },
+   "EPS": {
+    "high_f": 53.9,
+    "issued_utc": "2026-11-19T10:44:47.059585+00:00",
+    "low_f": 46.2
+   },
+   "GEFS": {
+    "high_f": 55.7,
+    "issued_utc": "2026-11-19T10:44:47.059585+00:00",
+    "low_f": 48.1
+   },
+   "GEM": {
+    "high_f": 51.4,
+    "issued_utc": "2026-11-19T10:44:47.059585+00:00",
+    "low_f": 42.9
+   },
+   "GFS": {
+    "high_f": 53.9,
+    "issued_utc": "2026-11-19T10:44:47.059585+00:00",
+    "low_f": 45.0
+   },
+   "ICON": {
+    "high_f": 54.7,
+    "issued_utc": "2026-11-19T10:44:47.059585+00:00",
+    "low_f": 44.4
+   }
+  },
+  "2026-11-21": {
+   "ECMWF": {
+    "high_f": 52.6,
+    "issued_utc": "2026-11-20T10:27:07.150330+00:00",
+    "low_f": 42.1
+   },
+   "EPS": {
+    "high_f": 53.7,
+    "issued_utc": "2026-11-20T10:27:07.150330+00:00",
+    "low_f": 43.1
+   },
+   "GEFS": {
+    "high_f": 55.3,
+    "issued_utc": "2026-11-20T10:27:07.150330+00:00",
+    "low_f": 46.2
+   },
+   "GEM": {
+    "high_f": 51.2,
+    "issued_utc": "2026-11-20T10:27:07.150330+00:00",
+    "low_f": 43.2
+   },
+   "GFS": {
+    "high_f": 56.8,
+    "issued_utc": "2026-11-20T10:27:07.150330+00:00",
+    "low_f": 43.0
+   },
+   "ICON": {
+    "high_f": 51.7,
+    "issued_utc": "2026-11-20T10:27:07.150330+00:00",
+    "low_f": 42.4
+   }
+  }
  }
 }
