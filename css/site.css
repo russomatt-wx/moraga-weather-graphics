@@ -1240,3 +1240,6 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 #public-shell .dwl-cc-sun .dwl-sun-ic { width: 38px !important; height: 27px !important; }
 #public-shell .dwl-cc-sun .dwl-sun-ic { width: 28px !important; height: 20px !important; }
 #public-shell .public-hour-day { color: #e4eef7 !important; }
+/* Wordmark on three lines: DIABLO / WEATHER / LAB */
+.dwl-wordmark { line-height: 1.04; }
+@media (max-width: 520px) { .dwl-wordmark { font-size: 7.4vw !important; } .dwl-mark { width: 27vw !important; } }
