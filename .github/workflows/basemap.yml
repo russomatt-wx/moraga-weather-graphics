@@ -1,0 +1,53 @@
+name: Build dark basemap (Northern California)
+
+# Cuts a Northern California extract from the daily Protomaps OpenStreetMap build into one
+# PMTiles file served from GitHub Pages (basemap/norcal.pmtiles). OpenStreetMap data is free
+# for commercial use with attribution (ODbL). Run by hand when the map needs refreshing.
+on:
+  workflow_dispatch:
+    inputs:
+      maxzoom:
+        description: Highest zoom level to include (vector tiles overzoom cleanly)
+        default: "11"
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pmtiles CLI
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download -R protomaps/go-pmtiles --pattern '*Linux_x86_64.tar.gz' -O pmtiles.tgz
+          tar xzf pmtiles.tgz pmtiles && ./pmtiles version
+      - name: Extract Northern California
+        run: |
+          set -e
+          KEY=$(curl -sf https://build-metadata.protomaps.dev/builds.json | python3 -c "import json,sys;b=json.load(sys.stdin);print(sorted(x['key'] for x in b)[-1])")
+          echo "Source build: $KEY"
+          mkdir -p basemap
+          Z="${{ github.event.inputs.maxzoom || '11' }}"
+          for z in $Z 10 9; do
+            ./pmtiles extract "https://build.protomaps.com/$KEY" basemap/norcal.pmtiles --bbox=-124.6,36.4,-119.2,42.05 --maxzoom=$z
+            SIZE=$(stat -c %s basemap/norcal.pmtiles); echo "maxzoom $z -> $SIZE bytes"
+            if [ "$SIZE" -lt 90000000 ]; then break; fi
+          done
+          ./pmtiles show basemap/norcal.pmtiles | head -20
+          echo "$KEY" > basemap/SOURCE.txt
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add basemap/norcal.pmtiles basemap/SOURCE.txt
+          git commit -m "Update Northern California dark basemap" || exit 0
+          for i in 1 2 3; do git pull --rebase -q origin main && git push -q origin HEAD:main && break; sleep 5; done
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run coordinated-pages.yml --ref main || true
