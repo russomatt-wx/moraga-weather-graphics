@@ -48,12 +48,23 @@ def miles(a, b, c, d):
 
 
 def town_point(town, station):
-    """The location being forecast: the town station's position and elevation (public metadata)."""
-    s = get(f"{WORKER}/station?id={station}")
-    return float(s["lat"]), float(s["lon"]), float(s.get("elevation_ft") or 0)
+    """The location being forecast: its trusted station's position and elevation, else the location's
+    own coordinates with terrain elevation from Open-Meteo."""
+    if station:
+        try:
+            s = get(f"{WORKER}/station?id={station}")
+            return float(s["lat"]), float(s["lon"]), float(s.get("elevation_ft") or 0)
+        except Exception:
+            pass
+    loc = locations.by_id()[town]
+    # Terrain elevation of the NWS 2.5 km grid cell at the location (public, no rate limit issues).
+    pt = get(f"https://api.weather.gov/points/{loc['lat']},{loc['lon']}")["properties"]
+    grid = get(pt["forecastGridData"])["properties"]
+    el = float(grid["elevation"]["value"]) * 3.281
+    return loc["lat"], loc["lon"], el
 
 
-def choose():
+def choose(only=None, prev=None):
     stations, url = [], "https://api.weather.gov/stations?state=CA&limit=500"
     for _ in range(40):
         d = get(url)
@@ -66,8 +77,10 @@ def choose():
         if not nxt or not d.get("features"):
             break
         url = nxt
-    out = {}
+    out = dict(prev or {})
     for town, wu in TOWNS.items():
+        if only and town not in only:
+            continue
         la, lo, el = town_point(town, wu)
         cands = sorted((dict(s, miles=round(miles(la, lo, s["lat"], s["lon"]), 2)) for s in stations), key=lambda s: s["miles"])
         picked = []
@@ -188,8 +201,9 @@ def main():
         choice = json.loads(CHOICE.read_text())
     except (OSError, ValueError):
         choice = None
-    if not choice or any(not choice.get(t) for t in TOWNS):
-        choice = choose()
+    missing = [t for t in TOWNS if not (choice or {}).get(t)]
+    if missing:
+        choice = choose(missing, choice or {})
     try:
         obs = json.loads(OUT.read_text())
     except (OSError, ValueError):

@@ -80,6 +80,38 @@ async function discoverStation(city, env) {
   });
   return {candidate:candidates[0] || null, searched:records.length, fresh_pws:candidates.length, api_error:payload.error?.code || null};
 }
+const SITE_DATA = 'https://russomatt-wx.github.io/moraga-weather-graphics/';
+const NWS_HEADERS = { 'User-Agent': 'DiabloWeatherLab-observations/1.0', Accept: 'application/geo+json' };
+async function siteJson(path, ttl) {
+  try { const r = await fetch(SITE_DATA + path, { cf: { cacheTtl: ttl, cacheEverything: true } }); return r.ok ? r.json() : null; } catch (_) { return null; }
+}
+const c2f = (c) => (Number.isFinite(c) ? Math.round((c * 9 / 5 + 32) * 10) / 10 : null);
+const kmh2mph = (k) => (Number.isFinite(k) ? Math.round(k * 0.621371 * 10) / 10 : null);
+async function publicObservation(city, log) {
+  const [choice, health] = await Promise.all([siteJson('verification/public_stations.json', 3600), siteJson('verification/public_station_health.json', 3600)]);
+  const dropped = new Set((health?.stations || []).filter((s) => s.town === city && s.status === 'drop').map((s) => s.station));
+  const list = (choice?.[city]?.stations || []).filter((s) => !dropped.has(s.id));
+  for (const s of list) {
+    try {
+      const r = await fetch('https://api.weather.gov/stations/' + s.id + '/observations/latest', { headers: NWS_HEADERS, cf: { cacheTtl: 300, cacheEverything: true } });
+      if (!r.ok) { log.push(s.id + ' http ' + r.status); continue; }
+      const p = (await r.json()).properties || {};
+      const t = Date.parse(p.timestamp || ''), temp = p.temperature?.value;
+      if (!Number.isFinite(t) || Date.now() - t > 80 * 60000 || !Number.isFinite(temp)) { log.push(s.id + ' stale'); continue; }
+      return { station: s.id, station_name: s.name, station_distance_mi: s.miles, station_selection: 'public', source: 'Public station (NWS)', observed_utc: new Date(t).toISOString(),
+        temperature_f: c2f(temp), dew_point_f: c2f(p.dewpoint?.value), humidity_pct: Number.isFinite(p.relativeHumidity?.value) ? Math.round(p.relativeHumidity.value) : null,
+        wind_mph: kmh2mph(p.windSpeed?.value) ?? 0, wind_direction_deg: p.windDirection?.value ?? null, wind_gust_mph: kmh2mph(p.windGust?.value),
+        pressure_inhg: Number.isFinite(p.barometricPressure?.value) ? Math.round(p.barometricPressure.value / 3386.39 * 100) / 100 : null };
+    } catch (_) { log.push(s.id + ' error'); }
+  }
+  // Fallback: NOAA's estimate for this spot (hourly, from the estimate job).
+  const now = await siteJson('nowcast_current.json', 600), e = now?.towns?.[city];
+  if (e && Number.isFinite(e.estimate_f) && Date.now() - Date.parse(e.valid_utc) < 3 * 3600000) {
+    return { station: 'NOAA RTMA', station_selection: 'estimate', source: 'NOAA estimate', observed_utc: e.valid_utc, temperature_f: e.corrected_f ?? e.estimate_f,
+      humidity_pct: e.humidity_pct, wind_mph: e.wind_mph, wind_gust_mph: e.gust_mph, estimated: true };
+  }
+  return null;
+}
 export default {
   // Cron (wrangler.toml): check NWS alerts for every town and send push notifications.
   async scheduled(event, env, ctx) {
@@ -157,6 +189,13 @@ export default {
       return out;
     };
     const sky = async solar => { try { return await skyFor(city, env, solar, wuLog); } catch (_) { wuLog.push('sky: error'); return null; } finally { if (wuLog.some(x => / 401$/.test(x)) && !wuLog.some(x => x.startsWith('key format'))) wuLog.push(wuKeyShape(env)); } };
+    // Neighborhoods without a station of their own: the nearest health-checked public station (NWS feed),
+    // else NOAA's corrected current-conditions estimate. Both are licence-free.
+    if (!WU_STATIONS[city]) {
+      const pub = await publicObservation(city, wuLog);
+      if (pub) { const body = {...pub, city, sky: await sky(null)}; Object.assign(body, await extras(body)); return Response.json(body, {headers:{...cors,'Cache-Control':'public, max-age=120'}}); }
+      return Response.json({error:'No fresh public observation', city, diagnostics: wuLog}, {status:503, headers:cors});
+    }
     // Hand-picked Weather Underground station first (needs WU_API_KEY); Xweather below is the fallback.
     if (WU_PRIMARY.has(city) && String(env.WU_API_KEY || '').trim()) {
       const wu = await wuCurrent(WU_STATIONS[city], env, wuLog);

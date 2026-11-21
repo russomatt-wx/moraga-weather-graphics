@@ -25,15 +25,18 @@ for region in data["regions"]:
     mine = [l for l in locs if l["region"] == region]
     if not mine:
         continue
-    parts.append('<div class="dwl-loc-group">' + e(region) + '</div>')
+    parts.append('<details class="dwl-loc-region" data-region="' + e(region) + '"><summary class="dwl-loc-group"><span>' + e(region) + '</span><small>' + str(len(mine)) + '</small></summary><div class="dwl-loc-list">')
     for l in mine:
         k, nb, area = l["key"], l["neighborhood"], l["area"]
         label = nb if nb == area else nb + ", " + area
-        parts.append('<div class="public-location-item"><button type="button" class="public-location-choice" data-public-city="' + e(k) + '" aria-pressed="false">'
+        parts.append('<div class="public-location-item" data-search="' + e((nb + ' ' + area + ' ' + region).lower()) + '"><button type="button" class="public-location-choice" data-public-city="' + e(k) + '" aria-pressed="false">'
                      '<span class="local-neighborhood">' + e(nb) + '</span><span class="dwl-loc-now" data-loc-now="' + e(k) + '"></span>'
                      '<span class="local-city">' + e(area) + '</span></button>'
                      '<button type="button" class="public-location-favorite" data-favorite-city="' + e(k) + '" aria-label="Set ' + e(label) + ' as favorite" aria-pressed="false" title="Set as default location">☆</button></div>')
-sheet = "<!--LOCSHEET:START-->" + "".join(parts) + "<!--LOCSHEET:END-->"
+    parts.append('</div></details>')
+search = ('<div class="dwl-loc-search"><input type="search" id="loc-search" placeholder="Search ' + str(len(locs)) + ' neighborhoods" aria-label="Search locations" autocomplete="off" enterkeyhint="search"></div>'
+          '<p class="dwl-loc-empty" id="loc-empty" hidden>No matching neighborhood yet.</p>')
+sheet = "<!--LOCSHEET:START-->" + search + "".join(parts) + "<!--LOCSHEET:END-->"
 
 p = ROOT / "index.html"
 h = p.read_text()

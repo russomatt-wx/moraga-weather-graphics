@@ -253,6 +253,15 @@ def main():
                          "training_hours": n, "humidity_pct": est["est_rh"], "wind_mph": est["est_wind"], "gust_mph": est["est_gust"],
                          "cloud_pct": est["est_cloud_pct"], "regime": ("day" if day else "night") + (" calm" if est["est_wind"] < 6 else " breezy")}
         print(f"{name:16s} est {est['est_t']}°F corrected {current[town]['corrected_f']} ({n} h) | station {ob.get('temperature_f')}°F")
+    # Neighbourhoods without a station: NOAA's raw estimate at the location (no training data yet).
+    for l in locations.load():
+        if l["id"] in current:
+            continue
+        est = sample(g, lat, lon, l["lat"], l["lon"])
+        day = sun_up(l["lat"], l["lon"], valid)
+        current[l["id"]] = {"name": l["short"], "valid_utc": valid.isoformat(), "estimate_f": est["est_t"], "corrected_f": None, "correction_f": None,
+                             "training_hours": 0, "humidity_pct": est["est_rh"], "wind_mph": est["est_wind"], "gust_mph": est["est_gust"],
+                             "cloud_pct": est["est_cloud_pct"], "regime": ("day" if day else "night") + (" calm" if est["est_wind"] < 6 else " breezy")}
     cutoff = (datetime.now(timezone.utc) - timedelta(days=60)).isoformat()
     rows = sorted((r for r in rows if r["valid"] >= cutoff), key=lambda r: (r["valid"], r["town"]))
     (ROOT / "verification" / "station_coords.json").write_text(json.dumps(coords, indent=1) + "\n")

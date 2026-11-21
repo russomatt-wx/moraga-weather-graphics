@@ -25,11 +25,26 @@ def fetch(url,params):
         except Exception:
             if attempt==2:raise
             time.sleep(4*(attempt+1))
+PREFETCH={}
+def prefetch(names):
+    """One multi-location request per model (chunks of 25) instead of one per location."""
+    for model,(endpoint,identifier,weight) in MODELS.items():
+        for i in range(0,len(names),25):
+            chunk=names[i:i+25]
+            try:
+                data=fetch(endpoint,{"latitude":",".join(str(LOCATIONS[n][0]) for n in chunk),"longitude":",".join(str(LOCATIONS[n][1]) for n in chunk),
+                    "models":identifier,"hourly":",".join(FIELDS),"timezone":"America/Los_Angeles","temperature_unit":"fahrenheit","precipitation_unit":"inch","forecast_days":3})
+                data=data if isinstance(data,list) else [data]
+                for n,d in zip(chunk,data):PREFETCH[(n,model)]=d
+            except Exception as exc:
+                for n in chunk:PREFETCH[(n,model)]=exc
 def collect(name,lat,lon):
     results={};failures={}
     for model,(endpoint,identifier,weight) in MODELS.items():
         try:
-            data=fetch(endpoint,{"latitude":lat,"longitude":lon,"models":identifier,"hourly":",".join(FIELDS),"timezone":"America/Los_Angeles","temperature_unit":"fahrenheit","precipitation_unit":"inch","forecast_days":3})
+            data=PREFETCH.get((name,model))
+            if isinstance(data,Exception):raise data
+            if data is None:data=fetch(endpoint,{"latitude":lat,"longitude":lon,"models":identifier,"hourly":",".join(FIELDS),"timezone":"America/Los_Angeles","temperature_unit":"fahrenheit","precipitation_unit":"inch","forecast_days":3})
             hourly=data["hourly"]
             if not hourly.get("time") or not hourly.get("temperature_2m"):raise ValueError("missing hourly temperature")
             results[model]={"hourly":hourly,"weight":weight,"model":identifier}
@@ -82,7 +97,19 @@ def collect(name,lat,lon):
         except Exception:pass
     path.write_text(json.dumps(output,indent=2)+"\n")
     print(name,"sources",list(results),"failures",failures)
+# Locations with a trusted station refresh every run; the rest every 3 hours (Open-Meteo free-tier budget).
+CORE={i for i,st in locations.towns().items() if st}
+def due(name):
+    if name in CORE:return True
+    try:
+        prev=json.loads(Path(name+"_short_range_24h.json").read_text())
+        return (datetime.now(timezone.utc)-datetime.fromisoformat(prev["generated_utc"])).total_seconds()>2.75*3600
+    except Exception:return True
+DUE=[n for n in LOCATIONS if due(n)]
+print("short-range due:",len(DUE),"of",len(LOCATIONS))
+prefetch(DUE)
 for name,(lat,lon) in LOCATIONS.items():
+    if name not in DUE:continue
     try:
         collect(name,lat,lon)
     except Exception as exc:

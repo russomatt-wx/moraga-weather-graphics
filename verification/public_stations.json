@@ -188,5 +188,1385 @@
    }
   ]
  },
- "_chosen_utc": "2026-11-21T02:46:47.527781+00:00"
+ "_chosen_utc": "2026-11-21T14:57:37.770216+00:00",
+ "campolindo": {
+  "point": [
+   37.8465,
+   -122.1225,
+   623
+  ],
+  "stations": [
+   {
+    "id": "PG670",
+    "name": "Fay Hill",
+    "miles": 1.08,
+    "elev_ft": 862,
+    "delev_ft": 239
+   },
+   {
+    "id": "394PG",
+    "name": "Moraga Bluffs",
+    "miles": 1.8,
+    "elev_ft": 859,
+    "delev_ft": 236
+   },
+   {
+    "id": "D3835",
+    "name": "DW3835 Orinda",
+    "miles": 1.8,
+    "elev_ft": 759,
+    "delev_ft": 136
+   }
+  ]
+ },
+ "happyvalley": {
+  "point": [
+   37.896,
+   -122.149,
+   597
+  ],
+  "stations": [
+   {
+    "id": "PG065",
+    "name": "Deer Trail",
+    "miles": 0.76,
+    "elev_ft": 631,
+    "delev_ft": 34
+   },
+   {
+    "id": "D1132",
+    "name": "K2MRS Orinda",
+    "miles": 1.57,
+    "elev_ft": 689,
+    "delev_ft": 92
+   },
+   {
+    "id": "G8122",
+    "name": "GW8122 MORAGA",
+    "miles": 1.9,
+    "elev_ft": 745,
+    "delev_ft": 148
+   }
+  ]
+ },
+ "glorietta": {
+  "point": [
+   37.864,
+   -122.166,
+   988
+  ],
+  "stations": [
+   {
+    "id": "D1132",
+    "name": "K2MRS Orinda",
+    "miles": 0.84,
+    "elev_ft": 689,
+    "delev_ft": -299
+   },
+   {
+    "id": "D3835",
+    "name": "DW3835 Orinda",
+    "miles": 1.07,
+    "elev_ft": 759,
+    "delev_ft": -229
+   },
+   {
+    "id": "G8122",
+    "name": "GW8122 MORAGA",
+    "miles": 1.56,
+    "elev_ft": 745,
+    "delev_ft": -243
+   }
+  ]
+ },
+ "sleepyhollow": {
+  "point": [
+   37.893,
+   -122.193,
+   594
+  ],
+  "stations": [
+   {
+    "id": "PG063",
+    "name": "Bear Creek",
+    "miles": 1.39,
+    "elev_ft": 690,
+    "delev_ft": 96
+   },
+   {
+    "id": "D1132",
+    "name": "K2MRS Orinda",
+    "miles": 2.29,
+    "elev_ft": 689,
+    "delev_ft": 95
+   },
+   {
+    "id": "PG065",
+    "name": "Deer Trail",
+    "miles": 2.7,
+    "elev_ft": 631,
+    "delev_ft": 37
+   }
+  ]
+ },
+ "northgate": {
+  "point": [
+   37.895,
+   -122.042,
+   220
+  ],
+  "stations": [
+   {
+    "id": "E1628",
+    "name": "EW1628 Walnut Creek",
+    "miles": 0.47,
+    "elev_ft": 268,
+    "delev_ft": 48
+   },
+   {
+    "id": "E8430",
+    "name": "EW8430 Walnut Creek",
+    "miles": 1.4,
+    "elev_ft": 165,
+    "delev_ft": -55
+   },
+   {
+    "id": "G8052",
+    "name": "GW8052 WALNUT CREEK",
+    "miles": 2.16,
+    "elev_ft": 292,
+    "delev_ft": 72
+   }
+  ]
+ },
+ "rossmoor": {
+  "point": [
+   37.866,
+   -122.069,
+   371
+  ],
+  "stations": [
+   {
+    "id": "E8430",
+    "name": "EW8430 Walnut Creek",
+    "miles": 2.35,
+    "elev_ft": 165,
+    "delev_ft": -206
+   },
+   {
+    "id": "E1628",
+    "name": "EW1628 Walnut Creek",
+    "miles": 2.49,
+    "elev_ft": 268,
+    "delev_ft": -103
+   },
+   {
+    "id": "F1863",
+    "name": "FW1863 Alamo",
+    "miles": 2.53,
+    "elev_ft": 363,
+    "delev_ft": -8
+   }
+  ]
+ },
+ "saranap": {
+  "point": [
+   37.886,
+   -122.077,
+   203
+  ],
+  "stations": [
+   {
+    "id": "E8430",
+    "name": "EW8430 Walnut Creek",
+    "miles": 1.11,
+    "elev_ft": 165,
+    "delev_ft": -38
+   },
+   {
+    "id": "G8052",
+    "name": "GW8052 WALNUT CREEK",
+    "miles": 1.75,
+    "elev_ft": 292,
+    "delev_ft": 89
+   },
+   {
+    "id": "E6413",
+    "name": "EW6413 Lafayette",
+    "miles": 2.23,
+    "elev_ft": 354,
+    "delev_ft": 151
+   }
+  ]
+ },
+ "pleasanthill": {
+  "point": [
+   37.948,
+   -122.061,
+   180
+  ],
+  "stations": [
+   {
+    "id": "457PG",
+    "name": "Concord IDSM",
+    "miles": 1.15,
+    "elev_ft": 41,
+    "delev_ft": -139
+   },
+   {
+    "id": "NGC29",
+    "name": "Diablo Valley College",
+    "miles": 1.48,
+    "elev_ft": 38,
+    "delev_ft": -142
+   },
+   {
+    "id": "G7844",
+    "name": "GW7844 PLEASANT HILL",
+    "miles": 1.98,
+    "elev_ft": 200,
+    "delev_ft": 20
+   }
+  ]
+ },
+ "claytonvalley": {
+  "point": [
+   37.948,
+   -121.975,
+   249
+  ],
+  "stations": [
+   {
+    "id": "E6555",
+    "name": "EW6555 Concord",
+    "miles": 1.6,
+    "elev_ft": 353,
+    "delev_ft": 104
+   },
+   {
+    "id": "322PG",
+    "name": "Lakewood Meadow",
+    "miles": 1.79,
+    "elev_ft": 395,
+    "delev_ft": 146
+   },
+   {
+    "id": "C3884",
+    "name": "CW3884 Concord",
+    "miles": 1.99,
+    "elev_ft": 146,
+    "delev_ft": -103
+   }
+  ]
+ },
+ "clayton": {
+  "point": [
+   37.941,
+   -121.936,
+   400
+  ],
+  "stations": [
+   {
+    "id": "F3932",
+    "name": "FW3932 Clayton",
+    "miles": 0.39,
+    "elev_ft": 461,
+    "delev_ft": 61
+   },
+   {
+    "id": "G3201",
+    "name": "GW3201 Clayton",
+    "miles": 0.91,
+    "elev_ft": 510,
+    "delev_ft": 110
+   },
+   {
+    "id": "E6555",
+    "name": "EW6555 Concord",
+    "miles": 1.65,
+    "elev_ft": 353,
+    "delev_ft": -47
+   }
+  ]
+ },
+ "martinez": {
+  "point": [
+   38.019,
+   -122.134,
+   66
+  ],
+  "stations": [
+   {
+    "id": "E7741",
+    "name": "EW7741 Martinez",
+    "miles": 1.1,
+    "elev_ft": 121,
+    "delev_ft": 55
+   },
+   {
+    "id": "MZXC1",
+    "name": "Martinez-Amorco Pier",
+    "miles": 1.18,
+    "elev_ft": 0,
+    "delev_ft": -66
+   }
+  ]
+ },
+ "alamo": {
+  "point": [
+   37.85,
+   -122.032,
+   397
+  ],
+  "stations": [
+   {
+    "id": "E3975",
+    "name": "EW3975 Alamo",
+    "miles": 0.69,
+    "elev_ft": 329,
+    "delev_ft": -68
+   },
+   {
+    "id": "F1863",
+    "name": "FW1863 Alamo",
+    "miles": 1.05,
+    "elev_ft": 363,
+    "delev_ft": -34
+   },
+   {
+    "id": "G7254",
+    "name": "GW7254 DANVILLE",
+    "miles": 1.79,
+    "elev_ft": 440,
+    "delev_ft": 43
+   }
+  ]
+ },
+ "blackhawk": {
+  "point": [
+   37.821,
+   -121.906,
+   1220
+  ],
+  "stations": []
+ },
+ "diablo": {
+  "point": [
+   37.835,
+   -121.958,
+   600
+  ],
+  "stations": [
+   {
+    "id": "PG930",
+    "name": "Caballo Ranchero Drive",
+    "miles": 0.59,
+    "elev_ft": 893,
+    "delev_ft": 293
+   },
+   {
+    "id": "G7254",
+    "name": "GW7254 DANVILLE",
+    "miles": 2.4,
+    "elev_ft": 440,
+    "delev_ft": -160
+   },
+   {
+    "id": "558PG",
+    "name": "Danville",
+    "miles": 2.93,
+    "elev_ft": 344,
+    "delev_ft": -256
+   }
+  ]
+ },
+ "doughertyvalley": {
+  "point": [
+   37.766,
+   -121.912,
+   502
+  ],
+  "stations": [
+   {
+    "id": "PG902",
+    "name": "Alcosta Boulevard",
+    "miles": 1.21,
+    "elev_ft": 768,
+    "delev_ft": 266
+   },
+   {
+    "id": "F3625",
+    "name": "FW3625 San Ramon",
+    "miles": 2.64,
+    "elev_ft": 415,
+    "delev_ft": -87
+   }
+  ]
+ },
+ "twincreeks": {
+  "point": [
+   37.776,
+   -121.99,
+   518
+  ],
+  "stations": [
+   {
+    "id": "PG938",
+    "name": "San Ramon IDSM",
+    "miles": 1.37,
+    "elev_ft": 475,
+    "delev_ft": -43
+   },
+   {
+    "id": "SJS61",
+    "name": "SJSU - PG&E Technology Center",
+    "miles": 1.39,
+    "elev_ft": 501,
+    "delev_ft": -17
+   },
+   {
+    "id": "170PG",
+    "name": "Crow Canyon Rd",
+    "miles": 1.96,
+    "elev_ft": 631,
+    "delev_ft": 113
+   }
+  ]
+ },
+ "dublin": {
+  "point": [
+   37.702,
+   -121.936,
+   384
+  ],
+  "stations": [
+   {
+    "id": "AU719",
+    "name": "W6ACT Dublin",
+    "miles": 1.33,
+    "elev_ft": 363,
+    "delev_ft": -21
+   },
+   {
+    "id": "F3625",
+    "name": "FW3625 San Ramon",
+    "miles": 2.53,
+    "elev_ft": 415,
+    "delev_ft": 31
+   }
+  ]
+ },
+ "pleasanton": {
+  "point": [
+   37.662,
+   -121.874,
+   440
+  ],
+  "stations": [
+   {
+    "id": "UP657",
+    "name": "RADUM",
+    "miles": 0.8,
+    "elev_ft": 356,
+    "delev_ft": -84
+   }
+  ]
+ },
+ "rubyhill": {
+  "point": [
+   37.636,
+   -121.826,
+   801
+  ],
+  "stations": [
+   {
+    "id": "PG552",
+    "name": "Water Road",
+    "miles": 1.21,
+    "elev_ft": 733,
+    "delev_ft": -68
+   }
+  ]
+ },
+ "livermorewine": {
+  "point": [
+   37.655,
+   -121.745,
+   600
+  ],
+  "stations": [
+   {
+    "id": "475PG",
+    "name": "Holmes",
+    "miles": 2.31,
+    "elev_ft": 476,
+    "delev_ft": -124
+   },
+   {
+    "id": "AV698",
+    "name": "KD7ECD Livermore",
+    "miles": 2.74,
+    "elev_ft": 728,
+    "delev_ft": 128
+   }
+  ]
+ },
+ "springtown": {
+  "point": [
+   37.708,
+   -121.722,
+   554
+  ],
+  "stations": [
+   {
+    "id": "G2871",
+    "name": "GW2871 Livermore",
+    "miles": 0.74,
+    "elev_ft": 532,
+    "delev_ft": -23
+   },
+   {
+    "id": "E8331",
+    "name": "EW8331 Livermore",
+    "miles": 1.6,
+    "elev_ft": 554,
+    "delev_ft": 0
+   },
+   {
+    "id": "PG851",
+    "name": "Dagnino Road",
+    "miles": 2.54,
+    "elev_ft": 551,
+    "delev_ft": -3
+   }
+  ]
+ },
+ "sunol": {
+  "point": [
+   37.594,
+   -121.888,
+   315
+  ],
+  "stations": [
+   {
+    "id": "474PG",
+    "name": "Foothill Farms",
+    "miles": 0.49,
+    "elev_ft": 523,
+    "delev_ft": 208
+   },
+   {
+    "id": "465PG",
+    "name": "San Antonio Reservoir",
+    "miles": 1.83,
+    "elev_ft": 542,
+    "delev_ft": 227
+   }
+  ]
+ },
+ "montclair": {
+  "point": [
+   37.828,
+   -122.211,
+   597
+  ],
+  "stations": [
+   {
+    "id": "F4432",
+    "name": "FW4432 Oakland",
+    "miles": 0.93,
+    "elev_ft": 910,
+    "delev_ft": 313
+   },
+   {
+    "id": "PG014",
+    "name": "Broadway Street",
+    "miles": 1.84,
+    "elev_ft": 755,
+    "delev_ft": 158
+   },
+   {
+    "id": "G0758",
+    "name": "GW0758 Oakland",
+    "miles": 1.89,
+    "elev_ft": 253,
+    "delev_ft": -344
+   }
+  ]
+ },
+ "piedmont": {
+  "point": [
+   37.824,
+   -122.232,
+   597
+  ],
+  "stations": [
+   {
+    "id": "G0758",
+    "name": "GW0758 Oakland",
+    "miles": 1.5,
+    "elev_ft": 253,
+    "delev_ft": -344
+   },
+   {
+    "id": "F4432",
+    "name": "FW4432 Oakland",
+    "miles": 1.66,
+    "elev_ft": 910,
+    "delev_ft": 313
+   },
+   {
+    "id": "PG014",
+    "name": "Broadway Street",
+    "miles": 2.21,
+    "elev_ft": 755,
+    "delev_ft": 158
+   }
+  ]
+ },
+ "rockridge": {
+  "point": [
+   37.844,
+   -122.251,
+   184
+  ],
+  "stations": [
+   {
+    "id": "F4463",
+    "name": "FW4463 Oakland",
+    "miles": 0.49,
+    "elev_ft": 139,
+    "delev_ft": -45
+   },
+   {
+    "id": "D3169",
+    "name": "DW3169 Oakland",
+    "miles": 0.82,
+    "elev_ft": 96,
+    "delev_ft": -88
+   },
+   {
+    "id": "G6983",
+    "name": "GW6983 BERKELEY",
+    "miles": 0.85,
+    "elev_ft": 168,
+    "delev_ft": -16
+   }
+  ]
+ },
+ "temescal": {
+  "point": [
+   37.834,
+   -122.263,
+   184
+  ],
+  "stations": [
+   {
+    "id": "F4463",
+    "name": "FW4463 Oakland",
+    "miles": 0.47,
+    "elev_ft": 139,
+    "delev_ft": -45
+   },
+   {
+    "id": "D3169",
+    "name": "DW3169 Oakland",
+    "miles": 0.72,
+    "elev_ft": 96,
+    "delev_ft": -88
+   },
+   {
+    "id": "G6983",
+    "name": "GW6983 BERKELEY",
+    "miles": 1.28,
+    "elev_ft": 168,
+    "delev_ft": -16
+   }
+  ]
+ },
+ "lakemerritt": {
+  "point": [
+   37.802,
+   -122.258,
+   33
+  ],
+  "stations": [
+   {
+    "id": "OAMC1",
+    "name": "Oakland Museum",
+    "miles": 0.4,
+    "elev_ft": 30,
+    "delev_ft": -3
+   },
+   {
+    "id": "G0758",
+    "name": "GW0758 Oakland",
+    "miles": 1.8,
+    "elev_ft": 253,
+    "delev_ft": 220
+   },
+   {
+    "id": "D3169",
+    "name": "DW3169 Oakland",
+    "miles": 2.12,
+    "elev_ft": 96,
+    "delev_ft": 63
+   }
+  ]
+ },
+ "downtownoakland": {
+  "point": [
+   37.804,
+   -122.272,
+   3
+  ],
+  "stations": [
+   {
+    "id": "OAMC1",
+    "name": "Oakland Museum",
+    "miles": 0.62,
+    "elev_ft": 30,
+    "delev_ft": 27
+   },
+   {
+    "id": "D9579",
+    "name": "DW9579 Alameda",
+    "miles": 2.2,
+    "elev_ft": 13,
+    "delev_ft": 10
+   },
+   {
+    "id": "D3169",
+    "name": "DW3169 Oakland",
+    "miles": 2.28,
+    "elev_ft": 96,
+    "delev_ft": 93
+   }
+  ]
+ },
+ "fruitvale": {
+  "point": [
+   37.775,
+   -122.224,
+   43
+  ],
+  "stations": [
+   {
+    "id": "PG937",
+    "name": "Oakland IDSM",
+    "miles": 1.03,
+    "elev_ft": 10,
+    "delev_ft": -33
+   },
+   {
+    "id": "C6723",
+    "name": "CW6723 Oakland",
+    "miles": 1.66,
+    "elev_ft": 233,
+    "delev_ft": 190
+   },
+   {
+    "id": "G0758",
+    "name": "GW0758 Oakland",
+    "miles": 1.93,
+    "elev_ft": 253,
+    "delev_ft": 210
+   }
+  ]
+ },
+ "skyline": {
+  "point": [
+   37.812,
+   -122.183,
+   676
+  ],
+  "stations": [
+   {
+    "id": "F4432",
+    "name": "FW4432 Oakland",
+    "miles": 2.54,
+    "elev_ft": 910,
+    "delev_ft": 234
+   }
+  ]
+ },
+ "berkeleyhills": {
+  "point": [
+   37.882,
+   -122.248,
+   1024
+  ],
+  "stations": [
+   {
+    "id": "LBNL1",
+    "name": "Berkeley Lab",
+    "miles": 0.34,
+    "elev_ft": 888,
+    "delev_ft": -136
+   },
+   {
+    "id": "PG014",
+    "name": "Broadway Street",
+    "miles": 2.52,
+    "elev_ft": 755,
+    "delev_ft": -269
+   }
+  ]
+ },
+ "northberkeley": {
+  "point": [
+   37.88,
+   -122.268,
+   322
+  ],
+  "stations": [
+   {
+    "id": "AV737",
+    "name": "KJ6WEG Berkeley",
+    "miles": 1.41,
+    "elev_ft": 105,
+    "delev_ft": -217
+   },
+   {
+    "id": "G6983",
+    "name": "GW6983 BERKELEY",
+    "miles": 1.92,
+    "elev_ft": 168,
+    "delev_ft": -154
+   },
+   {
+    "id": "F1589",
+    "name": "FW1589 El Cerrito",
+    "miles": 2.39,
+    "elev_ft": 317,
+    "delev_ft": -5
+   }
+  ]
+ },
+ "westberkeley": {
+  "point": [
+   37.866,
+   -122.295,
+   98
+  ],
+  "stations": [
+   {
+    "id": "AV737",
+    "name": "KJ6WEG Berkeley",
+    "miles": 0.59,
+    "elev_ft": 105,
+    "delev_ft": 7
+   },
+   {
+    "id": "G6983",
+    "name": "GW6983 BERKELEY",
+    "miles": 2.02,
+    "elev_ft": 168,
+    "delev_ft": 70
+   },
+   {
+    "id": "F4463",
+    "name": "FW4463 Oakland",
+    "miles": 2.74,
+    "elev_ft": 139,
+    "delev_ft": 41
+   }
+  ]
+ },
+ "albany": {
+  "point": [
+   37.887,
+   -122.298,
+   85
+  ],
+  "stations": [
+   {
+    "id": "F1589",
+    "name": "FW1589 El Cerrito",
+    "miles": 1.65,
+    "elev_ft": 317,
+    "delev_ft": 232
+   },
+   {
+    "id": "AV737",
+    "name": "KJ6WEG Berkeley",
+    "miles": 1.74,
+    "elev_ft": 105,
+    "delev_ft": 20
+   },
+   {
+    "id": "G5483",
+    "name": "GW5483 RICHMOND",
+    "miles": 1.83,
+    "elev_ft": 23,
+    "delev_ft": -62
+   }
+  ]
+ },
+ "elcerrito": {
+  "point": [
+   37.916,
+   -122.311,
+   499
+  ],
+  "stations": [
+   {
+    "id": "G7968",
+    "name": "GW7968 EL CERRITO",
+    "miles": 1.17,
+    "elev_ft": 640,
+    "delev_ft": 141
+   },
+   {
+    "id": "F1589",
+    "name": "FW1589 El Cerrito",
+    "miles": 1.22,
+    "elev_ft": 317,
+    "delev_ft": -182
+   },
+   {
+    "id": "PG043",
+    "name": "Terrace Drive",
+    "miles": 1.35,
+    "elev_ft": 769,
+    "delev_ft": 270
+   }
+  ]
+ },
+ "alameda": {
+  "point": [
+   37.765,
+   -122.242,
+   3
+  ],
+  "stations": [
+   {
+    "id": "PG937",
+    "name": "Oakland IDSM",
+    "miles": 1.34,
+    "elev_ft": 10,
+    "delev_ft": 7
+   },
+   {
+    "id": "OAMC1",
+    "name": "Oakland Museum",
+    "miles": 2.57,
+    "elev_ft": 30,
+    "delev_ft": 27
+   },
+   {
+    "id": "G0758",
+    "name": "GW0758 Oakland",
+    "miles": 2.78,
+    "elev_ft": 253,
+    "delev_ft": 250
+   }
+  ]
+ },
+ "outersunset": {
+  "point": [
+   37.755,
+   -122.502,
+   148
+  ],
+  "stations": [
+   {
+    "id": "604PG",
+    "name": "Golden Gate Park",
+    "miles": 1.17,
+    "elev_ft": 40,
+    "delev_ft": -108
+   }
+  ]
+ },
+ "innersunset": {
+  "point": [
+   37.76,
+   -122.466,
+   361
+  ],
+  "stations": [
+   {
+    "id": "F2543",
+    "name": "FW2543 San Francisco",
+    "miles": 1.09,
+    "elev_ft": 499,
+    "delev_ft": 138
+   },
+   {
+    "id": "F8548",
+    "name": "FW8548 San Francisco",
+    "miles": 1.32,
+    "elev_ft": 475,
+    "delev_ft": 114
+   },
+   {
+    "id": "F6803",
+    "name": "FW6803 San Francisco",
+    "miles": 1.57,
+    "elev_ft": 189,
+    "delev_ft": -172
+   }
+  ]
+ },
+ "richmond": {
+  "point": [
+   37.779,
+   -122.483,
+   197
+  ],
+  "stations": [
+   {
+    "id": "604PG",
+    "name": "Golden Gate Park",
+    "miles": 1.45,
+    "elev_ft": 40,
+    "delev_ft": -157
+   },
+   {
+    "id": "FTPC1",
+    "name": "San Francisco",
+    "miles": 2.15,
+    "elev_ft": 0,
+    "delev_ft": -197
+   },
+   {
+    "id": "F2543",
+    "name": "FW2543 San Francisco",
+    "miles": 2.29,
+    "elev_ft": 499,
+    "delev_ft": 302
+   }
+  ]
+ },
+ "presidio": {
+  "point": [
+   37.798,
+   -122.466,
+   0
+  ],
+  "stations": [
+   {
+    "id": "FTPC1",
+    "name": "San Francisco",
+    "miles": 0.6,
+    "elev_ft": 0,
+    "delev_ft": 0
+   },
+   {
+    "id": "SFOC1",
+    "name": "SAN FRANCISCO DOWNTOWN",
+    "miles": 2.85,
+    "elev_ft": 150,
+    "delev_ft": 150
+   },
+   {
+    "id": "604PG",
+    "name": "Golden Gate Park",
+    "miles": 2.93,
+    "elev_ft": 40,
+    "delev_ft": 40
+   }
+  ]
+ },
+ "marina": {
+  "point": [
+   37.803,
+   -122.437,
+   0
+  ],
+  "stations": [
+   {
+    "id": "FTPC1",
+    "name": "San Francisco",
+    "miles": 1.55,
+    "elev_ft": 0,
+    "delev_ft": 0
+   },
+   {
+    "id": "SFOC1",
+    "name": "SAN FRANCISCO DOWNTOWN",
+    "miles": 2.3,
+    "elev_ft": 150,
+    "delev_ft": 150
+   },
+   {
+    "id": "F4637",
+    "name": "FW4637 San Francisco",
+    "miles": 2.37,
+    "elev_ft": 64,
+    "delev_ft": 64
+   }
+  ]
+ },
+ "northbeach": {
+  "point": [
+   37.806,
+   -122.41,
+   197
+  ],
+  "stations": [
+   {
+    "id": "F4637",
+    "name": "FW4637 San Francisco",
+    "miles": 2.57,
+    "elev_ft": 64,
+    "delev_ft": -133
+   },
+   {
+    "id": "SFOC1",
+    "name": "SAN FRANCISCO DOWNTOWN",
+    "miles": 2.61,
+    "elev_ft": 150,
+    "delev_ft": -47
+   },
+   {
+    "id": "FTPC1",
+    "name": "San Francisco",
+    "miles": 3.0,
+    "elev_ft": 0,
+    "delev_ft": -197
+   }
+  ]
+ },
+ "pacificheights": {
+  "point": [
+   37.793,
+   -122.435,
+   217
+  ],
+  "stations": [
+   {
+    "id": "SFOC1",
+    "name": "SAN FRANCISCO DOWNTOWN",
+    "miles": 1.61,
+    "elev_ft": 150,
+    "delev_ft": -67
+   },
+   {
+    "id": "F4637",
+    "name": "FW4637 San Francisco",
+    "miles": 1.69,
+    "elev_ft": 64,
+    "delev_ft": -153
+   },
+   {
+    "id": "FTPC1",
+    "name": "San Francisco",
+    "miles": 1.89,
+    "elev_ft": 0,
+    "delev_ft": -217
+   }
+  ]
+ },
+ "haight": {
+  "point": [
+   37.77,
+   -122.447,
+   253
+  ],
+  "stations": [
+   {
+    "id": "F2543",
+    "name": "FW2543 San Francisco",
+    "miles": 0.5,
+    "elev_ft": 499,
+    "delev_ft": 246
+   },
+   {
+    "id": "F6803",
+    "name": "FW6803 San Francisco",
+    "miles": 0.94,
+    "elev_ft": 189,
+    "delev_ft": -64
+   },
+   {
+    "id": "F8548",
+    "name": "FW8548 San Francisco",
+    "miles": 1.0,
+    "elev_ft": 475,
+    "delev_ft": 222
+   }
+  ]
+ },
+ "noevalley": {
+  "point": [
+   37.75,
+   -122.433,
+   197
+  ],
+  "stations": [
+   {
+    "id": "E9227",
+    "name": "EW9227 San Francisco",
+    "miles": 0.47,
+    "elev_ft": 379,
+    "delev_ft": 182
+   },
+   {
+    "id": "F6803",
+    "name": "FW6803 San Francisco",
+    "miles": 0.64,
+    "elev_ft": 189,
+    "delev_ft": -8
+   },
+   {
+    "id": "F8548",
+    "name": "FW8548 San Francisco",
+    "miles": 0.66,
+    "elev_ft": 475,
+    "delev_ft": 278
+   }
+  ]
+ },
+ "mission": {
+  "point": [
+   37.76,
+   -122.415,
+   197
+  ],
+  "stations": [
+   {
+    "id": "F4637",
+    "name": "FW4637 San Francisco",
+    "miles": 0.85,
+    "elev_ft": 64,
+    "delev_ft": -133
+   },
+   {
+    "id": "C5988",
+    "name": "CW5988 San Francisco",
+    "miles": 0.91,
+    "elev_ft": 177,
+    "delev_ft": -20
+   },
+   {
+    "id": "G6226",
+    "name": "GW6226 SAN FRANCISCO",
+    "miles": 0.95,
+    "elev_ft": 52,
+    "delev_ft": -145
+   }
+  ]
+ },
+ "potrerohill": {
+  "point": [
+   37.759,
+   -122.4,
+   197
+  ],
+  "stations": [
+   {
+    "id": "G6226",
+    "name": "GW6226 SAN FRANCISCO",
+    "miles": 0.61,
+    "elev_ft": 52,
+    "delev_ft": -145
+   },
+   {
+    "id": "F4637",
+    "name": "FW4637 San Francisco",
+    "miles": 1.49,
+    "elev_ft": 64,
+    "delev_ft": -133
+   },
+   {
+    "id": "SFOC1",
+    "name": "SAN FRANCISCO DOWNTOWN",
+    "miles": 1.67,
+    "elev_ft": 150,
+    "delev_ft": -47
+   }
+  ]
+ },
+ "soma": {
+  "point": [
+   37.778,
+   -122.405,
+   131
+  ],
+  "stations": [
+   {
+    "id": "F4637",
+    "name": "FW4637 San Francisco",
+    "miles": 1.13,
+    "elev_ft": 64,
+    "delev_ft": -67
+   },
+   {
+    "id": "SFOC1",
+    "name": "SAN FRANCISCO DOWNTOWN",
+    "miles": 1.3,
+    "elev_ft": 150,
+    "delev_ft": 19
+   },
+   {
+    "id": "G6226",
+    "name": "GW6226 SAN FRANCISCO",
+    "miles": 1.91,
+    "elev_ft": 52,
+    "delev_ft": -79
+   }
+  ]
+ },
+ "bernalheights": {
+  "point": [
+   37.741,
+   -122.416,
+   197
+  ],
+  "stations": [
+   {
+    "id": "E5830",
+    "name": "EW5830 San Francisco",
+    "miles": 0.9,
+    "elev_ft": 272,
+    "delev_ft": 75
+   },
+   {
+    "id": "G6226",
+    "name": "GW6226 SAN FRANCISCO",
+    "miles": 0.98,
+    "elev_ft": 52,
+    "delev_ft": -145
+   },
+   {
+    "id": "G3010",
+    "name": "GW3010 San Francisco",
+    "miles": 1.32,
+    "elev_ft": 174,
+    "delev_ft": -23
+   }
+  ]
+ },
+ "twinpeaks": {
+  "point": [
+   37.752,
+   -122.447,
+   197
+  ],
+  "stations": [
+   {
+    "id": "F8548",
+    "name": "FW8548 San Francisco",
+    "miles": 0.38,
+    "elev_ft": 475,
+    "delev_ft": 278
+   },
+   {
+    "id": "E9227",
+    "name": "EW9227 San Francisco",
+    "miles": 0.67,
+    "elev_ft": 379,
+    "delev_ft": 182
+   },
+   {
+    "id": "F6803",
+    "name": "FW6803 San Francisco",
+    "miles": 0.7,
+    "elev_ft": 189,
+    "delev_ft": -8
+   }
+  ]
+ }
 }

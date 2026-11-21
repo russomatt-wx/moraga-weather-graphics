@@ -12,7 +12,7 @@ concurrency:
 jobs:
   locations:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -41,19 +41,28 @@ jobs:
           dates=[(today+datetime.timedelta(days=i)).isoformat() for i in range(10)]
           locs=[(l['id'],l['lat'],l['lon']) for l in json.load(open('locations.json'))['locations'] if l['id']!='moraga']
           for name,lat,lon in locs:
-              data=json.loads(pathlib.Path(f'{name}_forecast_10day.json').read_text())
-              assert data['dates']==dates, f'{name}: wrong dates'
-              assert abs(data['latitude']-lat)<0.002 and abs(data['longitude']-lon)<0.002, f'{name}: wrong coordinates'
-              assert len(data.get('temperature_models',{}))>=2, f'{name}: insufficient models'
-              assert all(day in data.get('rain_guidance',{}) for day in dates), f'{name}: missing rain guidance'
-              print(name,'validated')
+              f=pathlib.Path(f'{name}_forecast_10day.json')
+              if not f.exists():
+                  print(f'::warning::{name}: no feed yet');continue
+              try:
+                  data=json.loads(f.read_text())
+                  assert data['dates']==dates, f'{name}: wrong dates'
+                  assert abs(data['latitude']-lat)<0.002 and abs(data['longitude']-lon)<0.002, f'{name}: wrong coordinates'
+                  assert len(data.get('temperature_models',{}))>=2, f'{name}: insufficient models'
+                  assert all(day in data.get('rain_guidance',{}) for day in dates), f'{name}: missing rain guidance'
+                  print(name,'validated')
+              except Exception as exc:
+                  # One bad feed never blocks the rest: restore the published copy instead.
+                  print(f'::warning::{name} not published: {exc}')
+                  import subprocess; subprocess.run(['git','checkout','--',str(f)],check=False)
+                  if subprocess.run(['git','ls-files','--error-unmatch',str(f)],capture_output=True).returncode!=0: f.unlink(missing_ok=True)
           PY
       - name: Publish only additional location feeds
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p /tmp/additional-location-publish
-          cp $(python3 -c "import json;print(' '.join(l['id']+'_forecast_10day.json' for l in json.load(open('locations.json'))['locations'] if l['id']!='moraga'))") /tmp/additional-location-publish/
+          for f in $(python3 -c "import json;print(' '.join(l['id']+'_forecast_10day.json' for l in json.load(open('locations.json'))['locations'] if l['id']!='moraga'))"); do [ -f "$f" ] && cp "$f" /tmp/additional-location-publish/; done
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           for attempt in 1 2 3 4 5; do

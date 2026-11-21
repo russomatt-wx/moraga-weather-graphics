@@ -34,7 +34,7 @@ WORKER = "https://moraga-live-observations.russo-matt.workers.dev/daily"
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import locations  # noqa: E402
-TOWNS = locations.towns(include_moraga=False)
+TOWNS = {k: v for k, v in locations.towns(include_moraga=False).items() if v}  # station towns (new neighbourhoods learn via the public-station track)
 MIN_SAMPLES = 200          # of ~288 five-minute observations in a day
 BACKFILL_DAYS = 35
 FACTORS = [0, .25, .5, .75, 1.0]

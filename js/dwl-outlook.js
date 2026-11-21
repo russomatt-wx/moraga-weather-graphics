@@ -600,8 +600,8 @@
       .filter(Boolean).map(dot);
     return {
       headline: headline(rs, hz, opts.daily, nowParts, region, afd),
-      text: greeting(nowParts.hour, place) + ' ' + para.join(' '),
-      long: greeting(nowParts.hour, place) + ' ' + nearTerm.join(' ') + (farTerm.length ? '\n\n' + farTerm.join(' ') : ''),
+      text: para.join(' '),
+      long: nearTerm.join(' ') + (farTerm.length ? '\n\n' + farTerm.join(' ') : ''),
       source: afd ? 'Based on the NWS ' + (/STO/.test(opts.afdText || '') && !/MTR/.test(String(opts.afdText || '').slice(0, 200)) ? 'Sacramento' : 'Bay Area') + ' forecast discussion (' + issued + ') and local model guidance' : 'Local model guidance · NWS discussion not available'
     };
   }
