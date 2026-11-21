@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=24"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=24"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=24">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261121w">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261121x">
 
 
 
@@ -798,11 +798,15 @@ function nwsWeatherOutlook(afd,d,h){
  // (under 3 hours old), then replaced in place as live data arrives.
  let shownCity=null;
  const SNAP_IDS=['public-days','public-hourly'];
- function snapKey(c){return 'dwl-snap-v2-'+c}
+ // Saved screens are tied to this build (stylesheet + script versions): any site update discards them,
+ // so a new layout never shows an old saved screen.
+ const SNAP_BUILD=[...document.querySelectorAll('link[href*="?v="],script[src*="?v="]')].map(e=>(e.getAttribute('href')||e.getAttribute('src')).split('?v=')[1]).join('.');
+ function snapKey(c){return 'dwl-snap-v3-'+SNAP_BUILD+'-'+c}
  function saveSnap(){
   try{if(!shownCity)return;const card=document.querySelector('#public-shell .public-obs-card');if(!card)return;
    const temp=el('public-current-temp')?.textContent||'';if(!/\d/.test(temp))return;
    const o={at:Date.now(),card:card.innerHTML,cardStyle:card.getAttribute('style')||'',shell:el('public-shell')?.getAttribute('style')||''};
+   try{Object.keys(localStorage).filter(k=>k.startsWith('dwl-snap-')&&!k.includes(SNAP_BUILD)).forEach(k=>localStorage.removeItem(k))}catch(e){}
    SNAP_IDS.forEach(id=>{o[id]=el(id)?.innerHTML||'';o[id+':class']=el(id)?.className||''});
    localStorage.setItem(snapKey(shownCity),JSON.stringify(o));}catch(e){}
  }
