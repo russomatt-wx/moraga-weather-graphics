@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-21T15:07:30.218161+00:00",
+ "generated_utc": "2026-11-21T15:07:56.606990+00:00",
  "source": "NOAA RTMA rapid update (2.5 km analysis)",
  "method": "Estimate at each station's location vs that station's reading (live: within 45 minutes; backfill: within 10 minutes). Corrected = minus the town's mean error in the same regime (day/night, calm/breezy) over the previous 14 days (needs 6+ prior hours).",
  "towns": {
