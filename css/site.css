@@ -1746,3 +1746,6 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday b { font-size: 1
 #public-shell .dwl-panel.public-outlook .dwl-panel-h h2 { font-size: clamp(20px, 5.8vw, 25px) !important; background: none !important; -webkit-background-clip: border-box !important; background-clip: border-box !important; color: #f1f6fb !important; }
 #public-shell .dwl-panel.public-outlook .public-outlook-headline { text-shadow: none !important; }
 #public-shell .public-outlook-source { display: none !important; }
+/* Sunrise / sunset / rainfall: outline icons in the same style as the tile icons */
+#public-shell .dwl-now-row .dwl-line-ic { width: clamp(26px, 7.4vw, 32px) !important; height: clamp(26px, 7.4vw, 32px) !important; margin-right: 3px;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, currentColor 45%, transparent)) !important; }
