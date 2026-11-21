@@ -68,7 +68,10 @@ def observations():
 
 def draw(points):
     """Phone-legible 72-hour chart with Pacific time and honest rainfall axis."""
-    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 12})
+    from matplotlib import font_manager
+    for f in (pathlib.Path(__file__).resolve().parents[1] / "fonts").glob("Inter-*.ttf"):
+        font_manager.fontManager.addfont(str(f))
+    plt.rcParams.update({"font.family": ["Inter", "DejaVu Sans"], "font.size": 12})
     x = [t for t, _ in points]
     y = np.array([v[0] for _, v in points])
     dew = np.array([v[1] for _, v in points])

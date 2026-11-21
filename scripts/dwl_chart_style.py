@@ -30,10 +30,10 @@ FONT_DIR = Path(__file__).resolve().parents[1] / "fonts"
 
 def _register_fonts():
     names = set()
-    for f in sorted(FONT_DIR.glob("Outfit-*.ttf")):
+    for f in sorted(FONT_DIR.glob("Inter-*.ttf")):
         font_manager.fontManager.addfont(str(f))
         names.add(font_manager.FontProperties(fname=str(f)).get_name())
-    return "Outfit" in names
+    return "Inter" in names
 
 
 def apply():
@@ -41,7 +41,7 @@ def apply():
     has_outfit = _register_fonts()
     from cycler import cycler
     matplotlib.rcParams.update({
-        "font.family": ["Outfit", "DejaVu Sans"] if has_outfit else ["DejaVu Sans"],
+        "font.family": ["Inter", "DejaVu Sans"] if has_outfit else ["DejaVu Sans"],
         "font.size": 14,
         "font.weight": "medium",
         "text.color": TEXT,
