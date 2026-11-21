@@ -104,6 +104,10 @@ def station_days(sid):
         if not nxt or not feats:
             break
         url = nxt
+    hourly = {}
+    for t, f in temps:
+        hourly.setdefault(t.replace(minute=0, second=0, microsecond=0), []).append(f)
+    hourly = {h: sum(v) / len(v) for h, v in hourly.items()}
     by = {}
     for t, f in temps:
         by.setdefault(t.date().isoformat(), []).append((t, f))
@@ -118,7 +122,63 @@ def station_days(sid):
         if span >= 22 and hours >= 20:
             fs = [f for _, f in vals]
             out[day] = (max(fs), min(fs))
-    return out
+    return out, hourly
+
+
+HEALTH = ROOT / "verification" / "public_station_health.json"
+
+
+def reference_hourly(town):
+    """The town's trusted station, hourly means, last 7 days (test phase only: used to grade public stations)."""
+    out = {}
+    for k in range(8):
+        day = (datetime.now(TZ) - timedelta(days=k)).strftime("%Y-%m-%d")
+        try:
+            req = urllib.request.Request(f"{WORKER}/dayobs?city={town}&date={day}", headers={"User-Agent": H["User-Agent"]})
+            d = json.load(urllib.request.urlopen(req, timeout=60))
+        except Exception:
+            continue
+        for t, temp, *_ in d.get("obs", []):
+            if temp is None:
+                continue
+            h = datetime.fromisoformat(t.replace("Z", "+00:00")).astimezone(TZ).replace(minute=0, second=0, microsecond=0)
+            out.setdefault(h, []).append(temp)
+    return {h: sum(v) / len(v) for h, v in out.items()}
+
+
+def grade(station, town, hourly, ref, neighbours):
+    """Offsets by day / night vs the trusted station and vs the other public stations; a status."""
+    cut = datetime.now(TZ) - timedelta(days=7)
+    hrs = [h for h in hourly if h >= cut]
+    expected = 7 * 24
+    def offsets(other, part):
+        d = [hourly[h] - other[h] for h in hrs if h in other and (9 <= h.hour <= 16 if part == "day" else (h.hour >= 21 or h.hour <= 5))]
+        return (round(sum(d) / len(d), 1), len(d)) if len(d) >= 12 else (None, len(d))
+    day_ref, nd = offsets(ref, "day")
+    night_ref, nn = offsets(ref, "night")
+    nb = {}
+    for h in hrs:
+        vals = [n[h] for n in neighbours if h in n]
+        if len(vals) >= 2:
+            nb[h] = median(vals)
+    day_nb, _ = offsets(nb, "day") if nb else (None, 0)
+    night_nb, _ = offsets(nb, "night") if nb else (None, 0)
+    reports = round(100 * len(hrs) / expected)
+    issues, status = [], "ok"
+    if reports < 75:
+        issues.append(f"reports only {reports}% of hours"); status = "watch" if reports >= 50 else "drop"
+    for label, dv, nv in (("vs trusted station", day_ref, night_ref), ("vs neighbours", day_nb, night_nb)):
+        if dv is None or nv is None:
+            continue
+        if dv - nv >= 3:
+            issues.append(f"runs {dv - nv:.0f}° warmer by day than at night {label} (sun on the sensor?)")
+            status = "drop" if dv - nv >= 5 else max(status, "watch", key=["ok", "watch", "drop"].index)
+        if abs(dv) >= 4 and abs(nv) >= 4 and (dv > 0) == (nv > 0):
+            issues.append(f"offset about {(dv + nv) / 2:+.0f}° at all hours {label}")
+            status = "drop" if min(abs(dv), abs(nv)) >= 6 else max(status, "watch", key=["ok", "watch", "drop"].index)
+    return {"station": station["id"], "name": station["name"], "town": town, "miles": station["miles"], "delev_ft": station.get("delev_ft"),
+            "reports_pct": reports, "day_vs_trusted": day_ref, "night_vs_trusted": night_ref, "day_vs_neighbours": day_nb,
+            "night_vs_neighbours": night_nb, "status": status, "issues": issues}
 
 
 def main():
@@ -132,7 +192,7 @@ def main():
         obs = json.loads(OUT.read_text())
     except (OSError, ValueError):
         obs = {}
-    cache = {}
+    cache, health = {}, []
     for town in TOWNS:
         per = {}
         for s in choice[town]["stations"]:
@@ -141,8 +201,16 @@ def main():
                     cache[s["id"]] = station_days(s["id"])
                 except Exception as exc:
                     print(s["id"], "unavailable", type(exc).__name__)
-                    cache[s["id"]] = {}
-            for day, hl in cache[s["id"]].items():
+                    cache[s["id"]] = ({}, {})
+        ref = reference_hourly(town)
+        for s in choice[town]["stations"]:
+            others = [cache[o["id"]][1] for o in choice[town]["stations"] if o["id"] != s["id"]]
+            g = grade(s, town, cache[s["id"]][1], ref, others)
+            health.append(g)
+            print("health", g["station"], g["status"], g["issues"])
+            if g["status"] == "drop":
+                continue  # a failing station never feeds the training data
+            for day, hl in cache[s["id"]][0].items():
                 per.setdefault(day, {})[s["id"]] = hl
         for day, vals in per.items():
             hi = {k: v[0] for k, v in vals.items()}
@@ -160,6 +228,11 @@ def main():
     cutoff = (datetime.now(TZ).date() - timedelta(days=120)).isoformat()
     obs = {t: {d: v for d, v in sorted(days.items()) if d >= cutoff} for t, days in obs.items()}
     OUT.write_text(json.dumps(obs, indent=1, sort_keys=True) + "\n")
+    HEALTH.write_text(json.dumps({"generated_utc": datetime.now(timezone.utc).isoformat(), "window_days": 7,
+                                  "method": "Hourly means over the last 7 days. Day = 9 AM-4 PM, night = 9 PM-5 AM Pacific. "
+                                            "Trusted station = the location's chosen station (test phase). Drop: offset of 6+ F at all hours, "
+                                            "5+ F warmer by day than at night, or under 50% of hours reported.",
+                                  "stations": health}, indent=1) + "\n")
 
 
 if __name__ == "__main__":

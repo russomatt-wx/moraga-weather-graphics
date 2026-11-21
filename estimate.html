@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Estimate Test Results | Diablo Weather Lab</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=24"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=24"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=24">
 <meta name="description" content="How closely the bias-corrected NOAA current-conditions estimate matches each local weather station.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261121j">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Outfit:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261121k">
 
 
 
@@ -36,6 +36,9 @@
 <p class="est-foot est-lead">Day-ahead high and low forecasts after the learned correction, all scored against the local station. <b>Station-trained</b> learns from the station itself (today's method); <b>NOAA-trained</b> learns from NOAA's URMA analysis; <b>Public-trained</b> learns from nearby public stations (airports, citizen and agency stations). Both can be used in a paid app. Average miss in °F, high / low.</p>
 <div class="est-table-wrap"><table class="est-table" id="fc-table"><thead><tr><th>Location</th><th>Days</th><th>No correction</th><th>Station-trained</th><th>NOAA-trained</th><th>Public-trained</th></tr></thead><tbody><tr><td colspan="6" class="low">Loading…</td></tr></tbody></table></div>
 <p class="est-foot" id="fc-foot"></p>
+<h2 class="pad-sec-h">Public station health</h2>
+<p class="est-foot est-lead">Each public station's average difference from the location's trusted station by day and by night over the last 7 days (°F). A station is dropped automatically if it is off by 6° or more at all hours, runs 5° or more warmer by day than at night (sun on the sensor), or misses half its reports. Dropped stations never feed the training data.</p>
+<div class="est-table-wrap"><table class="est-table" id="health-table"><thead><tr><th>Station</th><th>Reports</th><th>Day</th><th>Night</th><th>Status</th></tr></thead><tbody><tr><td colspan="5" class="low">Loading…</td></tr></tbody></table></div>
 <section class="pad-notes">
  <h2>How the test works</h2>
  <p><b>10-day forecast learning:</b> each model's day-ahead high and low are compared with what was observed, and a bias correction is kept only where testing on earlier days shows it helps. The NOAA track repeats this using NOAA's quality-controlled URMA analysis (hourly, 2.5 km) at each location instead of the station, so the corrections could be used in a paid app. Both are then scored against the station. NOAA's daily high and low come from hourly values, so they run slightly milder than a station's 5-minute extremes.</p>
@@ -43,6 +46,6 @@
  <p>The NOAA estimate is public-domain data. The station readings are used here only to measure and train it.</p>
 </section>
 </div>
-<script src="js/estimate.js?v=20261121d" defer></script>
+<script src="js/estimate.js?v=20261121e" defer></script>
 </body>
 </html>

@@ -1054,3 +1054,8 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 
 /* No NWS alerts in the Observation Lab (they live on Local Weather) */
 #moraga-alerts { display: none !important; }
+#health-table tr.grp th { padding: 10px 4px 0 !important; background: none; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); cursor: default; }
+#health-table tr.grp { background: none !important; }
+#health-table tbody th small { display: block; font-size: 11px; font-weight: 500; color: var(--muted); }
+#health-table tbody th { white-space: normal; max-width: 150px; }
+#health-table td.st-ok { color: #6ff0b8; } #health-table td.st-watch { color: #ffd36b; } #health-table td.st-drop { color: #ff9a9a; }

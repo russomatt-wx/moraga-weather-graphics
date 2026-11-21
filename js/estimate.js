@@ -137,7 +137,23 @@
     const avg = (a) => a.reduce((x, y) => x + y, 0) / a.length;
     $('fc-foot').textContent = gapH.length ? 'Across ' + gapH.length + ' location-days, NOAA’s daily high averaged ' + (avg(gapH) >= 0 ? '+' : '') + avg(gapH).toFixed(1) + '° and its low ' + (avg(gapL) >= 0 ? '+' : '') + avg(gapL).toFixed(1) + '° versus the stations. Moraga always learns from your own station.' : '';
   }
+  async function health() {
+    const d = await getJSON('verification/public_station_health.json');
+    if (!d) return;
+    const NAMES = Object.fromEntries(TOWNS);
+    const f = (v) => v == null ? '—' : (v > 0 ? '+' : '') + v.toFixed(1) + '°';
+    const tone = (v) => v == null ? '' : Math.abs(v) <= 2 ? 'good' : Math.abs(v) <= 4 ? 'ok' : 'low';
+    let last = '';
+    $('health-table').querySelector('tbody').innerHTML = d.stations.map((s) => {
+      const head = s.town !== last ? '<tr class="grp"><th colspan="5">' + esc(NAMES[s.town] || s.town) + '</th></tr>' : '';
+      last = s.town;
+      return head + '<tr title="' + esc(s.issues.join('; ')) + '"><th>' + esc(s.name.replace(/^[A-Z]{2}\d{4} /, '')) + '<small>' + s.miles + ' mi · ' + (s.delev_ft > 0 ? '+' : '') + s.delev_ft + ' ft</small></th>' +
+        '<td class="' + (s.reports_pct >= 75 ? 'good' : s.reports_pct >= 50 ? 'ok' : 'low') + '">' + s.reports_pct + '%</td><td class="' + tone(s.day_vs_trusted) + '">' + f(s.day_vs_trusted) + '</td><td class="' + tone(s.night_vs_trusted) + '">' + f(s.night_vs_trusted) + '</td>' +
+        '<td class="st-' + s.status + '">' + (s.status === 'ok' ? '✓ OK' : s.status === 'watch' ? '! Watch' : '✕ Dropped') + '</td></tr>';
+    }).join('');
+  }
   load();
   forecasts();
+  health();
   setInterval(load, 15 * 60 * 1000);
 })();
