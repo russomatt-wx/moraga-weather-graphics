@@ -1897,3 +1897,5 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { border-width: 1.
 /* Radar basemap: tint the neutral dark map to the app's navy (radar colours untouched) */
 #public-shell .dwl-radar-map, #public-shell .dwl-radar-map.leaflet-container { background: #0c1d33 !important; }
 #public-shell .dwl-radar-map .leaflet-pane[class*="labels"], #public-shell .dwl-radar-map .leaflet-labels-pane { opacity: .9; }
+#public-shell .dwl-radar-play { display: grid !important; place-items: center; padding: 0 !important; line-height: 0; }
+#public-shell .dwl-radar-play svg { width: 15px; height: 15px; display: block; }
