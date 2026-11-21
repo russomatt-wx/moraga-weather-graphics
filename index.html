@@ -345,6 +345,8 @@
   // Current-conditions rainfall = today's forecast amount, exactly as shown on the 10-day Today row.
   const todayAmt=host.querySelector('.dwl-day.is-today .dwl-day-amount')?.textContent;if(todayAmt)set('public-rain',todayAmt);
   applyBarsToday();
+  // Keep the 36-hour temperatures on the same highs / lows as these rows.
+  if(lastHourly&&lastHourly.city===city)renderHourly(lastHourly.hourly,lastHourly.currentTime);
  }
 
  // Hourly icon follows the displayed (blended) rain chance, with the 10-day cards' thresholds:
@@ -406,6 +408,19 @@
   const night=h.is_day?h.is_day[i]===0:!sunUp(h.time[i],coords[chosen][0],coords[chosen][1]);
   return description(code,night);
  }
+ function fitToDaily(hourly){
+  const out=[...hourly.temperature_2m];
+  if(!lastDaily||lastDaily.city!==city||!lastDaily.d?.time)return out;
+  const d=lastDaily.d,byDate={};
+  hourly.time.forEach((t,i)=>{if(Number.isFinite(out[i]))(byDate[t.slice(0,10)]=byDate[t.slice(0,10)]||[]).push(i);});
+  Object.entries(byDate).forEach(([date,idx])=>{
+   const k=d.time.indexOf(date),hi=d.temperature_2m_max?.[k],lo=d.temperature_2m_min?.[k];
+   if(k<0||!Number.isFinite(hi)||!Number.isFinite(lo)||hi<lo||idx.length<18)return; // need (nearly) the whole day
+   const v=idx.map(i=>out[i]),H=Math.max(...v),L=Math.min(...v);
+   idx.forEach(i=>{out[i]=H-L>=2?lo+(out[i]-L)*(hi-lo)/(H-L):out[i]+((hi+lo)-(H+L))/2;});
+  });
+  return out;
+ }
  function renderHourly(hourly,currentTime){
   const host=el('public-hourly');
   if(!hourly?.time?.length){host.replaceChildren();return;}
@@ -414,9 +429,12 @@
   let start=hourly.time.findIndex(t=>t.slice(0,13)>=hourStamp);if(start<0)start=0;
   // Models often run warm/cool at night: nudge the first hours toward the observed temperature,
   // fading back to the forecast over 6 hours.
-  const obsOk=lastObs&&lastObs.city===city&&Date.now()-lastObs.at<60*60000&&Number.isFinite(hourly.temperature_2m[start]);
-  const offset=obsOk?Math.max(-10,Math.min(10,lastObs.temp-hourly.temperature_2m[start])):0;
-  const tempAt=i=>{const v=hourly.temperature_2m[i];return Number.isFinite(v)?v+offset*Math.max(0,1-(i-start)/6):v;};
+  // Same temperatures as the 10-day: keep the short-range models' hour-by-hour shape, but scale each
+  // day so its warmest / coolest hours land on that day's self-learning 10-day high / low.
+  const T=fitToDaily(hourly);
+  const obsOk=lastObs&&lastObs.city===city&&Date.now()-lastObs.at<60*60000&&Number.isFinite(T[start]);
+  const offset=obsOk?Math.max(-10,Math.min(10,lastObs.temp-T[start])):0;
+  const tempAt=i=>{const v=T[i];return Number.isFinite(v)?v+offset*Math.max(0,1-(i-start)/6):v;};
   const skyOk=lastSky&&lastSky.city===city&&Date.now()-lastSky.at<90*60000;
   const cards=[];
   for(let i=start;i<Math.min(hourly.time.length,start+36);i+=2){
