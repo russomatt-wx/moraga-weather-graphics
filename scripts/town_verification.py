@@ -191,9 +191,10 @@ def score(town, archive, observed, source="station"):
             if wf:
                 calibration.setdefault(model, {})[phase] = {**wf, "verified_days": len(errs)}
     return {"generated_utc": datetime.now(timezone.utc).isoformat(), "status": "verified_daily_extremes" if rows else "collecting",
-            "town": town, "station": TOWNS[town] if source == "station" else "NOAA URMA", "verified_against": source, "model_scores": scores, "calibration": calibration,
+            "town": town, "station": TOWNS[town] if source == "station" else ("public stations" if source == "public_stations" else "NOAA URMA"), "verified_against": source, "model_scores": scores, "calibration": calibration,
             "method": "Earliest archived day-ahead model forecast per target local date (from the published town feed); observed daily high/low from the town's "
                       + (f"Weather Underground station ({TOWNS[town]}) covering at least 22.5 hours of the day" if source == "station"
+                         else "nearby public stations (NWS feed; see public_stations.json), averaged after a neighbour check" if source == "public_stations"
                          else "point in NOAA's URMA 2.5 km analysis (hourly, 22+ hours of the Pacific day; public domain)"),
             "note": "Each town is verified against its own station; Moraga corrections are never transferred.",
             "matches": rows[-90:]}
@@ -232,6 +233,12 @@ def main():
             nres = score(town, archive, noaa, source="noaa_urma")
             (OUT / f"{town}_model_daily_verification_noaa.json").write_text(json.dumps(nres, indent=1) + "\n")
             print(f"{town} (NOAA track): {len(nres['matches'])} matches")
+        # Third track: nearby public stations (NWS feed) - licence-friendly and scalable.
+        pub = load(OUT / "town_observed_public.json", {})
+        if pub.get(town):
+            pres = score(town, archive, pub, source="public_stations")
+            (OUT / f"{town}_model_daily_verification_public.json").write_text(json.dumps(pres, indent=1) + "\n")
+            print(f"{town} (public-station track): {len(pres['matches'])} matches")
     archive_path.write_text(json.dumps(archive, indent=1, sort_keys=True) + "\n")
     observed_path.write_text(json.dumps(observed, indent=1, sort_keys=True) + "\n")
 

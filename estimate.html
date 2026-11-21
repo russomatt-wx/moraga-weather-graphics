@@ -33,8 +33,8 @@
 <div class="pad-filter" id="est-towns" role="group" aria-label="Location"></div>
 <div class="est-detail" id="est-detail"></div>
 <h2 class="pad-sec-h">10-day forecast learning</h2>
-<p class="est-foot est-lead">Day-ahead high and low forecasts after the learned correction, all scored against the local station. <b>Station-trained</b> learns from the station itself (today's method); <b>NOAA-trained</b> learns from NOAA's URMA analysis, which a paid app can use. Average miss in °F, high / low.</p>
-<div class="est-table-wrap"><table class="est-table" id="fc-table"><thead><tr><th>Location</th><th>Days</th><th>No correction</th><th>Station-trained</th><th>NOAA-trained</th></tr></thead><tbody><tr><td colspan="5" class="low">Loading…</td></tr></tbody></table></div>
+<p class="est-foot est-lead">Day-ahead high and low forecasts after the learned correction, all scored against the local station. <b>Station-trained</b> learns from the station itself (today's method); <b>NOAA-trained</b> learns from NOAA's URMA analysis; <b>Public-trained</b> learns from nearby public stations (airports, citizen and agency stations). Both can be used in a paid app. Average miss in °F, high / low.</p>
+<div class="est-table-wrap"><table class="est-table" id="fc-table"><thead><tr><th>Location</th><th>Days</th><th>No correction</th><th>Station-trained</th><th>NOAA-trained</th><th>Public-trained</th></tr></thead><tbody><tr><td colspan="6" class="low">Loading…</td></tr></tbody></table></div>
 <p class="est-foot" id="fc-foot"></p>
 <section class="pad-notes">
  <h2>How the test works</h2>
@@ -43,6 +43,6 @@
  <p>The NOAA estimate is public-domain data. The station readings are used here only to measure and train it.</p>
 </section>
 </div>
-<script src="js/estimate.js?v=20261121b" defer></script>
+<script src="js/estimate.js?v=20261121c" defer></script>
 </body>
 </html>

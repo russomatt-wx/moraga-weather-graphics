@@ -1,0 +1,206 @@
+{
+ "moraga": {
+  "point": [
+   37.82,
+   -122.119,
+   620
+  ],
+  "stations": [
+   {
+    "id": "334PG",
+    "name": "Carr Ranch Road",
+    "miles": 0.93,
+    "elev_ft": 621,
+    "delev_ft": 1
+   },
+   {
+    "id": "PG712",
+    "name": "Peninsula Road",
+    "miles": 1.89,
+    "elev_ft": 756,
+    "delev_ft": 136
+   },
+   {
+    "id": "394PG",
+    "name": "Moraga Bluffs",
+    "miles": 2.15,
+    "elev_ft": 859,
+    "delev_ft": 239
+   }
+  ]
+ },
+ "lafayette": {
+  "point": [
+   37.921028,
+   -122.072639,
+   116
+  ],
+  "stations": [
+   {
+    "id": "G8052",
+    "name": "GW8052 WALNUT CREEK",
+    "miles": 0.69,
+    "elev_ft": 292,
+    "delev_ft": 176
+   },
+   {
+    "id": "E8430",
+    "name": "EW8430 Walnut Creek",
+    "miles": 1.48,
+    "elev_ft": 165,
+    "delev_ft": 49
+   },
+   {
+    "id": "G7844",
+    "name": "GW7844 PLEASANT HILL",
+    "miles": 2.42,
+    "elev_ft": 200,
+    "delev_ft": 84
+   }
+  ]
+ },
+ "danville": {
+  "point": [
+   37.803,
+   -121.934,
+   571
+  ],
+  "stations": [
+   {
+    "id": "SJS61",
+    "name": "SJSU - PG&E Technology Center",
+    "miles": 2.22,
+    "elev_ft": 501,
+    "delev_ft": -70
+   },
+   {
+    "id": "PG938",
+    "name": "San Ramon IDSM",
+    "miles": 2.25,
+    "elev_ft": 475,
+    "delev_ft": -96
+   },
+   {
+    "id": "PG930",
+    "name": "Caballo Ranchero Drive",
+    "miles": 2.97,
+    "elev_ft": 893,
+    "delev_ft": 322
+   }
+  ]
+ },
+ "greenbrook": {
+  "point": [
+   37.796,
+   -121.97,
+   486
+  ],
+  "stations": [
+   {
+    "id": "SJS61",
+    "name": "SJSU - PG&E Technology Center",
+    "miles": 0.89,
+    "elev_ft": 501,
+    "delev_ft": 15
+   },
+   {
+    "id": "PG938",
+    "name": "San Ramon IDSM",
+    "miles": 0.94,
+    "elev_ft": 475,
+    "delev_ft": -11
+   }
+  ]
+ },
+ "brentwood": {
+  "point": [
+   37.957,
+   -121.701,
+   22
+  ],
+  "stations": [
+   {
+    "id": "D9278",
+    "name": "DW9278 Brentwood",
+    "miles": 1.31,
+    "elev_ft": 88,
+    "delev_ft": 66
+   },
+   {
+    "id": "E9135",
+    "name": "EW9135 Brentwood",
+    "miles": 1.45,
+    "elev_ft": 92,
+    "delev_ft": 70
+   },
+   {
+    "id": "453PG",
+    "name": "Brentwood IDSM",
+    "miles": 2.86,
+    "elev_ft": 70,
+    "delev_ft": 48
+   }
+  ]
+ },
+ "sacramento": {
+  "point": [
+   38.574505,
+   -121.445938,
+   39
+  ],
+  "stations": [
+   {
+    "id": "CF181",
+    "name": "51SB at Elvas Pump House",
+    "miles": 0.82,
+    "elev_ft": 36,
+    "delev_ft": -3
+   },
+   {
+    "id": "G5219",
+    "name": "GW5219 SACRAMENTO",
+    "miles": 1.92,
+    "elev_ft": 131,
+    "delev_ft": 92
+   },
+   {
+    "id": "CQ018",
+    "name": "Sacramento - 1309 T Street",
+    "miles": 2.61,
+    "elev_ft": 16,
+    "delev_ft": -23
+   }
+  ]
+ },
+ "sausalito": {
+  "point": [
+   37.875,
+   -122.516,
+   90
+  ],
+  "stations": [
+   {
+    "id": "D3153",
+    "name": "DW3153 Mill Valley",
+    "miles": 1.95,
+    "elev_ft": 20,
+    "delev_ft": -70
+   },
+   {
+    "id": "G2969",
+    "name": "GW2969 Mill Valley",
+    "miles": 2.5,
+    "elev_ft": 272,
+    "delev_ft": 182
+   },
+   {
+    "id": "G5625",
+    "name": "GW5625 SAUSALITO",
+    "miles": 2.54,
+    "elev_ft": 194,
+    "delev_ft": 104
+   }
+  ]
+ },
+ "_chosen_utc": "2026-11-21T02:39:22.592312+00:00"
+}

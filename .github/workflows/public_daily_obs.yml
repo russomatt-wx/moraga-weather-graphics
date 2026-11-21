@@ -1,0 +1,42 @@
+name: Public station daily observations
+# Daily high / low per location from nearby public stations (scripts/public_daily_obs.py).
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/public_daily_obs.py'
+      - '.github/workflows/public_daily_obs.yml'
+  schedule:
+    - cron: '40 */6 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: public-daily-obs
+  cancel-in-progress: false
+jobs:
+  fill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python scripts/public_daily_obs.py
+      - name: Save
+        run: |
+          mkdir -p /tmp/pub && cp verification/town_observed_public.json verification/public_stations.json /tmp/pub/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/pub/* verification/
+            git add verification/town_observed_public.json verification/public_stations.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "Update public station daily observations"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
+          done
+          exit 1

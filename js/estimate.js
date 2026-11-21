@@ -116,24 +116,24 @@
     const [obsS, obsN] = await Promise.all([getJSON('verification/town_observed.json'), getJSON('verification/town_observed_noaa.json')]);
     let gapH = [], gapL = [];
     const out = await Promise.all(FC.map(async ([k, name]) => {
-      const [st, no] = await Promise.all([getJSON('verification/' + k + '_model_daily_verification.json'), getJSON('verification/' + k + '_model_daily_verification_noaa.json')]);
+      const [st, no, pu] = await Promise.all([getJSON('verification/' + k + '_model_daily_verification.json'), getJSON('verification/' + k + '_model_daily_verification_noaa.json'), getJSON('verification/' + k + '_model_daily_verification_public.json')]);
       Object.entries(obsN?.[k] || {}).forEach(([d, v]) => { const s = obsS?.[k]?.[d]; if (s) { gapH.push(v.high_f - s.high_f); gapL.push(v.low_f - s.low_f); } });
       if (!st || !no || !(st.matches || []).length) return { name, n: 0 };
       const noaaDays = new Set((no.matches || []).map((m) => m.valid_local_date));
       const rows = (st.matches || []).filter((m) => noaaDays.has(m.valid_local_date));
       const res = { name, n: new Set(rows.map((m) => m.valid_local_date)).size };
       for (const phase of ['high', 'low']) {
-        const key = phase + '_error_f'; let raw = 0, s = 0, n = 0, c = 0;
-        rows.forEach((m) => { const e = m[key]; raw += Math.abs(e); s += Math.abs(e - corr(st, m.model, phase)); n += Math.abs(e - corr(no, m.model, phase)); c++; });
-        res[phase] = c ? { raw: raw / c, st: s / c, no: n / c } : null;
+        const key = phase + '_error_f'; let raw = 0, s = 0, n = 0, pb = 0, c = 0;
+        rows.forEach((m) => { const e = m[key]; raw += Math.abs(e); s += Math.abs(e - corr(st, m.model, phase)); n += Math.abs(e - corr(no, m.model, phase)); pb += Math.abs(e - corr(pu, m.model, phase)); c++; });
+        res[phase] = c ? { raw: raw / c, st: s / c, no: n / c, pu: pu ? pb / c : null } : null;
       }
       return res;
     }));
     const f = (v) => v == null ? '—' : v.toFixed(1);
     const cell = (r, key) => r.high ? f(r.high[key]) + ' / ' + f(r.low[key]) : '—';
     $('fc-table').querySelector('tbody').innerHTML = out.map((r) => '<tr><th>' + esc(r.name) + '</th>' + (r.n
-      ? '<td>' + r.n + '</td><td>' + cell(r, 'raw') + '</td><td>' + cell(r, 'st') + '</td><td class="' + (r.high && (r.high.no + r.low.no) <= (r.high.st + r.low.st) + 0.4 ? 'good' : 'ok') + '">' + cell(r, 'no') + '</td>'
-      : '<td colspan="4" class="low">Waiting for NOAA days…</td>') + '</tr>').join('');
+      ? '<td>' + r.n + '</td><td>' + cell(r, 'raw') + '</td><td>' + cell(r, 'st') + '</td><td class="' + (r.high && (r.high.no + r.low.no) <= (r.high.st + r.low.st) + 0.4 ? 'good' : 'ok') + '">' + cell(r, 'no') + '</td><td class="' + (r.high && r.high.pu != null && (r.high.pu + r.low.pu) <= (r.high.st + r.low.st) + 0.4 ? 'good' : 'ok') + '">' + (r.high && r.high.pu != null ? cell(r, 'pu') : 'collecting') + '</td>'
+      : '<td colspan="5" class="low">Waiting for NOAA days…</td>') + '</tr>').join('');
     const avg = (a) => a.reduce((x, y) => x + y, 0) / a.length;
     $('fc-foot').textContent = gapH.length ? 'Across ' + gapH.length + ' location-days, NOAA’s daily high averaged ' + (avg(gapH) >= 0 ? '+' : '') + avg(gapH).toFixed(1) + '° and its low ' + (avg(gapL) >= 0 ? '+' : '') + avg(gapL).toFixed(1) + '° versus the stations. Moraga always learns from your own station.' : '';
   }
