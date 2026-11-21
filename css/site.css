@@ -1842,3 +1842,13 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day:not(.is-holiday) { border-wid
   box-shadow: -4px 0 12px -9px var(--hi), 4px 0 12px -9px var(--lo), inset 0 0 14px rgba(60, 200, 255, .05) !important; }
 body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { border-width: 1.25px !important; box-shadow: 0 0 10px -4px var(--hol1), inset 0 0 18px color-mix(in srgb, var(--hol2) 12%, transparent) !important; }
 #public-shell .dwl-panel[aria-label="10-day forecast"] { border-width: 1px !important; border-color: rgba(70, 200, 255, .4) !important; box-shadow: 0 0 16px -8px rgba(40, 190, 255, .45) !important; }
+/* 36 hours: rain amount inside each card (replaces the separate bar row) */
+#public-shell .public-hourly .public-hour-qpf { display: none !important; }
+#public-shell .public-hourly { grid-template-rows: auto !important; }
+#public-shell .public-hour-rain { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+#public-shell .public-hour-amt { display: inline-flex; align-items: center; gap: 3px; font-size: 12.5px; font-weight: 600; color: #bfe3f5; letter-spacing: 0; }
+#public-shell .public-hour-amt i { width: 7px; height: 10px; background: linear-gradient(180deg, #7fe6ff, #22c3f2);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 16'%3E%3Cpath d='M6 0C9 4.6 12 8 12 10.5a6 6 0 0 1-12 0C0 8 3 4.6 6 0Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 16'%3E%3Cpath d='M6 0C9 4.6 12 8 12 10.5a6 6 0 0 1-12 0C0 8 3 4.6 6 0Z'/%3E%3C/svg%3E") center / contain no-repeat; }
+#public-shell .public-hourly .public-hour { display: flex !important; flex-direction: column; align-items: center; }
+#public-shell .public-hourly .public-hour-wind { margin-top: auto !important; align-self: stretch; }

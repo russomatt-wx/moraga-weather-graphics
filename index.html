@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>try{localStorage.removeItem('dwl-page-zoom')}catch(e){}</script>
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=27"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=27"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=27">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261124c">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261124e">
 
 
 
@@ -447,6 +447,8 @@
      qpf:[i,i+1].reduce((a,k)=>{const v=Number(hourly.precipitation?.[k]);return a+(Number.isFinite(v)&&v>0?v:0);},0),
      src:icon.match(/src="([^"]+)"/)[1],alt:(icon.match(/alt="([^"]*)"/)||[])[1]||'',icon,rain:'<div class="public-hour-rain">'+(Number.isFinite(chance)&&Math.round(chance/10)*10>=20?Math.min(100,Math.round(chance/10)*10)+'%':'&nbsp;')+'</div>'});
   }
+  // Rain amount for each card's 2 hours, shown inside the card under the rain chance.
+  cards.forEach(d=>{if(d.qpf>=0.01&&d.rain)d.rain=d.rain.replace(/<\/div>$/,'<small class="public-hour-amt"><i aria-hidden="true"></i>'+d.qpf.toFixed(2)+'″</small></div>');});
   // Sunrise / sunset cards slotted in time order between the hours shown.
   if(false&&cards.length&&coords[city]){ // sunrise/sunset cards turned off (shown in current conditions instead)
    const first=hourly.time[start],lastT=cards[cards.length-1].key,[lat,lon]=coords[city];
