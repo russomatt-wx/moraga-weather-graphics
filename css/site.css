@@ -1197,3 +1197,5 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
   .dwl-tagline { display: block !important; width: auto !important; padding-left: 0 !important; border-left: 0 !important; text-align: center !important;
     font-size: 9.5px !important; letter-spacing: .32em !important; white-space: nowrap !important; color: var(--text-2); }
 }
+/* Day of the week above the time on each hourly card */
+#public-shell .public-hour-day { display: block; margin: 0 0 1px; font: 700 10.5px/1.1 var(--font-ui); letter-spacing: .12em; color: var(--muted); }
