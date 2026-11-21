@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-21T15:25:59.139662+00:00",
+ "generated_utc": "2026-11-21T15:29:16.210292+00:00",
  "source": "NOAA RTMA rapid update (2.5 km analysis)",
  "method": "Estimate at each station's location vs that station's reading (live: within 45 minutes; backfill: within 10 minutes). Corrected = minus the town's mean error in the same regime (day/night, calm/breezy) over the previous 14 days (needs 6+ prior hours).",
  "towns": {
@@ -121,8 +121,8 @@
     "night": {
      "n": 107,
      "mae_f": 1.32,
-     "bias_f": 0.54,
-     "within_2f_pct": 79
+     "bias_f": 0.53,
+     "within_2f_pct": 78
     }
    },
    "corrected": {
@@ -141,7 +141,7 @@
     "night": {
      "n": 95,
      "mae_f": 1.34,
-     "bias_f": -0.02,
+     "bias_f": -0.03,
      "within_2f_pct": 78
     }
    },
@@ -205,7 +205,7 @@
     "all": {
      "n": 178,
      "mae_f": 1.06,
-     "bias_f": 0.49,
+     "bias_f": 0.48,
      "within_2f_pct": 88
     },
     "day": {
@@ -226,7 +226,7 @@
      "n": 154,
      "mae_f": 1.06,
      "bias_f": -0.31,
-     "within_2f_pct": 85
+     "within_2f_pct": 84
     },
     "day": {
      "n": 58,
@@ -236,9 +236,9 @@
     },
     "night": {
      "n": 96,
-     "mae_f": 0.88,
+     "mae_f": 0.89,
      "bias_f": -0.49,
-     "within_2f_pct": 90
+     "within_2f_pct": 89
     }
    },
    "wind_mae_mph": 4.8
@@ -269,7 +269,7 @@
     "day": null,
     "night": null
    },
-   "wind_mae_mph": 7.3
+   "wind_mae_mph": 7.4
   },
   "sacramento": {
    "name": "East Sacramento",
