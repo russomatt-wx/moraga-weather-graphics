@@ -107,7 +107,7 @@
       '<div class="dwl-day-when">' + (o.today ? '<span class="dwl-pill">Today</span>' : '') +
         '<strong>' + esc(o.day) + '</strong><span>' + esc(o.date) + '</span></div>' +
       '<div class="dwl-day-icon">' + icon(o.iconCode, '', o.night) + '</div>' +
-      '<div class="dwl-day-sky"><div class="dwl-day-cond">' + esc(String(o.condition).replace(/^(early am|late am|am|pm|early|late|morning|afternoon|evening|overnight)\s+(?=\S)/i, '').replace(/^slight chance of (rain|showers)$/i, 'Slight Chance').replace(/\b([a-z])([a-z]*)/g, function (w, a, b) { return /^(of|in|at|by|the|and|or|to|after|before|until|then)$/.test(w) ? w : a.toUpperCase() + b; }).replace(/^./, function (c) { return c.toUpperCase(); })) + '</div>' + rainLine + '</div>' +
+      '<div class="dwl-day-sky"><div class="dwl-day-cond">' + esc(String(o.condition).replace(/^(early am|late am|am|pm|early|late|morning|afternoon|evening|overnight)\s+(?=\S)/i, '').replace(/^slight chance of (rain|showers)$/i, 'Slight Chance').replace(/\b([A-Z])([a-z]+)\b/g, function (w) { return w.toLowerCase(); }).replace(/^./, function (c) { return c.toUpperCase(); })) + '</div>' + rainLine + '</div>' +
       '<div class="dwl-day-hi" aria-label="High">' + esc(o.highText) + '</div>' +
       '<div class="dwl-day-bar" aria-hidden="true"></div>' +
       '<div class="dwl-day-lo" aria-label="Low">' + esc(o.lowText) + '</div>' +

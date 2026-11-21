@@ -1701,3 +1701,15 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-drop { width: 8px !i
 #public-shell .dwl-now-cond { font-size: clamp(21px, 5.9vw, 27px) !important; }
 #public-shell .dwl-now-hl { margin-top: 8px !important; }
 #public-shell .public-obs-card { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 0 14px -8px var(--public-current-accent, #1cb5b8), 0 0 40px -30px var(--violet) !important; }
+/* 10-day rain line: light probability, cyan drop, smaller accumulation */
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-rain span:first-of-type { color: #e3f6ff !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-drop { background: linear-gradient(180deg, #7fe6ff, #22c3f2) !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-rain .dwl-day-amount { font-size: .86em !important; color: #b9d3e6 !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-rain .dwl-day-dot { color: #7f9bb3 !important; }
+/* Holiday badge: smaller corner tab anchored to the card's upper-right corner */
+body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { margin-top: 0 !important; padding-top: 12px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { top: -2px !important; right: -2px !important; left: auto !important; gap: 3px !important;
+  padding: 2px 9px 3px 8px !important; border-radius: 0 20px 0 12px !important; font-size: 8.5px !important; letter-spacing: .1em !important; line-height: 1.3 !important;
+  box-shadow: none !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday b { font-size: 10px !important; }
+@media (min-width: 700px) { body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { right: -2px !important; } }
