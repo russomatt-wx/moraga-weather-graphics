@@ -185,7 +185,8 @@
   /* Show the first 5 forecast days, with a button for the rest. State is remembered per list
      (key), so re-rendering the cards keeps the reader's choice. */
   var expanded = {};
-  // Major US holidays: [name, emoji, theme colour 1, theme colour 2] for a given year.
+  // California state holidays (CalHR list, without Cesar Chavez Day and the day after Thanksgiving):
+  // [name, emoji, theme colour 1, theme colour 2] for a given year.
   function holidays(y) {
     var nth = function (m, wd, n) { var d = new Date(y, m, 1); var off = (wd - d.getDay() + 7) % 7; return new Date(y, m, 1 + off + 7 * (n - 1)); };
     var last = function (m, wd) { var d = new Date(y, m + 1, 0); return new Date(y, m, d.getDate() - ((d.getDay() - wd + 7) % 7)); };
@@ -195,22 +196,13 @@
     var list = [
       [new Date(y, 0, 1), "New Year's Day", '🎉', '#ffd34d', '#c9d6e8'],
       [nth(0, 1, 3), 'MLK Day', '✊', '#c9a227', '#7a5cff'],
-      [new Date(y, 1, 14), "Valentine's Day", '❤️', '#ff4d7a', '#ff9ec4'],
       [nth(1, 1, 3), "Presidents' Day", '🇺🇸', '#e0313f', '#3b6cff'],
-      [new Date(y, 2, 17), "St. Patrick's Day", '☘️', '#2fbf5b', '#9be15d'],
-      [easter, 'Easter', '🐣', '#f9a8d4', '#a5f3fc'],
-      [nth(4, 0, 2), "Mother's Day", '💐', '#f472b6', '#fbcfe8'],
       [last(4, 1), 'Memorial Day', '🇺🇸', '#e0313f', '#3b6cff'],
-      [nth(5, 0, 3), "Father's Day", '👔', '#38bdf8', '#1e3a8a'],
-      [new Date(y, 5, 19), 'Juneteenth', '✊🏾', '#e0313f', '#2fbf5b'],
       [new Date(y, 6, 4), 'Independence Day', '🎆', '#e0313f', '#3b6cff'],
       [nth(8, 1, 1), 'Labor Day', '🇺🇸', '#e0313f', '#3b6cff'],
-      [new Date(y, 9, 31), 'Halloween', '🎃', '#ff7a18', '#8b5cf6'],
       [new Date(y, 10, 11), 'Veterans Day', '🇺🇸', '#e0313f', '#3b6cff'],
       [nth(10, 4, 4), 'Thanksgiving', '🦃', '#f59e0b', '#b45309'],
-      [new Date(y, 11, 24), 'Christmas Eve', '🎄', '#e0313f', '#22c55e'],
       [new Date(y, 11, 25), 'Christmas', '🎄', '#e0313f', '#22c55e'],
-      [new Date(y, 11, 31), "New Year's Eve", '🎆', '#ffd34d', '#c9d6e8'],
     ];
     var out = {};
     list.forEach(function (h) { out[(h[0].getMonth() + 1) + '-' + h[0].getDate()] = h.slice(1); });
