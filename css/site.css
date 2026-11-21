@@ -1361,3 +1361,36 @@ body::after { content: ""; position: fixed; inset: -20%; z-index: -1; pointer-ev
 @media (prefers-reduced-motion: reduce) {
   body::after, #public-shell .dwl-cc-dot, #public-shell .dwl-ai-chip i, #public-shell .public-obs-card, #public-shell .dwl-alert-bar, #public-shell .dwl-panel { animation: none !important; }
 }
+
+/* ===== Structured alert card (summary, key numbers, key actions) ===== */
+.dwl-alert summary { gap: 12px !important; }
+.dwl-alert .dwl-alert-badge { border-radius: 0 !important; background: none !important; box-shadow: none !important; width: 34px !important; height: 34px !important; padding-right: 12px; border-right: 1px solid color-mix(in srgb, var(--al) 45%, transparent); box-sizing: content-box; }
+.dwl-alert .dwl-alert-badge svg { width: 30px !important; height: 30px !important; filter: drop-shadow(0 0 6px var(--al)); }
+.dwl-alert-when { text-transform: uppercase; letter-spacing: .12em; font-size: 11.5px !important; }
+.dwl-alert-nws { flex: none; padding: 3px 11px; border-radius: 999px; font: 800 12px/1.2 var(--font-ui); letter-spacing: .06em; color: color-mix(in srgb, var(--al) 70%, #fff); box-shadow: inset 0 0 0 1.4px color-mix(in srgb, var(--al) 75%, transparent); }
+.dwl-alert[open] { box-shadow: 0 0 24px -6px var(--al), inset 0 1px 0 rgba(255, 255, 255, .06) !important; }
+.dwl-alert-rich { padding: 0 14px 14px !important; }
+.dwl-ar-sum { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-top: 1px solid color-mix(in srgb, var(--al) 25%, transparent); }
+.dwl-ar-tag { flex: none; display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: 999px; font: 700 13px/1.2 var(--font-ui); color: color-mix(in srgb, var(--al) 60%, #fff);
+  background: color-mix(in srgb, var(--al) 12%, transparent); box-shadow: inset 0 0 0 1.3px color-mix(in srgb, var(--al) 70%, transparent); }
+.dwl-ar-tag svg { width: 14px; height: 14px; color: var(--al); }
+.dwl-ar-sum b { display: block; font-size: 15.5px; line-height: 1.3; color: var(--text); }
+.dwl-ar-sum span { display: block; margin-top: 3px; font-size: 13.5px; line-height: 1.4; color: var(--text-2); }
+.dwl-ar-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 10px 0; border-top: 1px solid rgba(255, 255, 255, .1); }
+.dwl-ar-stats > div { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 0 6px; }
+.dwl-ar-stats > div + div { border-left: 1px solid rgba(255, 255, 255, .12); }
+.dwl-ar-stats svg { width: 24px; height: 24px; flex: none; color: #cfe9ff; }
+.dwl-ar-stats small { display: block; font-size: 11.5px; color: var(--muted); }
+.dwl-ar-stats b { display: block; font-size: 15px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dwl-ar-acts { display: grid; grid-template-columns: auto repeat(3, minmax(0, 1fr)); align-items: center; gap: 4px; padding: 12px 10px; border-radius: 14px; background: rgba(255, 255, 255, .04); box-shadow: inset 0 0 0 1px rgba(150, 190, 255, .16); }
+.dwl-ar-acts > b { font-size: 15px; line-height: 1.15; padding-right: 6px; }
+.dwl-ar-acts > div { display: flex; flex-direction: column; align-items: center; gap: 5px; text-align: center; font-size: 12px; line-height: 1.25; color: var(--text-2); padding: 0 4px; }
+.dwl-ar-acts > div + div { border-left: 1px solid rgba(255, 255, 255, .1); }
+.dwl-ar-acts svg { width: 24px; height: 24px; color: #e6f4ff; }
+@media (max-width: 400px) { .dwl-ar-acts { grid-template-columns: repeat(3, minmax(0, 1fr)); } .dwl-ar-acts > b { grid-column: 1 / -1; padding: 0 0 4px; } .dwl-ar-acts > b + div { border-left: 0; } .dwl-ar-sum { flex-direction: column; gap: 8px; } }
+.dwl-alert-more { all: unset; box-sizing: border-box; display: block; margin: 12px auto 0; padding: 9px 22px; border-radius: 999px; cursor: pointer; text-align: center;
+  font: 700 14.5px/1.2 var(--font-ui); color: color-mix(in srgb, var(--al) 60%, #fff); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--al) 75%, transparent), 0 0 14px -6px var(--al); }
+.dwl-alert-full { margin-top: 12px; font-size: 13.5px; line-height: 1.5; color: var(--text-2); }
+.dwl-alert-full p { white-space: pre-line; margin: 0 0 8px; }
+.dwl-alert-full a { color: var(--accent); font-weight: 600; }
+#public-shell button.dwl-alert-more { background: none !important; border: 0 !important; min-height: 0 !important; width: auto !important; }

@@ -368,7 +368,75 @@
     return c;
   }
 
-  window.DWL = { markHolidays: markHolidays, holidays: holidays, tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts, collapseDays: collapseDays, resetDays: function (key) { delete expanded[key]; }, timingPrefix: timingPrefix, periodAmounts: periodAmounts, modelPeriodAmounts: modelPeriodAmounts, timedCondition: timedCondition, applyRestOfToday: applyRestOfToday, restOfToday: restOfToday,
+  // ---- Structured alert card: parse the NWS WHAT / WHERE / WHEN / IMPACTS text into a summary,
+  // key numbers and key actions (rule-based, from the official text only). ----
+  var AI = {
+    layers: '<path d="M12 3 3 8l9 5 9-5Z M3 12.5l9 5 9-5 M3 17l9 5 9-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
+    paw: '<circle cx="7" cy="9" r="1.9" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17" cy="9" r="1.9" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="5.2" r="1.9" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="14" cy="5.2" r="1.9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 11c-3 0-5.5 3.4-5.5 5.6 0 2 2 2.6 3.2 2.2 1-.3 1.6-.6 2.3-.6s1.3.3 2.3.6c1.2.4 3.2-.2 3.2-2.2 0-2.2-2.5-5.6-5.5-5.6Z" fill="none" stroke="currentColor" stroke-width="1.6"/>',
+    leaf: '<path d="M5 19c0-8 5-13 15-14-1 10-6 15-14 15M5 19c3-4 6-7 10-9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',
+    flame: '<path d="M12 21c-4 0-6.5-2.6-6.5-6 0-3.7 3-5.6 4-9 2.5 1.6 3.5 3.6 3.5 5.6 1-.6 1.6-1.6 1.8-2.8C17 10.5 18.5 12.8 18.5 15c0 3.4-2.5 6-6.5 6Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
+    home: '<path d="M4 11 12 4l8 7v9h-5v-5h-6v5H4Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
+    car: '<path d="M5 16V12l2-5h10l2 5v4M4 16h16v3H4ZM7.5 19v1.5M16.5 19v1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/>',
+    water: '<path d="M12 3.5c3.3 4.2 5.5 7.3 5.5 10a5.5 5.5 0 0 1-11 0c0-2.7 2.2-5.8 5.5-10Z" fill="none" stroke="currentColor" stroke-width="1.7"/>',
+    wind: '<path d="M3 8h10a2.6 2.6 0 1 0-2.6-2.6M3 12.5h15a2.6 2.6 0 1 1-2.6 2.6M3 17h7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+    wave: '<path d="M2 9c3-3.5 6-3.5 9 0s6 3.5 9 0M2 16c3-3.5 6-3.5 9 0s6 3.5 9 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+    bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
+    thermo: '<path d="M10 4.5a2 2 0 0 1 4 0v9a4 4 0 1 1-4 0Z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 9v7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+    snow: '<path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7M9 4l3 2 3-2M9 20l3-2 3 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+    clock: '<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+    pin: '<path d="M12 21s7-6.2 7-11.5a7 7 0 1 0-14 0C5 14.8 12 21 12 21Z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="9.5" r="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/>',
+    spark: '<path d="M12 2.5c.7 4.8 3.7 7.8 8.5 8.5v1c-4.8.7-7.8 3.7-8.5 8.5h-1c-.7-4.8-3.7-7.8-8.5-8.5v-1C7.3 10.3 10.3 7.3 11 2.5Z" fill="currentColor"/>'
+  };
+  var svgi = function (k) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + AI[k] + '</svg>'; };
+  var ACTIONS = [
+    [/layers/i, 'layers', 'Dress in layers'], [/pets|livestock|animals/i, 'paw', 'Protect pets & livestock'],
+    [/crops|plants|vegetation/i, 'leaf', 'Cover sensitive plants'], [/heater/i, 'flame', 'Use heaters safely'],
+    [/warming cent|cooling cent/i, 'home', 'Find a warming center'], [/turn around|flooded road|flood waters/i, 'car', 'Avoid flooded roads'],
+    [/hydrat|drink plenty/i, 'water', 'Stay hydrated'], [/secure|loose objects|outdoor objects/i, 'wind', 'Secure outdoor items'],
+    [/power outage|downed (power )?lines|trees/i, 'bolt', 'Prepare for outages'], [/rocks|jetties|beach|surf|water'?s edge/i, 'wave', 'Stay off rocks & jetties'],
+    [/travel|drive|driving|motorists/i, 'car', 'Use caution driving'], [/air condition|shade|strenuous/i, 'home', 'Limit time outdoors'],
+    [/indoors|shelter/i, 'home', 'Stay indoors']
+  ];
+  function alertParts(p) {
+    var d = String(p.description || ''), sect = {};
+    d.replace(/\* ?([A-Z][A-Z ]+?)\.\.\.([\s\S]*?)(?=\n\s*\n\* ?[A-Z]|\n\* ?[A-Z][A-Z ]+?\.\.\.|$)/g, function (m, k, v) { sect[k.trim()] = v.replace(/\s+/g, ' ').trim(); });
+    var what = sect.WHAT || String(p.headline || '').replace(/ by NWS.*$/, ''), impacts = sect.IMPACTS || '';
+    var where = (sect.WHERE || '').replace(/^(The|Portions of|Parts of)\s+/i, '').replace(/\.$/, '');
+    if (!where) where = String(p.areaDesc || '').split(';')[0];
+    if (where.length > 28) where = where.split(/,| and /)[0].trim();
+    var stats = [], m;
+    if ((m = what.match(/(?:temperatures?|lows?|highs?|wind chills?|heat (?:index|indices))[^.]*?(-?\d{1,3})\s*(?:to|-|–)\s*(-?\d{1,3})/i))) stats.push(['thermo', /wind chill/i.test(m[0]) ? 'Wind chill' : 'Temps', m[1] + '–' + m[2] + '°']);
+    else if ((m = what.match(/(?:as low as|as high as|near|around)\s+(-?\d{1,3})\s*degrees/i))) stats.push(['thermo', 'Temps', m[1] + '°']);
+    if ((m = what.match(/winds?\s+(\d{1,3})\s*(?:to|-|–)\s*(\d{1,3})\s*mph(?:[^.]*?gusts?\s+(?:up to\s+)?(\d{1,3})\s*mph)?/i))) stats.push(['wind', 'Wind', m[1] + '–' + m[2] + ' mph']);
+    if ((m = what.match(/gusts?\s+(?:up to\s+)?(\d{1,3})\s*mph/i))) stats.push(['wind', 'Gusts', m[1] + ' mph']);
+    if ((m = what.match(/(\d+(?:\.\d+)?)\s*(?:to|-|–)\s*(\d+(?:\.\d+)?)\s*inch/i))) stats.push(['water', 'Rain', m[1] + '–' + m[2] + '″']);
+    if ((m = what.match(/(?:waves?|seas|surf|breakers)[^.]*?(\d{1,2})\s*(?:to|-|–)\s*(\d{1,2})\s*(?:ft|feet)/i))) stats.push(['wave', 'Waves', m[1] + '–' + m[2] + ' ft']);
+    var on = Date.parse(p.onset || p.effective || ''), off = Date.parse(p.ends || p.expires || ''), win = '';
+    if (Number.isFinite(on) && Number.isFinite(off) && off > on) {
+      var hrs = Math.round((off - on) / 36e5);
+      stats.push([/cold|freeze|frost|winter/i.test(p.event) ? 'snow' : 'clock', 'Duration', hrs < 48 ? hrs + ' hour' + (hrs === 1 ? '' : 's') : Math.round(hrs / 24) + ' days']);
+      var f = function (t, o) { return new Date(t).toLocaleString('en-US', Object.assign({ timeZone: 'America/Los_Angeles', hour: 'numeric' }, o || {})).replace(':00', ''); };
+      var dayOn = f(on, { weekday: 'short', hour: undefined }), dayOff = f(off, { weekday: 'short', hour: undefined });
+      win = dayOn + ' ' + f(on) + ' – ' + (dayOn === dayOff ? '' : dayOff + ' ') + f(off);
+    }
+    if (where) stats.push(['pin', 'Area', where]);
+    var first = what.replace(/\s+expected\.?$/i, '').replace(/\.$/, '');
+    first = first.replace(/temperatures? as (low|high) as (-?\d+) to (-?\d+) degrees/i, 'temps $2–$3°').replace(/(-?\d+) to (-?\d+) degrees/i, '$1–$2°')
+      .replace(/^(\w+) conditions with /i, function (m, w) { return 'A ' + w.toLowerCase() + ' stretch with '; }).replace(/ miles per hour/gi, ' mph').replace(/(\d+) to (\d+) mph/gi, '$1–$2 mph');
+    first = first.charAt(0).toUpperCase() + first.slice(1);
+    var imp = impacts.split(/(?<=\.)\s/)[0] || '';
+    imp = imp.replace(/^[A-Z][a-z]+ conditions will be hazardous,?\s*/i, 'Hazardous, ').replace(/\s+/g, ' ');
+    var acts = [], txt = String(p.instruction || '') + ' ' + impacts;
+    ACTIONS.forEach(function (a) { if (acts.length < 3 && a[0].test(txt) && !acts.some(function (x) { return x[1] === a[2]; })) acts.push([a[1], a[2]]); });
+    return { where: where, window: win, summary: first + '.', impact: imp, stats: stats.slice(0, 3), actions: acts };
+  }
+  function alertRich(A) {
+    var s = '<div class="dwl-ar-sum"><span class="dwl-ar-tag">' + svgi('spark') + 'Summary</span><div><b>' + esc(A.summary) + '</b>' + (A.impact ? '<span>' + esc(A.impact) + '</span>' : '') + '</div></div>';
+    if (A.stats.length) s += '<div class="dwl-ar-stats">' + A.stats.map(function (x) { return '<div>' + svgi(x[0]) + '<span><small>' + esc(x[1]) + '</small><b>' + esc(x[2]) + '</b></span></div>'; }).join('') + '</div>';
+    if (A.actions.length) s += '<div class="dwl-ar-acts"><b>Key actions</b>' + A.actions.map(function (x) { return '<div>' + svgi(x[0]) + '<span>' + esc(x[1]) + '</span></div>'; }).join('') + '</div>';
+    return s;
+  }
+  window.DWL = { alertParts: alertParts, alertRich: alertRich, markHolidays: markHolidays, holidays: holidays, tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts, collapseDays: collapseDays, resetDays: function (key) { delete expanded[key]; }, timingPrefix: timingPrefix, periodAmounts: periodAmounts, modelPeriodAmounts: modelPeriodAmounts, timedCondition: timedCondition, applyRestOfToday: applyRestOfToday, restOfToday: restOfToday,
     publishBlend: publishBlend, blendReady: blendReady, moragaBlend: moragaBlend };
 
   // Section tabs: highlight the tab for the section currently in view.
