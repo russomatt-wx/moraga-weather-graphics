@@ -1051,3 +1051,6 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .est-chart .yl, .est-chart .xl { font-size: 10.5px; }
 .est-chart .obs { stroke-width: 1.8; } .est-chart .cor { stroke-width: 1.6; } .est-chart .raw { stroke-width: 1; }
 .est-lead { margin: -2px 0 8px !important; line-height: 1.45; }
+
+/* No NWS alerts in the Observation Lab (they live on Local Weather) */
+#moraga-alerts { display: none !important; }
