@@ -1854,9 +1854,8 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { border-width: 1.
 #public-shell .public-hourly .public-hour-wind { margin-top: auto !important; align-self: stretch; }
 
 /* ================= Refinement pass ================= */
-/* 1. Current conditions: keep the green-teal palette (no orange/blue shift); border ~12% softer, glow kept */
-#public-shell .public-obs-card { --public-current-accent: #22c7a1 !important;
-  border-color: color-mix(in srgb, #22c7a1 72%, transparent) !important; }
+/* 1. Current conditions: border ~12% softer (still the temperature colour), glow kept */
+#public-shell .public-obs-card { border-color: color-mix(in srgb, var(--public-current-accent, #1cb5b8) 72%, transparent) !important; }
 /* 3. Alerts: slimmer collapsed cards, title most prominent; easier reading when expanded */
 #public-shell .dwl-alert summary { padding: 7px 10px 7px 12px !important; }
 #public-shell .dwl-alert .dwl-alert-title { font-size: clamp(15.5px, 4.3vw, 17px) !important; }
