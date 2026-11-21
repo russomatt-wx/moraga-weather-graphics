@@ -1587,3 +1587,68 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-rain { justify-conte
 body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-sky, body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-wind { justify-self: stretch !important; width: auto !important; }
 body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { text-align: left !important; align-self: flex-start !important; }
 body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-rain { align-self: flex-start !important; width: auto !important; margin-left: 0 !important; margin-right: 0 !important; }
+
+/* ================= 10-day v4: closer match to the mockup ================= */
+#public-shell .dwl-panel[aria-label="10-day forecast"] { border: 1.5px solid rgba(70, 200, 255, .55) !important; border-radius: 26px !important;
+  box-shadow: 0 0 22px -6px rgba(40, 190, 255, .55), inset 0 0 30px rgba(40, 160, 255, .06) !important; padding: 16px 10px 14px !important; }
+#public-shell .dwl-panel[aria-label="10-day forecast"] .dwl-panel-h { margin: 0 6px 4px !important; }
+#public-shell .dwl-panel[aria-label="10-day forecast"] .dwl-panel-h h2 { font-size: clamp(25px, 7.4vw, 31px) !important; font-weight: 750 !important; }
+#public-shell .dwl-panel[aria-label="10-day forecast"] .dwl-ph-ic svg { width: 28px; height: 28px; }
+#public-shell .dwl-ai-chip-net { background: linear-gradient(90deg, #17457e, #2c3f9e 55%, #3d2f8f) padding-box, linear-gradient(90deg, #4aa8ff, #8b6cff) border-box !important;
+  color: #eef3ff !important; box-shadow: 0 0 16px -4px rgba(90, 140, 255, .8) !important; }
+#public-shell .dwl-panel[aria-label="10-day forecast"] > .dwl-panel-sub { margin: 4px 9px 12px 46px !important; color: #d4e2f0 !important; font-size: 11.5px !important; letter-spacing: .22em !important; }
+body #public-shell .dwl-panel .dwl-days { gap: 8px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day {
+  grid-template-columns: 60px 54px 48px minmax(0, 1fr) 50px !important; column-gap: 4px !important;
+  min-height: 56px !important; padding: 6px 10px 6px 14px !important; border-radius: 20px !important;
+  border: 2px solid #3fe0ff !important;
+  background: linear-gradient(180deg, rgba(20, 78, 104, .78), rgba(12, 46, 74, .78)) !important;
+  box-shadow: 0 0 14px -1px rgba(40, 215, 255, .55), 0 0 3px rgba(120, 240, 255, .5), inset 0 0 16px rgba(60, 220, 255, .14) !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-when strong { font-size: clamp(17px, 4.9vw, 20px) !important; font-weight: 800 !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-when span:not(.dwl-pill) { font-size: clamp(12.5px, 3.5vw, 14px) !important; color: #d9e6f2 !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-when .dwl-pill { background: #2fd8f6 !important; color: #052235 !important; font-size: 10.5px !important; padding: 1px 9px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi, body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo {
+  font-size: clamp(25px, 7.3vw, 31px) !important; font-weight: 800 !important; letter-spacing: -.02em !important;
+  -webkit-background-clip: text !important; background-clip: text !important; color: transparent !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi { background-image: linear-gradient(180deg, #b6ff7a, #4fe36a) !important; filter: drop-shadow(0 0 7px rgba(110, 255, 110, .45)); text-shadow: none !important; justify-content: center !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { background-image: linear-gradient(180deg, #a8f2ff, #3cc6f5) !important; filter: drop-shadow(0 0 7px rgba(70, 210, 255, .5)); text-shadow: none !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-icon .dwl-icon { width: 50px !important; height: 40px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-sky { padding-left: 6px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { font-size: clamp(15px, 4.3vw, 18px) !important; font-weight: 750 !important; color: #f4f9ff !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-rain { font-size: clamp(12.5px, 3.6vw, 14.5px) !important; color: #dbe9f6 !important; margin-top: 2px !important; padding-left: 3px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-drop { width: 10px; height: 13px; background: linear-gradient(180deg, #8cecff, #22b6f2); }
+/* Holiday: row grows a little so the ribbon sits inside the top edge, as in the mockup */
+body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { border-color: #ffd84a !important; padding-top: 18px !important; margin-top: 2px !important;
+  box-shadow: 0 0 16px -1px rgba(255, 210, 60, .6), 0 0 3px rgba(255, 230, 120, .6), inset 0 0 16px rgba(255, 210, 60, .12) !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { top: 5px !important; left: calc(14px + 60px + 54px + 48px + 14px) !important; padding: 1px 10px 1px 7px !important; font-size: 10px !important; letter-spacing: .1em !important;
+  background: linear-gradient(90deg, #8a3a07, #a24a0c) !important; border: 1.5px solid #ffc83a !important; color: #ffe9b8 !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday b { font-size: 11px; }
+@media (max-width: 360px) {
+  body #public-shell .dwl-panel .dwl-days > .dwl-day { grid-template-columns: 50px 46px 42px minmax(0, 1fr) 44px !important; padding: 6px 8px 6px 11px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { left: calc(11px + 50px + 46px + 42px + 14px) !important; }
+}
+@media (min-width: 700px) {
+  body #public-shell .dwl-panel .dwl-days > .dwl-day { grid-template-columns: 100px 90px 80px minmax(0, 1fr) 80px !important; padding: 8px 24px !important; column-gap: 10px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi, body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { font-size: 38px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { left: calc(24px + 100px + 90px + 80px + 46px) !important; }
+}
+/* 10-day v4: give the condition column room */
+#public-shell .dwl-panel[aria-label="10-day forecast"] { padding-left: 6px !important; padding-right: 6px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day { grid-template-columns: 52px 50px 44px minmax(0, 1fr) 46px !important; column-gap: 2px !important; padding: 6px 9px 6px 11px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-icon .dwl-icon { width: 46px !important; height: 37px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi, body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { font-size: clamp(24px, 7vw, 30px) !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-sky { padding-left: 5px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { font-size: clamp(14.5px, 4.1vw, 18px) !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-rain { font-size: clamp(12px, 3.45vw, 14.5px) !important; gap: 3px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { left: calc(11px + 52px + 50px + 44px + 11px) !important; }
+@media (max-width: 360px) {
+  body #public-shell .dwl-panel .dwl-days > .dwl-day { grid-template-columns: 46px 44px 38px minmax(0, 1fr) 42px !important; padding: 6px 7px 6px 9px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { left: calc(9px + 46px + 44px + 38px + 11px) !important; }
+}
+@media (min-width: 700px) {
+  #public-shell .dwl-panel[aria-label="10-day forecast"] { padding-left: 14px !important; padding-right: 14px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day { grid-template-columns: 100px 90px 80px minmax(0, 1fr) 80px !important; padding: 8px 24px !important; column-gap: 10px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi, body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { font-size: 38px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { left: calc(24px + 100px + 90px + 80px + 46px) !important; }
+}
+body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { padding-top: 27px !important; }
