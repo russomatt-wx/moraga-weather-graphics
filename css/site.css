@@ -1745,3 +1745,4 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday b { font-size: 1
   -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
 #public-shell .dwl-panel.public-outlook .dwl-panel-h h2 { font-size: clamp(20px, 5.8vw, 25px) !important; background: none !important; -webkit-background-clip: border-box !important; background-clip: border-box !important; color: #f1f6fb !important; }
 #public-shell .dwl-panel.public-outlook .public-outlook-headline { text-shadow: none !important; }
+#public-shell .public-outlook-source { display: none !important; }
