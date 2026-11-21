@@ -1670,3 +1670,30 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { top: -10px !im
 body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday b { font-size: 12px; }
 @media (min-width: 700px) { body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { left: auto !important; right: 18px !important; } }
 @media (max-width: 360px) { body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { left: auto !important; } }
+
+/* ================= 10-day v5 ================= */
+/* Temperature gradient border (high colour -> low colour), with a matching glow */
+body #public-shell .dwl-panel .dwl-days > .dwl-day:not(.is-holiday) { border: 2px solid transparent !important;
+  background: linear-gradient(180deg, rgba(20, 70, 100, .92), rgba(10, 38, 64, .92)) padding-box, linear-gradient(90deg, var(--hi), var(--lo)) border-box !important;
+  box-shadow: -6px 0 16px -8px var(--hi), 6px 0 16px -8px var(--lo), 0 0 10px -4px color-mix(in srgb, var(--hi) 50%, var(--lo)), inset 0 0 16px rgba(60, 200, 255, .08) !important; }
+/* Columns: date | high | gap | icon + condition (centred) | gap | low */
+body #public-shell .dwl-panel .dwl-days > .dwl-day {
+  grid-template-columns: 54px 56px minmax(4px, 1fr) 44px minmax(0, max-content) minmax(4px, 1fr) 54px !important;
+  grid-template-areas: "when hi . icon sky . lo" "when hi . icon wind . lo" !important; column-gap: 0 !important; padding: 6px 12px 6px 12px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi { justify-content: center !important; padding-left: 4px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { justify-content: flex-end !important; overflow: visible !important; padding-right: 1px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi, body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { font-size: clamp(24px, 6.9vw, 30px) !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-sky { padding-left: 6px !important; overflow: hidden; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-wind { padding-left: 6px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { font-size: clamp(15.5px, 4.4vw, 19px) !important; font-weight: 700 !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-rain, body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-rain span { font-size: clamp(12px, 3.4vw, 14px) !important; font-weight: 500 !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-drop { width: 8px !important; height: 11px !important; margin-right: 2px !important; }
+@media (max-width: 360px) {
+  body #public-shell .dwl-panel .dwl-days > .dwl-day { grid-template-columns: 46px 48px minmax(2px, 1fr) 38px minmax(0, max-content) minmax(2px, 1fr) 46px !important; padding: 6px 9px !important; }
+}
+@media (min-width: 700px) {
+  body #public-shell .dwl-panel .dwl-days > .dwl-day { grid-template-columns: 100px 90px minmax(10px, 1fr) 76px minmax(0, max-content) minmax(10px, 1fr) 80px !important; padding: 8px 24px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi, body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { font-size: 38px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { font-size: 20px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-rain, body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-rain span { font-size: 15px !important; }
+}
