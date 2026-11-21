@@ -1,3 +1,4 @@
+import LOCATIONS from '../locations.json';
 // Moraga Observatory live station proxy and push alerts. Deploy as a Cloudflare Worker.
 import { AlertPush, handlePush, runAlertCheck } from './push.js';
 import { WU_STATIONS, WU_PRIMARY, TOWN_COORDS, LOCATION_IDS, wuCurrent, wuToday, wuDay, wuDayObs, skyFor, wuKeyShape, sunElevation } from './wu.js';
@@ -93,6 +94,28 @@ function dewF(tf, rh) {
   const tc = (tf - 32) * 5 / 9, g = Math.log(rh / 100) + 17.62 * tc / (243.12 + tc);
   return Math.round((243.12 * g / (17.62 - g) * 9 / 5 + 32) * 10) / 10;
 }
+// Today so far (Pacific day) from a public station's NWS history: high, low and rain since midnight.
+async function publicToday(id, log, airport = false) {
+  const now = new Date(), pt = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23' }).formatToParts(now);
+  const g = (t) => Number(pt.find((x) => x.type === t).value), date = `${pt.find((x) => x.type === 'year').value}-${pt.find((x) => x.type === 'month').value}-${pt.find((x) => x.type === 'day').value}`;
+  const start = new Date(now.getTime() - (g('hour') * 60 + now.getUTCMinutes()) * 60000 - 60000).toISOString();
+  try {
+    const r = await fetch('https://api.weather.gov/stations/' + id + '/observations?start=' + encodeURIComponent(start), { headers: NWS_HEADERS, cf: { cacheTtl: 600, cacheEverything: true } });
+    if (!r.ok) { log.push(id + ' today http ' + r.status); return null; }
+    const temps = [], rain = {};
+    for (const f of (await r.json()).features || []) {
+      const p = f.properties || {}, t = p.temperature?.value;
+      if (Number.isFinite(t)) temps.push(c2f(t));
+      // Hourly totals (ASOS reports them near :53); keep one per hour.
+      const mm = p.precipitationLastHour?.value, ts = Date.parse(p.timestamp || '');
+      // Airports (ASOS) omit the rain group in a dry hour, so a routine hourly report with no value means 0.
+      if (Number.isFinite(ts) && (Number.isFinite(mm) || (airport && 'precipitationLastHour' in p))) rain[new Date(ts + 7 * 60000).toISOString().slice(0, 13)] = Number.isFinite(mm) ? mm : 0;
+    }
+    if (temps.length < 2) return null;
+    const vals = Object.values(rain);
+    return { date, high_f: Math.max(...temps), low_f: Math.min(...temps), rain_in: vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / 25.4 * 100) / 100 : null };
+  } catch (_) { log.push(id + ' today error'); return null; }
+}
 async function publicObservation(city, log) {
   const [choice, health] = await Promise.all([siteJson('verification/public_stations.json', 3600), siteJson('verification/public_station_health.json', 3600)]);
   const dropped = new Set((health?.stations || []).filter((s) => s.town === city && s.status === 'drop').map((s) => s.station));
@@ -128,7 +151,8 @@ async function publicObservation(city, log) {
   const e = await nowcast();
   if (e) {
     return { station: 'NOAA RTMA', station_selection: 'estimate', source: 'NOAA estimate', observed_utc: e.valid_utc, temperature_f: e.corrected_f ?? e.estimate_f,
-      humidity_pct: e.humidity_pct, dew_point_f: dewF(e.corrected_f ?? e.estimate_f, e.humidity_pct), wind_mph: e.wind_mph, wind_gust_mph: e.gust_mph, estimated: true };
+      humidity_pct: e.humidity_pct, dew_point_f: dewF(e.corrected_f ?? e.estimate_f, e.humidity_pct), wind_mph: e.wind_mph, wind_gust_mph: e.gust_mph, estimated: true,
+      today: e.today || null };
   }
   return null;
 }
@@ -198,9 +222,16 @@ export default {
     // the owner's Moraga station (KCAMORAG71), so the towns never disagree on pressure.
     const extras = async (base) => {
       const out = {};
-      const today = await wuToday(WU_STATIONS[city], env, wuLog);
+      // Station-less neighbourhoods: the public station's NWS history, or the NOAA estimate's running high/low.
+      const pubDay = WU_STATIONS[city] ? null : base.station_selection === 'public' ? await publicToday(base.station, wuLog) : base.today;
+      const today = WU_STATIONS[city] ? await wuToday(WU_STATIONS[city], env, wuLog) : pubDay;
       if (today) Object.assign(out, { daily_high_f: today.high_f, daily_low_f: today.low_f, daily_date: today.date });
-      const rain = base.daily_precipitation_in ?? base.precip_today_in;
+      let rain = base.daily_precipitation_in ?? base.precip_today_in ?? pubDay?.rain_in;
+      // Neighbourhood stations rarely have a rain gauge: use the nearest airport's (ASOS) rain since midnight.
+      if (!WU_STATIONS[city] && !Number.isFinite(rain)) {
+        const ap = LOCATIONS.locations.find((l) => l.id === city)?.sky_airports?.[0];
+        if (ap) { const a = await publicToday(ap, wuLog, true); if (a && Number.isFinite(a.rain_in)) { rain = a.rain_in; out.rain_station = ap; } }
+      }
       if (Number.isFinite(rain)) out.daily_precipitation_in = rain;
       {
         const m = await wuCurrent(WU_STATIONS.moraga, env, wuLog);
