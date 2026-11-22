@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment_retry.outputs.page_url || steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout latest weather graphics
         uses: actions/checkout@v5
@@ -332,4 +332,14 @@ jobs:
           path: .
       - name: Deploy site
         id: deployment
+        continue-on-error: true
+        uses: actions/deploy-pages@v5
+      # GitHub sometimes can't see the just-uploaded artifact yet ("No artifacts named github-pages").
+      # Wait and try once more before failing the run.
+      - name: Wait before retrying deploy
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 30
+      - name: Deploy site (retry)
+        id: deployment_retry
+        if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v5
