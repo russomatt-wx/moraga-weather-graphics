@@ -1,10 +1,11 @@
 {
   "schema_version": 1,
-  "generated_utc": "2026-11-22T23:49:07.383Z",
-  "source_label": "Diablo Weather Lab · Updated Nov 22, 3:49 PM PST",
+  "generated_utc": "2026-11-22T23:51:06.266Z",
+  "source_label": "Diablo Weather Lab · Updated Nov 22, 3:51 PM PST",
+  "writer": "built-in",
   "horizon_days": 7,
   "outlooks": {
-    "Campolindo": {
+    "Glorietta": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
@@ -16,7 +17,7 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
-    "Glorietta": {
+    "Campolindo": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
@@ -24,7 +25,7 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
-    "SleepyHollow": {
+    "Northgate": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
@@ -36,6 +37,10 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
+    "SleepyHollow": {
+      "headline": "Rain Tuesday, then drying out",
+      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+    },
     "PleasantHill": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
@@ -44,15 +49,7 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
-    "Northgate": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
     "Clayton": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "Danville": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
@@ -60,7 +57,7 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
-    "Blackhawk": {
+    "Danville": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
@@ -68,7 +65,11 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
-    "Diablo": {
+    "Alamo": {
+      "headline": "Rain Tuesday, then drying out",
+      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+    },
+    "Blackhawk": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
@@ -76,11 +77,7 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
-    "Alamo": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "Dublin": {
+    "Diablo": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
@@ -88,7 +85,15 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
+    "Dublin": {
+      "headline": "Rain Tuesday, then drying out",
+      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+    },
     "Pleasanton": {
+      "headline": "Rain Tuesday, then drying out",
+      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+    },
+    "RubyHill": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
@@ -96,17 +101,13 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings around a tenth of an inch. Afterward, conditions look mostly dry through Saturday."
     },
-    "Springtown": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings around a tenth of an inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "RubyHill": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
     "Sunol": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+    },
+    "Montclair": {
+      "headline": "Rain Tuesday, then drying out",
+      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
     "Piedmont": {
       "headline": "Rain Tuesday, then drying out",
@@ -116,15 +117,19 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
-    "Montclair": {
+    "Springtown": {
       "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings around a tenth of an inch. Afterward, conditions look mostly dry through Saturday."
     },
     "Temescal": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
     "LakeMerritt": {
+      "headline": "Rain Tuesday, then drying out",
+      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+    },
+    "Fruitvale": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
@@ -136,15 +141,11 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
-    "Skyline": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
     "NorthBerkeley": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
-    "Fruitvale": {
+    "WestBerkeley": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
@@ -156,11 +157,11 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
-    "Alameda": {
+    "Skyline": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
-    "WestBerkeley": {
+    "Alameda": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
@@ -168,7 +169,7 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
     },
-    "InnerSunset": {
+    "Richmond": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
     },
@@ -176,7 +177,7 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
     },
-    "Richmond": {
+    "PacificHeights": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
     },
@@ -184,15 +185,15 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
     },
-    "PacificHeights": {
+    "NorthBeach": {
+      "headline": "Rain Tuesday, then drying out",
+      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
+    },
+    "InnerSunset": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
     },
     "Haight": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "NorthBeach": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
     },
@@ -204,6 +205,10 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
     },
+    "SoMa": {
+      "headline": "Rain Tuesday, then drying out",
+      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
+    },
     "PotreroHill": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
@@ -212,17 +217,13 @@
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
     },
-    "SoMa": {
+    "Brentwood": {
       "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
+      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
     "TwinPeaks": {
       "headline": "Rain Tuesday, then drying out",
       "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "Brentwood": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
     },
     "East Sacramento": {
       "headline": "Rain Tuesday, then drying out",
