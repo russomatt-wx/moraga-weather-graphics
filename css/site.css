@@ -1915,3 +1915,5 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { border-width: 1.
 /* "Updated …" lines: readable spacing */
 #public-shell .dwl-panel-sub, #public-shell .dwl-panel[aria-label="10-day forecast"] > .dwl-panel-sub, #public-shell .dwl-panel[aria-label="Next 36 hours"] > .dwl-panel-sub {
   letter-spacing: .04em !important; font-size: 12.5px !important; font-weight: 500 !important; text-transform: none !important; color: #b8cadb !important; }
+/* 10-day condition text in all caps */
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { text-transform: uppercase !important; letter-spacing: .03em !important; font-size: clamp(13.5px, 3.8vw, 17px) !important; }
