@@ -1,0 +1,12 @@
+{
+ "generated_utc": "2026-11-22T18:35:21.301338+00:00",
+ "status": "collecting",
+ "town": "lakemerritt",
+ "station": "public stations",
+ "verified_against": "public_stations",
+ "model_scores": {},
+ "calibration": {},
+ "method": "Earliest archived day-ahead model forecast per target local date (from the published town feed); observed daily high/low from the town's nearby public stations (NWS feed; see public_stations.json), averaged after a neighbour check",
+ "note": "Each town is verified against its own station; Moraga corrections are never transferred.",
+ "matches": []
+}

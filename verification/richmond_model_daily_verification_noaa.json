@@ -1,0 +1,12 @@
+{
+ "generated_utc": "2026-11-22T18:38:56.607409+00:00",
+ "status": "collecting",
+ "town": "richmond",
+ "station": "NOAA URMA",
+ "verified_against": "noaa_urma",
+ "model_scores": {},
+ "calibration": {},
+ "method": "Earliest archived day-ahead model forecast per target local date (from the published town feed); observed daily high/low from the town's point in NOAA's URMA 2.5 km analysis (hourly, 22+ hours of the Pacific day; public domain)",
+ "note": "Each town is verified against its own station; Moraga corrections are never transferred.",
+ "matches": []
+}

@@ -1,4 +1,10 @@
 {
+ "alameda": {},
+ "alamo": {},
+ "albany": {},
+ "berkeleyhills": {},
+ "bernalheights": {},
+ "blackhawk": {},
  "brentwood": {
   "2026-09-19": {
    "high_f": 88,
@@ -385,6 +391,9 @@
    "samples": 288
   }
  },
+ "campolindo": {},
+ "clayton": {},
+ "claytonvalley": {},
  "danville": {
   "2026-09-16": {
    "high_f": 69.6,
@@ -789,6 +798,13 @@
    "samples": 288
   }
  },
+ "diablo": {},
+ "doughertyvalley": {},
+ "downtownoakland": {},
+ "dublin": {},
+ "elcerrito": {},
+ "fruitvale": {},
+ "glorietta": {},
  "greenbrook": {
   "2026-09-16": {
    "high_f": 74.5,
@@ -1193,6 +1209,9 @@
    "samples": 288
   }
  },
+ "haight": {},
+ "happyvalley": {},
+ "innersunset": {},
  "lafayette": {
   "2026-09-16": {
    "high_f": 72.3,
@@ -1585,6 +1604,27 @@
    "samples": 284
   }
  },
+ "lakemerritt": {},
+ "livermorewine": {},
+ "marina": {},
+ "martinez": {},
+ "mission": {},
+ "montclair": {},
+ "noevalley": {},
+ "northbeach": {},
+ "northberkeley": {},
+ "northgate": {},
+ "outersunset": {},
+ "pacificheights": {},
+ "piedmont": {},
+ "pleasanthill": {},
+ "pleasanton": {},
+ "potrerohill": {},
+ "presidio": {},
+ "richmond": {},
+ "rockridge": {},
+ "rossmoor": {},
+ "rubyhill": {},
  "sacramento": {
   "2026-09-19": {
    "high_f": 87.6,
@@ -1971,6 +2011,7 @@
    "samples": 288
   }
  },
+ "saranap": {},
  "sausalito": {
   "2026-09-21": {
    "high_f": 60.4,
@@ -2344,5 +2385,14 @@
    "precip_in": 0,
    "samples": 288
   }
- }
+ },
+ "skyline": {},
+ "sleepyhollow": {},
+ "soma": {},
+ "springtown": {},
+ "sunol": {},
+ "temescal": {},
+ "twincreeks": {},
+ "twinpeaks": {},
+ "westberkeley": {}
 }
