@@ -2199,3 +2199,6 @@ html[data-theme="light"] #public-shell .dwl-rs-marks i { background: rgba(30, 70
 #public-shell .dwl-now-tiles > div + div, #public-shell .dwl-now-row > span + span, #public-shell .dwl-now-sun > span + span,
 #public-shell .dwl-now-sun:not([hidden]) + span, html[data-theme] #public-shell .dwl-now-tiles > div + div, html[data-theme] #public-shell .dwl-now-row > span + span,
 html[data-theme] #public-shell .dwl-now-sun > span + span, html[data-theme] #public-shell .dwl-now-sun:not([hidden]) + span { border-left: 0 !important; }
+#public-shell .dwl-now-tiles small#public-gust { display: inline !important; margin: 0 0 0 4px !important; font-size: .62em !important; font-weight: 700; color: #9fd4ee !important; overflow: visible; }
+#public-shell .dwl-now-tiles b > span { font-size: inherit !important; color: inherit !important; }
+html[data-theme="light"] #public-shell .dwl-now-tiles small#public-gust { color: #2f7aa8 !important; }
