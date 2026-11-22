@@ -1906,3 +1906,12 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { border-width: 1.
 #public-shell .dwl-radar-map.is-playing .leaflet-radar-pane .leaflet-layer { filter: none !important; }
 /* Radar map labels: bright names with a dark outline so they stay readable over any rain colour */
 #public-shell .dwl-radar-map .leaflet-labels-pane { filter: drop-shadow(0 0 1px #020a14) drop-shadow(0 0 2px #020a14) drop-shadow(0 1px 3px rgba(2, 10, 20, .8)); }
+/* Section titles back in Outfit (original heading font) */
+#public-shell .dwl-panel-h h2, .pad-intro h1, .pad-section h2 { font-family: "Outfit", var(--font-ui) !important; font-weight: 700 !important; letter-spacing: -.005em !important; }
+/* Model chips: cyan outline */
+#public-shell .dwl-panel .dwl-ai-chip, #public-shell .dwl-panel[aria-label="Next 36 hours"] .dwl-ai-chip, #public-shell .dwl-ai-chip-net {
+  border: 1px solid rgba(63, 216, 245, .6) !important; box-shadow: 0 0 8px -3px rgba(63, 216, 245, .5) !important; color: #cfe6f5 !important; }
+#public-shell .dwl-ai-chip-net svg { color: #3fd8f5 !important; }
+/* "Updated …" lines: readable spacing */
+#public-shell .dwl-panel-sub, #public-shell .dwl-panel[aria-label="10-day forecast"] > .dwl-panel-sub, #public-shell .dwl-panel[aria-label="Next 36 hours"] > .dwl-panel-sub {
+  letter-spacing: .04em !important; font-size: 12.5px !important; font-weight: 500 !important; text-transform: none !important; color: #b8cadb !important; }
