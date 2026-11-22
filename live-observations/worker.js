@@ -187,6 +187,17 @@ export default {
     // GET /forecast?<Open-Meteo forecast query> : shared, edge-cached copy of the Open-Meteo forecast.
     // Every phone asking for the same location within 10 minutes gets one upstream request, which keeps
     // the site clear of Open-Meteo's per-IP rate limit (HTTP 429) that was blanking wind and hourly data.
+    // GET /radar-tile?m=0|5|...|50&z=&x=&y= : NOAA NEXRAD (IEM) tile passed through with CORS so the page can
+    // read pixels for Radar Insight (storm tracking). Cached 4 minutes.
+    if (url.pathname === '/radar-tile') {
+      const m = Number(url.searchParams.get('m') || 0), z = Number(url.searchParams.get('z')), x = Number(url.searchParams.get('x')), y = Number(url.searchParams.get('y'));
+      if (![0,5,10,15,20,25,30,35,40,45,50].includes(m) || !Number.isInteger(z) || z < 4 || z > 10 || !Number.isInteger(x) || !Number.isInteger(y) || x < 0 || y < 0 || x >= 2 ** z || y >= 2 ** z)
+        return new Response('Bad request', { status: 400, headers: cors });
+      const up = 'https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/nexrad-n0q-900913' + (m ? '-m' + String(m).padStart(2, '0') + 'm' : '') + '/' + z + '/' + x + '/' + y + '.png';
+      const r = await fetch(up, { cf: { cacheTtl: 240, cacheEverything: true } });
+      if (!r.ok) return new Response('Upstream ' + r.status, { status: 502, headers: cors });
+      return new Response(r.body, { headers: { ...cors, 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=240' } });
+    }
     if (url.pathname === '/forecast') {
       const q = new URLSearchParams(url.search);
       const lat = Number(q.get('latitude')), lon = Number(q.get('longitude'));

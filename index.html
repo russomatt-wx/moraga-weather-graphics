@@ -2857,11 +2857,60 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
    if(!r.ok)return null;const j=await r.json(),m=j.minutely_15;if(!m?.time?.length)return null;nowcastCache[k]={at:Date.now(),data:m};return m;}catch(e){return null;}
  }
  const feel=a=>a<0.02?'light sprinkles':a<0.1?'light rain':a<0.3?'steady rain':'heavy rain';
+ // ---- Radar storm tracking: where is the rain, which way is it moving, when does it reach the pin? ----
+ // Reads NOAA NEXRAD pixels (via our worker for CORS) for now and 20 minutes ago, measures motion by
+ // block matching, then advects the current echoes forward to estimate arrival / end times.
+ const RADAR_API='https://moraga-live-observations.russo-matt.workers.dev/radar-tile';
+ const tileImg=(m,z,x,y)=>new Promise((ok,no)=>{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>ok(im);im.onerror=no;
+  im.src=RADAR_API+'?m='+m+'&z='+z+'&x='+x+'&y='+y+'&t='+Math.floor(Date.now()/240000);});
+ async function radarGrid(m,lat,lon){
+  const Z=8,N=256*2**Z,px=(lon+180)/360*N,sl=Math.sin(lat*Math.PI/180),py=(0.5-Math.log((1+sl)/(1-sl))/(4*Math.PI))*N;
+  const tx=Math.floor(px/256),ty=Math.floor(py/256),cv=document.createElement('canvas');cv.width=cv.height=768;const g=cv.getContext('2d',{willReadFrequently:true});
+  await Promise.all([-1,0,1].flatMap(i=>[-1,0,1].map(j=>tileImg(m,Z,tx+i,ty+j).then(im=>g.drawImage(im,(i+1)*256,(j+1)*256)))));
+  const d=g.getImageData(0,0,768,768).data,B=4,W=192,grid=new Uint8Array(W*W);
+  for(let by=0;by<W;by++)for(let bx=0;bx<W;bx++){let n=0;for(let yy=0;yy<B;yy++)for(let xx=0;xx<B;xx++){const k=((by*B+yy)*768+bx*B+xx)*4,r=d[k],gg=d[k+1],b=d[k+2],a=d[k+3];
+   if(a>80&&(gg>b+40||r>180))n++;}grid[by*W+bx]=n>=3?1:0;}
+  const kmPerBlock=156.54303*Math.cos(lat*Math.PI/180)/2**Z*B; // km per 4-px block
+  return {grid,W,kmPerBlock,cx:(px-(tx-1)*256)/B,cy:(py-(ty-1)*256)/B};
+ }
+ const DIRS=['north','northeast','east','southeast','south','southwest','west','northwest'];
+ const dirOf=(dx,dy)=>DIRS[Math.round(((Math.atan2(dx,-dy)*180/Math.PI)+360)%360/45)%8];
+ async function radarTrack(lat,lon){
+  const [now,old]=await Promise.all([radarGrid(0,lat,lon),radarGrid(20,lat,lon)]);
+  const {W,kmPerBlock:km,cx,cy}=now,A=old.grid,Bg=now.grid,pts=[];
+  for(let y=0;y<W;y++)for(let x=0;x<W;x++)if(Bg[y*W+x])pts.push([x,y]);
+  if(!pts.length)return {state:'none'};
+  let near=1e9,nx=0,ny=0;for(const [x,y] of pts){const d=Math.hypot(x-cx,y-cy);if(d<near){near=d;nx=x;ny=y;}}
+  const distMi=near*km*0.621;
+  if(distMi>40)return {state:'none'};
+  // Motion: shift of the 20-minute-old echoes that best overlaps the current ones (search ±12 blocks).
+  let best=-1,mx=0,my=0;const oldPts=[];for(let y=0;y<W;y++)for(let x=0;x<W;x++)if(A[y*W+x])oldPts.push([x,y]);
+  if(oldPts.length>=25&&pts.length>=25){for(let dy=-12;dy<=12;dy++)for(let dx=-12;dx<=12;dx++){let sc=0;for(const [x,y] of oldPts){const X=x+dx,Y=y+dy;if(X>=0&&Y>=0&&X<W&&Y<W&&Bg[Y*W+X])sc++;}
+    if(sc>best||(sc===best&&Math.hypot(dx,dy)<Math.hypot(mx,my))){best=sc;mx=dx;my=dy;}}}
+  const moving=best>0&&Math.hypot(mx,my)>=1,vx=mx/20,vy=my/20,speedMph=Math.round(Math.hypot(mx,my)*km*0.621*3); // blocks per minute; mph
+  const hitAt=t=>pts.some(([x,y])=>Math.hypot(x+vx*t-cx,y+vy*t-cy)<=1.3);
+  const res={distMi,bearing:dirOf(nx-cx,ny-cy),moving,dir:moving?dirOf(mx,my):'',speedMph};
+  if(near<=1.3){let end=null;if(moving)for(let t=5;t<=90;t+=5)if(!hitAt(t)){end=t;break;}return {...res,state:'raining',endMin:end};}
+  if(moving)for(let t=5;t<=90;t+=5)if(hitAt(t))return {...res,state:'approaching',etaMin:t};
+  return {...res,state:'nearby'};
+ }
+ const at=min=>new Date(Date.now()+min*60000).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'});
+ const roundAt=min=>{const t=new Date(Date.now()+min*60000);t.setMinutes(Math.round(t.getMinutes()/5)*5,0,0);return t.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'});};
  let lastH=null,lastT=null,seq=0;
  window.dwlRadarSync=async function(h,currentTime){
   want=where();if(map){map.setView(want,map.getZoom(),{animate:true});pin&&pin.setLatLng(want);}
   if(h)lastH=h;if(currentTime)lastT=currentTime;h=lastH;const out=el('radar-insight');if(!out||!h?.time)return;
   const my=++seq,[lat,lon]=want,now=ptNow();
+  // 1) What the radar shows (storm tracking). 2) Model guidance only when no rain is nearby on radar.
+  try{const R=await radarTrack(lat,lon);if(my!==seq)return;
+   const mv=R.moving&&R.speedMph>=3?', moving '+R.dir+' at about '+R.speedMph+' mph':'';
+   const mi=d=>d<1.5?'about a mile':Math.round(d)+' miles';
+   let txt=null;
+   if(R.state==='raining')txt='Rain on radar over the area now'+mv+(R.endMin?' — likely ending around '+roundAt(R.endMin)+'.':'. It looks set to continue through the next hour.');
+   else if(R.state==='approaching')txt='Rain is '+mi(R.distMi)+' to the '+R.bearing+mv+' — arriving around '+roundAt(R.etaMin)+(R.etaMin<=15?' (within 15 minutes).':'.');
+   else if(R.state==='nearby'&&R.distMi<=15)txt='Rain is '+mi(R.distMi)+' to the '+R.bearing+mv+'. It isn’t tracking toward you in the next hour, but stay alert.';
+   if(txt){out.textContent=txt;return;}
+  }catch(e){}
   const rainingNow=/rain|drizzle|shower|storm|thunder/i.test(el('public-current-condition')?.textContent||'');
   // Next 4 quarter-hours (HRRR); fall back to the blend's current and next hour.
   const m=await nowcast(lat,lon);if(my!==seq)return;
