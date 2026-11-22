@@ -63,23 +63,28 @@ jobs:
         uses: actions/checkout@v5
         with:
           ref: main
-      - name: Check local Weather Outlook feed freshness
+      - name: Check local Weather Outlook feed freshness and quality
         id: outlook_freshness
         run: |
           python3 - <<'PY'
-          import json, os
+          import json, os, re
           from datetime import datetime, timezone, timedelta
           from pathlib import Path
-          path=Path('weather_outlooks.json')
           fresh=False
           try:
-              data=json.loads(path.read_text())
-              stamp=datetime.fromisoformat(data['generated_utc'].replace('Z','+00:00'))
+              feed=json.loads(Path('weather_outlooks.json').read_text())
+              locations=json.loads(Path('locations.json').read_text())['locations']
+              stamp=datetime.fromisoformat(feed['generated_utc'].replace('Z','+00:00'))
               age=datetime.now(timezone.utc)-stamp
-              fresh=timedelta(minutes=-10)<=age<=timedelta(hours=12)
-          except (OSError,ValueError,KeyError,TypeError):
-              age=None
-          print('Local Weather Outlook feed age:',age)
+              expected={x.get('outlook_key') or x['key'] for x in locations}
+              outlooks=feed.get('outlooks',{})
+              complete=set(outlooks)==expected
+              temperature=re.compile(r'\b\d{2,3}\s*°\s*F?\b',re.I)
+              clean=all(not temperature.search(item.get('headline','')+' '+item.get('text','')) for item in outlooks.values())
+              fresh=timedelta(minutes=-10)<=age<=timedelta(hours=12) and complete and clean
+              print('Local Weather Outlook feed age:',age,'locations:',len(outlooks),'/',len(expected),'temperature-free:',clean)
+          except (OSError,ValueError,KeyError,TypeError) as exc:
+              print('Local Weather Outlook feed unavailable or invalid:',exc)
           with open(os.environ['GITHUB_OUTPUT'],'a') as output:
               output.write('stale='+('false' if fresh else 'true')+'\n')
           PY
