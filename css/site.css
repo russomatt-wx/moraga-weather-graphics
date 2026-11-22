@@ -1982,3 +1982,127 @@ body #public-shell .dwl-panel .dwl-days { gap: 10px !important; }
 #public-shell .public-hourly .public-hour-qpf .dwl-qpf-col span { display: block; height: auto !important; margin: 0 0 2px !important; font-size: 11.5px !important; line-height: 1.1 !important; font-weight: 700; color: #bfeaff !important; }
 #public-shell .public-hourly .public-hour-qpf .dwl-qpf-col i { display: block; width: 44%; border-radius: 4px 4px 1px 1px; margin: 0 !important;
   background: linear-gradient(180deg, #7fe6ff, #22a8f0) !important; box-shadow: 0 0 8px -2px rgba(63, 216, 245, .7) !important; }
+
+/* ================= Appearance switcher ================= */
+#public-shell .dwl-locbar { position: relative; gap: 8px; }
+#public-shell .dwl-theme-btn { flex: none; align-self: stretch; width: 48px; display: grid; place-items: center; padding: 0; border-radius: 14px; cursor: pointer;
+  border: 1.5px solid var(--line); background: linear-gradient(180deg, rgba(11, 60, 86, .75), rgba(6, 34, 54, .85)); color: var(--accent); box-shadow: 0 0 12px -4px rgba(25, 220, 246, .5); }
+#public-shell .dwl-theme-btn svg { width: 20px; height: 20px; }
+#public-shell .dwl-theme-pop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 950; min-width: 190px; padding: 10px; border-radius: 16px;
+  background: #0b2133; border: 1px solid rgba(25, 220, 246, .45); box-shadow: 0 14px 34px rgba(0, 0, 0, .55); display: grid; gap: 4px; }
+#public-shell .dwl-theme-pop[hidden] { display: none; }
+#public-shell .dwl-theme-pop b { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding: 2px 6px 6px; }
+#public-shell .dwl-theme-pop button { appearance: none; display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 8px; border: 0; border-radius: 10px; background: none;
+  color: var(--text); font: 600 15px/1 var(--font-ui); cursor: pointer; text-align: left; min-height: 0 !important; box-shadow: none !important; }
+#public-shell .dwl-theme-pop button[aria-checked="true"] { background: rgba(25, 220, 246, .14); }
+#public-shell .dwl-theme-pop button[aria-checked="true"]::after { content: "✓"; margin-left: auto; color: var(--accent); }
+#public-shell .dwl-theme-pop .sw { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid rgba(25, 220, 246, .6); }
+#public-shell .dwl-theme-pop .sw-navy { background: linear-gradient(135deg, #0a2f55, #031a30); }
+#public-shell .dwl-theme-pop .sw-black { background: #000; }
+#public-shell .dwl-theme-pop .sw-light { background: linear-gradient(135deg, #ffffff, #dfe8f1); }
+
+/* ================= Black theme (true black for OLED) ================= */
+html[data-theme="black"] { --bg-top: #000; --bg-mid: #000; --bg-bottom: #000; --panel: rgba(12, 14, 18, .9); --panel-deep: rgba(8, 10, 14, .92); }
+html[data-theme="black"] body { background: #000 !important; }
+html[data-theme="black"] body::before { opacity: .45; }
+html[data-theme="black"] body::after { opacity: .35; }
+html[data-theme="black"] #public-shell .dwl-panel, html[data-theme="black"] #public-shell .dwl-panel[aria-label="Next 36 hours"],
+html[data-theme="black"] #public-shell .dwl-panel[aria-label="10-day forecast"], html[data-theme="black"] #public-shell .dwl-panel.public-outlook,
+html[data-theme="black"] #public-shell .dwl-panel.dwl-sofar, html[data-theme="black"] #public-shell .dwl-radar { background: #07090c !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+html[data-theme="black"] #public-shell .public-obs-card { background: linear-gradient(180deg, #0a0d12, #050608) !important; }
+html[data-theme="black"] #public-shell .dwl-now-tiles { background: rgba(255, 255, 255, .035) !important; }
+html[data-theme="black"] body #public-shell .dwl-panel .dwl-days > .dwl-day:not(.is-holiday) { background: linear-gradient(180deg, #0d1117, #080a0e) padding-box, linear-gradient(90deg, color-mix(in srgb, var(--hi) 75%, transparent), color-mix(in srgb, var(--lo) 75%, transparent)) border-box !important; }
+html[data-theme="black"] body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { background: linear-gradient(100deg, color-mix(in srgb, var(--hol1) 18%, #080a0e), #080a0e) padding-box, linear-gradient(100deg, var(--hol1), var(--hol2)) border-box !important; }
+html[data-theme="black"] #public-shell .public-hourly .public-hour:not(.is-sun) { background: linear-gradient(180deg, color-mix(in srgb, var(--hour-color) 14%, #0b0e13), #07090c) padding-box,
+  linear-gradient(180deg, color-mix(in srgb, var(--hour-color) 85%, #fff), color-mix(in srgb, var(--hour-color) 40%, #000)) border-box !important; }
+html[data-theme="black"] #public-shell .dwl-locbar-btn, html[data-theme="black"] #public-shell .dwl-theme-btn { background: #0a0d12 !important; }
+html[data-theme="black"] #public-shell .dwl-theme-pop, html[data-theme="black"] #public-shell .dwl-locsheet-panel { background: #0b0d11 !important; }
+html[data-theme="black"] #public-shell .dwl-locsheet .dwl-loc-search { background: #0b0d11 !important; }
+html[data-theme="black"] #public-shell .dwl-alert, html[data-theme="black"] #public-shell .dwl-now-alerts .dwl-alert-status { background-color: #0a0c10 !important; }
+html[data-theme="black"] #public-shell .dwl-radar-insight { background: linear-gradient(90deg, rgba(47, 140, 255, .08), rgba(139, 92, 246, .06)) !important; }
+
+/* ================= Light theme ================= */
+html[data-theme="light"] { color-scheme: light; --bg-top: #f4f8fc; --bg-mid: #eaf1f8; --bg-bottom: #e6eef6; --text: #0d2236; --text-2: #2c4357; --muted: #5d7489;
+  --line: rgba(14, 140, 190, .45); --line-soft: rgba(30, 70, 110, .14); --accent: #0a8fc2; --panel: #fff; --panel-deep: #fff; }
+html[data-theme="light"] body { background: linear-gradient(180deg, #f4f8fc, #e6eef6) !important; color: var(--text); }
+html[data-theme="light"] body::before { opacity: .35; filter: hue-rotate(0deg); }
+html[data-theme="light"] body::after { opacity: .25; }
+/* Header keeps its dark brand banner so the logo reads as designed */
+html[data-theme="light"] .dwl-header { background: linear-gradient(180deg, #06223f, #0b3560) !important; border-radius: 0 0 22px 22px; }
+/* Surfaces */
+html[data-theme="light"] #public-shell .dwl-panel, html[data-theme="light"] #public-shell .dwl-panel[aria-label="Next 36 hours"],
+html[data-theme="light"] #public-shell .dwl-panel[aria-label="10-day forecast"], html[data-theme="light"] #public-shell .dwl-panel.public-outlook,
+html[data-theme="light"] #public-shell .dwl-panel.dwl-sofar, html[data-theme="light"] #public-shell .dwl-radar {
+  background: #ffffff !important; border-color: rgba(14, 140, 190, .28) !important; box-shadow: 0 6px 22px -12px rgba(20, 60, 100, .35) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+html[data-theme="light"] #public-shell .public-obs-card { background: linear-gradient(180deg, #ffffff, #f3f8fc) !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--public-current-accent, #1cb5b8) 25%, transparent), inset 0 0 26px color-mix(in srgb, var(--public-current-accent, #1cb5b8) 14%, transparent), 0 8px 24px -14px rgba(20, 60, 100, .4) !important; }
+html[data-theme="light"] #public-shell .dwl-now-tiles { background: #f2f7fb !important; border-color: rgba(14, 140, 190, .22) !important; box-shadow: none !important; }
+html[data-theme="light"] #public-shell .dwl-now-tiles > div + div, html[data-theme="light"] #public-shell .dwl-now-row > span + span, html[data-theme="light"] #public-shell .dwl-now-sun > span + span,
+html[data-theme="light"] #public-shell .dwl-now-sun:not([hidden]) + span { border-left-color: rgba(30, 70, 110, .14) !important; }
+/* Text */
+html[data-theme="light"] #public-shell .dwl-panel-h h2 { background: none !important; -webkit-background-clip: border-box !important; background-clip: border-box !important; color: #0d2236 !important; -webkit-text-fill-color: #0d2236; }
+html[data-theme="light"] #public-shell .dwl-panel-sub, html[data-theme="light"] #public-shell .dwl-ph-tag { color: #5d7489 !important; }
+html[data-theme="light"] #public-shell .dwl-now-time, html[data-theme="light"] #public-shell .dwl-now-hl, html[data-theme="light"] #public-shell .dwl-now-tiles span,
+html[data-theme="light"] #public-shell .dwl-now-row small { color: #4a6a86 !important; }
+html[data-theme="light"] #public-shell .dwl-now-cond, html[data-theme="light"] #public-shell .dwl-now-tiles b, html[data-theme="light"] #public-shell .dwl-now-tiles b span,
+html[data-theme="light"] #public-shell .dwl-now-row b { color: #0d2236 !important; }
+html[data-theme="light"] #public-shell .dwl-now-tiles .dwl-now-unit, html[data-theme="light"] #public-shell .dwl-now-tiles small { color: #5d7489 !important; }
+html[data-theme="light"] #public-shell .dwl-now-tiles svg { color: #0aa5cf !important; filter: none !important; }
+html[data-theme="light"] #public-shell .dwl-now-temp { filter: saturate(1.4) brightness(.82) !important; }
+html[data-theme="light"] #public-shell .dwl-now-icon::before { display: none; }
+html[data-theme="light"] #public-shell .dwl-now-icon .dwl-icon { filter: drop-shadow(0 4px 10px rgba(20, 60, 100, .28)) !important; }
+/* Location bar + appearance */
+html[data-theme="light"] #public-shell .dwl-locbar-btn, html[data-theme="light"] #public-shell .dwl-theme-btn { background: #fff !important; box-shadow: 0 2px 10px -4px rgba(20, 60, 100, .3) !important; }
+html[data-theme="light"] #public-shell .dwl-locbar-btn { color: #0d2236 !important; }
+html[data-theme="light"] #public-shell .dwl-theme-pop, html[data-theme="light"] #public-shell .dwl-locsheet-panel, html[data-theme="light"] #public-shell .dwl-locsheet .dwl-loc-search { background: #fff !important; }
+html[data-theme="light"] #public-shell .dwl-theme-pop button, html[data-theme="light"] #public-shell .dwl-locsheet { color: #0d2236; }
+/* Alerts */
+html[data-theme="light"] #public-shell .dwl-now-alerts .dwl-alert-status { background: #f2f7fb !important; color: #0d2236 !important; border-color: rgba(30, 70, 110, .16) !important; }
+html[data-theme="light"] #public-shell .dwl-alert { background-color: #fff !important; }
+html[data-theme="light"] #public-shell .dwl-alert .dwl-alert-title, html[data-theme="light"] #public-shell .dwl-ar-sum b { color: #0d2236 !important; }
+html[data-theme="light"] #public-shell .dwl-alert .dwl-alert-when, html[data-theme="light"] #public-shell .dwl-ar-sum span, html[data-theme="light"] #public-alerts .dwl-alert-nearby { color: #4a6a86 !important; }
+/* Chips */
+html[data-theme="light"] #public-shell .dwl-panel .dwl-ai-chip, html[data-theme="light"] #public-shell .dwl-ai-chip-net { background: #f2fbfe !important; color: #0d4a66 !important; box-shadow: none !important; }
+/* 36 hours */
+html[data-theme="light"] #public-shell .public-hourly .public-hour:not(.is-sun) { background: linear-gradient(180deg, color-mix(in srgb, var(--hour-color) 12%, #fff), #fff) padding-box,
+  linear-gradient(180deg, color-mix(in srgb, var(--hour-color) 80%, #fff), color-mix(in srgb, var(--hour-color) 35%, #fff)) border-box !important; box-shadow: 0 3px 10px -6px rgba(20, 60, 100, .35) !important; }
+html[data-theme="light"] #public-shell .public-hourly .public-hour, html[data-theme="light"] #public-shell .public-hourly .public-hour strong:not(.public-hour-temp) { color: #0d2236 !important; }
+html[data-theme="light"] #public-shell .public-hourly .public-hour-day { color: #4a6a86 !important; }
+html[data-theme="light"] #public-shell .public-hourly .public-hour-wind { color: #2c4357 !important; border-top-color: rgba(30, 70, 110, .14) !important; }
+html[data-theme="light"] #public-shell .public-hourly .public-hour-temp { filter: saturate(1.4) brightness(.8) !important; }
+html[data-theme="light"] #public-shell .public-hourly .public-hour-rain { color: #0a7fb8 !important; }
+html[data-theme="light"] #public-shell .public-hourly .public-hour-qpf .dwl-qpf-col span { color: #0a6f9e !important; }
+/* 10-day */
+html[data-theme="light"] body #public-shell .dwl-panel .dwl-days > .dwl-day:not(.is-holiday) { background: linear-gradient(180deg, #ffffff, #f5f9fc) padding-box,
+  linear-gradient(90deg, color-mix(in srgb, var(--hi) 80%, #fff), color-mix(in srgb, var(--lo) 80%, #fff)) border-box !important; box-shadow: 0 3px 12px -8px rgba(20, 60, 100, .4) !important; }
+html[data-theme="light"] body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { background: linear-gradient(100deg, color-mix(in srgb, var(--hol1) 14%, #fff), #fff) padding-box, linear-gradient(100deg, var(--hol1), var(--hol2)) border-box !important; box-shadow: 0 3px 12px -8px var(--hol1) !important; }
+html[data-theme="light"] body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-when strong, html[data-theme="light"] body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { color: #0d2236 !important; }
+html[data-theme="light"] body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-when span:not(.dwl-pill), html[data-theme="light"] body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-rain,
+html[data-theme="light"] body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-rain span:first-of-type { color: #3c5a74 !important; }
+html[data-theme="light"] body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-rain .dwl-day-amount { color: #5d7489 !important; }
+html[data-theme="light"] body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi, html[data-theme="light"] body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { filter: saturate(1.4) brightness(.8) !important; }
+html[data-theme="light"] #public-shell .dwl-more { color: #0a7fb8 !important; background: #f2f7fb !important; }
+/* Outlook, today so far, radar */
+html[data-theme="light"] #public-shell .public-outlook p#public-discussion { color: #1f374c !important; }
+html[data-theme="light"] #public-shell .public-outlook-headline { color: #0a7fb8 !important; }
+html[data-theme="light"] #public-shell .dwl-sofar-grid span { color: #4a6a86 !important; }
+html[data-theme="light"] #public-shell .dwl-sofar-grid strong { filter: saturate(1.3) brightness(.85); }
+html[data-theme="light"] #public-shell .dwl-radar-insight { background: linear-gradient(90deg, rgba(47, 140, 255, .08), rgba(139, 92, 246, .06)) !important; border-color: rgba(80, 120, 220, .2) !important; }
+html[data-theme="light"] #public-shell .dwl-radar-insight-body, html[data-theme="light"] #public-shell #radar-insight, html[data-theme="light"] #public-shell .dwl-radar-cells li b,
+html[data-theme="light"] #public-shell .dwl-radar-time { color: #0d2236 !important; }
+html[data-theme="light"] #public-shell .dwl-radar-insight-body > b, html[data-theme="light"] #public-shell .dwl-radar-cells li em { color: #3d5fc0 !important; }
+html[data-theme="light"] #public-shell .dwl-radar-cells li, html[data-theme="light"] #public-shell .dwl-radar-cells li.dwl-rc-motion, html[data-theme="light"] #public-shell .dwl-rt-ticks,
+html[data-theme="light"] #public-shell .dwl-radar-legend small, html[data-theme="light"] #public-shell .dwl-radar-credit { color: #5d7489 !important; }
+html[data-theme="light"] #public-shell .dwl-rt-bar i { background: rgba(30, 70, 110, .1); }
+html[data-theme="light"] #public-shell .dwl-radar-play { color: #0a7fb8 !important; background: #f2f7fb !important; }
+html[data-theme="light"] #public-shell #public-more-details { background: #fff !important; color: #0d2236 !important; }
+html[data-theme="light"] .dwl-toggle { background: #ffffff !important; border-color: rgba(14, 140, 190, .3) !important; box-shadow: 0 2px 10px -4px rgba(20, 60, 100, .3) !important; }
+html[data-theme="light"] .dwl-toggle > * { color: #3c5a74 !important; }
+html[data-theme="light"] .dwl-toggle > [aria-current="page"] { color: #fff !important; }
+html[data-theme="light"] #public-shell .dwl-now-time .dwl-push-btn { background: #eef6fb !important; color: #0a7fb8 !important; border-color: rgba(10, 127, 184, .5) !important; }
+html[data-theme="light"] #public-shell .dwl-now-time .dwl-push-btn.is-on { color: #0f8a5f !important; border-color: rgba(15, 138, 95, .6) !important; background: #eafaf2 !important; }
+html[data-theme="light"] #public-shell .dwl-cc-live { color: #0f8a5f !important; box-shadow: inset 0 0 0 1.4px rgba(15, 138, 95, .7) !important; }
+html[data-theme="light"] #public-shell .dwl-panel-sub, html[data-theme="light"] #public-shell .dwl-panel[aria-label="10-day forecast"] > .dwl-panel-sub,
+html[data-theme="light"] #public-shell .dwl-panel[aria-label="Next 36 hours"] > .dwl-panel-sub { color: #4a6a86 !important; }
+html[data-theme="light"] footer { color: #5d7489 !important; border-top-color: rgba(30, 70, 110, .15) !important; background: transparent !important; }
+html[data-theme="light"] #public-shell .dwl-theme-pop button[aria-checked="true"] { background: rgba(10, 143, 194, .1); }
