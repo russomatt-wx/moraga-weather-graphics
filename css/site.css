@@ -1900,4 +1900,4 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { border-width: 1.
 #public-shell .dwl-radar-play { display: grid !important; place-items: center; padding: 0 !important; line-height: 0; }
 #public-shell .dwl-radar-play svg { width: 15px; height: 15px; display: block; }
 /* Radar smoothing: soft blur + slight saturation on the radar layer only (map, labels and pin stay sharp) */
-#public-shell .dwl-radar-map .leaflet-radar-pane .leaflet-layer { filter: blur(var(--radar-blur, 1.6px)) saturate(1.2) contrast(1.05); will-change: filter; }
+#public-shell .dwl-radar-map .leaflet-radar-pane .leaflet-layer { filter: blur(var(--radar-blur, .7px)) saturate(1.15) contrast(1.08); will-change: filter; }

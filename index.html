@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>try{localStorage.removeItem('dwl-page-zoom')}catch(e){}</script>
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=27"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=27"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=27">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261124p">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261124q">
 
 
 
@@ -2803,7 +2803,7 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
  // One frame visible at a time; hidden frames are display:none so the browser doesn't composite or re-filter them.
  function show(i){layers.forEach((l,j)=>{const c=l&&l.getContainer();if(c)c.style.display=j===i?'':'none';});idx=i;el('radar-time').textContent=(FRAMES[i]===0?'Now · ':'')+frameTime(FRAMES[i]);}
  function loop(){clearTimeout(timer);if(!playing)return;timer=setTimeout(()=>{show((idx+1)%FRAMES.length);loop();},idx===FRAMES.length-1?1500:500);}
- const mk=m=>L.tileLayer(tile(m),{opacity:.88,zIndex:2,pane:'radar',maxNativeZoom:10,maxZoom:12,updateWhenIdle:true,updateWhenZooming:false,keepBuffer:0});
+ const mk=m=>L.tileLayer(tile(m),{opacity:.9,zIndex:2,pane:'radar',detectRetina:true,maxNativeZoom:10,maxZoom:12,updateWhenIdle:true,updateWhenZooming:false,keepBuffer:0});
  // Paused on the latest image: only "now" is loaded. The loop's other frames load on first Play.
  function buildFrames(){stamp=Math.floor(Date.now()/300000);layers.forEach(l=>l&&map.removeLayer(l));
   layers=FRAMES.map(()=>null);layers[FRAMES.length-1]=mk(0).addTo(map);show(FRAMES.length-1);if(playing){playing=false;loadLoop();}}
@@ -2830,7 +2830,7 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
   protomapsL.leafletLayer({url:PM,paintRules:[],labelRules:theme.labelRules,pane:'labels',maxZoom:13}).addTo(map);
   pin=L.marker(want||where(),{icon:L.divIcon({className:'dwl-radar-pin',html:'<i></i>',iconSize:[18,18]}),interactive:false}).addTo(map);
   // Smooth the blocky radar pixels: blur scales with zoom (the radar grid gets bigger on screen as you zoom in).
-  const smooth=()=>{const z=map.getZoom();map.getContainer().style.setProperty('--radar-blur',Math.min(6,Math.max(.6,.9*Math.pow(2,z-8)))+'px');};
+  const smooth=()=>{const z=map.getZoom();map.getContainer().style.setProperty('--radar-blur',Math.min(2.5,Math.max(.35,.35*Math.pow(2,z-8)))+'px');};
   map.on('zoomend',smooth);smooth();
   buildFrames();setInterval(()=>{if(document.visibilityState==='visible')buildFrames();},5*60000);
   el('radar-play').onclick=()=>{if(playing){playing=false;clearTimeout(timer);show(FRAMES.length-1);setBtn();}else loadLoop();};setBtn();}
