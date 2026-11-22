@@ -827,7 +827,7 @@ function nwsWeatherOutlook(afd,d,h){
      const sum=document.createElement('p');sum.textContent=A.summary||'';row.append(t,w);if(A.summary)row.append(sum);list.appendChild(row);});
     const a=document.createElement('a');a.href='https://forecast.weather.gov/MapClick.php?lat='+lat+'&lon='+lon;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Full details on weather.gov ›';list.appendChild(a);
     d.appendChild(list);host.appendChild(d);};
-   if(!cards.length){status('No active NWS alerts for this location','is-clear');nearbyLine();return;}
+   if(!cards.length){status('No active weather alerts for this location','is-clear');nearbyLine();return;}
    for(const item of cards.slice(0,5)){
     const p=item.properties,card=document.createElement('details');card.className='dwl-alert is-'+level(p.event);if(opened.has(p.event))card.open=true;
     const sum=document.createElement('summary');
