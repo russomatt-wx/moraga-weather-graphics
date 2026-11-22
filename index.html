@@ -2933,4 +2933,14 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
  setInterval(()=>{if(document.visibilityState==='visible'&&lastH)window.dwlRadarSync();},5*60000);
 })();
 </script>
+<script>
+// Auto-update: when the app comes back to the foreground (or every 10 minutes), check whether a newer
+// version of the site is published and reload once if so. Keeps Home Screen copies current.
+(function(){const mine=(document.querySelector('link[href*="site.css?v="]')||{}).getAttribute?.('href')||'';let last=0;
+ async function check(){if(Date.now()-last<60000)return;last=Date.now();
+  try{const r=await fetch('index.html?check='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/css\/site\.css\?v=[0-9a-z]+/);
+   if(m&&mine&&!mine.includes(m[0].split('?v=')[1])){location.reload();}}catch(e){}}
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')check();});
+ window.addEventListener('pageshow',e=>{if(e.persisted)check();});setInterval(check,10*60000);})();
+</script>
 </body></html>
