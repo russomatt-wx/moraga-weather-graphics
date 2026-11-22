@@ -36,6 +36,29 @@ jobs:
       - name: Generate all location synopses
         if: steps.gate.outputs.run == 'true'
         run: node scripts/generate-weather-outlooks.js
+      - name: Verify generated local Weather Outlook feed
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          python3 - <<'PY'
+          import json, re
+          from datetime import datetime, timezone, timedelta
+          from pathlib import Path
+          feed=json.loads(Path('weather_outlooks.json').read_text())
+          locations=json.loads(Path('locations.json').read_text())['locations']
+          stamp=datetime.fromisoformat(feed['generated_utc'].replace('Z','+00:00'))
+          age=datetime.now(timezone.utc)-stamp
+          if age < timedelta(minutes=-10) or age > timedelta(minutes=15):
+              raise SystemExit(f'Generated feed timestamp is not current: {age}')
+          expected={x.get('outlook_key') or x['key'] for x in locations}
+          actual=set(feed.get('outlooks',{}))
+          if actual != expected:
+              raise SystemExit(f'Incomplete feed: {len(actual)}/{len(expected)} locations; missing={sorted(expected-actual)}')
+          temperature=re.compile(r'\b\d{2,3}\s*°\s*F?\b',re.I)
+          offenders=[key for key,item in feed['outlooks'].items() if temperature.search(item.get('headline','')+' '+item.get('text',''))]
+          if offenders:
+              raise SystemExit('Explicit temperatures remain in synopses: '+', '.join(offenders))
+          print(f'Verified temperature-free synopses for all {len(actual)} locations')
+          PY
       - name: Commit refreshed outlook feed
         if: steps.gate.outputs.run == 'true'
         shell: bash
