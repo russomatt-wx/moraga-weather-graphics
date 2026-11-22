@@ -1136,7 +1136,6 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 @media (max-width: 600px) { #public-shell .dwl-panel .dwl-days > .dwl-day { grid-template-columns: 46px 54px minmax(0, 1fr) 48px 116px minmax(0, 1fr) 50px !important; column-gap: 4px !important; } }
 @media (max-width: 360px) { #public-shell .dwl-days > .dwl-day > .dwl-day-hi, #public-shell .dwl-days > .dwl-day > .dwl-day-lo { font-size: 27px !important; } }
 @media (min-width: 700px) { #public-shell .dwl-days > .dwl-day > .dwl-day-hi, #public-shell .dwl-days > .dwl-day > .dwl-day-lo { font-size: 38px !important; } }
-@media (max-width: 600px) { #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-sky .dwl-day-cond { font-size: 12px !important; letter-spacing: -.01em !important; } }
 /* Header clears the iPhone status bar / Safari top bar (home-screen app draws under it) */
 .dwl-header { padding-top: calc(env(safe-area-inset-top, 0px) + 22px) !important; }
 
@@ -2208,3 +2207,17 @@ html[data-theme="light"] #public-shell .dwl-now-tiles small#public-gust { color:
 #public-shell .dwl-now-row .dwl-line-ic, #public-shell .dwl-sun-ic.dwl-line-ic { filter: drop-shadow(0 0 5px color-mix(in srgb, currentColor 45%, transparent)) !important; }
 html[data-theme="light"] .dwl-icon { filter: brightness(1.04) contrast(1.12) saturate(1.35) drop-shadow(0 2px 4px rgba(20, 60, 100, .3)) !important; }
 html[data-theme="light"] #public-shell .dwl-now-icon .dwl-icon { filter: contrast(1.1) saturate(1.35) drop-shadow(0 4px 10px rgba(20, 60, 100, .3)) !important; }
+/* 10-day condition text: slightly larger */
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { font-size: clamp(14.5px, 4.15vw, 18.5px) !important; }
+@media (min-width: 700px) { body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { font-size: 20px !important; } }
+/* 10-day condition size is set by fitDayConds() in index.html (largest size that fits every row, max 16px) */
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { font-size: var(--cond-fs, 14px) !important; letter-spacing: .02em !important; }
+@media (min-width: 700px) { body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { font-size: 20px !important; } }
+/* Make room for larger conditions: slimmer date / temperature / icon columns */
+@media (max-width: 699px) {
+  body #public-shell .dwl-panel .dwl-days > .dwl-day { grid-template-columns: 48px 50px 44px minmax(0, 1fr) 48px !important; padding-left: 12px !important; padding-right: 10px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-icon .dwl-icon { width: 42px !important; height: 32px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi, body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { font-size: clamp(23px, 6.6vw, 28px) !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-sky { padding-left: 6px !important; }
+}
+@media (max-width: 340px) { body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { white-space: normal !important; line-height: 1.1 !important; } }
