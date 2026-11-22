@@ -2221,3 +2221,7 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { font-size: va
   body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-sky { padding-left: 6px !important; }
 }
 @media (max-width: 340px) { body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { white-space: normal !important; line-height: 1.1 !important; } }
+/* Weather Outlook: slightly larger reading text */
+#public-shell .public-outlook p#public-discussion { font-size: 16.5px !important; line-height: 1.65 !important; }
+#public-shell .public-outlook-headline { font-size: clamp(19px, 5.2vw, 23px) !important; }
+@media (min-width: 700px) { #public-shell .public-outlook p#public-discussion { font-size: 17.5px !important; } }
