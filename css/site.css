@@ -1917,3 +1917,11 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { border-width: 1.
   letter-spacing: .04em !important; font-size: 12.5px !important; font-weight: 500 !important; text-transform: none !important; color: #b8cadb !important; }
 /* 10-day condition text in all caps */
 body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { text-transform: uppercase !important; letter-spacing: .03em !important; font-size: clamp(13.5px, 3.8vw, 17px) !important; }
+/* 10-day: fixed icon + condition columns so they line up on every row */
+body #public-shell .dwl-panel .dwl-days > .dwl-day {
+  grid-template-columns: 54px 58px 52px minmax(0, 1fr) 54px !important;
+  grid-template-areas: "when hi icon sky lo" "when hi icon wind lo" !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-icon { justify-content: center !important; justify-self: center !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-sky { justify-self: stretch !important; align-items: flex-start !important; padding-left: 8px !important; }
+@media (max-width: 360px) { body #public-shell .dwl-panel .dwl-days > .dwl-day { grid-template-columns: 46px 50px 44px minmax(0, 1fr) 46px !important; } }
+@media (min-width: 700px) { body #public-shell .dwl-panel .dwl-days > .dwl-day { grid-template-columns: 100px 90px 84px minmax(0, 1fr) 80px !important; } }
