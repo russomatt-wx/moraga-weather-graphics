@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>try{localStorage.removeItem('dwl-page-zoom');var t=localStorage.getItem('dwl-theme');if(t==='black'||t==='light'){document.documentElement.dataset.theme=t;document.querySelector('meta[name=theme-color]')&&document.querySelector('meta[name=theme-color]').setAttribute('content',t==='black'?'#000000':'#eef3f8');}}catch(e){}</script>
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=27"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=27"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=27">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261125l">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261125m">
 
 
 
@@ -2941,7 +2941,7 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
     if(hits.length){tlBar.innerHTML=R.timeline.map(v=>'<i class="lv'+v+'" title="'+(LEVEL[v]||'Dry')+'"></i>').join('');tl.hidden=false;}else tl.hidden=true;
     // Nearby showers (up to 3, closest / soonest first)
     const lines=R.cells.slice(0,3).map(c=>{const where=Math.round(c.distMi)<1?'overhead':(c.distMi<1.5?'1 mi':Math.round(c.distMi)+' mi')+' '+c.bearing+(c.town?' near '+c.town:'');
-     const st=c.first===0?'over you now':c.first!==null?'arriving ~'+roundAt(c.first):c.closing&&c.cpaMi<10?'passing ~'+Math.max(1,Math.round(c.cpaMi))+' mi '+c.passSide+' around '+roundAt(c.cpaT):!R.moving?'not moving much':'moving away';
+     const st=c.first===0?'Over you now':c.first!==null?'Arriving ~'+roundAt(c.first):c.closing&&c.cpaMi<10?'Passing '+Math.max(1,Math.round(c.cpaMi))+' mi '+SH[DIRS.indexOf(c.passSide)]+' of you ~'+roundAt(c.cpaT):!R.moving?'Not moving much':'Moving away';
      const lab=c.typ>=c.peak?LEVEL[c.peak]:LEVEL[c.typ]+'–'+lvl(c.peak);return '<li><i class="lv'+c.peak+'"></i><span><b>'+lab+'</b> · '+where+'</span><em>'+st+'</em></li>';});
     cellsEl.innerHTML=lines.join('')+(R.moving&&R.cells.length?'<li class="dwl-rc-motion">Showers are '+mv+'.</li>':'');cellsEl.hidden=!lines.length;
     return;}
