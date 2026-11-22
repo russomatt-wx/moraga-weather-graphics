@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>try{localStorage.removeItem('dwl-page-zoom');var t=localStorage.getItem('dwl-theme');if(t==='black'||t==='light'){document.documentElement.dataset.theme=t;document.querySelector('meta[name=theme-color]')&&document.querySelector('meta[name=theme-color]').setAttribute('content',t==='black'?'#000000':'#eef3f8');}}catch(e){}</script>
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=27"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=27"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=27">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261126y">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261127a">
 
 
 
@@ -817,8 +817,16 @@ function nwsWeatherOutlook(afd,d,h){
    // Let the outlook mention alerts that cover this town (not just nearby county alerts).
    outlookAlerts={city:chosen,events:items.filter(promote).map(x=>x.properties.event+(x._nearby?' (nearby)':''))};
    if(lastOutlook&&chosen===city)set('public-discussion',nwsWeatherOutlook(lastOutlook.afd,lastOutlook.d,lastOutlook.h));
-   const nearbyLine=()=>{if(!nearbyNames.length)return;const n=document.createElement('a');n.className='dwl-alert-nearby';n.href='https://forecast.weather.gov/MapClick.php?lat='+lat+'&lon='+lon;n.target='_blank';n.rel='noopener noreferrer';
-     n.textContent='Also in effect elsewhere in the county: '+nearbyNames.join(', ');host.appendChild(n);};
+   // Elsewhere in the county: a small drop-down listing each alert (area, timing, one-line summary).
+   const nearbyLine=()=>{if(!nearbyNames.length)return;const d=document.createElement('details');d.className='dwl-alert-nearby';
+    const sm=document.createElement('summary');sm.textContent='Also in effect elsewhere in the county: '+nearbyNames.join(', ');d.appendChild(sm);
+    const list=document.createElement('div');list.className='dwl-nearby-list';
+    nearbyNames.forEach(ev=>{const it=items.find(x=>x.properties.event===ev);if(!it)return;const p=it.properties,A=DWL.alertParts(p);
+     const row=document.createElement('div');row.className='dwl-nearby-item';
+     const t=document.createElement('b');t.textContent=ev;const w=document.createElement('small');w.textContent=[A.where,A.window||(p.ends||p.expires?'Until '+when(p.ends||p.expires):'')].filter(Boolean).join(' · ');
+     const sum=document.createElement('p');sum.textContent=A.summary||'';row.append(t,w);if(A.summary)row.append(sum);list.appendChild(row);});
+    const a=document.createElement('a');a.href='https://forecast.weather.gov/MapClick.php?lat='+lat+'&lon='+lon;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Full details on weather.gov ›';list.appendChild(a);
+    d.appendChild(list);host.appendChild(d);};
    if(!cards.length){status('No active NWS alerts for this location','is-clear');nearbyLine();return;}
    for(const item of cards.slice(0,5)){
     const p=item.properties,card=document.createElement('details');card.className='dwl-alert is-'+level(p.event);if(opened.has(p.event))card.open=true;
