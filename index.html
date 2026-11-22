@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>try{localStorage.removeItem('dwl-page-zoom')}catch(e){}</script>
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=27"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=27"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=27">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261124s">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261124t">
 
 
 
@@ -2801,7 +2801,13 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
  const tile=m=>'https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/nexrad-n0q-900913'+(m?'-m'+String(m).padStart(2,'0')+'m':'')+'/{z}/{x}/{y}.png?_='+stamp;
  function frameTime(m){const t=new Date(Date.now()-m*60000);t.setMinutes(Math.floor(t.getMinutes()/5)*5,0,0);return t.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'});}
  // One frame visible at a time; hidden frames are display:none so the browser doesn't composite or re-filter them.
- function show(i){layers.forEach((l,j)=>{const c=l&&l.getContainer();if(c){c.style.display='';c.style.opacity=j===i?'1':'0';}});idx=i;el('radar-time').textContent=(FRAMES[i]===0?'Now · ':'')+frameTime(FRAMES[i]);}
+ let zTop=10;
+ // New frame fades in ON TOP of the old one (which stays fully visible), then the old one is hidden — no brightness dip.
+ function show(i){const prev=idx,anim=playing&&prev!==i&&i!==FRAMES.length-1-FRAMES.length;
+  layers.forEach((l,j)=>{const c=l&&l.getContainer();if(!c)return;c.style.display='';
+   if(j===i){c.style.zIndex=++zTop;if(playing){c.style.transition='none';c.style.opacity='0';void c.offsetWidth;c.style.transition='opacity .2s ease-out';}c.style.opacity='1';}
+   else if(j===prev&&playing){c.style.transition='none';setTimeout(()=>{if(idx!==j)c.style.opacity='0';},210);}
+   else{c.style.transition='none';c.style.opacity='0';}});idx=i;el('radar-time').textContent=(FRAMES[i]===0?'Now · ':'')+frameTime(FRAMES[i]);}
  function loop(){clearTimeout(timer);if(!playing)return;timer=setTimeout(()=>{show((idx+1)%FRAMES.length);loop();},idx===FRAMES.length-1?1100:260);}
  const mk=m=>L.tileLayer(tile(m),{opacity:.9,zIndex:2,pane:'radar',maxNativeZoom:10,maxZoom:12,updateWhenIdle:true,updateWhenZooming:false,keepBuffer:0});
  // Paused on the latest image: only "now" is loaded. The loop's other frames load on first Play.
