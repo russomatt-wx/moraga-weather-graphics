@@ -1,0 +1,38 @@
+name: Forecast vs NWS (archive + score)
+# Each evening: save NWS's and Diablo Weather Lab's forecast for tomorrow at all locations, then score
+# every completed day against NOAA's observed highs/lows. Results: verification/forecast_vs_nws.json.
+on:
+  schedule:
+    - cron: '23 3 * * *'   # 7:23 PM PST / 8:23 PM PDT
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: { group: forecast-vs-nws, cancel-in-progress: false }
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - name: Save NWS forecasts
+        run: python scripts/nws_forecast_archive.py
+      - name: Save Diablo Weather Lab forecasts (as the app shows them)
+        run: |
+          npm install --no-save playwright@1.48.2
+          npx playwright install --with-deps chromium
+          (python -m http.server 8765 >/dev/null 2>&1 &)
+          sleep 2
+          node scripts/dwl_forecast_snapshot.js http://localhost:8765
+      - name: Score against NOAA observations
+        run: python scripts/forecast_vs_nws.py
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add verification/nws_forecast_archive.json verification/dwl_forecast_archive.json verification/forecast_vs_nws.json
+          git commit -m "Forecast vs NWS: archive and score [skip ci]" || exit 0
+          for i in 1 2 3 4; do git pull --rebase -q origin main && git push -q origin HEAD:main && break; sleep 6; done
