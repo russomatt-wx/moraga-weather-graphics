@@ -2159,3 +2159,29 @@ html[data-theme="light"] #public-shell .dwl-radar-cells li:not(.dwl-rc-motion) {
 #public-shell .dwl-radar-time { white-space: nowrap; }
 #public-shell .dwl-radar-scrub { padding: 0 10px; }
 @media (max-width: 380px) { #public-shell .dwl-radar-legend i { width: 58px; } #public-shell .dwl-radar-legend small { font-size: 10px; } #public-shell .dwl-radar-time { font-size: 13px; } #public-shell .dwl-radar-bar { gap: 8px; } }
+/* Radar refinements 2 */
+#public-shell .dwl-radar-insight-body > b { letter-spacing: .07em !important; }
+#public-shell .dwl-radar-cells li i { box-shadow: 0 0 3px -1px currentColor !important; }
+#public-shell .dwl-radar-scrub { position: relative; }
+#public-shell .dwl-rs-marks { position: relative; height: 6px; margin: -6px 20px 0; display: flex; justify-content: space-between; pointer-events: none; }
+#public-shell .dwl-rs-marks i { width: 1.5px; height: 6px; border-radius: 1px; background: rgba(150, 200, 240, .45); }
+#public-shell .dwl-rs-ticks { margin: 3px 6px 0 !important; }
+#public-shell .dwl-rs-ticks span { width: 28px; text-align: center; }
+#public-shell .dwl-rs-ticks span:first-child { width: auto; text-align: left; margin-right: -14px; }
+#public-shell .dwl-radar-map .leaflet-labels-pane { filter: drop-shadow(0 0 1px #020a14) drop-shadow(0 0 2px #020a14) drop-shadow(0 0 3px rgba(2, 10, 20, .9)) !important; }
+html[data-theme="light"] #public-shell .dwl-rs-marks i { background: rgba(30, 70, 110, .3); }
+/* Scrubber ticks/labels positioned exactly under the thumb's travel (thumb radius 10px) */
+#public-shell .dwl-rs-marks, #public-shell .dwl-rs-ticks { position: relative !important; display: block !important; margin: 0 10px !important; }
+#public-shell .dwl-rs-marks { height: 6px; margin-top: -6px !important; }
+#public-shell .dwl-rs-ticks { height: 14px; margin-top: 2px !important; }
+#public-shell .dwl-rs-marks i, #public-shell .dwl-rs-ticks span { position: absolute; top: 0; transform: translateX(-50%); }
+#public-shell .dwl-rs-ticks span { width: auto !important; margin: 0 !important; white-space: nowrap; text-align: center !important; }
+#public-shell .dwl-rs-marks i:nth-child(1), #public-shell .dwl-rs-ticks span:nth-child(1) { left: 10px; }
+#public-shell .dwl-rs-marks i:nth-child(2), #public-shell .dwl-rs-ticks span:nth-child(2) { left: calc(10px + (100% - 20px) * .2); }
+#public-shell .dwl-rs-marks i:nth-child(3), #public-shell .dwl-rs-ticks span:nth-child(3) { left: calc(10px + (100% - 20px) * .4); }
+#public-shell .dwl-rs-marks i:nth-child(4), #public-shell .dwl-rs-ticks span:nth-child(4) { left: calc(10px + (100% - 20px) * .6); }
+#public-shell .dwl-rs-marks i:nth-child(5), #public-shell .dwl-rs-ticks span:nth-child(5) { left: calc(10px + (100% - 20px) * .8); }
+#public-shell .dwl-rs-marks i:nth-child(6), #public-shell .dwl-rs-ticks span:nth-child(6) { left: calc(100% - 10px); }
+#public-shell .dwl-rs-ticks span:nth-child(1) { transform: translateX(-30%); }
+#public-shell .dwl-rs-ticks span:nth-child(6) { transform: translateX(-70%); }
+#public-shell .dwl-rs-marks, #public-shell .dwl-rs-ticks { margin-left: 0 !important; margin-right: 0 !important; }
