@@ -2905,7 +2905,7 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
   return dir+' of '+best[0];
  }
  async function radarTrack(lat,lon){
-  const [now,old]=await Promise.all([radarGrid(0,lat,lon),radarGrid(20,lat,lon)]);
+  const [now,old,old50]=await Promise.all([radarGrid(0,lat,lon),radarGrid(20,lat,lon),radarGrid(50,lat,lon).catch(()=>null)]);
   const {W,km,cx,cy}=now,G=now.grid,A=old.grid,R=1.3; // R: "over you" radius in blocks (~2.5 km)
   // Motion: shift of the 20-minute-old echoes that best overlaps the current ones, within 60 blocks of the pin.
   const near=(x,y)=>Math.abs(x-cx)<60&&Math.abs(y-cy)<60,oldPts=[],nowSet=[];
@@ -2927,10 +2927,13 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
    // Clutter: echoes that sit still while the rain field moves (wind farms, ground clutter). Compare overlap with the
    // 20-minute-old image at the same spot vs at the motion-shifted spot.
    let same=0,shifted=0;for(const [x,y] of pts){if(A[y*W+x])same++;const X=Math.round(x-mx),Y=Math.round(y-my);if(X>=0&&Y>=0&&X<W&&Y<W&&A[Y*W+X])shifted++;}
-   const [cla,clo]=now.toLatLon(pts[0][0],pts[0][1]);
-   const clutterZone=cla>37.66&&cla<37.82&&clo>-121.78&&clo<-121.52; // Altamont Pass wind farms
-   if(moving&&same>shifted&&same>=pts.length*.4)continue;
-   if(clutterZone&&!(moving&&shifted>=pts.length*.3))continue;
+   // Known wind-farm clutter (turbines reflect the beam): Altamont Pass, and Montezuma Hills / Shiloh near Rio Vista.
+   const ZONES=[[37.62,37.92,-121.86,-121.25],[38.02,38.24,-122.00,-121.66]];
+   let inZone=0;for(const [x,y] of pts){const [a,b]=now.toLatLon(x,y);if(ZONES.some(z=>a>z[0]&&a<z[1]&&b>z[2]&&b<z[3]))inZone++;}
+   if(inZone>=pts.length*.5&&pts.length<150)continue; // small echo mostly over a wind farm = clutter (real rain bands are larger)
+   if(moving&&same>shifted&&same>=pts.length*.4)continue; // sits still while the rain moves
+   // Still in the same place 50 minutes ago while the rain field moves 10+ mph = clutter (real showers would be 8+ miles away).
+   if(old50&&moving&&speedMph>=10&&pts.length<150){let s50=0;for(const [x,y] of pts)if(old50.grid[y*W+x])s50++;if(s50>=pts.length*.35)continue;}
    cells.push({pts,peak:pk,typ:Math.min(typ,pk)});}
   // Project each shower forward 0..60 min: closest approach, arrival / departure at the pin, intensity over the pin.
   const timeline=new Array(12).fill(0),T=[0,5,10,15,20,25,30,35,40,45,50,55,60];
