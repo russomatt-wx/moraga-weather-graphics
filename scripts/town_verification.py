@@ -34,7 +34,9 @@ WORKER = "https://moraga-live-observations.russo-matt.workers.dev/daily"
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import locations  # noqa: E402
-TOWNS = {k: v for k, v in locations.towns(include_moraga=False).items() if v}  # station towns (new neighbourhoods learn via the public-station track)
+TOWNS = {k: v for k, v in locations.towns(include_moraga=False).items() if v}  # station towns (scored against their own station)
+# Every other location learns its corrections from NOAA URMA (and nearby public stations): licence-free.
+ALL_TOWNS = [l["id"] for l in locations.load() if l["id"] != "moraga"]
 MIN_SAMPLES = 200          # of ~288 five-minute observations in a day
 BACKFILL_DAYS = 35
 FACTORS = [0, .25, .5, .75, 1.0]
@@ -207,7 +209,7 @@ def main():
     archive_path, observed_path = OUT / "town_forecast_archive.json", OUT / "town_observed.json"
     archive, observed = load(archive_path, {}), load(observed_path, {})
     today = datetime.now(TZ).date()
-    for town in TOWNS:
+    for town in ALL_TOWNS:
         since = 3 if archive.get(town) else BACKFILL_DAYS
         added = sum(add_snapshot(archive, town, feed) for feed in snapshots(town, since))
         if len(archive.get(town, {})) < 30:
@@ -217,6 +219,8 @@ def main():
         # Observed days: every archived day before today that is missing, plus the last 2 days (late data).
         want = {d for d in archive.get(town, {}) if d < today.isoformat() and d not in observed.get(town, {})}
         want |= {(today - timedelta(days=k)).isoformat() for k in (1, 2)}
+        if town not in TOWNS:
+            want = set()  # no private station: NOAA / public-station tracks only
         got = 0
         for day in sorted(want):
             ob = observed_day(town, day)
@@ -227,9 +231,13 @@ def main():
         cutoff = (today - timedelta(days=120)).isoformat()
         archive[town] = {d: v for d, v in archive.get(town, {}).items() if d >= cutoff}
         observed[town] = {d: v for d, v in observed.get(town, {}).items() if d >= cutoff}
-        result = score(town, archive, observed)
-        (OUT / f"{town}_model_daily_verification.json").write_text(json.dumps(result, indent=1) + "\n")
-        print(f"{town}: +{added} forecasts, +{got} observed days, {len(result['matches'])} matches, models {list(result['model_scores'])}")
+        if town in TOWNS:
+            result = score(town, archive, observed)
+            (OUT / f"{town}_model_daily_verification.json").write_text(json.dumps(result, indent=1) + "\n")
+            print(f"{town}: +{added} forecasts, +{got} observed days, {len(result['matches'])} matches, models {list(result['model_scores'])}")
+        else:
+            print(f"{town}: +{added} forecasts (NOAA/public tracks)")
+        time.sleep(1.5)  # be gentle with the previous-runs archive
         # Second track: the same forecasts verified against NOAA's URMA analysis (licence-free for a paid app).
         noaa = load(OUT / "town_observed_noaa.json", {})
         if noaa.get(town):
