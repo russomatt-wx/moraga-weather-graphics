@@ -34,6 +34,7 @@ on:
       - 'Moraga ensemble spread chart'
       - 'Update Moraga extended ensemble outlook'
       - 'Additional locations 10-day forecasts'
+      - 'Publish local Weather Outlook synopses'
       - 'Town forecast verification'
       - 'Publish KCAMORAG71 daily summary'
       - 'Paddle conditions'
