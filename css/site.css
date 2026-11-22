@@ -2185,3 +2185,12 @@ html[data-theme="light"] #public-shell .dwl-rs-marks i { background: rgba(30, 70
 #public-shell .dwl-rs-ticks span:nth-child(1) { transform: translateX(-30%); }
 #public-shell .dwl-rs-ticks span:nth-child(6) { transform: translateX(-70%); }
 #public-shell .dwl-rs-marks, #public-shell .dwl-rs-ticks { margin-left: 0 !important; margin-right: 0 !important; }
+/* Current conditions: icons + values only (labels kept for screen readers) */
+#public-shell .dwl-now-tiles > div > span:not(:has(#public-pressure)), #public-shell .dwl-now-row small {
+  position: absolute !important; width: 1px !important; height: 1px !important; overflow: hidden !important; clip: rect(0 0 0 0) !important; white-space: nowrap !important; }
+#public-shell .dwl-now-tiles > div { position: relative; gap: 4px !important; }
+#public-shell .dwl-now-tiles svg { width: 26px !important; height: 26px !important; margin-bottom: 2px !important; }
+#public-shell .dwl-now-tiles span .dwl-cc-trend { position: absolute; top: 2px; right: 8px; }
+#public-shell .dwl-now-row > span, #public-shell .dwl-now-sun > span { grid-template-rows: auto !important; }
+#public-shell .dwl-now-row .dwl-sun-ic { grid-row: 1 !important; }
+#public-shell .dwl-now-tiles b .dwl-cc-trend { position: static !important; font-style: normal; margin-left: 2px; font-size: .75em; color: #3fd8f5; }
