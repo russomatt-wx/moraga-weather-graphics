@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>try{localStorage.removeItem('dwl-page-zoom')}catch(e){}</script>
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=27"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=27"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=27">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261125f">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261125g">
 
 
 
@@ -468,7 +468,8 @@
   const qpfMax=Math.max(...cards.map(d=>d.qpf),0),qpfScale=Math.max(qpfMax,0.10);
   host.classList.toggle('has-qpf',qpfMax>=0.01);
   // Rain pill under each card: fills with the amount (relative to the wettest card, min scale 0.10") and shows the number inside.
-  const qpfBar=d=>d.qpf>=0.01?'<b class="dwl-qpf-pill"><i style="width:'+Math.max(18,Math.round(100*Math.min(1,d.qpf/qpfScale)))+'%"></i><span>'+d.qpf.toFixed(2)+'″</span></b>':'';
+  // Rain bar under each card: height shows the amount (vs the wettest card, min scale 0.10"); the number sits on top of the bar.
+  const qpfBar=d=>d.qpf>=0.01?'<b class="dwl-qpf-col"><span>'+d.qpf.toFixed(2)+'″</span><i style="height:'+Math.max(3,Math.round(16*Math.min(1,d.qpf/qpfScale)))+'px"></i></b>':'';
   // Same hours already on screen (e.g. the station reading just arrived): update in place rather than
   // rebuilding, so images are never re-created (Safari could leave a re-inserted icon blank).
   const existing=[...host.querySelectorAll('.public-hour')];
