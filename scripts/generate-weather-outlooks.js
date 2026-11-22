@@ -16,6 +16,7 @@ function publicCopy(s){
     .replace(/\b\d{2,3}\s*°F?\b/g,'');
  // Translate forecast-office / model language into plain, reader-facing language.
  const rules=[
+  [/\ban upper[- ]level (low|trough)\b/gi,'a weather system'],
   [/\bupper[- ]level low\b/gi,'weather system'],
   [/\bupper[- ]level trough\b/gi,'weather system'],
   [/\bshortwave trough\b/gi,'weather disturbance'],
