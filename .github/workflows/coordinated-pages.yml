@@ -370,7 +370,7 @@ jobs:
           missing=sorted(expected-actual)
           if missing:
               raise SystemExit(f'Local Weather Outlook feed missing {len(missing)} locations: {missing}')
-          temperature=re.compile(r'\\b\\d{2,3}\\s*°\\s*F?\\b',re.I)
+          temperature=re.compile(r'\b\d{2,3}\s*°\s*F?\b',re.I)
           offenders=[]
           for key,item in feed['outlooks'].items():
               text=(item.get('headline','')+' '+item.get('text',''))
