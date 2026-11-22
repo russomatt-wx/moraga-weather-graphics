@@ -2130,3 +2130,5 @@ html[data-theme="light"] #public-shell .dwl-theme-pop button[aria-checked="true"
 html[data-theme="light"] .dwl-header { background: none !important; border-radius: 0; }
 html[data-theme="light"] .dwl-header .dwl-wm-1, html[data-theme="light"] .dwl-header .dwl-wm-3 { color: #0d2236 !important; }
 html[data-theme="light"] .dwl-header .dwl-wm-2:not(.dwl-wm-3) { color: #0a8fc2 !important; text-shadow: none !important; }
+#public-shell .dwl-ai-chip-net svg.dwl-chip-ic { width: 22px !important; height: 22px !important; color: #3fd8f5 !important; }
+html[data-theme="light"] #public-shell .dwl-ai-chip-net svg.dwl-chip-ic { color: #0a9bbf !important; }
