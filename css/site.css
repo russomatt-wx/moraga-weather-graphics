@@ -2301,3 +2301,33 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day.is-today:not(.is-holiday) { h
 /* Multi-Model Blend chip matches the Adaptive Intelligence chip size */
 #public-shell .dwl-panel[aria-label="Next 36 hours"] .dwl-panel-h .dwl-ai-chip { font-size: 12px !important; padding: 3px 9px 3px 7px !important; }
 #public-shell .dwl-panel[aria-label="Next 36 hours"] .dwl-panel-h .dwl-ai-chip svg { width: 18px !important; height: 18px !important; }
+
+/* ================= What to Wear ================= */
+#public-shell .dwl-wear { background: rgba(10, 28, 44, .6) !important; border: 1px solid rgba(90, 190, 235, .28) !important; box-shadow: 0 0 12px -9px rgba(63, 216, 245, .6) !important; display: grid; gap: 10px; }
+#public-shell .dwl-wear[hidden] { display: none !important; }
+#public-shell .dwl-wear .dwl-panel-h { margin-bottom: 0 !important; display: flex; align-items: center; gap: 10px; flex-wrap: nowrap; }
+#public-shell .dwl-wear .dwl-panel-h h2 { font-size: clamp(20px, 5.8vw, 25px) !important; white-space: nowrap; }
+#public-shell .dwl-wear-badge { margin-left: auto; padding: 3px 9px; border-radius: 999px; border: 1px solid rgba(63, 216, 245, .5); font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #9fe6f7; white-space: nowrap; }
+#public-shell .dwl-wear-sub { margin: -6px 0 0 41px; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #8fa9c0; }
+#public-shell .dwl-wear-main { padding: 12px 14px; border-radius: 14px; background: rgba(63, 216, 245, .06); border-left: 3px solid rgba(63, 216, 245, .7); display: grid; gap: 4px; }
+#public-shell .dwl-wear-main strong { font: 700 clamp(18px, 5vw, 21px)/1.25 "Outfit", var(--font-ui); color: #f1f6fb; }
+#public-shell .dwl-wear-main p { margin: 0; font-size: 14.5px; line-height: 1.5; color: #d3e0ec; }
+#public-shell .dwl-wear-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+#public-shell .dwl-wear-grid > div { display: grid; justify-items: center; gap: 3px; padding: 10px 6px; border-radius: 12px; background: rgba(255, 255, 255, .03); border: 1px solid rgba(150, 200, 240, .12); text-align: center; min-width: 0; }
+#public-shell .dwl-wear-ic svg, #public-shell .dwl-wear .dwl-ph-ic svg { width: 24px; height: 24px; color: #3fd8f5; }
+#public-shell .dwl-wear-grid small { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #8fa9c0; }
+#public-shell .dwl-wear-grid b { font-size: 13.5px; font-weight: 650; color: #eef4fa; line-height: 1.25; }
+#public-shell .dwl-wear-note { margin: 0; font-size: 13.5px; line-height: 1.5; color: #a9bfd2; }
+@media (min-width: 700px) { #public-shell .dwl-wear-grid b { font-size: 15px; } #public-shell .dwl-wear-main p { font-size: 15.5px; } }
+html[data-theme="black"] #public-shell .dwl-wear { background: #07090c !important; }
+html[data-theme="light"] #public-shell .dwl-wear { background: #fff !important; border-color: rgba(14, 140, 190, .28) !important; box-shadow: 0 6px 22px -12px rgba(20, 60, 100, .35) !important; }
+html[data-theme="light"] #public-shell .dwl-wear-main { background: #f2f9fc; border-left-color: #0aa5cf; }
+html[data-theme="light"] #public-shell .dwl-wear-main strong, html[data-theme="light"] #public-shell .dwl-wear-grid b { color: #0d2236; }
+html[data-theme="light"] #public-shell .dwl-wear-main p { color: #2c4357; }
+html[data-theme="light"] #public-shell .dwl-wear-grid > div { background: #f7fafc; border-color: rgba(30, 70, 110, .12); }
+html[data-theme="light"] #public-shell .dwl-wear-note, html[data-theme="light"] #public-shell .dwl-wear-sub, html[data-theme="light"] #public-shell .dwl-wear-grid small { color: #5d7489; }
+html[data-theme="light"] #public-shell .dwl-wear-badge { color: #0a7fb8; border-color: rgba(10, 127, 184, .5); }
+html[data-theme="light"] #public-shell .dwl-wear-ic svg, html[data-theme="light"] #public-shell .dwl-wear .dwl-ph-ic svg { color: #0a9bbf; }
+#public-shell .dwl-wear-grid > div { align-content: start; }
+#public-shell .dwl-wear-grid b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+#public-shell .dwl-wear-note { padding: 0 4px; }
