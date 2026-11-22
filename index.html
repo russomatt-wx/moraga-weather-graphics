@@ -448,6 +448,9 @@
      src:icon.match(/src="([^"]+)"/)[1],alt:(icon.match(/alt="([^"]*)"/)||[])[1]||'',icon,rain:'<div class="public-hour-rain">'+(Number.isFinite(chance)&&Math.round(chance/10)*10>=20?Math.min(100,Math.round(chance/10)*10)+'%':'&nbsp;')+'</div>'});
   }
   // Rain amount for each card's 2 hours, shown inside the card under the rain chance.
+  // An amount is only shown (and counted toward 'Expected') when the card also shows a rain chance (20%+),
+  // so a trace from one model never appears without a chance.
+  cards.forEach(d=>{if(!d.sun&&!/%/.test(d.rain||''))d.qpf=0;});
   cards.forEach(d=>{if(d.qpf>=0.01&&d.rain)d.rain=d.rain.replace(/<\/div>$/,'<small class="public-hour-amt"><i aria-hidden="true"></i>'+d.qpf.toFixed(2)+'″</small></div>');});
   // Sunrise / sunset cards slotted in time order between the hours shown.
   if(false&&cards.length&&coords[city]){ // sunrise/sunset cards turned off (shown in current conditions instead)
