@@ -1937,3 +1937,23 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { padding-top: 20p
 body #public-shell .dwl-panel .dwl-days > .dwl-day { min-height: 70px !important; padding-top: 10px !important; padding-bottom: 10px !important; }
 body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { padding-top: 22px !important; }
 body #public-shell .dwl-panel .dwl-days { gap: 10px !important; }
+/* Radar Insight: headline, next-hour timeline, nearby showers */
+#public-shell .dwl-radar-insight-body { flex: 1; min-width: 0; font-size: 14.5px; line-height: 1.45; color: #e6eef7; }
+#public-shell .dwl-radar-insight-body > b { display: block; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #9fc2ff; margin-bottom: 2px; }
+#public-shell #radar-insight { display: block; font-size: 15px; font-weight: 600; color: #f1f6fb; }
+#public-shell .dwl-radar-timeline { margin-top: 10px; }
+#public-shell .dwl-rt-bar { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; height: 12px; border-radius: 6px; overflow: hidden; }
+#public-shell .dwl-rt-bar i { display: block; background: rgba(255, 255, 255, .08); }
+#public-shell .dwl-rt-bar i.lv1, #public-shell .dwl-radar-cells i.lv1 { background: #22c55e; }
+#public-shell .dwl-rt-bar i.lv2, #public-shell .dwl-radar-cells i.lv2 { background: #facc15; }
+#public-shell .dwl-rt-bar i.lv3, #public-shell .dwl-radar-cells i.lv3 { background: #ef4444; }
+#public-shell .dwl-rt-ticks { display: flex; justify-content: space-between; margin-top: 3px; font-size: 10.5px; color: #8fa9c0; }
+#public-shell .dwl-radar-cells { list-style: none; margin: 10px 0 0; padding: 8px 0 0; border-top: 1px solid rgba(150, 180, 255, .15); display: grid; gap: 6px; }
+#public-shell .dwl-radar-cells li { display: grid; grid-template-columns: 10px 1fr auto; align-items: center; gap: 8px; font-size: 13px; color: #cfdcea; }
+#public-shell .dwl-radar-cells li i { width: 10px; height: 10px; border-radius: 50%; }
+#public-shell .dwl-radar-cells li b { color: #f1f6fb; font-weight: 600; }
+#public-shell .dwl-radar-cells li em { font-style: normal; color: #9fc2ff; font-size: 12.5px; text-align: right; white-space: nowrap; }
+#public-shell .dwl-radar-cells li.dwl-rc-motion { display: block; font-size: 12px; color: #8fa9c0; }
+#public-shell .dwl-radar-cells[hidden], #public-shell .dwl-radar-timeline[hidden] { display: none; }
+#public-shell .dwl-radar-cells li b { display: inline !important; text-transform: none !important; letter-spacing: 0 !important; font-size: 13px !important; margin: 0 !important; color: #f1f6fb !important; }
+#public-shell .dwl-radar-cells li span { min-width: 0; }

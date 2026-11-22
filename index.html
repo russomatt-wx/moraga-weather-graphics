@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>try{localStorage.removeItem('dwl-page-zoom')}catch(e){}</script>
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=27"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=27"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=27">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261125a">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261125c">
 
 
 
@@ -30,7 +30,7 @@
   <div class="public-note" id="public-summary" hidden></div>
   <div class="public-heading" id="public-city-heading" hidden>Moraga</div><div class="public-sub" id="public-location-sub" hidden></div>
  <div class="dwl-alert-bar dwl-now-alerts"><div id="public-alerts" aria-live="polite"></div></div></div><div id="estimate-test" class="est-test" hidden></div>
- <section class="dwl-panel" aria-label="Next 36 hours"><div class="dwl-panel-h"><span class="dwl-ph-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h2>Next 36 Hours</h2><span class="dwl-ai-chip dwl-ai-chip-net" title="HRRR, RRFS, ECMWF and GFS, scaled to the self-learning 10-day highs and lows"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 3.5 8.5 12 13l8.5-4.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M3.5 12.2 12 16.7l8.5-4.5M3.5 15.9 12 20.4l8.5-4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></svg>Multi-Model Blend</span></div><p class="dwl-panel-sub" id="public-short-range-source" aria-live="polite"></p><div class="public-hourly" id="public-hourly" aria-live="polite"></div></section><section class="dwl-panel" aria-label="10-day forecast"><div class="dwl-panel-h"><span class="dwl-ph-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><h2>10-Day Forecast</h2><span class="dwl-ai-chip dwl-ai-chip-net"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3.5c.6 3.9 2.6 5.9 6.5 6.5-3.9.6-5.9 2.6-6.5 6.5-.6-3.9-2.6-5.9-6.5-6.5 3.9-.6 5.9-2.6 6.5-6.5Z" fill="currentColor"/><path d="M18.5 14.5c.3 1.7 1.1 2.5 2.8 2.8-1.7.3-2.5 1.1-2.8 2.8-.3-1.7-1.1-2.5-2.8-2.8 1.7-.3 2.5-1.1 2.8-2.8Z" fill="currentColor" opacity=".75"/></svg>Self-Learning Forecast</span></div><p class="dwl-panel-sub" id="public-days-updated"></p><div class="public-days" id="public-days" aria-live="polite"></div></section><section class="dwl-panel public-outlook" aria-label="Weather outlook"><div class="dwl-panel-h"><span class="dwl-ph-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 3.5h7.5l4.5 4.5v12.5h-12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 3.5V8h4.5M9 12.5h6M9 16h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><h2>Weather Outlook</h2><span class="dwl-ph-tag">What’s ahead</span></div><div class="public-outlook-headline" id="public-outlook-headline"></div><p id="public-discussion" aria-live="polite">Loading the local outlook…</p><div class="public-outlook-source" id="public-outlook-source"></div></section><section class="dwl-panel dwl-sofar" id="public-sofar" aria-label="Today so far" hidden><div class="dwl-panel-h"><span class="dwl-ph-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><h2>Today So Far</h2><span class="dwl-ph-tag">Observed since midnight</span></div><div class="dwl-sofar-grid"><div><span>High</span><strong id="public-today-high">—</strong></div><div><span>Low</span><strong id="public-today-low">—</strong></div><div><span>Rainfall</span><strong id="public-today-rain">—</strong></div></div></section><section class="dwl-panel dwl-radar" id="public-radar" aria-label="Live radar"><div class="dwl-panel-h"><span class="dwl-ph-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".7"/><path d="M12 12 18 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg></span><h2>Live Radar</h2><span class="dwl-ph-tag">NOAA NEXRAD</span></div><div class="dwl-radar-insight"><span class="dwl-radar-insight-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3.5c.6 3.9 2.6 5.9 6.5 6.5-3.9.6-5.9 2.6-6.5 6.5-.6-3.9-2.6-5.9-6.5-6.5 3.9-.6 5.9-2.6 6.5-6.5Z" fill="currentColor"/><path d="M18.5 14.5c.3 1.7 1.1 2.5 2.8 2.8-1.7.3-2.5 1.1-2.8 2.8-.3-1.7-1.1-2.5-2.8-2.8 1.7-.3 2.5-1.1 2.8-2.8Z" fill="currentColor" opacity=".75"/></svg></span><p><b>Radar Insight · Next Hour</b><span id="radar-insight">Reading the latest model blend…</span></p></div><div class="dwl-radar-map" id="radar-map" role="img" aria-label="Animated weather radar for the last 50 minutes"><div class="dwl-radar-loading">Loading radar…</div></div><div class="dwl-radar-bar"><button type="button" class="dwl-radar-play" id="radar-play" aria-label="Play radar loop"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="6" width="3.2" height="12" rx="1" fill="currentColor"/><rect x="13.8" y="6" width="3.2" height="12" rx="1" fill="currentColor"/></svg></button><span class="dwl-radar-time" id="radar-time">—</span><span class="dwl-radar-legend" aria-hidden="true"><small>Light</small><i></i><small>Heavy</small></span></div><p class="dwl-radar-credit">Radar: NOAA NEXRAD via Iowa Environmental Mesonet · Map © OpenStreetMap contributors · Protomaps</p></section><div class="public-status" id="public-station-status">Checking nearby public weather observations…</div><div class="public-notice" id="public-data-notice"></div>
+ <section class="dwl-panel" aria-label="Next 36 hours"><div class="dwl-panel-h"><span class="dwl-ph-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h2>Next 36 Hours</h2><span class="dwl-ai-chip dwl-ai-chip-net" title="HRRR, RRFS, ECMWF and GFS, scaled to the self-learning 10-day highs and lows"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 3.5 8.5 12 13l8.5-4.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M3.5 12.2 12 16.7l8.5-4.5M3.5 15.9 12 20.4l8.5-4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></svg>Multi-Model Blend</span></div><p class="dwl-panel-sub" id="public-short-range-source" aria-live="polite"></p><div class="public-hourly" id="public-hourly" aria-live="polite"></div></section><section class="dwl-panel" aria-label="10-day forecast"><div class="dwl-panel-h"><span class="dwl-ph-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><h2>10-Day Forecast</h2><span class="dwl-ai-chip dwl-ai-chip-net"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3.5c.6 3.9 2.6 5.9 6.5 6.5-3.9.6-5.9 2.6-6.5 6.5-.6-3.9-2.6-5.9-6.5-6.5 3.9-.6 5.9-2.6 6.5-6.5Z" fill="currentColor"/><path d="M18.5 14.5c.3 1.7 1.1 2.5 2.8 2.8-1.7.3-2.5 1.1-2.8 2.8-.3-1.7-1.1-2.5-2.8-2.8 1.7-.3 2.5-1.1 2.8-2.8Z" fill="currentColor" opacity=".75"/></svg>Self-Learning Forecast</span></div><p class="dwl-panel-sub" id="public-days-updated"></p><div class="public-days" id="public-days" aria-live="polite"></div></section><section class="dwl-panel public-outlook" aria-label="Weather outlook"><div class="dwl-panel-h"><span class="dwl-ph-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 3.5h7.5l4.5 4.5v12.5h-12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 3.5V8h4.5M9 12.5h6M9 16h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><h2>Weather Outlook</h2><span class="dwl-ph-tag">What’s ahead</span></div><div class="public-outlook-headline" id="public-outlook-headline"></div><p id="public-discussion" aria-live="polite">Loading the local outlook…</p><div class="public-outlook-source" id="public-outlook-source"></div></section><section class="dwl-panel dwl-sofar" id="public-sofar" aria-label="Today so far" hidden><div class="dwl-panel-h"><span class="dwl-ph-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><h2>Today So Far</h2><span class="dwl-ph-tag">Observed since midnight</span></div><div class="dwl-sofar-grid"><div><span>High</span><strong id="public-today-high">—</strong></div><div><span>Low</span><strong id="public-today-low">—</strong></div><div><span>Rainfall</span><strong id="public-today-rain">—</strong></div></div></section><section class="dwl-panel dwl-radar" id="public-radar" aria-label="Live radar"><div class="dwl-panel-h"><span class="dwl-ph-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".7"/><path d="M12 12 18 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg></span><h2>Live Radar</h2><span class="dwl-ph-tag">NOAA NEXRAD</span></div><div class="dwl-radar-insight"><span class="dwl-radar-insight-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3.5c.6 3.9 2.6 5.9 6.5 6.5-3.9.6-5.9 2.6-6.5 6.5-.6-3.9-2.6-5.9-6.5-6.5 3.9-.6 5.9-2.6 6.5-6.5Z" fill="currentColor"/><path d="M18.5 14.5c.3 1.7 1.1 2.5 2.8 2.8-1.7.3-2.5 1.1-2.8 2.8-.3-1.7-1.1-2.5-2.8-2.8 1.7-.3 2.5-1.1 2.8-2.8Z" fill="currentColor" opacity=".75"/></svg></span><div class="dwl-radar-insight-body"><b>Radar Insight · Next Hour</b><span id="radar-insight">Reading the latest radar…</span><div class="dwl-radar-timeline" id="radar-timeline" hidden aria-label="Rain at your location over the next hour"><div class="dwl-rt-bar" id="radar-timeline-bar"></div><div class="dwl-rt-ticks"><span>Now</span><span>+15</span><span>+30</span><span>+45</span><span>+60 min</span></div></div><ul class="dwl-radar-cells" id="radar-cells" hidden></ul></div></div><div class="dwl-radar-map" id="radar-map" role="img" aria-label="Animated weather radar for the last 50 minutes"><div class="dwl-radar-loading">Loading radar…</div></div><div class="dwl-radar-bar"><button type="button" class="dwl-radar-play" id="radar-play" aria-label="Play radar loop"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="6" width="3.2" height="12" rx="1" fill="currentColor"/><rect x="13.8" y="6" width="3.2" height="12" rx="1" fill="currentColor"/></svg></button><span class="dwl-radar-time" id="radar-time">—</span><span class="dwl-radar-legend" aria-hidden="true"><small>Light</small><i></i><small>Heavy</small></span></div><p class="dwl-radar-credit">Radar: NOAA NEXRAD via Iowa Environmental Mesonet · Map © OpenStreetMap contributors · Protomaps</p></section><div class="public-status" id="public-station-status">Checking nearby public weather observations…</div><div class="public-notice" id="public-data-notice"></div>
  <div style="margin-top:22px"><button id="public-more-details">View full forecast and technical charts ↗</button></div>
  </div><button id="observatory-return">← Simple forecast</button>
  <script>
@@ -2864,36 +2864,54 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
  const RADAR_API='https://moraga-live-observations.russo-matt.workers.dev/radar-tile';
  const tileImg=(m,z,x,y)=>new Promise((ok,no)=>{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>ok(im);im.onerror=no;
   im.src=RADAR_API+'?m='+m+'&z='+z+'&x='+x+'&y='+y+'&t='+Math.floor(Date.now()/240000);});
+ // Radar grid around the pin: 4-px blocks (~2 km) holding rain intensity 0 none, 1 light, 2 moderate, 3 heavy
+ // (NEXRAD colours: green light, yellow moderate, orange/red/magenta heavy; faint blue echoes ignored).
  async function radarGrid(m,lat,lon){
   const Z=8,N=256*2**Z,px=(lon+180)/360*N,sl=Math.sin(lat*Math.PI/180),py=(0.5-Math.log((1+sl)/(1-sl))/(4*Math.PI))*N;
   const tx=Math.floor(px/256),ty=Math.floor(py/256),cv=document.createElement('canvas');cv.width=cv.height=768;const g=cv.getContext('2d',{willReadFrequently:true});
   await Promise.all([-1,0,1].flatMap(i=>[-1,0,1].map(j=>tileImg(m,Z,tx+i,ty+j).then(im=>g.drawImage(im,(i+1)*256,(j+1)*256)))));
   const d=g.getImageData(0,0,768,768).data,B=4,W=192,grid=new Uint8Array(W*W);
-  for(let by=0;by<W;by++)for(let bx=0;bx<W;bx++){let n=0;for(let yy=0;yy<B;yy++)for(let xx=0;xx<B;xx++){const k=((by*B+yy)*768+bx*B+xx)*4,r=d[k],gg=d[k+1],b=d[k+2],a=d[k+3];
-   if(a>80&&(gg>b+40||r>180))n++;}grid[by*W+bx]=n>=3?1:0;}
-  const kmPerBlock=156.54303*Math.cos(lat*Math.PI/180)/2**Z*B; // km per 4-px block
-  return {grid,W,kmPerBlock,cx:(px-(tx-1)*256)/B,cy:(py-(ty-1)*256)/B};
+  for(let by=0;by<W;by++)for(let bx=0;bx<W;bx++){let n=0,mx=0;for(let yy=0;yy<B;yy++)for(let xx=0;xx<B;xx++){const k=((by*B+yy)*768+bx*B+xx)*4,r=d[k],gg=d[k+1],b=d[k+2],a=d[k+3];
+   if(a<=80)continue;let v=0;if(r>180&&gg>170&&b<120)v=2;else if(r>180)v=3;else if(gg>b+40)v=1;else if(b>200&&r>150)v=3;if(v){n++;if(v>mx)mx=v;}}
+   grid[by*W+bx]=n>=3?mx:0;}
+  const km=156.54303*Math.cos(lat*Math.PI/180)/2**Z*B,mpp=156.54303*Math.cos(lat*Math.PI/180)/2**Z;
+  return {grid,W,km,cx:(px-(tx-1)*256)/B,cy:(py-(ty-1)*256)/B,toLatLon:(bx,by)=>{const X=(tx-1)*256+bx*B+B/2,Y=(ty-1)*256+by*B+B/2;
+   return [Math.atan(Math.sinh(Math.PI*(1-2*Y/N)))*180/Math.PI,X/N*360-180];}};
  }
- const DIRS=['north','northeast','east','southeast','south','southwest','west','northwest'];
- const dirOf=(dx,dy)=>DIRS[Math.round(((Math.atan2(dx,-dy)*180/Math.PI)+360)%360/45)%8];
+ const DIRS=['north','northeast','east','southeast','south','southwest','west','northwest'],SH=['N','NE','E','SE','S','SW','W','NW'];
+ const octant=(dx,dy)=>Math.round(((Math.atan2(dx,-dy)*180/Math.PI)+360)%360/45)%8;
+ const dirOf=(dx,dy)=>DIRS[octant(dx,dy)];
+ const LEVEL=['','Light','Moderate','Heavy'];
+ function nearTown(la,lo){let best=null,bd=1e9;(window.DWL_LOCATIONS||[]).forEach(l=>{const d=Math.hypot(l.lat-la,(l.lon-lo)*Math.cos(la*Math.PI/180))*69;if(d<bd){bd=d;best=l;}});
+  return best&&bd<=6?(best.area&&!/County|Valley$/.test(best.area)?best.area:best.neighborhood):'';}
  async function radarTrack(lat,lon){
   const [now,old]=await Promise.all([radarGrid(0,lat,lon),radarGrid(20,lat,lon)]);
-  const {W,kmPerBlock:km,cx,cy}=now,A=old.grid,Bg=now.grid,pts=[];
-  for(let y=0;y<W;y++)for(let x=0;x<W;x++)if(Bg[y*W+x])pts.push([x,y]);
-  if(!pts.length)return {state:'none'};
-  let near=1e9,nx=0,ny=0;for(const [x,y] of pts){const d=Math.hypot(x-cx,y-cy);if(d<near){near=d;nx=x;ny=y;}}
-  const distMi=near*km*0.621;
-  if(distMi>40)return {state:'none'};
-  // Motion: shift of the 20-minute-old echoes that best overlaps the current ones (search ±12 blocks).
-  let best=-1,mx=0,my=0;const oldPts=[];for(let y=0;y<W;y++)for(let x=0;x<W;x++)if(A[y*W+x])oldPts.push([x,y]);
-  if(oldPts.length>=25&&pts.length>=25){for(let dy=-12;dy<=12;dy++)for(let dx=-12;dx<=12;dx++){let sc=0;for(const [x,y] of oldPts){const X=x+dx,Y=y+dy;if(X>=0&&Y>=0&&X<W&&Y<W&&Bg[Y*W+X])sc++;}
-    if(sc>best||(sc===best&&Math.hypot(dx,dy)<Math.hypot(mx,my))){best=sc;mx=dx;my=dy;}}}
-  const moving=best>0&&Math.hypot(mx,my)>=1,vx=mx/20,vy=my/20,speedMph=Math.round(Math.hypot(mx,my)*km*0.621*3); // blocks per minute; mph
-  const hitAt=t=>pts.some(([x,y])=>Math.hypot(x+vx*t-cx,y+vy*t-cy)<=1.3);
-  const res={distMi,bearing:dirOf(nx-cx,ny-cy),moving,dir:moving?dirOf(mx,my):'',speedMph};
-  if(near<=1.3){let end=null;if(moving)for(let t=5;t<=90;t+=5)if(!hitAt(t)){end=t;break;}return {...res,state:'raining',endMin:end};}
-  if(moving)for(let t=5;t<=90;t+=5)if(hitAt(t))return {...res,state:'approaching',etaMin:t};
-  return {...res,state:'nearby'};
+  const {W,km,cx,cy}=now,G=now.grid,A=old.grid,R=1.3; // R: "over you" radius in blocks (~2.5 km)
+  // Motion: shift of the 20-minute-old echoes that best overlaps the current ones, within 60 blocks of the pin.
+  const near=(x,y)=>Math.abs(x-cx)<60&&Math.abs(y-cy)<60,oldPts=[],nowSet=[];
+  for(let y=0;y<W;y++)for(let x=0;x<W;x++){if(A[y*W+x]&&near(x,y))oldPts.push([x,y]);if(G[y*W+x]&&near(x,y))nowSet.push(1);}
+  let best=-1,mx=0,my=0;
+  if(oldPts.length>=20&&nowSet.length>=20)for(let dy=-14;dy<=14;dy++)for(let dx=-14;dx<=14;dx++){let sc=0;for(const [x,y] of oldPts){const X=x+dx,Y=y+dy;if(X>=0&&Y>=0&&X<W&&Y<W&&G[Y*W+X])sc++;}
+   if(sc>best||(sc===best&&Math.hypot(dx,dy)<Math.hypot(mx,my))){best=sc;mx=dx;my=dy;}}
+  const moving=best>0&&Math.hypot(mx,my)>=1,vx=mx/20,vy=my/20,speedMph=Math.round(Math.hypot(mx,my)*km*0.621*3),motion=moving?dirOf(mx,my):'';
+  // Showers: connected rain areas (8-neighbour), ignoring specks.
+  const lab=new Int32Array(W*W),cells=[];let id=0;
+  for(let i=0;i<W*W;i++){if(!G[i]||lab[i])continue;id++;const st=[i],pts=[];lab[i]=id;let peak=0;
+   while(st.length){const k=st.pop(),x=k%W,y=(k-x)/W;pts.push([x,y,G[k]]);if(G[k]>peak)peak=G[k];
+    for(let ddy=-1;ddy<=1;ddy++)for(let ddx=-1;ddx<=1;ddx++){const X=x+ddx,Y=y+ddy;if(X<0||Y<0||X>=W||Y>=W)continue;const kk=Y*W+X;if(G[kk]&&!lab[kk]){lab[kk]=id;st.push(kk);}}}
+   if(pts.length>=3){const cnt=[0,0,0,0];pts.forEach(q=>cnt[q[2]]++);const typ=cnt.indexOf(Math.max(cnt[1],cnt[2],cnt[3]));cells.push({pts,peak,typ});}}
+  // Project each shower forward 0..60 min: closest approach, arrival / departure at the pin, intensity over the pin.
+  const timeline=new Array(12).fill(0),T=[0,5,10,15,20,25,30,35,40,45,50,55,60];
+  cells.forEach(c=>{let first=null,last=null,cpa=1e9,cpaT=0,cpaX=0,cpaY=0,dNow=1e9,nx=0,ny=0,sx=0,sy=0;
+   c.pts.forEach(([x,y])=>{sx+=x;sy+=y;const d=Math.hypot(x-cx,y-cy);if(d<dNow){dNow=d;nx=x;ny=y;}});
+   for(const t of T){let md=1e9,mxp=0,ax=0,ay=0;for(const [x,y,v] of c.pts){const X=x+vx*t,Y=y+vy*t,d=Math.hypot(X-cx,Y-cy);if(d<md){md=d;ax=X;ay=Y;}if(d<=R&&v>mxp)mxp=v;}
+    if(md<cpa){cpa=md;cpaT=t;cpaX=ax;cpaY=ay;}if(md<=R){if(first===null)first=t;last=t;if(t<60)timeline[t/5]=Math.max(timeline[t/5],mxp||c.peak);}
+    if(!moving)break;}
+   const [la,lo]=now.toLatLon(nx,ny); // name the shower by its nearest edge, not its centre
+   Object.assign(c,{distMi:dNow*km*0.621,bearing:SH[octant(nx-cx,ny-cy)],first,last,cpaMi:cpa*km*0.621,cpaT,passSide:DIRS[octant(cpaX-cx,cpaY-cy)],
+    closing:moving&&cpaT>0&&cpa<dNow-0.5,town:nearTown(la,lo)});});
+  cells.sort((a,b)=>(a.first??999)-(b.first??999)||a.distMi-b.distMi);
+  return {cells:cells.filter(c=>c.distMi<=35),timeline,moving,motion,speedMph};
  }
  const at=min=>new Date(Date.now()+min*60000).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'});
  const roundAt=min=>{const t=new Date(Date.now()+min*60000);t.setMinutes(Math.round(t.getMinutes()/5)*5,0,0);return t.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'});};
@@ -2903,15 +2921,30 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
   if(h)lastH=h;if(currentTime)lastT=currentTime;h=lastH;const out=el('radar-insight');if(!out||!h?.time)return;
   const my=++seq,[lat,lon]=want,now=ptNow();
   // 1) What the radar shows (storm tracking). 2) Model guidance only when no rain is nearby on radar.
+  const cellsEl=el('radar-cells'),tl=el('radar-timeline'),tlBar=el('radar-timeline-bar');
+  const place=(window.DWL_LOC||{})[document.querySelector('.public-location-choice[aria-pressed="true"]')?.dataset.publicCity]?.short||'your spot';
   try{const R=await radarTrack(lat,lon);if(my!==seq)return;
-   const mv=R.moving&&R.speedMph>=3?', moving '+R.dir+' at about '+R.speedMph+' mph':'';
-   const mi=d=>d<1.5?'about a mile':Math.round(d)+' miles';
-   let txt=null;
-   if(R.state==='raining')txt='Rain on radar over the area now'+mv+(R.endMin?' — likely ending around '+roundAt(R.endMin)+'.':'. It looks set to continue through the next hour.');
-   else if(R.state==='approaching')txt='Rain is '+mi(R.distMi)+' to the '+R.bearing+mv+' — arriving around '+roundAt(R.etaMin)+(R.etaMin<=15?' (within 15 minutes).':'.');
-   else if(R.state==='nearby'&&R.distMi<=15)txt='Rain is '+mi(R.distMi)+' to the '+R.bearing+mv+'. It isn’t tracking toward you in the next hour, but stay alert.';
-   if(txt){out.textContent=txt;return;}
-  }catch(e){}
+   const lvl=v=>LEVEL[v].toLowerCase(),mv=R.moving&&R.speedMph>=3?'moving '+R.motion+' at '+R.speedMph+' mph':'nearly stationary';
+   const hits=R.cells.filter(c=>c.first!==null),over=hits.find(c=>c.first===0),next=hits.find(c=>c.first>0);
+   let head;
+   if(over){const end=over.last<60?roundAt(over.last+5):null,pk=Math.max(...R.timeline.slice(0,4));
+    head=(LEVEL[pk||over.peak]||'Light')+' rain over '+place+' now'+(end?', likely ending around '+end+'.':' and continuing through the next hour.');
+    if(next&&next!==over&&end)head+=' More '+lvl(next.peak)+' rain could follow around '+roundAt(next.first)+'.';}
+   else if(next)head=LEVEL[next.peak]+' '+(next.peak>1?'rain':'showers')+' arriving around '+roundAt(next.first)+' (in about '+next.first+' min)'+(next.last>next.first?', lasting about '+(next.last-next.first+5)+' min.':'.');
+   else if(R.cells.length)head='No showers on a path toward '+place+' in the next hour.';
+   else head=null;
+   if(head){
+    out.textContent=head;
+    // Timeline: 12 five-minute slots for the pin
+    if(hits.length){tlBar.innerHTML=R.timeline.map(v=>'<i class="lv'+v+'" title="'+(LEVEL[v]||'Dry')+'"></i>').join('');tl.hidden=false;}else tl.hidden=true;
+    // Nearby showers (up to 3, closest / soonest first)
+    const lines=R.cells.slice(0,3).map(c=>{const where=Math.round(c.distMi)<1?'overhead':(c.distMi<1.5?'1 mi':Math.round(c.distMi)+' mi')+' '+c.bearing+(c.town?' near '+c.town:'');
+     const st=c.first===0?'over you now':c.first!==null?'arriving ~'+roundAt(c.first):c.closing&&c.cpaMi<10?'passing ~'+Math.max(1,Math.round(c.cpaMi))+' mi '+c.passSide+' around '+roundAt(c.cpaT):!R.moving?'not moving much':'moving away';
+     const lab=c.typ>=c.peak?LEVEL[c.peak]:LEVEL[c.typ]+'–'+lvl(c.peak);return '<li><i class="lv'+c.peak+'"></i><span><b>'+lab+'</b> · '+where+'</span><em>'+st+'</em></li>';});
+    cellsEl.innerHTML=lines.join('')+(R.moving&&R.cells.length?'<li class="dwl-rc-motion">Showers are '+mv+'.</li>':'');cellsEl.hidden=!lines.length;
+    return;}
+   tl.hidden=true;cellsEl.hidden=true;
+  }catch(e){tl&&(tl.hidden=true);cellsEl&&(cellsEl.hidden=true);}
   const rainingNow=/rain|drizzle|shower|storm|thunder/i.test(el('public-current-condition')?.textContent||'');
   // Next 4 quarter-hours (HRRR); fall back to the blend's current and next hour.
   const m=await nowcast(lat,lon);if(my!==seq)return;
