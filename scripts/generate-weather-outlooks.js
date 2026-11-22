@@ -18,6 +18,8 @@ function publicCopy(s){
  const rules=[
   [/\ban upper[- ]level (low|trough)\b/gi,'a weather system'],
   [/\bupper[- ]level low\b/gi,'weather system'],
+  [/\b(a|an) (trough|cutoff low|cut-off low|shortwave)\b/gi,'a weather system'],
+  [/\b(trough|shortwave)\b/gi,'weather system'],
   [/\bupper[- ]level trough\b/gi,'weather system'],
   [/\bshortwave trough\b/gi,'weather disturbance'],
   [/\bshortwave\b/gi,'weather disturbance'],
