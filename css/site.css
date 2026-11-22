@@ -1904,3 +1904,5 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { border-width: 1.
 /* Radar playback: frames are stacked GPU layers switched by opacity; no filter while animating (no per-frame redraw) */
 #public-shell .dwl-radar-map .leaflet-radar-pane .leaflet-layer { will-change: opacity; }
 #public-shell .dwl-radar-map.is-playing .leaflet-radar-pane .leaflet-layer { filter: none !important; }
+/* Radar map labels: bright names with a dark outline so they stay readable over any rain colour */
+#public-shell .dwl-radar-map .leaflet-labels-pane { filter: drop-shadow(0 0 1px #020a14) drop-shadow(0 0 2px #020a14) drop-shadow(0 1px 3px rgba(2, 10, 20, .8)); }
