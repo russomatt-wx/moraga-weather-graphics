@@ -18,7 +18,7 @@ jobs:
         id: gate
         run: |
           HOUR="$(TZ=America/Los_Angeles date +%H)"
-          if [ "$HOUR" = "06" ] || [ "$HOUR" = "15" ] || [ "\${{ github.event_name }}" = "workflow_dispatch" ]; then
+          if [ "$HOUR" = "06" ] || [ "$HOUR" = "15" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
             echo "Publishing local outlooks at $(TZ=America/Los_Angeles date)"
           else
