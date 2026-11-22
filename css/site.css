@@ -2225,3 +2225,59 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { font-size: va
 #public-shell .public-outlook p#public-discussion { font-size: 16.5px !important; line-height: 1.65 !important; }
 #public-shell .public-outlook-headline { font-size: clamp(19px, 5.2vw, 23px) !important; }
 @media (min-width: 700px) { #public-shell .public-outlook p#public-discussion { font-size: 17.5px !important; } }
+
+/* ================= 10-day v6 (mockup: date | icon | condition | high | low) ================= */
+#public-shell .dwl-panel[aria-label="10-day forecast"] .dwl-panel-h { display: grid !important; grid-template-columns: auto 1fr auto; align-items: center; column-gap: 10px; }
+#public-shell .dwl-panel[aria-label="10-day forecast"] .dwl-panel-h .dwl-ai-chip { margin: 0 !important; justify-self: end; }
+#public-shell .dwl-panel[aria-label="10-day forecast"] > .dwl-panel-sub { margin: -8px 9px 12px 48px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day, html[data-theme] body #public-shell .dwl-panel .dwl-days > .dwl-day:not(.is-holiday) {
+  grid-template-columns: 60px 60px minmax(0, 1fr) auto auto !important;
+  grid-template-areas: "when icon sky hi lo" "when icon wind hi lo" !important;
+  column-gap: 0 !important; padding: 10px 14px 10px 14px !important; min-height: 72px !important; border-radius: 18px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day:not(.is-holiday) {
+  border: 1px solid rgba(90, 190, 235, .32) !important;
+  background: linear-gradient(180deg, rgba(20, 62, 96, .55), rgba(10, 34, 60, .55)) !important;
+  box-shadow: 0 0 14px -8px rgba(63, 216, 245, .55), inset 0 1px 0 rgba(255, 255, 255, .05) !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-when { grid-area: when !important; border-right: 1px solid rgba(150, 200, 240, .25) !important; padding-right: 6px !important; height: 100%; justify-content: center; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-icon { grid-area: icon !important; justify-self: center !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-icon .dwl-icon { width: 50px !important; height: 38px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-sky { grid-area: sky !important; padding-left: 4px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { text-transform: none !important; letter-spacing: 0 !important; font-weight: 700 !important; font-size: var(--cond-fs, 17px) !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi { grid-area: hi !important; justify-content: flex-end !important; padding: 0 10px 0 6px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { grid-area: lo !important; justify-content: flex-start !important; padding: 0 0 0 10px !important; border-left: 1.5px solid rgba(150, 200, 240, .35) !important; height: 60%; align-self: center !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi, body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { font-size: clamp(25px, 7vw, 32px) !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { grid-template-columns: 60px 60px minmax(0, 1fr) auto auto !important; padding: 18px 14px 10px !important; border: 1.5px solid #f5a524 !important;
+  background: linear-gradient(180deg, rgba(120, 70, 20, .28), rgba(40, 30, 30, .4)) !important; box-shadow: 0 0 16px -4px rgba(245, 165, 36, .6) !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { top: -11px !important; left: 14px !important; right: auto !important; border-radius: 999px !important; padding: 2px 11px 2px 8px !important; font-size: 10.5px !important;
+  background: linear-gradient(90deg, #c2410c, #ea7a18) !important; border: 0 !important; box-shadow: 0 0 10px -2px rgba(245, 140, 36, .7) !important; color: #fff !important; }
+@media (min-width: 700px) {
+  body #public-shell .dwl-panel .dwl-days > .dwl-day, body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { grid-template-columns: 100px 90px minmax(0, 1fr) auto auto !important; padding-left: 24px !important; padding-right: 24px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-icon .dwl-icon { width: 70px !important; height: 52px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi, body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { font-size: 38px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-cond { font-size: 21px !important; }
+}
+html[data-theme="black"] body #public-shell .dwl-panel .dwl-days > .dwl-day:not(.is-holiday) { background: #0b0e13 !important; }
+html[data-theme="light"] body #public-shell .dwl-panel .dwl-days > .dwl-day:not(.is-holiday) { background: #fff !important; border-color: rgba(14, 140, 190, .28) !important; box-shadow: 0 3px 12px -8px rgba(20, 60, 100, .4) !important; }
+html[data-theme="light"] body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { background: #fff7ec !important; }
+html[data-theme="light"] body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-when, html[data-theme="light"] body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { border-color: rgba(30, 70, 110, .18) !important; }
+@media (max-width: 699px) {
+  body #public-shell .dwl-panel .dwl-days > .dwl-day, html[data-theme] body #public-shell .dwl-panel .dwl-days > .dwl-day:not(.is-holiday), body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday {
+    grid-template-columns: 54px 52px minmax(0, 1fr) auto auto !important; padding-left: 12px !important; padding-right: 12px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-day-icon .dwl-icon { width: 46px !important; height: 35px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi, body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { font-size: clamp(22px, 6.2vw, 27px) !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-hi { padding: 0 8px 0 4px !important; }
+  body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-lo { padding-left: 8px !important; }
+}
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-sky { align-self: center !important; grid-row: 1 / 3 !important; }
+#public-shell .dwl-panel[aria-label="10-day forecast"] .dwl-panel-h h2 { white-space: nowrap; font-size: clamp(21px, 6vw, 27px) !important; }
+#public-shell .dwl-panel[aria-label="10-day forecast"] .dwl-panel-h .dwl-ai-chip { font-size: 12px !important; padding: 3px 9px 3px 7px !important; }
+#public-shell .dwl-panel[aria-label="10-day forecast"] .dwl-panel-h .dwl-ai-chip svg { width: 18px !important; height: 18px !important; }
+#public-shell .dwl-panel[aria-label="10-day forecast"] > .dwl-panel-sub { margin: -4px 9px 12px 46px !important; }
+@media (max-width: 480px) {
+  #public-shell .dwl-panel[aria-label="10-day forecast"] .dwl-panel-h { grid-template-columns: auto 1fr; row-gap: 6px; }
+  #public-shell .dwl-panel[aria-label="10-day forecast"] .dwl-panel-h .dwl-ai-chip { grid-column: 2; justify-self: start; }
+  #public-shell .dwl-panel[aria-label="10-day forecast"] > .dwl-panel-sub { margin: 2px 9px 12px 46px !important; }
+}
+@media (max-width: 699px) { body #public-shell .dwl-panel .dwl-days > .dwl-day, html[data-theme] body #public-shell .dwl-panel .dwl-days > .dwl-day:not(.is-holiday), body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday {
+  grid-template-columns: 54px 52px minmax(0, 1fr) 58px 52px !important; } }
+@media (min-width: 700px) { body #public-shell .dwl-panel .dwl-days > .dwl-day, body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { grid-template-columns: 100px 90px minmax(0, 1fr) 90px 80px !important; } }
