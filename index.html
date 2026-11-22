@@ -2919,7 +2919,19 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
   for(let i=0;i<W*W;i++){if(!G[i]||lab[i])continue;id++;const st=[i],pts=[];lab[i]=id;let peak=0;
    while(st.length){const k=st.pop(),x=k%W,y=(k-x)/W;pts.push([x,y,G[k]]);if(G[k]>peak)peak=G[k];
     for(let ddy=-1;ddy<=1;ddy++)for(let ddx=-1;ddx<=1;ddx++){const X=x+ddx,Y=y+ddy;if(X<0||Y<0||X>=W||Y>=W)continue;const kk=Y*W+X;if(G[kk]&&!lab[kk]){lab[kk]=id;st.push(kk);}}}
-   if(pts.length>=3){const cnt=[0,0,0,0];pts.forEach(q=>cnt[q[2]]++);const typ=cnt.indexOf(Math.max(cnt[1],cnt[2],cnt[3]));cells.push({pts,peak,typ});}}
+   if(pts.length<5)continue; // specks
+   const cnt=[0,0,0,0];pts.forEach(q=>cnt[q[2]]++);
+   // Intensity needs support: moderate/heavy only if at least 2 blocks (and 5% of the shower) reach it — not one stray pixel.
+   let pk=0;for(let v=3;v>=1;v--)if(cnt[v]>=2&&(v===1||cnt[v]>=pts.length*.05)){pk=v;break;}if(!pk)pk=1;
+   const typ=cnt.indexOf(Math.max(cnt[1],cnt[2],cnt[3]))||1;
+   // Clutter: echoes that sit still while the rain field moves (wind farms, ground clutter). Compare overlap with the
+   // 20-minute-old image at the same spot vs at the motion-shifted spot.
+   let same=0,shifted=0;for(const [x,y] of pts){if(A[y*W+x])same++;const X=Math.round(x-mx),Y=Math.round(y-my);if(X>=0&&Y>=0&&X<W&&Y<W&&A[Y*W+X])shifted++;}
+   const [cla,clo]=now.toLatLon(pts[0][0],pts[0][1]);
+   const clutterZone=cla>37.66&&cla<37.82&&clo>-121.78&&clo<-121.52; // Altamont Pass wind farms
+   if(moving&&same>shifted&&same>=pts.length*.4)continue;
+   if(clutterZone&&!(moving&&shifted>=pts.length*.3))continue;
+   cells.push({pts,peak:pk,typ:Math.min(typ,pk)});}
   // Project each shower forward 0..60 min: closest approach, arrival / departure at the pin, intensity over the pin.
   const timeline=new Array(12).fill(0),T=[0,5,10,15,20,25,30,35,40,45,50,55,60];
   cells.forEach(c=>{let first=null,last=null,cpa=1e9,cpaT=0,cpaX=0,cpaY=0,dNow=1e9,nx=0,ny=0,sx=0,sy=0;
