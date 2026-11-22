@@ -1929,3 +1929,7 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-sky { justify-self
 body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { left: -2px !important; right: auto !important; border-radius: 20px 0 12px 0 !important; padding: 2px 10px 3px 9px !important; }
 body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { padding-top: 20px !important; }
 @media (min-width: 700px) { body #public-shell .dwl-panel .dwl-days > .dwl-day .dwl-holiday { left: -2px !important; right: auto !important; } }
+/* Location sheet: fixed height so the search box doesn't drop as results filter; search stays pinned on scroll */
+#public-shell .dwl-locsheet-panel { height: min(86vh, 760px); height: min(86dvh, 760px); }
+#public-shell .dwl-locsheet .public-locations { flex: 1 1 auto; min-height: 0; }
+#public-shell .dwl-locsheet .dwl-loc-search { position: sticky; top: 0; z-index: 2; padding-bottom: 6px; background: #071a2b; }
