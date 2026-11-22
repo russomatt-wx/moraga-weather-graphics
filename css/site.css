@@ -2194,3 +2194,4 @@ html[data-theme="light"] #public-shell .dwl-rs-marks i { background: rgba(30, 70
 #public-shell .dwl-now-row > span, #public-shell .dwl-now-sun > span { grid-template-rows: auto !important; }
 #public-shell .dwl-now-row .dwl-sun-ic { grid-row: 1 !important; }
 #public-shell .dwl-now-tiles b .dwl-cc-trend { position: static !important; font-style: normal; margin-left: 2px; font-size: .75em; color: #3fd8f5; }
+#public-shell .dwl-now-tiles small#public-gust { position: static !important; display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px !important; line-height: 1.1; margin-top: -1px; }
