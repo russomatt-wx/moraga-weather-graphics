@@ -35,6 +35,8 @@ jobs:
           node-version: '22'
       - name: Generate all location synopses
         if: steps.gate.outputs.run == 'true'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: node scripts/generate-weather-outlooks.js
       - name: Verify generated local Weather Outlook feed
         if: steps.gate.outputs.run == 'true'
