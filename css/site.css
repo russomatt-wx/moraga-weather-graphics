@@ -2415,3 +2415,10 @@ html[data-theme="light"] #public-shell .dwl-wear-chips b, html[data-theme="light
 #public-shell .dwl-wear-chips { flex-wrap: wrap !important; gap: 3px 10px !important; overflow: visible; }
 #public-shell .dwl-wear-chips li { font-size: 12px; }
 #public-shell .dwl-wear-chips b { font-weight: 600; }
+/* What to Wear: a little more presence (~10-12% taller) */
+#public-shell .dwl-wear-compact { padding: 13px 14px 14px !important; gap: 7px !important; }
+#public-shell .dwl-wear-compact .dwl-wear-main strong { font-size: 19.5px !important; }
+#public-shell .dwl-wear-body { gap: 10px !important; }
+#public-shell .dwl-wear-chips li { font-size: 13.5px !important; gap: 5px !important; }
+#public-shell .dwl-wear-chips svg { width: 18px !important; height: 18px !important; }
+#public-shell .dwl-wear-chips { gap: 4px 12px !important; }
