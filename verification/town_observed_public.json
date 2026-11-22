@@ -238,31 +238,28 @@
  "bernalheights": {
   "2026-11-15": {
    "high_f": 64.0,
-   "low_f": 52.3,
-   "samples": 3,
+   "low_f": 52.0,
+   "samples": 2,
    "stations": [
     "E5830",
-    "G6226",
     "G3010"
    ]
   },
   "2026-11-16": {
-   "high_f": 61.3,
-   "low_f": 47.7,
-   "samples": 3,
+   "high_f": 61.5,
+   "low_f": 47.0,
+   "samples": 2,
    "stations": [
     "E5830",
-    "G6226",
     "G3010"
    ]
   },
   "2026-11-17": {
-   "high_f": 62.7,
-   "low_f": 44.7,
-   "samples": 3,
+   "high_f": 63.5,
+   "low_f": 44.0,
+   "samples": 2,
    "stations": [
     "E5830",
-    "G6226",
     "G3010"
    ]
   },
@@ -1572,30 +1569,27 @@
  },
  "mission": {
   "2026-11-15": {
-   "high_f": 64.5,
+   "high_f": 65.0,
    "low_f": 53.0,
-   "samples": 2,
+   "samples": 1,
    "stations": [
-    "C5988",
-    "G6226"
+    "C5988"
    ]
   },
   "2026-11-16": {
-   "high_f": 60.5,
-   "low_f": 50.5,
-   "samples": 2,
+   "high_f": 60.0,
+   "low_f": 52.0,
+   "samples": 1,
    "stations": [
-    "C5988",
-    "G6226"
+    "C5988"
    ]
   },
   "2026-11-17": {
    "high_f": 61.0,
-   "low_f": 48.0,
-   "samples": 2,
+   "low_f": 50.0,
+   "samples": 1,
    "stations": [
-    "C5988",
-    "G6226"
+    "C5988"
    ]
   },
   "2026-11-18": {
@@ -2279,29 +2273,26 @@
  },
  "potrerohill": {
   "2026-11-15": {
-   "high_f": 63.5,
+   "high_f": 63.1,
    "low_f": 53.0,
-   "samples": 2,
+   "samples": 1,
    "stations": [
-    "G6226",
     "SFOC1"
    ]
   },
   "2026-11-16": {
-   "high_f": 60.4,
-   "low_f": 50.5,
-   "samples": 2,
+   "high_f": 59.9,
+   "low_f": 52.1,
+   "samples": 1,
    "stations": [
-    "G6226",
     "SFOC1"
    ]
   },
   "2026-11-17": {
-   "high_f": 60.1,
-   "low_f": 47.0,
-   "samples": 2,
+   "high_f": 59.1,
+   "low_f": 48.1,
+   "samples": 1,
    "stations": [
-    "G6226",
     "SFOC1"
    ]
   },
@@ -2918,30 +2909,27 @@
  },
  "soma": {
   "2026-11-15": {
-   "high_f": 63.5,
+   "high_f": 63.1,
    "low_f": 53.0,
-   "samples": 2,
+   "samples": 1,
    "stations": [
-    "SFOC1",
-    "G6226"
+    "SFOC1"
    ]
   },
   "2026-11-16": {
-   "high_f": 60.4,
-   "low_f": 50.5,
-   "samples": 2,
+   "high_f": 59.9,
+   "low_f": 52.1,
+   "samples": 1,
    "stations": [
-    "SFOC1",
-    "G6226"
+    "SFOC1"
    ]
   },
   "2026-11-17": {
-   "high_f": 60.1,
-   "low_f": 47.0,
-   "samples": 2,
+   "high_f": 59.1,
+   "low_f": 48.1,
+   "samples": 1,
    "stations": [
-    "SFOC1",
-    "G6226"
+    "SFOC1"
    ]
   },
   "2026-11-19": {
