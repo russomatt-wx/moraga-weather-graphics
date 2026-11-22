@@ -1843,8 +1843,6 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day:not(.is-holiday) { border-wid
 body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { border-width: 1.25px !important; box-shadow: 0 0 10px -4px var(--hol1), inset 0 0 18px color-mix(in srgb, var(--hol2) 12%, transparent) !important; }
 #public-shell .dwl-panel[aria-label="10-day forecast"] { border-width: 1px !important; border-color: rgba(70, 200, 255, .4) !important; box-shadow: 0 0 16px -8px rgba(40, 190, 255, .45) !important; }
 /* 36 hours: rain amount inside each card (replaces the separate bar row) */
-#public-shell .public-hourly .public-hour-qpf { display: none !important; }
-#public-shell .public-hourly { grid-template-rows: auto !important; }
 #public-shell .public-hour-rain { display: flex; flex-direction: column; align-items: center; gap: 1px; }
 #public-shell .public-hour-amt { display: inline-flex; align-items: center; gap: 3px; font-size: 12.5px; font-weight: 600; color: #bfe3f5; letter-spacing: 0; }
 #public-shell .public-hour-amt i { width: 7px; height: 10px; background: linear-gradient(180deg, #7fe6ff, #22c3f2);
@@ -1973,3 +1971,8 @@ body #public-shell .dwl-panel .dwl-days { gap: 10px !important; }
 #public-shell .public-hourly .public-hour-wind { padding-top: 4px !important; margin-top: auto !important; font-size: 13px !important; }
 #public-shell .public-hourly { padding: 2px 2px 2px !important; row-gap: 0 !important; }
 #public-shell .public-hourly.has-qpf { row-gap: 0 !important; }
+/* 36 hours: rain-amount bars back under the cards (compact) */
+#public-shell .public-hourly.has-qpf .public-hour-qpf { height: 30px !important; }
+#public-shell .public-hourly .public-hour-qpf { border-bottom: 0 !important; }
+#public-shell .public-hourly .public-hour-qpf i { background: linear-gradient(180deg, #7fe6ff, #22a8f0) !important; border-radius: 3px 3px 1px 1px; box-shadow: 0 0 8px -2px rgba(63, 216, 245, .7); }
+#public-shell .public-hourly .public-hour-qpf span { font-size: 10.5px !important; color: #9fd4ee !important; }
