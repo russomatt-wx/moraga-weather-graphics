@@ -25,7 +25,7 @@
    <div class="dwl-now-time"><span id="public-current-time">—</span><span id="public-push"></span><span class="dwl-cc-live" id="public-live" hidden>LIVE</span></div><p class="dwl-push-note" id="public-push-note" hidden></p>
    <div class="dwl-now-main"><div class="dwl-now-left"><strong class="dwl-now-temp" id="public-current-temp">—</strong><span class="dwl-now-cond" id="public-current-condition">Loading…</span><span class="dwl-now-hl" id="public-high-low">H: —  L: —</span></div><div class="dwl-now-icon" id="public-hero-icon" aria-hidden="true"></div></div>
    <div class="dwl-now-tiles"><div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c3.3 4.2 5.5 7.3 5.5 10a5.5 5.5 0 0 1-11 0c0-2.7 2.2-5.8 5.5-10Z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span>Humidity</span><b id="public-humidity">—</b></div><div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 4.5a2 2 0 0 1 4 0v9.3a4 4 0 1 1-4 0Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="9.5" cy="17.2" r="1.7" fill="currentColor"/><path d="M9.5 9v7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18 7.2c1.6 2.2 2.6 3.6 2.6 4.8a2.6 2.6 0 0 1-5.2 0c0-1.2 1-2.6 2.6-4.8Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span>Dew Point</span><b id="public-dew">—</b></div><div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8h10a2.6 2.6 0 1 0-2.6-2.6M3 12.5h15a2.6 2.6 0 1 1-2.6 2.6M3 17h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Wind</span><b id="public-wind">—</b><small id="public-gust"></small></div><div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.2 17.5a8.5 8.5 0 1 1 15.6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 14.5l3.6-4.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="14.5" r="1.5" fill="currentColor"/><path d="M7 9.6l.8.8M12 6.5v1.2M16.9 9.6l-.8.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>Pressure</span><b><span id="public-pressure">—</span><small class="dwl-now-unit">inHg</small><i class="dwl-cc-trend" id="public-pressure-trend"></i></b></div></div>
-   <div class="dwl-now-row"><div class="dwl-now-sun" id="public-sun" hidden></div><span class="dwl-now-rain"><svg class="dwl-icon dwl-sun-ic dwl-line-ic" viewBox="0 0 24 24" aria-hidden="true" style="color:#45d4f5"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15.2a4 4 0 0 1-.5-7.96A5.6 5.6 0 0 1 17.2 8a3.6 3.6 0 0 1 .3 7.2"/><path d="M9 17.6v3M12.2 18.4v3.1M15.4 17.6v3"/></g></svg><small>Expected</small><b id="public-rain">—</b></span></div>
+   <div class="dwl-now-row"><div class="dwl-now-sun" id="public-sun" hidden></div><span class="dwl-now-rain"><svg class="dwl-icon dwl-sun-ic dwl-line-ic" viewBox="0 0 24 24" aria-hidden="true" style="color:#45d4f5"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15.2a4 4 0 0 1-.5-7.96A5.6 5.6 0 0 1 17.2 8a3.6 3.6 0 0 1 .3 7.2"/><path d="M9 17.6v3M12.2 18.4v3.1M15.4 17.6v3"/></g></svg><small>Rain so far today</small><b id="public-rain">—</b></span></div>
   </div>
   <div class="public-note" id="public-summary" hidden></div>
   <div class="public-heading" id="public-city-heading" hidden>Moraga</div><div class="public-sub" id="public-location-sub" hidden></div>
@@ -268,7 +268,7 @@
   observedToday={city:chosen,date};
   set('public-today-high',fmt(hi));set('public-today-low',fmt(lo));el('public-sofar').hidden=false;
   el('public-today-high').title='Observed high so far';el('public-today-low').title='Observed low so far';
-  set('public-today-rain',Number.isFinite(rain)?rain.toFixed(2)+'″':'—');
+  set('public-today-rain',Number.isFinite(rain)?rain.toFixed(2)+'″':'—');set('public-rain',Number.isFinite(rain)?rain.toFixed(2)+'″':'—'); // card: rain fallen so far today
  }
  function showToday(d){
   setHL(fmt(d.temperature_2m_max[0]),fmt(d.temperature_2m_min[0]));
@@ -344,7 +344,7 @@
   DWL.markHolidays(host);
   DWL.collapseDays(host,'local');
   // Current-conditions rainfall = today's forecast amount, exactly as shown on the 10-day Today row.
-  const todayAmt=host.querySelector('.dwl-day.is-today .dwl-day-amount')?.textContent;if(todayAmt)set('public-rain',todayAmt);
+  const todayAmt=host.querySelector('.dwl-day.is-today .dwl-day-amount')?.textContent;
   applyBarsToday();
   // Keep the 36-hour temperatures on the same highs / lows as these rows.
   if(lastHourly&&lastHourly.city===city)renderHourly(lastHourly.hourly,lastHourly.currentTime);
@@ -398,7 +398,7 @@
  }
  // Latest station reading and live sky, used to anchor the first hours of the strip to reality.
  let lastObs=null,lastSky=null,lastHourly=null,barsToday=null;
- function applyBarsToday(){if(!barsToday||barsToday.city!==city)return;const a=document.querySelector('#public-days .dwl-day.is-today .dwl-day-amount');if(a)a.textContent=barsToday.text;set('public-rain',barsToday.text);}
+ function applyBarsToday(){if(!barsToday||barsToday.city!==city)return;const a=document.querySelector('#public-days .dwl-day.is-today .dwl-day-amount');if(a)a.textContent=barsToday.text;}
  // Sky words for 'now' from the hourly series already on screen (published blend), when live sky is unavailable.
  function publishedSky(chosen){
   const h=lastHourly&&lastHourly.city===chosen?lastHourly.hourly:null;if(!h?.time)return '';
