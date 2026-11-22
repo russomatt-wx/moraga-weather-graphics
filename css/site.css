@@ -1933,3 +1933,7 @@ body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { padding-top: 20p
 #public-shell .dwl-locsheet-panel { height: min(86vh, 760px); height: min(86dvh, 760px); }
 #public-shell .dwl-locsheet .public-locations { flex: 1 1 auto; min-height: 0; }
 #public-shell .dwl-locsheet .dwl-loc-search { position: sticky; top: 0; z-index: 2; padding-bottom: 6px; background: #071a2b; }
+/* 10-day rows: a little taller */
+body #public-shell .dwl-panel .dwl-days > .dwl-day { min-height: 70px !important; padding-top: 10px !important; padding-bottom: 10px !important; }
+body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { padding-top: 22px !important; }
+body #public-shell .dwl-panel .dwl-days { gap: 10px !important; }
