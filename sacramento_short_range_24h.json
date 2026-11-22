@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-22T03:58:38.070620+00:00",
+  "generated_utc": "2026-11-22T04:00:25.443871+00:00",
   "location": "sacramento",
   "latitude": 38.575,
   "longitude": -121.446,
@@ -12,7 +12,6 @@
   "failed_sources": {},
   "hourly": {
     "time": [
-      "2026-11-21T19:00",
       "2026-11-21T20:00",
       "2026-11-21T21:00",
       "2026-11-21T22:00",
@@ -35,10 +34,10 @@
       "2026-11-22T15:00",
       "2026-11-22T16:00",
       "2026-11-22T17:00",
-      "2026-11-22T18:00"
+      "2026-11-22T18:00",
+      "2026-11-22T19:00"
     ],
     "temperature_2m": [
-      49.03,
       48.725,
       48.675,
       48.57,
@@ -61,10 +60,10 @@
       51.81,
       51.385,
       49.79,
-      48.42
+      48.42,
+      46.905
     ],
     "precipitation": [
-      0.003,
       0.004,
       0.001,
       0.0,
@@ -87,10 +86,10 @@
       0.0,
       0.0,
       0.0,
+      0.0,
       0.0
     ],
     "precipitation_probability": [
-      15.733,
       25.267,
       30.267,
       33.133,
@@ -113,7 +112,8 @@
       8.267,
       7.0,
       5.467,
-      4.733
+      4.733,
+      3.733
     ],
     "weather_code": [
       3,
@@ -139,10 +139,9 @@
       3,
       3,
       3,
-      3
+      2
     ],
     "cloud_cover": [
-      100.0,
       100.0,
       100.0,
       100.0,
@@ -165,7 +164,8 @@
       100.0,
       99.4,
       95.1,
-      92.7
+      78.7,
+      69.0
     ]
   },
   "method": "Weighted HRRR/RRFS/ECMWF/GFS blend. Sky icon from 3-hour smoothed blended cloud cover; rain icon from blended rain chance; thunder/fog only when a weighted majority of models agree."

@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-22T03:58:38.068098+00:00",
+  "generated_utc": "2026-11-22T04:00:25.441792+00:00",
   "location": "greenbrook",
   "latitude": 37.799,
   "longitude": -121.97,
@@ -12,7 +12,6 @@
   "failed_sources": {},
   "hourly": {
     "time": [
-      "2026-11-21T19:00",
       "2026-11-21T20:00",
       "2026-11-21T21:00",
       "2026-11-21T22:00",
@@ -35,10 +34,10 @@
       "2026-11-22T15:00",
       "2026-11-22T16:00",
       "2026-11-22T17:00",
-      "2026-11-22T18:00"
+      "2026-11-22T18:00",
+      "2026-11-22T19:00"
     ],
     "temperature_2m": [
-      48.02,
       47.94,
       48.535,
       48.695,
@@ -61,10 +60,10 @@
       51.575,
       50.605,
       48.52,
-      46.865
+      46.865,
+      45.405
     ],
     "precipitation": [
-      0.006,
       0.002,
       0.003,
       0.002,
@@ -87,10 +86,10 @@
       0.0,
       0.0,
       0.0,
+      0.0,
       0.0
     ],
     "precipitation_probability": [
-      20.933,
       28.0,
       28.667,
       29.867,
@@ -113,7 +112,8 @@
       3.733,
       3.867,
       3.2,
-      2.0
+      2.0,
+      1.067
     ],
     "weather_code": [
       3,
@@ -138,11 +138,10 @@
       3,
       3,
       3,
-      3,
-      2
+      2,
+      1
     ],
     "cloud_cover": [
-      100.0,
       100.0,
       100.0,
       100.0,
@@ -165,7 +164,8 @@
       99.9,
       96.2,
       78.1,
-      67.3
+      53.2,
+      35.3
     ]
   },
   "method": "Weighted HRRR/RRFS/ECMWF/GFS blend. Sky icon from 3-hour smoothed blended cloud cover; rain icon from blended rain chance; thunder/fog only when a weighted majority of models agree."
