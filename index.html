@@ -2888,8 +2888,22 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
  const octant=(dx,dy)=>Math.round(((Math.atan2(dx,-dy)*180/Math.PI)+360)%360/45)%8;
  const dirOf=(dx,dy)=>DIRS[octant(dx,dy)];
  const LEVEL=['','Light','Moderate','Heavy'];
- function nearTown(la,lo){let best=null,bd=1e9;(window.DWL_LOCATIONS||[]).forEach(l=>{const d=Math.hypot(l.lat-la,(l.lon-lo)*Math.cos(la*Math.PI/180))*69;if(d<bd){bd=d;best=l;}});
-  return best&&bd<=6?(best.area&&!/County|Valley$/.test(best.area)?best.area:best.neighborhood):'';}
+ // Gazetteer for describing where showers are (towns + a few landmarks across the Bay Area and NorCal).
+ const PLACES=('San Francisco,37.775,-122.419;Oakland,37.804,-122.271;Berkeley,37.872,-122.273;Richmond,37.936,-122.348;San Rafael,37.974,-122.531;Novato,38.107,-122.570;Petaluma,38.232,-122.637;Santa Rosa,38.440,-122.714;Sonoma,38.292,-122.458;Napa,38.297,-122.287;Vallejo,38.104,-122.256;Benicia,38.049,-122.159;Fairfield,38.249,-122.040;Vacaville,38.357,-121.988;Dixon,38.445,-121.823;Davis,38.545,-121.741;Woodland,38.679,-121.773;Sacramento,38.582,-121.494;Elk Grove,38.409,-121.372;Roseville,38.752,-121.288;Folsom,38.678,-121.176;Lodi,38.130,-121.272;Stockton,37.958,-121.291;Tracy,37.740,-121.425;Manteca,37.797,-121.216;Modesto,37.639,-120.997;Rio Vista,38.156,-121.691;Antioch,38.005,-121.806;Pittsburg,38.028,-121.885;Brentwood,37.932,-121.696;Discovery Bay,37.909,-121.600;Oakley,37.997,-121.712;Concord,37.978,-122.031;Martinez,38.019,-122.134;Pleasant Hill,37.948,-122.061;Walnut Creek,37.910,-122.065;Lafayette,37.886,-122.118;Orinda,37.877,-122.180;Moraga,37.835,-122.130;Danville,37.822,-121.999;San Ramon,37.780,-121.978;Dublin,37.702,-121.936;Pleasanton,37.662,-121.875;Livermore,37.682,-121.768;Sunol,37.594,-121.888;Clayton,37.941,-121.936;Mount Diablo,37.882,-121.914;Hercules,38.017,-122.289;Pinole,38.004,-122.299;El Cerrito,37.916,-122.311;Albany,37.887,-122.298;Alameda,37.765,-122.242;San Leandro,37.725,-122.156;Castro Valley,37.694,-122.086;Hayward,37.669,-122.081;Union City,37.596,-122.044;Fremont,37.548,-121.989;Newark,37.530,-122.040;Milpitas,37.428,-121.907;San Jose,37.339,-121.895;Santa Clara,37.354,-121.955;Sunnyvale,37.369,-122.036;Mountain View,37.386,-122.084;Palo Alto,37.442,-122.143;Menlo Park,37.453,-122.182;Redwood City,37.485,-122.236;San Carlos,37.507,-122.260;San Mateo,37.563,-122.326;Burlingame,37.584,-122.366;San Bruno,37.630,-122.411;South San Francisco,37.655,-122.408;Daly City,37.688,-122.470;Pacifica,37.614,-122.487;Half Moon Bay,37.464,-122.429;Pescadero,37.255,-122.383;Woodside,37.430,-122.254;Los Gatos,37.227,-121.975;Saratoga,37.264,-122.023;Cupertino,37.323,-122.032;Morgan Hill,37.130,-121.654;Gilroy,37.006,-121.568;Santa Cruz,36.974,-122.031;Scotts Valley,37.051,-122.015;Watsonville,36.910,-121.757;Boulder Creek,37.126,-122.122;Sausalito,37.859,-122.485;Mill Valley,37.906,-122.545;Tiburon,37.874,-122.457;Larkspur,37.934,-122.535;Fairfax,37.987,-122.589;Bolinas,37.909,-122.686;Stinson Beach,37.901,-122.644;Point Reyes Station,38.069,-122.807;Bodega Bay,38.333,-123.048;Sebastopol,38.402,-122.824;Healdsburg,38.611,-122.869;Calistoga,38.579,-122.580;St. Helena,38.505,-122.470;American Canyon,38.175,-122.261;Suisun City,38.238,-122.040;Byron,37.867,-121.638;Mountain House,37.783,-121.543;Patterson,37.472,-121.130;Hollister,36.853,-121.402;Point Reyes,38.000,-122.950;Farallon Islands,37.698,-123.003;Mount Hamilton,37.341,-121.643').split(';').map(x=>{const [n,a,b]=x.split(',');return [n,+a,+b];});
+ const COMPASS16=['north','north','northeast','east','east','east','southeast','south','south','south','southwest','west','west','west','northwest','north'];
+ // Always returns a reference: "near X", "<dir> of X", or "off the coast near X".
+ function nearTown(la,lo){
+  const dist=(a,b)=>Math.hypot(a-la,(b-lo)*Math.cos(la*Math.PI/180))*69;let best=null,bd=1e9;
+  for(const [n,a,b] of PLACES){const d=dist(a,b);if(d<bd){bd=d;best=[n,a,b];}}
+  // A neighbourhood name only when the shower is right over it (within 2 mi); otherwise use the city/town.
+  for(const l of (window.DWL_LOCATIONS||[])){const d=dist(l.lat,l.lon);if(d<=2&&d<bd){bd=d;best=[l.short,l.lat,l.lon];}}
+  if(!best)return '';
+  if(bd<=4)return 'near '+best[0];
+  const ang=(Math.atan2((lo-best[2])*Math.cos(la*Math.PI/180),la-best[1])*180/Math.PI+360)%360,dir=COMPASS16[Math.round(ang/22.5)%16];
+  // West of the coastline (roughly: west of the westernmost coastal towns at that latitude) = offshore.
+  if(lo<-122.52&&la<38.0&&la>37.1&&dir.includes('west'))return 'off the coast near '+best[0];
+  return dir+' of '+best[0];
+ }
  async function radarTrack(lat,lon){
   const [now,old]=await Promise.all([radarGrid(0,lat,lon),radarGrid(20,lat,lon)]);
   const {W,km,cx,cy}=now,G=now.grid,A=old.grid,R=1.3; // R: "over you" radius in blocks (~2.5 km)
@@ -2944,7 +2958,7 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
     // Timeline: 12 five-minute slots for the pin
     if(R.timeline.some(v=>v>0)){tlBar.innerHTML=R.timeline.map(v=>'<i class="lv'+v+'" title="'+(LEVEL[v]||'Dry')+'"></i>').join('');tl.hidden=false;}else tl.hidden=true;
     // Nearby showers (up to 3, closest / soonest first)
-    const lines=R.cells.slice(0,3).map(c=>{const where=Math.round(c.distMi)<1?'overhead':(c.distMi<1.5?'1 mi':Math.round(c.distMi)+' mi')+' '+c.bearing+(c.town?' near '+c.town:'');
+    const lines=R.cells.slice(0,3).map(c=>{const where=Math.round(c.distMi)<1?'overhead':(c.distMi<1.5?'1 mi':Math.round(c.distMi)+' mi')+' '+c.bearing+(c.town?' · '+c.town:'');
      const st=c.first===0?'Over you now':c.first!==null?'Arriving ~'+roundAt(c.first):c.closing&&c.cpaMi<10?'Passing '+Math.max(1,Math.round(c.cpaMi))+' mi '+SH[DIRS.indexOf(c.passSide)]+' of you ~'+roundAt(c.cpaT):!R.moving?'Not moving much':'Moving away';
      const lab=c.typ>=c.peak?LEVEL[c.peak]:LEVEL[c.typ]+'–'+lvl(c.peak);return '<li><i class="lv'+c.peak+'"></i><span><b>'+lab+'</b> · '+where+'</span><em>'+st+'</em></li>';});
     cellsEl.innerHTML=lines.join('')+(R.moving&&R.cells.length?'<li class="dwl-rc-motion">Showers are '+mv+'.</li>':'');cellsEl.hidden=!lines.length;
