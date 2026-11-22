@@ -2298,3 +2298,6 @@ html[data-theme="black"] body #public-shell .dwl-panel .dwl-days > .dwl-day:not(
 html[data-theme="light"] body #public-shell .dwl-panel .dwl-days > .dwl-day:not(.is-holiday) { background: #fff padding-box, linear-gradient(110deg, rgba(14, 160, 200, .45), rgba(59, 130, 246, .3)) border-box !important; }
 @media (min-width: 700px) { body #public-shell .dwl-panel .dwl-days > .dwl-day, html[data-theme] body #public-shell .dwl-panel .dwl-days > .dwl-day:not(.is-holiday) { height: 72px !important; } body #public-shell .dwl-panel .dwl-days > .dwl-day.is-holiday { height: 80px !important; } }
 body #public-shell .dwl-panel .dwl-days > .dwl-day.is-today:not(.is-holiday) { height: 68px !important; }
+/* Multi-Model Blend chip matches the Adaptive Intelligence chip size */
+#public-shell .dwl-panel[aria-label="Next 36 hours"] .dwl-panel-h .dwl-ai-chip { font-size: 12px !important; padding: 3px 9px 3px 7px !important; }
+#public-shell .dwl-panel[aria-label="Next 36 hours"] .dwl-panel-h .dwl-ai-chip svg { width: 18px !important; height: 18px !important; }
