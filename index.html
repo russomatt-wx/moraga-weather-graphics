@@ -739,14 +739,16 @@ function nwsWeatherOutlook(afd,d,h){
  const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  async function updateAlerts(chosen,request){
   const host=el('public-alerts');
+  // Only the newest check may draw (overlapping checks on resume / timer / refresh used to double the alerts).
+  const myCheck=(updateAlerts.seq=(updateAlerts.seq||0)+1);
   // Keep any alert the reader has opened open across the 5-minute re-checks.
-  const opened=new Set([...host.querySelectorAll('details[open] .dwl-alert-title')].map(x=>x.textContent));host.replaceChildren();
+  const opened=new Set([...host.querySelectorAll('details[open] .dwl-alert-title')].map(x=>x.textContent));
   const [lat,lon]=coords[chosen];
   const status=(text,cls)=>{const s=document.createElement('div');s.className='dwl-alert-status'+(cls?' '+cls:'');s.textContent=text;host.appendChild(s);};
   const when=t=>new Date(t).toLocaleString('en-US',{timeZone:'America/Los_Angeles',weekday:'short',hour:'numeric',minute:'2-digit'}).replace(':00','');
   const level=e=>/warning|emergency/i.test(e)?'warning':/watch/i.test(e)?'watch':/advisory/i.test(e)?'advisory':'statement';
   try{
-   const features=await DWL.fetchAlerts(lat,lon);if(request!==revision)return;
+   const features=await DWL.fetchAlerts(lat,lon);if(request!==revision||myCheck!==updateAlerts.seq)return;host.replaceChildren();
    const items=features.filter(x=>x.properties?.event);
    // Cards only for alerts covering this town (plus nearby warnings); other county alerts go on one quiet line.
    // Repeats of the same alert type (e.g. two nights of Cold Weather Advisory) are merged.
@@ -796,7 +798,7 @@ function nwsWeatherOutlook(afd,d,h){
     card.appendChild(body);host.appendChild(card);
    }
    nearbyLine();
-  }catch(e){if(request!==revision)return;status('NWS alerts could not be checked. See weather.gov for official warnings.','is-error');}
+  }catch(e){if(request!==revision||myCheck!==updateAlerts.seq)return;host.replaceChildren();status('NWS alerts could not be checked. See weather.gov for official warnings.','is-error');}
  }
  // Published (same-origin) forecast: shown immediately on every refresh so the page never sits
  // empty while the live Open-Meteo request is slow, and kept as the fallback if it fails.
