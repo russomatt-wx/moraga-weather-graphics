@@ -2202,3 +2202,9 @@ html[data-theme] #public-shell .dwl-now-sun > span + span, html[data-theme] #pub
 #public-shell .dwl-now-tiles small#public-gust { display: inline !important; margin: 0 0 0 4px !important; font-size: .62em !important; font-weight: 700; color: #9fd4ee !important; overflow: visible; }
 #public-shell .dwl-now-tiles b > span { font-size: inherit !important; color: inherit !important; }
 html[data-theme="light"] #public-shell .dwl-now-tiles small#public-gust { color: #2f7aa8 !important; }
+/* Weather illustrations: brighter, crisper, more colour everywhere (not just the hero icon) */
+.dwl-icon { filter: brightness(1.16) contrast(1.14) saturate(1.3) drop-shadow(0 0 6px rgba(255, 255, 255, .14)) drop-shadow(0 3px 5px rgba(0, 0, 0, .35)) !important; }
+#public-shell .dwl-now-icon .dwl-icon { filter: brightness(1.2) contrast(1.14) saturate(1.3) drop-shadow(0 0 14px rgba(255, 255, 255, .22)) drop-shadow(0 6px 12px rgba(0, 0, 0, .35)) !important; }
+#public-shell .dwl-now-row .dwl-line-ic, #public-shell .dwl-sun-ic.dwl-line-ic { filter: drop-shadow(0 0 5px color-mix(in srgb, currentColor 45%, transparent)) !important; }
+html[data-theme="light"] .dwl-icon { filter: brightness(1.04) contrast(1.12) saturate(1.35) drop-shadow(0 2px 4px rgba(20, 60, 100, .3)) !important; }
+html[data-theme="light"] #public-shell .dwl-now-icon .dwl-icon { filter: contrast(1.1) saturate(1.35) drop-shadow(0 4px 10px rgba(20, 60, 100, .3)) !important; }
