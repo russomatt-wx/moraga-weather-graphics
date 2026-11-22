@@ -2422,3 +2422,6 @@ html[data-theme="light"] #public-shell .dwl-wear-chips b, html[data-theme="light
 #public-shell .dwl-wear-chips li { font-size: 13.5px !important; gap: 5px !important; }
 #public-shell .dwl-wear-chips svg { width: 18px !important; height: 18px !important; }
 #public-shell .dwl-wear-chips { gap: 4px 12px !important; }
+#public-shell .dwl-wear-head h2 { font-size: 21px !important; }
+#public-shell .dwl-wear-head > svg { width: 22px !important; height: 22px !important; }
+@media (max-width: 380px) { #public-shell .dwl-wear-head h2 { font-size: 19px !important; } #public-shell .dwl-wear-compact .dwl-wear-sub { display: none; } }
