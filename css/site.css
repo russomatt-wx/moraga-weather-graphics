@@ -2195,3 +2195,7 @@ html[data-theme="light"] #public-shell .dwl-rs-marks i { background: rgba(30, 70
 #public-shell .dwl-now-row .dwl-sun-ic { grid-row: 1 !important; }
 #public-shell .dwl-now-tiles b .dwl-cc-trend { position: static !important; font-style: normal; margin-left: 2px; font-size: .75em; color: #3fd8f5; }
 #public-shell .dwl-now-tiles small#public-gust { position: static !important; display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px !important; line-height: 1.1; margin-top: -1px; }
+/* Current conditions: no dividers between tiles or in the sun/rain row */
+#public-shell .dwl-now-tiles > div + div, #public-shell .dwl-now-row > span + span, #public-shell .dwl-now-sun > span + span,
+#public-shell .dwl-now-sun:not([hidden]) + span, html[data-theme] #public-shell .dwl-now-tiles > div + div, html[data-theme] #public-shell .dwl-now-row > span + span,
+html[data-theme] #public-shell .dwl-now-sun > span + span, html[data-theme] #public-shell .dwl-now-sun:not([hidden]) + span { border-left: 0 !important; }
