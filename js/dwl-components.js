@@ -55,7 +55,7 @@
 
   // WMO weather code -> transparent illustrated icon (weather-icons/v5/*.png).
   var ICON_LABEL = {
-    mostlyCloudy: 'Mostly cloudy', sun: 'Sunny', mostlySun: 'Mostly sunny', partly: 'Partly cloudy', overcast: 'Cloudy', fog: 'Fog',
+    sun: 'Sunny', mostlySun: 'Mostly sunny', partly: 'Partly cloudy', overcast: 'Cloudy', fog: 'Fog',
     storm: 'Thunderstorms', showersSun: 'Showers', showers: 'Showers', rain: 'Rain', heavyRain: 'Heavy rain',
     drizzle: 'Drizzle', cloudy: 'Mostly cloudy', slightRain: 'Light rain', chance: 'Chance of rain', clearing: 'Clearing', snow: 'Snow'
   };
@@ -63,7 +63,7 @@
     if (code === 0) return 'sun';
     if (code === 1) return 'mostlySun';
     if (code === 2) return 'partly';
-    if (code === 2.5) return 'mostlyCloudy'; // 'Mostly cloudy' (sun peeking out)
+    if (code === 2.5) return 'cloudy'; // 'Mostly cloudy' text from the observed sky
     if (code === 3) return 'overcast';
     if (code === 45 || code === 48) return 'fog';
     if (code >= 95) return 'storm';
@@ -75,8 +75,8 @@
     return 'mostlySun';
   }
   // Icons containing a sun have night versions (moon) in weather-icons/v5/night/.
-  var NIGHT = { mostlyCloudy: 1, sun: 1, mostlySun: 1, partly: 1, clearing: 1, cloudy: 1, showersSun: 1, slightRain: 1, chance: 1, showers: 1, storm: 1, snow: 1 };
-  var NIGHT_LABEL = { mostlyCloudy: 'Mostly cloudy', sun: 'Clear', mostlySun: 'Mostly clear', partly: 'Partly cloudy', clearing: 'Clearing', showersSun: 'Showers', slightRain: 'Showers', cloudy: 'Mostly cloudy', chance: 'Chance of rain', showers: 'Showers', storm: 'Thunderstorms', snow: 'Snow' };
+  var NIGHT = { sun: 1, mostlySun: 1, partly: 1, clearing: 1, cloudy: 1, showersSun: 1, slightRain: 1, chance: 1, showers: 1, storm: 1, snow: 1 };
+  var NIGHT_LABEL = { sun: 'Clear', mostlySun: 'Mostly clear', partly: 'Partly cloudy', clearing: 'Clearing', showersSun: 'Showers', slightRain: 'Showers', cloudy: 'Mostly cloudy', chance: 'Chance of rain', showers: 'Showers', storm: 'Thunderstorms', snow: 'Snow' };
   function icon(code, extraClass, night) {
     var name = iconName(code), isNight = !!night && NIGHT[name];
     return '<img class="dwl-icon' + (extraClass ? ' ' + extraClass : '') + '" src="weather-icons/v5/' + (isNight ? 'night/' : '') + name +
