@@ -95,6 +95,8 @@ jobs:
           node-version: '22'
       - name: Recover stale local Weather Outlook synopses
         if: steps.outlook_freshness.outputs.stale == 'true'
+        # A broken outlook must never block the rest of the site's data from publishing.
+        continue-on-error: true
         run: node scripts/generate-weather-outlooks.js
       - name: Recover missed 10-day forecast schedule
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push'
