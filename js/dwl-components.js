@@ -80,7 +80,7 @@
   function icon(code, extraClass, night) {
     var name = iconName(code), isNight = !!night && NIGHT[name];
     return '<img class="dwl-icon' + (extraClass ? ' ' + extraClass : '') + '" src="weather-icons/v5/' + (isNight ? 'night/' : '') + name +
-      '.png?v=7" alt="' + (isNight ? NIGHT_LABEL[name] : ICON_LABEL[name]) + '" width="72" height="54"' +
+      '.png?v=8" alt="' + (isNight ? NIGHT_LABEL[name] : ICON_LABEL[name]) + '" width="72" height="54"' +
       (isNight ? ' onerror="this.onerror=null;this.src=this.src.replace(\'/night/\',\'/\')"' : '') + '>';
   }
 
