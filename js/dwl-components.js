@@ -101,7 +101,10 @@
   function dayCard(o) {
     var hi = tempColor(o.high), lo = tempColor(o.low);
     var tag = o.tag || 'article';
-    var rainLine = (o.pop || o.amount)
+    // No rain forecast (0.00″ and under a 20% chance): drop the rain line so the condition sits centred.
+    var popN = parseFloat(o.pop), amtN = parseFloat(String(o.amount || '').replace(/[^0-9.]/g, ''));
+    var dry = (!o.amount || (/^0?\.00/.test(String(o.amount).trim()) && amtN === 0)) && !(popN >= 20);
+    var rainLine = !dry && (o.pop || o.amount)
       ? '<div class="dwl-day-rain"><i class="dwl-day-drop" aria-hidden="true"></i>' + (o.pop ? '<span>' + esc(o.pop) + '</span>' : '') +
         (o.pop && o.amount ? '<span class="dwl-day-dot" aria-hidden="true">·</span>' : '') +
         (o.amount ? '<span class="dwl-day-amount">' + esc(o.amount) + '</span>' : '') + '</div>'
