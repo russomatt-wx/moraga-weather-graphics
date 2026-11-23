@@ -840,8 +840,10 @@ main .card .chart-viewport img { background: transparent; border-radius: 12px; }
 .public-outlook { padding-top: 16px !important; padding-bottom: 14px !important; }
 .public-outlook-title { margin-bottom: 8px; }
 .public-outlook-headline { margin-bottom: 8px; font-size: clamp(19px, 4.6vw, 24px); }
-.public-outlook.is-clamped p#public-discussion { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.public-outlook.is-clamped .public-outlook-source { display: none; }
+/* Full 100–150-word editorial synopsis remains visible; never visually truncate the story. */
+.public-outlook.is-clamped p#public-discussion { display: block; -webkit-line-clamp: unset; overflow: visible; }
+.public-outlook.is-clamped .public-outlook-source { display: block; }
+.public-outlook-more { display: none !important; }
 .public-outlook-more { appearance: none; border: 0; background: none; padding: 8px 0 0; cursor: pointer; font: 600 14.5px/1.2 var(--font-ui); color: var(--accent); }
 #public-shell button.public-outlook-more { border: 0 !important; background: none !important; box-shadow: none !important; padding: 6px 0 0 !important; min-height: 0 !important; width: auto !important; font: 600 14.5px/1.2 var(--font-ui) !important; color: var(--accent) !important; }
 #public-shell .public-hourly + .public-outlook { margin-top: 26px; }

@@ -2272,10 +2272,11 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  }catch(e){note.textContent='Rainfall data temporarily unavailable; showing the latest published chart.'}
 })();
 </script><script>
-// Weather outlook: show the headline and first lines; "Read more" opens the rest.
+// Weather outlook: display the complete 100–150-word editorial synopsis.
 (function(){
  const sec=document.querySelector('#public-shell .public-outlook'),btn=document.getElementById('public-outlook-more');if(!sec||!btn)return;
- btn.addEventListener('click',()=>{const open=sec.classList.toggle('is-clamped')===false;btn.setAttribute('aria-expanded',String(open));btn.textContent=open?'Show less ▴':'Read more ▾';});
+ sec.classList.remove('is-clamped');
+ if(btn)btn.hidden=true;
 })();
 </script><script>
 // Estimate test (opt-in: open the site once with ?estimate=1; ?estimate=0 turns it off).

@@ -56,10 +56,15 @@ jobs:
           if actual != expected:
               raise SystemExit(f'Incomplete feed: {len(actual)}/{len(expected)} locations; missing={sorted(expected-actual)}')
           temperature=re.compile(r'\b\d{2,3}\s*°\s*F?\b',re.I)
+          word_count=lambda text: len(text.split())
           offenders=[key for key,item in feed['outlooks'].items() if temperature.search(item.get('headline','')+' '+item.get('text',''))]
           if offenders:
               raise SystemExit('Explicit temperatures remain in synopses: '+', '.join(offenders))
-          print(f'Verified temperature-free synopses for all {len(actual)} locations')
+          short=[key for key,item in feed['outlooks'].items() if word_count(item.get('text',''))<100]
+          long=[key for key,item in feed['outlooks'].items() if word_count(item.get('text',''))>150]
+          if short or long:
+              raise SystemExit('Synopsis word-count validation failed (100–150 required). Short: '+', '.join(short)+'; long: '+', '.join(long))
+          print(f'Verified temperature-free, 100–150-word synopses for all {len(actual)} locations')
           PY
       - name: Commit refreshed outlook feed
         if: steps.gate.outputs.run == 'true'
