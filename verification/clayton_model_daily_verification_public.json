@@ -1,37 +1,37 @@
 {
- "generated_utc": "2026-11-22T19:03:05.552914+00:00",
+ "generated_utc": "2026-11-23T01:57:18.522492+00:00",
  "status": "verified_daily_extremes",
  "town": "clayton",
  "station": "public stations",
  "verified_against": "public_stations",
  "model_scores": {
   "ecmwf": {
-   "verified_days": 6,
-   "high_mae_f": 1.95,
-   "low_mae_f": 4.92,
-   "high_bias_f": -1.95,
-   "low_bias_f": 4.92
+   "verified_days": 7,
+   "high_mae_f": 1.7,
+   "low_mae_f": 4.7,
+   "high_bias_f": -1.7,
+   "low_bias_f": 4.7
   },
   "gem": {
-   "verified_days": 6,
-   "high_mae_f": 3.63,
-   "low_mae_f": 1.15,
-   "high_bias_f": -3.63,
-   "low_bias_f": -0.08
+   "verified_days": 7,
+   "high_mae_f": 4.06,
+   "low_mae_f": 1.1,
+   "high_bias_f": -4.06,
+   "low_bias_f": -0.19
   },
   "gfs": {
-   "verified_days": 6,
-   "high_mae_f": 3.52,
-   "low_mae_f": 3.07,
-   "high_bias_f": -3.52,
-   "low_bias_f": 3.07
+   "verified_days": 7,
+   "high_mae_f": 3.37,
+   "low_mae_f": 3.27,
+   "high_bias_f": -2.66,
+   "low_bias_f": 3.27
   },
   "icon": {
-   "verified_days": 6,
-   "high_mae_f": 2.55,
-   "low_mae_f": 2.62,
-   "high_bias_f": -2.55,
-   "low_bias_f": 2.62
+   "verified_days": 7,
+   "high_mae_f": 2.39,
+   "low_mae_f": 2.73,
+   "high_bias_f": -2.39,
+   "low_bias_f": 2.73
   }
  },
  "calibration": {},
@@ -276,6 +276,46 @@
    "observed_low_f": 39.3,
    "high_error_f": -0.4,
    "low_error_f": 3.8,
+   "observation_count": 3
+  },
+  {
+   "model": "ecmwf",
+   "valid_local_date": "2026-11-21",
+   "issued_utc": "previous_runs_day1",
+   "observed_high_f": 53.3,
+   "observed_low_f": 35.3,
+   "high_error_f": -0.2,
+   "low_error_f": 3.4,
+   "observation_count": 3
+  },
+  {
+   "model": "gem",
+   "valid_local_date": "2026-11-21",
+   "issued_utc": "previous_runs_day1",
+   "observed_high_f": 53.3,
+   "observed_low_f": 35.3,
+   "high_error_f": -6.6,
+   "low_error_f": -0.8,
+   "observation_count": 3
+  },
+  {
+   "model": "gfs",
+   "valid_local_date": "2026-11-21",
+   "issued_utc": "previous_runs_day1",
+   "observed_high_f": 53.3,
+   "observed_low_f": 35.3,
+   "high_error_f": 2.5,
+   "low_error_f": 4.5,
+   "observation_count": 3
+  },
+  {
+   "model": "icon",
+   "valid_local_date": "2026-11-21",
+   "issued_utc": "previous_runs_day1",
+   "observed_high_f": 53.3,
+   "observed_low_f": 35.3,
+   "high_error_f": -1.4,
+   "low_error_f": 3.4,
    "observation_count": 3
   }
  ]
