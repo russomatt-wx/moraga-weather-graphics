@@ -1,237 +1,237 @@
 {
   "schema_version": 1,
-  "generated_utc": "2026-11-22T23:51:06.266Z",
-  "source_label": "Diablo Weather Lab · Updated Nov 22, 3:51 PM PST",
-  "writer": "built-in",
+  "generated_utc": "2026-11-23T00:07:00.785Z",
+  "source_label": "Diablo Weather Lab · Updated Nov 22, 4:07 PM PST",
+  "writer": "chatgpt",
   "horizon_days": 7,
   "outlooks": {
-    "Glorietta": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "HappyValley": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+    "Moraga": {
+      "headline": "Moraga: A Quiet Start, Then Rain",
+      "text": "Moraga starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The sheltered Moraga valley may hold fog longer than the surrounding foothills. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Lafayette": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Lafayette: A Quiet Start, Then Rain",
+      "text": "Lafayette starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Lower Lafayette pockets may stay misty longer than the ridge tops. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Campolindo": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Campolindo, Moraga: Breezier Hills Before Rain",
+      "text": "Campolindo, Moraga starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Higher slopes around Campolindo may feel the breeze sooner than central Moraga. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
-    "Moraga": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+    "HappyValley": {
+      "headline": "Happy Valley, Lafayette: A Quiet Start, Then Rain",
+      "text": "Happy Valley, Lafayette starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Its tucked-away valley setting can keep damp air around after showers ease. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
-    "Northgate": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "Saranap": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "Rossmoor": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+    "Glorietta": {
+      "headline": "Glorietta, Orinda: Breezier Hills Before Rain",
+      "text": "Glorietta, Orinda starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Orinda's hills may hold low cloud even as nearby valley streets brighten. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "SleepyHollow": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Sleepy Hollow, Orinda: Breezier Hills Before Rain",
+      "text": "Sleepy Hollow, Orinda starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The wooded, sheltered valley may dry more slowly than nearby exposed slopes. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "Northgate": {
+      "headline": "Northgate, Walnut Creek: A Quiet Start, Then Rain",
+      "text": "Northgate, Walnut Creek starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The lower Walnut Creek basin may stay misty while nearby ridges clear sooner. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "Rossmoor": {
+      "headline": "Rossmoor, Walnut Creek: A Quiet Start, Then Rain",
+      "text": "Rossmoor, Walnut Creek starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The sheltered basin can keep low cloud and damp pavement around into the morning. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "Saranap": {
+      "headline": "Saranap, Walnut Creek: A Quiet Start, Then Rain",
+      "text": "Saranap, Walnut Creek starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Low spots near the creek corridor may stay damp after showers pass. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "PleasantHill": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Pleasant Hill Downtown: A Quiet Start, Then Rain",
+      "text": "Pleasant Hill Downtown starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Busy central streets may turn slick during the evening rain and commute. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "ClaytonValley": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Clayton Valley, Concord: A Quiet Start, Then Rain",
+      "text": "Clayton Valley, Concord starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The open valley can feel the southeast breeze more clearly than sheltered neighborhoods. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Clayton": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Clayton Downtown: Breezier Hills Before Rain",
+      "text": "Clayton Downtown starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Foothill openings may feel breezier than the more protected valley floor. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Martinez": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Martinez Downtown: High Tides and Tuesday Rain",
+      "text": "Martinez Downtown starts Monday with cool marine clouds and a light breeze near the water. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Unusually high Bay tides are a separate concern for low-lying waterfront access through midweek. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Danville": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Sycamore Valley, Danville: A Quiet Start, Then Rain",
+      "text": "Sycamore Valley, Danville starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The Sycamore Valley floor may hold fog longer than the surrounding hills. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Greenbrook": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Greenbrook, Danville: A Quiet Start, Then Rain",
+      "text": "Greenbrook, Danville starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Sheltered parts of Greenbrook may stay damp after the rain band moves through. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Alamo": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Alamo Downtown: A Quiet Start, Then Rain",
+      "text": "Alamo Downtown starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The valley floor may hold fog while nearby ridges brighten sooner. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Blackhawk": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "DoughertyValley": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Blackhawk, Danville: Breezier Hills Before Rain",
+      "text": "Blackhawk, Danville starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Exposed Blackhawk slopes may feel the southeast breeze more than the valley below. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Diablo": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Diablo, Danville: Breezier Hills Before Rain",
+      "text": "Diablo, Danville starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The open foothills around Diablo may stay cloudier and breezier than the valley floor. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "DoughertyValley": {
+      "headline": "Dougherty Valley, San Ramon: A Quiet Start, Then Rain",
+      "text": "Dougherty Valley, San Ramon starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Lower parts of Dougherty Valley may keep fog and damp air around longer. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "TwinCreeks": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Twin Creeks, San Ramon: A Quiet Start, Then Rain",
+      "text": "Twin Creeks, San Ramon starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The lower San Ramon valley can stay misty after nearby hills begin to clear. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Dublin": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Dublin Downtown: A Quiet Start, Then Rain",
+      "text": "Dublin Downtown starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Open Tri-Valley roads may feel breezier as the front approaches. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Pleasanton": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Pleasanton Downtown: A Quiet Start, Then Rain",
+      "text": "Pleasanton Downtown starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The open valley may see better afternoon breaks before clouds return. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "RubyHill": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Ruby Hill, Pleasanton: A Quiet Start, Then Rain",
+      "text": "Ruby Hill, Pleasanton starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The foothill edge can feel breezier than central Pleasanton as the front approaches. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "LivermoreWine": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings around a tenth of an inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "Sunol": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "Montclair": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "Piedmont": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "Rockridge": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Wine Country, Livermore: A Quiet Start, Then Rain",
+      "text": "Wine Country, Livermore starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The inland wine country may see a lighter, more broken round of showers than the coastal hills. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Springtown": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings around a tenth of an inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Springtown, Livermore: A Quiet Start, Then Rain",
+      "text": "Springtown, Livermore starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The eastern Tri-Valley can feel more exposed to passing southeast breezes. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "Sunol": {
+      "headline": "Sunol Downtown: A Quiet Start, Then Rain",
+      "text": "Sunol Downtown starts Monday cool, with patchy fog possible in sheltered valleys before clouds increase. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The canyon can funnel breezes and keep low clouds around longer. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "Montclair": {
+      "headline": "Montclair, Oakland: Breezier Hills Before Rain",
+      "text": "Montclair, Oakland starts Monday cool, with low clouds around the hills and a few brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Exposed Oakland hills may stay cloudier and breezier than the flats. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "Piedmont": {
+      "headline": "Civic Center, Piedmont: Breezier Hills Before Rain",
+      "text": "Civic Center, Piedmont starts Monday cool, with low clouds around the hills and a few brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Hillside streets may stay misty while lower Oakland neighborhoods brighten sooner. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "Rockridge": {
+      "headline": "Rockridge, Oakland: Low Clouds Before Rain",
+      "text": "Rockridge, Oakland starts Monday cool, with low clouds around the hills and a few brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The edge of the Oakland hills may keep low cloud longer than the flatter streets. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Temescal": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Temescal, Oakland: Low Clouds Before Rain",
+      "text": "Temescal, Oakland starts Monday cool, with low clouds around the hills and a few brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Busy streets may turn slick during the evening rain and commute. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "LakeMerritt": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "Fruitvale": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "BerkeleyHills": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Lake Merritt, Oakland: Low Clouds Before Rain",
+      "text": "Lake Merritt, Oakland starts Monday cool, with low clouds around the hills and a few brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Unusually high Bay tides may affect nearby low-lying shoreline and drainage access through midweek. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "DowntownOakland": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Oakland Downtown: High Tides and Tuesday Rain",
+      "text": "Oakland Downtown starts Monday with cool marine clouds and a light breeze near the water. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Unusually high Bay tides are a separate concern for low-lying waterfront access through midweek. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
-    "NorthBerkeley": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "WestBerkeley": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "Albany": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "ElCerrito": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+    "Fruitvale": {
+      "headline": "Fruitvale, Oakland: Low Clouds Before Rain",
+      "text": "Fruitvale, Oakland starts Monday cool, with low clouds around the hills and a few brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Away from the immediate shoreline, the main issue is the timing of showers and slick streets. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Skyline": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Skyline, Oakland: Breezier Hills Before Rain",
+      "text": "Skyline, Oakland starts Monday cool, with low clouds around the hills and a few brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The exposed ridge may feel breezier and hold clouds longer than neighborhoods below. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "BerkeleyHills": {
+      "headline": "Berkeley Hills, Berkeley: Breezier Hills Before Rain",
+      "text": "Berkeley Hills, Berkeley starts Monday cool, with low clouds around the hills and a few brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Higher slopes may stay cloudier and breezier than the flatter neighborhoods near the Bay. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "NorthBerkeley": {
+      "headline": "North Berkeley, Berkeley: Low Clouds Before Rain",
+      "text": "North Berkeley, Berkeley starts Monday cool, with low clouds around the hills and a few brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Low clouds near the hills may take longer to lift than inland valley haze. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "WestBerkeley": {
+      "headline": "West Berkeley, Berkeley: High Tides and Tuesday Rain",
+      "text": "West Berkeley, Berkeley starts Monday with cool marine clouds and a light breeze near the water. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Unusually high Bay tides are a separate concern for low-lying waterfront streets through midweek. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "Albany": {
+      "headline": "Solano Avenue, Albany: High Tides and Tuesday Rain",
+      "text": "Solano Avenue, Albany starts Monday with cool marine clouds and a light breeze near the water. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Unusually high Bay tides may affect low shoreline access through midweek. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "ElCerrito": {
+      "headline": "Civic Center, El Cerrito: High Tides and Tuesday Rain",
+      "text": "Civic Center, El Cerrito starts Monday with cool marine clouds and a light breeze near the water. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The Bay-facing side may stay cloudier, with high tides a separate concern for low spots. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Alameda": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Park Street, Alameda: High Tides and Tuesday Rain",
+      "text": "Park Street, Alameda starts Monday with cool marine clouds and a light breeze near the water. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Unusually high Bay tides are a separate concern for low-lying island waterfront areas through midweek. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "OuterSunset": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "Richmond": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "Presidio": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "PacificHeights": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "Marina": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "NorthBeach": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Outer Sunset, San Francisco: Coastal Clouds and Rough Surf",
+      "text": "Outer Sunset, San Francisco starts Monday with cool marine clouds and a light breeze near the water. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Rough Pacific surf and strong rip currents become the bigger beach concern Tuesday night into Wednesday. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "InnerSunset": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Inner Sunset, San Francisco: Coastal Clouds and Rough Surf",
+      "text": "Inner Sunset, San Francisco starts Monday with a cool, cloudy city feel and occasional brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Pacific beaches nearby become rough Tuesday night into Wednesday, even if the neighborhood feels less exposed. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "Richmond": {
+      "headline": "Richmond District, San Francisco: Coastal Clouds and Rough Surf",
+      "text": "Richmond District, San Francisco starts Monday with cool marine clouds and a light breeze near the water. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Nearby ocean beaches face rough surf and strong rip currents Tuesday night into Wednesday. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "Presidio": {
+      "headline": "Presidio, San Francisco: Coastal Clouds and Rough Surf",
+      "text": "Presidio, San Francisco starts Monday with cool marine clouds and a light breeze near the water. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Exposed shoreline paths face rough surf and strong rip currents Tuesday night into Wednesday. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "Marina": {
+      "headline": "Marina, San Francisco: High Tides and Tuesday Rain",
+      "text": "Marina, San Francisco starts Monday with cool marine clouds and a light breeze near the water. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Unusually high Bay tides may affect low-lying shoreline access through midweek. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "NorthBeach": {
+      "headline": "North Beach, San Francisco: High Tides and Tuesday Rain",
+      "text": "North Beach, San Francisco starts Monday with cool marine clouds and a light breeze near the water. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Unusually high Bay tides may affect the lowest shoreline and access roads through midweek. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "PacificHeights": {
+      "headline": "Pacific Heights, San Francisco: Breezier Hills Before Rain",
+      "text": "Pacific Heights, San Francisco starts Monday with a cool, cloudy city feel and occasional brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Exposed hilltop blocks may feel breezier than sheltered streets below. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Haight": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "Mission": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Haight-Ashbury, San Francisco: A Gray Start Before Rain",
+      "text": "Haight-Ashbury, San Francisco starts Monday with a cool, cloudy city feel and occasional brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Low clouds may linger near the western hills longer than in the city center. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "NoeValley": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Noe Valley, San Francisco: A Gray Start Before Rain",
+      "text": "Noe Valley, San Francisco starts Monday with a cool, cloudy city feel and occasional brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Sheltered valley streets may hold fog and damp air longer than nearby hilltops. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
-    "SoMa": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
+    "Mission": {
+      "headline": "Mission, San Francisco: A Gray Start Before Rain",
+      "text": "Mission, San Francisco starts Monday with a cool, cloudy city feel and occasional brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Urban streets may turn slick during the afternoon and evening rain. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "PotreroHill": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Potrero Hill, San Francisco: Breezier Hills Before Rain",
+      "text": "Potrero Hill, San Francisco starts Monday with a cool, cloudy city feel and occasional brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The hillside may notice the southeast breeze more than sheltered streets closer to the Bay. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "SoMa": {
+      "headline": "SoMa, San Francisco: High Tides and Tuesday Rain",
+      "text": "SoMa, San Francisco starts Monday with cool marine clouds and a light breeze near the water. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Unusually high Bay tides are a separate concern for low-lying waterfront and creek areas through midweek. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "BernalHeights": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
-    },
-    "Brentwood": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a quarter inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Bernal Heights, San Francisco: Breezier Hills Before Rain",
+      "text": "Bernal Heights, San Francisco starts Monday with a cool, cloudy city feel and occasional brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The exposed hilltop may feel breezier than surrounding neighborhoods as the front approaches. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "TwinPeaks": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings about a third of an inch. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Twin Peaks, San Francisco: Breezier Hills Before Rain",
+      "text": "Twin Peaks, San Francisco starts Monday with a cool, cloudy city feel and occasional brighter breaks. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The ridge may stay cloudier and windier than lower neighborhoods after the front passes. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
-    "East Sacramento": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night with about a quarter inch. Afterward, conditions look mostly dry through Saturday. Good news for the Sierra, too: the snowpack is getting a boost."
+    "Brentwood": {
+      "headline": "North Brentwood, Brentwood: Fog First, Rain Later",
+      "text": "North Brentwood, Brentwood starts Monday cool, with some morning haze across the open Delta plain. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. The open Delta plain may feel the southeast breeze more than sheltered inland streets. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
     },
     "Sausalito": {
-      "headline": "Rain Tuesday, then drying out",
-      "text": "After a dry Monday, rain moves in Tuesday evening and night as a weather system brings close to three-quarters of an inch — watch for ponding on roads and give yourself extra time. Afterward, conditions look mostly dry through Saturday."
+      "headline": "Old Town, Sausalito: High Tides and Tuesday Rain",
+      "text": "Old Town, Sausalito starts Monday with cool marine clouds and a light breeze near the water. Rain is expected Tuesday afternoon and evening after a mostly quiet Monday. Unusually high Bay tides are a separate concern for low-lying waterfront areas through midweek. Wednesday looks quieter, and Thanksgiving should be mostly dry, although patchy fog may linger in sheltered spots. Another shower chance may return late Friday or Saturday, so keep plans flexible and watch for slick roads after the recent wet spell."
+    },
+    "East Sacramento": {
+      "headline": "East Sacramento: Fog, Then a Wet Midweek",
+      "text": "East Sacramento starts Monday with a cool, fog-prone Valley morning. The next system brings periods of rain Tuesday through Thanksgiving, with breezier conditions and a chance of thunderstorms across the Valley. Fog may redevelop overnight and early morning, especially where winds ease. Conditions should gradually improve after the system, but another shower chance may return late in the week. Allow extra time on early drives if visibility drops."
     }
   }
 }
