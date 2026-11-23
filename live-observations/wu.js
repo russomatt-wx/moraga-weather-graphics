@@ -231,11 +231,14 @@ async function airportSky(city, day, model, log) {
     try {
       const res = await fetch('https://api.weather.gov/stations/' + id + '/observations/latest', { headers: { 'User-Agent': 'DiabloWeatherLab-observations/1.0', Accept: 'application/geo+json' }, cf: { cacheTtl: 600, cacheEverything: true } });
       if (!res.ok) { log.push('airport sky ' + id + ': http ' + res.status); continue; }
-      const p = (await res.json())?.properties;
+      const j = await res.json(), p = j?.properties, loc = j?.geometry;
       if (!p || Date.now() - Date.parse(p.timestamp) > 90 * 60000) continue;
       const layers = (p.cloudLayers || []).map((l) => COVER[l.amount]).filter((v) => v !== undefined);
       if (!layers.length) continue;
-      covers.push(Math.max(...layers));
+      // Weight by distance: the airport next door decides; a farther one only nudges (inverse-square).
+      const here = TOWN_COORDS[city], at = loc && loc.coordinates;
+      const mi = here && at ? Math.max(2, Math.hypot(at[1] - here[0], (at[0] - here[1]) * Math.cos(here[0] * Math.PI / 180)) * 69) : 10;
+      covers.push({ c: Math.max(...layers), w: 1 / (mi * mi) });
       const tx = p.textDescription || '';
       if (!wet && /thunder/i.test(tx)) wet = { text: 'Thunderstorms', code: 95 };
       else if (!wet && /rain|shower/i.test(tx)) wet = /heavy/i.test(tx) ? { text: 'Heavy rain', code: 65 } : /light/i.test(tx) ? { text: 'Light rain', code: 61 } : { text: 'Rain', code: 63 };
@@ -246,7 +249,8 @@ async function airportSky(city, day, model, log) {
   if (!covers.length) return null;
   if (wet) return { ...wet, is_day: day, source: 'airports', airports: ids };
   if (fog) return { text: 'Fog', code: 45, is_day: day, source: 'airports', airports: ids };
-  let c = Math.round(covers.reduce((a, b) => a + b, 0) / covers.length);
+  const W = covers.reduce((a, b) => a + b.w, 0);
+  let c = Math.round(covers.reduce((a, b) => a + b.c * b.w, 0) / W);
   // Ceilometers see only below ~12,000 ft: let a thick high-cloud deck from the model show through.
   if (c <= 1 && Number(model?.cloud_cover_high) >= 75) c = 2;
   const text = [day ? 'Sunny' : 'Clear', day ? 'Mostly sunny' : 'Mostly clear', 'Partly cloudy', 'Mostly cloudy', 'Cloudy'][c];
