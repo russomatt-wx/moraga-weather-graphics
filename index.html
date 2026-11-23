@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>try{localStorage.removeItem('dwl-page-zoom');var t=localStorage.getItem('dwl-theme');if(t==='black'||t==='light'){document.documentElement.dataset.theme=t;document.querySelector('meta[name=theme-color]')&&document.querySelector('meta[name=theme-color]').setAttribute('content',t==='black'?'#000000':'#eef3f8');}}catch(e){}</script>
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=27"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=27"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=27">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261128c">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261128d">
 
 
 
@@ -105,7 +105,7 @@
   const spans=[...(scope||document).querySelectorAll('[data-loc-now]')].filter(s=>s.offsetParent!==null&&Date.now()-(locNowAt[s.dataset.locNow]||0)>5*60000);
   await Promise.all(spans.map(async s=>{locNowAt[s.dataset.locNow]=Date.now();
    try{const id=(DWL_LOC[s.dataset.locNow]?.id)||s.dataset.locNow.toLowerCase();const r=await fetch('https://moraga-live-observations.russo-matt.workers.dev/observations?city='+id,{cache:'no-store'});if(!r.ok)return;
-    const o=await r.json();if(Number.isFinite(o.temperature_f)){s.textContent=Math.round(o.temperature_f)+'°'+(o.sky?.text?' · '+o.sky.text:'');s.style.color=tempColor(o.temperature_f);}}catch(e){}
+    const o=await r.json();if(Number.isFinite(o.temperature_f)){s.textContent=Math.round(o.temperature_f)+'°'+(o.sky?.text?' · '+o.sky.text:'');}}catch(e){}
   }));
  }
  // Search filters every region; otherwise only the current place's region starts open.

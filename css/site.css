@@ -2522,3 +2522,7 @@ body.public-mode #regional { display: none; }
 .rl-read { margin: 2px 0 8px; padding: 10px 12px; border-radius: 12px; font-size: 14px; line-height: 1.45; color: var(--text, #e8f4ff);
   background: rgba(63, 216, 245, .07); border: 1px solid rgba(63, 216, 245, .22); }
 [data-theme="light"] .rl-read { background: rgba(14, 116, 144, .06); border-color: rgba(14, 116, 144, .25); }
+
+/* Location sheet: live temp + sky in plain white (light theme: normal text colour) */
+#public-shell .dwl-locsheet .dwl-loc-now { color: #fff; }
+[data-theme="light"] #public-shell .dwl-locsheet .dwl-loc-now { color: var(--text, #0f172a); }
