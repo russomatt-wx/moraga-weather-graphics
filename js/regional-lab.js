@@ -1,7 +1,8 @@
 /* Diablo Weather Lab — Regional Lab (Forecast Lab).
    Moraga's chart set (temperature guidance, ensemble spread, 14-day rainfall, upper air) for each regional
    site, drawn in one consistent style from the data files the chart jobs publish
-   (moraga_*.json for Moraga, lab/{id}_*.json for the others) plus live hourly model temperatures. */
+   (moraga_*.json for Moraga, lab/{id}_*.json for the others) plus live hourly model temperatures,
+   and (Phase 2) a live marine-layer card per site. */
 (function () {
   'use strict';
   var HUBS = [['moraga', 'Moraga'], ['soma', 'San Francisco'], ['downtownoakland', 'Oakland'], ['northgate', 'Walnut Creek'],
@@ -32,7 +33,8 @@
     spec.series.forEach(function (s) { if (!vis(s.name)) return; s.t.forEach(function (t, i) { var m = tms(t); if (m >= start && m <= end && num(s.v[i])) vals.push(+s.v[i]); }); });
     (spec.bands || []).forEach(function (b) { if (!vis(b.name)) return; b.t.forEach(function (t, i) { var m = tms(t); if (m >= start && m <= end) { if (num(b.lo[i])) vals.push(+b.lo[i]); if (num(b.hi[i])) vals.push(+b.hi[i]); } }); });
     if (!vals.length) return '<p class="rl-empty">No data for this chart yet.</p>';
-    var step = spec.step || 5, lo = Math.max(spec.min !== undefined ? spec.min : -1e9, Math.floor((Math.min.apply(null, vals) - step / 2) / step) * step), hi = Math.ceil((Math.max.apply(null, vals) + step / 2) / step) * step;
+    (spec.refs || []).forEach(function (r) { vals.push(r.v); });
+    var step = spec.step || 5, lo = Math.max(spec.min !== undefined ? spec.min : -1e9, Math.floor((Math.min.apply(null, vals) - step / 2) / step) * step), hi = Math.min(spec.max !== undefined ? spec.max : 1e9, Math.ceil((Math.max.apply(null, vals) + step / 2) / step) * step);
     var x = function (m) { return L + (W - L - R) * (m - start) / (end - start); }, y = function (v) { return T + (H - T - B) * (1 - (v - lo) / (hi - lo)); };
     var g = '';
     for (var v = lo; v <= hi + 1e-9; v += step) g += '<line class="rl-grid" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v).toFixed(1) + '" y2="' + y(v).toFixed(1) + '"/><text class="rl-ax" x="' + (L - 6) + '" y="' + (y(v) + 4).toFixed(1) + '" text-anchor="end">' + spec.fmt(v) + '</text>';
@@ -49,6 +51,7 @@
       segs.forEach(function (sg) { if (sg.length > 1) g += '<polyline points="' + sg.join(' ') + '" fill="none" stroke="' + s.color + '" stroke-width="' + (s.width || 2) + '"' + (s.dash ? ' stroke-dasharray="6 4"' : '') + ' stroke-linejoin="round" stroke-linecap="round"/>'; });
       if (spec.dots) segs.forEach(function (sg) { sg.forEach(function (pt) { var q = pt.split(','); g += '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="2.6" fill="' + s.color + '"/>'; }); });
     });
+    (spec.refs || []).forEach(function (r) { var yy = y(r.v).toFixed(1); g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + yy + '" y2="' + yy + '" stroke="' + (r.color || '#e2e8f0') + '" stroke-width="1.6" stroke-dasharray="2 4" opacity=".85"/><text class="rl-ref" x="' + (W - R - 4) + '" y="' + (+yy - 5) + '" text-anchor="end">' + esc(r.label) + '</text>'; });
     (spec.top || []).forEach(function (tl) { var m = tms(tl.t); if (m >= start && m <= end) g += '<text class="rl-pop" x="' + x(m).toFixed(1) + '" y="' + (T - 10) + '" text-anchor="middle">' + tl.label + '</text>'; });
     g += '<line class="rl-cursor" x1="0" x2="0" y1="' + T + '" y2="' + (H - B) + '" visibility="hidden"/><rect class="rl-hit" x="' + L + '" y="' + T + '" width="' + (W - L - R) + '" height="' + (H - T - B) + '"/>';
     state.charts[spec.key] = { spec: spec, start: start, end: end, L: L, R: R, W: W };
@@ -84,6 +87,50 @@
     z500: function () { return { key: 'z500', label: '500 mb height', series: state.data.up.z, fmt: function (v) { return Math.round(v); }, step: 60, h: 240, days: 10 }; },
     t850: function () { return { key: 't850', label: '850 mb temperature', series: state.data.up.t, fmt: function (v, tip) { return (tip ? (+v).toFixed(1) : Math.round(v)) + '°'; }, step: 2, h: 240, days: 10 }; }
   };
+  var ft = function (v) { return Math.round(v / 10) * 10 >= 1000 ? (v / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : String(Math.round(v / 10) * 10); };
+  specs.low = function () { return { key: 'low', label: 'Low clouds and fog', series: state.data.marine.low, fmt: function (v) { return Math.round(v) + '%'; }, step: 25, min: 0, max: 100, h: 220, days: 4 }; };
+  specs.depth = function () { var m = state.data.marine; return { key: 'depth', label: 'Marine layer depth', series: m.depth, fmt: function (v, tip) { return tip ? Math.round(v / 10) * 10 + ' ft' : ft(v); }, step: 500, min: 0, h: 220, days: 4, refs: [{ v: m.elev, label: m.name + ' ' + Math.round(m.elev / 10) * 10 + ' ft' }] }; };
+  specs.push = function () { return { key: 'push', label: 'Onshore push', series: state.data.marine.push, fmt: function (v, tip) { return (v > 0 && tip ? '+' : '') + (tip ? (+v).toFixed(1) + ' mb' : Math.round(v)); }, step: 2, h: 200, days: 4, refs: [{ v: 0, label: 'onshore ↑ · offshore ↓' }] }; };
+  var marineHTML = function () { var m = state.data.marine; return '<p class="rl-read">' + m.read + '</p><h4 class="rl-h4">Low clouds &amp; fog (%)</h4>' + lineChart(specs.low()) + '<h4 class="rl-h4">Marine layer depth (ft)</h4>' + lineChart(specs.depth()) + (m.push ? '<h4 class="rl-h4">Onshore push · SFO − Sacramento (mb, next 2 days)</h4>' + lineChart(specs.push()) : ''); };
+
+  /* ---------- Marine layer (Phase 2): live HRRR→GFS + ECMWF at the site and at the coast ---------- */
+  var COAST = { lat: 37.50, lon: -122.50 };
+  var om = function (p, extra) { var q = new URLSearchParams(Object.assign({ latitude: p.lat, longitude: p.lon, timezone: TZ, forecast_days: '5' }, extra)); return fetch('https://api.open-meteo.com/v1/forecast?' + q).then(function (r) { if (!r.ok) throw 0; return r.json(); }); };
+  function marine(site, name) {
+    var H = { hourly: 'cloud_cover_low,boundary_layer_height', models: 'gfs_seamless' };
+    return Promise.allSettled([om(site, H), om(site, { hourly: 'cloud_cover_low', models: 'ecmwf_ifs025' }), om(COAST, H), getJSON('moraga_marine_diagnostics_96h.json')]).then(function (r) {
+      var v = function (k) { return r[k].status === 'fulfilled' ? r[k].value : null; }, a = v(0), e = v(1), c = v(2), g = v(3);
+      if (!a || !a.hourly) throw 0;
+      var toFt = function (arr) { return (arr || []).map(function (x) { return num(x) ? x * 3.281 : null; }); };
+      var low = [{ name: name + ' · HRRR/GFS', color: '#3fd8f5', t: a.hourly.time, v: a.hourly.cloud_cover_low, width: 2.4 }];
+      if (e && e.hourly) low.push({ name: name + ' · ECMWF', color: C.ECMWF, t: e.hourly.time, v: e.hourly.cloud_cover_low });
+      if (c && c.hourly) low.push({ name: 'Coast · Half Moon Bay', color: '#94a3b8', t: c.hourly.time, v: c.hourly.cloud_cover_low, dash: true });
+      var depth = [{ name: 'At ' + name, color: '#3fd8f5', t: a.hourly.time, v: toFt(a.hourly.boundary_layer_height), width: 2.4 }];
+      if (c && c.hourly) depth.unshift({ name: 'At the coast', color: '#94a3b8', t: c.hourly.time, v: toFt(c.hourly.boundary_layer_height), dash: true });
+      var push = g && g.time_local ? [{ name: 'SFO − SAC', color: '#a78bfa', t: g.time_local, v: g.sfo_minus_sac_hpa, width: 2.4 }] : null;
+      var elev = num(a.elevation) ? a.elevation * 3.281 : 0;
+      return { low: low, depth: depth, push: push, elev: elev, name: name, read: marineRead(name, a, e, g) };
+    });
+  }
+  // Plain-English readout: when low clouds are likely (both models) or possible (one model) in the next 72 hours.
+  function marineRead(name, a, e, g) {
+    var now = nowLocal(), end = now + 72 * 3600e3, eh = {};
+    if (e && e.hourly) e.hourly.time.forEach(function (t, i) { eh[t] = e.hourly.cloud_cover_low[i]; });
+    var hrs = [];
+    a.hourly.time.forEach(function (t, i) { var m = tms(t); if (m < now - 1800e3 || m > end) return; var p = a.hourly.cloud_cover_low[i], q = eh[t]; hrs.push({ m: m, lvl: num(p) && p >= 50 && (!num(q) || q >= 50) ? 2 : (num(p) && p >= 50) || (num(q) && q >= 50) ? 1 : 0 }); });
+    var hh = function (m) { var h = new Date(m).getUTCHours(); return h === 0 ? 'midnight' : h === 12 ? 'noon' : ((h % 12) || 12) + (h < 12 ? ' AM' : ' PM'); };
+    var dd = function (m) { var day = Math.floor(m / 86400e3) - Math.floor(now / 86400e3), h = new Date(m).getUTCHours(); return day === 0 ? (h >= 18 ? 'tonight' : 'today') : day === 1 ? (h < 5 ? 'tonight' : 'tomorrow') : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date(m).getUTCDay()]; };
+    var when = function (m) { return hh(m) + ' ' + dd(m); };
+    var span = function (a, b) { return dd(a) === dd(b) ? 'from ' + hh(a) + ' to ' + hh(b) + ' ' + dd(b) : 'from ' + when(a) + ' to ' + when(b); };
+    var run = function (lvl) { var s = -1, f = -1; for (var i = 0; i < hrs.length; i++) { if (hrs[i].lvl >= lvl) { if (s < 0) s = i; f = i; } else if (s >= 0 && i - f > 2) break; } return s < 0 || f - s < 1 ? null : [hrs[s].m, hrs[f].m + 3600e3]; };
+    var sure = run(2), maybe = sure ? null : run(1), txt;
+    if (sure) txt = (sure[0] <= now ? 'Low clouds or fog over ' + name + ' now' : 'Low clouds or fog likely at ' + name + ' from about ' + when(sure[0])) + ', clearing around ' + when(sure[1]) + '. Both models agree.';
+    else if (maybe) txt = 'Some low clouds possible at ' + name + ' ' + span(maybe[0], maybe[1]) + ', but the models disagree.';
+    else txt = 'No marine low clouds expected at ' + name + ' over the next three days.';
+    if (g && g.time_local) { var i = g.time_local.findIndex(function (t) { return tms(t) >= now; }), v = i >= 0 ? g.sfo_minus_sac_hpa[i] : null; if (num(v)) txt += ' ' + (v >= 3 ? 'Strong onshore push right now, so marine air is pouring inland.' : v >= 1.5 ? 'Moderate onshore push right now.' : v >= 0.5 ? 'Weak onshore push right now.' : v > -1.5 ? 'Little onshore push right now.' : 'Offshore flow right now, holding marine air at the coast.'); }
+    return txt;
+  }
+
   var upHTML = function () { return '<h4 class="rl-h4">500 mb height (m)</h4>' + lineChart(specs.z500()) + '<h4 class="rl-h4">850 mb temperature (°C)</h4>' + lineChart(specs.t850()); };
 
   function render() {
@@ -95,6 +142,7 @@
       '<article class="card rl-card"><h3>Ensemble spread</h3><p class="rl-sub">Shaded = 10th–90th percentile of each ensemble · line = median</p><div id="rl-c-ens" class="rl-body"><p class="rl-empty">Loading…</p></div></article>' +
       '<article class="card rl-card"><h3>14-day rainfall</h3><p class="rl-sub">Daily rain by model (inches) · % = chance of measurable rain · tap for values</p><div id="rl-c-rain" class="rl-body"><p class="rl-empty">Loading…</p></div></article>' +
       '<article class="card rl-card"><h3>Upper air · 10 days</h3><p class="rl-sub">500 mb height (higher = ridge, lower = trough) and 850 mb temperature (air mass)</p><div id="rl-c-up" class="rl-body"><p class="rl-empty">Loading…</p></div></article>' +
+      '<article class="card rl-card"><h3>Marine layer · 4 days</h3><p class="rl-sub">Low clouds, marine-layer depth against this site\'s elevation, and the pressure push that drives marine air inland</p><div id="rl-c-marine" class="rl-body"><p class="rl-empty">Loading…</p></div></article>' +
       '<article class="card rl-card"><h3>Which model is best here?</h3><div id="rl-acc" class="rl-body"><p class="rl-empty">Loading…</p></div></article>' +
       '</div>';
     var put = function (el, html) { if (state.id === id) { var e = document.getElementById(el); if (e) e.innerHTML = html; } };
@@ -112,6 +160,7 @@
       var mk = function (field) { return ms.map(function (k) { return { name: k + (/EPS|GEFS/.test(k) ? ' mean' : ''), color: C[k], t: j.models[k].time, v: j.models[k][field], dash: /EPS|GEFS/.test(k) }; }); };
       state.data.up = { z: mk('z500_m'), t: mk('t850_c') }; put('rl-c-up', upHTML());
     }).catch(function () { put('rl-c-up', pending); });
+    marine(site, name).then(function (m) { if (state.id !== id) return; state.data.marine = m; put('rl-c-marine', marineHTML()); }).catch(function (err) { console.warn('marine', err); put('rl-c-marine', '<p class="rl-empty">Live marine-layer guidance unavailable right now.</p>'); });
     loadAccuracy(id);
   }
 
@@ -156,6 +205,7 @@
     if (key === 'temp' && d.temp) document.getElementById('rl-c-temp').innerHTML = lineChart(specs.temp());
     if (key === 'ens' && d.ens) document.getElementById('rl-c-ens').innerHTML = lineChart(specs.ens());
     if (key === 'rain' && d.rain) document.getElementById('rl-c-rain').innerHTML = rainChart();
+    if ((key === 'low' || key === 'depth' || key === 'push') && d.marine) document.getElementById('rl-c-marine').innerHTML = marineHTML();
     if ((key === 'z500' || key === 't850') && d.up) document.getElementById('rl-c-up').innerHTML = upHTML();
   }
 

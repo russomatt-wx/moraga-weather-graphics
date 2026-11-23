@@ -2516,3 +2516,9 @@ body.public-mode #regional { display: none; }
 .rl-tip i, .rl-raintip i { width: 8px; height: 8px; border-radius: 50%; }
 .rl-h4 { margin: 4px 0 2px; font-size: 13px; color: var(--muted); font-weight: 600; }
 .rl-body { display: grid; gap: 8px; min-width: 0; }
+
+/* Regional Lab · Phase 2 marine-layer card */
+.rl-chart .rl-ref { fill: var(--text, #e2e8f0); font: 600 11px var(--font-ui); paint-order: stroke; stroke: var(--bg, #071426); stroke-width: 4px; stroke-linejoin: round; }
+.rl-read { margin: 2px 0 8px; padding: 10px 12px; border-radius: 12px; font-size: 14px; line-height: 1.45; color: var(--text, #e8f4ff);
+  background: rgba(63, 216, 245, .07); border: 1px solid rgba(63, 216, 245, .22); }
+[data-theme="light"] .rl-read { background: rgba(14, 116, 144, .06); border-color: rgba(14, 116, 144, .25); }
