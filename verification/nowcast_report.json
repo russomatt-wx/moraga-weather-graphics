@@ -1,19 +1,19 @@
 {
- "generated_utc": "2026-11-23T02:36:31.657335+00:00",
+ "generated_utc": "2026-11-23T12:17:38.273524+00:00",
  "source": "NOAA RTMA rapid update (2.5 km analysis)",
  "method": "Estimate at each station's location vs that station's reading (live: within 45 minutes; backfill: within 10 minutes). Corrected = minus the town's mean error in the same regime (day/night, calm/breezy) over the previous 14 days (needs 6+ prior hours).",
  "towns": {
   "moraga": {
    "name": "Moraga",
    "station": "KCAMORAG71",
-   "hours": 184,
+   "hours": 185,
    "first": "2026-11-13T05:00:00+00:00",
-   "last": "2026-11-23T02:15:00+00:00",
+   "last": "2026-11-23T11:45:00+00:00",
    "raw": {
     "all": {
-     "n": 184,
-     "mae_f": 1.79,
-     "bias_f": -0.49,
+     "n": 185,
+     "mae_f": 1.8,
+     "bias_f": -0.47,
      "within_2f_pct": 65
     },
     "day": {
@@ -23,18 +23,18 @@
      "within_2f_pct": 49
     },
     "night": {
-     "n": 109,
-     "mae_f": 1.64,
-     "bias_f": 0.21,
-     "within_2f_pct": 76
+     "n": 110,
+     "mae_f": 1.66,
+     "bias_f": 0.24,
+     "within_2f_pct": 75
     }
    },
    "corrected": {
     "all": {
-     "n": 160,
-     "mae_f": 1.69,
-     "bias_f": 0.32,
-     "within_2f_pct": 71
+     "n": 161,
+     "mae_f": 1.7,
+     "bias_f": 0.33,
+     "within_2f_pct": 70
     },
     "day": {
      "n": 63,
@@ -43,10 +43,10 @@
      "within_2f_pct": 67
     },
     "night": {
-     "n": 97,
-     "mae_f": 1.67,
-     "bias_f": 0.52,
-     "within_2f_pct": 73
+     "n": 98,
+     "mae_f": 1.68,
+     "bias_f": 0.55,
+     "within_2f_pct": 72
     }
    },
    "wind_mae_mph": 5.5
@@ -54,15 +54,15 @@
   "lafayette": {
    "name": "Lafayette",
    "station": "KCAWALNU6",
-   "hours": 184,
+   "hours": 185,
    "first": "2026-11-13T05:00:00+00:00",
-   "last": "2026-11-23T02:15:00+00:00",
+   "last": "2026-11-23T11:45:00+00:00",
    "raw": {
     "all": {
-     "n": 184,
-     "mae_f": 1.8,
-     "bias_f": 1.21,
-     "within_2f_pct": 70
+     "n": 185,
+     "mae_f": 1.81,
+     "bias_f": 1.23,
+     "within_2f_pct": 69
     },
     "day": {
      "n": 75,
@@ -71,18 +71,18 @@
      "within_2f_pct": 88
     },
     "night": {
-     "n": 109,
-     "mae_f": 2.21,
-     "bias_f": 2.09,
-     "within_2f_pct": 57
+     "n": 110,
+     "mae_f": 2.22,
+     "bias_f": 2.1,
+     "within_2f_pct": 56
     }
    },
    "corrected": {
     "all": {
-     "n": 160,
+     "n": 161,
      "mae_f": 1.54,
-     "bias_f": -0.37,
-     "within_2f_pct": 69
+     "bias_f": -0.36,
+     "within_2f_pct": 70
     },
     "day": {
      "n": 63,
@@ -91,9 +91,9 @@
      "within_2f_pct": 83
     },
     "night": {
-     "n": 97,
+     "n": 98,
      "mae_f": 1.72,
-     "bias_f": -0.59,
+     "bias_f": -0.57,
      "within_2f_pct": 61
     }
    },
@@ -102,15 +102,15 @@
   "danville": {
    "name": "Sycamore Valley",
    "station": "KCADANVI207",
-   "hours": 184,
+   "hours": 185,
    "first": "2026-11-13T05:00:00+00:00",
-   "last": "2026-11-23T02:15:00+00:00",
+   "last": "2026-11-23T11:45:00+00:00",
    "raw": {
     "all": {
-     "n": 184,
+     "n": 185,
      "mae_f": 1.3,
-     "bias_f": -0.04,
-     "within_2f_pct": 79
+     "bias_f": -0.03,
+     "within_2f_pct": 78
     },
     "day": {
      "n": 75,
@@ -119,17 +119,17 @@
      "within_2f_pct": 80
     },
     "night": {
-     "n": 109,
-     "mae_f": 1.3,
-     "bias_f": 0.53,
-     "within_2f_pct": 78
+     "n": 110,
+     "mae_f": 1.31,
+     "bias_f": 0.54,
+     "within_2f_pct": 77
     }
    },
    "corrected": {
     "all": {
-     "n": 160,
+     "n": 161,
      "mae_f": 1.26,
-     "bias_f": -0.02,
+     "bias_f": -0.01,
      "within_2f_pct": 80
     },
     "day": {
@@ -139,10 +139,10 @@
      "within_2f_pct": 83
     },
     "night": {
-     "n": 97,
+     "n": 98,
      "mae_f": 1.32,
-     "bias_f": -0.04,
-     "within_2f_pct": 78
+     "bias_f": -0.02,
+     "within_2f_pct": 79
     }
    },
    "wind_mae_mph": 4.6
@@ -150,14 +150,14 @@
   "greenbrook": {
    "name": "Greenbrook",
    "station": "KCADANVI224",
-   "hours": 184,
+   "hours": 185,
    "first": "2026-11-13T05:00:00+00:00",
-   "last": "2026-11-23T02:15:00+00:00",
+   "last": "2026-11-23T11:45:00+00:00",
    "raw": {
     "all": {
-     "n": 184,
+     "n": 185,
      "mae_f": 1.58,
-     "bias_f": 0.35,
+     "bias_f": 0.36,
      "within_2f_pct": 73
     },
     "day": {
@@ -167,16 +167,16 @@
      "within_2f_pct": 76
     },
     "night": {
-     "n": 109,
-     "mae_f": 1.63,
+     "n": 110,
+     "mae_f": 1.62,
      "bias_f": 1.19,
      "within_2f_pct": 71
     }
    },
    "corrected": {
     "all": {
-     "n": 160,
-     "mae_f": 1.44,
+     "n": 161,
+     "mae_f": 1.43,
      "bias_f": 0.18,
      "within_2f_pct": 75
     },
@@ -187,25 +187,25 @@
      "within_2f_pct": 78
     },
     "night": {
-     "n": 97,
-     "mae_f": 1.44,
+     "n": 98,
+     "mae_f": 1.42,
      "bias_f": 0.29,
      "within_2f_pct": 73
     }
    },
-   "wind_mae_mph": 4.5
+   "wind_mae_mph": 4.4
   },
   "brentwood": {
    "name": "North Brentwood",
    "station": "KCABRENT202",
-   "hours": 184,
+   "hours": 185,
    "first": "2026-11-13T05:00:00+00:00",
-   "last": "2026-11-23T02:15:00+00:00",
+   "last": "2026-11-23T11:45:00+00:00",
    "raw": {
     "all": {
-     "n": 184,
+     "n": 185,
      "mae_f": 1.05,
-     "bias_f": 0.48,
+     "bias_f": 0.49,
      "within_2f_pct": 88
     },
     "day": {
@@ -215,17 +215,17 @@
      "within_2f_pct": 82
     },
     "night": {
-     "n": 110,
-     "mae_f": 0.95,
-     "bias_f": 0.45,
+     "n": 111,
+     "mae_f": 0.96,
+     "bias_f": 0.46,
      "within_2f_pct": 92
     }
    },
    "corrected": {
     "all": {
-     "n": 160,
+     "n": 161,
      "mae_f": 1.04,
-     "bias_f": -0.3,
+     "bias_f": -0.29,
      "within_2f_pct": 85
     },
     "day": {
@@ -235,9 +235,9 @@
      "within_2f_pct": 79
     },
     "night": {
-     "n": 98,
+     "n": 99,
      "mae_f": 0.88,
-     "bias_f": -0.48,
+     "bias_f": -0.46,
      "within_2f_pct": 89
     }
    },
@@ -246,15 +246,15 @@
   "sausalito": {
    "name": "Old Town",
    "station": "KCASAUSA60",
-   "hours": 12,
+   "hours": 13,
    "first": "2026-11-21T02:30:00+00:00",
-   "last": "2026-11-23T02:15:00+00:00",
+   "last": "2026-11-23T11:45:00+00:00",
    "raw": {
     "all": {
-     "n": 12,
-     "mae_f": 1.95,
-     "bias_f": 1.5,
-     "within_2f_pct": 50
+     "n": 13,
+     "mae_f": 1.93,
+     "bias_f": 1.52,
+     "within_2f_pct": 54
     },
     "day": {
      "n": 4,
@@ -263,29 +263,39 @@
      "within_2f_pct": 75
     },
     "night": {
-     "n": 8,
-     "mae_f": 2.26,
-     "bias_f": 2.26,
-     "within_2f_pct": 38
+     "n": 9,
+     "mae_f": 2.2,
+     "bias_f": 2.2,
+     "within_2f_pct": 44
     }
    },
    "corrected": {
-    "all": null,
+    "all": {
+     "n": 1,
+     "mae_f": 0.17,
+     "bias_f": -0.17,
+     "within_2f_pct": 100
+    },
     "day": null,
-    "night": null
+    "night": {
+     "n": 1,
+     "mae_f": 0.17,
+     "bias_f": -0.17,
+     "within_2f_pct": 100
+    }
    },
-   "wind_mae_mph": 6.8
+   "wind_mae_mph": 6.9
   },
   "sacramento": {
    "name": "East Sacramento",
    "station": "KCASACRA200",
-   "hours": 184,
+   "hours": 185,
    "first": "2026-11-13T05:00:00+00:00",
-   "last": "2026-11-23T02:15:00+00:00",
+   "last": "2026-11-23T11:45:00+00:00",
    "raw": {
     "all": {
-     "n": 184,
-     "mae_f": 0.97,
+     "n": 185,
+     "mae_f": 0.96,
      "bias_f": -0.39,
      "within_2f_pct": 90
     },
@@ -296,15 +306,15 @@
      "within_2f_pct": 87
     },
     "night": {
-     "n": 113,
-     "mae_f": 0.86,
+     "n": 114,
+     "mae_f": 0.85,
      "bias_f": -0.31,
      "within_2f_pct": 92
     }
    },
    "corrected": {
     "all": {
-     "n": 160,
+     "n": 161,
      "mae_f": 0.89,
      "bias_f": -0.23,
      "within_2f_pct": 93
@@ -316,9 +326,9 @@
      "within_2f_pct": 88
     },
     "night": {
-     "n": 101,
-     "mae_f": 0.81,
-     "bias_f": -0.12,
+     "n": 102,
+     "mae_f": 0.8,
+     "bias_f": -0.11,
      "within_2f_pct": 96
     }
    },
