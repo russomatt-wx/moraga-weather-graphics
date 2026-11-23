@@ -211,6 +211,15 @@ export async function skyFor(city, env, solarNow, log) {
       // Sunlight jumping between bright and dim within 30 minutes means broken clouds, not a clear sky.
       const swing = samples.length >= 3 ? (Math.max(...samples) - Math.min(...samples)) / clear : 0;
       if (swing > 0.35 && s.code < 2) s = { text: 'Partly cloudy', code: 2 };
+      // A thin cloud deck lets most sunlight through, so the sensor alone reads it as partly cloudy or sunny.
+      // When the nearby airports measure a broken/overcast deck, trust them unless the sun is at full strength.
+      if (ratio < 0.95) {
+        const deck = await airportSky(city, true, null, log, true);
+        if (deck && deck.cover >= 3 && s.code <= 2 && s.text !== 'Cloudy') {
+          s = deck.cover >= 4 && ratio < 0.9 ? { text: 'Cloudy', code: 3 } : { text: 'Mostly cloudy', code: 2 };
+          s.thin_deck = true;
+        }
+      }
       return { ...s, is_day: true, source: 'station_sunlight', clear_sky_ratio: Math.round(ratio * 100) / 100, samples: samples.length };
     }
   }
@@ -223,7 +232,7 @@ export async function skyFor(city, env, solarNow, log) {
 
 // Nearest NWS airport reports (ASOS/AWOS ceilometers, free, public domain). Cached 10 minutes.
 const COVER = { SKC: 0, CLR: 0, FEW: 1, SCT: 2, BKN: 3, OVC: 4, VV: 4 };
-async function airportSky(city, day, model, log) {
+async function airportSky(city, day, model, log, raw) {
   const ids = (LOCS.find((l) => l.id === city)?.sky_airports || []).slice(0, 2);
   const covers = [];
   let fog = false, wet = null;
@@ -251,6 +260,7 @@ async function airportSky(city, day, model, log) {
   if (fog) return { text: 'Fog', code: 45, is_day: day, source: 'airports', airports: ids };
   const W = covers.reduce((a, b) => a + b.w, 0);
   let c = Math.round(covers.reduce((a, b) => a + b.c * b.w, 0) / W);
+  if (raw) return { cover: c };
   // Ceilometers see only below ~12,000 ft: let a thick high-cloud deck from the model show through.
   if (c <= 1 && Number(model?.cloud_cover_high) >= 75) c = 2;
   const text = [day ? 'Sunny' : 'Clear', day ? 'Mostly sunny' : 'Mostly clear', 'Partly cloudy', 'Mostly cloudy', 'Cloudy'][c];
