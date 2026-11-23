@@ -2456,3 +2456,47 @@ html[data-theme="light"] #public-shell .dwl-nearby-item small, html[data-theme="
 html[data-theme="light"] #public-shell .dwl-nearby-list a { color: #b26a00; }
 #public-shell #public-alerts details.dwl-alert-nearby, #public-shell .dwl-now-alerts details.dwl-alert-nearby { display: block !important; }
 #public-shell details.dwl-alert-nearby > summary, #public-shell details.dwl-alert-nearby > .dwl-nearby-list { width: 100%; }
+
+/* ================= Regional Lab (Forecast Lab) ================= */
+#regional-lab { display: grid; gap: 14px; }
+.rl-picker { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.rl-picker button { flex: none; appearance: none; padding: 7px 13px; border-radius: 999px; border: 1px solid var(--line-soft); background: rgba(4, 20, 34, .6); color: var(--text-2); font: 600 13.5px/1 var(--font-ui); cursor: pointer; }
+.rl-picker button[aria-selected="true"] { background: rgba(25, 220, 246, .16); border-color: var(--accent); color: #fff; }
+.rl-meta { font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+.rl-card { display: grid; gap: 8px; min-width: 0; }
+.rl-card h3 { margin: 0; }
+.rl-sub, .rl-note, .rl-odds { margin: 0; font-size: 12.5px; color: var(--muted); }
+.rl-empty { color: var(--muted); font-size: 14px; }
+.rl-chart { width: 100%; height: auto; display: block; }
+.rl-chart .rl-grid { stroke: rgba(150, 200, 240, .12); }
+.rl-chart .rl-ax { fill: var(--muted); font: 500 11px var(--font-ui); }
+.rl-chart .rl-band.hi { fill: rgba(251, 146, 60, .10); } .rl-chart .rl-band.lo { fill: rgba(63, 216, 245, .10); }
+.rl-chart .rl-sel { stroke: rgba(255, 255, 255, .35); stroke-dasharray: 3 3; }
+.rl-chart .rl-hit { fill: transparent; cursor: pointer; }
+.rl-legend { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.rl-legend button { appearance: none; display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line-soft); background: none; color: var(--text-2); font: 600 12px var(--font-ui); cursor: pointer; }
+.rl-legend button[aria-pressed="false"] { opacity: .4; }
+.rl-legend i { width: 10px; height: 10px; border-radius: 50%; }
+.rl-key { margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--muted); }
+.rl-key i { display: inline-block; width: 16px; border-top: 2px solid var(--text-2); } .rl-key i.dash { border-top-style: dashed; margin-left: 6px; }
+.rl-rain { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 3px; }
+.rl-rbar { appearance: none; display: grid; justify-items: center; gap: 3px; padding: 4px 0; border: 1px solid transparent; border-radius: 10px; background: none; color: var(--text-2); cursor: pointer; font: 600 11px var(--font-ui); min-width: 0; }
+.rl-rbar.is-sel { border-color: var(--line); background: rgba(25, 220, 246, .08); }
+.rl-pop { color: #7fdcff; font-size: 11px; }
+.rl-track { height: 66px; width: 60%; display: flex; align-items: flex-end; justify-content: center; border-bottom: 1px solid rgba(150, 200, 240, .2); }
+.rl-track i { display: block; width: 100%; border-radius: 3px 3px 0 0; background: linear-gradient(180deg, #7fe6ff, #22a8f0); }
+.rl-amt { font-size: 10.5px; color: var(--text); white-space: nowrap; }
+.rl-dow { font-size: 11px; color: var(--muted); }
+.rl-scroll { overflow-x: auto; }
+.rl-day h4 { margin: 6px 0 4px; font-size: 14px; }
+.rl-card table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 13.5px; }
+.rl-card th, .rl-card td { text-align: left; padding: 6px 8px; border-bottom: 1px solid rgba(150, 200, 240, .12); white-space: nowrap; }
+.rl-card thead th { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.rl-card tbody th i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 7px; }
+.rl-card td.h { color: #fdba74; } .rl-card td.l { color: #7dd3fc; }
+.rl-acc tr.best th, .rl-acc tr.best b { color: #4ade9a; }
+.rl-acc small { font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: #4ade9a; }
+@media (max-width: 480px) { .rl-amt { font-size: 9.5px; } .rl-pop { font-size: 10px; } }
+.rl-chart .rl-ax { font-size: 12px; }
+.rl-key svg { color: var(--text-2); }
+body.public-mode #regional { display: none; }
