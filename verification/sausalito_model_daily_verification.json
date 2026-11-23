@@ -1,198 +1,138 @@
 {
- "generated_utc": "2026-11-23T01:59:00.721114+00:00",
+ "generated_utc": "2026-11-23T21:40:57.808986+00:00",
  "status": "verified_daily_extremes",
  "town": "sausalito",
  "station": "KCASAUSA60",
  "verified_against": "station",
  "model_scores": {
   "ecmwf": {
-   "verified_days": 62,
-   "high_mae_f": 4.03,
-   "low_mae_f": 1.75,
+   "verified_days": 63,
+   "high_mae_f": 4.01,
+   "low_mae_f": 1.73,
    "high_bias_f": -2.66,
-   "low_bias_f": -0.3
+   "low_bias_f": -0.31
   },
   "eps": {
-   "verified_days": 3,
-   "high_mae_f": 2.13,
-   "low_mae_f": 1.27,
-   "high_bias_f": -1.8,
-   "low_bias_f": 0.73
+   "verified_days": 4,
+   "high_mae_f": 2.35,
+   "low_mae_f": 1.18,
+   "high_bias_f": -2.1,
+   "low_bias_f": 0.78
   },
   "gefs": {
-   "verified_days": 3,
-   "high_mae_f": 1.6,
-   "low_mae_f": 2.53,
-   "high_bias_f": -0.73,
-   "low_bias_f": 2.53
+   "verified_days": 4,
+   "high_mae_f": 1.43,
+   "low_mae_f": 2.72,
+   "high_bias_f": -0.78,
+   "low_bias_f": 2.72
   },
   "gem": {
-   "verified_days": 62,
-   "high_mae_f": 5.45,
-   "low_mae_f": 2.19,
-   "high_bias_f": -4.34,
-   "low_bias_f": -1.66
+   "verified_days": 63,
+   "high_mae_f": 5.46,
+   "low_mae_f": 2.18,
+   "high_bias_f": -4.37,
+   "low_bias_f": -1.65
   },
   "gfs": {
-   "verified_days": 62,
-   "high_mae_f": 3.94,
-   "low_mae_f": 2.51,
+   "verified_days": 63,
+   "high_mae_f": 3.9,
+   "low_mae_f": 2.49,
    "high_bias_f": -1.68,
-   "low_bias_f": -1.68
+   "low_bias_f": -1.64
   },
   "icon": {
-   "verified_days": 62,
-   "high_mae_f": 4.25,
-   "low_mae_f": 3.19,
-   "high_bias_f": -3.41,
-   "low_bias_f": -2.43
+   "verified_days": 63,
+   "high_mae_f": 4.24,
+   "low_mae_f": 3.22,
+   "high_bias_f": -3.42,
+   "low_bias_f": -2.47
   }
  },
  "calibration": {
   "ecmwf": {
    "high": {
     "factor": 1.0,
-    "holdout_days": 57,
-    "raw_holdout_mae_f": 4.002,
-    "selected_holdout_mae_f": 3.312,
+    "holdout_days": 58,
+    "raw_holdout_mae_f": 3.981,
+    "selected_holdout_mae_f": 3.258,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 62
+    "verified_days": 63
    },
    "low": {
     "factor": 0,
-    "holdout_days": 57,
-    "raw_holdout_mae_f": 1.758,
-    "selected_holdout_mae_f": 1.758,
+    "holdout_days": 58,
+    "raw_holdout_mae_f": 1.738,
+    "selected_holdout_mae_f": 1.738,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 62
+    "verified_days": 63
    }
   },
   "gem": {
    "high": {
     "factor": 1.0,
-    "holdout_days": 57,
-    "raw_holdout_mae_f": 5.461,
-    "selected_holdout_mae_f": 3.816,
+    "holdout_days": 58,
+    "raw_holdout_mae_f": 5.478,
+    "selected_holdout_mae_f": 3.786,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 62
+    "verified_days": 63
    },
    "low": {
     "factor": 1.0,
-    "holdout_days": 57,
-    "raw_holdout_mae_f": 2.26,
-    "selected_holdout_mae_f": 1.8,
+    "holdout_days": 58,
+    "raw_holdout_mae_f": 2.247,
+    "selected_holdout_mae_f": 1.772,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 62
+    "verified_days": 63
    }
   },
   "gfs": {
    "high": {
     "factor": 0,
-    "holdout_days": 57,
-    "raw_holdout_mae_f": 3.988,
-    "selected_holdout_mae_f": 3.988,
+    "holdout_days": 58,
+    "raw_holdout_mae_f": 3.952,
+    "selected_holdout_mae_f": 3.952,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 62
+    "verified_days": 63
    },
    "low": {
     "factor": 1.0,
-    "holdout_days": 57,
-    "raw_holdout_mae_f": 2.623,
-    "selected_holdout_mae_f": 2.256,
+    "holdout_days": 58,
+    "raw_holdout_mae_f": 2.598,
+    "selected_holdout_mae_f": 2.266,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 62
+    "verified_days": 63
    }
   },
   "icon": {
    "high": {
     "factor": 1.0,
-    "holdout_days": 57,
-    "raw_holdout_mae_f": 4.179,
-    "selected_holdout_mae_f": 2.84,
+    "holdout_days": 58,
+    "raw_holdout_mae_f": 4.176,
+    "selected_holdout_mae_f": 2.801,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 62
+    "verified_days": 63
    },
    "low": {
     "factor": 1.0,
-    "holdout_days": 57,
-    "raw_holdout_mae_f": 3.195,
+    "holdout_days": 58,
+    "raw_holdout_mae_f": 3.222,
     "selected_holdout_mae_f": 2.374,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 62
+    "verified_days": 63
    }
   }
  },
  "method": "Earliest archived day-ahead model forecast per target local date (from the published town feed); observed daily high/low from the town's Weather Underground station (KCASAUSA60) covering at least 22.5 hours of the day",
  "note": "Each town is verified against its own station; Moraga corrections are never transferred.",
  "matches": [
-  {
-   "model": "ecmwf",
-   "valid_local_date": "2026-11-01",
-   "issued_utc": "previous_runs_day1",
-   "observed_high_f": 69.3,
-   "observed_low_f": 47.7,
-   "high_error_f": -6.4,
-   "low_error_f": 1.1,
-   "observation_count": 300
-  },
-  {
-   "model": "gem",
-   "valid_local_date": "2026-11-01",
-   "issued_utc": "previous_runs_day1",
-   "observed_high_f": 69.3,
-   "observed_low_f": 47.7,
-   "high_error_f": -8.9,
-   "low_error_f": 0.1,
-   "observation_count": 300
-  },
-  {
-   "model": "gfs",
-   "valid_local_date": "2026-11-01",
-   "issued_utc": "previous_runs_day1",
-   "observed_high_f": 69.3,
-   "observed_low_f": 47.7,
-   "high_error_f": -3.8,
-   "low_error_f": 1.9,
-   "observation_count": 300
-  },
-  {
-   "model": "icon",
-   "valid_local_date": "2026-11-01",
-   "issued_utc": "previous_runs_day1",
-   "observed_high_f": 69.3,
-   "observed_low_f": 47.7,
-   "high_error_f": -6.3,
-   "low_error_f": -1.5,
-   "observation_count": 300
-  },
-  {
-   "model": "ecmwf",
-   "valid_local_date": "2026-11-02",
-   "issued_utc": "previous_runs_day1",
-   "observed_high_f": 65.3,
-   "observed_low_f": 51.8,
-   "high_error_f": -1.7,
-   "low_error_f": -0.8,
-   "observation_count": 288
-  },
-  {
-   "model": "gem",
-   "valid_local_date": "2026-11-02",
-   "issued_utc": "previous_runs_day1",
-   "observed_high_f": 65.3,
-   "observed_low_f": 51.8,
-   "high_error_f": -3.9,
-   "low_error_f": -3.2,
-   "observation_count": 288
-  },
   {
    "model": "gfs",
    "valid_local_date": "2026-11-02",
@@ -1031,6 +971,66 @@
    "observed_low_f": 43.9,
    "high_error_f": -2.6,
    "low_error_f": -1.5,
+   "observation_count": 288
+  },
+  {
+   "model": "ecmwf",
+   "valid_local_date": "2026-11-22",
+   "issued_utc": "2026-11-21T10:10:09.244282+00:00",
+   "observed_high_f": 55.4,
+   "observed_low_f": 45.3,
+   "high_error_f": -2.8,
+   "low_error_f": -0.6,
+   "observation_count": 288
+  },
+  {
+   "model": "eps",
+   "valid_local_date": "2026-11-22",
+   "issued_utc": "2026-11-21T10:10:09.244282+00:00",
+   "observed_high_f": 55.4,
+   "observed_low_f": 45.3,
+   "high_error_f": -3.0,
+   "low_error_f": 0.9,
+   "observation_count": 288
+  },
+  {
+   "model": "gefs",
+   "valid_local_date": "2026-11-22",
+   "issued_utc": "2026-11-21T10:10:09.244282+00:00",
+   "observed_high_f": 55.4,
+   "observed_low_f": 45.3,
+   "high_error_f": -0.9,
+   "low_error_f": 3.3,
+   "observation_count": 288
+  },
+  {
+   "model": "gem",
+   "valid_local_date": "2026-11-22",
+   "issued_utc": "2026-11-21T10:10:09.244282+00:00",
+   "observed_high_f": 55.4,
+   "observed_low_f": 45.3,
+   "high_error_f": -6.4,
+   "low_error_f": -1.5,
+   "observation_count": 288
+  },
+  {
+   "model": "gfs",
+   "valid_local_date": "2026-11-22",
+   "issued_utc": "2026-11-21T10:10:09.244282+00:00",
+   "observed_high_f": 55.4,
+   "observed_low_f": 45.3,
+   "high_error_f": -1.9,
+   "low_error_f": 1.2,
+   "observation_count": 288
+  },
+  {
+   "model": "icon",
+   "valid_local_date": "2026-11-22",
+   "issued_utc": "2026-11-21T10:10:09.244282+00:00",
+   "observed_high_f": 55.4,
+   "observed_low_f": 45.3,
+   "high_error_f": -4.0,
+   "low_error_f": -4.8,
    "observation_count": 288
   }
  ]

@@ -389,6 +389,12 @@
    "low_f": 36.3,
    "precip_in": 0.02,
    "samples": 288
+  },
+  "2026-11-22": {
+   "high_f": 53.8,
+   "low_f": 39.7,
+   "precip_in": 0,
+   "samples": 288
   }
  },
  "campolindo": {},
@@ -795,6 +801,12 @@
    "high_f": 56.7,
    "low_f": 32.7,
    "precip_in": 0,
+   "samples": 288
+  },
+  "2026-11-22": {
+   "high_f": 53.1,
+   "low_f": 37.8,
+   "precip_in": 0.01,
    "samples": 288
   }
  },
@@ -1207,6 +1219,12 @@
    "low_f": 34.2,
    "precip_in": 0.01,
    "samples": 288
+  },
+  "2026-11-22": {
+   "high_f": 54.5,
+   "low_f": 36,
+   "precip_in": 0.02,
+   "samples": 288
   }
  },
  "haight": {},
@@ -1602,6 +1620,12 @@
    "low_f": 33.4,
    "precip_in": 0.03,
    "samples": 284
+  },
+  "2026-11-22": {
+   "high_f": 53.8,
+   "low_f": 36.9,
+   "precip_in": 0.01,
+   "samples": 288
   }
  },
  "lakemerritt": {},
@@ -2009,6 +2033,12 @@
    "low_f": 36.1,
    "precip_in": 0.03,
    "samples": 288
+  },
+  "2026-11-22": {
+   "high_f": 51.1,
+   "low_f": 42.4,
+   "precip_in": 0.04,
+   "samples": 288
   }
  },
  "saranap": {},
@@ -2382,6 +2412,12 @@
   "2026-11-21": {
    "high_f": 54.3,
    "low_f": 43.9,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-11-22": {
+   "high_f": 55.4,
+   "low_f": 45.3,
    "precip_in": 0,
    "samples": 288
   }
