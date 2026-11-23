@@ -261,7 +261,10 @@ async function airportSky(city, day, model, log, raw) {
   if (fog) return { text: 'Fog', code: 45, is_day: day, source: 'airports', airports: ids };
   const W = covers.reduce((a, b) => a + b.w, 0);
   let c = Math.round(covers.reduce((a, b) => a + b.c * b.w, 0) / W);
-  if (raw) return { cover: c, near: Math.max(0, ...covers.filter((x) => x.mi <= 13).map((x) => x.c)) };
+  const near = Math.max(0, ...covers.filter((x) => x.mi <= 13).map((x) => x.c));
+  if (raw) return { cover: c, near };
+  // A broken/overcast deck at an airport within ~13 miles usually covers the neighbourhood too.
+  if (near >= 3 && c < 3) c = 3;
   // Ceilometers see only below ~12,000 ft: let a thick high-cloud deck from the model show through.
   if (c <= 1 && Number(model?.cloud_cover_high) >= 75) c = 2;
   const text = [day ? 'Sunny' : 'Clear', day ? 'Mostly sunny' : 'Mostly clear', 'Partly cloudy', 'Mostly cloudy', 'Cloudy'][c];
