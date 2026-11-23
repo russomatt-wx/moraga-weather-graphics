@@ -35,7 +35,7 @@ for label,model in MODELS.items():
         t=[float(v) if v is not None else float("nan") for v in h["temperature_850hPa"]]
         axes[0].plot(x,z,label=label,color=colors[label],linewidth=2.2)
         axes[1].plot(x,t,label=label,color=colors[label],linewidth=2.2)
-        results[label]={"model":model,"hours":len(x),"grid_latitude":payload.get("latitude"),"grid_longitude":payload.get("longitude")}
+        results[label]={"model":model,"hours":len(x),"grid_latitude":payload.get("latitude"),"grid_longitude":payload.get("longitude"),"time":h["time"],"z500_m":[None if v!=v else round(v) for v in z],"t850_c":[None if v!=v else round(v,1) for v in t]}
     except Exception as exc:
         results[label]={"error":str(exc)}
 # Actual ensemble means from Open-Meteo's ensemble-mean API.
@@ -66,7 +66,8 @@ for label, model in ENSEMBLES.items():
                       linewidth=2.3,linestyle=(0,(6,3)))
         results[label]={"model":model,"source":"Open-Meteo ensemble-mean",
                         "hours":len(x),"grid_latitude":payload.get("latitude"),
-                        "grid_longitude":payload.get("longitude")}
+                        "grid_longitude":payload.get("longitude"),"time":h["time"],
+                        "z500_m":[None if not np.isfinite(v) else round(float(v)) for v in z],"t850_c":[None if not np.isfinite(v) else round(float(v),1) for v in t]}
     except Exception as exc:
         results[label]={"error":str(exc)}
         print(f"{label} ensemble mean unavailable: {exc}")

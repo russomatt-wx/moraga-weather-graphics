@@ -1,142 +1,177 @@
 /* Diablo Weather Lab — Regional Lab (Forecast Lab).
-   Interactive model guidance for a few regional hubs, drawn in the browser from each location's
-   published forecast feed ({id}_forecast_10day.json) and verification files. No extra jobs or images. */
+   Moraga's chart set (temperature guidance, ensemble spread, 14-day rainfall, upper air) for each regional
+   site, drawn in one consistent style from the data files the chart jobs publish
+   (moraga_*.json for Moraga, lab/{id}_*.json for the others) plus live hourly model temperatures. */
 (function () {
   'use strict';
-  var HUBS = [
-    ['moraga', 'Moraga'], ['soma', 'San Francisco'], ['downtownoakland', 'Oakland'], ['northgate', 'Walnut Creek'],
-    ['danville', 'Danville'], ['claytonvalley', 'Concord'], ['livermorewine', 'Livermore'], ['sacramento', 'Sacramento']
-  ];
-  var COLORS = { EPS: '#a78bfa', GEFS: '#f472b6', ECMWF: '#3fd8f5', GFS: '#fbbf24', ICON: '#34d399', GEM: '#fb923c', NAM: '#94a3b8' };
+  var HUBS = [['moraga', 'Moraga'], ['soma', 'San Francisco'], ['downtownoakland', 'Oakland'], ['northgate', 'Walnut Creek'],
+    ['danville', 'Danville'], ['claytonvalley', 'Concord'], ['livermorewine', 'Livermore'], ['sacramento', 'Sacramento']];
+  var C = { GFS: '#5aa9ff', ECMWF: '#ffbf2e', HRRR: '#37d67a', NAM: '#ff7a59', ICON: '#a78bfa', GEM: '#f472b6', EPS: '#ffbf2e', GEFS: '#5aa9ff', 'EPS mean': '#ffd98a', 'GEFS mean': '#9cc9ff' };
+  var TZ = 'America/Los_Angeles';
   var host = document.getElementById('regional-lab'); if (!host) return;
-  var state = { id: 'moraga', hidden: {}, day: 0, feed: null };
-  try { var saved = localStorage.getItem('dwl-lab-hub'); if (saved && HUBS.some(function (h) { return h[0] === saved; })) state.id = saved; } catch (e) {}
+  var LOC = {}; (window.DWL_LOCATIONS || []).forEach(function (l) { LOC[l.id] = l; });
+  LOC.moraga = { lat: 37.8201932, lon: -122.1193876 };
+  var state = { id: 'moraga', hidden: {}, charts: {}, data: {} };
+  try { var sv = localStorage.getItem('dwl-lab-hub'); if (sv && HUBS.some(function (h) { return h[0] === sv; })) state.id = sv; } catch (e) {}
 
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
-  var fmtDay = function (d) { var t = new Date(d + 'T12:00:00'); return { dow: t.toLocaleDateString('en-US', { weekday: 'short' }), md: t.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }; };
-  var r1 = function (v) { return Math.round(v); };
   var num = function (v) { return v !== null && v !== undefined && Number.isFinite(Number(v)); };
+  var nameOf = function (id) { return (HUBS.find(function (h) { return h[0] === id; }) || [])[1]; };
+  var getJSON = function (u) { return fetch(u + (u.indexOf('?') < 0 ? '?' : '&') + 't=' + Math.floor(Date.now() / 600000)).then(function (r) { if (!r.ok) throw Error(r.status); return r.json(); }); };
+  // Local wall-clock time string ("2026-11-23T14:00", with or without offset) -> ms on one local axis.
+  var tms = function (t) { return Date.parse(String(t).slice(0, 16) + ':00Z'); };
+  var dayLbl = function (ms) { return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][new Date(ms).getUTCDay()]; };
+  var nowLocal = function () { var p = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23' }).formatToParts(new Date()); var g = function (k) { return p.find(function (x) { return x.type === k; }).value; }; return tms(g('year') + '-' + g('month') + '-' + g('day') + 'T' + g('hour') + ':00'); };
 
-  function picker() {
-    return '<div class="rl-picker" role="tablist" aria-label="Choose a regional site">' + HUBS.map(function (h) {
-      return '<button type="button" role="tab" data-hub="' + h[0] + '" aria-selected="' + (h[0] === state.id) + '">' + esc(h[1]) + '</button>';
-    }).join('') + '</div>';
-  }
-
-  // Temperature chart: each model's daily high (solid) and low (dashed); shaded band = spread across models.
-  function tempChart(f) {
-    var dates = f.dates.slice(0, 10), models = Object.keys(f.temperature_models || {});
-    var W = 560, H = 360, L = 34, R = 10, T = 14, B = 30, n = dates.length;
+  /* ---------- One chart style for every line chart ---------- */
+  function lineChart(spec) {
+    var W = 560, H = spec.h || 330, L = 44, R = 12, T = 12, B = 28;
+    var start = nowLocal() - 3600e3, end = start + (spec.days || 10) * 86400e3;
+    var vis = function (n) { return !state.hidden[spec.key + ':' + n]; };
     var vals = [];
-    models.forEach(function (m) { var tm = f.temperature_models[m]; dates.forEach(function (d) { var i = tm.dates.indexOf(d); if (i >= 0) { [tm.high_f[i], tm.low_f[i]].forEach(function (q) { if (num(q)) vals.push(+q); }); } }); });
-     if (!vals.length) return '<p class="rl-empty">No model temperatures yet.</p>';
-    var lo = Math.floor((Math.min.apply(null, vals) - 3) / 5) * 5, hi = Math.ceil((Math.max.apply(null, vals) + 3) / 5) * 5;
-    var x = function (i) { return L + (W - L - R) * (n === 1 ? .5 : i / (n - 1)); }, y = function (v) { return T + (H - T - B) * (1 - (v - lo) / (hi - lo)); };
+    spec.series.forEach(function (s) { if (!vis(s.name)) return; s.t.forEach(function (t, i) { var m = tms(t); if (m >= start && m <= end && num(s.v[i])) vals.push(+s.v[i]); }); });
+    (spec.bands || []).forEach(function (b) { if (!vis(b.name)) return; b.t.forEach(function (t, i) { var m = tms(t); if (m >= start && m <= end) { if (num(b.lo[i])) vals.push(+b.lo[i]); if (num(b.hi[i])) vals.push(+b.hi[i]); } }); });
+    if (!vals.length) return '<p class="rl-empty">No data for this chart yet.</p>';
+    var step = spec.step || 5, lo = Math.floor((Math.min.apply(null, vals) - step / 2) / step) * step, hi = Math.ceil((Math.max.apply(null, vals) + step / 2) / step) * step;
+    var x = function (m) { return L + (W - L - R) * (m - start) / (end - start); }, y = function (v) { return T + (H - T - B) * (1 - (v - lo) / (hi - lo)); };
     var g = '';
-    for (var v = lo; v <= hi; v += 5) g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v) + '" y2="' + y(v) + '" class="rl-grid"/><text x="' + (L - 6) + '" y="' + (y(v) + 4) + '" class="rl-ax" text-anchor="end">' + v + '°</text>';
-    dates.forEach(function (d, i) { var fd = fmtDay(d); g += '<text x="' + x(i) + '" y="' + (H - 14) + '" class="rl-ax" text-anchor="middle">' + fd.dow + '</text>'; });
-    // spread bands
-    ['high_f', 'low_f'].forEach(function (k) {
-      var top = [], bot = [];
-      dates.forEach(function (d, i) { var vs = models.filter(function (m) { return !state.hidden[m]; }).map(function (m) { var tm = f.temperature_models[m], j = tm.dates.indexOf(d); return j >= 0 && num(tm[k][j]) ? +tm[k][j] : null; }).filter(function (q) { return q !== null; });
-        if (vs.length) { top.push([x(i), y(Math.max.apply(null, vs))]); bot.push([x(i), y(Math.min.apply(null, vs))]); } });
-      if (top.length > 1) g += '<path class="rl-band ' + (k === 'high_f' ? 'hi' : 'lo') + '" d="M' + top.map(function (p) { return p.join(','); }).join('L') + 'L' + bot.reverse().map(function (p) { return p.join(','); }).join('L') + 'Z"/>';
+    for (var v = lo; v <= hi + 1e-9; v += step) g += '<line class="rl-grid" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v).toFixed(1) + '" y2="' + y(v).toFixed(1) + '"/><text class="rl-ax" x="' + (L - 6) + '" y="' + (y(v) + 4).toFixed(1) + '" text-anchor="end">' + spec.fmt(v) + '</text>';
+    for (var d = Math.ceil(start / 86400e3) * 86400e3; d <= end; d += 86400e3) g += '<line class="rl-day" x1="' + x(d).toFixed(1) + '" x2="' + x(d).toFixed(1) + '" y1="' + T + '" y2="' + (H - B) + '"/>' + (x(d + 86400e3) <= W - R + 1 ? '<text class="rl-ax" x="' + (x(d) + (x(d + 86400e3) - x(d)) / 2).toFixed(1) + '" y="' + (H - 9) + '" text-anchor="middle">' + dayLbl(d) + '</text>' : '');
+    (spec.bands || []).forEach(function (b) {
+      if (!vis(b.name)) return; var top = [], bot = [];
+      b.t.forEach(function (t, i) { var m = tms(t); if (m >= start && m <= end && num(b.lo[i]) && num(b.hi[i])) { top.push(x(m).toFixed(1) + ',' + y(+b.hi[i]).toFixed(1)); bot.push(x(m).toFixed(1) + ',' + y(+b.lo[i]).toFixed(1)); } });
+      if (top.length > 1) g += '<path d="M' + top.join('L') + 'L' + bot.reverse().join('L') + 'Z" fill="' + b.color + '" opacity=".18"/>';
     });
-    models.forEach(function (m) {
-      if (state.hidden[m]) return; var tm = f.temperature_models[m], c = COLORS[m] || '#cbd5e1';
-      ['high_f', 'low_f'].forEach(function (k) {
-        var pts = dates.map(function (d, i) { var j = tm.dates.indexOf(d); return j >= 0 && num(tm[k][j]) ? x(i) + ',' + y(tm[k][j]) : null; }).filter(Boolean);
-        if (pts.length > 1) g += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + c + '" stroke-width="2" ' + (k === 'low_f' ? 'stroke-dasharray="5 4"' : '') + ' stroke-linejoin="round" stroke-linecap="round"/>';
-      });
+    spec.series.forEach(function (s) {
+      if (!vis(s.name)) return; var seg = [], segs = [];
+      s.t.forEach(function (t, i) { var m = tms(t); if (m < start || m > end) return; if (num(s.v[i])) seg.push(x(m).toFixed(1) + ',' + y(+s.v[i]).toFixed(1)); else if (seg.length) { segs.push(seg); seg = []; } });
+      if (seg.length) segs.push(seg);
+      segs.forEach(function (sg) { if (sg.length > 1) g += '<polyline points="' + sg.join(' ') + '" fill="none" stroke="' + s.color + '" stroke-width="' + (s.width || 2) + '"' + (s.dash ? ' stroke-dasharray="6 4"' : '') + ' stroke-linejoin="round" stroke-linecap="round"/>'; });
     });
-    g += '<line class="rl-sel" x1="' + x(state.day) + '" x2="' + x(state.day) + '" y1="' + T + '" y2="' + (H - B) + '"/>';
-    dates.forEach(function (d, i) { g += '<rect class="rl-hit" data-day="' + i + '" x="' + (x(i) - (W - L - R) / (n - 1) / 2) + '" y="' + T + '" width="' + ((W - L - R) / (n - 1)) + '" height="' + (H - T - B) + '"/>'; });
-    var legend = '<div class="rl-legend">' + models.map(function (m) {
-      return '<button type="button" data-model="' + esc(m) + '" aria-pressed="' + !state.hidden[m] + '"><i style="background:' + (COLORS[m] || '#cbd5e1') + '"></i>' + esc(m) + '</button>';
-    }).join('') + '<span class="rl-key"><svg width="18" height="6"><line x1="0" y1="3" x2="18" y2="3" stroke="currentColor" stroke-width="2"/></svg>High <svg width="18" height="6"><line x1="0" y1="3" x2="18" y2="3" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3"/></svg>Low</span></div>';
-    return '<svg viewBox="0 0 ' + W + ' ' + H + '" class="rl-chart" role="img" aria-label="Daily high and low temperature by model">' + g + '</svg>' + legend;
+    g += '<line class="rl-cursor" x1="0" x2="0" y1="' + T + '" y2="' + (H - B) + '" visibility="hidden"/><rect class="rl-hit" x="' + L + '" y="' + T + '" width="' + (W - L - R) + '" height="' + (H - T - B) + '"/>';
+    state.charts[spec.key] = { spec: spec, start: start, end: end, L: L, R: R, W: W };
+    var names = spec.series.map(function (s) { return [s.name, s.color]; }).concat((spec.bands || []).filter(function (b) { return !spec.series.some(function (s) { return s.name === b.name; }); }).map(function (b) { return [b.name, b.color]; }));
+    return '<div class="rl-plot" data-chart="' + spec.key + '"><svg viewBox="0 0 ' + W + ' ' + H + '" class="rl-chart" role="img" aria-label="' + esc(spec.label) + '">' + g + '</svg><div class="rl-tip" hidden></div></div>' +
+      '<div class="rl-legend">' + names.map(function (n) { return '<button type="button" data-toggle="' + esc(spec.key + ':' + n[0]) + '" aria-pressed="' + vis(n[0]) + '"><i style="background:' + n[1] + '"></i>' + esc(n[0]) + '</button>'; }).join('') + '</div>';
   }
 
-  // Rain chart: expected amount per day (bar) and chance (label above).
-  function rainChart(f) {
-    var dates = f.dates.slice(0, 10), rg = f.rain_guidance || {}, pop = f.ensemble_rain_probability_pct || {};
-    var amts = dates.map(function (d) { return Number(rg[d] && rg[d].expected_inches) || 0; }), max = Math.max(.25, Math.max.apply(null, amts));
-    return '<div class="rl-rain">' + dates.map(function (d, i) {
-      var p = Number(rg[d] && rg[d].derived_pop_pct); if (!isFinite(p)) p = Number(pop[d]); var fd = fmtDay(d), a = amts[i];
-      return '<button type="button" class="rl-rbar' + (i === state.day ? ' is-sel' : '') + '" data-day="' + i + '"><span class="rl-pop">' + (isFinite(p) ? Math.round(p / 10) * 10 + '%' : '') + '</span><span class="rl-track"><i style="height:' + Math.max(a > 0.004 ? 4 : 0, Math.round(64 * a / max)) + 'px"></i></span><span class="rl-amt">' + (a >= .01 ? a.toFixed(2) + '″' : '—') + '</span><span class="rl-dow">' + fd.dow + '</span></button>';
-    }).join('') + '</div>';
+  // Tap / drag on a chart: cursor line + every visible series' value at that time.
+  function inspect(plot, clientX) {
+    var c = state.charts[plot.dataset.chart]; if (!c) return; var svg = plot.querySelector('svg'), r = svg.getBoundingClientRect();
+    var px = (clientX - r.left) / r.width * c.W; if (px < c.L || px > c.W - c.R) return;
+    var m = c.start + (px - c.L) / (c.W - c.L - c.R) * (c.end - c.start), rows = [];
+    var near = function (t, arr) { var best = -1, bd = 1e18; t.forEach(function (tt, i) { var d = Math.abs(tms(tt) - m); if (d < bd && num(arr[i])) { bd = d; best = i; } }); return bd <= 3 * 3600e3 ? best : -1; };
+    c.spec.series.forEach(function (s) { if (state.hidden[c.spec.key + ':' + s.name]) return; var i = near(s.t, s.v); if (i >= 0) rows.push('<span><i style="background:' + s.color + '"></i>' + esc(s.name) + ' <b>' + c.spec.fmt(+s.v[i], true) + '</b></span>'); });
+    (c.spec.bands || []).forEach(function (b) { if (state.hidden[c.spec.key + ':' + b.name]) return; var i = near(b.t, b.lo); if (i >= 0) rows.push('<span><i style="background:' + b.color + '"></i>' + esc(b.name) + ' range <b>' + c.spec.fmt(+b.lo[i], true) + '–' + c.spec.fmt(+b.hi[i], true) + '</b></span>'); });
+    var d = new Date(m), when = dayLbl(m) + ' ' + ((d.getUTCHours() % 12) || 12) + (d.getUTCHours() < 12 ? ' AM' : ' PM');
+    var cur = svg.querySelector('.rl-cursor'); cur.setAttribute('x1', px); cur.setAttribute('x2', px); cur.setAttribute('visibility', 'visible');
+    var tip = plot.querySelector('.rl-tip'); tip.innerHTML = '<b>' + when + '</b>' + rows.join(''); tip.hidden = false;
   }
 
-  // Selected day: every model's high / low / rain.
-  function dayDetail(f) {
-    var d = f.dates[state.day]; if (!d) return ''; var fd = fmtDay(d), rows = '';
-    Object.keys(f.temperature_models || {}).forEach(function (m) {
-      var tm = f.temperature_models[m], j = tm.dates.indexOf(d), rain = (f.model_daily_inches || {})[m] || (f.model_daily_inches || {})[m + ' mean'];
-      if (j < 0) return; var ri = rain && rain[state.day];
-      rows += '<tr><th scope="row"><i style="background:' + (COLORS[m] || '#cbd5e1') + '"></i>' + esc(m) + '</th><td class="h">' + (num(tm.high_f[j]) ? r1(tm.high_f[j]) + '°' : '—') + '</td><td class="l">' + (num(tm.low_f[j]) ? r1(tm.low_f[j]) + '°' : '—') + '</td><td>' + (num(ri) ? Number(ri).toFixed(2) + '″' : '—') + '</td></tr>';
+  var MODELS = [['GFS', 'ncep_gfs_seamless'], ['ECMWF', 'ecmwf_ifs025'], ['HRRR', 'ncep_hrrr_conus'], ['NAM', 'ncep_nam_conus'], ['ICON', 'icon_seamless'], ['GEM', 'gem_seamless']];
+  function tempGuidance(site) {
+    return Promise.allSettled(MODELS.map(function (m) {
+      var q = new URLSearchParams({ latitude: site.lat, longitude: site.lon, hourly: 'temperature_2m', models: m[1], temperature_unit: 'fahrenheit', timezone: TZ, forecast_days: '11' });
+      return fetch('https://api.open-meteo.com/v1/forecast?' + q).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (j) { return { name: m[0], color: C[m[0]], t: j.hourly.time, v: j.hourly.temperature_2m }; });
+    })).then(function (res) { return res.filter(function (r) { return r.status === 'fulfilled'; }).map(function (r) { return r.value; }); });
+  }
+  var degF = function (v) { return Math.round(v) + '°'; };
+  var specs = {
+    temp: function () { return { key: 'temp', label: 'Temperature guidance', series: state.data.temp, fmt: degF, days: 10 }; },
+    ens: function () { return { key: 'ens', label: 'Ensemble spread', series: state.data.ens.series, bands: state.data.ens.bands, fmt: degF, days: 11 }; },
+    z500: function () { return { key: 'z500', label: '500 mb height', series: state.data.up.z, fmt: function (v) { return Math.round(v); }, step: 60, h: 240, days: 10 }; },
+    t850: function () { return { key: 't850', label: '850 mb temperature', series: state.data.up.t, fmt: function (v, tip) { return (tip ? (+v).toFixed(1) : Math.round(v)) + '°'; }, step: 2, h: 240, days: 10 }; }
+  };
+  var upHTML = function () { return '<h4 class="rl-h4">500 mb height (m)</h4>' + lineChart(specs.z500()) + '<h4 class="rl-h4">850 mb temperature (°C)</h4>' + lineChart(specs.t850()); };
+
+  function render() {
+    var id = state.id, name = nameOf(id), pre = id === 'moraga' ? 'moraga' : 'lab/' + id, site = LOC[id];
+    state.charts = {}; state.data = {};
+    host.innerHTML = '<div class="rl-picker" role="tablist" aria-label="Choose a regional site">' + HUBS.map(function (h) { return '<button type="button" role="tab" data-hub="' + h[0] + '" aria-selected="' + (h[0] === id) + '">' + esc(h[1]) + '</button>'; }).join('') + '</div>' +
+      '<div class="rl-cards">' +
+      '<article class="card rl-card"><h3>Temperature guidance</h3><p class="rl-sub">Hourly temperature from six models · tap the chart for values</p><div id="rl-c-temp" class="rl-body"><p class="rl-empty">Loading…</p></div></article>' +
+      '<article class="card rl-card"><h3>Ensemble spread</h3><p class="rl-sub">Shaded = 10th–90th percentile of each ensemble · line = median</p><div id="rl-c-ens" class="rl-body"><p class="rl-empty">Loading…</p></div></article>' +
+      '<article class="card rl-card"><h3>14-day rainfall</h3><p class="rl-sub">Daily rain by model · % = chance of measurable rain · tap a day</p><div id="rl-c-rain" class="rl-body"><p class="rl-empty">Loading…</p></div></article>' +
+      '<article class="card rl-card"><h3>Upper air · 10 days</h3><p class="rl-sub">500 mb height (higher = ridge, lower = trough) and 850 mb temperature (air mass)</p><div id="rl-c-up" class="rl-body"><p class="rl-empty">Loading…</p></div></article>' +
+      '<article class="card rl-card"><h3>Which model is best here?</h3><div id="rl-acc" class="rl-body"><p class="rl-empty">Loading…</p></div></article>' +
+      '</div>';
+    var put = function (el, html) { if (state.id === id) { var e = document.getElementById(el); if (e) e.innerHTML = html; } };
+    var pending = '<p class="rl-empty">Chart data for ' + esc(name) + ' is being prepared — check back shortly.</p>';
+    tempGuidance(site).then(function (s) { if (state.id !== id) return; state.data.temp = s; put('rl-c-temp', s.length ? lineChart(specs.temp()) : '<p class="rl-empty">Live model guidance unavailable right now.</p>'); });
+    getJSON(pre + '_ensemble_range.json').then(function (j) {
+      if (state.id !== id) return; var ser = [], bands = [];
+      Object.keys(j.models || {}).forEach(function (k) { var m = j.models[k], nm = /EPS|ECMWF/.test(k) ? 'EPS' : 'GEFS'; bands.push({ name: nm, color: C[nm], t: m.time, lo: m.p10, hi: m.p90 }); ser.push({ name: nm, color: C[nm], t: m.time, v: m.median, width: 2.4 }); });
+      state.data.ens = { series: ser, bands: bands }; put('rl-c-ens', lineChart(specs.ens()));
+    }).catch(function () { put('rl-c-ens', pending); });
+    getJSON(pre + '_rainfall_10day.json').then(function (j) { if (state.id !== id) return; state.data.rain = j; put('rl-c-rain', rainChart(j)); }).catch(function () { put('rl-c-rain', pending); });
+    getJSON(pre + '_upper_air_10day.json').then(function (j) {
+      if (state.id !== id) return; var ms = Object.keys(j.models || {}).filter(function (k) { return j.models[k].time; });
+      if (!ms.length) throw 0;
+      var mk = function (field) { return ms.map(function (k) { return { name: k + (/EPS|GEFS/.test(k) ? ' mean' : ''), color: C[k], t: j.models[k].time, v: j.models[k][field], dash: /EPS|GEFS/.test(k) }; }); };
+      state.data.up = { z: mk('z500_m'), t: mk('t850_c') }; put('rl-c-up', upHTML());
+    }).catch(function () { put('rl-c-up', pending); });
+    loadAccuracy(id);
+  }
+
+  // Rain: grouped bars per day (one per model), chance on top; tap a day for the numbers.
+  function rainChart(j) {
+    var dates = (j.dates || []).slice(0, 14), all = Object.keys(j.model_daily_inches || {}), mods = all.filter(function (m) { return !state.hidden['rain:' + m]; }), pop = j.ensemble_rain_probability_pct || {};
+    var max = .25; mods.forEach(function (m) { (j.model_daily_inches[m] || []).slice(0, 14).forEach(function (v) { if (num(v) && v > max) max = +v; }); });
+    var st = [.05, .1, .25, .5, 1].find(function (q) { return max / q <= 5; }) || 1; max = Math.ceil(max / st) * st; var ticks = Math.round(max / st);
+    var W = 560, H = 300, L = 40, R = 8, T = 26, B = 30, n = dates.length, cw = (W - L - R) / n, bw = Math.max(2, (cw - 6) / Math.max(1, mods.length));
+    var y = function (v) { return T + (H - T - B) * (1 - v / max); }, g = '';
+    for (var k = 0; k <= ticks; k++) { var v = st * k; g += '<line class="rl-grid" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v).toFixed(1) + '" y2="' + y(v).toFixed(1) + '"/><text class="rl-ax" x="' + (L - 5) + '" y="' + (y(v) + 4).toFixed(1) + '" text-anchor="end">' + v.toFixed(2) + '</text>'; }
+    dates.forEach(function (d, i) {
+      var x0 = L + i * cw; g += '<text class="rl-ax" x="' + (x0 + cw / 2).toFixed(1) + '" y="' + (H - 10) + '" text-anchor="middle">' + dayLbl(tms(d + 'T12:00')).slice(0, 2) + '</text>';
+      if (num(pop[d])) g += '<text class="rl-pop" x="' + (x0 + cw / 2).toFixed(1) + '" y="' + (T - 10) + '" text-anchor="middle">' + Math.round(pop[d] / 10) * 10 + '</text>';
+      mods.forEach(function (m, k) { var val = (j.model_daily_inches[m] || [])[i]; if (num(val) && val > 0) g += '<rect x="' + (x0 + 3 + k * bw).toFixed(1) + '" y="' + y(+val).toFixed(1) + '" width="' + Math.max(1, bw - .6).toFixed(1) + '" height="' + (y(0) - y(+val)).toFixed(1) + '" rx="1" fill="' + (C[m] || '#cbd5e1') + '"/>'; });
+      g += '<rect class="rl-hitday" data-rainday="' + i + '" x="' + x0.toFixed(1) + '" y="' + T + '" width="' + cw.toFixed(1) + '" height="' + (H - T - B) + '"/>';
     });
-    var rg = (f.rain_guidance || {})[d] || {}, th = rg.ensemble_threshold_pct || {};
-    var odds = th['0.1'] !== undefined ? '<p class="rl-odds">Ensemble odds: ' + (th['0.01'] || 0) + '% any rain · ' + (th['0.1'] || 0) + '% ≥ 0.10″ · ' + (th['0.25'] || 0) + '% ≥ 0.25″ · ' + (th['0.5'] || 0) + '% ≥ 0.50″</p>' : '';
-    return '<div class="rl-day"><h4>' + fd.dow + ', ' + fd.md + '</h4><div class="rl-scroll"><table><thead><tr><th>Model</th><th>High</th><th>Low</th><th>Rain</th></tr></thead><tbody>' + rows + '</tbody></table></div>' + odds + '</div>';
+    return '<svg viewBox="0 0 ' + W + ' ' + H + '" class="rl-chart" role="img" aria-label="14-day rainfall by model">' + g + '</svg>' +
+      '<div class="rl-legend">' + all.map(function (m) { return '<button type="button" data-toggle="rain:' + esc(m) + '" aria-pressed="' + !state.hidden['rain:' + m] + '"><i style="background:' + (C[m] || '#cbd5e1') + '"></i>' + esc(m) + '</button>'; }).join('') + '<span class="rl-key">inches · top row = % chance</span></div><div class="rl-raintip" id="rl-raintip"></div>';
+  }
+  function rainDay(i) {
+    var j = state.data.rain, d = j && j.dates[i], tip = document.getElementById('rl-raintip'); if (!d || !tip) return;
+    var pop = (j.ensemble_rain_probability_pct || {})[d];
+    tip.innerHTML = '<b>' + new Date(d + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }) + (num(pop) ? ' · ' + Math.round(pop) + '% chance' : '') + '</b>' +
+      Object.keys(j.model_daily_inches).map(function (m) { var v = j.model_daily_inches[m][i]; return '<span><i style="background:' + (C[m] || '#cbd5e1') + '"></i>' + esc(m) + ' <b>' + (num(v) ? (+v).toFixed(2) + '″' : '—') + '</b></span>'; }).join('');
   }
 
-  // Accuracy: per-model next-day error at this site, raw vs after local correction.
+  function loadAccuracy(id) {
+    var tries = id === 'moraga' ? ['verification/moraga_model_daily_verification_noaa.json', 'model_daily_verification_latest.json'] : ['verification/' + id + '_model_daily_verification_noaa.json', 'verification/' + id + '_model_daily_verification.json'];
+    (function next(k) {
+      if (k >= tries.length) { var a = document.getElementById('rl-acc'); if (a) a.innerHTML = '<p class="rl-empty">Accuracy builds as verified days accumulate.</p>'; return; }
+      getJSON(tries[k]).then(function (v) { if (id !== state.id) return; if (!v.calibration) throw 0; var a = document.getElementById('rl-acc'); if (a) a.innerHTML = accuracy(v); }).catch(function () { next(k + 1); });
+    })(0);
+  }
   function accuracy(v) {
-    if (!v || !v.calibration) return '<p class="rl-empty">Accuracy builds as verified days accumulate.</p>';
     var rows = Object.keys(v.calibration).filter(function (m) { var c = v.calibration[m]; return c.high && c.high.holdout_days >= 8; }).map(function (m) {
       var c = v.calibration[m]; return { m: m.toUpperCase(), d: c.high.holdout_days, hr: c.high.raw_holdout_mae_f, hc: c.high.selected_holdout_mae_f, lr: c.low.raw_holdout_mae_f, lc: c.low.selected_holdout_mae_f };
     }).sort(function (a, b) { return (a.hc + a.lc) - (b.hc + b.lc); });
+    var most = Math.max.apply(null, rows.map(function (r) { return r.d; }).concat([0])); rows = rows.filter(function (r) { return r.d >= most * .6; });
     if (!rows.length) return '<p class="rl-empty">Accuracy builds as verified days accumulate.</p>';
     var src = v.verified_against === 'station' ? 'the local station' : v.verified_against === 'public_stations' ? 'nearby public stations' : 'NOAA observed temperatures';
     return '<div class="rl-scroll"><table class="rl-acc"><thead><tr><th>Model</th><th>High miss</th><th>Low miss</th><th>Days</th></tr></thead><tbody>' + rows.map(function (r, k) {
       return '<tr' + (k === 0 ? ' class="best"' : '') + '><th scope="row">' + esc(r.m) + (k === 0 ? ' <small>best</small>' : '') + '</th><td>' + r.hr.toFixed(1) + '° → <b>' + r.hc.toFixed(1) + '°</b></td><td>' + r.lr.toFixed(1) + '° → <b>' + r.lc.toFixed(1) + '°</b></td><td>' + r.d + '</td></tr>';
-    }).join('') + '</tbody></table></div><p class="rl-note">Average next-day miss against ' + src + ', before → after this site\'s learned corrections (scored only on days the corrections had not seen).</p>';
+    }).join('') + '</tbody></table></div><p class="rl-note">Average next-day miss against ' + src + ', before → after this site\'s learned corrections.</p>';
   }
 
-  // Same charts as Moraga's section: live temperature guidance (same renderer) + the published
-  // ensemble, 14-day rainfall and upper-air images for this site (Moraga uses its originals).
-  function chartCard(title, src, alt) {
-    return '<article class="card"><h3>' + esc(title) + '</h3><a href="' + src + '"><div class="chart-viewport" role="region" aria-label="Weather chart"><img loading="lazy" src="' + src + '" alt="' + esc(alt) + '" onerror="this.closest(\'article\').querySelector(\'.rl-pending\').hidden=false;this.closest(\'.chart-viewport\').style.display=\'none\'"></div></a><p class="rl-pending" hidden>Chart is being prepared for this site — check back shortly.</p></article>';
-  }
-  function render() {
-    var name = (HUBS.find(function (h) { return h[0] === state.id; }) || [])[1], id = state.id, mor = id === 'moraga';
-    var v = Math.floor(Date.now() / 1800000), pre = mor ? 'moraga' : 'lab/' + id;
-    host.innerHTML = picker() +
-      '<div class="grid">' +
-      '<article class="card"><h3>Temperature guidance</h3><a><div class="chart-viewport" role="region" aria-label="Weather chart"><img id="rl-temp-img" alt="' + esc(name) + ' temperature model guidance"></div></a><p class="rl-note" id="rl-temp-note">Loading live model guidance…</p></article>' +
-      chartCard('Ensemble spread', pre + '_ensemble_range.png?v=' + v, name + ' GEFS and EPS ensemble temperature spread') +
-      '<article class="card wide">' + '<h3>14-day rainfall model comparison</h3><a href="' + pre + '_rainfall_10day.png?v=' + v + '"><div class="chart-viewport" role="region" aria-label="Weather chart"><img loading="lazy" src="' + pre + '_rainfall_10day.png?v=' + v + '" alt="' + esc(name) + ' 14-day model rainfall comparison" onerror="this.closest(\'article\').querySelector(\'.rl-pending\').hidden=false;this.closest(\'.chart-viewport\').style.display=\'none\'"></div></a><p class="rl-pending" hidden>Chart is being prepared for this site — check back shortly.</p></article>' +
-      chartCard('10-day upper-air forecast', pre + '_upper_air_10day.png?v=' + v, name + ' 10-day upper-air model forecast') +
-      '<article class="card wide rl-card"><h3>Which model is best here?</h3><div id="rl-acc"><p class="rl-empty">Loading accuracy…</p></div></article>' +
-      '</div>';
-    var site = LOC[id];
-    // The live renderer is defined by the Forecast Lab's own scripts, which load when the Lab opens.
-    (function draw(tries) {
-      if (id !== state.id) return;
-      if (window.dwlTempGuidance && site) Promise.resolve(window.dwlTempGuidance(document.getElementById('rl-temp-img'), document.getElementById('rl-temp-note'), site.lat, site.lon, name, false)).then(function () {
-        var n = document.getElementById('rl-temp-note'); if (n && /Loading/.test(n.textContent)) n.textContent = 'Live hourly model guidance · updates when you open the page';
-      });
-      else if (tries < 60) setTimeout(function () { draw(tries + 1); }, 500);
-    })(0);
-  }
-  var LOC = {}; (window.DWL_LOCATIONS || []).forEach(function (l) { LOC[l.id] = l; });
-  if (LOC.moraga) { LOC.moraga = { lat: 37.8201932, lon: -122.1193876 }; }
-
-  function load() {
-    lastAcc = ''; render(); var id = state.id;
-    var tries = id === 'moraga' ? ['verification/moraga_model_daily_verification_noaa.json', 'model_daily_verification_latest.json'] : ['verification/' + id + '_model_daily_verification_noaa.json', 'verification/' + id + '_model_daily_verification.json'];
-    (function next(k) {
-      if (k >= tries.length) { var a = document.getElementById('rl-acc'); if (a) a.innerHTML = accuracy(null); return; }
-      fetch(tries[k] + '?t=' + Math.floor(Date.now() / 600000)).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (v) {
-        if (id !== state.id) return; if (!v.calibration) throw 0; var a = document.getElementById('rl-acc'); if (a) a.innerHTML = accuracy(v);
-      }).catch(function () { next(k + 1); });
-    })(0);
+  function redraw(key) {
+    var d = state.data;
+    if (key === 'temp' && d.temp) document.getElementById('rl-c-temp').innerHTML = lineChart(specs.temp());
+    if (key === 'ens' && d.ens) document.getElementById('rl-c-ens').innerHTML = lineChart(specs.ens());
+    if (key === 'rain' && d.rain) document.getElementById('rl-c-rain').innerHTML = rainChart(d.rain);
+    if ((key === 'z500' || key === 't850') && d.up) document.getElementById('rl-c-up').innerHTML = upHTML();
   }
 
   host.addEventListener('click', function (e) {
     var b = e.target.closest('[data-hub]');
-    if (b) { state.id = b.dataset.hub; try { localStorage.setItem('dwl-lab-hub', state.id); } catch (_) {} load(); }
+    if (b) { state.id = b.dataset.hub; try { localStorage.setItem('dwl-lab-hub', state.id); } catch (_) {} render(); return; }
+    var t = e.target.closest('[data-toggle]');
+    if (t) { var k = t.dataset.toggle; state.hidden[k] = !state.hidden[k]; redraw(k.split(':')[0]); return; }
+    var r = e.target.closest('[data-rainday]'); if (r) { rainDay(+r.dataset.rainday); return; }
+    var p = e.target.closest('.rl-plot'); if (p) inspect(p, e.clientX);
   });
-  var lastAcc = '';
-  load();
+  host.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse' || e.buttons) { var p = e.target.closest('.rl-plot'); if (p) inspect(p, e.clientX); } });
+  render();
 })();

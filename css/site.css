@@ -2500,3 +2500,19 @@ html[data-theme="light"] #public-shell .dwl-nearby-list a { color: #b26a00; }
 .rl-chart .rl-ax { font-size: 12px; }
 .rl-key svg { color: var(--text-2); }
 body.public-mode #regional { display: none; }
+/* Regional Lab v3: one chart style */
+.rl-cards { display: grid; gap: 14px; }
+@media (min-width: 980px) { .rl-cards { grid-template-columns: 1fr 1fr; } }
+.rl-plot { position: relative; touch-action: pan-y; }
+.rl-chart .rl-day { stroke: rgba(150, 200, 240, .07); }
+.rl-chart .rl-cursor { stroke: rgba(255, 255, 255, .55); stroke-width: 1; }
+.rl-chart .rl-hit, .rl-chart .rl-hitday { fill: transparent; cursor: crosshair; }
+.rl-chart .rl-pop { fill: #7fdcff; font: 600 11px var(--font-ui); }
+.rl-tip, .rl-raintip { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 6px; padding: 8px 10px; border-radius: 10px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(150, 200, 240, .14); font-size: 12.5px; color: var(--text-2); }
+.rl-raintip:empty { display: none; }
+.rl-tip[hidden] { display: none; }
+.rl-tip > b, .rl-raintip > b { flex-basis: 100%; color: var(--text); }
+.rl-tip span, .rl-raintip span { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.rl-tip i, .rl-raintip i { width: 8px; height: 8px; border-radius: 50%; }
+.rl-h4 { margin: 4px 0 2px; font-size: 13px; color: var(--muted); font-weight: 600; }
+.rl-body { display: grid; gap: 8px; min-width: 0; }
