@@ -215,7 +215,42 @@ export async function skyFor(city, env, solarNow, log) {
     }
   }
   if (twc) return { ...twc, source: 'twc' };
-  return modelSky(coords, log);
+  // After dark (or with no sunlight sensor): what the nearest airports actually report beats a model guess.
+  const model = await modelSky(coords, log);
+  const seen = await airportSky(city, elev > 0, model, log);
+  return seen || model;
+}
+
+// Nearest NWS airport reports (ASOS/AWOS ceilometers, free, public domain). Cached 10 minutes.
+const COVER = { SKC: 0, CLR: 0, FEW: 1, SCT: 2, BKN: 3, OVC: 4, VV: 4 };
+async function airportSky(city, day, model, log) {
+  const ids = (LOCS.find((l) => l.id === city)?.sky_airports || []).slice(0, 2);
+  const covers = [];
+  let fog = false, wet = null;
+  for (const id of ids) {
+    try {
+      const res = await fetch('https://api.weather.gov/stations/' + id + '/observations/latest', { headers: { 'User-Agent': 'DiabloWeatherLab-observations/1.0', Accept: 'application/geo+json' }, cf: { cacheTtl: 600, cacheEverything: true } });
+      if (!res.ok) { log.push('airport sky ' + id + ': http ' + res.status); continue; }
+      const p = (await res.json())?.properties;
+      if (!p || Date.now() - Date.parse(p.timestamp) > 90 * 60000) continue;
+      const layers = (p.cloudLayers || []).map((l) => COVER[l.amount]).filter((v) => v !== undefined);
+      if (!layers.length) continue;
+      covers.push(Math.max(...layers));
+      const tx = p.textDescription || '';
+      if (!wet && /thunder/i.test(tx)) wet = { text: 'Thunderstorms', code: 95 };
+      else if (!wet && /rain|shower/i.test(tx)) wet = /heavy/i.test(tx) ? { text: 'Heavy rain', code: 65 } : /light/i.test(tx) ? { text: 'Light rain', code: 61 } : { text: 'Rain', code: 63 };
+      else if (!wet && /drizzle/i.test(tx)) wet = { text: 'Drizzle', code: 51 };
+      if (/fog/i.test(p.textDescription || '') && !/patches|shallow/i.test(p.textDescription || '')) fog = true;
+    } catch (_) { log.push('airport sky ' + id + ': error'); }
+  }
+  if (!covers.length) return null;
+  if (wet) return { ...wet, is_day: day, source: 'airports', airports: ids };
+  if (fog) return { text: 'Fog', code: 45, is_day: day, source: 'airports', airports: ids };
+  let c = Math.round(covers.reduce((a, b) => a + b, 0) / covers.length);
+  // Ceilometers see only below ~12,000 ft: let a thick high-cloud deck from the model show through.
+  if (c <= 1 && Number(model?.cloud_cover_high) >= 75) c = 2;
+  const text = [day ? 'Sunny' : 'Clear', day ? 'Mostly sunny' : 'Mostly clear', 'Partly cloudy', 'Mostly cloudy', 'Cloudy'][c];
+  return { text, code: [0, 1, 2, 3, 3][c], is_day: day, source: 'airports', airports: ids, cloud_cover_pct: [5, 20, 45, 75, 95][c] };
 }
 
 // Last resort (night, or no sunlight reading): the forecast model's current sky, cached 15 minutes.
@@ -223,11 +258,11 @@ const MODEL_TEXT = (c, day) => c >= 95 ? 'Thunderstorms' : c >= 71 && c <= 86 &&
   : c === 3 ? 'Cloudy' : c === 2 ? 'Partly cloudy' : c === 1 ? (day ? 'Mostly sunny' : 'Mostly clear') : (day ? 'Sunny' : 'Clear');
 async function modelSky(coords, log) {
   try {
-    const u = 'https://api.open-meteo.com/v1/forecast?latitude=' + coords[0].toFixed(3) + '&longitude=' + coords[1].toFixed(3) + '&current=weather_code,is_day,cloud_cover';
+    const u = 'https://api.open-meteo.com/v1/forecast?latitude=' + coords[0].toFixed(3) + '&longitude=' + coords[1].toFixed(3) + '&current=weather_code,is_day,cloud_cover,cloud_cover_high';
     const d = await getJson(u, 900, log, 'model sky');
     const c = num(d?.current?.weather_code);
     if (c === null) return null;
     const day = d.current.is_day === 1;
-    return { text: MODEL_TEXT(c, day), code: c, is_day: day, source: 'model', cloud_cover_pct: num(d.current.cloud_cover) };
+    return { text: MODEL_TEXT(c, day), code: c, is_day: day, source: 'model', cloud_cover_pct: num(d.current.cloud_cover), cloud_cover_high: num(d.current.cloud_cover_high) };
   } catch (_) { log.push('model sky: error'); return null; }
 }
