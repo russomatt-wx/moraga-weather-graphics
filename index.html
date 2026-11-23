@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>try{localStorage.removeItem('dwl-page-zoom');var t=localStorage.getItem('dwl-theme');if(t==='black'||t==='light'){document.documentElement.dataset.theme=t;document.querySelector('meta[name=theme-color]')&&document.querySelector('meta[name=theme-color]').setAttribute('content',t==='black'?'#000000':'#eef3f8');}}catch(e){}</script>
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=27"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=27"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=27">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261128a">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261128b">
 
 
 
@@ -2875,7 +2875,6 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
  // Leaflet + protomaps-leaflet are served from this site (js/vendor), not a third-party CDN.
  async function loadLeaflet(){if(!window.L){const c=document.createElement('link');c.rel='stylesheet';c.href='js/vendor/leaflet-1.9.4.css';document.head.appendChild(c);await addScript('js/vendor/leaflet-1.9.4.js');}
   if(!window.protomapsL)await addScript('js/vendor/protomaps-leaflet-5.1.0.js?v=navy4');}
- const tile=m=>'https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/nexrad-n0q-900913'+(m?'-m'+String(m).padStart(2,'0')+'m':'')+'/{z}/{x}/{y}.png?_='+stamp;
  function frameTime(m){const t=new Date(Date.now()-m*60000);t.setMinutes(Math.floor(t.getMinutes()/5)*5,0,0);return t.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'});}
  // One frame visible at a time; hidden frames are display:none so the browser doesn't composite or re-filter them.
  let zTop=10;
@@ -2886,7 +2885,14 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
    else if(j===prev&&playing){c.style.transition='none';setTimeout(()=>{if(idx!==j)c.style.opacity='0';},210);}
    else{c.style.transition='none';c.style.opacity='0';}});idx=i;el('radar-time').textContent=(FRAMES[i]===0?'Now · ':'')+frameTime(FRAMES[i]);const sc=el('radar-scrub');if(sc){sc.value=i;sc.style.setProperty('--p',(i/(FRAMES.length-1)*100)+'%');}}
  function loop(){clearTimeout(timer);if(!playing)return;timer=setTimeout(()=>{show((idx+1)%FRAMES.length);loop();},idx===FRAMES.length-1?1100:260);}
- const mk=m=>L.tileLayer(tile(m),{opacity:.9,zIndex:2,pane:'radar',maxNativeZoom:10,maxZoom:12,updateWhenIdle:true,updateWhenZooming:false,keepBuffer:0});
+ // Radar tiles drawn through a filter: grey/blue pixels (very weak echoes below measurable rain — mostly ground clutter,
+ // anomalous propagation on cold mornings, birds/insects) are cleared; teal/green and up are kept as-is.
+ let RadarLayer=null;
+ const clean=p=>{for(let k=0;k<p.length;k+=4){if(!p[k+3])continue;const r=p[k],g=p[k+1],b=p[k+2],mx=Math.max(r,g,b),mn=Math.min(r,g,b);if(mx-mn<70||(b>=g&&b>=r&&!(r>150&&g<130)))p[k+3]=0;}};
+ const mk=m=>{if(!RadarLayer)RadarLayer=L.GridLayer.extend({createTile(c,done){const cv=document.createElement('canvas');cv.width=cv.height=256;const im=new Image();im.crossOrigin='anonymous';
+   im.onload=()=>{const g=cv.getContext('2d',{willReadFrequently:true});g.drawImage(im,0,0);try{const d=g.getImageData(0,0,256,256);clean(d.data);g.putImageData(d,0,0);}catch(e){}done(null,cv);};
+   im.onerror=()=>done(null,cv);im.src='https://moraga-live-observations.russo-matt.workers.dev/radar-tile?m='+this.options.m+'&z='+c.z+'&x='+c.x+'&y='+c.y+'&_='+stamp;return cv;}});
+  return new RadarLayer({m,opacity:.9,zIndex:2,pane:'radar',maxNativeZoom:10,maxZoom:12,updateWhenIdle:true,updateWhenZooming:false,keepBuffer:0});};
  // Paused on the latest image: only "now" is loaded. The loop's other frames load on first Play.
  function buildFrames(){stamp=Math.floor(Date.now()/300000);layers.forEach(l=>l&&map.removeLayer(l));
   layers=FRAMES.map(()=>null);layers[FRAMES.length-1]=mk(0).addTo(map);show(FRAMES.length-1);if(playing){playing=false;loadLoop();}}
@@ -2949,7 +2955,8 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
   await Promise.all([-1,0,1].flatMap(i=>[-1,0,1].map(j=>tileImg(m,Z,tx+i,ty+j).then(im=>g.drawImage(im,(i+1)*256,(j+1)*256)))));
   const d=g.getImageData(0,0,768,768).data,B=4,W=192,grid=new Uint8Array(W*W);
   for(let by=0;by<W;by++)for(let bx=0;bx<W;bx++){let n=0,mx=0;for(let yy=0;yy<B;yy++)for(let xx=0;xx<B;xx++){const k=((by*B+yy)*768+bx*B+xx)*4,r=d[k],gg=d[k+1],b=d[k+2],a=d[k+3];
-   if(a<=80)continue;let v=0;if(r>180&&gg>170&&b<120)v=2;else if(r>180)v=3;else if(gg>b+40)v=1;else if(b>200&&r>150)v=3;if(v){n++;if(v>mx)mx=v;}}
+   if(a<=80||Math.max(r,gg,b)-Math.min(r,gg,b)<70)continue; // grey/beige = very weak echoes or clutter, not rain
+   let v=0;if(r>180&&gg>=170&&b<120)v=2;else if(r>180&&gg<170)v=3;else if(gg>b+40)v=1;else if(b>200&&r>150&&gg<130)v=3;if(v){n++;if(v>mx)mx=v;}}
    grid[by*W+bx]=n>=3?mx:0;}
   const km=156.54303*Math.cos(lat*Math.PI/180)/2**Z*B,mpp=156.54303*Math.cos(lat*Math.PI/180)/2**Z;
   return {grid,W,km,cx:(px-(tx-1)*256)/B,cy:(py-(ty-1)*256)/B,toLatLon:(bx,by)=>{const X=(tx-1)*256+bx*B+B/2,Y=(ty-1)*256+by*B+B/2;
@@ -3005,6 +3012,12 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
    if(moving&&same>shifted&&same>=pts.length*.4)continue; // sits still while the rain moves
    // Still in the same place 50 minutes ago while the rain field moves 10+ mph = clutter (real showers would be 8+ miles away).
    if(old50&&moving&&speedMph>=10&&pts.length<150){let s50=0;for(const [x,y] of pts)if(old50.grid[y*W+x])s50++;if(s50>=pts.length*.35)continue;}
+   // No coherent motion anywhere but the echo sits in the same spot it did 20 and 50 minutes ago = ground clutter / anomalous propagation.
+   if(old50&&!moving&&pts.length<150){let s50=0;for(const [x,y] of pts)if(old50.grid[y*W+x])s50++;if(same>=pts.length*.5&&s50>=pts.length*.4)continue;}
+   // Nothing on radar is moving and this is a small, light-only echo: clutter speckle, not a shower.
+   if(!moving&&pk===1&&pts.length<25)continue;
+   // Flicker: a small light echo with nothing near it 20 minutes ago (AP speckle pops in and out; real showers grow from something).
+   if(pk===1&&pts.length<25){let prior=0;for(const [x,y] of pts){for(let ddy=-3;ddy<=3&&!prior;ddy++)for(let ddx=-3;ddx<=3;ddx++){const X=x+ddx,Y=y+ddy;if(X>=0&&Y>=0&&X<W&&Y<W&&A[Y*W+X]){prior=1;break;}}if(prior)break;}if(!prior)continue;}
    cells.push({pts,peak:pk,typ:Math.min(typ,pk)});}
   // Project each shower forward 0..60 min: closest approach, arrival / departure at the pin, intensity over the pin.
   const timeline=new Array(12).fill(0),T=[0,5,10,15,20,25,30,35,40,45,50,55,60];
