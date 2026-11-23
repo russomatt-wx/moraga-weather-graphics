@@ -20,6 +20,22 @@ function rainingSky(rate, sky, city, humidity, today) {
        : r >= 0.05 ? { text: 'Rain', code: 63, is_day: day, source: 'station_rain_rate', rate_in_hr: r }
        : { text: 'Light rain', code: 61, is_day: day, source: 'station_rain_rate', rate_in_hr: r };
 }
+// Valley fog the airports can't see (Lamorinda, San Ramon Valley): the station itself is saturated
+// (dew point within ~1.5°F, 97%+ humidity) in calm air. Rain wins. Once the sun is up, the sunlight sensor
+// decides: dim light = fog, near-normal light = burned off. With no usable sunlight reading it's "Patchy fog".
+function fogSky(sky, o, city) {
+  if (!o) return sky;
+  if (sky && Number(sky.code) >= 51) return sky;
+  const rh = Number(o.humidity_pct), t = Number(o.temperature_f), td = Number(o.dew_point_f), w = Number(o.wind_mph);
+  if (!(rh >= 97)) return sky;
+  if (Number.isFinite(t) && Number.isFinite(td) && t - td > 1.5) return sky;
+  if (Number.isFinite(w) && w > 5) return sky;
+  const ratio = Number(sky?.clear_sky_ratio);
+  if (Number.isFinite(ratio) && ratio >= 0.55) return sky;
+  const c = TOWN_COORDS[city], day = c ? sunElevation(c[0], c[1]) > 0 : !!sky?.is_day;
+  return { text: Number.isFinite(ratio) ? 'Fog' : 'Patchy fog', code: 45, is_day: day, source: 'station_saturation',
+           humidity_pct: rh, ...(Number.isFinite(ratio) ? { clear_sky_ratio: ratio } : {}), sky_without_fog: sky?.text || null };
+}
 export { AlertPush };
 // Configure secrets XWEATHER_CLIENT_ID, XWEATHER_CLIENT_SECRET and ALLOWED_ORIGIN.
 // Never place credentials in the public website or source repository.
@@ -264,13 +280,13 @@ export default {
     // else NOAA's corrected current-conditions estimate. Both are licence-free.
     if (!WU_STATIONS[city]) {
       const pub = await publicObservation(city, wuLog);
-      if (pub) { const body = {...pub, city, sky: await sky(null)}; Object.assign(body, await extras(body)); return Response.json(body, {headers:{...cors,'Cache-Control':'public, max-age=120'}}); }
+      if (pub) { const body = {...pub, city, sky: await sky(null)}; body.sky = fogSky(body.sky, body, city); Object.assign(body, await extras(body)); return Response.json(body, {headers:{...cors,'Cache-Control':'public, max-age=120'}}); }
       return Response.json({error:'No fresh public observation', city, diagnostics: wuLog}, {status:503, headers:cors});
     }
     // Hand-picked Weather Underground station first (needs WU_API_KEY); Xweather below is the fallback.
     if (WU_PRIMARY.has(city) && String(env.WU_API_KEY || '').trim()) {
       const wu = await wuCurrent(WU_STATIONS[city], env, wuLog);
-      if (wu) { const body = {...wu, city, station_selection:'weather_underground', sky: rainingSky(wu.precip_rate_in_hr, await sky(wu.solar_radiation_wm2), city, wu.humidity_pct, wu.precip_today_in), source:'Weather Underground'}; Object.assign(body, await extras(body)); return Response.json({...body, diagnostics: wuLog.length ? wuLog : undefined}, {headers:cors}); }
+      if (wu) { const body = {...wu, city, station_selection:'weather_underground', sky: rainingSky(wu.precip_rate_in_hr, await sky(wu.solar_radiation_wm2), city, wu.humidity_pct, wu.precip_today_in), source:'Weather Underground'}; body.sky = fogSky(body.sky, body, city); Object.assign(body, await extras(body)); return Response.json({...body, diagnostics: wuLog.length ? wuLog : undefined}, {headers:cors}); }
     }
     if (!env.XWEATHER_CLIENT_ID || !env.XWEATHER_CLIENT_SECRET) return Response.json({error:'Live service not configured'},{status:503,headers:cors});
     let station = city === 'moraga' ? STATION : (city === 'lafayette' ? env.LAFAYETTE_STATION_ID : city === 'greenbrook' ? env.GREENBROOK_STATION_ID : city === 'danville' ? env.DANVILLE_STATION_ID : null);
@@ -400,6 +416,7 @@ export default {
         diagnostics:wuLog.length?wuLog:undefined,
         source:'Xweather'
       };
+      xbody.sky = fogSky(xbody.sky, xbody, city);
       if (!xbody.daily_extrema || xbody.daily_extrema.date) Object.assign(xbody, await extras(xbody));
       if (!Number.isFinite(xbody.daily_high_f) && xbody.daily_extrema?.complete) Object.assign(xbody, { daily_high_f: xbody.daily_extrema.high_f, daily_low_f: xbody.daily_extrema.low_f, daily_date: xbody.daily_extrema.date });
       xbody.diagnostics = wuLog.length ? wuLog : undefined;
