@@ -1115,7 +1115,7 @@ function nwsWeatherOutlook(afd,d,h){
  })();
  </script>
 <header><div class="dwl-header" aria-label="Diablo Weather Lab — Hyperlocal Weather Intelligence"><div class="dwl-brand"><svg class="dwl-mark" viewBox="0 -14 160 96" aria-hidden="true"><defs><linearGradient id="lt-dwlb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4feff"/><stop offset="1" stop-color="#8fe6ff"/></linearGradient><linearGradient id="dk-dwlb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5fd6f7"/><stop offset="1" stop-color="#0a9fd6"/></linearGradient><linearGradient id="arc-dwlb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7fe9ff"/><stop offset="1" stop-color="#1ab8ee"/></linearGradient><radialGradient id="cl-dwlb" gradientUnits="userSpaceOnUse" cx="52" cy="13" r="36" gradientTransform="translate(52 13) scale(1 .62) translate(-52 -13)"><stop offset="0" stop-color="#3f5064"/><stop offset=".5" stop-color="#617286"/><stop offset=".8" stop-color="#a9b7c7"/><stop offset="1" stop-color="#f2f6fb"/></radialGradient><linearGradient id="hi-dwlb" gradientUnits="userSpaceOnUse" x1="60" y1="-12" x2="56" y2="10"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs><path d="M84.75 8.33A37.02 37.02 0 0 1 141 46.77" fill="none" stroke="#19dcf6" stroke-opacity=".14" stroke-width="9" stroke-linecap="round"/><path d="M84.75 8.33A37.02 37.02 0 0 1 141 46.77" fill="none" stroke="url(#arc-dwlb)" stroke-width="4" stroke-linecap="round"/><path d="M2 80 58 30 58 50Z" fill="url(#lt-dwlb)"/><path d="M58 30 80 47 80 65 58 50Z" fill="#79dcf8"/><path d="M80 47 110 17 108 40 80 65Z" fill="url(#lt-dwlb)"/><path d="M110 17 158 80 108 40Z" fill="url(#dk-dwlb)"/><path d="M73 23.5A10.9 10.9 0 0 0 70.41 2.01A15 15 0 0 0 40.64 3.27A10.9 10.9 0 0 0 35 23.5Z" fill="none" stroke="#bfefff" stroke-opacity=".10" stroke-width="9" stroke-linejoin="round"/><path d="M73 23.5A10.9 10.9 0 0 0 70.41 2.01A15 15 0 0 0 40.64 3.27A10.9 10.9 0 0 0 35 23.5Z" fill="none" stroke="#dff7ff" stroke-opacity=".22" stroke-width="5.5" stroke-linejoin="round"/><defs><linearGradient id="cf-dwlb" gradientUnits="userSpaceOnUse" x1="0" y1="-11" x2="0" y2="24"><stop offset="0" stop-color="#ffffff"/><stop offset=".3" stop-color="#dde6f3"/><stop offset=".7" stop-color="#8ea5c3"/><stop offset="1" stop-color="#4f6f97"/></linearGradient><linearGradient id="bolt-dwlb" gradientUnits="userSpaceOnUse" x1="56" y1="23" x2="81" y2="55"><stop offset="0" stop-color="#f4feff"/><stop offset=".55" stop-color="#bff2ff"/><stop offset="1" stop-color="#79dcf8"/></linearGradient></defs><path d="M73 23.5A10.9 10.9 0 0 0 70.41 2.01A15 15 0 0 0 40.64 3.27A10.9 10.9 0 0 0 35 23.5Z" fill="url(#cf-dwlb)"/><path d="M73 23.5A10.9 10.9 0 0 0 70.41 2.01A15 15 0 0 0 40.64 3.27A10.9 10.9 0 0 0 35 23.5Z" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"/><path d="M47.4 24.4L54 24.4L50 30.8L53.4 30.8L44.2 41.6L47.6 33.8L44.6 33.8Z" fill="none" stroke="#8ee9ff" stroke-opacity=".45" stroke-width="2.6" stroke-linejoin="round"/><path d="M47.4 24.4L54 24.4L50 30.8L53.4 30.8L44.2 41.6L47.6 33.8L44.6 33.8Z" fill="url(#bolt-dwlb)"/></svg><div class="dwl-wordmark"><span class="dwl-wm-1">Diablo</span><span class="dwl-wm-2">Weather</span><span class="dwl-wm-2 dwl-wm-3">Lab</span></div></div><div class="dwl-tagline">Hyperlocal Weather Intelligence</div><svg class="dwl-ridge" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40V30l28-8 22 5 30-14 26 9 34-17 28 12 24-6 30 13 26-9 34 11 28-7 30 9 22-5 38 13V40Z"/></svg></div><p id="moraga-local-date" hidden></p></header><div class="dwl-toggle" role="group" aria-label="Weather view"><button type="button" data-weather-view="public">Local Weather</button><button type="button" data-weather-view="observatory" aria-current="page">Forecast Lab</button><a href="marine.html">Marine &amp; Surf</a></div>
-<main><nav aria-label="Weather dashboard sections"><a href="#regional">Regional</a><a href="#observations">Now</a><a href="#forecast">Forecast</a><a href="./hrrr.html">RRFS 48h</a><a href="#marine">Marine</a><a href="#rainfall">Rain</a><a href="#pattern">Pattern</a><a href="#satellite">Satellite</a><a href="#cpc-outlook">Extended &amp; CPC</a><a href="#westcoast">Pacific</a><a href="#accuracy">Model skill</a><a href="#chatgpt-accuracy">Briefing skill</a><a href="#climate">Climate</a><a href="./estimate.html">Estimate test</a></nav><section id="regional"><div class="intro"><div class="kicker">Regional lab</div><h2>Regional model guidance</h2><p>Every model's forecast and its track record, for seven regional sites and Moraga. Moraga's original station charts follow below.</p></div><div id="regional-lab" aria-live="polite"></div></section>
+<main><nav aria-label="Weather dashboard sections"><a href="#regional">Regional</a><a href="#observations">Now</a><a href="#forecast">Forecast</a><a href="./hrrr.html">RRFS 48h</a><a href="#marine">Marine</a><a href="#rainfall">Rain</a><a href="#pattern">Pattern</a><a href="#satellite">Satellite</a><a href="#cpc-outlook">Extended &amp; CPC</a><a href="#westcoast">Pacific</a><a href="#accuracy">Model skill</a><a href="#chatgpt-accuracy">Briefing skill</a><a href="#climate">Climate</a><a href="./estimate.html">Estimate test</a></nav><section id="regional"><div class="intro"><div class="kicker">Regional lab</div><h2>Regional model guidance</h2><p>The same model charts as Moraga's, for each regional site. Moraga's original section follows below.</p></div><div id="regional-lab" aria-live="polite"></div></section>
  <section id="observations"><div class="intro"><div class="kicker">01 / Today in Moraga</div><h2>Moraga right now</h2><p>KCAMORAG71 · Live station observations.</p></div><div class="card" style="padding:14px"><div id="moraga-alerts" aria-live="polite"></div><div id="today-so-far-heading" class="dwl-label">Today so far</div><div id="station-today" aria-live="polite" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;text-align:center"><div><div style="color:#9fb8cc">High</div><strong style="font-size:clamp(24px,6vw,42px);color:#f0a65e">—</strong></div><div><div style="color:#9fb8cc">Low</div><strong style="font-size:clamp(24px,6vw,42px);color:#75bde8">—</strong></div><div><div style="color:#9fb8cc">Rainfall</div><strong style="font-size:clamp(24px,6vw,42px);color:#7ed1db">0.00 in</strong></div></div><p id="station-today-status" hidden>Last updated: awaiting observations</p><div id="atmospheric-intelligence"><div class="ai-model" id="ai-model" data-level="unknown"><div class="ai-model-top"><strong id="ai-story-title">The Moraga weather story</strong><span class="ai-level" id="ai-model-level">Next 24 hours</span></div><p id="ai-model-detail">Loading the latest forecast guidance…</p></div></div><div id="forecast-evolution" style="margin-top:10px;padding:14px 16px;border:1px solid rgba(125,190,207,.30);border-radius:13px;background:rgba(13,34,49,.52);color:inherit"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><strong style="font-size:14px">What's changed?</strong><span id="forecast-evolution-time" style="font-size:11px;opacity:.7"></span></div><p id="forecast-evolution-detail" style="margin:8px 0 0;font-size:14px;line-height:1.55">Establishing a forecast baseline…</p></div></div></section>
  <section id="forecast"><div class="intro"><div class="kicker">02 / What comes next</div><h2>Moraga temperature forecast</h2><p>Daily temperatures and model guidance.</p></div><div class="focus-grid"><article id="ten-day"><div class="dwl-title"><h2>Moraga Daily Outlook</h2><p id="ten-day-updated"></p></div><div id="ten-day-results" aria-live="polite"><p>Loading daily forecast…</p></div><details class="method-note"><summary>How this forecast is made</summary><p>Temperatures blend models using recent verified skill and local bias adjustments. Rain icons require at least 20% ensemble-derived rain probability; model-mean rainfall amounts are shown on cards when rain chance reaches 20%, and the full model comparison remains in the rainfall section. Forecast weighting is provisional while the verification archive grows. Tap “Model range” for daily details.</p></details></article><article class="card" id="rrfs-compact" style="padding:16px">
 <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h3 style="margin:0;font-size:clamp(17px,3.8vw,23px)">48-hour high-resolution forecast</h3><a href="./hrrr.html" style="font-size:13px;color:#7dd3fc;white-space:nowrap">Full view</a></div>
@@ -2151,12 +2151,12 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  }).catch(()=>{label(syn,'GFS map validity unavailable — check source data')})}
 })();
 </script><script type="text/dwl-observatory" data-src="dashboard_enhancements.js?v=20261110-compact2"></script><script type="text/dwl-observatory">
-(async function(){
- const img=document.getElementById('temperature-guidance-image'),note=document.getElementById('temperature-chart-note');
+// Live temperature-guidance chart, reusable for any site (Moraga's section and the Regional Lab).
+window.dwlTempGuidance=async function(img,note,lat,lon,site,isMoraga){
  if(!img)return;
  const colors={GFS:'#5aa9ff',ECMWF:'#ffbf2e',HRRR:'#37d67a',NAM:'#ff7a59',ICON:'#a78bfa',GEM:'#f472b6'};
  const sources=[['GFS','ncep_gfs_seamless'],['ECMWF','ecmwf_ifs025'],['HRRR','ncep_hrrr_conus'],['NAM','ncep_nam_conus'],['ICON','icon_seamless'],['GEM','gem_seamless']];
- const tz='America/Los_Angeles',lat=37.8201932,lon=-122.1193876;
+ const tz='America/Los_Angeles';
  const fetched=await Promise.allSettled(sources.map(async ([name,model])=>{
   const url='https://api.open-meteo.com/v1/forecast?'+new URLSearchParams({latitude:String(lat),longitude:String(lon),hourly:'temperature_2m',models:model,temperature_unit:'fahrenheit',timezone:tz,forecast_days:'16'});
   const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw Error(name+' HTTP '+response.status);
@@ -2210,16 +2210,16 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
  };
  // Surface the actual chart source, so fallback PNGs cannot silently appear current.
  
- const guidanceUrl=renderChart(series,window.innerWidth<640?'Moraga temperature guidance (°F)':'Moraga | Temperature model guidance');
+ const guidanceUrl=renderChart(series,window.innerWidth<640?site+' temperature guidance (°F)':site+' | Temperature model guidance');
  const localStamp=()=>new Date().toLocaleString('en-US',{timeZone:tz,month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
  
  if(!guidanceUrl)return;
- img.onerror=()=>{img.onerror=null;img.src='moraga_model_temperatures.png?v=20261110-republish-all';};img.src=guidanceUrl;img.closest('a').href=guidanceUrl;
+ if(isMoraga)img.onerror=()=>{img.onerror=null;img.src='moraga_model_temperatures.png?v=20261110-republish-all';};img.src=guidanceUrl;if(img.closest('a'))img.closest('a').href=guidanceUrl;
  
  // The ensemble chart is published by the server-side graphics workflow.
  // Do not fetch or render GEFS/EPS independently in the visitor's browser:
  // that path can fail on mobile and replace a valid PNG with a false warning.
- const ensembleImg=document.getElementById('ensemble-guidance-image');
+ const ensembleImg=isMoraga?document.getElementById('ensemble-guidance-image'):null;
  if(ensembleImg){
    // Published by this repo's ensemble_spread workflow every 6 hours.
    const url='moraga_ensemble_range.png?v='+Math.floor(Date.now()/1800000);
@@ -2227,9 +2227,10 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
    const anchor=ensembleImg.closest('a');
    if(anchor)anchor.href=url;
  }
- const meta=img.closest('a').nextElementSibling;
+ const meta=img.closest('a')?.nextElementSibling;
  
-})();
+};
+window.dwlTempGuidance(document.getElementById('temperature-guidance-image'),document.getElementById('temperature-chart-note'),37.8201932,-122.1193876,'Moraga',true);
 </script><script type="text/dwl-observatory">
 /* Independent visual summaries; the existing forecast tables remain authoritative. */
 (async function(){
@@ -3095,5 +3096,5 @@ status.textContent='RRFS · Updated '+new Intl.DateTimeFormat('en-US',{timeZone:
  pop.addEventListener('click',e=>{const b=e.target.closest('[data-theme-choice]');if(b){apply(b.dataset.themeChoice);close();}});
  document.addEventListener('click',e=>{if(!pop.hidden&&!pop.contains(e.target))close();});mark();})();
 </script>
-<script src="js/regional-lab.js?v=4" defer></script>
+<script src="js/regional-lab.js?v=6" defer></script>
 </body></html>

@@ -386,6 +386,9 @@ jobs:
               raise SystemExit('Editorial synopses contain explicit temperatures: '+', '.join(offenders))
           print(f'Local Weather Outlook feed verified: {len(actual)}/{len(expected)} locations; age {age}')
           PY
+      - name: Add Regional Lab charts (kept on the lab-charts branch, latest set only)
+        run: |
+          git fetch --depth=1 origin lab-charts 2>/dev/null && git checkout FETCH_HEAD -- lab 2>/dev/null && ls lab | head -3 || echo "No Regional Lab charts yet"
       - name: Configure Pages
         uses: actions/configure-pages@v6
       - name: Upload site

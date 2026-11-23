@@ -4,6 +4,7 @@ import math
 Source: Open-Meteo deterministic forecast and ensemble-mean APIs.
 Daily totals are midnight-to-midnight America/Los_Angeles; units inches.
 """
+import os
 import json, urllib.parse, urllib.request, time, os
 from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
@@ -244,7 +245,7 @@ ax.grid(axis="x",which="major",color="#5f7f96",linestyle="--",linewidth=1,alpha=
 ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
 _d0, _d1 = datetime.fromisoformat(dates[0]), datetime.fromisoformat(dates[-1])
-fig.suptitle("Moraga · 14-day rainfall",fontsize=21,fontweight="bold",x=.11,ha="left",y=.975)
+fig.suptitle(os.environ.get("DWL_SITE_NAME","Moraga")+" · 14-day rainfall",fontsize=21,fontweight="bold",x=.11,ha="left",y=.975)
 fig.text(.11,.932,f"Daily rain by model, {_d0:%b %-d}–{_d1:%b %-d}",fontsize=14,color="#9fb6c8",va="top")
 handles,labels=ax.get_legend_handles_labels()
 fig.legend(handles,labels,loc="upper left",bbox_to_anchor=(.09,.892),
@@ -254,10 +255,10 @@ fig.text(.11,.012,
          f"Updated {now:%b %d %H:%M} UTC · Open-Meteo · gaps = model day unavailable",
          fontsize=11,color="#9fb6c8")
 fig.subplots_adjust(left=.13,right=.98,bottom=.135,top=.71)
-out=Path("moraga_rainfall_10day.png")
+out=Path(os.environ.get("DWL_OUT","moraga")+"_rainfall_10day.png")
 fig.savefig(out,facecolor=fig.get_facecolor())
 plt.close(fig)
-Path("moraga_rainfall_10day.json").write_text(json.dumps({
+Path(os.environ.get("DWL_OUT","moraga")+"_rainfall_10day.json").write_text(json.dumps({
     "generated_utc": now.isoformat(), "timezone": TZ, "latitude": LAT, "longitude": LON,
     "dates": dates, "model_daily_inches": results, "ensemble_rain_probability_pct": {day: model_derived_pop[day] for day in dates}, "benchmark_open_meteo_pop_pct": benchmark_pop, "errors": errors,
     "source": "Open-Meteo", "note": "API does not explicitly expose model initialization times here; generated time is not initialization time."

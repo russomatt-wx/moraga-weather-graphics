@@ -93,41 +93,50 @@
     }).join('') + '</tbody></table></div><p class="rl-note">Average next-day miss against ' + src + ', before → after this site\'s learned corrections (scored only on days the corrections had not seen).</p>';
   }
 
-  function render() {
-    var f = state.feed, name = (HUBS.find(function (h) { return h[0] === state.id; }) || [])[1];
-    host.innerHTML = picker() + (f ? (
-      '<div class="rl-meta">' + esc(name) + ' · updated ' + new Date(f.generated_utc).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) + '</div>' +
-      '<article class="card rl-card"><h3>Model temperatures · 10 days</h3><p class="rl-sub">Tap a day for every model\'s numbers. Tap a model to show or hide it.</p>' + tempChart(f) + '</article>' +
-      '<article class="card rl-card"><h3>Rain outlook · 10 days</h3><p class="rl-sub">Bar = expected amount (blended). Above = chance of measurable rain.</p>' + rainChart(f) + dayDetail(f) + '</article>' +
-      '<article class="card rl-card"><h3>Which model is best here?</h3><div id="rl-acc"><p class="rl-empty">Loading accuracy…</p></div></article>'
-    ) : '<p class="rl-empty">Loading ' + esc(name) + '…</p>');
+  // Same charts as Moraga's section: live temperature guidance (same renderer) + the published
+  // ensemble, 14-day rainfall and upper-air images for this site (Moraga uses its originals).
+  function chartCard(title, src, alt) {
+    return '<article class="card"><h3>' + esc(title) + '</h3><a href="' + src + '"><div class="chart-viewport" role="region" aria-label="Weather chart"><img loading="lazy" src="' + src + '" alt="' + esc(alt) + '" onerror="this.closest(\'article\').querySelector(\'.rl-pending\').hidden=false;this.closest(\'.chart-viewport\').style.display=\'none\'"></div></a><p class="rl-pending" hidden>Chart is being prepared for this site — check back shortly.</p></article>';
   }
+  function render() {
+    var name = (HUBS.find(function (h) { return h[0] === state.id; }) || [])[1], id = state.id, mor = id === 'moraga';
+    var v = Math.floor(Date.now() / 1800000), pre = mor ? 'moraga' : 'lab/' + id;
+    host.innerHTML = picker() +
+      '<div class="grid">' +
+      '<article class="card"><h3>Temperature guidance</h3><a><div class="chart-viewport" role="region" aria-label="Weather chart"><img id="rl-temp-img" alt="' + esc(name) + ' temperature model guidance"></div></a><p class="rl-note" id="rl-temp-note">Loading live model guidance…</p></article>' +
+      chartCard('Ensemble spread', pre + '_ensemble_range.png?v=' + v, name + ' GEFS and EPS ensemble temperature spread') +
+      '<article class="card wide">' + '<h3>14-day rainfall model comparison</h3><a href="' + pre + '_rainfall_10day.png?v=' + v + '"><div class="chart-viewport" role="region" aria-label="Weather chart"><img loading="lazy" src="' + pre + '_rainfall_10day.png?v=' + v + '" alt="' + esc(name) + ' 14-day model rainfall comparison" onerror="this.closest(\'article\').querySelector(\'.rl-pending\').hidden=false;this.closest(\'.chart-viewport\').style.display=\'none\'"></div></a><p class="rl-pending" hidden>Chart is being prepared for this site — check back shortly.</p></article>' +
+      chartCard('10-day upper-air forecast', pre + '_upper_air_10day.png?v=' + v, name + ' 10-day upper-air model forecast') +
+      '<article class="card wide rl-card"><h3>Which model is best here?</h3><div id="rl-acc"><p class="rl-empty">Loading accuracy…</p></div></article>' +
+      '</div>';
+    var site = LOC[id];
+    // The live renderer is defined by the Forecast Lab's own scripts, which load when the Lab opens.
+    (function draw(tries) {
+      if (id !== state.id) return;
+      if (window.dwlTempGuidance && site) Promise.resolve(window.dwlTempGuidance(document.getElementById('rl-temp-img'), document.getElementById('rl-temp-note'), site.lat, site.lon, name, false)).then(function () {
+        var n = document.getElementById('rl-temp-note'); if (n && /Loading/.test(n.textContent)) n.textContent = 'Live hourly model guidance · updates when you open the page';
+      });
+      else if (tries < 60) setTimeout(function () { draw(tries + 1); }, 500);
+    })(0);
+  }
+  var LOC = {}; (window.DWL_LOCATIONS || []).forEach(function (l) { LOC[l.id] = l; });
+  if (LOC.moraga) { LOC.moraga = { lat: 37.8201932, lon: -122.1193876 }; }
 
   function load() {
-    state.feed = null; lastAcc = ''; render(); var id = state.id;
-    fetch(id + '_forecast_10day.json?t=' + Math.floor(Date.now() / 600000)).then(function (r) { return r.json(); }).then(function (f) {
-      if (id !== state.id) return; state.feed = f; state.day = 0; render();
-      var tries = id === 'moraga' ? ['verification/moraga_model_daily_verification_noaa.json', 'model_daily_verification_latest.json'] : ['verification/' + id + '_model_daily_verification_noaa.json', 'verification/' + id + '_model_daily_verification.json'];
-      (function next(k) {
-        if (k >= tries.length) { var a = document.getElementById('rl-acc'); if (a) a.innerHTML = accuracy(null); return; }
-        fetch(tries[k] + '?t=' + Math.floor(Date.now() / 600000)).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (v) {
-          if (id !== state.id) return; if (!v.calibration) throw 0; var a = document.getElementById('rl-acc'); if (a) a.innerHTML = accuracy(v);
-        }).catch(function () { next(k + 1); });
-      })(0);
-    }).catch(function () { host.innerHTML = picker() + '<p class="rl-empty">Forecast unavailable right now.</p>'; });
+    lastAcc = ''; render(); var id = state.id;
+    var tries = id === 'moraga' ? ['verification/moraga_model_daily_verification_noaa.json', 'model_daily_verification_latest.json'] : ['verification/' + id + '_model_daily_verification_noaa.json', 'verification/' + id + '_model_daily_verification.json'];
+    (function next(k) {
+      if (k >= tries.length) { var a = document.getElementById('rl-acc'); if (a) a.innerHTML = accuracy(null); return; }
+      fetch(tries[k] + '?t=' + Math.floor(Date.now() / 600000)).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (v) {
+        if (id !== state.id) return; if (!v.calibration) throw 0; var a = document.getElementById('rl-acc'); if (a) a.innerHTML = accuracy(v);
+      }).catch(function () { next(k + 1); });
+    })(0);
   }
 
   host.addEventListener('click', function (e) {
     var b = e.target.closest('[data-hub]');
-    if (b) { state.id = b.dataset.hub; try { localStorage.setItem('dwl-lab-hub', state.id); } catch (_) {} load(); return; }
-    var m = e.target.closest('[data-model]');
-    if (m && state.feed) { state.hidden[m.dataset.model] = !state.hidden[m.dataset.model]; render(); fillAcc(); return; }
-    var d = e.target.closest('[data-day]');
-    if (d && state.feed) { state.day = +d.dataset.day; render(); fillAcc(); }
+    if (b) { state.id = b.dataset.hub; try { localStorage.setItem('dwl-lab-hub', state.id); } catch (_) {} load(); }
   });
-  // Re-rendering replaces the accuracy box; keep the last result.
   var lastAcc = '';
-  new MutationObserver(function () { var a = document.getElementById('rl-acc'); if (a && !/Loading accuracy/.test(a.textContent)) lastAcc = a.innerHTML; }).observe(host, { childList: true, subtree: true });
-  function fillAcc() { var a = document.getElementById('rl-acc'); if (a && lastAcc) a.innerHTML = lastAcc; }
   load();
 })();

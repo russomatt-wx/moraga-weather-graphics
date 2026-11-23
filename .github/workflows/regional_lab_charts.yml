@@ -1,0 +1,56 @@
+name: Regional Lab charts
+# Same charts as Moraga's (ensemble spread, 14-day rainfall, 10-day upper air) for the Forecast Lab's regional
+# sites. Saved on the lab-charts branch as one replaced commit (latest images only), so the main branch's
+# history doesn't grow; the Pages build copies them into lab/.
+on:
+  schedule:
+    - cron: '41 1,7,13,19 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: write
+concurrency: { group: regional-lab-charts, cancel-in-progress: false }
+jobs:
+  charts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with: { python-version: '3.12' }
+      - run: python -m pip install matplotlib numpy requests
+      - name: Draw charts for each site
+        run: |
+          mkdir -p "$RUNNER_TEMP/lab"
+          python - > "$RUNNER_TEMP/sites.txt" <<'PY'
+          import json
+          ids = {"soma": "San Francisco", "downtownoakland": "Oakland", "northgate": "Walnut Creek", "danville": "Danville",
+                 "claytonvalley": "Concord", "livermorewine": "Livermore", "sacramento": "Sacramento"}
+          for l in json.load(open("locations.json"))["locations"]:
+              if l["id"] in ids:
+                  print(l["id"], l["lat"], l["lon"], ids[l["id"]].replace(" ", "_"))
+          PY
+          while read -r id lat lon name; do
+            name="${name//_/ }"; w="$RUNNER_TEMP/w-$id"; mkdir -p "$w"
+            export DWL_LAT="$lat" DWL_LON="$lon" DWL_SITE_NAME="$name"
+            DWL_OUT="$RUNNER_TEMP/lab/$id" python scripts/ensemble_spread.py || echo "::warning::$id ensemble failed"
+            (cd "$w" && DWL_OUT="$RUNNER_TEMP/lab/$id" WX_FORECAST_LAT="$lat" WX_FORECAST_LON="$lon" WX_FORECAST_OUTPUT="$w/feed.json" python "$GITHUB_WORKSPACE/scripts/rainfall_10day.py") || echo "::warning::$id rainfall failed"
+            (cd "$w" && DWL_OUT="$RUNNER_TEMP/lab/$id" python "$GITHUB_WORKSPACE/scripts/upper_air_forecast.py") || echo "::warning::$id upper air failed"
+            sleep 3
+          done < "$RUNNER_TEMP/sites.txt"
+          ls -la "$RUNNER_TEMP/lab"
+      - name: Publish to lab-charts branch (keep previous images for any site that failed)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p "$RUNNER_TEMP/keep" && (git fetch --depth=1 origin lab-charts && git archive FETCH_HEAD lab | tar -x -C "$RUNNER_TEMP/keep") || true
+          rm -rf lab && mkdir lab
+          [ -d "$RUNNER_TEMP/keep/lab" ] && cp "$RUNNER_TEMP/keep/lab/"* lab/ 2>/dev/null || true
+          cp "$RUNNER_TEMP/lab/"*.png "$RUNNER_TEMP/lab/"*.json lab/ 2>/dev/null || true
+          git checkout --orphan lab-charts-new
+          git rm -rq --cached . && git add lab
+          git commit -qm "Regional Lab charts $(date -u +%FT%H:%MZ)"
+          git push -f origin lab-charts-new:lab-charts
+      - name: Publish site
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: gh workflow run coordinated-pages.yml --ref main || true

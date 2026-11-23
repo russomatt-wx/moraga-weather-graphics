@@ -24,7 +24,10 @@ dwl.apply()
 
 ROOT = Path(__file__).resolve().parents[1]
 TZ = ZoneInfo("America/Los_Angeles")
-LAT, LON = 37.8201932, -122.1193876
+import os
+LAT, LON = float(os.environ.get("DWL_LAT", "37.8201932")), float(os.environ.get("DWL_LON", "-122.1193876"))
+SITE = os.environ.get("DWL_SITE_NAME", "Moraga")
+OUT = os.environ.get("DWL_OUT", "moraga")  # file prefix (may include a folder, e.g. lab/soma)
 DAYS = 11
 MODELS = {  # label: (Open-Meteo model, colour)
     "GEFS": ("ncep_gefs_seamless", dwl.SERIES[2]),
@@ -75,7 +78,7 @@ def main():
     # A grey patch in the legend explains the shading once.
     ax.fill_between([], [], [], color=dwl.MUTED, alpha=.35, label="10–90% range")
 
-    ax.text(0, 1.25, "Moraga ensemble spread", transform=ax.transAxes, fontsize=19, fontweight="bold", color=dwl.TEXT, va="bottom")
+    ax.text(0, 1.25, f"{SITE} ensemble spread", transform=ax.transAxes, fontsize=19, fontweight="bold", color=dwl.TEXT, va="bottom")
     ax.text(0, 1.16, "Hourly temperature, °F · GEFS vs ECMWF EPS", transform=ax.transAxes, fontsize=14, color=dwl.MUTED, va="bottom")
     ax.legend(loc="lower left", bbox_to_anchor=(0, 1.0), ncol=3, fontsize=12, frameon=False, handlelength=1.4, columnspacing=1.0, borderaxespad=.3)
 
@@ -102,12 +105,12 @@ def main():
     members = " · ".join(f"{k} {v['members']} members" for k, v in summary.items())
     ax.text(0, -.2, f"{members} · Open-Meteo · updated {datetime.now(TZ):%b %-d, %-I:%M %p} PT",
             transform=ax.transAxes, fontsize=10.5, color=dwl.MUTED, va="top")
-    fig.savefig(ROOT / "moraga_ensemble_range.png", dpi=200, bbox_inches="tight", pad_inches=.25, facecolor=dwl.BG)
+    fig.savefig(ROOT / f"{OUT}_ensemble_range.png", dpi=200, bbox_inches="tight", pad_inches=.25, facecolor=dwl.BG)
     plt.close(fig)
-    (ROOT / "moraga_ensemble_range.json").write_text(json.dumps({
+    (ROOT / f"{OUT}_ensemble_range.json").write_text(json.dumps({
         "generated_utc": datetime.now(timezone.utc).isoformat(), "source": "Open-Meteo ensemble API",
         "location": {"latitude": LAT, "longitude": LON}, "percentiles": [10, 50, 90], "models": summary}) + "\n")
-    print("Wrote moraga_ensemble_range.png")
+    print(f"Wrote {OUT}_ensemble_range.png")
 
 
 if __name__ == "__main__":
