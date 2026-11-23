@@ -44,6 +44,8 @@ on:
   schedule:
     # Fallback for observations and other feeds (GitHub may skip some scheduled runs).
     - cron: '11,47 * * * *'
+    # Before people get dressed: extra refreshes 4:30-6:30 AM Pacific (UTC times cover both PST and PDT).
+    - cron: '29,53 11,12,13 * * *'
 permissions:
   contents: write
   actions: write
