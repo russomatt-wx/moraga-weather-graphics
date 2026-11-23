@@ -1,21 +1,21 @@
 {
-  "generated_utc": "2026-11-23T01:59:33.604673+00:00",
+  "generated_utc": "2026-11-23T13:40:27.789715+00:00",
   "status": "verified_daily_extremes",
   "station": "KCAMORAG71",
   "model_scores": {
     "gfs": {
-      "verified_days": 34,
-      "high_mae_f": 4.37,
+      "verified_days": 35,
+      "high_mae_f": 4.27,
       "low_mae_f": 7.39,
-      "high_bias_f": 0.13,
+      "high_bias_f": 0.1,
       "low_bias_f": 7.15
     },
     "ecmwf": {
-      "verified_days": 34,
-      "high_mae_f": 4.28,
-      "low_mae_f": 4.15,
-      "high_bias_f": -2.06,
-      "low_bias_f": 2.72
+      "verified_days": 35,
+      "high_mae_f": 4.25,
+      "low_mae_f": 4.2,
+      "high_bias_f": -2.09,
+      "low_bias_f": 2.8
     },
     "nam": {
       "verified_days": 16,
@@ -25,37 +25,37 @@
       "low_bias_f": 5.98
     },
     "icon": {
-      "verified_days": 34,
-      "high_mae_f": 4.96,
-      "low_mae_f": 4.62,
-      "high_bias_f": -2.1,
+      "verified_days": 35,
+      "high_mae_f": 4.82,
+      "low_mae_f": 4.6,
+      "high_bias_f": -2.04,
       "low_bias_f": 3.8
     },
     "gem": {
-      "verified_days": 34,
-      "high_mae_f": 5.5,
-      "low_mae_f": 3.46,
-      "high_bias_f": -5.08,
-      "low_bias_f": 0.73
+      "verified_days": 35,
+      "high_mae_f": 5.45,
+      "low_mae_f": 3.59,
+      "high_bias_f": -5.05,
+      "low_bias_f": 0.94
     }
   },
   "calibration": {
     "gfs": {
       "high": {
         "factor": 0.0,
-        "verified_days": 34,
-        "holdout_days": 27,
-        "raw_holdout_mae_f": 4.906,
-        "selected_holdout_mae_f": 4.906,
+        "verified_days": 35,
+        "holdout_days": 28,
+        "raw_holdout_mae_f": 4.764,
+        "selected_holdout_mae_f": 4.764,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       },
       "low": {
         "factor": 1.25,
-        "verified_days": 34,
-        "holdout_days": 27,
-        "raw_holdout_mae_f": 7.678,
-        "selected_holdout_mae_f": 3.362,
+        "verified_days": 35,
+        "holdout_days": 28,
+        "raw_holdout_mae_f": 7.662,
+        "selected_holdout_mae_f": 3.302,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       }
@@ -63,19 +63,19 @@
     "ecmwf": {
       "high": {
         "factor": 0.75,
-        "verified_days": 34,
-        "holdout_days": 27,
-        "raw_holdout_mae_f": 4.396,
-        "selected_holdout_mae_f": 4.026,
+        "verified_days": 35,
+        "holdout_days": 28,
+        "raw_holdout_mae_f": 4.35,
+        "selected_holdout_mae_f": 3.938,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       },
       "low": {
         "factor": 1.25,
-        "verified_days": 34,
-        "holdout_days": 27,
-        "raw_holdout_mae_f": 4.541,
-        "selected_holdout_mae_f": 3.662,
+        "verified_days": 35,
+        "holdout_days": 28,
+        "raw_holdout_mae_f": 4.586,
+        "selected_holdout_mae_f": 3.617,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       }
@@ -102,20 +102,20 @@
     },
     "icon": {
       "high": {
-        "factor": 1.25,
-        "verified_days": 34,
-        "holdout_days": 27,
-        "raw_holdout_mae_f": 5.233,
-        "selected_holdout_mae_f": 4.67,
+        "factor": 1.0,
+        "verified_days": 35,
+        "holdout_days": 28,
+        "raw_holdout_mae_f": 5.047,
+        "selected_holdout_mae_f": 4.586,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       },
       "low": {
         "factor": 1.25,
-        "verified_days": 34,
-        "holdout_days": 27,
-        "raw_holdout_mae_f": 4.994,
-        "selected_holdout_mae_f": 3.805,
+        "verified_days": 35,
+        "holdout_days": 28,
+        "raw_holdout_mae_f": 4.959,
+        "selected_holdout_mae_f": 3.696,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       }
@@ -123,19 +123,19 @@
     "gem": {
       "high": {
         "factor": 1.0,
-        "verified_days": 34,
-        "holdout_days": 27,
-        "raw_holdout_mae_f": 5.714,
-        "selected_holdout_mae_f": 2.774,
+        "verified_days": 35,
+        "holdout_days": 28,
+        "raw_holdout_mae_f": 5.653,
+        "selected_holdout_mae_f": 2.714,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       },
       "low": {
         "factor": 0.0,
-        "verified_days": 34,
-        "holdout_days": 27,
-        "raw_holdout_mae_f": 3.73,
-        "selected_holdout_mae_f": 3.73,
+        "verified_days": 35,
+        "holdout_days": 28,
+        "raw_holdout_mae_f": 3.881,
+        "selected_holdout_mae_f": 3.881,
         "method": "walk_forward_prior_days_only",
         "lead_specific": false
       }
@@ -1663,6 +1663,46 @@
       "high_error_f": -1.86,
       "low_error_f": 8.0,
       "observation_count": 1414
+    },
+    {
+      "model": "gfs",
+      "valid_local_date": "2026-11-22",
+      "issued_utc": "2026-11-17T20:50:20.374918+00:00",
+      "observed_high_f": 54.0,
+      "observed_low_f": 37.0,
+      "high_error_f": -0.94,
+      "low_error_f": 7.24,
+      "observation_count": 1416
+    },
+    {
+      "model": "ecmwf",
+      "valid_local_date": "2026-11-22",
+      "issued_utc": "2026-11-17T20:50:20.461627+00:00",
+      "observed_high_f": 54.0,
+      "observed_low_f": 37.0,
+      "high_error_f": -3.1,
+      "low_error_f": 5.8,
+      "observation_count": 1416
+    },
+    {
+      "model": "icon",
+      "valid_local_date": "2026-11-22",
+      "issued_utc": "2026-11-17T20:50:20.933111+00:00",
+      "observed_high_f": 54.0,
+      "observed_low_f": 37.0,
+      "high_error_f": -0.04,
+      "low_error_f": 4.0,
+      "observation_count": 1416
+    },
+    {
+      "model": "gem",
+      "valid_local_date": "2026-11-22",
+      "issued_utc": "2026-11-17T20:50:21.651578+00:00",
+      "observed_high_f": 54.0,
+      "observed_low_f": 37.0,
+      "high_error_f": -4.0,
+      "low_error_f": 7.96,
+      "observation_count": 1416
     }
   ]
 }
