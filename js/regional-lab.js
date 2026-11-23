@@ -25,14 +25,14 @@
 
   /* ---------- One chart style for every line chart ---------- */
   function lineChart(spec) {
-    var W = 560, H = spec.h || 330, L = 44, R = 12, T = 12, B = 28;
-    var start = nowLocal() - 3600e3, end = start + (spec.days || 10) * 86400e3;
+    var W = 560, H = spec.h || 330, L = 44, R = 12, T = spec.top ? 26 : 12, B = 28;
+    var start = spec.daily ? Math.floor(nowLocal() / 86400e3) * 86400e3 : nowLocal() - 3600e3, end = start + (spec.days || 10) * 86400e3;
     var vis = function (n) { return !state.hidden[spec.key + ':' + n]; };
     var vals = [];
     spec.series.forEach(function (s) { if (!vis(s.name)) return; s.t.forEach(function (t, i) { var m = tms(t); if (m >= start && m <= end && num(s.v[i])) vals.push(+s.v[i]); }); });
     (spec.bands || []).forEach(function (b) { if (!vis(b.name)) return; b.t.forEach(function (t, i) { var m = tms(t); if (m >= start && m <= end) { if (num(b.lo[i])) vals.push(+b.lo[i]); if (num(b.hi[i])) vals.push(+b.hi[i]); } }); });
     if (!vals.length) return '<p class="rl-empty">No data for this chart yet.</p>';
-    var step = spec.step || 5, lo = Math.floor((Math.min.apply(null, vals) - step / 2) / step) * step, hi = Math.ceil((Math.max.apply(null, vals) + step / 2) / step) * step;
+    var step = spec.step || 5, lo = Math.max(spec.min !== undefined ? spec.min : -1e9, Math.floor((Math.min.apply(null, vals) - step / 2) / step) * step), hi = Math.ceil((Math.max.apply(null, vals) + step / 2) / step) * step;
     var x = function (m) { return L + (W - L - R) * (m - start) / (end - start); }, y = function (v) { return T + (H - T - B) * (1 - (v - lo) / (hi - lo)); };
     var g = '';
     for (var v = lo; v <= hi + 1e-9; v += step) g += '<line class="rl-grid" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v).toFixed(1) + '" y2="' + y(v).toFixed(1) + '"/><text class="rl-ax" x="' + (L - 6) + '" y="' + (y(v) + 4).toFixed(1) + '" text-anchor="end">' + spec.fmt(v) + '</text>';
@@ -47,7 +47,9 @@
       s.t.forEach(function (t, i) { var m = tms(t); if (m < start || m > end) return; if (num(s.v[i])) seg.push(x(m).toFixed(1) + ',' + y(+s.v[i]).toFixed(1)); else if (seg.length) { segs.push(seg); seg = []; } });
       if (seg.length) segs.push(seg);
       segs.forEach(function (sg) { if (sg.length > 1) g += '<polyline points="' + sg.join(' ') + '" fill="none" stroke="' + s.color + '" stroke-width="' + (s.width || 2) + '"' + (s.dash ? ' stroke-dasharray="6 4"' : '') + ' stroke-linejoin="round" stroke-linecap="round"/>'; });
+      if (spec.dots) segs.forEach(function (sg) { sg.forEach(function (pt) { var q = pt.split(','); g += '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="2.6" fill="' + s.color + '"/>'; }); });
     });
+    (spec.top || []).forEach(function (tl) { var m = tms(tl.t); if (m >= start && m <= end) g += '<text class="rl-pop" x="' + x(m).toFixed(1) + '" y="' + (T - 10) + '" text-anchor="middle">' + tl.label + '</text>'; });
     g += '<line class="rl-cursor" x1="0" x2="0" y1="' + T + '" y2="' + (H - B) + '" visibility="hidden"/><rect class="rl-hit" x="' + L + '" y="' + T + '" width="' + (W - L - R) + '" height="' + (H - T - B) + '"/>';
     state.charts[spec.key] = { spec: spec, start: start, end: end, L: L, R: R, W: W };
     var names = spec.series.map(function (s) { return [s.name, s.color]; }).concat((spec.bands || []).filter(function (b) { return !spec.series.some(function (s) { return s.name === b.name; }); }).map(function (b) { return [b.name, b.color]; }));
@@ -60,10 +62,10 @@
     var c = state.charts[plot.dataset.chart]; if (!c) return; var svg = plot.querySelector('svg'), r = svg.getBoundingClientRect();
     var px = (clientX - r.left) / r.width * c.W; if (px < c.L || px > c.W - c.R) return;
     var m = c.start + (px - c.L) / (c.W - c.L - c.R) * (c.end - c.start), rows = [];
-    var near = function (t, arr) { var best = -1, bd = 1e18; t.forEach(function (tt, i) { var d = Math.abs(tms(tt) - m); if (d < bd && num(arr[i])) { bd = d; best = i; } }); return bd <= 3 * 3600e3 ? best : -1; };
+    var near = function (t, arr) { var best = -1, bd = 1e18; t.forEach(function (tt, i) { var d = Math.abs(tms(tt) - m); if (d < bd && num(arr[i])) { bd = d; best = i; } }); return bd <= (c.spec.daily ? 12 : 3) * 3600e3 ? best : -1; };
     c.spec.series.forEach(function (s) { if (state.hidden[c.spec.key + ':' + s.name]) return; var i = near(s.t, s.v); if (i >= 0) rows.push('<span><i style="background:' + s.color + '"></i>' + esc(s.name) + ' <b>' + c.spec.fmt(+s.v[i], true) + '</b></span>'); });
     (c.spec.bands || []).forEach(function (b) { if (state.hidden[c.spec.key + ':' + b.name]) return; var i = near(b.t, b.lo); if (i >= 0) rows.push('<span><i style="background:' + b.color + '"></i>' + esc(b.name) + ' range <b>' + c.spec.fmt(+b.lo[i], true) + '–' + c.spec.fmt(+b.hi[i], true) + '</b></span>'); });
-    var d = new Date(m), when = dayLbl(m) + ' ' + ((d.getUTCHours() % 12) || 12) + (d.getUTCHours() < 12 ? ' AM' : ' PM');
+    var d = new Date(m), when = c.spec.daily ? new Date(Math.floor(m / 86400e3) * 86400e3 + 43200e3).toLocaleDateString('en-US', { timeZone: 'UTC', weekday: 'long', month: 'short', day: 'numeric' }) : dayLbl(m) + ' ' + ((d.getUTCHours() % 12) || 12) + (d.getUTCHours() < 12 ? ' AM' : ' PM');
     var cur = svg.querySelector('.rl-cursor'); cur.setAttribute('x1', px); cur.setAttribute('x2', px); cur.setAttribute('visibility', 'visible');
     var tip = plot.querySelector('.rl-tip'); tip.innerHTML = '<b>' + when + '</b>' + rows.join(''); tip.hidden = false;
   }
@@ -91,7 +93,7 @@
       '<div class="rl-cards">' +
       '<article class="card rl-card"><h3>Temperature guidance</h3><p class="rl-sub">Hourly temperature from six models · tap the chart for values</p><div id="rl-c-temp" class="rl-body"><p class="rl-empty">Loading…</p></div></article>' +
       '<article class="card rl-card"><h3>Ensemble spread</h3><p class="rl-sub">Shaded = 10th–90th percentile of each ensemble · line = median</p><div id="rl-c-ens" class="rl-body"><p class="rl-empty">Loading…</p></div></article>' +
-      '<article class="card rl-card"><h3>14-day rainfall</h3><p class="rl-sub">Daily rain by model · % = chance of measurable rain · tap a day</p><div id="rl-c-rain" class="rl-body"><p class="rl-empty">Loading…</p></div></article>' +
+      '<article class="card rl-card"><h3>14-day rainfall</h3><p class="rl-sub">Daily rain by model (inches) · % = chance of measurable rain · tap for values</p><div id="rl-c-rain" class="rl-body"><p class="rl-empty">Loading…</p></div></article>' +
       '<article class="card rl-card"><h3>Upper air · 10 days</h3><p class="rl-sub">500 mb height (higher = ridge, lower = trough) and 850 mb temperature (air mass)</p><div id="rl-c-up" class="rl-body"><p class="rl-empty">Loading…</p></div></article>' +
       '<article class="card rl-card"><h3>Which model is best here?</h3><div id="rl-acc" class="rl-body"><p class="rl-empty">Loading…</p></div></article>' +
       '</div>';
@@ -103,7 +105,7 @@
       Object.keys(j.models || {}).forEach(function (k) { var m = j.models[k], nm = /EPS|ECMWF/.test(k) ? 'EPS' : 'GEFS'; bands.push({ name: nm, color: C[nm], t: m.time, lo: m.p10, hi: m.p90 }); ser.push({ name: nm, color: C[nm], t: m.time, v: m.median, width: 2.4 }); });
       state.data.ens = { series: ser, bands: bands }; put('rl-c-ens', lineChart(specs.ens()));
     }).catch(function () { put('rl-c-ens', pending); });
-    getJSON(pre + '_rainfall_10day.json').then(function (j) { if (state.id !== id) return; state.data.rain = j; put('rl-c-rain', rainChart(j)); }).catch(function () { put('rl-c-rain', pending); });
+    getJSON(pre + '_rainfall_10day.json').then(function (j) { if (state.id !== id) return; state.data.rain = j; put('rl-c-rain', rainChart()); }).catch(function () { put('rl-c-rain', pending); });
     getJSON(pre + '_upper_air_10day.json').then(function (j) {
       if (state.id !== id) return; var ms = Object.keys(j.models || {}).filter(function (k) { return j.models[k].time; });
       if (!ms.length) throw 0;
@@ -113,23 +115,16 @@
     loadAccuracy(id);
   }
 
-  // Rain: grouped bars per day (one per model), chance on top; tap a day for the numbers.
-  function rainChart(j) {
-    var dates = (j.dates || []).slice(0, 14), all = Object.keys(j.model_daily_inches || {}), mods = all.filter(function (m) { return !state.hidden['rain:' + m]; }), pop = j.ensemble_rain_probability_pct || {};
-    var max = .25; mods.forEach(function (m) { (j.model_daily_inches[m] || []).slice(0, 14).forEach(function (v) { if (num(v) && v > max) max = +v; }); });
-    var st = [.05, .1, .25, .5, 1].find(function (q) { return max / q <= 5; }) || 1; max = Math.ceil(max / st) * st; var ticks = Math.round(max / st);
-    var W = 560, H = 300, L = 40, R = 8, T = 26, B = 30, n = dates.length, cw = (W - L - R) / n, bw = Math.max(2, (cw - 6) / Math.max(1, mods.length));
-    var y = function (v) { return T + (H - T - B) * (1 - v / max); }, g = '';
-    for (var k = 0; k <= ticks; k++) { var v = st * k; g += '<line class="rl-grid" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v).toFixed(1) + '" y2="' + y(v).toFixed(1) + '"/><text class="rl-ax" x="' + (L - 5) + '" y="' + (y(v) + 4).toFixed(1) + '" text-anchor="end">' + v.toFixed(2) + '</text>'; }
-    dates.forEach(function (d, i) {
-      var x0 = L + i * cw; g += '<text class="rl-ax" x="' + (x0 + cw / 2).toFixed(1) + '" y="' + (H - 10) + '" text-anchor="middle">' + dayLbl(tms(d + 'T12:00')).slice(0, 2) + '</text>';
-      if (num(pop[d])) g += '<text class="rl-pop" x="' + (x0 + cw / 2).toFixed(1) + '" y="' + (T - 10) + '" text-anchor="middle">' + Math.round(pop[d] / 10) * 10 + '</text>';
-      mods.forEach(function (m, k) { var val = (j.model_daily_inches[m] || [])[i]; if (num(val) && val > 0) g += '<rect x="' + (x0 + 3 + k * bw).toFixed(1) + '" y="' + y(+val).toFixed(1) + '" width="' + Math.max(1, bw - .6).toFixed(1) + '" height="' + (y(0) - y(+val)).toFixed(1) + '" rx="1" fill="' + (C[m] || '#cbd5e1') + '"/>'; });
-      g += '<rect class="rl-hitday" data-rainday="' + i + '" x="' + x0.toFixed(1) + '" y="' + T + '" width="' + cw.toFixed(1) + '" height="' + (H - T - B) + '"/>';
-    });
-    return '<svg viewBox="0 0 ' + W + ' ' + H + '" class="rl-chart" role="img" aria-label="14-day rainfall by model">' + g + '</svg>' +
-      '<div class="rl-legend">' + all.map(function (m) { return '<button type="button" data-toggle="rain:' + esc(m) + '" aria-pressed="' + !state.hidden['rain:' + m] + '"><i style="background:' + (C[m] || '#cbd5e1') + '"></i>' + esc(m) + '</button>'; }).join('') + '<span class="rl-key">inches · top row = % chance</span></div><div class="rl-raintip" id="rl-raintip"></div>';
+  // Rain: one line per model through each day's total; chance of rain along the top. Tap for values.
+  function rainSpec() {
+    var j = state.data.rain, dates = (j.dates || []).slice(0, 14), pop = j.ensemble_rain_probability_pct || {};
+    var t = dates.map(function (d) { return d + 'T12:00'; }), max = 0;
+    var series = Object.keys(j.model_daily_inches || {}).map(function (m) { var v = (j.model_daily_inches[m] || []).slice(0, 14); v.forEach(function (q) { if (num(q) && q > max) max = +q; }); return { name: m, color: C[m] || '#cbd5e1', t: t, v: v, dash: / mean$/.test(m), width: / mean$/.test(m) ? 2.6 : 2 }; });
+    var st = [.05, .1, .25, .5].find(function (q) { return max / q <= 5; }) || 1;
+    return { key: 'rain', label: '14-day rainfall by model', series: series, fmt: function (v) { return (+v).toFixed(2) + (arguments[1] ? '″' : ''); }, step: st, min: 0, dots: true, days: 14, daily: true,
+      top: dates.filter(function (d) { return num(pop[d]); }).map(function (d) { return { t: d + 'T12:00', label: Math.round(pop[d] / 10) * 10 + '%' }; }) };
   }
+  function rainChart() { return lineChart(rainSpec()); }
   function rainDay(i) {
     var j = state.data.rain, d = j && j.dates[i], tip = document.getElementById('rl-raintip'); if (!d || !tip) return;
     var pop = (j.ensemble_rain_probability_pct || {})[d];
@@ -160,7 +155,7 @@
     var d = state.data;
     if (key === 'temp' && d.temp) document.getElementById('rl-c-temp').innerHTML = lineChart(specs.temp());
     if (key === 'ens' && d.ens) document.getElementById('rl-c-ens').innerHTML = lineChart(specs.ens());
-    if (key === 'rain' && d.rain) document.getElementById('rl-c-rain').innerHTML = rainChart(d.rain);
+    if (key === 'rain' && d.rain) document.getElementById('rl-c-rain').innerHTML = rainChart();
     if ((key === 'z500' || key === 't850') && d.up) document.getElementById('rl-c-up').innerHTML = upHTML();
   }
 
