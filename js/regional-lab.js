@@ -5,7 +5,7 @@
   'use strict';
   var HUBS = [
     ['moraga', 'Moraga'], ['soma', 'San Francisco'], ['downtownoakland', 'Oakland'], ['northgate', 'Walnut Creek'],
-    ['danville', 'Danville'], ['claytonvalley', 'Concord'], ['sacramento', 'Sacramento']
+    ['danville', 'Danville'], ['claytonvalley', 'Concord'], ['livermorewine', 'Livermore'], ['sacramento', 'Sacramento']
   ];
   var COLORS = { EPS: '#a78bfa', GEFS: '#f472b6', ECMWF: '#3fd8f5', GFS: '#fbbf24', ICON: '#34d399', GEM: '#fb923c', NAM: '#94a3b8' };
   var host = document.getElementById('regional-lab'); if (!host) return;
