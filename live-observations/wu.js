@@ -215,8 +215,9 @@ export async function skyFor(city, env, solarNow, log) {
       // When the nearby airports measure a broken/overcast deck, trust them unless the sun is at full strength.
       if (ratio < 0.95) {
         const deck = await airportSky(city, true, null, log, true);
-        if (deck && deck.cover >= 3 && s.code <= 2 && s.text !== 'Cloudy') {
-          s = deck.cover >= 4 && ratio < 0.9 ? { text: 'Cloudy', code: 3 } : { text: 'Mostly cloudy', code: 2 };
+        const cov = deck ? Math.max(deck.cover || 0, deck.near || 0) : 0;
+        if (cov >= 3 && s.code <= 2 && s.text !== 'Cloudy') {
+          s = cov >= 4 && ratio < 0.9 ? { text: 'Cloudy', code: 3 } : { text: 'Mostly cloudy', code: 2 };
           s.thin_deck = true;
         }
       }
@@ -247,7 +248,7 @@ async function airportSky(city, day, model, log, raw) {
       // Weight by distance: the airport next door decides; a farther one only nudges (inverse-square).
       const here = TOWN_COORDS[city], at = loc && loc.coordinates;
       const mi = here && at ? Math.max(2, Math.hypot(at[1] - here[0], (at[0] - here[1]) * Math.cos(here[0] * Math.PI / 180)) * 69) : 10;
-      covers.push({ c: Math.max(...layers), w: 1 / (mi * mi) });
+      covers.push({ c: Math.max(...layers), w: 1 / (mi * mi), mi });
       const tx = p.textDescription || '';
       if (!wet && /thunder/i.test(tx)) wet = { text: 'Thunderstorms', code: 95 };
       else if (!wet && /rain|shower/i.test(tx)) wet = /heavy/i.test(tx) ? { text: 'Heavy rain', code: 65 } : /light/i.test(tx) ? { text: 'Light rain', code: 61 } : { text: 'Rain', code: 63 };
@@ -260,7 +261,7 @@ async function airportSky(city, day, model, log, raw) {
   if (fog) return { text: 'Fog', code: 45, is_day: day, source: 'airports', airports: ids };
   const W = covers.reduce((a, b) => a + b.w, 0);
   let c = Math.round(covers.reduce((a, b) => a + b.c * b.w, 0) / W);
-  if (raw) return { cover: c };
+  if (raw) return { cover: c, near: Math.max(0, ...covers.filter((x) => x.mi <= 13).map((x) => x.c)) };
   // Ceilometers see only below ~12,000 ft: let a thick high-cloud deck from the model show through.
   if (c <= 1 && Number(model?.cloud_cover_high) >= 75) c = 2;
   const text = [day ? 'Sunny' : 'Clear', day ? 'Mostly sunny' : 'Mostly clear', 'Partly cloudy', 'Mostly cloudy', 'Cloudy'][c];
