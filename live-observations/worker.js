@@ -6,9 +6,13 @@ import { WU_STATIONS, WU_PRIMARY, TOWN_COORDS, LOCATION_IDS, wuCurrent, wuToday,
 // A station's rain rate only overrides the sky when it's believable. One bucket tip (0.01 in/hr) can come
 // from a sprinkler, dew or a stray drop and lingers for an hour, so a trace rate needs support:
 // humid air (85%+) or nearby airports already reporting precipitation.
-function rainingSky(rate, sky, city, humidity) {
+// The rate is worked out from the last bucket tip, so one 0.01" tip from dew or fog drip on a cold, saturated
+// morning can read as 0.07 in/hr. Unless nearby airports also report precipitation, rain needs at least
+// three tips today (0.03") behind it.
+function rainingSky(rate, sky, city, humidity, today) {
   if (!(Number(rate) > 0)) return sky;
   const airportsWet = sky && Number(sky.code) >= 51 && Number(sky.code) <= 99;
+  if (!airportsWet && Number.isFinite(Number(today)) && today !== null && Number(today) < 0.03) return sky;
   if (Number(rate) < 0.03 && !(Number(humidity) >= 85) && !airportsWet) return sky;
   const c = TOWN_COORDS[city], day = c ? sunElevation(c[0], c[1]) > 0 : true;
   const r = Number(rate);
@@ -266,7 +270,7 @@ export default {
     // Hand-picked Weather Underground station first (needs WU_API_KEY); Xweather below is the fallback.
     if (WU_PRIMARY.has(city) && String(env.WU_API_KEY || '').trim()) {
       const wu = await wuCurrent(WU_STATIONS[city], env, wuLog);
-      if (wu) { const body = {...wu, city, station_selection:'weather_underground', sky: rainingSky(wu.precip_rate_in_hr, await sky(wu.solar_radiation_wm2), city, wu.humidity_pct), source:'Weather Underground'}; Object.assign(body, await extras(body)); return Response.json({...body, diagnostics: wuLog.length ? wuLog : undefined}, {headers:cors}); }
+      if (wu) { const body = {...wu, city, station_selection:'weather_underground', sky: rainingSky(wu.precip_rate_in_hr, await sky(wu.solar_radiation_wm2), city, wu.humidity_pct, wu.precip_today_in), source:'Weather Underground'}; Object.assign(body, await extras(body)); return Response.json({...body, diagnostics: wuLog.length ? wuLog : undefined}, {headers:cors}); }
     }
     if (!env.XWEATHER_CLIENT_ID || !env.XWEATHER_CLIENT_SECRET) return Response.json({error:'Live service not configured'},{status:503,headers:cors});
     let station = city === 'moraga' ? STATION : (city === 'lafayette' ? env.LAFAYETTE_STATION_ID : city === 'greenbrook' ? env.GREENBROOK_STATION_ID : city === 'danville' ? env.DANVILLE_STATION_ID : null);
@@ -392,7 +396,7 @@ export default {
         daily_precipitation_date:dailyRain?.date ?? null,
         daily_precipitation_source:dailyRain?.source ?? (dailyRain ? 'xweather_summary' : null),
         // Sunlight only from vetted stations; an auto-discovered station's sensor may be shaded.
-        sky:rainingSky(pick('precipRateIN') ?? (WU_STATIONS[city] ? (await wuCurrent(WU_STATIONS[city], env, wuLog))?.precip_rate_in_hr : null), await sky(discovery ? null : [...solarRecent, pick('solradWM2')]), city),
+        sky:rainingSky(pick('precipRateIN') ?? (WU_STATIONS[city] ? (await wuCurrent(WU_STATIONS[city], env, wuLog))?.precip_rate_in_hr : null), await sky(discovery ? null : [...solarRecent, pick('solradWM2')]), city, pick('humidity'), dailyRain?.inches ?? (WU_STATIONS[city] ? (await wuCurrent(WU_STATIONS[city], env, wuLog))?.precip_today_in : null)),
         diagnostics:wuLog.length?wuLog:undefined,
         source:'Xweather'
       };
