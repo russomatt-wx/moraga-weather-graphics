@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-24T02:36:20.978964+00:00",
+  "generated_utc": "2026-11-24T14:17:26.899430+00:00",
   "station": "KCAMORAG71",
   "status": "verified",
   "method": "Earliest complete pre-day Open-Meteo hourly precipitation snapshot, summed in mm and converted to inches; complete finalized KCAMORAG71 Xweather daily summaries only; 0.01 inch wet threshold.",
@@ -8,23 +8,23 @@
       "days": 1,
       "models": [
         {
-          "model": "gfs",
-          "days": 1,
-          "wet_days": 1,
-          "mae_in": 0.124,
-          "wet_day_mae_in": 0.124,
-          "bias_in": 0.124,
-          "hits": 1,
-          "misses": 0,
-          "false_alarms": 0
-        },
-        {
           "model": "ecmwf",
           "days": 1,
           "wet_days": 1,
-          "mae_in": 0.36,
-          "wet_day_mae_in": 0.36,
-          "bias_in": 0.36,
+          "mae_in": 0.006,
+          "wet_day_mae_in": 0.006,
+          "bias_in": -0.006,
+          "hits": 0,
+          "misses": 1,
+          "false_alarms": 0
+        },
+        {
+          "model": "gfs",
+          "days": 1,
+          "wet_days": 1,
+          "mae_in": 0.037,
+          "wet_day_mae_in": 0.037,
+          "bias_in": 0.037,
           "hits": 1,
           "misses": 0,
           "false_alarms": 0
@@ -35,23 +35,23 @@
       "days": 7,
       "models": [
         {
-          "model": "ecmwf",
-          "days": 7,
-          "wet_days": 6,
-          "mae_in": 0.523,
-          "wet_day_mae_in": 0.611,
-          "bias_in": -0.261,
-          "hits": 6,
-          "misses": 0,
-          "false_alarms": 0
-        },
-        {
           "model": "gfs",
           "days": 7,
           "wet_days": 6,
-          "mae_in": 0.528,
-          "wet_day_mae_in": 0.616,
-          "bias_in": -0.217,
+          "mae_in": 0.504,
+          "wet_day_mae_in": 0.588,
+          "bias_in": -0.241,
+          "hits": 5,
+          "misses": 1,
+          "false_alarms": 0
+        },
+        {
+          "model": "ecmwf",
+          "days": 7,
+          "wet_days": 6,
+          "mae_in": 0.508,
+          "wet_day_mae_in": 0.592,
+          "bias_in": -0.278,
           "hits": 5,
           "misses": 1,
           "false_alarms": 0
@@ -59,55 +59,55 @@
       ]
     },
     "30d": {
-      "days": 15,
+      "days": 16,
       "models": [
         {
           "model": "gfs",
-          "days": 15,
-          "wet_days": 10,
-          "mae_in": 0.357,
-          "wet_day_mae_in": 0.535,
-          "bias_in": -0.212,
-          "hits": 7,
+          "days": 16,
+          "wet_days": 11,
+          "mae_in": 0.337,
+          "wet_day_mae_in": 0.49,
+          "bias_in": -0.196,
+          "hits": 8,
           "misses": 3,
           "false_alarms": 0
         },
         {
           "model": "ecmwf",
-          "days": 15,
-          "wet_days": 10,
-          "mae_in": 0.371,
-          "wet_day_mae_in": 0.557,
-          "bias_in": -0.246,
+          "days": 16,
+          "wet_days": 11,
+          "mae_in": 0.348,
+          "wet_day_mae_in": 0.507,
+          "bias_in": -0.231,
           "hits": 8,
-          "misses": 2,
+          "misses": 3,
           "false_alarms": 0
         }
       ]
     },
     "90d": {
-      "days": 15,
+      "days": 16,
       "models": [
         {
           "model": "gfs",
-          "days": 15,
-          "wet_days": 10,
-          "mae_in": 0.357,
-          "wet_day_mae_in": 0.535,
-          "bias_in": -0.212,
-          "hits": 7,
+          "days": 16,
+          "wet_days": 11,
+          "mae_in": 0.337,
+          "wet_day_mae_in": 0.49,
+          "bias_in": -0.196,
+          "hits": 8,
           "misses": 3,
           "false_alarms": 0
         },
         {
           "model": "ecmwf",
-          "days": 15,
-          "wet_days": 10,
-          "mae_in": 0.371,
-          "wet_day_mae_in": 0.557,
-          "bias_in": -0.246,
+          "days": 16,
+          "wet_days": 11,
+          "mae_in": 0.348,
+          "wet_day_mae_in": 0.507,
+          "bias_in": -0.231,
           "hits": 8,
-          "misses": 2,
+          "misses": 3,
           "false_alarms": 0
         }
       ]
