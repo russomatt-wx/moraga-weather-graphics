@@ -2533,3 +2533,9 @@ body.public-mode #regional { display: none; }
 #public-shell .dwl-now-time #public-current-time { flex-shrink: 1; min-width: 0; overflow: hidden; }
 #public-shell .dwl-now-time .dwl-push-btn { white-space: nowrap; width: auto !important; min-width: 0 !important; }
 @media (max-width: 400px) { #public-shell .dwl-now-time { letter-spacing: .035em; } #public-shell .dwl-now-time .dwl-push-btn { letter-spacing: .04em; padding: 3px 8px 3px 7px !important; } }
+
+/* Saved screen older than 10 minutes: current values dimmed until the live reading arrives */
+#public-shell .public-obs-card.is-updating .dwl-now-temp,
+#public-shell .public-obs-card.is-updating .dwl-now-cond,
+#public-shell .public-obs-card.is-updating .dwl-now-icon,
+#public-shell .public-obs-card.is-updating .dwl-now-tiles { opacity: .45; transition: opacity .3s; }

@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>try{localStorage.removeItem('dwl-page-zoom');var t=localStorage.getItem('dwl-theme');if(t==='black'||t==='light'){document.documentElement.dataset.theme=t;document.querySelector('meta[name=theme-color]')&&document.querySelector('meta[name=theme-color]').setAttribute('content',t==='black'?'#000000':'#eef3f8');}}catch(e){}</script>
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=27"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=27"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=27">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261128h">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261128i">
 
 
 
@@ -104,8 +104,7 @@
  async function loadLocNow(scope){
   const spans=[...(scope||document).querySelectorAll('[data-loc-now]')].filter(s=>s.offsetParent!==null&&Date.now()-(locNowAt[s.dataset.locNow]||0)>5*60000);
   await Promise.all(spans.map(async s=>{locNowAt[s.dataset.locNow]=Date.now();
-   try{const id=(DWL_LOC[s.dataset.locNow]?.id)||s.dataset.locNow.toLowerCase();const r=await fetch('https://moraga-live-observations.russo-matt.workers.dev/observations?city='+id,{cache:'no-store'});if(!r.ok)return;
-    const o=await r.json();if(Number.isFinite(o.temperature_f)){s.textContent=Math.round(o.temperature_f)+'°'+(o.sky?.text?' · '+o.sky.text:'');}}catch(e){}
+   try{const o=await fetchObs(s.dataset.locNow);if(Number.isFinite(o.temperature_f)){s.textContent=Math.round(o.temperature_f)+'°'+(o.sky?.text?' · '+o.sky.text:'');}}catch(e){}
   }));
  }
  // Search filters every region; otherwise only the current place's region starts open.
@@ -157,6 +156,7 @@
   return parts.map((x,i)=>x+(cuts.includes(i)?'\n\n':' ')).join('').trim();
  }
  const set=(id,value)=>{const node=el(id);if(!node)return;
+  if(id==='public-current-temp'&&/\d/.test(String(value)))document.querySelector('#public-shell .public-obs-card.is-updating')?.classList.remove('is-updating');
   if(id==='public-discussion')value=paragraphs(value);
   if(id==='public-current-condition')value=DWL.titleCase(value);
   if(id==='public-wind')value=String(value).replace(/ mph$/,'');
@@ -593,12 +593,21 @@
   const old=hist.find(x=>at-x.t>=30*60000);if(!old)return;
   const d=p-old.p;node.textContent=d>=0.02?'↗':d<=-0.02?'↘':'→';node.title='Pressure '+(d>=0.02?'rising':d<=-0.02?'falling':'steady');
  }
- async function updateStation(chosen,request,modelTemp,modeledConflict=false){
-  const endpoint='https://moraga-live-observations.russo-matt.workers.dev/observations?city='+encodeURIComponent(chosen.toLowerCase());
+ // Live readings shared by the card and the location list: kept 10 minutes (memory + phone storage),
+ // so a place picked from the list or search shows its real current conditions instantly.
+ const OBS_API='https://moraga-live-observations.russo-matt.workers.dev/observations?city=';
+ const obsId=c=>(DWL_LOC[c]?.id)||String(c).toLowerCase();
+ const obsMem={};
+ function obsCached(c,maxAge=10*60000){const id=obsId(c);let e=obsMem[id];
+  if(!e){try{e=JSON.parse(localStorage.getItem('dwl-obs-'+id)||'null');}catch(_){e=null}}
+  return e&&Date.now()-e.at<maxAge?e.ob:null;}
+ async function fetchObs(c){const id=obsId(c),r=await fetch(OBS_API+encodeURIComponent(id),{cache:'no-store'});
+  if(!r.ok)throw Error('No verified local station available');const ob=await r.json();
+  if(Number.isFinite(ob.temperature_f)){const e={at:Date.now(),ob};obsMem[id]=e;try{localStorage.setItem('dwl-obs-'+id,JSON.stringify(e))}catch(_){}}
+  return ob;}
+ async function updateStation(chosen,request,modelTemp,modeledConflict=false,pre=null){
   try{
-   const response=await fetch(endpoint,{cache:'no-store'});
-   if(!response.ok)throw Error('No verified local station available');
-   const ob=await response.json();
+   const ob=pre||await fetchObs(chosen);
    if(request!==revision)return;
    const stamp=Date.parse(ob.observed_utc||'');
    showObservedToday(chosen,ob);
@@ -936,7 +945,7 @@ function nwsWeatherOutlook(afd,d,h){
     setHL(fmt(daily.temperature_2m_max[0]),fmt(daily.temperature_2m_min[0]));
     if(forecastTodayAllowed())set('public-today-rain',todayRain(daily.precipitation_sum[0],feed,daily.time[0]));
     if(!prefill){set('public-current-temp','—°');set('public-current-condition','Live observation unavailable');set('public-summary','Published forecast available; live observations temporarily unavailable.');}
-    else set('public-current-condition','Loading current conditions…');
+    else if(!(lastSky&&lastSky.city===chosen&&Date.now()-lastSky.at<90*60000)&&!/Updating/.test(el('public-current-condition')?.textContent||''))set('public-current-condition','Loading current conditions…');
     {
      const hc=feed.hourly_conditions||{},names=Object.keys(hc).filter(n=>Array.isArray(hc[n]?.time));
      const base=names.length?hc[names[0]].time:[];
@@ -995,6 +1004,7 @@ function nwsWeatherOutlook(afd,d,h){
    const card=document.querySelector('#public-shell .public-obs-card');if(!card||!o.card)return false;
    card.innerHTML=o.card;if(o.cardStyle)card.setAttribute('style',o.cardStyle);if(o.shell)el('public-shell')?.setAttribute('style',o.shell);
    SNAP_IDS.forEach(id=>{if(o[id]&&el(id)){el(id).innerHTML=o[id];if(o[id+':class'])el(id).className=o[id+':class'];}});
+   if(Date.now()-o.at>10*60000&&!obsCached(c)){card.classList.add('is-updating');const cc=el('public-current-condition');if(cc)cc.textContent='Updating…';}
    shownCity=c;return true;}catch(e){return false}
  }
  document.addEventListener('DOMContentLoaded',()=>{
@@ -1013,10 +1023,14 @@ function nwsWeatherOutlook(afd,d,h){
   if(!sameCity){['public-humidity','public-dew','public-pressure','public-wind'].forEach(id=>set(id,'—'));set('public-current-temp','—°');set('public-current-condition','Loading forecast…');setHL('—','—');set('public-rain','—');el('public-sofar').hidden=true;}
   set('public-discussion',sameCity&&el('public-discussion').textContent.length>80?el('public-discussion').textContent:'Loading the local outlook…');if(!sameCity){set('public-outlook-source','');set('public-outlook-headline','');}el('public-alerts').replaceChildren();updateAlerts(chosen,request);set('public-station-status','Checking nearby public weather observations…');set('public-summary','Retrieving the latest forecast.');
   if(!sameCity){el('public-days').replaceChildren();el('public-hourly').replaceChildren();}
+  if(!sameCity){const hi=el('public-hero-icon');if(hi)hi.innerHTML='';}
+  {const pre=obsCached(chosen);if(pre)updateStation(chosen,request,NaN,false,pre);}
   const [lat,lon]=coords[chosen];
   renderPublished(chosen,request,lat,lon,true);
-  updateStation(chosen,request,NaN,false); // station reading right away, independent of the forecast
-  updateSky(chosen,request); // observed sky from nearby airports
+  // Station reading right away, independent of the forecast. The airport sky is only a fallback: it waits
+  // for the station (whose sky already blends airports, fog and sunlight) so it never flashes first.
+  const stationDone=updateStation(chosen,request,NaN,false);
+  stationDone.catch(()=>{}).then(()=>{if(request===revision)updateSky(chosen,request);});
   const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone=America%2FLos_Angeles&temperature_unit=fahrenheit&precipitation_unit=inch&forecast_days=10&current=temperature_2m%2Cweather_code%2Cis_day%2Crelative_humidity_2m%2Cdew_point_2m%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m&wind_speed_unit=mph&hourly=temperature_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code%2Cis_day%2Cwind_gusts_10m%2Cwind_speed_10m%2Cwind_direction_10m%2Ccloud_cover&daily=weather_code%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_probability_max';
   try{
    let response;
