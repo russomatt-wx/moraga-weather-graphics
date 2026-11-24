@@ -1,237 +1,234 @@
 {
-  "schema_version": 1,
-  "generated_utc": "2026-11-23T14:15:23.146Z",
-  "source_label": "Diablo Weather Lab \u00b7 Updated Nov 23, 6:15 AM PST",
-  "writer": "chatgpt",
-  "horizon_days": 7,
+  "generated_utc": "2026-11-24T00:03:44.000Z",
+  "source_label": "Diablo Weather Lab · Updated Nov 23, 4:03 PM PST",
   "outlooks": {
     "Moraga": {
-      "headline": "Moraga: A Quiet Monday Before the Next Storm",
-      "text": "Moraga starts Monday cold and mostly clear, with high clouds gradually spreading in from the west. The sheltered valley may hold a little early fog, but the afternoon should turn brighter and stay dry. Rain and stronger southerly breezes return Tuesday afternoon, continuing into Wednesday morning. Thanksgiving and Friday look much quieter, so Monday is the better window for outdoor plans before another wet weekend."
+      "headline": "Moraga: A Calm Start Before Tuesday’s Rain",
+      "text": "Moraga gets a quiet stretch through Monday evening, with patchy valley fog early and high clouds gathering ahead of the next Pacific front. Rain should reach Lamorinda Tuesday evening, becoming steadier overnight as a southerly breeze moves through the East Bay hills. A few showers may linger Wednesday morning before brighter breaks develop. Thanksgiving trends quieter, although another unsettled spell is possible over the weekend."
     },
     "Lafayette": {
-      "headline": "Lafayette: Fog Lifts Before Tuesday\u2019s Rain",
-      "text": "Lafayette begins with a chilly, calm feel, and lower pockets may stay misty longer than the surrounding hills. Clouds should thin or break at times this afternoon, with a quiet stretch lasting into Tuesday morning. Rain and a southerly breeze arrive Tuesday afternoon, with steadier showers possible into Wednesday. Thanksgiving and Friday look drier, while another shower chance may return over the weekend, so enjoy the break without assuming the wet pattern is over."
+      "headline": "Lafayette: Clouds Build Before the Next Front",
+      "text": "Lafayette starts cool and settled, while lower pockets around Reliez Valley may hold mist longer than nearby slopes. Clouds thicken Tuesday, then rain spreads into town during the evening and continues overnight with a modest southerly breeze. Wednesday should bring a few leftover showers before conditions begin to improve. The holiday itself looks calmer, but another Pacific system may approach late in the weekend. Shaded streets may stay damp after the rain."
     },
     "Campolindo": {
-      "headline": "Moraga: Campolindo Starts Cool Before Rain Returns",
-      "text": "Moraga\u2019s Campolindo area starts Monday cold and quiet, with the higher neighborhood slopes exposed to the first incoming clouds. The morning should gradually brighten, while sheltered pockets may keep a little fog. Rain and a stronger southerly breeze return Tuesday afternoon and continue into Wednesday morning. Thanksgiving looks drier, but another unsettled weekend is possible, so Monday is the most dependable day for outdoor work."
+      "headline": "Campolindo: A Quiet Day Before the Rain",
+      "text": "Campolindo should stay mostly quiet through Monday, though its hillside streets may see more passing cloud than the valley floor. The next front arrives Tuesday evening with rain and a southerly breeze, then showers may linger into Wednesday morning. Exposed slopes could feel gustier than sheltered blocks as the front crosses. Conditions look more settled for Thanksgiving, with another shower chance possible over the weekend."
     },
     "HappyValley": {
-      "headline": "Lafayette: Happy Valley Holds the Morning Chill",
-      "text": "Lafayette\u2019s Happy Valley neighborhood starts Monday cool and calm, with damp air lingering in its sheltered folds. High clouds should increase, but the day is expected to stay dry. Rain returns Tuesday afternoon as a new Pacific system moves inland, with breezier weather into Wednesday morning. Thanksgiving and Friday look more settled, giving the neighborhood a useful break before another possible round of weekend showers."
+      "headline": "Happy Valley: Sheltered Mornings, Wetter Nights",
+      "text": "Happy Valley begins with a cool, damp feel, and its sheltered folds may keep low cloud or mist around after nearby ridges brighten. Tuesday stays mostly cloudy before rain moves into Lafayette during the evening. Showers may continue overnight and taper Wednesday, leaving brighter breaks later. Thanksgiving looks quieter, but the next Pacific disturbance could bring another unsettled period before the month ends. Lower hollows may stay damp after the front passes."
     },
     "Glorietta": {
-      "headline": "Orinda: Glorietta Gets a Brief Dry Break",
-      "text": "Orinda starts Monday cool, and Glorietta\u2019s wooded slopes may hold onto low cloud a little longer than exposed valley roads. Conditions should brighten at times while remaining mostly dry. The next front brings rain and increasing southerly breezes Tuesday afternoon into Wednesday morning. Thanksgiving and Friday look quieter, but another wet spell may follow over the weekend, so keep outdoor plans flexible This is a useful window for walks on shaded neighborhood roads."
+      "headline": "Glorietta: Hillside Clouds Ahead of Tuesday’s Rain",
+      "text": "Glorietta’s wooded slopes may hold onto low cloud longer than the open Orinda valley, although Monday should remain mostly dry. Clouds thicken Tuesday as the next front approaches, with rain arriving during the evening and continuing overnight. Exposed ridgelines may feel the southerly breeze more than sheltered streets. A few showers could linger Wednesday morning, followed by a quieter Thanksgiving and another possible wet spell this weekend."
     },
     "SleepyHollow": {
-      "headline": "Orinda: Sleepy Hollow Stays Cool and Sheltered",
-      "text": "Orinda\u2019s Sleepy Hollow area begins Monday with a chilly, quiet feel, and its sheltered setting may keep damp air around early. Clouds increase from the west, but meaningful rain is not expected today. Tuesday afternoon brings the next chance for steadier showers, with breezier conditions into Wednesday morning. Thanksgiving looks drier, although the broader pattern stays unsettled and another round of rain may return this weekend."
+      "headline": "Sleepy Hollow: A Damp Start, Then Rain Returns",
+      "text": "Sleepy Hollow’s sheltered setting can hold onto cool, damp air, so morning mist may linger even as nearby hills brighten. The day stays relatively quiet before clouds thicken Tuesday. Rain is expected to move into Orinda during the evening, with breezier conditions overnight and a few showers possible Wednesday morning. Thanksgiving trends drier, though another Pacific system may bring unsettled weather back over the weekend."
     },
     "Northgate": {
-      "headline": "Walnut Creek: A Dry Monday Before Tuesday\u2019s Front",
-      "text": "Walnut Creek\u2019s Northgate area starts with a cold, calm morning, while low clouds may linger near the foothills. Monday should turn brighter at times and stay dry. Rain arrives Tuesday afternoon with a southerly breeze, then tapers toward Wednesday morning. Thanksgiving and Friday look mostly settled, but another system may affect the weekend; It is a good day to handle errands before the next wet period."
+      "headline": "Northgate: Foothill Clouds Before the Evening Front",
+      "text": "Northgate should see a cool, mostly quiet Monday, with low cloud or mist lingering near the foothills before conditions brighten. Tuesday brings increasing clouds and a southerly breeze, followed by rain during the evening and overnight. The nearby hills may wring out a few extra showers as the front passes, while the valley floor gradually dries Wednesday. Thanksgiving looks calmer, with another wet period possible this weekend."
     },
     "Rossmoor": {
-      "headline": "Walnut Creek: Rossmoor Gets a Short Weather Break",
-      "text": "Walnut Creek\u2019s Rossmoor neighborhood starts Monday cool, with sheltered greens and nearby hills holding onto the morning chill. High clouds increase through the day, but the forecast stays dry. A new front brings rain and gustier southerly winds Tuesday afternoon into Wednesday morning. Thanksgiving should be quieter, with another unsettled weekend possible, so take advantage of today\u2019s calmer weather for outdoor plans Residents can use the calmer stretch for outdoor plans around the grounds."
+      "headline": "Rossmoor: A Brief Break Before Rain Returns",
+      "text": "Rossmoor has a useful quiet window through Monday, although shaded greens and nearby slopes may stay cool and damp early. Clouds build Tuesday ahead of an evening front, bringing rain and a southerly breeze overnight. Showers should become more scattered Wednesday, with brighter intervals developing later. Thanksgiving looks more settled for outdoor plans, but the broader Pacific pattern remains active and another round of rain may arrive this weekend."
     },
     "Saranap": {
-      "headline": "Walnut Creek: Saranap Sees a Calm Start",
-      "text": "Walnut Creek\u2019s Saranap area begins Monday chilly and still, with low-lying streets more prone to lingering mist than nearby slopes. The clouds should thin at times before increasing later, and the day remains dry. Rain returns Tuesday afternoon, accompanied by a southerly breeze that lasts into Wednesday morning. Thanksgiving and Friday look drier, though another wet system may approach over the weekend Mist may linger longest in the lower streets."
+      "headline": "Saranap: Valley Mist Gives Way to Midweek Rain",
+      "text": "Saranap’s lower streets may hold onto mist longer than surrounding hills, especially where cool air settles overnight. Monday stays mostly dry, then clouds thicken Tuesday before rain arrives during the evening. The sheltered valley may feel less exposed to the strongest gusts, though wet roads and breezier conditions are expected as the front passes. Wednesday gradually improves, with a quieter Thanksgiving and another shower chance later in the weekend."
     },
     "PleasantHill": {
-      "headline": "Pleasant Hill: A Brighter Break Before Midweek Rain",
-      "text": "Pleasant Hill starts Monday with a cool, quiet morning and a chance of patchy mist in sheltered spots. High clouds will spread overhead, but the day should stay dry and gradually brighten. Rain and a southerly breeze return Tuesday afternoon, with showers continuing into Wednesday morning. Thanksgiving and Friday look more settled, while another wet period may arrive this weekend, so enjoy the brief pause."
+      "headline": "Pleasant Hill: A Quiet Day Before Tuesday’s Front",
+      "text": "Pleasant Hill’s downtown area should stay mostly dry through Monday, with a cool start and some high clouds spreading overhead. The next front approaches Tuesday, bringing a southerly breeze and rain during the evening and overnight. Low spots may stay damp into Wednesday morning before showers ease and brighter breaks return. Thanksgiving looks more settled, although another Pacific disturbance could bring rain back toward the weekend."
     },
     "ClaytonValley": {
-      "headline": "Concord: Clayton Valley Starts Cool and Quiet",
-      "text": "Concord\u2019s Clayton Valley area begins Monday chilly, with the nearby foothills and open valley floor both starting under calm conditions. Clouds increase later, but the day should remain dry. A new front brings rain and a southerly breeze Tuesday afternoon into Wednesday morning. Thanksgiving looks quieter, though the wet pattern may return over the weekend; Watch for slick roads once the next showers arrive Conditions may vary near the nearby foothills."
+      "headline": "Clayton Valley: Clouds Gather Along the Foothills",
+      "text": "Clayton Valley has a calm start, but the nearby Diablo foothills may keep more cloud and passing showers than the open valley floor. Tuesday turns increasingly cloudy before rain arrives during the evening, accompanied by a southerly breeze. Gusts may be more noticeable in exposed gaps and along open roads. Showers should ease Wednesday, with a drier Thanksgiving break before another unsettled spell becomes possible this weekend."
     },
     "Clayton": {
-      "headline": "Clayton: Clearer Skies Before the Next Pacific Front",
-      "text": "Clayton starts Monday cold and mostly quiet, with a little morning haze possible near the foothills. High clouds should increase during the day, but rain is not expected until the next system approaches Tuesday afternoon. Showers and breezier southerly winds continue into Wednesday morning. Thanksgiving and Friday look drier, giving the foothills a short break before another unsettled weekend Keep outdoor plans flexible before the next front arrives."
+      "headline": "Clayton: A Foothill Breeze Ahead of the Rain",
+      "text": "Clayton’s foothill setting may feel breezier than the lower valleys as the next Pacific front approaches. Monday remains mostly quiet, while clouds thicken Tuesday and rain moves in during the evening. Showers may continue overnight and taper Wednesday morning, leaving some brighter breaks later. Exposed roads and higher neighborhoods could notice the wind more than sheltered downtown blocks. Thanksgiving looks calmer, though another wet period may develop this weekend."
     },
     "Martinez": {
-      "headline": "Martinez: A Calm Start Along the Waterfront",
-      "text": "Martinez begins Monday cool and quiet, with some low cloud possible near the waterfront and surrounding hills. The day should stay dry as high clouds drift overhead. Rain and stronger southerly breezes return Tuesday afternoon, continuing into Wednesday morning. Low-lying shoreline areas should also keep an eye on high-tide conditions this week, while Thanksgiving looks drier before another possible weekend system Take care near the waterfront and downtown shoreline."
+      "headline": "Martinez: Rain Returns as Bayfront Tides Stay High",
+      "text": "Martinez has a relatively quiet start before clouds thicken Tuesday and rain arrives during the evening. The southerly breeze may be noticeable along the waterfront, while the larger local concern is high water around low-lying shoreline roads and tidal areas. Follow any closure notices near the marina and waterfront as the tide peaks. Showers should ease Wednesday, with a quieter Thanksgiving before another Pacific system approaches the weekend."
     },
     "Danville": {
-      "headline": "Danville: A Dry Valley Day Before Rain Returns",
-      "text": "Danville starts Monday with a cool, calm morning and a chance of patchy valley fog. Clouds increase gradually, but the day should remain dry and brighter at times. The next front brings rain and southerly breezes Tuesday afternoon into Wednesday morning. Thanksgiving and Friday look quieter, although another wet period may develop this weekend; Monday is the best near-term window for outdoor errands Monday is a useful window before holiday travel picks up."
+      "headline": "Sycamore Valley: A Calm Start Before Rain Returns",
+      "text": "Sycamore Valley should stay mostly dry through Monday, with cool air lingering in the valley while nearby hills see a few more clouds. Tuesday turns cloudier, then rain is expected during the evening and overnight. The sheltered valley may avoid the strongest exposed-ridge gusts, but roads will become slick as showers spread through the San Ramon Valley. Wednesday gradually improves, and Thanksgiving looks quieter before another possible weekend system."
     },
     "Greenbrook": {
-      "headline": "Danville: Greenbrook Gets a Brief Dry Window",
-      "text": "Danville\u2019s Greenbrook neighborhood starts Monday cool, with sheltered streets and landscaped pockets holding the morning chill. The day should stay dry as high clouds build, though sunshine may be filtered at times. Rain returns Tuesday afternoon with a southerly breeze, continuing into Wednesday morning. Thanksgiving looks drier, but another unsettled weekend is possible, so plan outdoor activities around today\u2019s calmer stretch The neighborhood trails and parks should be easier to enjoy today."
+      "headline": "Greenbrook: Quiet Weather Before Tuesday Night’s Showers",
+      "text": "Greenbrook begins with a cool, settled feel, and its sheltered neighborhood streets may keep a little morning dampness after the hills brighten. Clouds increase Tuesday ahead of an evening front, bringing rain and a southerly breeze overnight. Showers should become more scattered Wednesday, with brighter breaks later in the day. Thanksgiving looks calmer, though another Pacific disturbance may bring rain back toward the weekend. Keep a light layer handy during the cooler evening."
     },
     "Alamo": {
-      "headline": "Alamo: A Quiet Start in the Valley",
-      "text": "Alamo begins Monday with a chilly, mostly clear morning, while the surrounding hills may keep a little haze nearby. High clouds increase later, but the day should remain dry. A new Pacific front brings rain and breezier southerly winds Tuesday afternoon into Wednesday morning. Thanksgiving and Friday look calmer, with another shower chance possible this weekend; Enjoy the dry break while it lasts It is a good day to finish outdoor tasks before the next system arrives."
+      "headline": "Alamo: A Dry Window Before the Next Pacific Front",
+      "text": "Alamo should enjoy a mostly quiet Monday, with a cool start and clouds gradually increasing from the west. Rain is expected to arrive Tuesday evening and continue overnight as southerly breezes strengthen across the valley. The surrounding hills may see more persistent showers than the sheltered town center. Wednesday should trend brighter after a few morning showers, while Thanksgiving looks drier before another unsettled period develops late in the weekend."
     },
     "Blackhawk": {
-      "headline": "Danville: Blackhawk\u2019s Foothills Stay Cool",
-      "text": "Danville\u2019s Blackhawk area starts Monday chilly, with the higher foothills feeling a little more exposed as clouds approach from the west. The day should remain dry, although sunshine may be filtered. Rain and stronger southerly breezes return Tuesday afternoon and continue into Wednesday morning. Thanksgiving looks drier, but the wider pattern stays active, with another chance of showers over the weekend Exposed hillside roads may feel cooler than the valley floor."
+      "headline": "Blackhawk: Exposed Hills Feel the Next Front",
+      "text": "Blackhawk’s higher, more open setting may notice the approaching southerly breeze sooner than the lower San Ramon Valley. Monday remains mostly quiet, then clouds thicken Tuesday before rain arrives during the evening and overnight. Showers may linger Wednesday morning, with exposed roads and ridgelines feeling breezier as the front passes. Thanksgiving should bring a calmer break, although another Pacific system could return with rain over the weekend."
     },
     "Diablo": {
-      "headline": "Danville: Diablo Sees a Cool, Quiet Monday",
-      "text": "Danville\u2019s Diablo area begins Monday with a cold start beneath a mostly quiet sky. The nearby foothills may hold onto a little morning haze before high clouds increase. Rain is expected to return Tuesday afternoon, with breezier conditions continuing into Wednesday morning. Thanksgiving and Friday look more settled, but another wet period may develop this weekend, so use today for outdoor chores The foothill trails should have a quieter weather window today."
+      "headline": "Diablo: Foothill Weather Turns Unsettled Tuesday",
+      "text": "Diablo’s foothill neighborhoods start with a cool, relatively calm day, while clouds gradually gather over the surrounding ridges. The next front is expected Tuesday evening, bringing rain and a southerly breeze that may be more noticeable on exposed slopes. A few showers could linger Wednesday morning before brighter breaks develop. Thanksgiving looks quieter, but the wider pattern remains active and another round of rain may arrive late in the weekend."
     },
     "DoughertyValley": {
-      "headline": "San Ramon: A Dry Break Before Tuesday\u2019s Rain",
-      "text": "San Ramon\u2019s Dougherty Valley starts Monday cool and calm, with the valley floor holding onto the morning chill. Clouds increase through the day, but the forecast stays dry. Rain and a southerly breeze arrive Tuesday afternoon, continuing into Wednesday morning. Thanksgiving looks quieter, although another system may bring showers over the weekend; The short dry stretch is useful for errands and outdoor plans This is a useful pause before holiday travel begins."
+      "headline": "Dougherty Valley: A Quiet Start Before Evening Rain",
+      "text": "Dougherty Valley should remain mostly dry through Monday, with a cool start and some high clouds moving over the eastern San Ramon Valley. Clouds thicken Tuesday as the next front approaches, then rain arrives during the evening and continues overnight. The valley floor may see a less blustery feel than nearby ridges, though roads will become wet. Wednesday gradually improves, followed by a quieter Thanksgiving and another possible weekend system."
     },
     "TwinCreeks": {
-      "headline": "San Ramon: Twin Creeks Gets a Quiet Monday",
-      "text": "San Ramon\u2019s Twin Creeks neighborhood begins Monday with a chilly, calm morning and a little haze possible in lower spots. The day should remain dry as high clouds spread overhead. A new front brings rain Tuesday afternoon and breezier weather into Wednesday morning. Thanksgiving and Friday look more settled, but another wet spell may return this weekend, so keep plans flexible after the brief break."
+      "headline": "Twin Creeks: Valley Clouds Before the Next Round of Rain",
+      "text": "Twin Creeks begins with a cool, quiet feel, and low spots along the valley floor may hold damp air longer than nearby slopes. Monday stays mostly dry before clouds build Tuesday. Rain should reach San Ramon during the evening, continuing overnight with a southerly breeze. A few showers may linger Wednesday morning before conditions improve. Thanksgiving looks calmer, but another Pacific disturbance could bring rain back late in the weekend."
     },
     "Dublin": {
-      "headline": "Dublin: Clouds Build Ahead of Tuesday\u2019s Rain",
-      "text": "Dublin starts Monday cool and mostly quiet, with some morning haze possible near the valley floor. High clouds increase later, but the day should stay dry and comfortable for errands. Rain and southerly breezes return Tuesday afternoon, with showers continuing into Wednesday morning. Thanksgiving looks quieter, while another system may affect the weekend; Today is the best near-term window for outdoor plans Allow extra time once the next round of rain arrives."
+      "headline": "Dublin: Clouds Increase Ahead of Tuesday’s Rain",
+      "text": "Dublin has a mostly quiet start, with a cool morning and some high cloud spreading across the Tri-Valley. The next front approaches Tuesday, bringing a southerly breeze and rain during the evening and overnight. Open stretches near the valley’s western edge may feel windier than sheltered neighborhoods, while wet roads could affect the evening commute. Showers ease Wednesday, Thanksgiving looks drier, and another unsettled period is possible this weekend."
     },
     "Pleasanton": {
-      "headline": "Pleasanton: A Calm Monday Before the Next Front",
-      "text": "Pleasanton begins Monday with a cool, mostly clear start and only a little morning haze in sheltered areas. Clouds gradually increase, but rain is not expected today. The next front brings showers and a southerly breeze Tuesday afternoon into Wednesday morning. Thanksgiving and Friday look drier, while another wet period may return over the weekend; Enjoy the break before holiday travel turns unsettled again Today offers a better window before the next front arrives."
+      "headline": "Pleasanton: A Short Break Before the Midweek Front",
+      "text": "Pleasanton’s downtown area should stay mostly dry through Monday, with a cool start and increasing high clouds later. Rain is expected Tuesday evening as the next Pacific front moves inland, with a southerly breeze and showers continuing overnight. The Tri-Valley may see a less persistent soaking than the coastal hills, but travel could still be damp. Wednesday trends brighter, Thanksgiving looks quieter, and another system may approach over the weekend."
     },
     "RubyHill": {
-      "headline": "Pleasanton: Ruby Hill Gets a Brighter Start",
-      "text": "Pleasanton\u2019s Ruby Hill area starts Monday cool, with the higher open slopes likely to brighten sooner than lower valley pockets. Clouds increase later, but the day should stay dry. Rain returns Tuesday afternoon with a southerly breeze, then eases toward Wednesday morning. Thanksgiving looks quieter, though another shower chance may arrive this weekend; It is a useful day for outdoor plans before the next system."
+      "headline": "Ruby Hill: Hillside Clouds Ahead of Tuesday’s Rain",
+      "text": "Ruby Hill should have a calm start, with cool air lingering around the eastern Pleasanton hills and a few clouds building later. The next front brings rain Tuesday evening and a southerly breeze overnight. Higher, more exposed streets may feel gustier than the valley floor, while showers could linger into Wednesday morning. Conditions should improve later Wednesday, with a quieter Thanksgiving before another possible round of weekend rain."
     },
     "LivermoreWine": {
-      "headline": "Livermore: Wine Country Gets a Dry Monday",
-      "text": "Livermore\u2019s Wine Country area begins Monday cool and calm, with a little valley haze possible before high clouds spread in. The day should remain dry, and brighter breaks are likely. Rain and southerly breezes return Tuesday afternoon, with showers continuing into Wednesday morning. Thanksgiving and Friday look more settled, but another system may bring weekend rain; Keep outdoor plans flexible as the pattern stays active."
+      "headline": "Livermore Wine Country: A Breezy Front Approaches",
+      "text": "Livermore Wine Country gets a mostly dry start, with high clouds increasing over the open vineyards and valley floor. Rain should arrive Tuesday evening as southerly breezes strengthen ahead of the front. Open terrain may feel windier than sheltered neighborhoods, and vineyard roads could become slick overnight. Showers taper Wednesday with brighter breaks later. Thanksgiving trends calmer, although another Pacific disturbance may bring unsettled weather back this weekend."
     },
     "Springtown": {
-      "headline": "Livermore: Springtown Starts Quiet Before Rain",
-      "text": "Livermore\u2019s Springtown neighborhood begins Monday with a cool, still morning and some haze possible over the valley floor. High clouds build through the day, but the forecast remains dry. A new front brings rain Tuesday afternoon and a southerly breeze into Wednesday morning. Thanksgiving should be quieter, although another round of showers may return this weekend; Today offers the best short break for outdoor tasks."
+      "headline": "Springtown: Valley Clouds Give Way to Tuesday Night Rain",
+      "text": "Springtown begins with a cool, quiet feel, and low cloud may linger around the northern Livermore Valley before lifting. The next front approaches Tuesday with increasing clouds and a southerly breeze, followed by rain during the evening and overnight. The open valley can feel breezier than sheltered residential streets, especially as the system passes. Wednesday should gradually improve, Thanksgiving looks drier, and another wet period is possible this weekend."
     },
     "Sunol": {
-      "headline": "Sunol: A Mostly Dry Day in the Hills",
-      "text": "Sunol starts Monday cool, with a quiet morning and some low cloud possible near the surrounding ridges. The day should brighten at times and stay dry. Rain and breezier southerly winds return Tuesday afternoon as the next front moves inland, with showers lingering into Wednesday morning. Thanksgiving looks calmer, but another wet spell may follow this weekend; Watch for changing conditions on the winding valley roads."
+      "headline": "Sunol: A Quiet Canyon Before the Next Front",
+      "text": "Sunol’s sheltered canyon may start cool and damp, while exposed ridges and the pass feel more open to the approaching southerly breeze. Monday stays mostly dry, then clouds thicken Tuesday before rain arrives during the evening. Showers may linger Wednesday morning, with wet roads and changing visibility around the canyon routes. Thanksgiving should be quieter, although another Pacific system may bring rain back late in the weekend."
     },
     "Montclair": {
-      "headline": "Oakland: Montclair\u2019s Hills Start Cool",
-      "text": "Oakland\u2019s Montclair neighborhood begins Monday with a chilly, quiet morning, and the higher wooded slopes may hold onto low cloud. Brighter breaks are possible later, with no meaningful rain expected today. The next front brings showers and a southerly breeze Tuesday afternoon into Wednesday morning. Thanksgiving looks drier, but another unsettled weekend is possible; Keep an eye on slick hillside roads when rain returns Shaded hillside streets may stay cool through the morning."
+      "headline": "Montclair: Oakland Hills Watch the Approaching Front",
+      "text": "Montclair’s hillside setting may hold low cloud longer than the flats, with a few brighter breaks possible during Monday. Clouds thicken Tuesday and rain arrives during the evening, accompanied by a southerly breeze that may be more noticeable on exposed slopes. Showers could linger Wednesday morning, especially near the higher terrain. Thanksgiving looks calmer, but another Pacific disturbance may bring a fresh round of rain over the weekend."
     },
     "Piedmont": {
-      "headline": "Piedmont: A Cool Start Before Midweek Showers",
-      "text": "Piedmont starts Monday cool and calm, with the hillside setting allowing pockets of mist to linger near shaded streets. Clouds increase gradually, but the day should remain dry. Rain and a southerly breeze return Tuesday afternoon, continuing into Wednesday morning. Thanksgiving and Friday look quieter, while another shower chance may develop this weekend; Today is a good window for walks before the next front arrives."
+      "headline": "Piedmont: A Calm Start Before the Hills Turn Wet",
+      "text": "Piedmont’s elevated streets should see a mostly quiet Monday, although shaded pockets may stay cool while clouds spread overhead. The next front brings rain Tuesday evening and a southerly breeze overnight. Higher blocks may feel windier than the sheltered civic center, and a few showers could persist into Wednesday morning. Brighter breaks should follow, with a quieter Thanksgiving before another unsettled period becomes possible this weekend."
     },
     "Rockridge": {
-      "headline": "Oakland: Rockridge Gets a Quiet Monday",
-      "text": "Oakland\u2019s Rockridge neighborhood starts Monday cool, with a little morning haze possible near the nearby hills. High clouds will spread in, but the day should remain dry and mostly comfortable. Rain returns Tuesday afternoon with stronger southerly breezes, then continues into Wednesday morning. Thanksgiving looks drier, though another wet period may arrive this weekend; Plan outdoor errands today while the weather is calmer It is a good day for errands before the next front arrives."
+      "headline": "Rockridge: Foothill Clouds Ahead of Tuesday’s Rain",
+      "text": "Rockridge has a cool, relatively quiet start, with the nearby Oakland hills likely to hold more cloud than the lower city streets. Rain moves in Tuesday evening as southerly breezes strengthen, then showers may continue overnight and into Wednesday morning. Wet pavement could linger on shaded neighborhood roads even after the main front passes. Thanksgiving looks more settled, though another Pacific system may bring showers back this weekend."
     },
     "Temescal": {
-      "headline": "Oakland: Temescal Sees Clouds but Little Rain Today",
-      "text": "Oakland\u2019s Temescal neighborhood begins Monday chilly and quiet, with clouds gradually increasing from the west. The day should stay dry, although sunshine may be filtered at times. A new front brings rain and a southerly breeze Tuesday afternoon into Wednesday morning. Thanksgiving and Friday look more settled, but the next weekend may turn wet again; Keep a light rain layer ready for midweek travel Keep a light layer handy before the middle of the week."
+      "headline": "Temescal: A Dry Start Before Rain Moves Through",
+      "text": "Temescal should remain mostly dry through Monday, with a cool morning and high clouds increasing later. The next front brings rain into Oakland Tuesday evening, with a southerly breeze and additional showers overnight. The urban setting should see a fairly steady transition rather than the larger terrain differences found in the hills. Wednesday trends brighter after a few showers, while Thanksgiving looks quieter before another possible wet spell this weekend."
     },
     "LakeMerritt": {
-      "headline": "Oakland: Lake Merritt Gets a Brief Dry Break",
-      "text": "Oakland\u2019s Lake Merritt area starts Monday cool, with calm conditions around the shoreline and a little morning haze possible. High clouds increase through the day, but meaningful rain is not expected. Showers and southerly breezes return Tuesday afternoon, continuing into Wednesday morning. Low-lying waterfront paths should also stay alert to this week\u2019s high tides; Thanksgiving looks drier before another possible weekend system The lakeside paths should be pleasant during the dry break."
+      "headline": "Lake Merritt: Rain Returns as Bay Water Runs High",
+      "text": "Lake Merritt has a calm start, but clouds thicken Tuesday before rain reaches Oakland during the evening. A southerly breeze accompanies the front, while high Bay water and storm surge make low-lying waterfront paths and nearby roads worth watching around high tide. Showers should taper Wednesday morning, with brighter breaks later. Thanksgiving looks quieter, although another Pacific system may bring rain back toward the weekend."
     },
     "DowntownOakland": {
-      "headline": "Oakland: A Calm Start Before Tuesday\u2019s Rain",
-      "text": "Oakland\u2019s downtown area begins Monday cool and mostly quiet, with clouds gradually building over the city. The day should stay dry, making it a useful window for errands and outdoor plans. Rain and stronger southerly breezes return Tuesday afternoon into Wednesday morning. Waterfront areas should watch local high-tide notices this week, while Thanksgiving and Friday look drier before another possible weekend front Take care near the waterfront as tides run high."
+      "headline": "Oakland: Bayfront Flooding and Tuesday Night Rain",
+      "text": "Downtown Oakland stays mostly quiet through Monday, then clouds increase ahead of Tuesday evening’s rain. The southerly breeze may strengthen around the waterfront, and the larger concern is high water along low-lying Bay shoreline roads and parking areas. Follow local closure notices near the estuary and waterfront as tides peak. Showers should ease Wednesday, with a drier Thanksgiving before another unsettled period may return this weekend."
     },
     "Fruitvale": {
-      "headline": "Oakland: Fruitvale Gets a Cool, Mostly Dry Monday",
-      "text": "Oakland\u2019s Fruitvale neighborhood starts Monday with a chilly, calm feel and a little haze possible in sheltered streets. Clouds increase later, but the day should remain dry. A new front brings rain and southerly breezes Tuesday afternoon, with showers continuing into Wednesday morning. Thanksgiving looks quieter, though another wet spell may arrive this weekend; Today is the better time for outdoor chores and errands Today is a better window before the next round arrives."
+      "headline": "Fruitvale: Clouds Build Before the Next Round of Rain",
+      "text": "Fruitvale should see a cool, mostly dry Monday, with clouds gradually increasing from the west. Rain is expected to move into Oakland Tuesday evening, continuing overnight with a southerly breeze. Lower streets near the estuary should watch for wet pavement and any local high-water notices, while neighborhoods farther inland focus on the passing showers. Wednesday brings improving conditions, Thanksgiving looks calmer, and another Pacific system may arrive this weekend."
     },
     "Skyline": {
-      "headline": "Oakland: Skyline Stays Cool as Clouds Increase",
-      "text": "Oakland\u2019s Skyline neighborhood begins Monday chilly, with the higher ridges more exposed to passing clouds and breezes. The day should remain dry, though sunshine may be limited at times. Rain returns Tuesday afternoon with stronger southerly winds, continuing into Wednesday morning. Thanksgiving looks drier, but another system may bring weekend showers; Expect the hilltop to feel cooler and breezier than the flats Exposed ridge roads may feel cooler than central Oakland."
+      "headline": "Skyline: Exposed Oakland Hills Feel the Breeze",
+      "text": "Skyline’s higher ridges may feel the approaching southerly breeze more than sheltered Oakland neighborhoods, while low cloud can drift across the hilltops. Monday remains mostly quiet, then rain arrives Tuesday evening and may linger into Wednesday morning. Roads along the exposed ridge could become slick and visibility may change quickly in passing cloud. Thanksgiving trends drier, although another Pacific disturbance could bring showers back late in the weekend."
     },
     "BerkeleyHills": {
-      "headline": "Berkeley: The Hills Hold Onto a Cool Start",
-      "text": "Berkeley\u2019s hillside neighborhoods begin Monday chilly, with low cloud or mist lingering longer on shaded slopes. Clouds increase through the day, but the forecast stays dry. Rain and southerly breezes return Tuesday afternoon into Wednesday morning, with the hills more exposed to passing showers. Thanksgiving looks quieter, though another wet spell may arrive this weekend; Allow extra time on winding roads when rain returns Take extra care on the steeper neighborhood roads when rain returns."
+      "headline": "Berkeley Hills: More Cloud and Rain on the Slopes",
+      "text": "Berkeley Hills should see a cool, quiet Monday, with low cloud lingering around the higher slopes before clouds thicken Tuesday. Rain arrives during the evening and continues overnight, with the hillside terrain capable of wringing out a few more showers than the flats. Exposed ridges may feel the southerly breeze more strongly. Wednesday gradually improves, Thanksgiving looks calmer, and another wet period is possible this weekend."
     },
     "NorthBerkeley": {
-      "headline": "Berkeley: North Berkeley Gets a Quiet Monday",
-      "text": "Berkeley\u2019s North Berkeley area starts Monday cool, with a little morning haze possible before high clouds spread overhead. The day should stay dry and offer some brighter breaks. A new front brings rain and a southerly breeze Tuesday afternoon, continuing into Wednesday morning. Thanksgiving and Friday look more settled, while another shower chance may return this weekend; Today is a good window for outdoor errands."
+      "headline": "North Berkeley: A Cool Start Before Tuesday’s Rain",
+      "text": "North Berkeley begins with a cool, mostly settled feel, while the lower hills may keep a little mist around early. Clouds increase Tuesday ahead of an evening front, bringing rain and a southerly breeze overnight. Streets closer to the hills may stay damp longer than the flatter blocks after showers taper Wednesday. Thanksgiving looks quieter, though another Pacific system could bring another round of rain before the month ends."
     },
     "WestBerkeley": {
-      "headline": "Berkeley: West Berkeley Feels Milder Near the Bay",
-      "text": "Berkeley\u2019s West Berkeley neighborhood starts Monday cool but a little milder near the shoreline than the inland hills. High clouds increase through the day, while dry weather should hold. Rain and southerly breezes return Tuesday afternoon into Wednesday morning. Low-lying waterfront areas should keep an eye on high-tide notices this week; Thanksgiving looks drier, but another round of showers may arrive over the weekend Waterfront paths may be affected by the higher tides."
+      "headline": "West Berkeley: Bay Clouds and High-Water Concerns",
+      "text": "West Berkeley’s shoreline setting brings a different concern from the inland hills: high Bay water around the peak tides this week. Monday stays mostly quiet, then rain and a southerly breeze arrive Tuesday evening and continue overnight. Low-lying roads and waterfront paths should follow local closure notices as tides and storm surge overlap. Showers ease Wednesday, with a calmer Thanksgiving before another Pacific disturbance may approach the weekend."
     },
     "Albany": {
-      "headline": "Albany: A Quiet Monday Along the Bay",
-      "text": "Albany begins Monday cool, with a little low cloud possible near the shoreline before high clouds spread in. The day should remain dry, with brighter breaks at times. Rain and southerly breezes return Tuesday afternoon and continue into Wednesday morning. Low-lying bayfront areas should watch local tide and access notices this week; Thanksgiving looks quieter, though another wet system may approach over the weekend Keep an eye on waterfront access and shoreline notices."
+      "headline": "Albany: Solano Avenue Gets a Brief Break",
+      "text": "Albany starts with cool, quiet weather, while clouds gradually spread over the flats and nearby hills. Rain should arrive Tuesday evening as a southerly breeze strengthens, continuing overnight before tapering Wednesday morning. The Bay shoreline nearby faces unusually high water this week, so low-lying paths and access roads deserve attention around high tide. Thanksgiving looks drier, although another unsettled spell may return over the weekend."
     },
     "ElCerrito": {
-      "headline": "El Cerrito: Clouds Build After a Chilly Start",
-      "text": "El Cerrito starts Monday cool, with the nearby hills and sheltered streets holding onto the morning chill. Clouds increase through the day, but rain should hold off. A new front brings showers and a southerly breeze Tuesday afternoon into Wednesday morning. Waterfront areas nearby should monitor high-tide notices, while Thanksgiving and Friday look drier; Another unsettled stretch may return over the weekend The hillier neighborhood streets may stay cool early."
+      "headline": "El Cerrito: Hills and Shoreline Watch Tuesday’s Front",
+      "text": "El Cerrito has a mostly quiet Monday, with the eastern hills and Bay-facing neighborhoods seeing slightly different cloud and wind conditions. The next front brings rain Tuesday evening and a southerly breeze overnight. Exposed slopes may feel gustier, while low-lying shoreline areas should keep track of high-water notices. Showers should ease Wednesday morning, followed by a calmer Thanksgiving and another possible round of rain over the weekend."
     },
     "Alameda": {
-      "headline": "Alameda: A Calm Start on the Island",
-      "text": "Alameda begins Monday cool and quiet, with the bay keeping the morning from feeling quite as cold as inland valleys. High clouds increase later, but the day should stay dry. Rain and southerly breezes return Tuesday afternoon into Wednesday morning. Low-lying shoreline paths and streets should watch local tide notices this week; Thanksgiving looks drier, with another possible wet period over the weekend Shoreline paths may be affected by higher water levels."
+      "headline": "Alameda: Bayfront Tides and Tuesday Night Rain",
+      "text": "Alameda’s island setting puts high Bay water near the top of the local weather story this week. Monday remains mostly quiet, then rain and a southerly breeze arrive Tuesday evening and continue overnight. Low-lying shoreline streets, paths and access points should follow local closure notices around high tide, especially where storm surge can push water farther inland. Showers ease Wednesday, with a drier Thanksgiving before another system may approach the weekend."
     },
     "OuterSunset": {
-      "headline": "San Francisco: Outer Sunset Faces a Windy, Wet Midweek",
-      "text": "San Francisco\u2019s Outer Sunset starts Monday cool and cloudy, with the ocean keeping conditions more subdued than inland neighborhoods. The day should remain dry, though high clouds increase. Rain and stronger southerly winds return Tuesday afternoon into Wednesday morning. Very large surf is expected along Pacific beaches Wednesday, so stay off exposed rocks, jetties and the water; Thanksgiving looks drier, but coastal conditions remain hazardous."
+      "headline": "Outer Sunset: Rain Approaches as Pacific Surf Builds",
+      "text": "Outer Sunset should remain mostly quiet through Monday, with cool ocean air and passing clouds along the coast. Rain arrives Tuesday night as southerly winds strengthen, while the Pacific shoreline faces a separate high-surf threat Wednesday. Large breaking waves can sweep across beaches, jetties and exposed rocks, so stay well back from the water and obey closures. Showers ease afterward, but rough surf may linger into the weekend."
     },
     "InnerSunset": {
-      "headline": "San Francisco: Inner Sunset Gets a Brief Dry Window",
-      "text": "San Francisco\u2019s Inner Sunset begins Monday cool, with low cloud possible near the hills before brighter breaks develop. The day should stay dry as high clouds spread overhead. Rain and southerly breezes return Tuesday afternoon, continuing into Wednesday morning. The neighborhood is less exposed to open-ocean surf, but nearby coastal areas will be hazardous during the midweek swell; Thanksgiving looks quieter before another possible weekend system."
+      "headline": "Inner Sunset: A Cool Day Before Rain Moves In",
+      "text": "Inner Sunset gets a cool, mostly settled Monday, with low cloud near the western hills and brighter breaks possible inland. Clouds thicken Tuesday before rain reaches San Francisco during the evening and continues overnight. The neighborhood is less exposed to open-ocean surf than the outer coast, but breezy conditions and wet roads are still expected. Wednesday should gradually improve, with a quieter Thanksgiving before another Pacific system may bring weekend showers."
     },
     "Richmond": {
-      "headline": "San Francisco: Richmond District Turns Unsettled Midweek",
-      "text": "San Francisco\u2019s Richmond District starts Monday cool and cloudy, with marine air keeping the western side of the city subdued. The day should remain dry, though brighter breaks may appear inland. Rain and southerly breezes return Tuesday afternoon into Wednesday morning. Pacific beaches nearby face dangerous surf, so avoid jetties and exposed shoreline rocks; Thanksgiving looks drier, but another wet weekend is possible Keep away from exposed shoreline rocks during the large surf."
+      "headline": "Richmond District: Coastal Clouds and Dangerous Surf",
+      "text": "The Richmond District begins with cool, mostly quiet weather, while low cloud may drift over the western neighborhoods. Rain arrives Tuesday evening and continues overnight with a southerly breeze. Along the Pacific edge, high surf is the bigger hazard Wednesday: stay away from jetties, rocks and exposed beach areas, where waves can reach farther inland than usual. Showers taper afterward, though rough coastal conditions may persist into the weekend."
     },
     "Presidio": {
-      "headline": "San Francisco: The Presidio Gets a Quiet Start",
-      "text": "San Francisco\u2019s Presidio begins Monday cool, with low cloud possible near the shoreline and open spaces. High clouds increase later, but the day should stay dry. Rain and stronger southerly breezes return Tuesday afternoon into Wednesday morning. The nearby Pacific coast faces dangerous surf and hazardous beach conditions, so keep away from exposed rocks and jetties; Thanksgiving looks drier, with another system possible this weekend."
+      "headline": "Presidio: A Quiet Start Before Rain and High Surf",
+      "text": "The Presidio should see a cool, mostly dry Monday, with clouds gathering over the headlands as the next front approaches. Rain moves into San Francisco Tuesday evening and continues overnight with a southerly breeze. The Pacific-facing shoreline faces dangerous surf Wednesday, so avoid exposed rocks, jetties and low coastal paths. Showers ease later Wednesday, while Thanksgiving looks calmer and another unsettled period may return this weekend."
     },
     "Marina": {
-      "headline": "San Francisco: Marina District Watches the Bayfront",
-      "text": "San Francisco\u2019s Marina District starts Monday cool and mostly quiet, with a little cloud cover drifting in from the west. Dry weather should hold today, offering a brief break before Tuesday\u2019s rain. Southerly breezes strengthen as showers arrive Tuesday afternoon and continue into Wednesday morning. Low-lying bayfront areas should follow local coastal-flood notices around high tide; Thanksgiving looks drier, though another wet weekend is possible."
+      "headline": "Marina: Watch the Bayfront as the Next Front Arrives",
+      "text": "The Marina District has a quiet start, but clouds thicken Tuesday before rain reaches San Francisco during the evening. Southerly breezes may be noticeable along the waterfront, where high tides and storm surge raise the risk of water reaching low-lying roads and paths. Follow local closure notices around the peak tide. Showers should taper Wednesday, with a drier Thanksgiving before another Pacific system may bring weekend rain."
     },
     "NorthBeach": {
-      "headline": "San Francisco: North Beach Gets a Dry Monday",
-      "text": "San Francisco\u2019s North Beach neighborhood begins Monday cool, with the bay moderating the early chill. High clouds spread in, but the day should remain dry. Rain and a southerly breeze return Tuesday afternoon into Wednesday morning. Waterfront streets and nearby low spots should watch local high-tide notices this week; Thanksgiving and Friday look more settled, while another Pacific system may bring showers over the weekend."
+      "headline": "North Beach: Rain Returns Near the Waterfront",
+      "text": "North Beach begins with cool, mostly settled weather, with the Bay helping moderate the morning chill. Clouds build Tuesday before rain arrives during the evening and continues overnight with a southerly breeze. The nearby waterfront should watch high-tide and coastal-flood notices, especially around low-lying access roads. Showers ease Wednesday, leaving brighter breaks later. Thanksgiving looks calmer, although another Pacific disturbance could bring rain back toward the weekend."
     },
     "PacificHeights": {
-      "headline": "San Francisco: Pacific Heights Starts Cool and Quiet",
-      "text": "San Francisco\u2019s Pacific Heights area begins Monday chilly, with breezier hilltop spots feeling cooler as clouds increase. The day should stay dry, with occasional brighter breaks. Rain and southerly winds return Tuesday afternoon, continuing into Wednesday morning. Exposed ridges may feel the breeze more than sheltered blocks, while nearby low-lying waterfronts watch high-tide notices; Thanksgiving looks drier before another possible weekend front The more exposed ridges may feel breezier than lower blocks."
+      "headline": "Pacific Heights: Hilltop Breezes Ahead of Tuesday’s Rain",
+      "text": "Pacific Heights should stay mostly quiet through Monday, though its exposed ridges may feel cooler and breezier as clouds increase. Rain moves into San Francisco Tuesday evening, with southerly winds strengthening overnight. The higher streets may notice the breeze more than sheltered neighborhoods below, while the main coastal flooding concern remains along the Bay shoreline. Wednesday gradually improves, Thanksgiving looks drier, and another unsettled period may arrive this weekend."
     },
     "Haight": {
-      "headline": "San Francisco: Haight-Ashbury Gets a Calm Monday",
-      "text": "San Francisco\u2019s Haight-Ashbury neighborhood starts Monday cool, with a little morning cloud around the nearby hills. The day should remain dry as high clouds drift overhead. Rain and southerly breezes return Tuesday afternoon into Wednesday morning. Conditions should improve for Thanksgiving and Friday, although another wet system may approach over the weekend; Today is a good opportunity for walks and errands before the next front."
+      "headline": "Haight-Ashbury: A Cool Pause Before the Next Front",
+      "text": "Haight-Ashbury has a cool, relatively calm start, with passing cloud around the nearby hills and a few brighter breaks possible Monday. Clouds thicken Tuesday before rain reaches the city during the evening and continues overnight. The neighborhood should see a fairly typical wet-weather transition, with breezier conditions and slick streets rather than major shoreline impacts. Wednesday trends brighter, Thanksgiving looks quieter, and another Pacific system may bring weekend showers."
     },
     "NoeValley": {
-      "headline": "San Francisco: Noe Valley Starts Cool in the Sheltered Hills",
-      "text": "San Francisco\u2019s Noe Valley begins Monday chilly, with its sheltered setting allowing the morning cool to linger. Clouds increase later, but the day should stay dry. A new front brings rain and southerly breezes Tuesday afternoon into Wednesday morning. Thanksgiving looks quieter, while another shower chance may return this weekend; Expect nearby ridge tops to feel breezier than the neighborhood floor The sheltered valley floor may hold the morning chill."
+      "headline": "Noe Valley: Sheltered Streets Before Tuesday Night Rain",
+      "text": "Noe Valley’s sheltered setting may hold onto cool, damp air longer than exposed hilltops, especially early in the day. Monday stays mostly dry before clouds thicken Tuesday. Rain is expected during the evening and overnight, with a southerly breeze moving across the city. The valley floor may remain damp after showers taper Wednesday morning. Thanksgiving looks calmer, though another Pacific disturbance could bring unsettled weather back late in the weekend."
     },
     "Mission": {
-      "headline": "San Francisco: The Mission Gets a Dry Monday",
-      "text": "San Francisco\u2019s Mission District begins Monday cool but sheltered from some of the stronger coastal breeze. High clouds increase during the day, though dry weather should hold. Rain and southerly winds return Tuesday afternoon, with showers continuing into Wednesday morning. Thanksgiving and Friday look more settled, but another wet period may arrive this weekend; Today is a useful window for outdoor plans before midweek travel gets wetter."
+      "headline": "Mission: A Quiet Monday Before Rain Returns",
+      "text": "The Mission should enjoy a mostly dry Monday, with a cool start and increasing high clouds later. Rain moves into San Francisco Tuesday evening and continues overnight as southerly breezes strengthen. The neighborhood’s urban streets should see wet pavement and occasional gusts, while the more serious high-water concerns remain near the Bay waterfront. Showers ease Wednesday, Thanksgiving trends quieter, and another Pacific system may bring rain back over the weekend."
     },
     "PotreroHill": {
-      "headline": "San Francisco: Potrero Hill Feels the Breeze First",
-      "text": "San Francisco\u2019s Potrero Hill neighborhood starts Monday cool, with its exposed slopes more open to passing breezes than nearby sheltered streets. Clouds increase, but the day should remain dry. Southerly winds strengthen ahead of Tuesday afternoon\u2019s rain, with showers continuing into Wednesday morning. Low-lying bayfront areas should watch high-tide notices this week; Thanksgiving looks drier, though another system may bring weekend showers Exposed hilltop streets may feel the southerly breeze first."
+      "headline": "Potrero Hill: Exposed Slopes Feel the Southerly Breeze",
+      "text": "Potrero Hill’s open slopes may notice the approaching southerly breeze before more sheltered city blocks. Monday remains mostly quiet, then clouds thicken Tuesday ahead of evening rain. Showers continue overnight and may linger into Wednesday morning, with gusts more noticeable on exposed streets and ridgelines. Low-lying Bayfront areas nearby should follow high-water notices, while the hill itself focuses on wind and wet roads. Thanksgiving looks calmer before another possible weekend front."
     },
     "SoMa": {
-      "headline": "San Francisco: SoMa Watches Midweek Rain and High Tides",
-      "text": "San Francisco\u2019s SoMa area begins Monday cool and mostly quiet, with high clouds spreading over the city. Dry weather should hold today, but rain and southerly breezes return Tuesday afternoon into Wednesday morning. Low-lying waterfront streets should follow local coastal-flood notices as high tides and storm surge overlap. Thanksgiving and Friday look drier, while another Pacific system may bring rain over the weekend Take care near the waterfront as tides and surge overlap."
+      "headline": "SoMa: Rain and High Tides Along the Waterfront",
+      "text": "SoMa begins with a quiet stretch, but clouds increase Tuesday before rain reaches San Francisco during the evening and overnight. Southerly breezes may strengthen around the waterfront, where high tides and storm surge raise concerns for low-lying streets, access roads and parking areas. Follow local closure notices rather than assuming the usual routes will remain open. Showers ease Wednesday, Thanksgiving looks drier, and another Pacific system may approach this weekend."
     },
     "BernalHeights": {
-      "headline": "San Francisco: Bernal Heights Gets a Cool, Dry Start",
-      "text": "San Francisco\u2019s Bernal Heights neighborhood starts Monday chilly, with its higher slopes more exposed to passing clouds and breezes. The day should remain dry, offering a brief break after the recent wet pattern. Rain and southerly winds return Tuesday afternoon into Wednesday morning. Thanksgiving looks quieter, though another shower chance may develop this weekend; Expect exposed hilltops to feel cooler than sheltered city streets Exposed hilltop streets may feel breezier than nearby flats."
+      "headline": "Bernal Heights: Breezier Hilltops Before the Rain",
+      "text": "Bernal Heights should remain mostly dry through Monday, with clouds increasing over the higher slopes as the next front approaches. Rain arrives Tuesday evening and continues overnight, while exposed hilltops may feel stronger southerly breezes than nearby flats. A few showers could linger Wednesday morning before brighter breaks develop. Thanksgiving looks more settled, although another Pacific disturbance may bring rain back late in the weekend."
     },
     "TwinPeaks": {
-      "headline": "San Francisco: Twin Peaks Stays Breezy and Cool",
-      "text": "San Francisco\u2019s Twin Peaks area begins Monday chilly, with exposed ridges feeling cooler than the neighborhoods below. Clouds increase during the day, but rain should hold off. A new front brings southerly winds and showers Tuesday afternoon into Wednesday morning. The higher viewpoints may feel especially breezy as the system approaches; Thanksgiving looks drier, although another wet period may return over the weekend The exposed ridge roads may feel cooler than sheltered streets."
+      "headline": "Twin Peaks: Cloud and Wind Build Ahead of the Front",
+      "text": "Twin Peaks’ exposed ridgeline may see passing cloud and a stronger breeze before sheltered city neighborhoods. Monday remains mostly quiet, then rain reaches San Francisco Tuesday evening and continues overnight. Gusts could feel more noticeable at the summit and on open roads, while visibility may change quickly in low cloud. Showers ease Wednesday, Thanksgiving looks drier, and another Pacific system may bring a fresh round of rain this weekend."
     },
     "Brentwood": {
-      "headline": "Brentwood: A Foggy Start Before the Midweek Front",
-      "text": "Brentwood begins Monday cool, with patchy fog possible in the wider Delta and nearby low-lying areas. The day should turn partly sunny and stay dry, making for a quieter start to the week. Rain and breezy southerly winds arrive Tuesday afternoon into Wednesday morning. Thanksgiving looks mostly dry, but another system may affect the weekend; Use low beams and slow down wherever fog reduces visibility."
+      "headline": "Brentwood: Delta Fog Gives Way to Midweek Rain",
+      "text": "Brentwood has a cool, mostly quiet start, with patchy Delta fog possible in low-lying areas before conditions brighten. Clouds increase Tuesday, then rain moves into the Delta during the evening and continues overnight with breezy southeasterly winds. Low-lying roads and waterways should follow local flood notices as high tides and storm surge affect the region. Wednesday gradually improves, Thanksgiving looks drier, and another unsettled period may arrive this weekend."
     },
     "Sausalito": {
-      "headline": "Sausalito: A Dry Monday Before Rain and High Tides",
-      "text": "Sausalito starts Monday cool and quiet along the waterfront, with clouds increasing while dry weather holds. Rain and stronger southerly breezes return Tuesday afternoon into Wednesday morning. The bigger local concern is the combination of high tides and storm surge, which can affect low-lying bayfront roads and paths. Follow local closure notices around the high-water period; Thanksgiving looks drier, but another wet weekend is possible."
+      "headline": "Sausalito: Bayfront Tides and Tuesday Night Rain",
+      "text": "Sausalito begins with a quiet, cool stretch along the waterfront, but clouds build Tuesday before rain arrives during the evening. Southerly breezes and unusually high Bay tides make low-lying streets, paths and marina access points worth watching through the midweek period. Follow local closure notices around high water, especially where storm surge can push water farther inland. Showers ease Wednesday, Thanksgiving looks calmer, and another Pacific system may approach the weekend."
     },
     "East Sacramento": {
-      "headline": "East Sacramento: Fog Gives Way to a Dry Day",
-      "text": "East Sacramento begins Monday cool, with patchy valley fog possible nearby before brighter breaks develop. The day should stay dry and near seasonal, while high clouds increase later. Rain returns Tuesday afternoon or evening as the next system moves inland, with breezy southerly winds and a few isolated thunderstorms possible. Thanksgiving looks mostly dry; Allow extra time if fog reduces visibility on the morning commute."
+      "headline": "East Sacramento: Valley Fog Before the Midweek Front",
+      "text": "East Sacramento should have a mostly dry Monday, although patchy Valley fog may linger in low spots overnight and early Tuesday. Clouds increase ahead of the next system, with rain reaching the Sacramento area Tuesday evening and continuing into Wednesday morning. Breezy southerly winds accompany the front, while the Delta faces added high-water concerns. Thanksgiving trends drier with some fog possible, but another unsettled Pacific pattern may return over the weekend."
     }
   }
 }
