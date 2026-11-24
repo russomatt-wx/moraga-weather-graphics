@@ -19,6 +19,7 @@ on:
       - 'pacific_synoptic.json'
       - 'service-worker.js'
       - 'weather_outlooks.json'
+      - 'public/weather-discussion.json'
       - '.github/workflows/coordinated-pages.yml'
   # Chart workflows commit with GITHUB_TOKEN, which never triggers 'push' runs, and GitHub drops many
   # scheduled runs. So publish whenever any chart/data workflow finishes (workflow_run does fire for
@@ -36,6 +37,7 @@ on:
       - 'Update Moraga extended ensemble outlook'
       - 'Additional locations 10-day forecasts'
       - 'Publish local Weather Outlook synopses'
+      - 'Update Weather Discussion'
       - 'Town forecast verification'
       - 'Publish KCAMORAG71 daily summary'
       - 'Paddle conditions'
