@@ -2539,3 +2539,10 @@ body.public-mode #regional { display: none; }
 #public-shell .public-obs-card.is-updating .dwl-now-cond,
 #public-shell .public-obs-card.is-updating .dwl-now-icon,
 #public-shell .public-obs-card.is-updating .dwl-now-tiles { opacity: .45; transition: opacity .3s; }
+
+/* Same-day correction: a small cyan dot on today's high, explained under the 10-day "Updated" line */
+#public-shell .dwl-day.is-live-adjusted .dwl-day-hi { position: relative; }
+#public-shell .dwl-day.is-live-adjusted .dwl-day-hi::after { content: ''; position: static; display: inline-block; vertical-align: top; align-self: flex-start; flex: none; margin: .22em 0 0 2px; width: 6px; height: 6px; border-radius: 50%; background: #3fd8f5; box-shadow: 0 0 6px rgba(63, 216, 245, .7); }
+#public-shell .dwl-live-note { display: flex; align-items: center; gap: 6px; margin-top: -2px; }
+#public-shell .dwl-live-note[hidden] { display: none; }
+#public-shell .dwl-live-note i { width: 6px; height: 6px; border-radius: 50%; background: #3fd8f5; box-shadow: 0 0 6px rgba(63, 216, 245, .7); flex: none; }
