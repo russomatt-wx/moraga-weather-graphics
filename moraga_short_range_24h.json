@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-24T05:25:39.312377+00:00",
+  "generated_utc": "2026-11-24T05:27:04.456373+00:00",
   "location": "moraga",
   "latitude": 37.8201932,
   "longitude": -122.1193876,
@@ -87,7 +87,7 @@
       0.0,
       0.0,
       0.0,
-      0.001
+      0.0
     ],
     "precipitation_probability": [
       0.0,
