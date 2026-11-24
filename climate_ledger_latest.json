@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-24T04:55:56.341076+00:00",
+  "generated_utc": "2026-11-24T10:51:32.369539+00:00",
   "station": "KCAMORAG71",
   "days": {
     "2026-10-07": {
@@ -406,12 +406,22 @@
     "2026-11-23": {
       "sampled_low_f": 33.0,
       "sampled_high_f": 59.0,
-      "samples": 1234,
+      "samples": 1416,
       "first_utc": "2026-11-23T08:00:00+00:00",
-      "last_utc": "2026-11-24T04:54:00+00:00",
+      "last_utc": "2026-11-24T07:59:00+00:00",
       "daily_precipitation_in": 0.01,
       "precipitation_source": "xweather_observations_summary",
-      "precipitation_as_of_utc": "2026-11-24T04:55:51.867387+00:00"
+      "precipitation_as_of_utc": "2026-11-24T10:51:27.791072+00:00"
+    },
+    "2026-11-24": {
+      "sampled_low_f": 39.0,
+      "sampled_high_f": 42.0,
+      "samples": 166,
+      "first_utc": "2026-11-24T08:00:00+00:00",
+      "last_utc": "2026-11-24T10:49:00+00:00",
+      "daily_precipitation_in": 0.0,
+      "precipitation_source": "xweather_observations_summary",
+      "precipitation_as_of_utc": "2026-11-24T10:51:27.791072+00:00"
     }
   },
   "months": {
@@ -426,17 +436,17 @@
       "precipitation_status": "daily_observed_or_confirmed_minimum"
     },
     "2026-11": {
-      "sample_count": 32332,
-      "days_with_samples": 22,
-      "mean_sample_temperature_f": 53.02,
-      "mean_sampled_daily_high_f": 66.73,
-      "mean_sampled_daily_low_f": 43.09,
-      "monthly_precipitation_in": 7.56,
+      "sample_count": 32680,
+      "days_with_samples": 23,
+      "mean_sample_temperature_f": 52.89,
+      "mean_sampled_daily_high_f": 66.39,
+      "mean_sampled_daily_low_f": 42.65,
+      "monthly_precipitation_in": 7.57,
       "annual_precipitation_in": null,
       "precipitation_status": "daily_observed_or_confirmed_minimum"
     }
   },
-  "observations": 53995,
+  "observations": 54343,
   "status": "partial_observed_climate_ledger",
   "caveat": "Uneven station sampling; monthly averages are not official daily-mean climate normals. Rainfall is source-reported month-to-date or a dated owner confirmation; cumulative readings are never summed.",
   "chart_status": "matplotlib_unavailable"
