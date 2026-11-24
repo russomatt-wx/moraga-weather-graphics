@@ -673,7 +673,7 @@ async function loadChatGPTOutlooks(){
  }catch(error){chatgptOutlooks=null;chatgptOutlooksChecked=Date.now();console.warn('Using local forecast-generated outlook:',error.message)}
  return chatgptOutlooks;
 }
-// Gemini-written Moraga discussion (public/weather-discussion.json, written twice a day by a GitHub Action).
+// Gemini-written Weather Outlook for every location (public/weather-discussion.json, twice a day by a GitHub Action).
 let geminiDiscussion=null,geminiChecked=0;
 async function loadGeminiDiscussion(){
  if(Date.now()-geminiChecked<5*60*1000)return geminiDiscussion;
@@ -681,9 +681,8 @@ async function loadGeminiDiscussion(){
  try{
   const r=await fetch('public/weather-discussion.json?t='+Date.now(),{cache:'no-store'});
   if(!r.ok)throw Error('Discussion feed unavailable');
-  const d=await r.json(),at=Date.parse(d.updated_at||'');
-  if(!Number.isFinite(at)||at>Date.now()+5*60*1000||Date.now()-at>16*3600000)throw Error('Discussion feed is stale');
-  if(typeof d.discussion!=='string'||!d.discussion.trim())throw Error('Discussion feed empty');
+  const d=await r.json();
+  if(!d.locations||typeof d.locations!=='object')throw Error('Discussion feed schema invalid');
   geminiDiscussion=d;
  }catch(e){geminiDiscussion=null;console.warn('Moraga discussion not used:',e.message)}
  return geminiDiscussion;
@@ -727,12 +726,13 @@ async function getNwsDiscussion(){
 let outlookAlerts={city:null,events:[]};
 let lastOutlook=null,liveOutlook=-1; // liveOutlook: request id whose live-model outlook is shown
 function nwsWeatherOutlook(afd,d,h){
- // Moraga: the Gemini discussion comes first while it's current.
- if(geminiDiscussion&&(DWL_LOC[city]?.area==='Moraga'||city==='Moraga')){
-  const g=splitDiscussion(geminiDiscussion.discussion);
-  if(g.text){set('public-outlook-source','Diablo Weather Lab · '+(geminiDiscussion.period||'Weather discussion'));set('public-outlook-headline',g.headline);return g.text;}
+ // The Gemini outlook for this location comes first while it's under 16 hours old.
+ const gEntry=geminiDiscussion?.locations?.[DWL_LOC[city]?.outlook_key||city],gAt=Date.parse(gEntry?.updated_at||'');
+ if(gEntry&&typeof gEntry.discussion==='string'&&Number.isFinite(gAt)&&gAt<Date.now()+5*60*1000&&Date.now()-gAt<16*3600000){
+  const g=splitDiscussion(gEntry.discussion);
+  if(g.text){set('public-outlook-source','Diablo Weather Lab · '+(geminiDiscussion.period||'Weather Outlook'));set('public-outlook-headline',g.headline);return g.text;}
  }
- // Prefer a current, explicitly published ChatGPT editorial outlook.
+ // Fallback: a current ChatGPT editorial outlook.
  const outlookKey=DWL_LOC[city]?.outlook_key||city;
  const published=chatgptOutlooks?.outlooks?.[outlookKey];
  if(published&&typeof published.headline==='string'&&typeof published.text==='string'&&published.headline.trim()&&published.text.trim()){

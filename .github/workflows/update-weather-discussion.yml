@@ -1,6 +1,6 @@
 name: Update Weather Discussion
 
-# Gemini-written Moraga weather discussion -> public/weather-discussion.json.
+# Gemini-written Weather Outlook for every location -> public/weather-discussion.json.
 # Needs the GEMINI_API_KEY repository secret (Settings -> Secrets and variables -> Actions).
 on:
   schedule:
@@ -19,7 +19,7 @@ concurrency:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 30
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
