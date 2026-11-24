@@ -1,132 +1,132 @@
 {
- "generated_utc": "2026-11-24T05:29:51.573219+00:00",
+ "generated_utc": "2026-11-24T20:20:37.063654+00:00",
  "status": "verified_daily_extremes",
  "town": "temescal",
  "station": "public stations",
  "verified_against": "public_stations",
  "model_scores": {
   "ecmwf": {
-   "verified_days": 8,
-   "high_mae_f": 1.99,
-   "low_mae_f": 4.3,
-   "high_bias_f": -1.14,
-   "low_bias_f": 4.3
+   "verified_days": 9,
+   "high_mae_f": 1.96,
+   "low_mae_f": 4.11,
+   "high_bias_f": -1.2,
+   "low_bias_f": 4.11
   },
   "eps": {
-   "verified_days": 1,
-   "high_mae_f": 0.9,
-   "low_mae_f": 3.4,
-   "high_bias_f": -0.9,
-   "low_bias_f": 3.4
+   "verified_days": 2,
+   "high_mae_f": 1.35,
+   "low_mae_f": 3.3,
+   "high_bias_f": -1.35,
+   "low_bias_f": 3.3
   },
   "gefs": {
-   "verified_days": 1,
-   "high_mae_f": 0.6,
-   "low_mae_f": 5.8,
-   "high_bias_f": -0.6,
-   "low_bias_f": 5.8
+   "verified_days": 2,
+   "high_mae_f": 1.3,
+   "low_mae_f": 5.25,
+   "high_bias_f": -1.3,
+   "low_bias_f": 5.25
   },
   "gem": {
-   "verified_days": 8,
-   "high_mae_f": 4.64,
-   "low_mae_f": 1.59,
-   "high_bias_f": -4.19,
-   "low_bias_f": 1.29
+   "verified_days": 9,
+   "high_mae_f": 4.81,
+   "low_mae_f": 1.61,
+   "high_bias_f": -4.41,
+   "low_bias_f": 0.94
   },
   "gfs": {
-   "verified_days": 8,
-   "high_mae_f": 2.84,
-   "low_mae_f": 1.8,
-   "high_bias_f": -2.46,
-   "low_bias_f": 1.23
+   "verified_days": 9,
+   "high_mae_f": 2.88,
+   "low_mae_f": 1.76,
+   "high_bias_f": -2.54,
+   "low_bias_f": 1.24
   },
   "icon": {
-   "verified_days": 8,
-   "high_mae_f": 2.46,
-   "low_mae_f": 4.8,
-   "high_bias_f": -1.61,
-   "low_bias_f": 4.8
+   "verified_days": 9,
+   "high_mae_f": 2.67,
+   "low_mae_f": 4.73,
+   "high_bias_f": -1.91,
+   "low_bias_f": 4.73
   }
  },
  "calibration": {
   "ecmwf": {
    "high": {
     "factor": 1.0,
-    "holdout_days": 3,
-    "raw_holdout_mae_f": 2.3,
-    "selected_holdout_mae_f": 2.144,
+    "holdout_days": 4,
+    "raw_holdout_mae_f": 2.15,
+    "selected_holdout_mae_f": 1.748,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 8
+    "verified_days": 9
    },
    "low": {
     "factor": 0.5,
-    "holdout_days": 3,
-    "raw_holdout_mae_f": 3.067,
-    "selected_holdout_mae_f": 1.095,
+    "holdout_days": 4,
+    "raw_holdout_mae_f": 2.95,
+    "selected_holdout_mae_f": 0.933,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 8
+    "verified_days": 9
    }
   },
   "gem": {
    "high": {
     "factor": 1.0,
-    "holdout_days": 3,
-    "raw_holdout_mae_f": 5.8,
-    "selected_holdout_mae_f": 2.104,
+    "holdout_days": 4,
+    "raw_holdout_mae_f": 5.9,
+    "selected_holdout_mae_f": 2.081,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 8
+    "verified_days": 9
    },
    "low": {
     "factor": 0,
-    "holdout_days": 3,
-    "raw_holdout_mae_f": 0.533,
-    "selected_holdout_mae_f": 0.533,
+    "holdout_days": 4,
+    "raw_holdout_mae_f": 0.85,
+    "selected_holdout_mae_f": 0.85,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 8
+    "verified_days": 9
    }
   },
   "gfs": {
    "high": {
-    "factor": 0.75,
-    "holdout_days": 3,
-    "raw_holdout_mae_f": 2.233,
-    "selected_holdout_mae_f": 0.505,
+    "factor": 1.0,
+    "holdout_days": 4,
+    "raw_holdout_mae_f": 2.475,
+    "selected_holdout_mae_f": 0.564,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 8
+    "verified_days": 9
    },
    "low": {
     "factor": 1.0,
-    "holdout_days": 3,
-    "raw_holdout_mae_f": 1.767,
-    "selected_holdout_mae_f": 0.778,
+    "holdout_days": 4,
+    "raw_holdout_mae_f": 1.675,
+    "selected_holdout_mae_f": 0.627,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 8
+    "verified_days": 9
    }
   },
   "icon": {
    "high": {
     "factor": 1.0,
-    "holdout_days": 3,
-    "raw_holdout_mae_f": 2.267,
-    "selected_holdout_mae_f": 0.927,
+    "holdout_days": 4,
+    "raw_holdout_mae_f": 2.775,
+    "selected_holdout_mae_f": 1.367,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 8
+    "verified_days": 9
    },
    "low": {
     "factor": 0.75,
-    "holdout_days": 3,
-    "raw_holdout_mae_f": 3.433,
-    "selected_holdout_mae_f": 1.154,
+    "holdout_days": 4,
+    "raw_holdout_mae_f": 3.625,
+    "selected_holdout_mae_f": 1.016,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
-    "verified_days": 8
+    "verified_days": 9
    }
   }
  },
@@ -471,6 +471,66 @@
    "observed_low_f": 43.3,
    "high_error_f": -2.3,
    "low_error_f": 1.9,
+   "observation_count": 3
+  },
+  {
+   "model": "ecmwf",
+   "valid_local_date": "2026-11-23",
+   "issued_utc": "2026-11-22T10:30:19.337812+00:00",
+   "observed_high_f": 59.0,
+   "observed_low_f": 41.0,
+   "high_error_f": -1.7,
+   "low_error_f": 2.6,
+   "observation_count": 3
+  },
+  {
+   "model": "eps",
+   "valid_local_date": "2026-11-23",
+   "issued_utc": "2026-11-22T10:30:19.337812+00:00",
+   "observed_high_f": 59.0,
+   "observed_low_f": 41.0,
+   "high_error_f": -1.8,
+   "low_error_f": 3.2,
+   "observation_count": 3
+  },
+  {
+   "model": "gefs",
+   "valid_local_date": "2026-11-23",
+   "issued_utc": "2026-11-22T10:30:19.337812+00:00",
+   "observed_high_f": 59.0,
+   "observed_low_f": 41.0,
+   "high_error_f": -2.0,
+   "low_error_f": 4.7,
+   "observation_count": 3
+  },
+  {
+   "model": "gem",
+   "valid_local_date": "2026-11-23",
+   "issued_utc": "2026-11-22T10:30:19.337812+00:00",
+   "observed_high_f": 59.0,
+   "observed_low_f": 41.0,
+   "high_error_f": -6.2,
+   "low_error_f": -1.8,
+   "observation_count": 3
+  },
+  {
+   "model": "gfs",
+   "valid_local_date": "2026-11-23",
+   "issued_utc": "2026-11-22T10:30:19.337812+00:00",
+   "observed_high_f": 59.0,
+   "observed_low_f": 41.0,
+   "high_error_f": -3.2,
+   "low_error_f": 1.4,
+   "observation_count": 3
+  },
+  {
+   "model": "icon",
+   "valid_local_date": "2026-11-23",
+   "issued_utc": "2026-11-22T10:30:19.337812+00:00",
+   "observed_high_f": 59.0,
+   "observed_low_f": 41.0,
+   "high_error_f": -4.3,
+   "low_error_f": 4.2,
    "observation_count": 3
   }
  ]
