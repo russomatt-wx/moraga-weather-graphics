@@ -2539,3 +2539,6 @@ body.public-mode #regional { display: none; }
 #public-shell .public-obs-card.is-updating .dwl-now-cond,
 #public-shell .public-obs-card.is-updating .dwl-now-icon,
 #public-shell .public-obs-card.is-updating .dwl-now-tiles { opacity: .45; transition: opacity .3s; }
+
+/* 10-day: smaller date line under the weekday */
+body #public-shell .dwl-panel .dwl-days > .dwl-day > .dwl-day-when span:not(.dwl-pill) { font-size: clamp(11px, 3vw, 12.5px) !important; letter-spacing: .02em; }
