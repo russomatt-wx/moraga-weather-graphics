@@ -173,7 +173,24 @@
     return { key: 'rain', label: '14-day rainfall by model', series: series, fmt: function (v) { return (+v).toFixed(2) + (arguments[1] ? '″' : ''); }, step: st, min: 0, dots: true, days: 14, daily: true,
       top: dates.filter(function (d) { return num(pop[d]); }).map(function (d) { return { t: d + 'T12:00', label: Math.round(pop[d] / 10) * 10 + '%' }; }) };
   }
-  function rainChart() { return lineChart(rainSpec()); }
+  function rainChart() { return rainStats() + lineChart(rainSpec()); }
+  // Same summary as Moraga's original rainfall section: ensemble-mean totals, wettest model, model count,
+  // plus each model's 14-day total.
+  function rainStats() {
+    var j = state.data.rain, m = j.model_daily_inches || {}, dates = j.dates || [];
+    var sum = function (v, n) { v = (v || []).slice(0, n); return v.length >= n && v.every(num) ? v.reduce(function (a, b) { return a + (+b); }, 0) : null; };
+    var ens = function (n) { var a = sum(m['EPS mean'], n), b = sum(m['GEFS mean'], n); return dates.length >= n && a !== null && b !== null ? (a + b) / 2 : null; };
+    var totals = Object.keys(m).map(function (k) { var v = (m[k] || []).slice(0, 14).filter(num); return { name: k, total: v.reduce(function (a, b) { return a + (+b); }, 0), n: v.length }; }).filter(function (x) { return x.n; });
+    var wet = totals.slice().sort(function (a, b) { return b.total - a.total; })[0];
+    var inch = function (v) { return v === null || v === undefined ? '—' : (+v).toFixed(2) + '″'; };
+    var box = function (label, value, sub) { return '<div class="rl-stat"><small>' + label + '</small><strong>' + value + '</strong>' + (sub ? '<small>' + sub + '</small>' : '') + '</div>'; };
+    return '<div class="rl-stats">' +
+      box('7-day ensemble mean', inch(ens(7)), 'EPS + GEFS · next 7 days') +
+      box('14-day ensemble mean', inch(ens(14)), 'EPS + GEFS · next 14 days') +
+      box('Wettest model total', wet ? inch(wet.total) : '—', wet ? esc(wet.name) : '') +
+      box('Models available', String(totals.length), 'of ' + Object.keys(m).length + ' sources') + '</div>' +
+      (totals.length ? '<p class="rl-totals">' + totals.map(function (x) { return '<span><i style="background:' + (C[x.name] || '#cbd5e1') + '"></i>' + esc(x.name) + ' <b>' + x.total.toFixed(2) + '″</b></span>'; }).join('') + '</p>' : '');
+  }
   function rainDay(i) {
     var j = state.data.rain, d = j && j.dates[i], tip = document.getElementById('rl-raintip'); if (!d || !tip) return;
     var pop = (j.ensemble_rain_probability_pct || {})[d];
