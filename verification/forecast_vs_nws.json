@@ -1,6 +1,527 @@
 {
- "generated_utc": "2026-11-24T14:02+00:00",
+ "generated_utc": "2026-11-25T13:17+00:00",
  "truth": "NOAA URMA observed daily high/low",
  "lead": "next day (forecasts saved the evening before)",
- "towns": {}
+ "towns": {
+  "alameda": {
+   "name": "Park Street",
+   "days": 1,
+   "dwl_high_mae": 1.5,
+   "nws_high_mae": 0.5,
+   "dwl_low_mae": 0.0,
+   "nws_low_mae": 1.0,
+   "dwl_wins": 0
+  },
+  "alamo": {
+   "name": "Alamo Downtown",
+   "days": 1,
+   "dwl_high_mae": 1.2,
+   "nws_high_mae": 0.2,
+   "dwl_low_mae": 1.5,
+   "nws_low_mae": 0.5,
+   "dwl_wins": 0
+  },
+  "albany": {
+   "name": "Solano Avenue",
+   "days": 1,
+   "dwl_high_mae": 2.5,
+   "nws_high_mae": 2.5,
+   "dwl_low_mae": 1.1,
+   "nws_low_mae": 0.1,
+   "dwl_wins": 0
+  },
+  "berkeleyhills": {
+   "name": "Berkeley Hills",
+   "days": 1,
+   "dwl_high_mae": 2.2,
+   "nws_high_mae": 2.2,
+   "dwl_low_mae": 5.5,
+   "nws_low_mae": 2.5,
+   "dwl_wins": 0
+  },
+  "bernalheights": {
+   "name": "Bernal Heights",
+   "days": 1,
+   "dwl_high_mae": 1.2,
+   "nws_high_mae": 0.2,
+   "dwl_low_mae": 1.0,
+   "nws_low_mae": 1.0,
+   "dwl_wins": 0
+  },
+  "blackhawk": {
+   "name": "Blackhawk",
+   "days": 1,
+   "dwl_high_mae": 2.3,
+   "nws_high_mae": 1.3,
+   "dwl_low_mae": 0.5,
+   "nws_low_mae": 0.5,
+   "dwl_wins": 0
+  },
+  "brentwood": {
+   "name": "North Brentwood",
+   "days": 1,
+   "dwl_high_mae": 0.6,
+   "nws_high_mae": 0.4,
+   "dwl_low_mae": 1.4,
+   "nws_low_mae": 1.4,
+   "dwl_wins": 0
+  },
+  "campolindo": {
+   "name": "Campolindo",
+   "days": 1,
+   "dwl_high_mae": 1.4,
+   "nws_high_mae": 1.4,
+   "dwl_low_mae": 3.4,
+   "nws_low_mae": 1.4,
+   "dwl_wins": 0
+  },
+  "clayton": {
+   "name": "Clayton Downtown",
+   "days": 1,
+   "dwl_high_mae": 3.8,
+   "nws_high_mae": 0.2,
+   "dwl_low_mae": 2.1,
+   "nws_low_mae": 1.1,
+   "dwl_wins": 0
+  },
+  "claytonvalley": {
+   "name": "Clayton Valley",
+   "days": 1,
+   "dwl_high_mae": 3.5,
+   "nws_high_mae": 0.5,
+   "dwl_low_mae": 1.5,
+   "nws_low_mae": 0.5,
+   "dwl_wins": 0
+  },
+  "danville": {
+   "name": "Sycamore Valley",
+   "days": 1,
+   "dwl_high_mae": 0.2,
+   "nws_high_mae": 1.2,
+   "dwl_low_mae": 0.8,
+   "nws_low_mae": 0.8,
+   "dwl_wins": 1
+  },
+  "diablo": {
+   "name": "Diablo",
+   "days": 1,
+   "dwl_high_mae": 2.8,
+   "nws_high_mae": 0.8,
+   "dwl_low_mae": 1.4,
+   "nws_low_mae": 0.4,
+   "dwl_wins": 0
+  },
+  "doughertyvalley": {
+   "name": "Dougherty Valley",
+   "days": 1,
+   "dwl_high_mae": 1.3,
+   "nws_high_mae": 0.3,
+   "dwl_low_mae": 1.8,
+   "nws_low_mae": 0.8,
+   "dwl_wins": 0
+  },
+  "downtownoakland": {
+   "name": "Oakland Downtown",
+   "days": 1,
+   "dwl_high_mae": 1.0,
+   "nws_high_mae": 0.0,
+   "dwl_low_mae": 1.7,
+   "nws_low_mae": 0.3,
+   "dwl_wins": 0
+  },
+  "dublin": {
+   "name": "Dublin Downtown",
+   "days": 1,
+   "dwl_high_mae": 1.5,
+   "nws_high_mae": 0.5,
+   "dwl_low_mae": 0.7,
+   "nws_low_mae": 0.3,
+   "dwl_wins": 0
+  },
+  "elcerrito": {
+   "name": "El Cerrito Civic Center",
+   "days": 1,
+   "dwl_high_mae": 0.3,
+   "nws_high_mae": 2.3,
+   "dwl_low_mae": 0.6,
+   "nws_low_mae": 0.6,
+   "dwl_wins": 1
+  },
+  "fruitvale": {
+   "name": "Fruitvale",
+   "days": 1,
+   "dwl_high_mae": 1.3,
+   "nws_high_mae": 0.3,
+   "dwl_low_mae": 0.9,
+   "nws_low_mae": 0.9,
+   "dwl_wins": 0
+  },
+  "glorietta": {
+   "name": "Glorietta",
+   "days": 1,
+   "dwl_high_mae": 0.2,
+   "nws_high_mae": 1.2,
+   "dwl_low_mae": 1.2,
+   "nws_low_mae": 1.2,
+   "dwl_wins": 1
+  },
+  "greenbrook": {
+   "name": "Greenbrook",
+   "days": 1,
+   "dwl_high_mae": 1.2,
+   "nws_high_mae": 0.8,
+   "dwl_low_mae": 0.5,
+   "nws_low_mae": 1.5,
+   "dwl_wins": 1
+  },
+  "haight": {
+   "name": "Haight-Ashbury",
+   "days": 1,
+   "dwl_high_mae": 1.0,
+   "nws_high_mae": 0.0,
+   "dwl_low_mae": 1.0,
+   "nws_low_mae": 1.0,
+   "dwl_wins": 0
+  },
+  "happyvalley": {
+   "name": "Happy Valley",
+   "days": 1,
+   "dwl_high_mae": 1.4,
+   "nws_high_mae": 1.4,
+   "dwl_low_mae": 2.4,
+   "nws_low_mae": 1.4,
+   "dwl_wins": 0
+  },
+  "innersunset": {
+   "name": "Inner Sunset",
+   "days": 1,
+   "dwl_high_mae": 0.4,
+   "nws_high_mae": 0.4,
+   "dwl_low_mae": 0.6,
+   "nws_low_mae": 0.4,
+   "dwl_wins": 0
+  },
+  "lafayette": {
+   "name": "Lafayette",
+   "days": 1,
+   "dwl_high_mae": 0.1,
+   "nws_high_mae": 0.9,
+   "dwl_low_mae": 3.5,
+   "nws_low_mae": 1.5,
+   "dwl_wins": 0
+  },
+  "lakemerritt": {
+   "name": "Lake Merritt",
+   "days": 1,
+   "dwl_high_mae": 1.4,
+   "nws_high_mae": 0.4,
+   "dwl_low_mae": 0.8,
+   "nws_low_mae": 0.2,
+   "dwl_wins": 0
+  },
+  "livermorewine": {
+   "name": "Wine Country",
+   "days": 1,
+   "dwl_high_mae": 2.5,
+   "nws_high_mae": 1.5,
+   "dwl_low_mae": 1.7,
+   "nws_low_mae": 3.7,
+   "dwl_wins": 1
+  },
+  "marina": {
+   "name": "Marina",
+   "days": 1,
+   "dwl_high_mae": 2.5,
+   "nws_high_mae": 1.5,
+   "dwl_low_mae": 5.9,
+   "nws_low_mae": 1.9,
+   "dwl_wins": 0
+  },
+  "martinez": {
+   "name": "Martinez Downtown",
+   "days": 1,
+   "dwl_high_mae": 2.1,
+   "nws_high_mae": 1.1,
+   "dwl_low_mae": 1.4,
+   "nws_low_mae": 1.4,
+   "dwl_wins": 0
+  },
+  "mission": {
+   "name": "Mission",
+   "days": 1,
+   "dwl_high_mae": 0.5,
+   "nws_high_mae": 0.5,
+   "dwl_low_mae": 0.6,
+   "nws_low_mae": 0.6,
+   "dwl_wins": 0
+  },
+  "montclair": {
+   "name": "Montclair",
+   "days": 1,
+   "dwl_high_mae": 2.1,
+   "nws_high_mae": 1.1,
+   "dwl_low_mae": 2.5,
+   "nws_low_mae": 2.5,
+   "dwl_wins": 0
+  },
+  "moraga": {
+   "name": "Moraga",
+   "days": 1,
+   "dwl_high_mae": 1.9,
+   "nws_high_mae": 1.1,
+   "dwl_low_mae": 4.8,
+   "nws_low_mae": 0.8,
+   "dwl_wins": 0
+  },
+  "noevalley": {
+   "name": "Noe Valley",
+   "days": 1,
+   "dwl_high_mae": 1.2,
+   "nws_high_mae": 0.2,
+   "dwl_low_mae": 1.0,
+   "nws_low_mae": 1.0,
+   "dwl_wins": 0
+  },
+  "northbeach": {
+   "name": "North Beach",
+   "days": 1,
+   "dwl_high_mae": 0.1,
+   "nws_high_mae": 0.1,
+   "dwl_low_mae": 1.3,
+   "nws_low_mae": 0.3,
+   "dwl_wins": 0
+  },
+  "northberkeley": {
+   "name": "North Berkeley",
+   "days": 1,
+   "dwl_high_mae": 1.0,
+   "nws_high_mae": 2.0,
+   "dwl_low_mae": 2.1,
+   "nws_low_mae": 1.1,
+   "dwl_wins": 0
+  },
+  "northgate": {
+   "name": "Northgate",
+   "days": 1,
+   "dwl_high_mae": 2.2,
+   "nws_high_mae": 0.8,
+   "dwl_low_mae": 1.6,
+   "nws_low_mae": 0.4,
+   "dwl_wins": 0
+  },
+  "outersunset": {
+   "name": "Outer Sunset",
+   "days": 1,
+   "dwl_high_mae": 0.7,
+   "nws_high_mae": 0.7,
+   "dwl_low_mae": 2.4,
+   "nws_low_mae": 1.4,
+   "dwl_wins": 0
+  },
+  "pacificheights": {
+   "name": "Pacific Heights",
+   "days": 1,
+   "dwl_high_mae": 1.0,
+   "nws_high_mae": 0.0,
+   "dwl_low_mae": 0.8,
+   "nws_low_mae": 0.2,
+   "dwl_wins": 0
+  },
+  "piedmont": {
+   "name": "Piedmont Civic Center",
+   "days": 1,
+   "dwl_high_mae": 1.1,
+   "nws_high_mae": 1.1,
+   "dwl_low_mae": 1.5,
+   "nws_low_mae": 2.5,
+   "dwl_wins": 1
+  },
+  "pleasanthill": {
+   "name": "Pleasant Hill Downtown",
+   "days": 1,
+   "dwl_high_mae": 2.5,
+   "nws_high_mae": 0.5,
+   "dwl_low_mae": 0.1,
+   "nws_low_mae": 0.1,
+   "dwl_wins": 0
+  },
+  "pleasanton": {
+   "name": "Pleasanton Downtown",
+   "days": 1,
+   "dwl_high_mae": 2.2,
+   "nws_high_mae": 0.8,
+   "dwl_low_mae": 0.2,
+   "nws_low_mae": 0.2,
+   "dwl_wins": 0
+  },
+  "potrerohill": {
+   "name": "Potrero Hill",
+   "days": 1,
+   "dwl_high_mae": 1.5,
+   "nws_high_mae": 0.5,
+   "dwl_low_mae": 0.4,
+   "nws_low_mae": 0.6,
+   "dwl_wins": 0
+  },
+  "presidio": {
+   "name": "Presidio",
+   "days": 1,
+   "dwl_high_mae": 1.1,
+   "nws_high_mae": 0.1,
+   "dwl_low_mae": 4.3,
+   "nws_low_mae": 1.3,
+   "dwl_wins": 0
+  },
+  "richmond": {
+   "name": "Richmond District",
+   "days": 1,
+   "dwl_high_mae": 1.7,
+   "nws_high_mae": 0.7,
+   "dwl_low_mae": 1.5,
+   "nws_low_mae": 0.5,
+   "dwl_wins": 0
+  },
+  "rockridge": {
+   "name": "Rockridge",
+   "days": 1,
+   "dwl_high_mae": 1.7,
+   "nws_high_mae": 0.7,
+   "dwl_low_mae": 1.4,
+   "nws_low_mae": 1.4,
+   "dwl_wins": 0
+  },
+  "rossmoor": {
+   "name": "Rossmoor",
+   "days": 1,
+   "dwl_high_mae": 0.3,
+   "nws_high_mae": 0.3,
+   "dwl_low_mae": 1.5,
+   "nws_low_mae": 0.5,
+   "dwl_wins": 0
+  },
+  "rubyhill": {
+   "name": "Ruby Hill",
+   "days": 1,
+   "dwl_high_mae": 1.9,
+   "nws_high_mae": 1.1,
+   "dwl_low_mae": 1.1,
+   "nws_low_mae": 1.9,
+   "dwl_wins": 0
+  },
+  "sacramento": {
+   "name": "East Sacramento",
+   "days": 1,
+   "dwl_high_mae": 0.8,
+   "nws_high_mae": 0.2,
+   "dwl_low_mae": 1.0,
+   "nws_low_mae": 0.0,
+   "dwl_wins": 0
+  },
+  "saranap": {
+   "name": "Saranap",
+   "days": 1,
+   "dwl_high_mae": 2.4,
+   "nws_high_mae": 0.6,
+   "dwl_low_mae": 0.2,
+   "nws_low_mae": 0.8,
+   "dwl_wins": 0
+  },
+  "sausalito": {
+   "name": "Old Town",
+   "days": 1,
+   "dwl_high_mae": 1.2,
+   "nws_high_mae": 1.2,
+   "dwl_low_mae": 1.5,
+   "nws_low_mae": 0.5,
+   "dwl_wins": 0
+  },
+  "skyline": {
+   "name": "Skyline",
+   "days": 1,
+   "dwl_high_mae": 3.3,
+   "nws_high_mae": 1.3,
+   "dwl_low_mae": 5.2,
+   "nws_low_mae": 2.2,
+   "dwl_wins": 0
+  },
+  "sleepyhollow": {
+   "name": "Sleepy Hollow",
+   "days": 1,
+   "dwl_high_mae": 0.9,
+   "nws_high_mae": 1.9,
+   "dwl_low_mae": 0.5,
+   "nws_low_mae": 1.5,
+   "dwl_wins": 1
+  },
+  "soma": {
+   "name": "SoMa",
+   "days": 1,
+   "dwl_high_mae": 0.8,
+   "nws_high_mae": 0.2,
+   "dwl_low_mae": 0.7,
+   "nws_low_mae": 0.3,
+   "dwl_wins": 0
+  },
+  "springtown": {
+   "name": "Springtown",
+   "days": 1,
+   "dwl_high_mae": 2.4,
+   "nws_high_mae": 1.6,
+   "dwl_low_mae": 1.7,
+   "nws_low_mae": 2.7,
+   "dwl_wins": 1
+  },
+  "sunol": {
+   "name": "Sunol Downtown",
+   "days": 1,
+   "dwl_high_mae": 2.0,
+   "nws_high_mae": 0.0,
+   "dwl_low_mae": 0.9,
+   "nws_low_mae": 1.1,
+   "dwl_wins": 0
+  },
+  "temescal": {
+   "name": "Temescal",
+   "days": 1,
+   "dwl_high_mae": 1.7,
+   "nws_high_mae": 0.7,
+   "dwl_low_mae": 0.4,
+   "nws_low_mae": 1.4,
+   "dwl_wins": 0
+  },
+  "twincreeks": {
+   "name": "Twin Creeks",
+   "days": 1,
+   "dwl_high_mae": 0.9,
+   "nws_high_mae": 0.1,
+   "dwl_low_mae": 0.0,
+   "nws_low_mae": 0.0,
+   "dwl_wins": 0
+  },
+  "twinpeaks": {
+   "name": "Twin Peaks",
+   "days": 1,
+   "dwl_high_mae": 3.2,
+   "nws_high_mae": 0.2,
+   "dwl_low_mae": 1.0,
+   "nws_low_mae": 1.0,
+   "dwl_wins": 0
+  },
+  "westberkeley": {
+   "name": "West Berkeley",
+   "days": 1,
+   "dwl_high_mae": 0.9,
+   "nws_high_mae": 1.9,
+   "dwl_low_mae": 0.3,
+   "nws_low_mae": 1.3,
+   "dwl_wins": 1
+  }
+ },
+ "overall": {
+  "location_days": 57,
+  "dwl_high_mae": 1.52,
+  "nws_high_mae": 0.81,
+  "dwl_low_mae": 1.53,
+  "nws_low_mae": 1.02
+ }
 }
