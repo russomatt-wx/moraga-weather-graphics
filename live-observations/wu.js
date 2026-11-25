@@ -253,7 +253,10 @@ async function airportSky(city, day, model, log, raw) {
       if (!wet && /thunder/i.test(tx)) wet = { text: 'Thunderstorms', code: 95 };
       else if (!wet && /rain|shower/i.test(tx)) wet = /heavy/i.test(tx) ? { text: 'Heavy rain', code: 65 } : /light/i.test(tx) ? { text: 'Light rain', code: 61 } : { text: 'Rain', code: 63 };
       else if (!wet && /drizzle/i.test(tx)) wet = { text: 'Drizzle', code: 51 };
-      if (/fog/i.test(p.textDescription || '') && !/patches|shallow/i.test(p.textDescription || '')) fog = true;
+      // Fog only when visibility is actually low (under ~1 mile). 'Fog/Mist' with miles of visibility is
+      // mist under a cloud deck: the cloud cover says more than 'Fog'.
+      const vis = num(p.visibility?.value);
+      if (/fog/i.test(tx) && !/patches|shallow/i.test(tx) && vis !== null && vis < 1600) fog = true;
     } catch (_) { log.push('airport sky ' + id + ': error'); }
   }
   if (!covers.length) return null;
