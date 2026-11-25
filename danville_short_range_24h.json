@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-25T22:57:41.629800+00:00",
+  "generated_utc": "2026-11-25T23:02:53.473145+00:00",
   "location": "danville",
   "latitude": 37.813,
   "longitude": -121.974,
@@ -12,7 +12,6 @@
   "failed_sources": {},
   "hourly": {
     "time": [
-      "2026-11-25T14:00",
       "2026-11-25T15:00",
       "2026-11-25T16:00",
       "2026-11-25T17:00",
@@ -35,10 +34,10 @@
       "2026-11-26T10:00",
       "2026-11-26T11:00",
       "2026-11-26T12:00",
-      "2026-11-26T13:00"
+      "2026-11-26T13:00",
+      "2026-11-26T14:00"
     ],
     "temperature_2m": [
-      60.93,
       60.6,
       59.11,
       55.475,
@@ -61,7 +60,8 @@
       54.6,
       58.4,
       60.915,
-      62.07
+      62.07,
+      62.085
     ],
     "precipitation": [
       0.0,
@@ -118,7 +118,6 @@
     "weather_code": [
       1,
       1,
-      1,
       2,
       2,
       3,
@@ -136,14 +135,14 @@
       45,
       45,
       45,
+      3,
       3,
       3,
       3,
       3
     ],
     "cloud_cover": [
-      20.9,
-      24.4,
+      25.2,
       29.6,
       46.0,
       67.5,
@@ -165,7 +164,8 @@
       99.7,
       99.6,
       99.6,
-      99.6
+      99.7,
+      99.7
     ]
   },
   "method": "Weighted HRRR/RRFS/ECMWF/GFS blend. Sky icon from 3-hour smoothed blended cloud cover; rain icon from blended rain chance; thunder/fog only when a weighted majority of models agree."
