@@ -256,7 +256,8 @@ async function airportSky(city, day, model, log, raw) {
       // Fog only when visibility is actually low (under ~1 mile). 'Fog/Mist' with miles of visibility is
       // mist under a cloud deck: the cloud cover says more than 'Fog'.
       const vis = num(p.visibility?.value);
-      if (/fog/i.test(tx) && !/patches|shallow/i.test(tx) && vis !== null && vis < 1600) fog = true;
+      // Fog is local (valley fog can sit over Concord and not Moraga): only an airport within ~6 miles counts.
+      if (/fog/i.test(tx) && !/patches|shallow/i.test(tx) && vis !== null && vis < 1600 && mi <= 6) fog = true;
     } catch (_) { log.push('airport sky ' + id + ': error'); }
   }
   if (!covers.length) return null;
