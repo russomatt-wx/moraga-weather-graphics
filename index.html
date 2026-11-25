@@ -441,8 +441,10 @@
   const h=lastHourly.hourly,T=fitToDaily(h,true),stamp=now.date+'T'+String(now.hour).padStart(2,'0');
   const i0=h.time.findIndex(t=>t.slice(0,13)===stamp);if(i0<0||!Number.isFinite(T[i0]))return null;
   const i1=i0+1<h.time.length&&Number.isFinite(T[i0+1])?i0+1:i0,fNow=T[i0]+(T[i1]-T[i0])*now.min/60;
-  const gap=Math.max(-10,Math.min(10,lastObs.temp-fNow));
-  if(Math.abs(gap)<1.5)return null; // forecast is on track
+  // A small gap is noise: don't carry it forward, but still let what has been observed today count
+  // (after the afternoon peak the forecast curve and the station agree again, yet today's high is
+  // whatever was actually reached).
+  let gap=Math.max(-10,Math.min(10,lastObs.temp-fNow));if(Math.abs(gap)<1.5)gap=0;
   const fog=/fog|mist|overcast|^cloudy|mostly cloudy/i.test(lastObs.sky||'');
   const tau=fog?10:5; // hours for the gap to fade to ~37%
   let peak=-1e9;
