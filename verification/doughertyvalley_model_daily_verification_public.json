@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-25T04:33:09.006722+00:00",
+ "generated_utc": "2026-11-25T19:34:24.776392+00:00",
  "status": "verified_daily_extremes",
  "town": "doughertyvalley",
  "station": "public stations",
@@ -8,9 +8,9 @@
   "ecmwf": {
    "verified_days": 9,
    "high_mae_f": 1.98,
-   "low_mae_f": 1.92,
+   "low_mae_f": 1.87,
    "high_bias_f": -1.6,
-   "low_bias_f": -0.34
+   "low_bias_f": -0.4
   },
   "eps": {
    "verified_days": 2,
@@ -29,23 +29,23 @@
   "gem": {
    "verified_days": 9,
    "high_mae_f": 4.94,
-   "low_mae_f": 1.91,
+   "low_mae_f": 1.97,
    "high_bias_f": -4.94,
-   "low_bias_f": -1.36
+   "low_bias_f": -1.41
   },
   "gfs": {
    "verified_days": 9,
    "high_mae_f": 2.63,
-   "low_mae_f": 1.49,
+   "low_mae_f": 1.54,
    "high_bias_f": -2.52,
-   "low_bias_f": 1.27
+   "low_bias_f": 1.21
   },
   "icon": {
    "verified_days": 9,
    "high_mae_f": 3.23,
-   "low_mae_f": 2.69,
+   "low_mae_f": 2.63,
    "high_bias_f": -3.23,
-   "low_bias_f": 2.69
+   "low_bias_f": 2.63
   }
  },
  "calibration": {
@@ -83,7 +83,7 @@
     "factor": 0.5,
     "holdout_days": 4,
     "raw_holdout_mae_f": 2.025,
-    "selected_holdout_mae_f": 1.769,
+    "selected_holdout_mae_f": 1.768,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
     "verified_days": 9
@@ -103,7 +103,7 @@
     "factor": 0.75,
     "holdout_days": 4,
     "raw_holdout_mae_f": 1.6,
-    "selected_holdout_mae_f": 0.93,
+    "selected_holdout_mae_f": 0.94,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
     "verified_days": 9
@@ -123,7 +123,7 @@
     "factor": 0.5,
     "holdout_days": 4,
     "raw_holdout_mae_f": 2.125,
-    "selected_holdout_mae_f": 0.839,
+    "selected_holdout_mae_f": 0.836,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
     "verified_days": 9
@@ -258,9 +258,9 @@
    "valid_local_date": "2026-11-18",
    "issued_utc": "previous_runs_day1",
    "observed_high_f": 56.5,
-   "observed_low_f": 45.1,
+   "observed_low_f": 45.6,
    "high_error_f": -3.8,
-   "low_error_f": 2.7,
+   "low_error_f": 2.2,
    "observation_count": 2
   },
   {
@@ -268,9 +268,9 @@
    "valid_local_date": "2026-11-18",
    "issued_utc": "previous_runs_day1",
    "observed_high_f": 56.5,
-   "observed_low_f": 45.1,
+   "observed_low_f": 45.6,
    "high_error_f": -3.2,
-   "low_error_f": -0.9,
+   "low_error_f": -1.4,
    "observation_count": 2
   },
   {
@@ -278,9 +278,9 @@
    "valid_local_date": "2026-11-18",
    "issued_utc": "previous_runs_day1",
    "observed_high_f": 56.5,
-   "observed_low_f": 45.1,
+   "observed_low_f": 45.6,
    "high_error_f": -4.0,
-   "low_error_f": 0.0,
+   "low_error_f": -0.5,
    "observation_count": 2
   },
   {
@@ -288,9 +288,9 @@
    "valid_local_date": "2026-11-18",
    "issued_utc": "previous_runs_day1",
    "observed_high_f": 56.5,
-   "observed_low_f": 45.1,
+   "observed_low_f": 45.6,
    "high_error_f": -1.9,
-   "low_error_f": 3.2,
+   "low_error_f": 2.7,
    "observation_count": 2
   },
   {

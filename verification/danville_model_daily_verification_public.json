@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-25T04:32:59.518820+00:00",
+ "generated_utc": "2026-11-25T19:34:16.018292+00:00",
  "status": "verified_daily_extremes",
  "town": "danville",
  "station": "public stations",
@@ -8,44 +8,44 @@
   "ecmwf": {
    "verified_days": 10,
    "high_mae_f": 1.64,
-   "low_mae_f": 2.53,
+   "low_mae_f": 2.58,
    "high_bias_f": -0.46,
-   "low_bias_f": -1.89
+   "low_bias_f": -1.94
   },
   "eps": {
    "verified_days": 10,
    "high_mae_f": 1.24,
-   "low_mae_f": 1.58,
+   "low_mae_f": 1.63,
    "high_bias_f": -0.58,
-   "low_bias_f": -1.28
+   "low_bias_f": -1.33
   },
   "gefs": {
    "verified_days": 10,
    "high_mae_f": 1.25,
-   "low_mae_f": 4.94,
+   "low_mae_f": 4.89,
    "high_bias_f": 0.65,
-   "low_bias_f": 4.94
+   "low_bias_f": 4.89
   },
   "gem": {
    "verified_days": 10,
    "high_mae_f": 3.37,
-   "low_mae_f": 1.64,
+   "low_mae_f": 1.59,
    "high_bias_f": -3.37,
-   "low_bias_f": -0.1
+   "low_bias_f": -0.15
   },
   "gfs": {
    "verified_days": 10,
    "high_mae_f": 1.89,
-   "low_mae_f": 1.88,
+   "low_mae_f": 1.93,
    "high_bias_f": -1.55,
-   "low_bias_f": 1.04
+   "low_bias_f": 0.99
   },
   "icon": {
    "verified_days": 10,
    "high_mae_f": 1.84,
-   "low_mae_f": 2.03,
+   "low_mae_f": 1.98,
    "high_bias_f": -1.74,
-   "low_bias_f": 2.03
+   "low_bias_f": 1.98
   }
  },
  "calibration": {
@@ -63,7 +63,7 @@
     "factor": 0.75,
     "holdout_days": 5,
     "raw_holdout_mae_f": 2.02,
-    "selected_holdout_mae_f": 1.486,
+    "selected_holdout_mae_f": 1.5,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
     "verified_days": 10
@@ -103,7 +103,7 @@
     "factor": 1.0,
     "holdout_days": 5,
     "raw_holdout_mae_f": 5.98,
-    "selected_holdout_mae_f": 1.645,
+    "selected_holdout_mae_f": 1.72,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
     "verified_days": 10
@@ -163,7 +163,7 @@
     "factor": 1.0,
     "holdout_days": 5,
     "raw_holdout_mae_f": 2.58,
-    "selected_holdout_mae_f": 1.187,
+    "selected_holdout_mae_f": 1.206,
     "method": "walk_forward_prior_days_only",
     "lead_specific": false,
     "verified_days": 10
@@ -418,9 +418,9 @@
    "valid_local_date": "2026-11-18",
    "issued_utc": "2026-11-17T11:05:43.714529+00:00",
    "observed_high_f": 56.2,
-   "observed_low_f": 47.4,
+   "observed_low_f": 47.9,
    "high_error_f": -2.8,
-   "low_error_f": -0.9,
+   "low_error_f": -1.4,
    "observation_count": 3
   },
   {
@@ -428,9 +428,9 @@
    "valid_local_date": "2026-11-18",
    "issued_utc": "2026-11-17T11:05:43.714529+00:00",
    "observed_high_f": 56.2,
-   "observed_low_f": 47.4,
+   "observed_low_f": 47.9,
    "high_error_f": -2.6,
-   "low_error_f": -0.3,
+   "low_error_f": -0.8,
    "observation_count": 3
   },
   {
@@ -438,9 +438,9 @@
    "valid_local_date": "2026-11-18",
    "issued_utc": "2026-11-17T11:05:43.714529+00:00",
    "observed_high_f": 56.2,
-   "observed_low_f": 47.4,
+   "observed_low_f": 47.9,
    "high_error_f": -2.0,
-   "low_error_f": 2.8,
+   "low_error_f": 2.3,
    "observation_count": 3
   },
   {
@@ -448,9 +448,9 @@
    "valid_local_date": "2026-11-18",
    "issued_utc": "2026-11-17T11:05:43.714529+00:00",
    "observed_high_f": 56.2,
-   "observed_low_f": 47.4,
+   "observed_low_f": 47.9,
    "high_error_f": -2.5,
-   "low_error_f": 1.0,
+   "low_error_f": 0.5,
    "observation_count": 3
   },
   {
@@ -458,9 +458,9 @@
    "valid_local_date": "2026-11-18",
    "issued_utc": "2026-11-17T11:05:43.714529+00:00",
    "observed_high_f": 56.2,
-   "observed_low_f": 47.4,
+   "observed_low_f": 47.9,
    "high_error_f": -4.2,
-   "low_error_f": -1.8,
+   "low_error_f": -2.3,
    "observation_count": 3
   },
   {
@@ -468,9 +468,9 @@
    "valid_local_date": "2026-11-18",
    "issued_utc": "2026-11-17T11:05:43.714529+00:00",
    "observed_high_f": 56.2,
-   "observed_low_f": 47.4,
+   "observed_low_f": 47.9,
    "high_error_f": 0.3,
-   "low_error_f": 1.7,
+   "low_error_f": 1.2,
    "observation_count": 3
   },
   {
