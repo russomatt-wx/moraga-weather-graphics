@@ -1,57 +1,34 @@
 {
-  "generated_utc": "2026-11-25T00:07:48.213656+00:00",
+  "generated_utc": "2026-11-25T09:11:04.127138+00:00",
   "station": "KCAMORAG71",
   "status": "verified",
   "method": "Earliest complete pre-day Open-Meteo hourly precipitation snapshot, summed in mm and converted to inches; complete finalized KCAMORAG71 Xweather daily summaries only; 0.01 inch wet threshold.",
   "windows": {
     "latest": {
-      "days": 1,
-      "models": [
-        {
-          "model": "ecmwf",
-          "days": 1,
-          "wet_days": 1,
-          "mae_in": 0.006,
-          "wet_day_mae_in": 0.006,
-          "bias_in": -0.006,
-          "hits": 0,
-          "misses": 1,
-          "false_alarms": 0
-        },
-        {
-          "model": "gfs",
-          "days": 1,
-          "wet_days": 1,
-          "mae_in": 0.037,
-          "wet_day_mae_in": 0.037,
-          "bias_in": 0.037,
-          "hits": 1,
-          "misses": 0,
-          "false_alarms": 0
-        }
-      ]
+      "days": 0,
+      "models": []
     },
     "7d": {
-      "days": 7,
+      "days": 6,
       "models": [
         {
           "model": "gfs",
-          "days": 7,
+          "days": 6,
           "wet_days": 6,
-          "mae_in": 0.504,
+          "mae_in": 0.588,
           "wet_day_mae_in": 0.588,
-          "bias_in": -0.241,
+          "bias_in": -0.281,
           "hits": 5,
           "misses": 1,
           "false_alarms": 0
         },
         {
           "model": "ecmwf",
-          "days": 7,
+          "days": 6,
           "wet_days": 6,
-          "mae_in": 0.508,
+          "mae_in": 0.592,
           "wet_day_mae_in": 0.592,
-          "bias_in": -0.278,
+          "bias_in": -0.324,
           "hits": 5,
           "misses": 1,
           "false_alarms": 0
