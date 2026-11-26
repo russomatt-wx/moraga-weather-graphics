@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-26T13:47:25.442370+00:00",
+  "generated_utc": "2026-11-26T14:05:11.001271+00:00",
   "location": "sausalito",
   "latitude": 37.852,
   "longitude": -122.483,
@@ -12,7 +12,6 @@
   "failed_sources": {},
   "hourly": {
     "time": [
-      "2026-11-26T05:00",
       "2026-11-26T06:00",
       "2026-11-26T07:00",
       "2026-11-26T08:00",
@@ -35,10 +34,10 @@
       "2026-11-27T01:00",
       "2026-11-27T02:00",
       "2026-11-27T03:00",
-      "2026-11-27T04:00"
+      "2026-11-27T04:00",
+      "2026-11-27T05:00"
     ],
     "temperature_2m": [
-      50.195,
       49.95,
       49.5,
       50.42,
@@ -61,6 +60,7 @@
       50.575,
       50.505,
       50.34,
+      50.225,
       50.225
     ],
     "precipitation": [
@@ -135,14 +135,13 @@
       3,
       3,
       3,
+      2,
+      2,
       3,
-      2,
-      2,
       3,
       3
     ],
     "cloud_cover": [
-      100.0,
       100.0,
       99.9,
       99.8,
@@ -165,7 +164,8 @@
       72.9,
       73.6,
       84.7,
-      96.8
+      97.1,
+      98.3
     ]
   },
   "method": "Weighted HRRR/RRFS/ECMWF/GFS blend. Sky icon from 3-hour smoothed blended cloud cover; rain icon from blended rain chance; thunder/fog only when a weighted majority of models agree."
