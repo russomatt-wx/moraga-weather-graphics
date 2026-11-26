@@ -235,5 +235,9 @@
     var p = e.target.closest('.rl-plot'); if (p) inspect(p, e.clientX);
   });
   host.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse' || e.buttons) { var p = e.target.closest('.rl-plot'); if (p) inspect(p, e.clientX); } });
-  render();
+  // Load only when the Forecast Lab is first opened (its charts make ~9 requests).
+  var started = false;
+  var go = function () { if (started || document.body.classList.contains('public-mode')) return; started = true; render(); };
+  go();
+  if (!started) new MutationObserver(function (m, o) { go(); if (started) o.disconnect(); }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 })();
