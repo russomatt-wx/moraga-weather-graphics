@@ -1,234 +1,234 @@
 {
-  "generated_utc": "2026-11-26T00:00:52.000Z",
-  "source_label": "Diablo Weather Lab \u00b7 Updated Nov 25, 4:00 PM PST",
+  "generated_utc": "2026-11-26T14:00:02.000Z",
+  "source_label": "Diablo Weather Lab · Updated Nov 26, 6:00 AM PST",
   "outlooks": {
     "Moraga": {
-      "headline": "Moraga: A Quiet Thanksgiving, Then the Pacific Wakes Up",
-      "text": "Moraga should enjoy a quiet Thanksgiving after the recent stormy stretch. Weak high pressure keeps the day mostly dry, although thin high clouds may soften the sunshine and calm winds can allow patchy fog in nearby low spots. Larch's sheltered terrain can hold damp air and fog a little longer than the nearby ridgelines.. The next Pacific front approaches Sunday, with rain becoming more likely later in the day; another, potentially stronger system may follow early next week, so the holiday lull looks brief."
+      "headline": "Moraga: A Quiet Thanksgiving, Then Rain Returns",
+      "summary": "Moraga should wake to patchy valley fog beneath a veil of high cloud, then turn partly sunny as the morning improves. The recent storm has moved away, and a quiet, dry Thanksgiving afternoon is expected across the hills and valley floor. Light winds and lingering moisture may keep the lowest pockets damp early, so allow extra time on shaded roads. The break lasts through Friday, with rain chances returning late in the weekend."
     },
     "Lafayette": {
-      "headline": "Lafayette: Reliez Valley Gets a Brief Holiday Break",
-      "text": "Lafayette should get a welcome pause for Thanksgiving. The recent rain is moving out, leaving a mostly dry day with some high cloud and a cool start; sheltered areas may hold fog longer than nearby ridges or open slopes. Reliez Valley's lower pockets may stay hazy longer than the open slopes above town.. Rain chances build again Sunday, then a more organized Pacific system could bring another wet spell early next week."
+      "headline": "Lafayette: Reliez Valley Gets a Holiday Break",
+      "summary": "Lafayette starts with a cool, locally foggy morning, especially around the lower Reliez Valley and shaded creek corridors. High clouds should thin enough for a brighter, partly sunny Thanksgiving afternoon, with no meaningful rain expected today. Roads may stay damp where fog lingers, while the open ridges improve sooner. Friday remains mostly dry; a weak Pacific system brings the next rain chance late in the weekend."
     },
     "Campolindo": {
-      "headline": "Campolindo, Moraga: Brighter Foothills, Then a Wet Weekend",
-      "text": "Campolindo, Moraga should have a mostly quiet Thanksgiving after the recent wet spell. High clouds may filter the sunshine, but the higher slopes should brighten sooner than nearby low spots; sheltered pockets can still develop patchy fog overnight. Campolindo's foothill setting should catch brighter breaks before the cooler lower valleys fully clear.. The next rain chance arrives Sunday, with a more organized Pacific system possible early next week."
+      "headline": "Campolindo, Moraga: Sunshine Reaches the Hills",
+      "summary": "Campolindo in Moraga should see a cool start, but its slightly higher neighborhood setting may clear sooner than the lowest valley pockets. High clouds pass overhead before brighter breaks develop, leaving a comfortable, mostly dry Thanksgiving afternoon. The recent rain has eased, though shaded paths and garden areas will stay damp. Sunshine and mild conditions continue Friday before the next Pacific system approaches late in the weekend."
     },
     "HappyValley": {
-      "headline": "Happy Valley, Lafayette: A Calm Holiday With Fog in the Valley",
-      "text": "Happy Valley, Lafayette should enjoy a quiet Thanksgiving after the recent stormy stretch. Weak high pressure keeps the day mostly dry, although thin high clouds may soften the sunshine and calm winds can allow patchy fog in nearby low spots. The enclosed valley floor can stay misty after nearby ridges begin to brighten.. The next Pacific front approaches Sunday, with rain becoming more likely later in the day; another, potentially stronger system may follow early next week, so the holiday lull looks brief."
+      "headline": "Happy Valley, Lafayette: Fog Lingers in the Valley",
+      "summary": "Happy Valley in Lafayette may hold onto fog and damp air longer than the surrounding slopes this morning. Expect a gradual brightening rather than an immediate clear start, followed by a mostly dry Thanksgiving afternoon. The sheltered valley floor can remain cool even as nearby ridges warm in the sunshine. Friday looks quiet as well, while clouds and a renewed chance of rain return toward Sunday."
     },
     "Glorietta": {
-      "headline": "Glorietta, Orinda: A Sheltered Orinda Holiday Break",
-      "text": "Glorietta, Orinda should get a welcome pause for Thanksgiving. The recent rain is moving out, leaving a mostly dry day with some high cloud and a cool start; sheltered areas may hold fog longer than nearby ridges or open slopes. Tree-lined canyon streets may stay damp and shaded after the higher Orinda slopes brighten.. Rain chances build again Sunday, then a more organized Pacific system could bring another wet spell early next week."
+      "headline": "Glorietta, Orinda: A Slow Start, Brighter Finish",
+      "summary": "Glorietta in Orinda should begin under patchy low cloud, with the wooded canyon setting favoring a slower morning clearing. A mix of sun and high cloud is expected later, keeping Thanksgiving pleasant and dry. Recent rainfall may leave shaded trails and narrow roads slick early, even after the sky brightens. Friday stays quiet, but a Pacific system is expected to bring rain back toward the weekend."
     },
     "SleepyHollow": {
-      "headline": "Sleepy Hollow, Orinda: Quiet Weather Before Sunday Rain",
-      "text": "Sleepy Hollow, Orinda should get a welcome pause for Thanksgiving. The recent rain is moving out, leaving a mostly dry day with some high cloud and a cool start; sheltered areas may hold fog longer than nearby ridges or open slopes. Sleepy Hollow's sheltered folds are more prone to lingering morning mist than exposed hilltops.. Rain chances build again Sunday, then a more organized Pacific system could bring another wet spell early next week."
+      "headline": "Sleepy Hollow, Orinda: Damp Trails, Improving Skies",
+      "summary": "Sleepy Hollow in Orinda is likely to start cool and locally foggy, especially in the sheltered folds below the ridgelines and around the lowest homes. The cloud deck should gradually lift, allowing brighter breaks through the afternoon while the weather stays dry. Moist ground and shaded driveways may remain damp after the recent storms. Friday looks similarly quiet, with the next organized rain chance arriving late Saturday or Sunday."
     },
     "Northgate": {
-      "headline": "Northgate, Walnut Creek: High Clouds and a Brief Dry Stretch",
-      "text": "Northgate, Walnut Creek should enjoy a quiet Thanksgiving after the recent stormy stretch. Weak high pressure keeps the day mostly dry, although thin high clouds may soften the sunshine and calm winds can allow patchy fog in nearby low spots. The open north side of Walnut Creek should brighten more readily once any valley haze lifts.. The next Pacific front approaches Sunday, with rain becoming more likely later in the day; another, potentially stronger system may follow early next week, so the holiday lull looks brief."
+      "headline": "Northgate, Walnut Creek: Valley Haze Gives Way",
+      "summary": "Northgate in Walnut Creek should see a chilly, hazy start, with valley fog possible before the sun gains strength. High clouds will filter the Thanksgiving sunshine, but the day should remain dry and comfortable for outdoor plans. The more open valley floor may brighten sooner than nearby creekside pockets. Friday stays mostly quiet, while a weak Pacific front brings the next rain chance late in the weekend."
     },
     "Rossmoor": {
-      "headline": "Rossmoor, Walnut Creek: A Mild Holiday Break Above the Valley",
-      "text": "Rossmoor, Walnut Creek should have a mostly quiet Thanksgiving after the recent wet spell. High clouds may filter the sunshine, but the higher slopes should brighten sooner than nearby low spots; sheltered pockets can still develop patchy fog overnight. Rossmoor's foothill position may see quicker clearing than the sheltered valley floor below.. The next rain chance arrives Sunday, with a more organized Pacific system possible early next week."
+      "headline": "Rossmoor, Walnut Creek: A Calm Holiday Afternoon",
+      "summary": "Rossmoor in Walnut Creek should begin with cool air and patchy fog in the lower parts of the valley. The morning gradually brightens, with high clouds giving way to a partly sunny and dry Thanksgiving afternoon. Sheltered greens and shaded paths may remain damp from the recent rain even after the sun appears. Friday looks quiet, but the next Pacific system could bring showers late in the weekend."
     },
     "Saranap": {
-      "headline": "Saranap, Walnut Creek: A Calm Thanksgiving, With Fog in Low Spots",
-      "text": "Saranap, Walnut Creek should enjoy a quiet Thanksgiving after the recent stormy stretch. Weak high pressure keeps the day mostly dry, although thin high clouds may soften the sunshine and calm winds can allow patchy fog in nearby low spots. Saranap's lower neighborhoods can retain patchy fog while nearby ridges see brighter intervals.. The next Pacific front approaches Sunday, with rain becoming more likely later in the day; another, potentially stronger system may follow early next week, so the holiday lull looks brief."
+      "headline": "Saranap, Walnut Creek: Slow Morning Clearing",
+      "summary": "Saranap in Walnut Creek should have a cool, slightly misty start, especially near low-lying creeks and shaded neighborhoods. Expect a slow improvement to brighter, partly sunny skies, with dry weather holding through Thanksgiving afternoon. The sheltered setting may keep damp spots around longer than the nearby open slopes. Friday remains quiet, while a weak system approaches late in the weekend and brings rain back into the forecast."
     },
     "PleasantHill": {
-      "headline": "Pleasant Hill Downtown: A Quiet Holiday Between Storms",
-      "text": "Pleasant Hill Downtown should enjoy a quiet Thanksgiving after the recent stormy stretch. Weak high pressure keeps the day mostly dry, although thin high clouds may soften the sunshine and calm winds can allow patchy fog in nearby low spots. The flatter valley floor may hold low cloud early before a brighter afternoon develops.. The next Pacific front approaches Sunday, with rain becoming more likely later in the day; another, potentially stronger system may follow early next week, so the holiday lull looks brief."
+      "headline": "Pleasant Hill: High Clouds and a Dry Holiday",
+      "summary": "Pleasant Hill should start cool, with a little valley haze possible before high clouds and sunshine mix through the day. Thanksgiving looks mostly dry, and the afternoon should feel brighter than the recent stormy stretch. Low spots and shaded streets near the creek paths may stay damp early, so allow extra care on the morning drive. Friday remains quiet, while the next chance of rain builds toward Sunday."
     },
     "ClaytonValley": {
-      "headline": "Clayton Valley, Concord: Dry Holiday Weather, Then a New Front",
-      "text": "Clayton Valley, Concord should enjoy a quiet Thanksgiving after the recent stormy stretch. Weak high pressure keeps the day mostly dry, although thin high clouds may soften the sunshine and calm winds can allow patchy fog in nearby low spots. Clayton Valley sits closer to the Diablo foothills, where cloud breaks may vary across the slopes.. The next Pacific front approaches Sunday, with rain becoming more likely later in the day; another, potentially stronger system may follow early next week, so the holiday lull looks brief."
+      "headline": "Clayton Valley, Concord: Foggy Pockets, Brighter Hills",
+      "summary": "Clayton Valley in Concord should begin with cool air and patchy mist, particularly where the valley floor stays sheltered. The clouds will thin gradually, leaving a partly sunny and dry Thanksgiving afternoon. The surrounding hills may clear sooner, while lower neighborhoods hold onto damp pavement and lingering haze. Friday remains mild and quiet, but another Pacific system is expected to bring rain back late in the weekend."
     },
     "Clayton": {
-      "headline": "Clayton Downtown: Foothill Skies Brighten for Thanksgiving",
-      "text": "Clayton Downtown should have a mostly quiet Thanksgiving after the recent wet spell. High clouds may filter the sunshine, but the higher slopes should brighten sooner than nearby low spots; sheltered pockets can still develop patchy fog overnight. The foothills near Mount Diablo can feel breezier than the sheltered valley neighborhoods.. The next rain chance arrives Sunday, with a more organized Pacific system possible early next week."
+      "headline": "Clayton: Foothill Sunshine Returns",
+      "summary": "Clayton should enjoy a calmer Thanksgiving after the recent wet stretch, though the morning may start cool with a little haze. High clouds pass overhead before more sunshine develops, and the foothill setting should feel pleasant by afternoon. Shaded streets and trails may remain damp where the sun arrives later. Friday stays mostly dry, with the next rain chance increasing toward Sunday; use the break for outdoor plans before the weather turns again."
     },
     "Martinez": {
-      "headline": "Martinez Downtown: Quiet Skies, Watch the Waterfront",
-      "text": "Martinez Downtown should see a mostly dry Thanksgiving, though elevated Bay water remains a concern along the lowest shoreline streets through Thursday afternoon. High clouds may soften the sunshine, and exposed waterfront blocks can feel cooler than nearby inland neighborhoods. The waterfront and Carquinez Strait shoreline should remain the focus for any lingering high-water impacts.. Rain chances return Sunday as the Pacific storm track becomes active again, with another unsettled period possible early next week."
+      "headline": "Martinez: A Brighter Day Near the Waterfront",
+      "summary": "Martinez should see a cool, partly cloudy Thanksgiving, with low cloud or mist possible near the waterfront before brighter breaks develop. The bayshore will feel more exposed than the inland neighborhoods, and the remaining high-tide flooding warning runs through the afternoon. Keep away from water-covered access roads and follow any local closures. Drier weather continues Friday, while a weak system brings rain back toward Sunday."
     },
     "Danville": {
-      "headline": "Sycamore Valley, Danville: A Calm Holiday Before the Next Rain",
-      "text": "Sycamore Valley, Danville should enjoy a quiet Thanksgiving after the recent stormy stretch. Weak high pressure keeps the day mostly dry, although thin high clouds may soften the sunshine and calm winds can allow patchy fog in nearby low spots. Sycamore Valley's sheltered floor may start hazy, while the foothills brighten more quickly.. The next Pacific front approaches Sunday, with rain becoming more likely later in the day; another, potentially stronger system may follow early next week, so the holiday lull looks brief."
+      "headline": "Danville: Sycamore Valley Dries Out for Thanksgiving",
+      "summary": "Danville's Sycamore Valley should start cool with patchy valley fog, then brighten as high clouds thin through the morning. Thanksgiving looks dry, with comfortable sunshine returning to the open valley and foothill neighborhoods. The sheltered creek corridors may stay damp longer than the surrounding slopes after the recent rain. Friday remains quiet, while a Pacific system brings the next chance of showers late in the weekend."
     },
     "Greenbrook": {
-      "headline": "Greenbrook, Danville: A Dry Thanksgiving With a Foggy Start",
-      "text": "Greenbrook, Danville should get a welcome pause for Thanksgiving. The recent rain is moving out, leaving a mostly dry day with some high cloud and a cool start; sheltered areas may hold fog longer than nearby ridges or open slopes. Greenbrook's south-valley setting should see a similar dry holiday, with fog favored in low pockets.. Rain chances build again Sunday, then a more organized Pacific system could bring another wet spell early next week."
+      "headline": "Greenbrook, Danville: A Cool Start, Then Sunshine",
+      "summary": "Greenbrook in Danville should have a cool, slightly misty start, with damp air lingering near the creek and lower neighborhood streets. The morning gradually brightens, and Thanksgiving afternoon should be mostly sunny and dry. Its valley setting may hold onto haze longer than the nearby Blackhawk ridges, so the change will be gradual before the weekend. Friday stays quiet, with rain chances increasing again toward Sunday."
     },
     "Alamo": {
-      "headline": "Alamo Downtown: A Cool Start and a Quiet Holiday",
-      "text": "Alamo Downtown should enjoy a quiet Thanksgiving after the recent stormy stretch. Weak high pressure keeps the day mostly dry, although thin high clouds may soften the sunshine and calm winds can allow patchy fog in nearby low spots. Alamo's valley floor may stay cooler and mistier than the surrounding foothill slopes.. The next Pacific front approaches Sunday, with rain becoming more likely later in the day; another, potentially stronger system may follow early next week, so the holiday lull looks brief."
+      "headline": "Alamo: A Dry Holiday Between Storms",
+      "summary": "Alamo should begin with a cool valley feel and a little patchy fog in sheltered spots. High clouds will gradually break, leaving a partly sunny Thanksgiving afternoon with no meaningful rain expected. The open stretches along the valley should brighten sooner than the lower pockets near the creek. Friday looks dry as well, while the next Pacific system approaches late in the weekend and brings a renewed chance of showers."
     },
     "Blackhawk": {
-      "headline": "Blackhawk, Danville: Brighter Foothills for Thanksgiving",
-      "text": "Blackhawk, Danville should have a mostly quiet Thanksgiving after the recent wet spell. High clouds may filter the sunshine, but the higher slopes should brighten sooner than nearby low spots; sheltered pockets can still develop patchy fog overnight. Blackhawk's higher foothill neighborhoods should clear sooner than the lower San Ramon Valley.. The next rain chance arrives Sunday, with a more organized Pacific system possible early next week."
+      "headline": "Blackhawk, Danville: Foothills Clear First",
+      "summary": "Blackhawk should see a cool start, but its foothill setting may clear sooner than the lower San Ramon Valley. High clouds give way to brighter breaks, leaving a pleasant and mostly dry Thanksgiving afternoon. Recent rainfall may keep shaded trails and north-facing slopes damp even after sunshine returns. Friday remains quiet, while a weak Pacific system brings a chance of rain late in the weekend; outdoor plans look best after the morning haze lifts."
     },
     "Diablo": {
-      "headline": "Diablo, Danville: A Brief Break Beneath Mount Diablo",
-      "text": "Diablo, Danville should have a mostly quiet Thanksgiving after the recent wet spell. High clouds may filter the sunshine, but the higher slopes should brighten sooner than nearby low spots; sheltered pockets can still develop patchy fog overnight. The Mount Diablo foothills may catch brighter breaks while the sheltered valleys remain hazy.. The next rain chance arrives Sunday, with a more organized Pacific system possible early next week."
+      "headline": "Diablo, Danville: Clearer Air Along the Foothills",
+      "summary": "Diablo's foothill neighborhoods should start cool, with a little haze in the lower slopes and clearer air along exposed ridges. Thanksgiving turns partly sunny and stays dry, offering a welcome break after the recent rain. Shaded canyon roads and trails may remain slick where sunlight is slow to reach during the morning. Friday looks quiet, but the next Pacific system should bring showers back toward Sunday."
     },
     "DoughertyValley": {
-      "headline": "Dougherty Valley, San Ramon: A Quiet Holiday in the Valley",
-      "text": "Dougherty Valley, San Ramon should get a welcome pause for Thanksgiving. The recent rain is moving out, leaving a mostly dry day with some high cloud and a cool start; sheltered areas may hold fog longer than nearby ridges or open slopes. Dougherty Valley's enclosed setting favors patchy morning fog before the day turns brighter.. Rain chances build again Sunday, then a more organized Pacific system could bring another wet spell early next week."
+      "headline": "Dougherty Valley, San Ramon: A Quiet Holiday Break",
+      "summary": "Dougherty Valley in San Ramon should have a cool, locally hazy start, with fog possible in the lower valley before the sun breaks through. High clouds thin gradually, leaving a mostly dry Thanksgiving afternoon. The more sheltered neighborhoods may stay damp longer than the open eastern slopes. Friday remains quiet, while clouds increase again over the weekend as the next Pacific system approaches; keep an eye on the changing sky before holiday travel."
     },
     "TwinCreeks": {
-      "headline": "Twin Creeks, San Ramon: High Clouds and a Dry Thanksgiving",
-      "text": "Twin Creeks, San Ramon should enjoy a quiet Thanksgiving after the recent stormy stretch. Weak high pressure keeps the day mostly dry, although thin high clouds may soften the sunshine and calm winds can allow patchy fog in nearby low spots. The open San Ramon Valley floor may clear gradually, with cooler pockets near creeks.. The next Pacific front approaches Sunday, with rain becoming more likely later in the day; another, potentially stronger system may follow early next week, so the holiday lull looks brief."
+      "headline": "Twin Creeks, San Ramon: Misty Morning, Dry Afternoon",
+      "summary": "Twin Creeks in San Ramon should start cool and a little misty, with low cloud lingering near the valley floor and creek paths. The morning brightens gradually, and Thanksgiving afternoon looks partly sunny and dry. Recent rainfall may leave neighborhood paths and shaded lawns damp even after the clouds lift. Friday remains calm, while a weak Pacific front brings another chance of rain late Saturday or Sunday."
     },
     "Dublin": {
-      "headline": "Dublin Downtown: A Calm Holiday, Then Rain Returns",
-      "text": "Dublin Downtown should enjoy a quiet Thanksgiving after the recent stormy stretch. Weak high pressure keeps the day mostly dry, although thin high clouds may soften the sunshine and calm winds can allow patchy fog in nearby low spots. The Tri-Valley corridor should stay dry, though low spots may hold morning haze.. The next Pacific front approaches Sunday, with rain becoming more likely later in the day; another, potentially stronger system may follow early next week, so the holiday lull looks brief."
+      "headline": "Dublin: A Brighter Holiday After the Storms",
+      "summary": "Dublin should enjoy a quiet Thanksgiving after the recent stormy weather, although the morning may begin cool with a little valley haze. High clouds will filter the sunshine before brighter breaks develop later in the day. The open valley should clear faster than sheltered pockets near the hills. Friday stays dry, while rain chances return toward Sunday as the next Pacific system moves closer around the hills."
     },
     "Pleasanton": {
-      "headline": "Pleasanton Downtown: A Brighter Holiday Break",
-      "text": "Pleasanton Downtown gets a short break through Thanksgiving and Friday. Expect a generally dry pattern with occasional high clouds, though sheltered pockets may start with fog before brighter breaks develop. Pleasanton's open valley setting favors brighter breaks once any early fog mixes out.. The Pacific becomes more active again Sunday, and a stronger disturbance may arrive early next week, so this quieter stretch may not last."
+      "headline": "Pleasanton: Sunshine Returns to the Valley",
+      "summary": "Pleasanton should see a cool, hazy start, followed by a gradual transition to brighter skies and a mostly sunny Thanksgiving afternoon. The valley floor may hold onto a little morning mist, but the day should stay dry for holiday plans. Open areas will warm more quickly once the clouds thin. Friday remains quiet, while the next chance of rain builds late in the weekend; enjoy the calmer stretch while it lasts."
     },
     "RubyHill": {
-      "headline": "Ruby Hill, Pleasanton: A Dry Holiday in the Foothills",
-      "text": "Ruby Hill, Pleasanton should have a mostly quiet Thanksgiving after the recent wet spell. High clouds may filter the sunshine, but the higher slopes should brighten sooner than nearby low spots; sheltered pockets can still develop patchy fog overnight. Ruby Hill's western foothills should see a little more sun than the valley floor.. The next rain chance arrives Sunday, with a more organized Pacific system possible early next week."
+      "headline": "Ruby Hill, Pleasanton: Brighter Foothill Weather",
+      "summary": "Ruby Hill in Pleasanton should begin with cool valley air and a little haze, then turn brighter as the morning progresses. The foothill edge may clear sooner than the lowest parts of the valley, leaving a pleasant, dry Thanksgiving afternoon. Recent rain should keep shaded trails and garden beds damp on shaded slopes. Friday looks quiet, with a renewed chance of showers arriving late in the weekend."
     },
     "LivermoreWine": {
-      "headline": "Wine Country, Livermore: A Sunny Break Before Sunday",
-      "text": "Wine Country, Livermore gets a short break through Thanksgiving and Friday. Expect a generally dry pattern with occasional high clouds, though sheltered pockets may start with fog before brighter breaks develop. The open Livermore Valley can turn brighter quickly, although fog may linger near vineyards and low ground.. The Pacific becomes more active again Sunday, and a stronger disturbance may arrive early next week, so this quieter stretch may not last."
+      "headline": "Wine Country, Livermore: A Welcome Dry Stretch",
+      "summary": "Livermore Wine Country should start cool, with a little valley haze possible before high clouds thin and the sun comes through. Thanksgiving afternoon looks mostly sunny and dry, a welcome change for vineyard work and outdoor plans. Open slopes should brighten sooner than the lower, sheltered rows. Friday stays quiet, but clouds return over the weekend ahead of another Pacific rain system; the break should help fields and access roads dry."
     },
     "Springtown": {
-      "headline": "Springtown, Livermore: A Quiet Holiday With a Breezy Edge",
-      "text": "Springtown, Livermore gets a short break through Thanksgiving and Friday. Expect a generally dry pattern with occasional high clouds, though sheltered pockets may start with fog before brighter breaks develop. Springtown's northern valley edge may stay breezier than sheltered pockets farther south.. The Pacific becomes more active again Sunday, and a stronger disturbance may arrive early next week, so this quieter stretch may not last."
+      "headline": "Springtown, Livermore: Fog Lifts, Then a Dry Holiday",
+      "summary": "Springtown in Livermore should see a cool start with some patchy haze across the valley floor. High clouds gradually thin, allowing a brighter and mostly dry Thanksgiving afternoon. The more open eastern side of town should clear faster than sheltered pockets near the foothills, though damp ground will linger after recent rain. Friday remains quiet, while the next Pacific system brings a chance of showers late in the weekend."
     },
     "Sunol": {
-      "headline": "Sunol Downtown: A Calm Holiday in the Canyon",
-      "text": "Sunol Downtown should get a welcome pause for Thanksgiving. The recent rain is moving out, leaving a mostly dry day with some high cloud and a cool start; sheltered areas may hold fog longer than nearby ridges or open slopes. Sunol's canyon setting can hold mist after the more open Tri-Valley clears.. Rain chances build again Sunday, then a more organized Pacific system could bring another wet spell early next week."
+      "headline": "Sunol: A Quiet Holiday in the Valley",
+      "summary": "Sunol should begin cool and locally foggy, especially around the creek bottoms and narrow valley corridors. The surrounding hills may brighten sooner, with a mix of sunshine and high cloud developing by afternoon. Thanksgiving stays mostly dry, but shaded roads and trails can remain damp. Friday looks quiet before the next Pacific system approaches late in the weekend and brings a renewed chance of rain; allow the morning haze to lift before setting out."
     },
     "Montclair": {
-      "headline": "Montclair, Oakland: A Brighter Holiday Above Oakland",
-      "text": "Montclair, Oakland should have a mostly quiet Thanksgiving after the recent wet spell. High clouds may filter the sunshine, but the higher slopes should brighten sooner than nearby low spots; sheltered pockets can still develop patchy fog overnight. Montclair's Oakland Hills setting may stay cooler, with fog lingering below the ridgeline.. The next rain chance arrives Sunday, with a more organized Pacific system possible early next week."
+      "headline": "Montclair, Oakland: Hillside Clouds Gradually Lift",
+      "summary": "Montclair in Oakland should start cool beneath patchy low cloud, with the hillside setting producing quick changes between shaded and sunny streets. High clouds thin gradually, leaving a brighter and dry Thanksgiving afternoon. The upper slopes may see sunshine before the lower Oakland flats, while shaded paths remain damp from recent rain in shaded places. Friday stays quiet, with the next rain chance increasing toward Sunday."
     },
     "Piedmont": {
-      "headline": "Civic Center, Piedmont: A Quiet Holiday on the Hillside",
-      "text": "Civic Center, Piedmont should have a mostly quiet Thanksgiving after the recent wet spell. High clouds may filter the sunshine, but the higher slopes should brighten sooner than nearby low spots; sheltered pockets can still develop patchy fog overnight. The elevated neighborhood should see brighter breaks while low-lying Oakland areas remain hazier.. The next rain chance arrives Sunday, with a more organized Pacific system possible early next week."
+      "headline": "Piedmont: A Brighter Afternoon Above Oakland",
+      "summary": "Piedmont should have a cool, cloudy start, with low cloud around the hills and tree-lined streets. The morning gradually brightens, and Thanksgiving afternoon should turn partly sunny while remaining dry. The hillside neighborhoods may clear at a different pace from the Oakland flats below, so expect some local variation. Friday remains quiet, with another chance of rain returning late in the weekend; shaded parks may take longer to dry."
     },
     "Rockridge": {
-      "headline": "Rockridge, Oakland: A Dry Holiday Away From the Waterfront",
-      "text": "Rockridge, Oakland should see a mostly dry Thanksgiving after the recent wet stretch. High clouds may filter the sunshine, and the marine influence will keep exposed western neighborhoods cooler and cloudier than the sunnier inland side of the city. Rockridge is set back from the immediate shoreline, so bayfront high-water concerns are less direct here.. The next Pacific front approaches Sunday, bringing a renewed chance of rain and breezier conditions; another system may follow early next week."
+      "headline": "Rockridge, Oakland: A Dry Day Between Systems",
+      "summary": "Rockridge in Oakland should begin with a cool, slightly hazy morning, then brighten as high clouds move through. Thanksgiving looks mostly dry, with a mix of sunshine and passing cloud by afternoon. The neighborhood's position between the hills and the Bay can bring changing cloud cover, but no meaningful rain is expected today. Friday stays quiet before the next Pacific system approaches late in the weekend."
     },
     "Temescal": {
-      "headline": "Temescal, Oakland: A Calm Thanksgiving With High Clouds",
-      "text": "Temescal, Oakland should see a mostly dry Thanksgiving after the recent wet stretch. High clouds may filter the sunshine, and the marine influence will keep exposed western neighborhoods cooler and cloudier than the sunnier inland side of the city. Temescal's inland side of Oakland should be less exposed to bayfront breezes than the waterfront.. The next Pacific front approaches Sunday, bringing a renewed chance of rain and breezier conditions; another system may follow early next week."
+      "headline": "Temescal, Oakland: Bay Clouds Thin Through the Morning",
+      "summary": "Temescal in Oakland should wake to a cool morning with some low cloud drifting inland from the Bay. The clouds should thin gradually, leaving a brighter and mostly dry Thanksgiving afternoon. The nearby shoreline may stay hazier than the neighborhoods farther east, while damp sidewalks dry as the sun returns. Friday looks quiet, but another chance of rain develops late in the weekend; keep waterfront plans flexible while the tide warning remains active."
     },
     "LakeMerritt": {
-      "headline": "Lake Merritt, Oakland: A Quiet Holiday, With Bay Water Still High",
-      "text": "Lake Merritt, Oakland should see a mostly dry Thanksgiving, though elevated Bay water remains a concern along the lowest shoreline streets through Thursday afternoon. High clouds may soften the sunshine, and exposed waterfront blocks can feel cooler than nearby inland neighborhoods. The lake and nearby estuary keep local water levels worth watching around the high tide.. Rain chances return Sunday as the Pacific storm track becomes active again, with another unsettled period possible early next week."
+      "headline": "Lake Merritt, Oakland: A Calm Day Near the Water",
+      "summary": "Lake Merritt in Oakland should start with low cloud and a cool bayshore feel, then turn brighter as the morning fog lifts. Thanksgiving afternoon looks mostly dry, with high clouds giving way to some sunshine. The lakefront may stay damp longer than the higher neighborhoods, and the remaining coastal flood warning continues through the afternoon. Friday is quieter, while rain chances return late in the weekend."
     },
     "DowntownOakland": {
-      "headline": "Oakland Downtown: Dry Skies, But Watch the Estuary",
-      "text": "Oakland Downtown should see a mostly dry Thanksgiving, though elevated Bay water remains a concern along the lowest shoreline streets through Thursday afternoon. High clouds may soften the sunshine, and exposed waterfront blocks can feel cooler than nearby inland neighborhoods. The estuary and low-lying waterfront blocks remain the places to watch for tidal water.. Rain chances return Sunday as the Pacific storm track becomes active again, with another unsettled period possible early next week."
+      "headline": "Oakland Downtown: Watch the Waterfront Through High Tide",
+      "summary": "Downtown Oakland should see a cool, cloudy start near the waterfront, with low cloud gradually thinning through the morning. Thanksgiving afternoon looks partly sunny and dry, although the shoreline may stay breezier and cooler than inland neighborhoods. The Bay's remaining high-tide flooding warning lasts through the afternoon, so check waterfront access and road closures before heading out. Friday improves, with rain chances returning late in the weekend."
     },
     "Fruitvale": {
-      "headline": "Fruitvale, Oakland: A Brief Dry Spell After the Storms",
-      "text": "Fruitvale, Oakland should see a mostly dry Thanksgiving after the recent wet stretch. High clouds may filter the sunshine, and the marine influence will keep exposed western neighborhoods cooler and cloudier than the sunnier inland side of the city. Fruitvale's flatter east Oakland setting may hold a little morning haze before brighter breaks arrive.. The next Pacific front approaches Sunday, bringing a renewed chance of rain and breezier conditions; another system may follow early next week."
+      "headline": "Fruitvale, Oakland: A Brighter Inland Afternoon",
+      "summary": "Fruitvale in Oakland should begin cool with a little low cloud, then brighten as the morning progresses. The inland neighborhood should see more sunshine than the exposed waterfront, while the day remains mostly dry. Recent rain may leave shaded streets and park paths damp into the afternoon. Friday stays quiet, but the next Pacific system is expected to bring a chance of showers late in the weekend; the morning commute may be hazy."
     },
     "Skyline": {
-      "headline": "Skyline, Oakland: Brighter Skies Above the Oakland Hills",
-      "text": "Skyline, Oakland should have a mostly quiet Thanksgiving after the recent wet spell. High clouds may filter the sunshine, but the higher slopes should brighten sooner than nearby low spots; sheltered pockets can still develop patchy fog overnight. Skyline's higher Oakland ridges should brighten sooner, though exposed spots can feel breezy.. The next rain chance arrives Sunday, with a more organized Pacific system possible early next week."
+      "headline": "Skyline, Oakland: Patchy Cloud on the Hills",
+      "summary": "Skyline in Oakland should start cool and cloudy, with the higher hillside setting likely to see changing patches of fog and sun. Thanksgiving afternoon should become brighter and remain dry, though shaded ridge roads may stay damp. The hills can hold onto cloud longer than the flats on some mornings, so clearing may be uneven. Friday looks quiet, with rain chances returning toward Sunday; exposed paths may feel cooler than town."
     },
     "BerkeleyHills": {
-      "headline": "Berkeley Hills, Berkeley: A Quieter Holiday Above the Bay",
-      "text": "Berkeley Hills, Berkeley should have a mostly quiet Thanksgiving after the recent wet spell. High clouds may filter the sunshine, but the higher slopes should brighten sooner than nearby low spots; sheltered pockets can still develop patchy fog overnight. The hills may clear sooner than the shoreline, with patchy fog settling in lower canyons.. The next rain chance arrives Sunday, with a more organized Pacific system possible early next week."
+      "headline": "Berkeley Hills: Fog on the Slopes, Sunshine Later",
+      "summary": "Berkeley Hills should begin with cool air and low cloud clinging to the higher slopes. The morning should gradually brighten, with a mix of sunshine and high cloud through a mostly dry Thanksgiving afternoon. Shaded trails and north-facing slopes may remain damp after the recent storms, even as the lower neighborhoods clear. Friday stays quiet, while the next Pacific system brings a renewed chance of rain late in the weekend."
     },
     "NorthBerkeley": {
-      "headline": "North Berkeley, Berkeley: A Dry Holiday Between Pacific Systems",
-      "text": "North Berkeley, Berkeley should see a mostly dry Thanksgiving after the recent wet stretch. High clouds may filter the sunshine, and the marine influence will keep exposed western neighborhoods cooler and cloudier than the sunnier inland side of the city. North Berkeley's inland neighborhoods should be brighter than the western shoreline when clouds thin.. The next Pacific front approaches Sunday, bringing a renewed chance of rain and breezier conditions; another system may follow early next week."
+      "headline": "North Berkeley: A Cool Start Near the Hills",
+      "summary": "North Berkeley should see a cool start, with low cloud near the hills gradually lifting through the morning. Thanksgiving afternoon looks partly sunny and dry, although the marine edge may keep the air a little cooler than inland valleys. Shaded streets near the Berkeley foothills can remain damp after recent rain. Friday stays quiet, but the next Pacific system brings another chance of showers late in the weekend."
     },
     "WestBerkeley": {
-      "headline": "West Berkeley, Berkeley: Quiet Skies, High Water Along the Shore",
-      "text": "West Berkeley, Berkeley should see a mostly dry Thanksgiving, though elevated Bay water remains a concern along the lowest shoreline streets through Thursday afternoon. High clouds may soften the sunshine, and exposed waterfront blocks can feel cooler than nearby inland neighborhoods. The low-lying shoreline near the Berkeley Marina remains the main local high-water concern.. Rain chances return Sunday as the Pacific storm track becomes active again, with another unsettled period possible early next week."
+      "headline": "West Berkeley: Coastal Cloud and a Waterfront Caution",
+      "summary": "West Berkeley should have a cool, cloudy start close to the Bay, with low cloud gradually thinning as the morning progresses. The afternoon should brighten but may retain more coastal cloud than neighborhoods farther inland. Low-lying waterfront routes remain the main concern during the high-tide warning through this afternoon, so follow local closures. Friday looks calmer, with a chance of rain returning late in the weekend."
     },
     "Albany": {
-      "headline": "Solano Avenue, Albany: A Calm Holiday Near the Bay",
-      "text": "Solano Avenue, Albany should see a mostly dry Thanksgiving, though elevated Bay water remains a concern along the lowest shoreline streets through Thursday afternoon. High clouds may soften the sunshine, and exposed waterfront blocks can feel cooler than nearby inland neighborhoods. The shoreline and Albany Bulb area remain exposed to unusually high Bay water through Thursday.. Rain chances return Sunday as the Pacific storm track becomes active again, with another unsettled period possible early next week."
+      "headline": "Albany: Bay Haze Gives Way to Brighter Skies",
+      "summary": "Albany should begin with a cool bayshore haze, then turn brighter as low cloud lifts through the morning. Thanksgiving afternoon looks mostly dry, with a mix of sunshine and passing high cloud. The waterfront and lower streets may stay damp longer than the inland neighborhoods, and the coastal flood warning continues through the afternoon. Friday remains quiet before another Pacific system brings a chance of rain late in the weekend."
     },
     "ElCerrito": {
-      "headline": "El Cerrito Civic Center: A Dry Holiday With Bay Breezes",
-      "text": "El Cerrito Civic Center should see a mostly dry Thanksgiving, though elevated Bay water remains a concern along the lowest shoreline streets through Thursday afternoon. High clouds may soften the sunshine, and exposed waterfront blocks can feel cooler than nearby inland neighborhoods. The western edge near the Bay may feel breezier, while the hillside neighborhoods stay sheltered.. Rain chances return Sunday as the Pacific storm track becomes active again, with another unsettled period possible early next week."
+      "headline": "El Cerrito: A Brighter Holiday Above the Bay",
+      "summary": "El Cerrito should start cool with low cloud along the Bay and the nearby hills. The morning gradually brightens, although the shoreline may remain hazier than the upper neighborhoods. Thanksgiving afternoon should stay dry with some sunshine, but low-lying waterfront access remains vulnerable during the high-tide warning. Friday looks calmer, while the next Pacific system brings a renewed chance of rain late in the weekend."
     },
     "Alameda": {
-      "headline": "Park Street, Alameda: A Dry Thanksgiving, But Tides Remain High",
-      "text": "Park Street, Alameda should see a mostly dry Thanksgiving, though elevated Bay water remains a concern along the lowest shoreline streets through Thursday afternoon. High clouds may soften the sunshine, and exposed waterfront blocks can feel cooler than nearby inland neighborhoods. The island's low-lying shoreline and lagoon edges deserve attention during the remaining high tides.. Rain chances return Sunday as the Pacific storm track becomes active again, with another unsettled period possible early next week."
+      "headline": "Alameda: A Dry Afternoon, but Mind the Shoreline",
+      "summary": "Alameda should wake to a cool, cloudy bayshore morning, with low cloud and damp air lingering near the waterfront. The afternoon should brighten gradually and remain mostly dry, though the island may hold onto more cloud than the inland East Bay. The remaining coastal flood warning runs through the afternoon, so check waterfront routes and local closures. Friday improves, with rain chances returning late in the weekend."
     },
     "OuterSunset": {
-      "headline": "Outer Sunset, San Francisco: A Cool, Cloud-Filtered Holiday",
-      "text": "Outer Sunset, San Francisco should see a mostly dry Thanksgiving after the recent wet stretch. High clouds may filter the sunshine, and the marine influence will keep exposed western neighborhoods cooler and cloudier than the sunnier inland side of the city. Ocean-facing blocks may stay cooler and cloudier than the eastern side of San Francisco.. The next Pacific front approaches Sunday, bringing a renewed chance of rain and breezier conditions; another system may follow early next week."
+      "headline": "Outer Sunset: Ocean Cloud and Dangerous Surf",
+      "summary": "Outer Sunset should keep a cool ocean-side feel, with low cloud and coastal haze lingering longer than across the rest of San Francisco. Some brighter breaks may develop, but the afternoon can stay more muted near the beach. Dangerous surf, sneaker waves and strong rip currents remain a concern through Friday evening; stay off jetties and exposed rocks. Friday remains mostly dry, with rain chances returning late in the weekend."
     },
     "InnerSunset": {
-      "headline": "Inner Sunset, San Francisco: A Brighter Break From the Coast",
-      "text": "Inner Sunset, San Francisco should see a mostly dry Thanksgiving after the recent wet stretch. High clouds may filter the sunshine, and the marine influence will keep exposed western neighborhoods cooler and cloudier than the sunnier inland side of the city. The inner neighborhoods should see more breaks than the outer coast, though high clouds remain.. The next Pacific front approaches Sunday, bringing a renewed chance of rain and breezier conditions; another system may follow early next week."
+      "headline": "Inner Sunset: Fog Lifts for a Brighter Afternoon",
+      "summary": "Inner Sunset should begin cool beneath low cloud, with the fog gradually lifting from the neighborhood as the morning improves. The afternoon looks brighter than the coast, with a mix of sun and high cloud and little chance of rain. Shaded streets near the hills may stay damp longer than the open avenues. Friday remains quiet, while the next Pacific system brings a renewed chance of showers late in the weekend."
     },
     "Richmond": {
-      "headline": "Richmond District, San Francisco: Coastal Clouds Ease for Thanksgiving",
-      "text": "Richmond District, San Francisco should see a mostly dry Thanksgiving after the recent wet stretch. High clouds may filter the sunshine, and the marine influence will keep exposed western neighborhoods cooler and cloudier than the sunnier inland side of the city. The Pacific-facing Richmond District can hold low marine cloud longer than the eastern city.. The next Pacific front approaches Sunday, bringing a renewed chance of rain and breezier conditions; another system may follow early next week."
+      "headline": "Richmond District: Coastal Cloud and High Surf",
+      "summary": "Richmond District should have a cool, cloudy start, with ocean-side neighborhoods holding onto fog longer than the blocks closer to the city center. The afternoon may brighten, but coastal cloud can linger near the park and shoreline. High surf and sneaker waves remain hazardous through Friday evening, so avoid exposed beaches and rocks. Friday is mostly dry, with rain chances returning late in the weekend."
     },
     "Presidio": {
-      "headline": "Presidio, San Francisco: A Quieter Holiday on the Exposed Waterfront",
-      "text": "Presidio, San Francisco should have a quieter Thanksgiving, but the shoreline may still feel cooler and grayer than inland valleys. High clouds and a light breeze are favored, while low-lying waterfront areas should remain alert to lingering high-water impacts through Thursday afternoon. Exposed bluffs and open waterfront paths may feel breezier than sheltered city streets.. Rain chances increase again Sunday as another Pacific front approaches, with a more unsettled pattern possible early next week."
+      "headline": "Presidio: A Cloudy Headland, Then a Break",
+      "summary": "Presidio should start cool with low cloud drifting across the headlands and tree-lined slopes. Some brighter breaks may develop later, but the waterfront can remain cloudier and breezier than inland San Francisco. The coastal flood and beach hazards make exposed shoreline paths, rocks and jetties poor choices through the holiday period. Friday stays mostly dry, while another Pacific system brings rain chances back toward Sunday."
     },
     "Marina": {
-      "headline": "Marina, San Francisco: Dry Weather Returns, But the Bayfront Needs Care",
-      "text": "Marina, San Francisco should see a mostly dry Thanksgiving, though elevated Bay water remains a concern along the lowest shoreline streets through Thursday afternoon. High clouds may soften the sunshine, and exposed waterfront blocks can feel cooler than nearby inland neighborhoods. The Marina waterfront remains exposed to elevated Bay water around the remaining high tides.. Rain chances return Sunday as the Pacific storm track becomes active again, with another unsettled period possible early next week."
+      "headline": "Marina, San Francisco: Watch the Bayfront Today",
+      "summary": "Marina District should begin with a cool, cloudy waterfront feel, with low cloud gradually lifting as the morning progresses. Thanksgiving afternoon looks brighter and mostly dry, though the Bay edge may stay cooler than the neighborhoods on the hills. The coastal flood warning continues through the afternoon, so check waterfront access before traveling. Friday improves, with another chance of rain developing late in the weekend."
     },
     "NorthBeach": {
-      "headline": "North Beach, San Francisco: A Calm Holiday Near the Waterfront",
-      "text": "North Beach, San Francisco should have a quieter Thanksgiving, but the shoreline may still feel cooler and grayer than inland valleys. High clouds and a light breeze are favored, while low-lying waterfront areas should remain alert to lingering high-water impacts through Thursday afternoon. The waterfront edge may stay breezier, while the nearby hills offer a little shelter.. Rain chances increase again Sunday as another Pacific front approaches, with a more unsettled pattern possible early next week."
+      "headline": "North Beach: A Cool Start Along the Waterfront",
+      "summary": "North Beach should wake to cool air and patchy low cloud near the waterfront, then brighten as the morning fog thins. The afternoon looks mostly dry with some sunshine, though the Bay side may stay cooler than the inland slopes. Low-lying waterfront routes remain exposed during the high-tide warning through this afternoon. Friday looks quiet, while the next Pacific system brings a chance of rain late in the weekend."
     },
     "PacificHeights": {
-      "headline": "Pacific Heights, San Francisco: Brighter Breaks Above the City",
-      "text": "Pacific Heights, San Francisco should have a mostly quiet Thanksgiving after the recent wet spell. High clouds may filter the sunshine, but the higher slopes should brighten sooner than nearby low spots; sheltered pockets can still develop patchy fog overnight. Its elevated blocks should see brighter breaks sooner than the fog-prone western neighborhoods.. The next rain chance arrives Sunday, with a more organized Pacific system possible early next week."
+      "headline": "Pacific Heights: Brighter Above the Waterfront",
+      "summary": "Pacific Heights should start cool with low cloud around the hills, but its higher setting may see brighter breaks sooner than the waterfront. Thanksgiving afternoon looks partly sunny and dry, with a little high cloud passing overhead. The breeze may feel cooler near exposed ridgelines, while shaded streets stay damp from recent rain. Friday remains quiet, with rain chances returning toward Sunday; the holiday afternoon is favorable for outdoor plans."
     },
     "Haight": {
-      "headline": "Haight-Ashbury, San Francisco: A Quiet Holiday in the City's Center",
-      "text": "Haight-Ashbury, San Francisco should see a mostly dry Thanksgiving after the recent wet stretch. High clouds may filter the sunshine, and the marine influence will keep exposed western neighborhoods cooler and cloudier than the sunnier inland side of the city. The central city's sheltered streets should be less exposed to the ocean breeze than the outer Sunset.. The next Pacific front approaches Sunday, bringing a renewed chance of rain and breezier conditions; another system may follow early next week."
+      "headline": "Haight-Ashbury: A Gradual Clearing Through the Day",
+      "summary": "Haight-Ashbury should begin with a cool, cloudy morning, with low cloud gradually lifting as the day gets underway. The neighborhood should see a brighter afternoon than the ocean-facing districts, with some sunshine and no meaningful rain expected. Shaded streets and park edges may remain damp after recent rain. Friday stays quiet, while the next Pacific system brings a renewed chance of showers late in the weekend."
     },
     "NoeValley": {
-      "headline": "Noe Valley, San Francisco: A Calm Thanksgiving in the Sheltered Basin",
-      "text": "Noe Valley, San Francisco should enjoy a quiet Thanksgiving after the recent stormy stretch. Weak high pressure keeps the day mostly dry, although thin high clouds may soften the sunshine and calm winds can allow patchy fog in nearby low spots. Noe Valley's sheltered basin can hold fog and dampness longer than nearby ridges.. The next Pacific front approaches Sunday, with rain becoming more likely later in the day; another, potentially stronger system may follow early next week, so the holiday lull looks brief."
+      "headline": "Noe Valley: Sheltered Streets See a Dry Holiday",
+      "summary": "Noe Valley should start cool and locally hazy, with the surrounding hills helping shelter the neighborhood from the immediate ocean breeze. High clouds thin through the morning, leaving a partly sunny and dry Thanksgiving afternoon. The valley floor may remain damp in shaded spots around the creek paths after recent rain. Friday looks quiet, while the next Pacific system brings a chance of showers late in the weekend."
     },
     "Mission": {
-      "headline": "Mission, San Francisco: A Dry Holiday Before Rain Returns Sunday",
-      "text": "Mission, San Francisco should see a mostly dry Thanksgiving after the recent wet stretch. High clouds may filter the sunshine, and the marine influence will keep exposed western neighborhoods cooler and cloudier than the sunnier inland side of the city. The Mission's more sheltered inland setting should see brighter intervals than the coast.. The next Pacific front approaches Sunday, bringing a renewed chance of rain and breezier conditions; another system may follow early next week."
+      "headline": "Mission, San Francisco: Sunshine Breaks Through the Clouds",
+      "summary": "Mission District should have a cool but improving morning, with high cloud moving overhead and low cloud thinning from the Bay. Thanksgiving afternoon looks partly sunny and dry, with a little more warmth than the exposed waterfront. Streets should dry as sunshine returns, although shaded blocks may stay damp. Friday remains quiet, while another Pacific system brings rain chances back late in the weekend; holiday plans look favorable."
     },
     "PotreroHill": {
-      "headline": "Potrero Hill, San Francisco: Brighter Skies With a Breezy Edge",
-      "text": "Potrero Hill, San Francisco should have a mostly quiet Thanksgiving after the recent wet spell. High clouds may filter the sunshine, but the higher slopes should brighten sooner than nearby low spots; sheltered pockets can still develop patchy fog overnight. The exposed hilltop can feel breezier than the lower SoMa and waterfront neighborhoods.. The next rain chance arrives Sunday, with a more organized Pacific system possible early next week."
+      "headline": "Potrero Hill: A Brighter View of the Holiday",
+      "summary": "Potrero Hill should start cool beneath passing high cloud, with some low cloud lingering toward the Bay. The hillside setting may brighten sooner than the waterfront, leaving a mostly sunny and dry Thanksgiving afternoon. Exposed slopes can feel breezier than the sheltered streets below. Friday stays quiet, while the next Pacific system brings a renewed chance of rain late in the weekend; expect a gradual rather than sudden clearing."
     },
     "SoMa": {
-      "headline": "SoMa, San Francisco: A Dry Holiday, With Waterfront Tides Still Elevated",
-      "text": "SoMa, San Francisco should see a mostly dry Thanksgiving, though elevated Bay water remains a concern along the lowest shoreline streets through Thursday afternoon. High clouds may soften the sunshine, and exposed waterfront blocks can feel cooler than nearby inland neighborhoods. Low-lying blocks near the waterfront remain sensitive to elevated Bay water through Thursday.. Rain chances return Sunday as the Pacific storm track becomes active again, with another unsettled period possible early next week."
+      "headline": "SoMa: Dry Weather, but Stay Alert Near the Bay",
+      "summary": "SoMa should begin with a cool, cloudy waterfront feel, with low cloud gradually lifting through the morning. Thanksgiving afternoon looks partly sunny and dry, although the Embarcadero and low-lying Bay edge remain exposed during the coastal flood warning through this afternoon. Check transit and waterfront access before heading out, especially before the evening commute. Friday should be quieter, with the next rain chance returning late in the weekend."
     },
     "BernalHeights": {
-      "headline": "Bernal Heights, San Francisco: A Quiet Holiday on the Hillside",
-      "text": "Bernal Heights, San Francisco should have a mostly quiet Thanksgiving after the recent wet spell. High clouds may filter the sunshine, but the higher slopes should brighten sooner than nearby low spots; sheltered pockets can still develop patchy fog overnight. Bernal's higher slopes should brighten sooner than the nearby sheltered valleys.. The next rain chance arrives Sunday, with a more organized Pacific system possible early next week."
+      "headline": "Bernal Heights: A Sunny Break on the Hills",
+      "summary": "Bernal Heights should start cool with a little low cloud around the slopes, then brighten as the morning progresses. The elevated neighborhood may see more sunshine than the waterfront, with a mostly dry Thanksgiving afternoon. Exposed hilltops can feel breezier while shaded streets remain damp after recent rain. Friday looks quiet, but another Pacific system brings a chance of showers late in the weekend; the holiday afternoon should be pleasant."
     },
     "TwinPeaks": {
-      "headline": "Twin Peaks, San Francisco: Brighter Above the Fog, Breezy on the Summit",
-      "text": "Twin Peaks, San Francisco should have a mostly quiet Thanksgiving after the recent wet spell. High clouds may filter the sunshine, but the higher slopes should brighten sooner than nearby low spots; sheltered pockets can still develop patchy fog overnight. The exposed summit can stay breezy above low cloud lingering in surrounding neighborhoods.. The next rain chance arrives Sunday, with a more organized Pacific system possible early next week."
+      "headline": "Twin Peaks: Clouds Around the Summit, Then Clearing",
+      "summary": "Twin Peaks should begin with cool air and patchy cloud around the summit, with visibility changing as fog drifts across the ridgeline. The afternoon should brighten, but the exposed high ground may stay breezier and cooler than the sheltered city neighborhoods. Thanksgiving remains mostly dry. Friday looks quiet, while a weak Pacific system brings a renewed chance of rain late in the weekend; check conditions before heading to the overlook."
     },
     "Brentwood": {
-      "headline": "North Brentwood, Brentwood: Foggy Delta Mornings, Then a Dry Holiday",
-      "text": "North Brentwood, Brentwood should have a dry Thanksgiving, although fog and haze may linger around the Delta and lower valley early in the day. High clouds will drift overhead, and open stretches can feel breezier than sheltered neighborhoods. Open Delta exposures may feel breezier, while low-lying waterways remain subject to the current flood warning.. Rain chances return late in the weekend as another Pacific front approaches, with a more active pattern likely early next week."
+      "headline": "Brentwood: A Dry Holiday Near the Delta",
+      "summary": "Brentwood should have a cool, hazy start, with patchy Delta fog possible before high clouds thin and the sun comes through. Thanksgiving afternoon looks partly sunny and dry, with a calmer feel after the recent storms. The Delta flood warning is focused on low-lying shoreline and erosion areas through early evening, not every inland neighborhood. Friday stays quiet, while rain chances return late in the weekend."
     },
     "Sausalito": {
-      "headline": "Old Town, Sausalito: A Dry Holiday With High Water Nearby",
-      "text": "Old Town, Sausalito should see a mostly dry Thanksgiving, though elevated Bay water remains a concern along the lowest shoreline streets through Thursday afternoon. High clouds may soften the sunshine, and exposed waterfront blocks can feel cooler than nearby inland neighborhoods. Old Town's waterfront remains exposed to elevated Bay water around the Thanksgiving high tides.. Rain chances return Sunday as the Pacific storm track becomes active again, with another unsettled period possible early next week."
+      "headline": "Sausalito: A Brighter Day, but Watch the Waterfront",
+      "summary": "Sausalito should begin with cool Bay air and patchy low cloud around the waterfront, then brighten as the morning fog lifts. The afternoon should be mostly dry, but the shoreline remains under a coastal flood warning through late afternoon as the high tide passes. Avoid flooded waterfront access and follow local closures. Friday looks calmer, though another Pacific system brings rain chances back toward Sunday."
     },
     "East Sacramento": {
-      "headline": "East Sacramento: A Foggy Start to a Quiet Thanksgiving",
-      "text": "East Sacramento should stay mostly dry through Thanksgiving and Friday, though valley fog may be slow to clear early in the day. High clouds and a few brighter breaks follow, with a calmer holiday pattern before the next Pacific system approaches. East Sacramento's tree-lined streets can stay foggy early even as open areas of the valley brighten.. Rain chances increase late in the weekend and may continue into early next week, so the quiet spell looks temporary."
+      "headline": "East Sacramento: Dry Thanksgiving, Wetter Weather Ahead",
+      "summary": "East Sacramento should start cool with patchy Valley fog nearby, while high clouds filter the early sunshine. The day should become partly sunny and remain dry, a welcome break for holiday plans. Low-lying Delta communities still face a separate coastal flooding and erosion warning through early evening, but that is not a blanket warning for East Sacramento. Friday stays quiet before a wetter pattern returns late in the weekend."
     }
   }
 }
