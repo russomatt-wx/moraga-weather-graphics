@@ -1,8 +1,8 @@
 {
-  "generated_utc": "2026-11-25T00:55:35.741849+00:00",
+  "generated_utc": "2026-11-26T00:33:02.893242+00:00",
   "status": "diagnostic_only",
   "archive_health": {
-    "valid_records": 112,
+    "valid_records": 114,
     "invalid_records": 0,
     "duplicate_target_editions": [
       {
@@ -298,9 +298,9 @@
   },
   "assistant_bias": {
     "6 AM": {
-      "verified_days": 34,
-      "high_mean_error_f": -1.74,
-      "low_mean_error_f": 1.29,
+      "verified_days": 35,
+      "high_mean_error_f": -1.39,
+      "low_mean_error_f": 1.25,
       "calibration_ready": true
     },
     "11 AM": {
@@ -310,9 +310,9 @@
       "calibration_ready": true
     },
     "4 PM": {
-      "verified_days": 37,
-      "high_mean_error_f": -1.78,
-      "low_mean_error_f": 2.22,
+      "verified_days": 38,
+      "high_mean_error_f": -1.61,
+      "low_mean_error_f": 2.34,
       "calibration_ready": true
     },
     "9 PM": {
