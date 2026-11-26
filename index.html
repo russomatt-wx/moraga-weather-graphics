@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>try{localStorage.removeItem('dwl-page-zoom');var t=localStorage.getItem('dwl-theme');if(t==='black'||t==='light'){document.documentElement.dataset.theme=t;document.querySelector('meta[name=theme-color]')&&document.querySelector('meta[name=theme-color]').setAttribute('content',t==='black'?'#000000':'#eef3f8');}}catch(e){}</script>
 <title>Diablo Weather Lab | Hyperlocal Weather Intelligence</title><link rel="manifest" href="./app.webmanifest"><meta name="theme-color" content="#031a30"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diablo Weather Lab"><link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png?v=27"><link rel="apple-touch-icon" sizes="180x180" href="app-icon-180.png?v=27"><link rel="apple-touch-icon-precomposed" href="app-icon-180.png?v=27">
 <meta name="description" content="Diablo Weather Lab — Hyperlocal Weather Intelligence for Moraga, Lafayette and Danville.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261128o">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"><link rel="stylesheet" href="css/legacy.css?v=20261114d"><link rel="stylesheet" href="css/site.css?v=20261128p">
 
 
 
@@ -590,7 +590,7 @@
     const w=c.querySelector('.public-hour-wind');if(w&&d.wind)w.outerHTML=d.wind;else if(!w&&d.wind)c.insertAdjacentHTML('beforeend',d.wind);
     const q=c.nextElementSibling;if(q&&q.classList.contains('public-hour-qpf'))q.innerHTML=qpfBar(d);});
   }else{
-   host.replaceChildren();
+   host.replaceChildren();host.scrollLeft=0; // new set of cards: always start at 'now', not where the row was scrolled before
    cards.forEach(d=>{const card=document.createElement('div');card.className='public-hour'+(d.sun?' is-sun is-sun-'+d.sun:'');card.dataset.key=d.key;if(d.color)card.style.setProperty('--hour-color',d.color);
     if(d.sun)card.innerHTML='<span class="public-hour-day">'+d.day+'</span><strong>'+d.hour+'</strong><div class="public-hour-icon">'+SUN_ICON[d.sun]+'</div><strong class="public-hour-sunlabel">'+(d.sun==='rise'?'Sunrise':'Sunset')+'</strong>';else card.innerHTML='<span class="public-hour-day">'+d.day+'</span><strong>'+d.hour+'</strong><div class="public-hour-icon">'+d.icon+'</div><strong class="public-hour-temp">'+d.temp+'</strong>'+d.rain+d.wind;host.appendChild(card);
     const q=document.createElement('div');q.className='public-hour-qpf';q.setAttribute('aria-hidden','true');q.innerHTML=qpfBar(d);host.appendChild(q);});
@@ -652,10 +652,18 @@
  function obsCached(c,maxAge=10*60000){const id=obsId(c);let e=obsMem[id];
   if(!e){try{e=JSON.parse(localStorage.getItem('dwl-obs-'+id)||'null');}catch(_){e=null}}
   return e&&Date.now()-e.at<maxAge?e.ob:null;}
- async function fetchObs(c){const id=obsId(c),r=await fetch(OBS_API+encodeURIComponent(id),{cache:'no-store'});
-  if(!r.ok)throw Error('No verified local station available');const ob=await r.json();
-  if(Number.isFinite(ob.temperature_f)){const e={at:Date.now(),ob};obsMem[id]=e;try{localStorage.setItem('dwl-obs-'+id,JSON.stringify(e))}catch(_){}}
-  return ob;}
+ // Phones drop requests (weak signal, waking from background): try twice, then fall back to this
+ // phone's last reading if it is under 30 minutes old, rather than to model values.
+ async function fetchObs(c){const id=obsId(c);let err=null;
+  for(let k=0;k<2;k++){
+   try{const r=await fetch(OBS_API+encodeURIComponent(id),{cache:'no-store',signal:AbortSignal.timeout?AbortSignal.timeout(9000):undefined});
+    if(!r.ok)throw Error('No verified local station available');const ob=await r.json();
+    if(Number.isFinite(ob.temperature_f)){const e={at:Date.now(),ob};obsMem[id]=e;try{localStorage.setItem('dwl-obs-'+id,JSON.stringify(e))}catch(_){}}
+    return ob;
+   }catch(e){err=e;if(k===0)await new Promise(z=>setTimeout(z,1200));}
+  }
+  const saved=obsCached(c,30*60000);if(saved)return saved;
+  throw err||Error('No verified local station available');}
  async function updateStation(chosen,request,modelTemp,modeledConflict=false,pre=null){
   try{
    const ob=pre||await fetchObs(chosen);
