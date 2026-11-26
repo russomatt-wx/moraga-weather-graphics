@@ -33,7 +33,8 @@ jobs:
       - run: pip install numpy xarray cfgrib eccodes
       - name: Estimate (and optional backfill)
         env:
-          DAYS: ${{ github.event.inputs.backfill_days || '0' }}
+          # GitHub skips many hourly runs: every scheduled run also fills in any hours missed in the last 2 days.
+          DAYS: ${{ github.event.inputs.backfill_days || '2' }}
           STEP: ${{ github.event.inputs.step_hours || '1' }}
         run: |
           if [ "$DAYS" != "0" ]; then python scripts/nowcast_test.py --backfill "$DAYS" "$STEP"; else python scripts/nowcast_test.py; fi
