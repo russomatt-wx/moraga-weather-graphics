@@ -115,7 +115,9 @@ export async function wuDayObs(station, date, env, log) {
   u.searchParams.set('stationId', station); u.searchParams.set('format', 'json'); u.searchParams.set('units', 'e');
   u.searchParams.set('numericPrecision', 'decimal'); u.searchParams.set('date', date.replace(/-/g, '')); u.searchParams.set('apiKey', wuKey(env));
   try {
-    const data = await getJson(u.toString(), 3600, log, station + ' history obs');
+    // Today's history is still growing: cache it 10 minutes; past days an hour.
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles' }).format(new Date());
+    const data = await getJson(u.toString(), date === today ? 600 : 3600, log, station + ' history obs');
     return (data?.observations || []).map((ob) => [ob.obsTimeUtc, num(ob.imperial?.tempAvg), num(ob.humidityAvg), num(ob.imperial?.windspeedAvg)])
       .filter((r) => r[0] && r[1] !== null);
   } catch (_) { log.push(station + ' history obs: error'); return null; }
