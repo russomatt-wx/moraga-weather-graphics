@@ -407,6 +407,12 @@
    "low_f": 46.4,
    "precip_in": 0,
    "samples": 288
+  },
+  "2026-11-25": {
+   "high_f": 62.2,
+   "low_f": 48,
+   "precip_in": 0,
+   "samples": 288
   }
  },
  "campolindo": {},
@@ -2490,6 +2496,12 @@
   "2026-11-24": {
    "high_f": 60.3,
    "low_f": 46.4,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-11-25": {
+   "high_f": 66,
+   "low_f": 49.8,
    "precip_in": 0,
    "samples": 288
   }
