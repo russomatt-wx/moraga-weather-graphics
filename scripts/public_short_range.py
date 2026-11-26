@@ -18,14 +18,14 @@ LAYERS=["cloud_cover_low","cloud_cover_mid","cloud_cover_high"]
 def effective_cover(hourly):
     """Cloud cover weighted by how much sun each layer blocks. Thin high cloud (cirrus) can cover 100% of the
     sky and still let ~90% of sunlight through, so total cover reads 'Cloudy' on a sunny day. Low cloud
-    counts fully, mid 90%, high 30%. Falls back to total cover when a model has no layer data."""
+    counts fully, mid 90%, high 25%. Falls back to total cover when a model has no layer data."""
     tot=hourly.get("cloud_cover") or []
     lo,mi,hi=(hourly.get(k) or [] for k in LAYERS)
     out=[]
     for i,t in enumerate(tot):
         L,M,H=(v[i] if i<len(v) and isinstance(v[i],(int,float)) else None for v in (lo,mi,hi))
         if None in (L,M,H):out.append(t);continue
-        out.append(round(100*(1-(1-L/100)*(1-.9*M/100)*(1-.3*H/100)),1))
+        out.append(round(100*(1-(1-L/100)*(1-.9*M/100)*(1-.25*H/100)),1))
     hourly["cloud_cover"]=out
     return hourly
 def fetch(url,params):
@@ -99,7 +99,7 @@ def collect(name,lat,lon):
     output["hourly"]["cloud_cover"]=smooth
     sky=lambda c:None if c is None else 0 if c<20 else 1 if c<45 else 2 if c<75 else 3
     output["hourly"]["weather_code"]=[w if w is not None else sky(c) for w,c in zip(output["hourly"]["weather_code"],smooth)]
-    output["method"]="Weighted HRRR/RRFS/ECMWF/GFS blend. Sky icon from 3-hour smoothed blended cloud cover (layers weighted by how much sun they block: low 100%, mid 90%, high 30%); rain icon from blended rain chance; thunder/fog only when a weighted majority of models agree."
+    output["method"]="Weighted HRRR/RRFS/ECMWF/GFS blend. Sky icon from 3-hour smoothed blended cloud cover (layers weighted by how much sun they block: low 100%, mid 90%, high 25%); rain icon from blended rain chance; thunder/fog only when a weighted majority of models agree."
     path=Path(name+"_short_range_24h.json")
     # Don't replace a recent complete blend with one missing the high-resolution models.
     if any(m in failures for m in ("HRRR","RRFS")) and path.exists():

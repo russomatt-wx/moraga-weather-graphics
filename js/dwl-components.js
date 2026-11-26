@@ -339,7 +339,13 @@
       var p = Number(hourly.precipitation_probability[i]), v = Number(hourly.precipitation && hourly.precipitation[i]), c = Number(hourly.cloud_cover && hourly.cloud_cover[i]);
       if (Number.isFinite(p)) pops.push(p);
       if (Number.isFinite(v)) { rain += Math.max(0, v); per[h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening'] += Math.max(0, v); }
-      if (Number.isFinite(c)) cloud.push(c);
+      if (Number.isFinite(c) && now >= 18) cloud.push(c);
+    });
+    // Before 6 PM today's sky describes the daytime (8 AM-4 PM, including hours already past), so a
+    // sunny afternoon isn't dragged to 'Cloudy' by clouds due after dark. After 6 PM: the rest of the night.
+    if (now < 18 && hourly.cloud_cover) t.forEach(function (x, i) {
+      var h = Number(x.slice(11, 13)), c = Number(hourly.cloud_cover[i]);
+      if (x.slice(0, 10) === date && h >= 8 && h <= 16 && Number.isFinite(c)) cloud.push(c);
     });
     if (!pops.length) return null;
     return { chance: Math.round(Math.max.apply(null, pops) / 10) * 10, amount: rain, night: now >= 18,
