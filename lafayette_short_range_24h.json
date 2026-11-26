@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-26T04:57:01.278152+00:00",
+  "generated_utc": "2026-11-26T05:08:31.035963+00:00",
   "location": "lafayette",
   "latitude": 37.89,
   "longitude": -122.115,
@@ -12,7 +12,6 @@
   "failed_sources": {},
   "hourly": {
     "time": [
-      "2026-11-25T20:00",
       "2026-11-25T21:00",
       "2026-11-25T22:00",
       "2026-11-25T23:00",
@@ -35,10 +34,10 @@
       "2026-11-26T16:00",
       "2026-11-26T17:00",
       "2026-11-26T18:00",
-      "2026-11-26T19:00"
+      "2026-11-26T19:00",
+      "2026-11-26T20:00"
     ],
     "temperature_2m": [
-      52.91,
       52.32,
       51.765,
       51.17,
@@ -61,7 +60,8 @@
       60.24,
       57.03,
       55.08,
-      53.975
+      53.975,
+      52.995
     ],
     "precipitation": [
       0.0,
@@ -142,8 +142,7 @@
       3
     ],
     "cloud_cover": [
-      81.8,
-      84.7,
+      90.9,
       91.9,
       93.9,
       96.8,
@@ -165,7 +164,8 @@
       99.5,
       99.3,
       98.9,
-      98.4
+      96.8,
+      95.8
     ]
   },
   "method": "Weighted HRRR/RRFS/ECMWF/GFS blend. Sky icon from 3-hour smoothed blended cloud cover; rain icon from blended rain chance; thunder/fog only when a weighted majority of models agree."
