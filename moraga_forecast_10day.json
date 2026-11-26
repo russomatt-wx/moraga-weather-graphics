@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-26T03:12:09.536710+00:00",
+  "generated_utc": "2026-11-26T03:34:30.136589+00:00",
   "timezone": "America/Los_Angeles",
   "latitude": 37.8201932,
   "longitude": -122.1193876,
@@ -38,7 +38,7 @@
       "expected_inches": 0.0,
       "ensemble_share": 0.25,
       "ensemble_threshold_pct": {
-        "0.01": 1,
+        "0.01": 0,
         "0.1": 0,
         "0.25": 0,
         "0.5": 0
@@ -47,8 +47,8 @@
         "EPS",
         "GEFS"
       ],
-      "ensemble_members": 80,
-      "derived_pop_pct": 1,
+      "ensemble_members": 79,
+      "derived_pop_pct": 0,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
       "pop_status": "available"
     },
@@ -56,7 +56,7 @@
       "expected_inches": 0.0,
       "ensemble_share": 0.25,
       "ensemble_threshold_pct": {
-        "0.01": 1,
+        "0.01": 0,
         "0.1": 0,
         "0.25": 0,
         "0.5": 0
@@ -65,8 +65,8 @@
         "EPS",
         "GEFS"
       ],
-      "ensemble_members": 80,
-      "derived_pop_pct": 1,
+      "ensemble_members": 79,
+      "derived_pop_pct": 0,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
       "pop_status": "available"
     },
@@ -74,7 +74,7 @@
       "expected_inches": 0.001,
       "ensemble_share": 0.6,
       "ensemble_threshold_pct": {
-        "0.01": 3,
+        "0.01": 5,
         "0.1": 0,
         "0.25": 0,
         "0.5": 0
@@ -84,18 +84,18 @@
         "GEFS"
       ],
       "ensemble_members": 80,
-      "derived_pop_pct": 3,
+      "derived_pop_pct": 5,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
       "pop_status": "available"
     },
     "2026-11-29": {
-      "expected_inches": 0.237,
+      "expected_inches": 0.228,
       "ensemble_share": 0.6,
       "ensemble_threshold_pct": {
         "0.01": 95,
-        "0.1": 83,
-        "0.25": 41,
-        "0.5": 5
+        "0.1": 79,
+        "0.25": 34,
+        "0.5": 8
       },
       "ensemble_models": [
         "EPS",
@@ -107,31 +107,31 @@
       "pop_status": "available"
     },
     "2026-11-30": {
-      "expected_inches": 0.173,
+      "expected_inches": 0.199,
       "ensemble_share": 0.6,
       "ensemble_threshold_pct": {
-        "0.01": 92,
-        "0.1": 65,
-        "0.25": 25,
-        "0.5": 0
+        "0.01": 90,
+        "0.1": 71,
+        "0.25": 30,
+        "0.5": 7
       },
       "ensemble_models": [
         "EPS",
         "GEFS"
       ],
       "ensemble_members": 80,
-      "derived_pop_pct": 92,
+      "derived_pop_pct": 90,
       "pop_method": "EPS/GEFS equal-family member fraction >=0.01 in",
       "pop_status": "available"
     },
     "2026-12-01": {
-      "expected_inches": 0.999,
+      "expected_inches": 0.985,
       "ensemble_share": 0.6,
       "ensemble_threshold_pct": {
         "0.01": 98,
-        "0.1": 90,
+        "0.1": 92,
         "0.25": 83,
-        "0.5": 78
+        "0.5": 75
       },
       "ensemble_models": [
         "EPS",
@@ -481,9 +481,9 @@
       0.0,
       0.0,
       0.0,
-      0.26,
-      0.232,
-      1.031,
+      0.228,
+      0.319,
+      1.0,
       0.283,
       0.138,
       0.118
@@ -503,11 +503,11 @@
   },
   "ensemble_rain_probability_pct": {
     "2026-11-25": 95,
-    "2026-11-26": 1,
-    "2026-11-27": 1,
-    "2026-11-28": 3,
+    "2026-11-26": 0,
+    "2026-11-27": 0,
+    "2026-11-28": 5,
     "2026-11-29": 95,
-    "2026-11-30": 92,
+    "2026-11-30": 90,
     "2026-12-01": 98,
     "2026-12-02": 50,
     "2026-12-03": 65,
