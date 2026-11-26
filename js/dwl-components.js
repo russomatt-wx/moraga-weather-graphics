@@ -345,6 +345,26 @@
     return { chance: Math.round(Math.max.apply(null, pops) / 10) * 10, amount: rain, night: now >= 18,
       cloud: cloud.length ? cloud.reduce(function (a, b) { return a + b; }, 0) / cloud.length : null, periods: per };
   }
+  // One cloud-cover scale for the 10-day and the 36-hour cards (2.5 = the Mostly cloudy icon).
+  function skyFromCover(c, night) {
+    if (c < 30) return { code: 1, text: night ? 'Mostly clear' : 'Mostly sunny' };
+    if (c < 60) return { code: 2, text: 'Partly cloudy' };
+    if (c < 85) return { code: 2.5, text: 'Mostly cloudy' };
+    return { code: 3, text: 'Cloudy' };
+  }
+  // A later day the hourly data fully covers (tomorrow): its sky from those same daytime hours, so the
+  // 10-day agrees with the 36-hour cards. Dry days only; returns null when the hours aren't there.
+  function daySkyFromHourly(hourly, date) {
+    if (!hourly || !hourly.time || !hourly.cloud_cover) return null;
+    var c = [], wet = false;
+    hourly.time.forEach(function (t, i) {
+      if (t.slice(0, 10) !== date) return; var h = +t.slice(11, 13); if (h < 9 || h > 16) return;
+      var v = Number(hourly.cloud_cover[i]); if (Number.isFinite(v)) c.push(v);
+      var p = Number(hourly.precipitation_probability && hourly.precipitation_probability[i]); if (p >= 30) wet = true;
+    });
+    if (c.length < 6 || wet) return null;
+    return skyFromCover(c.reduce(function (a, b) { return a + b; }, 0) / c.length, false);
+  }
   function applyRestOfToday(o, hc, date, hourly) {
     if (!o || !o.today) return o;
     var r = liveRestOfToday(hourly, date) || restOfToday(hc, date);
@@ -352,9 +372,8 @@
     if (r.chance < 20 && r.amount < 0.025) {
       var c = r.cloud === null ? 50 : r.cloud;
       o.pop = ''; o.amount = '';
-      o.iconCode = c < 30 ? 1 : c < 70 ? 2 : 3;
-      o.night = r.night;
-      o.condition = r.night ? (c < 30 ? 'Clear' : c < 70 ? 'Partly cloudy' : 'Cloudy') : (c < 30 ? 'Mostly sunny' : c < 70 ? 'Partly cloudy' : 'Cloudy');
+      var sk = skyFromCover(c, r.night);
+      o.iconCode = sk.code; o.night = r.night; o.condition = sk.text;
     } else {
       o.pop = Math.max(20, r.chance) + '%';
       // Same precision as the 36-hour rain bars (hundredths), so the two add up.
@@ -452,7 +471,7 @@
     if (A.actions.length) s += '<div class="dwl-ar-acts"><b>Key actions</b>' + A.actions.map(function (x) { return '<div>' + svgi(x[0]) + '<span>' + esc(x[1]) + '</span></div>'; }).join('') + '</div>';
     return s;
   }
-  window.DWL = { titleCase: titleCase, alertParts: alertParts, alertRich: alertRich, markHolidays: markHolidays, holidays: holidays, tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts, collapseDays: collapseDays, resetDays: function (key) { delete expanded[key]; }, timingPrefix: timingPrefix, periodAmounts: periodAmounts, modelPeriodAmounts: modelPeriodAmounts, timedCondition: timedCondition, applyRestOfToday: applyRestOfToday, restOfToday: restOfToday,
+  window.DWL = { titleCase: titleCase, alertParts: alertParts, alertRich: alertRich, markHolidays: markHolidays, holidays: holidays, tempColor: tempColor, icon: icon, iconName: iconName, dayCard: dayCard, fetchAlerts: fetchAlerts, collapseDays: collapseDays, resetDays: function (key) { delete expanded[key]; }, timingPrefix: timingPrefix, periodAmounts: periodAmounts, modelPeriodAmounts: modelPeriodAmounts, timedCondition: timedCondition, applyRestOfToday: applyRestOfToday, restOfToday: restOfToday, skyFromCover: skyFromCover, daySkyFromHourly: daySkyFromHourly,
     publishBlend: publishBlend, blendReady: blendReady, moragaBlend: moragaBlend };
 
   // Section tabs: highlight the tab for the section currently in view.
