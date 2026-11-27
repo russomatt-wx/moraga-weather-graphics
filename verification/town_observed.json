@@ -838,6 +838,12 @@
    "low_f": 38.3,
    "precip_in": 0.01,
    "samples": 288
+  },
+  "2026-11-25": {
+   "high_f": 61.7,
+   "low_f": 44.2,
+   "precip_in": 0.04,
+   "samples": 288
   }
  },
  "diablo": {},
@@ -1267,6 +1273,12 @@
    "low_f": 37.4,
    "precip_in": 0,
    "samples": 284
+  },
+  "2026-11-25": {
+   "high_f": 62.8,
+   "low_f": 42.6,
+   "precip_in": 0.05,
+   "samples": 286
   }
  },
  "haight": {},
@@ -2104,6 +2116,12 @@
    "high_f": 57,
    "low_f": 39.6,
    "precip_in": 0.01,
+   "samples": 288
+  },
+  "2026-11-25": {
+   "high_f": 62.1,
+   "low_f": 46.9,
+   "precip_in": 0,
    "samples": 288
   }
  },
