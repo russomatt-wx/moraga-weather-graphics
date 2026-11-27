@@ -413,6 +413,12 @@
    "low_f": 48,
    "precip_in": 0,
    "samples": 288
+  },
+  "2026-11-26": {
+   "high_f": 65.3,
+   "low_f": 46.2,
+   "precip_in": 0,
+   "samples": 288
   }
  },
  "campolindo": {},
@@ -843,6 +849,12 @@
    "high_f": 61.7,
    "low_f": 44.2,
    "precip_in": 0.04,
+   "samples": 288
+  },
+  "2026-11-26": {
+   "high_f": 66.6,
+   "low_f": 41.4,
+   "precip_in": 0,
    "samples": 288
   }
  },
@@ -1279,6 +1291,12 @@
    "low_f": 42.6,
    "precip_in": 0.05,
    "samples": 286
+  },
+  "2026-11-26": {
+   "high_f": 66.7,
+   "low_f": 40.3,
+   "precip_in": 0,
+   "samples": 286
   }
  },
  "haight": {},
@@ -1691,6 +1709,18 @@
    "high_f": 55.6,
    "low_f": 37.8,
    "precip_in": 0,
+   "samples": 288
+  },
+  "2026-11-25": {
+   "high_f": 62.4,
+   "low_f": 44.4,
+   "precip_in": 0.11,
+   "samples": 288
+  },
+  "2026-11-26": {
+   "high_f": 65.5,
+   "low_f": 41.4,
+   "precip_in": 0.01,
    "samples": 288
   }
  },
@@ -2123,6 +2153,12 @@
    "low_f": 46.9,
    "precip_in": 0,
    "samples": 288
+  },
+  "2026-11-26": {
+   "high_f": 64.4,
+   "low_f": 44.4,
+   "precip_in": 0,
+   "samples": 288
   }
  },
  "saranap": {},
@@ -2520,6 +2556,12 @@
   "2026-11-25": {
    "high_f": 66,
    "low_f": 49.8,
+   "precip_in": 0,
+   "samples": 288
+  },
+  "2026-11-26": {
+   "high_f": 66.6,
+   "low_f": 50.7,
    "precip_in": 0,
    "samples": 288
   }
