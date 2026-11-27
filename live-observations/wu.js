@@ -273,7 +273,8 @@ async function airportSky(city, day, model, log, raw) {
   // A broken/overcast deck at an airport within ~13 miles usually covers the neighbourhood too.
   if (near >= 3 && c < 3) c = 3;
   // Ceilometers see only below ~12,000 ft: let a thick high-cloud deck from the model show through.
-  if (c <= 1 && Number(model?.cloud_cover_high) >= 75) c = 2;
+  // (Thin cirrus lets most light through: it makes a clear sky 'mostly clear', not 'partly cloudy'.)
+  if (c === 0 && Number(model?.cloud_cover_high) >= 75) c = 1;
   const text = [day ? 'Sunny' : 'Clear', day ? 'Mostly sunny' : 'Mostly clear', 'Partly cloudy', 'Mostly cloudy', 'Cloudy'][c];
   return { text, code: [0, 1, 2, 3, 3][c], is_day: day, source: 'airports', airports: ids, cloud_cover_pct: [5, 20, 45, 75, 95][c], near_vis_m: nearVis };
 }
