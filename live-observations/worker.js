@@ -32,6 +32,9 @@ function fogSky(sky, o, city) {
   if (Number.isFinite(w) && w > 5) return sky;
   const ratio = Number(sky?.clear_sky_ratio);
   if (Number.isFinite(ratio) && ratio >= 0.55) return sky;
+  // No sunlight reading (night): home-station humidity sensors read 97-99% from dew on clear, calm nights,
+  // so fog also needs a nearby airport (within 15 mi) seeing reduced visibility (under ~5 miles).
+  if (!Number.isFinite(ratio) && !(Number(sky?.near_vis_m) < 8000)) return sky;
   const c = TOWN_COORDS[city], day = c ? sunElevation(c[0], c[1]) > 0 : !!sky?.is_day;
   return { text: Number.isFinite(ratio) ? 'Fog' : 'Patchy fog', code: 45, is_day: day, source: 'station_saturation',
            humidity_pct: rh, ...(Number.isFinite(ratio) ? { clear_sky_ratio: ratio } : {}), sky_without_fog: sky?.text || null };

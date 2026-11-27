@@ -238,7 +238,7 @@ const COVER = { SKC: 0, CLR: 0, FEW: 1, SCT: 2, BKN: 3, OVC: 4, VV: 4 };
 async function airportSky(city, day, model, log, raw) {
   const ids = (LOCS.find((l) => l.id === city)?.sky_airports || []).slice(0, 2);
   const covers = [];
-  let fog = false, wet = null;
+  let fog = false, wet = null, nearVis = null;
   for (const id of ids) {
     try {
       const res = await fetch('https://api.weather.gov/stations/' + id + '/observations/latest', { headers: { 'User-Agent': 'DiabloWeatherLab-observations/1.0', Accept: 'application/geo+json' }, cf: { cacheTtl: 600, cacheEverything: true } });
@@ -258,13 +258,14 @@ async function airportSky(city, day, model, log, raw) {
       // Fog only when visibility is actually low (under ~1 mile). 'Fog/Mist' with miles of visibility is
       // mist under a cloud deck: the cloud cover says more than 'Fog'.
       const vis = num(p.visibility?.value);
+      if (vis !== null && mi <= 15) nearVis = nearVis === null ? vis : Math.min(nearVis, vis);
       // Fog is local (valley fog can sit over Concord and not Moraga): only an airport within ~6 miles counts.
       if (/fog/i.test(tx) && !/patches|shallow/i.test(tx) && vis !== null && vis < 1600 && mi <= 6) fog = true;
     } catch (_) { log.push('airport sky ' + id + ': error'); }
   }
   if (!covers.length) return null;
-  if (wet) return { ...wet, is_day: day, source: 'airports', airports: ids };
-  if (fog) return { text: 'Fog', code: 45, is_day: day, source: 'airports', airports: ids };
+  if (wet) return { ...wet, is_day: day, source: 'airports', airports: ids, near_vis_m: nearVis };
+  if (fog) return { text: 'Fog', code: 45, is_day: day, source: 'airports', airports: ids, near_vis_m: nearVis };
   const W = covers.reduce((a, b) => a + b.w, 0);
   let c = Math.round(covers.reduce((a, b) => a + b.c * b.w, 0) / W);
   const near = Math.max(0, ...covers.filter((x) => x.mi <= 13).map((x) => x.c));
@@ -274,7 +275,7 @@ async function airportSky(city, day, model, log, raw) {
   // Ceilometers see only below ~12,000 ft: let a thick high-cloud deck from the model show through.
   if (c <= 1 && Number(model?.cloud_cover_high) >= 75) c = 2;
   const text = [day ? 'Sunny' : 'Clear', day ? 'Mostly sunny' : 'Mostly clear', 'Partly cloudy', 'Mostly cloudy', 'Cloudy'][c];
-  return { text, code: [0, 1, 2, 3, 3][c], is_day: day, source: 'airports', airports: ids, cloud_cover_pct: [5, 20, 45, 75, 95][c] };
+  return { text, code: [0, 1, 2, 3, 3][c], is_day: day, source: 'airports', airports: ids, cloud_cover_pct: [5, 20, 45, 75, 95][c], near_vis_m: nearVis };
 }
 
 // Last resort (night, or no sunlight reading): the forecast model's current sky, cached 15 minutes.
