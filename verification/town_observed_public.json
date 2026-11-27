@@ -544,29 +544,32 @@
    ]
   },
   "2026-11-24": {
-   "high_f": 61.0,
+   "high_f": 61.3,
    "low_f": 46.0,
-   "samples": 2,
+   "samples": 3,
    "stations": [
     "E5830",
+    "G6226",
     "G3010"
    ]
   },
   "2026-11-25": {
-   "high_f": 63.5,
-   "low_f": 51.0,
-   "samples": 2,
+   "high_f": 64.0,
+   "low_f": 51.7,
+   "samples": 3,
    "stations": [
     "E5830",
+    "G6226",
     "G3010"
    ]
   },
   "2026-11-26": {
    "high_f": 67.0,
-   "low_f": 50.5,
-   "samples": 2,
+   "low_f": 51.0,
+   "samples": 3,
    "stations": [
     "E5830",
+    "G6226",
     "G3010"
    ]
   }
@@ -1122,20 +1125,19 @@
    ]
   },
   "2026-11-21": {
-   "high_f": 55.6,
-   "low_f": 34.8,
+   "high_f": 54.5,
+   "low_f": 38.1,
    "samples": 2,
    "stations": [
-    "SJS61",
-    "PG938"
+    "PG938",
+    "PG930"
    ]
   },
   "2026-11-22": {
-   "high_f": 51.9,
-   "low_f": 40.9,
-   "samples": 3,
+   "high_f": 51.5,
+   "low_f": 41.7,
+   "samples": 2,
    "stations": [
-    "SJS61",
     "PG938",
     "PG930"
    ]
@@ -2042,20 +2044,18 @@
    ]
   },
   "2026-11-21": {
-   "high_f": 55.6,
-   "low_f": 34.8,
-   "samples": 2,
+   "high_f": 55.9,
+   "low_f": 35.1,
+   "samples": 1,
    "stations": [
-    "SJS61",
     "PG938"
    ]
   },
   "2026-11-22": {
-   "high_f": 52.6,
-   "low_f": 39.4,
-   "samples": 2,
+   "high_f": 52.3,
+   "low_f": 39.6,
+   "samples": 1,
    "stations": [
-    "SJS61",
     "PG938"
    ]
   },
@@ -3103,30 +3103,33 @@
    ]
   },
   "2026-11-24": {
-   "high_f": 62.5,
-   "low_f": 48.5,
-   "samples": 2,
+   "high_f": 62.3,
+   "low_f": 47.7,
+   "samples": 3,
    "stations": [
     "F4637",
-    "C5988"
+    "C5988",
+    "G6226"
    ]
   },
   "2026-11-25": {
-   "high_f": 62.5,
+   "high_f": 63.3,
    "low_f": 53.0,
-   "samples": 2,
+   "samples": 3,
    "stations": [
     "F4637",
-    "C5988"
+    "C5988",
+    "G6226"
    ]
   },
   "2026-11-26": {
-   "high_f": 65.5,
-   "low_f": 54.0,
-   "samples": 2,
+   "high_f": 66.0,
+   "low_f": 53.3,
+   "samples": 3,
    "stations": [
     "F4637",
-    "C5988"
+    "C5988",
+    "G6226"
    ]
   }
  },
@@ -4444,26 +4447,29 @@
    ]
   },
   "2026-11-24": {
-   "high_f": 63.0,
-   "low_f": 48.0,
-   "samples": 1,
+   "high_f": 62.5,
+   "low_f": 47.0,
+   "samples": 2,
    "stations": [
+    "G6226",
     "F4637"
    ]
   },
   "2026-11-25": {
-   "high_f": 63.0,
+   "high_f": 64.0,
    "low_f": 53.0,
-   "samples": 1,
+   "samples": 2,
    "stations": [
+    "G6226",
     "F4637"
    ]
   },
   "2026-11-26": {
-   "high_f": 66.0,
-   "low_f": 54.0,
-   "samples": 1,
+   "high_f": 66.5,
+   "low_f": 53.0,
+   "samples": 2,
    "stations": [
+    "G6226",
     "F4637"
    ]
   }
@@ -5671,27 +5677,30 @@
    ]
   },
   "2026-11-24": {
-   "high_f": 63.0,
-   "low_f": 48.0,
-   "samples": 1,
+   "high_f": 62.5,
+   "low_f": 47.0,
+   "samples": 2,
    "stations": [
-    "F4637"
+    "F4637",
+    "G6226"
    ]
   },
   "2026-11-25": {
-   "high_f": 63.0,
+   "high_f": 64.0,
    "low_f": 53.0,
-   "samples": 1,
+   "samples": 2,
    "stations": [
-    "F4637"
+    "F4637",
+    "G6226"
    ]
   },
   "2026-11-26": {
-   "high_f": 66.0,
-   "low_f": 54.0,
-   "samples": 1,
+   "high_f": 66.5,
+   "low_f": 53.0,
+   "samples": 2,
    "stations": [
-    "F4637"
+    "F4637",
+    "G6226"
    ]
   }
  },
@@ -6108,21 +6117,19 @@
   },
   "2026-11-21": {
    "high_f": 55.2,
-   "low_f": 35.9,
-   "samples": 3,
+   "low_f": 36.6,
+   "samples": 2,
    "stations": [
     "PG938",
-    "SJS61",
     "170PG"
    ]
   },
   "2026-11-22": {
-   "high_f": 52.1,
-   "low_f": 39.1,
-   "samples": 3,
+   "high_f": 51.7,
+   "low_f": 39.0,
+   "samples": 2,
    "stations": [
     "PG938",
-    "SJS61",
     "170PG"
    ]
   },
