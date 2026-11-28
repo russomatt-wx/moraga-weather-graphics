@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-28T13:39:48.107525+00:00",
+  "generated_utc": "2026-11-28T14:07:42.063356+00:00",
   "location": "moraga",
   "latitude": 37.8201932,
   "longitude": -122.1193876,
@@ -12,7 +12,6 @@
   "failed_sources": {},
   "hourly": {
     "time": [
-      "2026-11-28T05:00",
       "2026-11-28T06:00",
       "2026-11-28T07:00",
       "2026-11-28T08:00",
@@ -35,10 +34,10 @@
       "2026-11-29T01:00",
       "2026-11-29T02:00",
       "2026-11-29T03:00",
-      "2026-11-29T04:00"
+      "2026-11-29T04:00",
+      "2026-11-29T05:00"
     ],
     "temperature_2m": [
-      50.105,
       49.33,
       49.39,
       50.235,
@@ -61,7 +60,8 @@
       53.11,
       52.75,
       52.815,
-      52.72
+      52.72,
+      52.48
     ],
     "precipitation": [
       0.0,
@@ -104,7 +104,6 @@
       0.0,
       0.0,
       0.0,
-      0.0,
       0.533,
       1.333,
       1.6,
@@ -113,10 +112,10 @@
       0.533,
       0.533,
       1.6,
-      1.6
+      1.6,
+      3.733
     ],
     "weather_code": [
-      3,
       2,
       2,
       2,
@@ -133,6 +132,7 @@
       1,
       1,
       1,
+      2,
       2,
       2,
       2,
@@ -142,8 +142,7 @@
       2
     ],
     "cloud_cover": [
-      81.9,
-      73.2,
+      67.8,
       65.0,
       52.4,
       54.3,
@@ -165,7 +164,8 @@
       68.4,
       63.5,
       60.7,
-      61.0
+      61.3,
+      60.7
     ]
   },
   "method": "Weighted HRRR/RRFS/ECMWF/GFS blend. Sky icon from 3-hour smoothed blended cloud cover (layers weighted by how much sun they block: low 100%, mid 90%, high 25%); rain icon from blended rain chance; thunder/fog only when a weighted majority of models agree."
