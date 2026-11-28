@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-27T21:43:29.883329+00:00",
+ "generated_utc": "2026-11-28T08:32:16.788665+00:00",
  "window_days": 7,
  "method": "Hourly means over the last 7 days. Day = 9 AM-4 PM, night = 9 PM-5 AM Pacific. Trusted station = the location's chosen station (test phase). Drop: offset of 6+ F at all hours, 5+ F warmer by day than at night, or under 50% of hours reported.",
  "stations": [
@@ -11,9 +11,9 @@
    "delev_ft": 1,
    "reports_pct": 95,
    "day_vs_trusted": -1.0,
-   "night_vs_trusted": -0.1,
+   "night_vs_trusted": -0.0,
    "day_vs_neighbours": 1.0,
-   "night_vs_neighbours": -2.8,
+   "night_vs_neighbours": -2.7,
    "status": "watch",
    "issues": [
     "runs 4\u00b0 warmer by day than at night vs neighbours (sun on the sensor?)"
@@ -26,10 +26,10 @@
    "miles": 1.89,
    "delev_ft": 136,
    "reports_pct": 99,
-   "day_vs_trusted": -2.0,
+   "day_vs_trusted": -1.9,
    "night_vs_trusted": 2.0,
    "day_vs_neighbours": -0.3,
-   "night_vs_neighbours": 0.4,
+   "night_vs_neighbours": 0.5,
    "status": "ok",
    "issues": []
   },
@@ -39,8 +39,8 @@
    "town": "moraga",
    "miles": 2.15,
    "delev_ft": 239,
-   "reports_pct": 98,
-   "day_vs_trusted": -2.3,
+   "reports_pct": 99,
+   "day_vs_trusted": -2.2,
    "night_vs_trusted": 3.1,
    "day_vs_neighbours": -0.7,
    "night_vs_neighbours": 2.3,
@@ -56,8 +56,8 @@
    "reports_pct": 100,
    "day_vs_trusted": -1.9,
    "night_vs_trusted": 1.6,
-   "day_vs_neighbours": -0.8,
-   "night_vs_neighbours": 0.5,
+   "day_vs_neighbours": -0.6,
+   "night_vs_neighbours": 0.6,
    "status": "ok",
    "issues": []
   },
@@ -67,14 +67,14 @@
    "town": "lafayette",
    "miles": 1.48,
    "delev_ft": 49,
-   "reports_pct": 55,
-   "day_vs_trusted": -1.0,
-   "night_vs_trusted": 0.3,
-   "day_vs_neighbours": 0.1,
+   "reports_pct": 48,
+   "day_vs_trusted": -1.2,
+   "night_vs_trusted": 0.1,
+   "day_vs_neighbours": -0.2,
    "night_vs_neighbours": -1.2,
-   "status": "watch",
+   "status": "drop",
    "issues": [
-    "reports only 55% of hours"
+    "reports only 48% of hours"
    ]
   },
   {
@@ -85,9 +85,9 @@
    "delev_ft": 84,
    "reports_pct": 100,
    "day_vs_trusted": -0.4,
-   "night_vs_trusted": 1.5,
-   "day_vs_neighbours": 0.7,
-   "night_vs_neighbours": 0.7,
+   "night_vs_trusted": 1.4,
+   "day_vs_neighbours": 0.8,
+   "night_vs_neighbours": 0.6,
    "status": "ok",
    "issues": []
   },
@@ -101,7 +101,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": -3.6,
-   "night_vs_neighbours": 0.3,
+   "night_vs_neighbours": 0.2,
    "status": "ok",
    "issues": []
   },
@@ -111,11 +111,11 @@
    "town": "campolindo",
    "miles": 1.8,
    "delev_ft": 236,
-   "reports_pct": 98,
+   "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": -0.2,
-   "night_vs_neighbours": -1.6,
+   "night_vs_neighbours": -1.5,
    "status": "ok",
    "issues": []
   },
@@ -125,7 +125,7 @@
    "town": "campolindo",
    "miles": 1.8,
    "delev_ft": 136,
-   "reports_pct": 99,
+   "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 3.8,
@@ -143,7 +143,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": -0.5,
-   "night_vs_neighbours": 2.6,
+   "night_vs_neighbours": 2.4,
    "status": "ok",
    "issues": []
   },
@@ -157,7 +157,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 0.7,
-   "night_vs_neighbours": -2.5,
+   "night_vs_neighbours": -2.3,
    "status": "watch",
    "issues": [
     "runs 3\u00b0 warmer by day than at night vs neighbours (sun on the sensor?)"
@@ -187,7 +187,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 0.0,
-   "night_vs_neighbours": -3.7,
+   "night_vs_neighbours": -3.6,
    "status": "watch",
    "issues": [
     "runs 4\u00b0 warmer by day than at night vs neighbours (sun on the sensor?)"
@@ -199,11 +199,11 @@
    "town": "glorietta",
    "miles": 1.07,
    "delev_ft": -229,
-   "reports_pct": 99,
+   "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 0.8,
-   "night_vs_neighbours": 5.0,
+   "night_vs_neighbours": 4.9,
    "status": "ok",
    "issues": []
   },
@@ -216,7 +216,7 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.9,
+   "day_vs_neighbours": -0.8,
    "night_vs_neighbours": -1.3,
    "status": "ok",
    "issues": []
@@ -230,8 +230,8 @@
    "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.7,
-   "night_vs_neighbours": 1.7,
+   "day_vs_neighbours": -0.6,
+   "night_vs_neighbours": 1.9,
    "status": "ok",
    "issues": []
   },
@@ -244,8 +244,8 @@
    "reports_pct": 96,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 1.0,
-   "night_vs_neighbours": -3.4,
+   "day_vs_neighbours": 0.9,
+   "night_vs_neighbours": -3.3,
    "status": "watch",
    "issues": [
     "runs 4\u00b0 warmer by day than at night vs neighbours (sun on the sensor?)"
@@ -261,7 +261,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": -0.3,
-   "night_vs_neighbours": 1.6,
+   "night_vs_neighbours": 1.5,
    "status": "ok",
    "issues": []
   },
@@ -274,8 +274,8 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.2,
-   "night_vs_neighbours": -1.6,
+   "day_vs_neighbours": -0.4,
+   "night_vs_neighbours": -1.5,
    "status": "ok",
    "issues": []
   },
@@ -285,14 +285,14 @@
    "town": "northgate",
    "miles": 1.4,
    "delev_ft": -55,
-   "reports_pct": 55,
+   "reports_pct": 48,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 0.5,
-   "night_vs_neighbours": -0.0,
-   "status": "watch",
+   "day_vs_neighbours": 0.4,
+   "night_vs_neighbours": -0.1,
+   "status": "drop",
    "issues": [
-    "reports only 55% of hours"
+    "reports only 48% of hours"
    ]
   },
   {
@@ -304,7 +304,7 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.3,
+   "day_vs_neighbours": -0.0,
    "night_vs_neighbours": 1.7,
    "status": "ok",
    "issues": []
@@ -315,14 +315,14 @@
    "town": "rossmoor",
    "miles": 2.35,
    "delev_ft": -206,
-   "reports_pct": 55,
+   "reports_pct": 48,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 0.3,
-   "night_vs_neighbours": 0.8,
-   "status": "watch",
+   "night_vs_neighbours": 0.6,
+   "status": "drop",
    "issues": [
-    "reports only 55% of hours"
+    "reports only 48% of hours"
    ]
   },
   {
@@ -334,7 +334,7 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.4,
+   "day_vs_neighbours": -0.5,
    "night_vs_neighbours": -0.8,
    "status": "ok",
    "issues": []
@@ -345,11 +345,11 @@
    "town": "rossmoor",
    "miles": 2.53,
    "delev_ft": -8,
-   "reports_pct": 98,
+   "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 0.0,
-   "night_vs_neighbours": 0.1,
+   "day_vs_neighbours": 0.2,
+   "night_vs_neighbours": 0.2,
    "status": "ok",
    "issues": []
   },
@@ -359,14 +359,14 @@
    "town": "saranap",
    "miles": 1.11,
    "delev_ft": -38,
-   "reports_pct": 55,
+   "reports_pct": 48,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 0.6,
-   "night_vs_neighbours": -0.2,
-   "status": "watch",
+   "day_vs_neighbours": 0.4,
+   "night_vs_neighbours": -0.3,
+   "status": "drop",
    "issues": [
-    "reports only 55% of hours"
+    "reports only 48% of hours"
    ]
   },
   {
@@ -378,7 +378,7 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.2,
+   "day_vs_neighbours": -0.1,
    "night_vs_neighbours": 1.5,
    "status": "ok",
    "issues": []
@@ -392,7 +392,7 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.4,
+   "day_vs_neighbours": -0.3,
    "night_vs_neighbours": -1.2,
    "status": "ok",
    "issues": []
@@ -406,7 +406,7 @@
    "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 0.7,
+   "day_vs_neighbours": 0.5,
    "night_vs_neighbours": 0.4,
    "status": "ok",
    "issues": []
@@ -420,8 +420,8 @@
    "reports_pct": 68,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.9,
-   "night_vs_neighbours": 1.1,
+   "day_vs_neighbours": -1.0,
+   "night_vs_neighbours": 1.0,
    "status": "watch",
    "issues": [
     "reports only 68% of hours"
@@ -436,7 +436,7 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 0.3,
+   "day_vs_neighbours": 0.5,
    "night_vs_neighbours": -1.4,
    "status": "ok",
    "issues": []
@@ -450,8 +450,8 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.2,
-   "night_vs_neighbours": -1.8,
+   "day_vs_neighbours": -0.1,
+   "night_vs_neighbours": -1.7,
    "status": "ok",
    "issues": []
   },
@@ -464,7 +464,7 @@
    "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.5,
+   "day_vs_neighbours": -0.6,
    "night_vs_neighbours": 3.2,
    "status": "ok",
    "issues": []
@@ -479,7 +479,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 0.7,
-   "night_vs_neighbours": -1.5,
+   "night_vs_neighbours": -1.4,
    "status": "ok",
    "issues": []
   },
@@ -493,7 +493,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 0.9,
-   "night_vs_neighbours": -0.4,
+   "night_vs_neighbours": -0.5,
    "status": "ok",
    "issues": []
   },
@@ -506,8 +506,8 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.1,
-   "night_vs_neighbours": 0.5,
+   "day_vs_neighbours": -0.0,
+   "night_vs_neighbours": 0.8,
    "status": "ok",
    "issues": []
   },
@@ -521,7 +521,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": -0.8,
-   "night_vs_neighbours": -0.1,
+   "night_vs_neighbours": -0.3,
    "status": "ok",
    "issues": []
   },
@@ -559,14 +559,14 @@
    "town": "danville",
    "miles": 2.22,
    "delev_ft": -70,
-   "reports_pct": 45,
-   "day_vs_trusted": -1.0,
+   "reports_pct": 39,
+   "day_vs_trusted": -1.2,
    "night_vs_trusted": 1.2,
    "day_vs_neighbours": 0.7,
-   "night_vs_neighbours": -1.4,
+   "night_vs_neighbours": -1.2,
    "status": "drop",
    "issues": [
-    "reports only 45% of hours"
+    "reports only 39% of hours"
    ]
   },
   {
@@ -576,10 +576,10 @@
    "miles": 2.25,
    "delev_ft": -96,
    "reports_pct": 99,
-   "day_vs_trusted": -1.0,
-   "night_vs_trusted": 1.5,
-   "day_vs_neighbours": 0.5,
-   "night_vs_neighbours": -0.7,
+   "day_vs_trusted": -1.1,
+   "night_vs_trusted": 1.6,
+   "day_vs_neighbours": 0.6,
+   "night_vs_neighbours": -0.5,
    "status": "ok",
    "issues": []
   },
@@ -591,9 +591,9 @@
    "delev_ft": 322,
    "reports_pct": 99,
    "day_vs_trusted": -2.1,
-   "night_vs_trusted": 4.5,
+   "night_vs_trusted": 4.6,
    "day_vs_neighbours": -1.2,
-   "night_vs_neighbours": 2.1,
+   "night_vs_neighbours": 1.8,
    "status": "ok",
    "issues": []
   },
@@ -603,14 +603,14 @@
    "town": "greenbrook",
    "miles": 0.89,
    "delev_ft": 15,
-   "reports_pct": 45,
-   "day_vs_trusted": -1.0,
-   "night_vs_trusted": 1.7,
+   "reports_pct": 39,
+   "day_vs_trusted": -1.3,
+   "night_vs_trusted": 1.5,
    "day_vs_neighbours": null,
    "night_vs_neighbours": null,
    "status": "drop",
    "issues": [
-    "reports only 45% of hours"
+    "reports only 39% of hours"
    ]
   },
   {
@@ -620,7 +620,7 @@
    "miles": 0.94,
    "delev_ft": -11,
    "reports_pct": 99,
-   "day_vs_trusted": -1.2,
+   "day_vs_trusted": -1.3,
    "night_vs_trusted": 2.1,
    "day_vs_neighbours": null,
    "night_vs_neighbours": null,
@@ -633,10 +633,10 @@
    "town": "alamo",
    "miles": 0.69,
    "delev_ft": -68,
-   "reports_pct": 99,
+   "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 1.3,
+   "day_vs_neighbours": 1.4,
    "night_vs_neighbours": 1.5,
    "status": "ok",
    "issues": []
@@ -647,10 +647,10 @@
    "town": "alamo",
    "miles": 1.05,
    "delev_ft": -34,
-   "reports_pct": 98,
+   "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.6,
+   "day_vs_neighbours": -0.7,
    "night_vs_neighbours": -1.6,
    "status": "ok",
    "issues": []
@@ -665,7 +665,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": -0.7,
-   "night_vs_neighbours": 0.2,
+   "night_vs_neighbours": 0.1,
    "status": "ok",
    "issues": []
   },
@@ -678,8 +678,8 @@
    "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.3,
-   "night_vs_neighbours": 4.2,
+   "day_vs_neighbours": -0.4,
+   "night_vs_neighbours": 4.1,
    "status": "ok",
    "issues": []
   },
@@ -692,8 +692,8 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 0.7,
-   "night_vs_neighbours": -1.2,
+   "day_vs_neighbours": 0.6,
+   "night_vs_neighbours": -1.1,
    "status": "ok",
    "issues": []
   },
@@ -703,11 +703,11 @@
    "town": "diablo",
    "miles": 2.93,
    "delev_ft": -256,
-   "reports_pct": 95,
+   "reports_pct": 94,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.3,
-   "night_vs_neighbours": -3.0,
+   "day_vs_neighbours": -0.2,
+   "night_vs_neighbours": -2.9,
    "status": "ok",
    "issues": []
   },
@@ -759,14 +759,14 @@
    "town": "twincreeks",
    "miles": 1.39,
    "delev_ft": -17,
-   "reports_pct": 45,
+   "reports_pct": 39,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 0.6,
+   "day_vs_neighbours": 0.5,
    "night_vs_neighbours": -0.4,
    "status": "drop",
    "issues": [
-    "reports only 45% of hours"
+    "reports only 39% of hours"
    ]
   },
   {
@@ -778,7 +778,7 @@
    "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -1.0,
+   "day_vs_neighbours": -0.9,
    "night_vs_neighbours": 0.0,
    "status": "ok",
    "issues": []
@@ -890,8 +890,8 @@
    "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.2,
-   "night_vs_neighbours": 0.4,
+   "day_vs_neighbours": -0.3,
+   "night_vs_neighbours": 0.3,
    "status": "ok",
    "issues": []
   },
@@ -947,7 +947,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": -1.5,
-   "night_vs_neighbours": -0.8,
+   "night_vs_neighbours": -0.6,
    "status": "ok",
    "issues": []
   },
@@ -960,8 +960,8 @@
    "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -1.6,
-   "night_vs_neighbours": -0.2,
+   "day_vs_neighbours": -1.5,
+   "night_vs_neighbours": -0.0,
    "status": "ok",
    "issues": []
   },
@@ -975,7 +975,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 3.0,
-   "night_vs_neighbours": 0.9,
+   "night_vs_neighbours": 0.6,
    "status": "ok",
    "issues": []
   },
@@ -989,7 +989,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 3.0,
-   "night_vs_neighbours": 0.9,
+   "night_vs_neighbours": 0.6,
    "status": "ok",
    "issues": []
   },
@@ -1003,7 +1003,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": -1.5,
-   "night_vs_neighbours": -0.8,
+   "night_vs_neighbours": -0.6,
    "status": "ok",
    "issues": []
   },
@@ -1016,8 +1016,8 @@
    "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -1.6,
-   "night_vs_neighbours": -0.2,
+   "day_vs_neighbours": -1.5,
+   "night_vs_neighbours": -0.0,
    "status": "ok",
    "issues": []
   },
@@ -1031,7 +1031,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 1.5,
-   "night_vs_neighbours": -1.1,
+   "night_vs_neighbours": -1.0,
    "status": "ok",
    "issues": []
   },
@@ -1044,7 +1044,7 @@
    "reports_pct": 98,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -1.5,
+   "day_vs_neighbours": -1.6,
    "night_vs_neighbours": 1.9,
    "status": "ok",
    "issues": []
@@ -1073,7 +1073,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 1.5,
-   "night_vs_neighbours": -1.1,
+   "night_vs_neighbours": -1.0,
    "status": "ok",
    "issues": []
   },
@@ -1086,7 +1086,7 @@
    "reports_pct": 98,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -1.5,
+   "day_vs_neighbours": -1.6,
    "night_vs_neighbours": 1.9,
    "status": "ok",
    "issues": []
@@ -1111,14 +1111,14 @@
    "town": "lakemerritt",
    "miles": 0.4,
    "delev_ft": -3,
-   "reports_pct": 2,
+   "reports_pct": 1,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": null,
    "night_vs_neighbours": null,
    "status": "drop",
    "issues": [
-    "reports only 2% of hours"
+    "reports only 1% of hours"
    ]
   },
   {
@@ -1155,14 +1155,14 @@
    "town": "downtownoakland",
    "miles": 0.62,
    "delev_ft": 27,
-   "reports_pct": 2,
+   "reports_pct": 1,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": null,
    "night_vs_neighbours": null,
    "status": "drop",
    "issues": [
-    "reports only 2% of hours"
+    "reports only 1% of hours"
    ]
   },
   {
@@ -1202,8 +1202,8 @@
    "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 1.1,
-   "night_vs_neighbours": 0.5,
+   "day_vs_neighbours": 1.0,
+   "night_vs_neighbours": 0.4,
    "status": "ok",
    "issues": []
   },
@@ -1213,10 +1213,10 @@
    "town": "fruitvale",
    "miles": 1.66,
    "delev_ft": 190,
-   "reports_pct": 99,
+   "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -1.6,
+   "day_vs_neighbours": -1.5,
    "night_vs_neighbours": -0.7,
    "status": "ok",
    "issues": []
@@ -1286,8 +1286,8 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.2,
-   "night_vs_neighbours": -0.8,
+   "day_vs_neighbours": -0.1,
+   "night_vs_neighbours": -0.9,
    "status": "ok",
    "issues": []
   },
@@ -1300,8 +1300,8 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 0.8,
-   "night_vs_neighbours": -1.5,
+   "day_vs_neighbours": 0.9,
+   "night_vs_neighbours": -1.6,
    "status": "ok",
    "issues": []
   },
@@ -1314,8 +1314,8 @@
    "reports_pct": 98,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.6,
-   "night_vs_neighbours": 2.3,
+   "day_vs_neighbours": -0.7,
+   "night_vs_neighbours": 2.5,
    "status": "ok",
    "issues": []
   },
@@ -1342,8 +1342,8 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.1,
-   "night_vs_neighbours": -0.1,
+   "day_vs_neighbours": -0.2,
+   "night_vs_neighbours": -0.2,
    "status": "ok",
    "issues": []
   },
@@ -1357,7 +1357,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 1.3,
-   "night_vs_neighbours": -0.4,
+   "night_vs_neighbours": -0.3,
    "status": "ok",
    "issues": []
   },
@@ -1370,8 +1370,8 @@
    "reports_pct": 98,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.8,
-   "night_vs_neighbours": 1.1,
+   "day_vs_neighbours": -1.0,
+   "night_vs_neighbours": 1.3,
    "status": "ok",
    "issues": []
   },
@@ -1384,8 +1384,8 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -0.4,
-   "night_vs_neighbours": -2.0,
+   "day_vs_neighbours": -0.3,
+   "night_vs_neighbours": -2.1,
    "status": "ok",
    "issues": []
   },
@@ -1399,7 +1399,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 1.3,
-   "night_vs_neighbours": 0.9,
+   "night_vs_neighbours": 0.8,
    "status": "ok",
    "issues": []
   },
@@ -1426,7 +1426,7 @@
    "reports_pct": 98,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 3.0,
+   "day_vs_neighbours": 2.9,
    "night_vs_neighbours": 2.2,
    "status": "ok",
    "issues": []
@@ -1465,14 +1465,14 @@
    "town": "alameda",
    "miles": 2.57,
    "delev_ft": 27,
-   "reports_pct": 2,
+   "reports_pct": 1,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": null,
    "night_vs_neighbours": null,
    "status": "drop",
    "issues": [
-    "reports only 2% of hours"
+    "reports only 1% of hours"
    ]
   },
   {
@@ -1512,7 +1512,7 @@
    "reports_pct": 96,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 1.3,
+   "day_vs_neighbours": 1.2,
    "night_vs_neighbours": -0.7,
    "status": "ok",
    "issues": []
@@ -1523,10 +1523,10 @@
    "town": "innersunset",
    "miles": 1.32,
    "delev_ft": 114,
-   "reports_pct": 98,
+   "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -2.5,
+   "day_vs_neighbours": -2.4,
    "night_vs_neighbours": -1.3,
    "status": "ok",
    "issues": []
@@ -1554,7 +1554,7 @@
    "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 0.2,
+   "day_vs_neighbours": 0.3,
    "night_vs_neighbours": -0.4,
    "status": "ok",
    "issues": []
@@ -1569,7 +1569,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": -1.5,
-   "night_vs_neighbours": 2.7,
+   "night_vs_neighbours": 2.6,
    "status": "ok",
    "issues": []
   },
@@ -1582,7 +1582,7 @@
    "reports_pct": 96,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 1.3,
+   "day_vs_neighbours": 1.2,
    "night_vs_neighbours": -2.3,
    "status": "watch",
    "issues": [
@@ -1598,8 +1598,8 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -1.2,
-   "night_vs_neighbours": 2.2,
+   "day_vs_neighbours": -1.3,
+   "night_vs_neighbours": 2.1,
    "status": "ok",
    "issues": []
   },
@@ -1612,7 +1612,7 @@
    "reports_pct": 79,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 0.4,
+   "day_vs_neighbours": 0.5,
    "night_vs_neighbours": -0.8,
    "status": "ok",
    "issues": []
@@ -1626,7 +1626,7 @@
    "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 0.7,
+   "day_vs_neighbours": 0.8,
    "night_vs_neighbours": -1.3,
    "status": "ok",
    "issues": []
@@ -1640,7 +1640,7 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -1.5,
+   "day_vs_neighbours": -1.6,
    "night_vs_neighbours": 1.8,
    "status": "ok",
    "issues": []
@@ -1665,7 +1665,7 @@
    "town": "marina",
    "miles": 2.37,
    "delev_ft": 64,
-   "reports_pct": 98,
+   "reports_pct": 95,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 1.5,
@@ -1679,7 +1679,7 @@
    "town": "northbeach",
    "miles": 2.57,
    "delev_ft": -133,
-   "reports_pct": 98,
+   "reports_pct": 95,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 1.5,
@@ -1710,7 +1710,7 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -1.5,
+   "day_vs_neighbours": -1.6,
    "night_vs_neighbours": 1.8,
    "status": "ok",
    "issues": []
@@ -1735,7 +1735,7 @@
    "town": "pacificheights",
    "miles": 1.69,
    "delev_ft": -153,
-   "reports_pct": 98,
+   "reports_pct": 95,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 1.5,
@@ -1752,7 +1752,7 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -1.5,
+   "day_vs_neighbours": -1.6,
    "night_vs_neighbours": 1.8,
    "status": "ok",
    "issues": []
@@ -1766,7 +1766,7 @@
    "reports_pct": 96,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 1.3,
+   "day_vs_neighbours": 1.2,
    "night_vs_neighbours": -0.7,
    "status": "ok",
    "issues": []
@@ -1791,10 +1791,10 @@
    "town": "haight",
    "miles": 1.0,
    "delev_ft": 222,
-   "reports_pct": 98,
+   "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -2.5,
+   "day_vs_neighbours": -2.4,
    "night_vs_neighbours": -1.3,
    "status": "ok",
    "issues": []
@@ -1833,10 +1833,10 @@
    "town": "noevalley",
    "miles": 0.66,
    "delev_ft": 278,
-   "reports_pct": 98,
+   "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -1.1,
+   "day_vs_neighbours": -1.0,
    "night_vs_neighbours": -1.6,
    "status": "ok",
    "issues": []
@@ -1847,7 +1847,7 @@
    "town": "mission",
    "miles": 0.85,
    "delev_ft": -133,
-   "reports_pct": 98,
+   "reports_pct": 95,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 0.1,
@@ -1865,7 +1865,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": -1.1,
-   "night_vs_neighbours": 1.6,
+   "night_vs_neighbours": 1.5,
    "status": "ok",
    "issues": []
   },
@@ -1875,14 +1875,14 @@
    "town": "mission",
    "miles": 0.95,
    "delev_ft": -145,
-   "reports_pct": 55,
+   "reports_pct": 62,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 1.0,
-   "night_vs_neighbours": -1.6,
+   "night_vs_neighbours": -1.5,
    "status": "watch",
    "issues": [
-    "reports only 55% of hours"
+    "reports only 62% of hours"
    ]
   },
   {
@@ -1891,14 +1891,14 @@
    "town": "potrerohill",
    "miles": 0.61,
    "delev_ft": -145,
-   "reports_pct": 55,
+   "reports_pct": 62,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 0.9,
-   "night_vs_neighbours": -1.2,
+   "night_vs_neighbours": -1.1,
    "status": "watch",
    "issues": [
-    "reports only 55% of hours"
+    "reports only 62% of hours"
    ]
   },
   {
@@ -1907,7 +1907,7 @@
    "town": "potrerohill",
    "miles": 1.49,
    "delev_ft": -133,
-   "reports_pct": 98,
+   "reports_pct": 95,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 0.1,
@@ -1925,7 +1925,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": -1.0,
-   "night_vs_neighbours": 0.5,
+   "night_vs_neighbours": 0.4,
    "status": "ok",
    "issues": []
   },
@@ -1935,7 +1935,7 @@
    "town": "soma",
    "miles": 1.13,
    "delev_ft": -67,
-   "reports_pct": 98,
+   "reports_pct": 95,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 0.1,
@@ -1953,7 +1953,7 @@
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": -1.0,
-   "night_vs_neighbours": 0.5,
+   "night_vs_neighbours": 0.4,
    "status": "ok",
    "issues": []
   },
@@ -1963,14 +1963,14 @@
    "town": "soma",
    "miles": 1.91,
    "delev_ft": -79,
-   "reports_pct": 55,
+   "reports_pct": 62,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 0.9,
-   "night_vs_neighbours": -1.2,
+   "night_vs_neighbours": -1.1,
    "status": "watch",
    "issues": [
-    "reports only 55% of hours"
+    "reports only 62% of hours"
    ]
   },
   {
@@ -1982,7 +1982,7 @@
    "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": 0.6,
+   "day_vs_neighbours": 0.5,
    "night_vs_neighbours": -1.1,
    "status": "ok",
    "issues": []
@@ -1993,14 +1993,14 @@
    "town": "bernalheights",
    "miles": 0.98,
    "delev_ft": -145,
-   "reports_pct": 55,
+   "reports_pct": 62,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
    "day_vs_neighbours": 1.2,
-   "night_vs_neighbours": 0.8,
+   "night_vs_neighbours": 0.9,
    "status": "watch",
    "issues": [
-    "reports only 55% of hours"
+    "reports only 62% of hours"
    ]
   },
   {
@@ -2009,11 +2009,11 @@
    "town": "bernalheights",
    "miles": 1.32,
    "delev_ft": -23,
-   "reports_pct": 99,
+   "reports_pct": 100,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -1.8,
-   "night_vs_neighbours": 0.3,
+   "day_vs_neighbours": -1.7,
+   "night_vs_neighbours": 0.2,
    "status": "ok",
    "issues": []
   },
@@ -2023,10 +2023,10 @@
    "town": "twinpeaks",
    "miles": 0.38,
    "delev_ft": 278,
-   "reports_pct": 98,
+   "reports_pct": 99,
    "day_vs_trusted": null,
    "night_vs_trusted": null,
-   "day_vs_neighbours": -1.1,
+   "day_vs_neighbours": -1.0,
    "night_vs_neighbours": -1.6,
    "status": "ok",
    "issues": []
@@ -2097,7 +2097,7 @@
    "delev_ft": 48,
    "reports_pct": 99,
    "day_vs_trusted": -0.6,
-   "night_vs_trusted": 0.5,
+   "night_vs_trusted": 0.4,
    "day_vs_neighbours": null,
    "night_vs_neighbours": null,
    "status": "ok",
@@ -2110,7 +2110,7 @@
    "miles": 0.17,
    "delev_ft": 178,
    "reports_pct": 99,
-   "day_vs_trusted": -0.7,
+   "day_vs_trusted": -0.8,
    "night_vs_trusted": 1.4,
    "day_vs_neighbours": null,
    "night_vs_neighbours": null,
@@ -2124,8 +2124,8 @@
    "miles": 0.82,
    "delev_ft": -3,
    "reports_pct": 95,
-   "day_vs_trusted": 2.3,
-   "night_vs_trusted": 3.0,
+   "day_vs_trusted": 2.4,
+   "night_vs_trusted": 3.1,
    "day_vs_neighbours": null,
    "night_vs_neighbours": null,
    "status": "ok",
@@ -2139,7 +2139,7 @@
    "delev_ft": 92,
    "reports_pct": 100,
    "day_vs_trusted": 0.4,
-   "night_vs_trusted": 2.2,
+   "night_vs_trusted": 2.3,
    "day_vs_neighbours": null,
    "night_vs_neighbours": null,
    "status": "ok",
