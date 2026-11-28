@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-28T02:39:43.099750+00:00",
+  "generated_utc": "2026-11-28T03:31:16.175789+00:00",
   "location": "brentwood",
   "latitude": 37.957,
   "longitude": -121.701,
@@ -12,7 +12,6 @@
   "failed_sources": {},
   "hourly": {
     "time": [
-      "2026-11-27T18:00",
       "2026-11-27T19:00",
       "2026-11-27T20:00",
       "2026-11-27T21:00",
@@ -35,10 +34,10 @@
       "2026-11-28T14:00",
       "2026-11-28T15:00",
       "2026-11-28T16:00",
-      "2026-11-28T17:00"
+      "2026-11-28T17:00",
+      "2026-11-28T18:00"
     ],
     "temperature_2m": [
-      53.645,
       51.99,
       50.665,
       50.375,
@@ -61,7 +60,8 @@
       57.14,
       57.425,
       56.535,
-      54.515
+      54.515,
+      53.155
     ],
     "precipitation": [
       0.0,
@@ -90,7 +90,7 @@
       0.0
     ],
     "precipitation_probability": [
-      0.0,
+      0.533,
       0.0,
       0.0,
       0.0,
@@ -100,8 +100,8 @@
       0.0,
       0.533,
       0.533,
-      1.067,
-      0.533,
+      0.0,
+      0.0,
       0.0,
       0.0,
       0.0,
@@ -124,7 +124,6 @@
       3,
       3,
       3,
-      3,
       45,
       45,
       45,
@@ -136,14 +135,14 @@
       3,
       3,
       3,
+      2,
       2,
       2,
       2,
       2
     ],
     "cloud_cover": [
-      80.6,
-      77.3,
+      75.3,
       76.6,
       75.3,
       79.6,
@@ -165,7 +164,8 @@
       71.5,
       65.1,
       60.6,
-      57.0
+      53.9,
+      52.1
     ]
   },
   "method": "Weighted HRRR/RRFS/ECMWF/GFS blend. Sky icon from 3-hour smoothed blended cloud cover (layers weighted by how much sun they block: low 100%, mid 90%, high 25%); rain icon from blended rain chance; thunder/fog only when a weighted majority of models agree."
